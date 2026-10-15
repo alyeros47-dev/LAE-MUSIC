@@ -1,1 +1,16 @@
-{"name":"music-marketplace-starter","version":"0.1.0","private":true,"type":"module","scripts":{"start":"node server.js"},"engines":{"node":">=20"},"dependencies":{"express":"^4.21.2"}}
+
+{
+  "name": "lae-music",
+  "version": "0.4.1",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
