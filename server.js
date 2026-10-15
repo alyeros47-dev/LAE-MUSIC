@@ -1,0 +1,6 @@
+import express from 'express';
+const app = express();
+const port = process.env.PORT || 3000;
+app.get('/health', (_req,res)=>res.json({status:'ok',service:'music-marketplace'}));
+app.get('/', (_req,res)=>res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music Marketplace</title><style>body{margin:0;background:#0c1020;color:#fff;font-family:system-ui,Arial}main{max-width:900px;margin:12vh auto;padding:28px}h1{font-size:clamp(2.5rem,7vw,5rem);margin:0}p{font-size:1.2rem;color:#c9d0e5;line-height:1.6}.tag{color:#86e0b5;font-weight:700}section{display:flex;gap:12px;flex-wrap:wrap;margin-top:35px}.card{padding:18px;border:1px solid #384057;border-radius:12px;background:#171d30;flex:1;min-width:180px}</style></head><body><main><div class="tag">FOUNDATION PREVIEW</div><h1>Music Marketplace</h1><p>Discover, stream and own the music you love. A future home for AI music creators and their listeners.</p><section><div class="card">Discover music</div><div class="card">Support creators</div><div class="card">Buy songs</div></section><p><small>Prototype only. Accounts, payments, uploads and royalties are not active.</small></p></main></body></html>`));
+app.listen(port, '0.0.0.0',()=>console.log(`Music Marketplace running on ${port}`));
