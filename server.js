@@ -1,61 +1,37 @@
 'use strict';
-const http=require('http'),fs=require('fs'),path=require('path'),crypto=require('crypto');
+const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {Pool}=require('pg');
-const PORT=process.env.PORT||3000;
-const pool=process.env.DATABASE_URL?new Pool({connectionString:process.env.DATABASE_URL,ssl:process.env.DATABASE_URL.includes('localhost')?false:{rejectUnauthorized:false}}):null;
+const PORT=Number(process.env.PORT||3000);
+const pool=process.env.DATABASE_URL?new Pool({connectionString:process.env.DATABASE_URL,ssl:/localhost|127\.0\.0\.1/.test(process.env.DATABASE_URL)?false:{rejectUnauthorized:false}}):null;
 const PLANS={starter:{usd:2,royalty:40},growth:{usd:5,royalty:50},professional:{usd:10,royalty:60}};
-let exchangeCache={updated:0,rates:null,asOf:null};
-async function exchangeRates(){
- if(exchangeCache.rates && Date.now()-exchangeCache.updated<12*60*60*1000)return exchangeCache;
- try {const response=await fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(7000)});
- if(!response.ok)throw Error('Rate service unavailable');const data=await response.json();
- if(data.result!=='success'||!data.rates||data.rates.USD!==1)throw Error('Invalid rates');
- exchangeCache={updated:Date.now(),rates:data.rates,asOf:data.time_last_update_utc||null};return exchangeCache;
- }catch(error){console.warn('Exchange rate refresh failed:',error.message);return exchangeCache;}
-}
-
-const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8'};
-const staticFiles={'/':'index.html','/index.html':'index.html','/style.css':'style.css','/app.js':'app.js','/tracks.json':'tracks.json'};
-const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
-const hashPassword=(password,salt)=>crypto.scryptSync(password,salt,64).toString('hex');
-const tokenHash=token=>crypto.createHash('sha256').update(token).digest('hex');
-function readBody(req){return new Promise((resolve,reject)=>{let s='';req.on('data',chunk=>{s+=chunk;if(s.length>16000){reject(Error('Request too large'));req.destroy();}});req.on('end',()=>{try{resolve(JSON.parse(s||'{}'));}catch{reject(Error('Invalid JSON'));}});req.on('error',reject);});}
-function cookies(req){return Object.fromEntries((req.headers.cookie||'').split(';').map(x=>x.trim().split('=').map(decodeURIComponent)).filter(x=>x.length===2));}
-function setSession(res,token){res.setHeader('Set-Cookie',`lae_session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=604800`);}
-function clearSession(res){res.setHeader('Set-Cookie','lae_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0');}
-async function currentUser(req){const token=cookies(req).lae_session;if(!pool||!token||!(/^[a-f0-9]{64}$/).test(token))return null;const r=await pool.query(`SELECT u.id,u.display_name,u.email,u.plan,u.membership_status,u.created_at FROM sessions s JOIN creators u ON u.id=s.creator_id WHERE s.token_hash=$1 AND s.expires_at>NOW()`,[tokenHash(token)]);return r.rows[0]||null;}
-async function init(){if(!pool){console.log('DATABASE_URL missing: public demo works, creator registration disabled');return;}await pool.query(`CREATE TABLE IF NOT EXISTS creators (id BIGSERIAL PRIMARY KEY,display_name VARCHAR(100) NOT NULL,email VARCHAR(254) NOT NULL UNIQUE,password_salt VARCHAR(64) NOT NULL,password_hash VARCHAR(128) NOT NULL,plan VARCHAR(24) NOT NULL DEFAULT 'starter',membership_status VARCHAR(24) NOT NULL DEFAULT 'pending_payment',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()); CREATE TABLE IF NOT EXISTS sessions (token_hash VARCHAR(64) PRIMARY KEY,creator_id BIGINT NOT NULL REFERENCES creators(id) ON DELETE CASCADE,expires_at TIMESTAMPTZ NOT NULL); CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);`);console.log('Creator database initialized');}
-const server=http.createServer(async(req,res)=>{try{
- const u=new URL(req.url,'http://localhost');const pathname=u.pathname;
- if(pathname==='/health')return json(res,200,{ok:true,stage:4,database:!!pool});
- if(pathname==='/api/plans'&&req.method==='GET')return json(res,200,{baseCurrency:'USD',billing:'annual',plans:PLANS,paymentEnabled:false,exchangeRatesEnabled:true});
- if(pathname==='/api/exchange-rates'&&req.method==='GET'){const rates=await exchangeRates();return json(res,rates.rates?200:503,{base:'USD',rates:rates.rates,asOf:rates.asOf,stale:!!rates.rates&&Date.now()-rates.updated>12*60*60*1000,disclaimer:'Indicative rates only. Checkout currency, provider fees and final amount may differ. No payments enabled.'});}
- if(pathname==='/api/status'&&req.method==='GET')return json(res,200,{databaseConfigured:!!pool,registrationEnabled:!!pool,paymentEnabled:false});
- if(pathname.startsWith('/api/')){
-   if(!pool)return json(res,503,{error:'Creator accounts are not yet available. Configure DATABASE_URL on Render.'});
-   if(req.method==='POST'){
-     const origin=req.headers.origin;const host=req.headers.host;
-     if(origin&&new URL(origin).host!==host)return json(res,403,{error:'Invalid request origin'});
-     if(!['application/json'].some(t=>(req.headers['content-type']||'').startsWith(t)))return json(res,415,{error:'JSON required'});
-   }
-   if(pathname==='/api/register'&&req.method==='POST'){
-     const b=await readBody(req),name=String(b.name||'').trim(),email=String(b.email||'').trim().toLowerCase(),password=String(b.password||''),plan=String(b.plan||'starter');
-     if(name.length<2||name.length>100||!/^\S+@\S+\.\S+$/.test(email)||email.length>254||password.length<10||password.length>128||!PLANS[plan])return json(res,400,{error:'Enter a valid name, email, plan, and password of at least 10 characters.'});
-     const salt=crypto.randomBytes(16).toString('hex'),hash=hashPassword(password,salt);
-     try{const r=await pool.query('INSERT INTO creators(display_name,email,password_salt,password_hash,plan) VALUES($1,$2,$3,$4,$5) RETURNING id,display_name,email,plan,membership_status,created_at',[name,email,salt,hash,plan]);const token=crypto.randomBytes(32).toString('hex');await pool.query("INSERT INTO sessions(token_hash,creator_id,expires_at) VALUES($1,$2,NOW()+INTERVAL '7 days')",[tokenHash(token),r.rows[0].id]);setSession(res,token);return json(res,201,{user:r.rows[0],notice:'Account created. Membership is pending payment; uploads and royalties are not active.'});}
-     catch(e){if(e.code==='23505')return json(res,409,{error:'This email is already registered.'});throw e;}
-   }
-   if(pathname==='/api/login'&&req.method==='POST'){
-     const b=await readBody(req),email=String(b.email||'').trim().toLowerCase(),password=String(b.password||'');
-     const r=await pool.query('SELECT * FROM creators WHERE email=$1',[email]);const user=r.rows[0];const salt=user?.password_salt||'00000000000000000000000000000000';const expected=Buffer.from(user?.password_hash||'0'.repeat(128),'hex');const actual=Buffer.from(hashPassword(password,salt),'hex');if(!user||!crypto.timingSafeEqual(expected,actual))return json(res,401,{error:'Incorrect email or password.'});
-     const token=crypto.randomBytes(32).toString('hex');await pool.query("INSERT INTO sessions(token_hash,creator_id,expires_at) VALUES($1,$2,NOW()+INTERVAL '7 days')",[tokenHash(token),user.id]);setSession(res,token);return json(res,200,{user:{id:user.id,display_name:user.display_name,email:user.email,plan:user.plan,membership_status:user.membership_status}});
-   }
-   if(pathname==='/api/me'&&req.method==='GET'){const user=await currentUser(req);return user?json(res,200,{user}):json(res,401,{error:'Not signed in.'});}
-   if(pathname==='/api/logout'&&req.method==='POST'){const token=cookies(req).lae_session;if(token)await pool.query('DELETE FROM sessions WHERE token_hash=$1',[tokenHash(token)]);clearSession(res);return json(res,200,{ok:true});}
-   return json(res,404,{error:'Unknown endpoint'});
- }
- if(req.method!=='GET'&&req.method!=='HEAD')return json(res,405,{error:'Method not allowed'});
- const file=staticFiles[pathname];if(!file){res.writeHead(404);return res.end('Not found');}
- fs.readFile(path.join(__dirname,'public',file),(err,data)=>{if(err){res.writeHead(500);return res.end('Server error');}res.writeHead(200,{'Content-Type':types[path.extname(file)]||'text/plain','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});res.end(req.method==='HEAD'?undefined:data);});
- }catch(e){console.error('Request error:',e.message);if(!res.headersSent)json(res,500,{error:'Something went wrong. Please try again.'});}});
-init().then(()=>server.listen(PORT,'0.0.0.0',()=>console.log('LAE Music Stage 3 on '+PORT))).catch(e=>{console.error('Database initialization failed:',e.message);process.exit(1)});
+const defaults={headline:'Your sound. Your audience. Your earnings.',subheading:'Discover fresh music, support independent creators and find your next favorite track.',heroImage:'',announcement:'A new home for independent music is coming to life.'};
+let site={...defaults},image=null,ratesCache={time:0,rates:null,asOf:null};
+const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.svg':'image/svg+xml','.json':'application/json; charset=utf-8'};
+function json(res,status,obj){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(obj));}
+function body(req,max=3000000){return new Promise((resolve,reject)=>{let size=0,chunks=[];req.on('data',c=>{size+=c.length;if(size>max){reject(new Error('Payload too large'));req.destroy();return;}chunks.push(c)});req.on('end',()=>{try{resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}'))}catch{reject(new Error('Invalid JSON'))}});req.on('error',reject)})}
+function authAdmin(req){const key=process.env.ADMIN_KEY||'';const supplied=req.headers['x-admin-key']||'';if(key.length<16||typeof supplied!=='string'||supplied.length!==key.length)return false;return crypto.timingSafeEqual(Buffer.from(key),Buffer.from(supplied));}
+const hash=(v)=>crypto.createHash('sha256').update(v).digest('hex');
+const pass=(v,s)=>crypto.scryptSync(v,s,64).toString('hex');
+function cookie(req){return (req.headers.cookie||'').split(';').map(x=>x.trim()).find(x=>x.startsWith('lae_session='))?.slice(12)||''}
+async function me(req){const t=cookie(req);if(!pool||!(/^[a-f0-9]{64}$/).test(t))return null;const r=await pool.query('SELECT c.id,c.display_name,c.email,c.plan,c.membership_status,c.created_at FROM sessions s JOIN creators c ON c.id=s.creator_id WHERE s.token_hash=$1 AND s.expires_at>NOW()',[hash(t)]);return r.rows[0]||null}
+function session(res,t){res.setHeader('Set-Cookie',`lae_session=${t}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=604800`)}
+async function init(){if(!pool){console.log('No DATABASE_URL: homepage and demo enabled; accounts and persistent admin settings disabled');return;}await pool.query(`CREATE TABLE IF NOT EXISTS creators(id BIGSERIAL PRIMARY KEY,display_name VARCHAR(100) NOT NULL,email VARCHAR(254) NOT NULL UNIQUE,password_salt VARCHAR(64) NOT NULL,password_hash VARCHAR(128) NOT NULL,plan VARCHAR(24) NOT NULL DEFAULT 'starter',membership_status VARCHAR(24) NOT NULL DEFAULT 'pending_payment',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());CREATE TABLE IF NOT EXISTS sessions(token_hash VARCHAR(64) PRIMARY KEY,creator_id BIGINT NOT NULL REFERENCES creators(id) ON DELETE CASCADE,expires_at TIMESTAMPTZ NOT NULL);CREATE TABLE IF NOT EXISTS site_settings(id INTEGER PRIMARY KEY CHECK(id=1),settings JSONB NOT NULL,hero_image BYTEA,hero_mime VARCHAR(30));`);const r=await pool.query('SELECT settings,hero_image,hero_mime FROM site_settings WHERE id=1');if(r.rows.length){site={...defaults,...r.rows[0].settings};if(r.rows[0].hero_image)image={bytes:r.rows[0].hero_image,mime:r.rows[0].hero_mime};}console.log('Database ready')}
+async function save(){if(pool)await pool.query('INSERT INTO site_settings(id,settings,hero_image,hero_mime) VALUES(1,$1,$2,$3) ON CONFLICT(id) DO UPDATE SET settings=EXCLUDED.settings,hero_image=EXCLUDED.hero_image,hero_mime=EXCLUDED.hero_mime',[JSON.stringify(site),image?.bytes||null,image?.mime||null]);}
+async function rates(){if(ratesCache.rates&&Date.now()-ratesCache.time<43200000)return ratesCache;try{const r=await fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(6500)});if(!r.ok)throw Error('Unavailable');const data=await r.json();if(data.result!=='success'||!data.rates)throw Error('Invalid');ratesCache={time:Date.now(),rates:data.rates,asOf:data.time_last_update_utc};}catch(e){console.warn('Rates unavailable:',e.message)}return ratesCache}
+const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');const p=url.pathname;
+ if(p==='/health')return json(res,200,{ok:true,version:'0.5.0',database:!!pool});
+ if(p==='/api/site'&&req.method==='GET')return json(res,200,{...site,heroImage:image?'/hero-image':site.heroImage,adminConfigured:!!process.env.ADMIN_KEY,databaseConfigured:!!pool,settingsPersistent:!!pool});
+ if(p==='/hero-image'&&req.method==='GET'){if(!image){res.writeHead(404);return res.end('No image')}res.writeHead(200,{'Content-Type':image.mime,'Cache-Control':'public, max-age=300','X-Content-Type-Options':'nosniff'});return res.end(image.bytes)}
+ if(p==='/api/plans'&&req.method==='GET')return json(res,200,{baseCurrency:'USD',billing:'annual',plans:PLANS,paymentEnabled:false});
+ if(p==='/api/status'&&req.method==='GET')return json(res,200,{databaseConfigured:!!pool,registrationEnabled:!!pool,paymentEnabled:false,adminConfigured:!!process.env.ADMIN_KEY});
+ if(p==='/api/exchange-rates'&&req.method==='GET'){const r=await rates();return json(res,r.rates?200:503,{base:'USD',rates:r.rates,asOf:r.asOf,disclaimer:'Indicative conversion only; payments not yet enabled.'})}
+ if(p.startsWith('/api/admin/')){if(!authAdmin(req))return json(res,401,{error:'Admin key missing or incorrect. Set ADMIN_KEY in Render environment (at least 16 characters).'});if(req.method!=='POST')return json(res,405,{error:'Method not allowed'});const b=await body(req);if(p==='/api/admin/site'){for(const k of ['headline','subheading','announcement']){if(b[k]!==undefined){if(typeof b[k]!=='string'||b[k].length>260)return json(res,400,{error:'Text too long'});site[k]=b[k].trim()}}await save();return json(res,200,{ok:true})}if(p==='/api/admin/hero'){if(b.remove===true){image=null;site.heroImage='';await save();return json(res,200,{ok:true})}if(typeof b.data!=='string'||!/^data:image\/(jpeg|png|webp);base64,/.test(b.data))return json(res,400,{error:'Upload a JPG, PNG or WebP image.'});const match=b.data.match(/^data:(image\/(?:jpeg|png|webp));base64,(.*)$/s);const bytes=Buffer.from(match[2],'base64');if(!bytes.length||bytes.length>2*1024*1024)return json(res,400,{error:'Image must be below 2 MB.'});const sig=bytes.subarray(0,12);const valid=match[1]==='image/png'?sig.subarray(0,8).equals(Buffer.from('89504e470d0a1a0a','hex')):match[1]==='image/jpeg'?sig[0]===255&&sig[1]===216: sig.subarray(0,4).toString()==='RIFF'&&sig.subarray(8,12).toString()==='WEBP';if(!valid)return json(res,400,{error:'Image format is invalid.'});image={bytes,mime:match[1]};await save();return json(res,200,{ok:true})}return json(res,404,{error:'Not found'})}
+ if(p==='/api/register'&&req.method==='POST'){if(!pool)return json(res,503,{error:'Registration requires DATABASE_URL.'});const b=await body(req,20000);const name=String(b.name||'').trim(),email=String(b.email||'').trim().toLowerCase(),password=String(b.password||''),plan=String(b.plan||'starter');if(name.length<2||name.length>100||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||password.length<10||password.length>128||!PLANS[plan])return json(res,400,{error:'Check name, email, plan and password (10+ characters).'});const salt=crypto.randomBytes(16).toString('hex');try{const r=await pool.query('INSERT INTO creators(display_name,email,password_salt,password_hash,plan) VALUES($1,$2,$3,$4,$5) RETURNING id,display_name,email,plan,membership_status',[name,email,salt,pass(password,salt),plan]);const t=crypto.randomBytes(32).toString('hex');await pool.query("INSERT INTO sessions(token_hash,creator_id,expires_at) VALUES($1,$2,NOW()+INTERVAL '7 days')",[hash(t),r.rows[0].id]);session(res,t);return json(res,201,{user:r.rows[0],notice:'Membership pending payment. Uploads and royalties are not yet active.'})}catch(e){if(e.code==='23505')return json(res,409,{error:'Email already registered'});throw e}}
+ if(p==='/api/login'&&req.method==='POST'){if(!pool)return json(res,503,{error:'Database not configured'});const b=await body(req,20000);const r=await pool.query('SELECT * FROM creators WHERE email=$1',[String(b.email||'').trim().toLowerCase()]);const u=r.rows[0],expected=Buffer.from(u?.password_hash||'0'.repeat(128),'hex'),actual=Buffer.from(pass(String(b.password||''),u?.password_salt||'0'.repeat(32)),'hex');if(!u||!crypto.timingSafeEqual(expected,actual))return json(res,401,{error:'Incorrect email or password'});const t=crypto.randomBytes(32).toString('hex');await pool.query("INSERT INTO sessions(token_hash,creator_id,expires_at) VALUES($1,$2,NOW()+INTERVAL '7 days')",[hash(t),u.id]);session(res,t);return json(res,200,{user:{id:u.id,display_name:u.display_name,email:u.email,plan:u.plan,membership_status:u.membership_status}})}
+ if(p==='/api/me'&&req.method==='GET'){const u=await me(req);return u?json(res,200,{user:u}):json(res,401,{error:'Not signed in'})}
+ if(p==='/api/logout'&&req.method==='POST'){if(pool&&cookie(req))await pool.query('DELETE FROM sessions WHERE token_hash=$1',[hash(cookie(req))]);res.setHeader('Set-Cookie','lae_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0');return json(res,200,{ok:true})}
+ if(p.startsWith('/api/'))return json(res,404,{error:'Unknown endpoint'});
+ if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'Method not allowed'});
+ const file=({'/':'index.html','/index.html':'index.html','/admin':'admin.html','/admin.html':'admin.html','/style.css':'style.css','/app.js':'app.js','/admin.js':'admin.js'})[p];if(!file){res.writeHead(404);return res.end('Not found')};const f=path.join(__dirname,'public',file);fs.readFile(f,(err,data)=>{if(err){console.error('Static file missing:',f);res.writeHead(500);return res.end('Website file missing')};res.writeHead(200,{'Content-Type':mime[path.extname(f)],'X-Content-Type-Options':'nosniff'});res.end(req.method==='HEAD'?undefined:data)});
+ }catch(e){console.error('Request error:',e.stack);if(!res.headersSent)json(res,500,{error:'Server error'})}});
+init().then(()=>server.listen(PORT,'0.0.0.0',()=>console.log('LAE Music v0.5.0 listening on '+PORT))).catch(e=>{console.error('Startup error:',e);process.exit(1)});
