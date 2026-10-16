@@ -144,7 +144,14 @@ const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'h
  if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'Method not allowed'});
  const file=({'/':'index.html','/index.html':'index.html','/admin':'admin.html','/admin.html':'admin.html','/style.css':'style.css','/app.js':'app.js','/admin.js':'admin.js'})[p];if(!file){res.writeHead(404);return res.end('Not found')};const encoded=embeddedAssets[file];if(!encoded){res.writeHead(404);return res.end('Page not found');}
  let data=zlib.gunzipSync(Buffer.from(encoded,'base64'));
- if(file==='index.html'){const banner='<div style="background:#152340;color:#fff;padding:15px;text-align:center;font:16px system-ui"><a style="background:#f5b842;color:#18213a;padding:12px 22px;border-radius:9px;text-decoration:none;font-weight:700;display:inline-block" href="/start">Get Started — Become an Artist</a> &nbsp; <a style="color:#fff" href="/music">Listen to Music</a></div>';data=Buffer.from(data.toString('utf8').replace(/<body([^>]*)>/i,'<body$1>'+banner))}
+ if(file==='index.html'){
+ const publicNav='<nav id="lae-public-nav" style="position:relative;z-index:9999;background:#14223e;color:#fff;padding:14px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font:16px system-ui"><strong style="margin-right:auto">LAE-MUSIC</strong><a style="color:#fff" href="/music">Listen to Music</a><a style="color:#fff" href="/start#signin">Sign In</a><a style="background:#f5b842;color:#14223e;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:bold" href="/start">Get Started / Sign Up</a></nav>';
+ const publicScript='<style>body a[href="/admin"],body a[href="/admin.html"],body a[href^="/admin?"],body button[onclick*="admin"]{display:none!important}</style><script>(function(){document.addEventListener("click",function(e){var t=e.target.closest("a,button");if(!t)return;var h=(t.getAttribute("href")||"").toLowerCase();var v=(t.textContent||"").trim().toLowerCase();if(h==="/admin"||h==="/admin.html"){e.preventDefault();e.stopImmediatePropagation();return}if(/^(starter|growth|professional|premium)(\\s|$)/i.test(v)){e.preventDefault();e.stopImmediatePropagation();location.href="/start"}},true)})();</scr'+'ipt>';
+ let html=data.toString('utf8');
+ html=html.replace(/<body\b[^>]*>/i,function(m){return m+publicNav});
+ html=html.replace(/<\/body>/i,function(m){return publicScript+m});
+ data=Buffer.from(html);
+}
  res.writeHead(200,{'Content-Type':mime[path.extname(file)],'X-Content-Type-Options':'nosniff','Cache-Control':'no-cache'});
  return res.end(req.method==='HEAD'?undefined:data);
 
