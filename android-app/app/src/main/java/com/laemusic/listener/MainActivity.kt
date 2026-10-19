@@ -40,6 +40,8 @@ class MainActivity : Activity() {
     private lateinit var search: EditText
     private lateinit var playPause: Button
     private var activeId: Long? = null
+    private var activeTitle = ""
+    private var activeArtist = ""
     private val queue = PlaybackQueue()
     private lateinit var seek: SeekBar
     private lateinit var elapsed: TextView
@@ -144,6 +146,29 @@ class MainActivity : Activity() {
             if (isFinishing || isDestroyed) return@addListener
             try {
                 player = future.get()
+                player?.addListener(object : Player.Listener {
+                    override fun onPlaybackStateChanged(state: Int) {
+                        when (state) {
+                            Player.STATE_READY -> {
+                                nowPlaying.text = "Ready: $activeTitle — $activeArtist"
+                                playPause.isEnabled = true
+                                playPause.text = if (player?.isPlaying == true) "Pause" else "Resume"
+                            }
+                            Player.STATE_ENDED -> {
+                                nowPlaying.text = "Finished: $activeTitle — $activeArtist"
+                                playPause.text = "Replay"
+                            }
+                            Player.STATE_BUFFERING -> nowPlaying.text = "Buffering: $activeTitle"
+                        }
+                    }
+                    override fun onIsPlayingChanged(isPlaying: Boolean) {
+                        if (playPause.isEnabled) playPause.text = if (isPlaying) "Pause" else "Resume"
+                    }
+                    override fun onPlayerError(error: PlaybackException) {
+                        nowPlaying.text = "Playback failed. Check connection and try again."
+                        playPause.isEnabled = false
+                    }
+                })
                 playPause.isEnabled = player!!.mediaItemCount > 0
             } catch (e: Exception) {
                 nowPlaying.text = "Player unavailable: " + (e.message ?: "connection error")
@@ -206,6 +231,8 @@ class MainActivity : Activity() {
         playbackToken++
         val token = playbackToken
         activeId = id
+        activeTitle = title
+        activeArtist = artist
         playPause.isEnabled = false
         seek.progress = 0
         elapsed.text = "0:00 / 0:00"
@@ -217,33 +244,6 @@ class MainActivity : Activity() {
                     if (token != playbackToken || isFinishing || isDestroyed) return@post
                     try {
                         val p = player ?: throw IllegalStateException("Player is connecting")
-                        p.addListener(object : Player.Listener {
-                            override fun onPlaybackStateChanged(state: Int) {
-                                if (token != playbackToken) return
-                                when (state) {
-                                    Player.STATE_READY -> {
-                                        nowPlaying.text = "Playing: $title — $artist"
-                                        playPause.isEnabled = true
-                                        playPause.text = if (p.isPlaying) "Pause" else "Resume"
-                                    }
-                                    Player.STATE_ENDED -> {
-                                        nowPlaying.text = "Finished: $title — $artist"
-                                        playPause.text = "Replay"
-                                    }
-                                    Player.STATE_BUFFERING -> nowPlaying.text = "Buffering: $title"
-                                }
-                            }
-                            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                                if (token == playbackToken && playPause.isEnabled)
-                                    playPause.text = if (isPlaying) "Pause" else "Resume"
-                            }
-                            override fun onPlayerError(error: PlaybackException) {
-                                if (token == playbackToken) {
-                                    nowPlaying.text = "Playback failed. Check connection and try again."
-                                    playPause.isEnabled = false
-                                }
-                            }
-                        })
                         p.setMediaItem(MediaItem.Builder()
                             .setUri(url)
                             .setMediaMetadata(MediaMetadata.Builder()
