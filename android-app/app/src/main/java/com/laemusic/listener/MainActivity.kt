@@ -34,6 +34,26 @@ class MainActivity : Activity() {
     private lateinit var search: EditText
     private lateinit var playPause: Button
     private var activeId: Long? = null
+    private data class Song(val id: Long, val title: String, val artist: String)
+    private val catalogue = mutableListOf<Song>()
+    private var currentIndex = -1
+    private lateinit var seek: SeekBar
+    private lateinit var elapsed: TextView
+    private val tick = object : Runnable {
+        override fun run() {
+            val p = player
+            if (::seek.isInitialized && p != null && p.duration > 0) {
+                seek.max = (p.duration / 1000).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+                seek.progress = (p.currentPosition / 1000).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+                elapsed.text = formatTime(p.currentPosition) + " / " + formatTime(p.duration)
+            }
+            main.postDelayed(this, 1000)
+        }
+    }
+    private fun formatTime(ms: Long): String {
+        val seconds = (ms / 1000).coerceAtLeast(0)
+        return (seconds / 60).toString() + ":" + (seconds % 60).toString().padStart(2, '0')
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +100,31 @@ class MainActivity : Activity() {
             }
         }
         root.addView(playPause)
+        val controls = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val previous = Button(this).apply {
+            text = "Previous"
+            setOnClickListener { playAt(currentIndex - 1) }
+        }
+        val next = Button(this).apply {
+            text = "Next"
+            setOnClickListener { playAt(currentIndex + 1) }
+        }
+        controls.addView(previous, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        controls.addView(next, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        root.addView(controls)
+        seek = SeekBar(this).apply {
+            max = 100
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(bar: SeekBar, position: Int, fromUser: Boolean) {
+                    if (fromUser) player?.seekTo(position.toLong() * 1000)
+                }
+                override fun onStartTrackingTouch(bar: SeekBar) {}
+                override fun onStopTrackingTouch(bar: SeekBar) {}
+            })
+        }
+        root.addView(seek)
+        elapsed = label("0:00 / 0:00", 12f)
+        root.addView(elapsed)
         val website = Button(this).apply {
             text = "Open full LAE-MUSIC website"
             setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("$origin/music"))) }
@@ -87,6 +132,7 @@ class MainActivity : Activity() {
         root.addView(website)
         setContentView(root)
         searchButton.setOnClickListener { loadSongs(search.text.toString()) }
+        main.post(tick)
         loadSongs("")
     }
 
@@ -110,16 +156,19 @@ class MainActivity : Activity() {
                 main.post {
                     if (isFinishing || isDestroyed) return@post
                     songs.removeAllViews()
+                    catalogue.clear()
                     status.text = "${tracks.length()} songs found"
                     for (i in 0 until tracks.length()) {
                         val t = tracks.getJSONObject(i)
                         val id = t.getLong("id")
                         val title = t.optString("title", "Untitled")
                         val artist = t.optString("artist", "Unknown artist")
+                        catalogue.add(Song(id, title, artist))
+                        val index = catalogue.lastIndex
                         val button = Button(this).apply {
                             text = "$title — $artist"
                             isAllCaps = false
-                            setOnClickListener { playSong(id, title, artist) }
+                            setOnClickListener { playAt(index) }
                         }
                         songs.addView(button)
                     }
@@ -130,6 +179,13 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun playAt(index: Int) {
+        if (index !in catalogue.indices) return
+        currentIndex = index
+        val song = catalogue[index]
+        playSong(song.id, song.title, song.artist)
+    }
+
     private fun playSong(id: Long, title: String, artist: String) {
         playbackToken++
         val token = playbackToken
@@ -137,6 +193,8 @@ class MainActivity : Activity() {
         player = null
         activeId = id
         playPause.isEnabled = false
+        seek.progress = 0
+        elapsed.text = "0:00 / 0:00"
         nowPlaying.text = "Loading: $title — $artist"
         executor.execute {
             try {
@@ -201,6 +259,7 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         playbackToken++
+        main.removeCallbacks(tick)
         player?.release()
         player = null
         executor.shutdownNow()
