@@ -43,7 +43,6 @@ class MainActivity : Activity() {
     private lateinit var playPause: Button
     private var activeId: Long? = null
     private var activeArtistId: Long? = null
-    private var activeTrackArtistId: Long? = null
     private lateinit var socialActions: LinearLayout
     private lateinit var engagementStatus: TextView
     private var engagementToken = 0
@@ -188,8 +187,13 @@ class MainActivity : Activity() {
                                 playPause.text = if (player?.isPlaying == true) "Pause" else "Resume"
                             }
                             Player.STATE_ENDED -> {
-                                nowPlaying.text = "Finished: $activeTitle — $activeArtist"
-                                playPause.text = "Replay"
+                                val upcoming = queue.next()
+                                if (upcoming != null) {
+                                    playSongFromQueue(upcoming)
+                                } else {
+                                    nowPlaying.text = "Finished: $activeTitle — $activeArtist"
+                                    playPause.text = "Replay"
+                                }
                             }
                             Player.STATE_BUFFERING -> nowPlaying.text = "Buffering: $activeTitle"
                         }
@@ -203,6 +207,12 @@ class MainActivity : Activity() {
                     }
                 })
                 playPause.isEnabled = player!!.mediaItemCount > 0
+                if (player!!.mediaItemCount > 0 && pendingStream == null) {
+                    val metadata = player!!.currentMediaItem?.mediaMetadata
+                    activeTitle = metadata?.title?.toString().orEmpty()
+                    activeArtist = metadata?.artist?.toString().orEmpty()
+                    nowPlaying.text = "Now playing: $activeTitle — $activeArtist"
+                }
                 pendingStream?.let { (url, title, artist) ->
                     pendingStream = null
                     startStream(url, title, artist)
@@ -277,7 +287,6 @@ class MainActivity : Activity() {
         activeId = id
         activeTitle = title
         activeArtist = artist
-        activeTrackArtistId = activeArtistId
         loadEngagement(id, activeArtistId)
         pendingStream = null
         player?.pause()
