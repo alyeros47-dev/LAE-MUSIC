@@ -84,6 +84,7 @@ function create({pool,me,authAdmin}){
  try{
  if(!pool)return send(res,503,{error:'Database connection required'}),true;
  if(p==='/api/music/status')return send(res,200,{database:true,storageConfigured:!!getStore(),uploadsEnabled:!!getStore(),message:getStore()?'Storage credentials present; upload requires a working R2 bucket and CORS':'Cloudflare R2 environment variables are missing'}),true;
+ if(/^\/api\/music\/track\/[1-9][0-9]*$/.test(p)&&req.method==='GET'){const id=p.split('/').pop();const r=await pool.query(`SELECT ${view} FROM music_tracks t JOIN creators c ON c.id=t.creator_id WHERE t.id=$1 AND t.status='published' LIMIT 1`,[id]);return send(res,r.rowCount?200:404,r.rowCount?{track:r.rows[0]}:{error:'Song not found'}),true;}
  if(p==='/api/music/tracks'&&req.method==='GET'){
  const q=safeText(url.searchParams.get('q'),100),genre=safeText(url.searchParams.get('genre'),60),limit=integer(url.searchParams.get('limit')||24,1,50)||24;
  const params=[],where=["t.status='published'"];if(q){params.push('%'+q+'%');where.push(`(t.title ILIKE $${params.length} OR c.display_name ILIKE $${params.length} OR t.genre ILIKE $${params.length})`)}if(genre){params.push(genre);where.push(`t.genre=$${params.length}`)}params.push(limit);
