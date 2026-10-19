@@ -30,6 +30,15 @@ class PlaybackQueueTest {
         assertNull(queue.next())
         assertEquals(3L, queue.select(0)?.id)
     }
+    @Test fun retainsActualPlayingSongAcrossSearch() {
+        val queue = PlaybackQueue()
+        queue.replace(listOf(PlaybackQueue.Song(1, "One", "A"), PlaybackQueue.Song(2, "Two", "B")))
+        queue.select(0)
+        queue.replace(listOf(PlaybackQueue.Song(2, "Two", "B"), PlaybackQueue.Song(3, "Three", "C")), 2L)
+        assertEquals(2L, queue.current()?.id)
+        assertEquals(3L, queue.next()?.id)
+    }
+
     @Test fun artistIdentityTracksNextAndPrevious() {
         val queue = PlaybackQueue()
         queue.replace(listOf(
