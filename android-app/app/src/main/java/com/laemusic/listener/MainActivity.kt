@@ -43,6 +43,7 @@ class MainActivity : Activity() {
     private lateinit var playPause: Button
     private var activeId: Long? = null
     private var activeArtistId: Long? = null
+    private var activeTrackArtistId: Long? = null
     private lateinit var socialActions: LinearLayout
     private lateinit var engagementStatus: TextView
     private var engagementToken = 0
@@ -276,6 +277,7 @@ class MainActivity : Activity() {
         activeId = id
         activeTitle = title
         activeArtist = artist
+        activeTrackArtistId = activeArtistId
         loadEngagement(id, activeArtistId)
         pendingStream = null
         player?.pause()
@@ -320,7 +322,7 @@ class MainActivity : Activity() {
                     val comment = array.getJSONObject(i)
                     val author = comment.optString("author", "Listener").ifBlank { "Listener" }
                     val body = comment.optString("body", "")
-                    text.append(author).append(": ").append(body).append("\\n\\n")
+                    text.append(author).append(": ").append(body).append("\n\n")
                 }
                 if (array.length() > count) text.append("Showing first $count comments")
                 main.post {
