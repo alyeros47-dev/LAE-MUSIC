@@ -5,7 +5,12 @@ import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.PlaybackException
-import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import androidx.media3.common.MediaMetadata
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
+import android.content.ComponentName
 import android.graphics.Color
 import android.view.ViewGroup
 import android.widget.*
@@ -26,7 +31,8 @@ class MainActivity : Activity() {
     private val origin = "https://lae-music.onrender.com"
     private val executor = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
-    private var player: ExoPlayer? = null
+    private var player: MediaController? = null
+    private var controllerFuture: ListenableFuture<MediaController>? = null
     private var playbackToken = 0
     private lateinit var songs: LinearLayout
     private lateinit var status: TextView
@@ -131,6 +137,18 @@ class MainActivity : Activity() {
         setContentView(root)
         searchButton.setOnClickListener { loadSongs(search.text.toString()) }
         main.post(tick)
+        val token = SessionToken(this, ComponentName(this, MusicPlaybackService::class.java))
+        val future = MediaController.Builder(this, token).buildAsync()
+        controllerFuture = future
+        future.addListener({
+            if (isFinishing || isDestroyed) return@addListener
+            try {
+                player = future.get()
+                playPause.isEnabled = player!!.mediaItemCount > 0
+            } catch (e: Exception) {
+                nowPlaying.text = "Player unavailable: " + (e.message ?: "connection error")
+            }
+        }, MoreExecutors.directExecutor())
         loadSongs("")
     }
 
@@ -187,8 +205,6 @@ class MainActivity : Activity() {
     private fun playSong(id: Long, title: String, artist: String) {
         playbackToken++
         val token = playbackToken
-        player?.release()
-        player = null
         activeId = id
         playPause.isEnabled = false
         seek.progress = 0
@@ -200,8 +216,7 @@ class MainActivity : Activity() {
                 main.post {
                     if (token != playbackToken || isFinishing || isDestroyed) return@post
                     try {
-                        val p = ExoPlayer.Builder(this).build()
-                        player = p
+                        val p = player ?: throw IllegalStateException("Player is connecting")
                         p.addListener(object : Player.Listener {
                             override fun onPlaybackStateChanged(state: Int) {
                                 if (token != playbackToken) return
@@ -229,7 +244,11 @@ class MainActivity : Activity() {
                                 }
                             }
                         })
-                        p.setMediaItem(MediaItem.fromUri(url))
+                        p.setMediaItem(MediaItem.Builder()
+                            .setUri(url)
+                            .setMediaMetadata(MediaMetadata.Builder()
+                                .setTitle(title).setArtist(artist).build())
+                            .build())
                         p.prepare()
                         p.play()
                     } catch (e: Exception) {
@@ -244,21 +263,11 @@ class MainActivity : Activity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        // Stage 3 will move playback to a MediaSessionService for background listening.
-        player?.pause()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Keep playback lifecycle tied to the Activity until the MediaSession service is wired.
-    }
-
     override fun onDestroy() {
         playbackToken++
         main.removeCallbacks(tick)
-        player?.release()
+        controllerFuture?.let { MediaController.releaseFuture(it) }
+        controllerFuture = null
         player = null
         executor.shutdownNow()
         super.onDestroy()
