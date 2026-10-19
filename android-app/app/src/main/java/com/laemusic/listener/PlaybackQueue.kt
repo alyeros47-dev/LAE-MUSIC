@@ -20,6 +20,6 @@ class PlaybackQueue {
         index = position
         return selected
     }
-    fun next(): Song? = select(index + 1)
+    fun next(): Song? = if (index == -1) null else select(index + 1)
     fun previous(): Song? = select(index - 1)
 }
