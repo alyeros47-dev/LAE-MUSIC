@@ -1,22 +1,24 @@
-# LAE-MUSIC Android — Phase 1
+# LAE-MUSIC Android — Stage 2
 
-This is an **Android-only starter app** that displays the existing LAE-MUSIC listener music catalogue at https://lae-music.onrender.com/music. It does **not** modify the website, backend, database, artist subscriptions, or royalty rules.
+This is a separate Android-only application connected to the existing LAE-MUSIC backend at https://lae-music.onrender.com. It does not change the live website.
 
-## Status
-- Android project structure and app entry point committed.
-- Requires Android Studio, JDK 17, Android SDK 35, and network access to Gradle dependencies.
-- **Not yet compiled or tested on an Android device.**
-- This initial version is a WebView-based online listener shell, **not** a finished native streaming player.
-- Offline downloads, background audio controls, monthly payments, ads, offline-play reconciliation, and anti-fraud logic **are not implemented**.
+## Implemented in source
+- Native Android song list, search, and online audio player.
+- Uses existing public `GET /api/music/tracks` and `GET /api/music/tracks/{id}/stream` APIs.
+- Playback controls: play, pause, resume, replay.
+- The server returns time-limited R2 streaming URLs.
 
-## Build
-Open `android-app/` as the project root in Android Studio. Allow Gradle sync. Build and run on an emulator or Android phone. The project uses AGP 8.7.3 and Kotlin 2.0.21.
+## Build and test
+Open this `android-app` folder in Android Studio with JDK 17 and Android SDK 35. Allow Gradle sync (Android Gradle Plugin 8.7.3; Kotlin 2.0.21). Build and run on a physical Android phone or emulator with internet access.
 
-## Next engineering stages
-1. Test existing listener catalogue and playback in the Android app.
-2. Add native player and background playback with Media3.
-3. Add secure app-managed offline cache and reconnect verification.
-4. Implement paid listener entitlement and Play Billing with backend verification.
-5. Add compliant ad inventory for free listeners and fraud-resistant royalty accounting.
+**Not yet compiled, installed, or device-tested.** This repository does not currently include a Gradle wrapper; Android Studio can be used to configure/build with a compatible Gradle installation. Verify streaming against actual published tracks and Cloudflare R2.
 
-No subscription money should be collected until payment verification, refund handling, and entitlement expiry are implemented and tested.
+## Not yet implemented
+- Android background playback and media notification.
+- Premium listener subscriptions and Google Play Billing.
+- Secure offline storage and entitlement expiry.
+- Free-tier advertisements.
+- Validated royalty accounting for Android playback (the native player deliberately does not report a payable stream until anti-fraud rules are designed).
+- App signing, icon, store listing and Play Store publishing.
+
+Do not sell premium offline access until subscriptions, verification, and offline playback are fully implemented and tested.
