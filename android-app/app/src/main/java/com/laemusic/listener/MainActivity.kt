@@ -43,6 +43,7 @@ class MainActivity : Activity() {
     private lateinit var playPause: Button
     private var activeId: Long? = null
     private var activeArtistId: Long? = null
+    private var restoringPlayback = false
     private lateinit var socialActions: LinearLayout
     private lateinit var engagementStatus: TextView
     private var engagementToken = 0
@@ -208,10 +209,12 @@ class MainActivity : Activity() {
                 })
                 playPause.isEnabled = player!!.mediaItemCount > 0
                 if (player!!.mediaItemCount > 0 && pendingStream == null) {
+                    restoringPlayback = true
                     val metadata = player!!.currentMediaItem?.mediaMetadata
                     activeTitle = metadata?.title?.toString().orEmpty()
                     activeArtist = metadata?.artist?.toString().orEmpty()
                     nowPlaying.text = "Now playing: $activeTitle — $activeArtist"
+                    activeId = player!!.currentMediaItem?.mediaId?.toLongOrNull()
                 }
                 pendingStream?.let { (url, title, artist) ->
                     pendingStream = null
@@ -265,6 +268,14 @@ class MainActivity : Activity() {
                         songs.addView(button)
                     }
                     queue.replace(results)
+                    if (restoringPlayback) {
+                        val i = results.indexOfFirst { it.id == activeId }
+                        if (i >= 0) {
+                            queue.select(i)
+                            activeArtistId = results[i].artistId
+                        }
+                        restoringPlayback = false
+                    }
                 }
             } catch (e: Exception) {
                 main.post { if (!isFinishing && !isDestroyed && request == searchToken) status.text = "Could not load music: ${e.message}" }
@@ -285,6 +296,7 @@ class MainActivity : Activity() {
         playbackToken++
         val token = playbackToken
         activeId = id
+        restoringPlayback = false
         activeTitle = title
         activeArtist = artist
         loadEngagement(id, activeArtistId)
@@ -384,6 +396,7 @@ class MainActivity : Activity() {
         try {
             val p = player ?: return
             p.setMediaItem(MediaItem.Builder()
+                .setMediaId(activeId?.toString().orEmpty())
                 .setUri(url)
                 .setMediaMetadata(MediaMetadata.Builder()
                     .setTitle(title).setArtist(artist).build())
