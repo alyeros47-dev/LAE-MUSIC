@@ -16,5 +16,9 @@ fun main() {
     check(queue.select(0)?.id == 2L)
     queue.replace(listOf(PlaybackQueue.Song(2, "Second", "Artist B"), PlaybackQueue.Song(3, "Third", "Artist C")))
     check(queue.current()?.id == 2L)
+    queue.replace(listOf(PlaybackQueue.Song(10, "Song X", "Artist X", 101), PlaybackQueue.Song(11, "Song Y", "Artist Y", 202)))
+    check(queue.select(0)?.artistId == 101L)
+    check(queue.next()?.artistId == 202L)
+    check(queue.previous()?.artistId == 101L)
     println("PlaybackQueue tests passed")
 }
