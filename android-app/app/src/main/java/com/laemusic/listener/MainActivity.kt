@@ -268,7 +268,7 @@ class MainActivity : Activity() {
                         }
                         songs.addView(button)
                     }
-                    queue.replace(results)
+                    queue.replace(results, activeId)
                     if (restoringPlayback) {
                         val i = results.indexOfFirst { it.id == activeId }
                         if (i >= 0) {
