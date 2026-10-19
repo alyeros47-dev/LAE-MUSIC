@@ -5,7 +5,7 @@ This is a separate Android-only application connected to the existing LAE-MUSIC 
 ## Implemented in source
 - Native Android song list, search, and online Media3 ExoPlayer audio player.
 - Uses existing public `GET /api/music/tracks` and `GET /api/music/tracks/{id}/stream` APIs.
-- Playback controls: play, pause, resume, replay; buffering and error states.
+- Playback controls: play, pause, resume, replay, previous/next song in search results, seek bar and elapsed/duration display; buffering and error states.
 - The server returns time-limited R2 streaming URLs.
 
 ## Build and test
