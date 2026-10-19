@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core:1.15.0")
+    implementation("com.google.guava:guava:33.3.1-android")
     testImplementation("junit:junit:4.13.2")
     implementation("androidx.media3:media3-exoplayer:1.5.1")
     implementation("androidx.media3:media3-common:1.5.1")
