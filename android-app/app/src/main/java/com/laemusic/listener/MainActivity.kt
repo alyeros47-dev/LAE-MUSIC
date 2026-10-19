@@ -7,8 +7,6 @@ import androidx.media3.common.Player
 import androidx.media3.common.PlaybackException
 import androidx.media3.exoplayer.ExoPlayer
 import android.graphics.Color
-import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.content.Intent
@@ -74,7 +72,10 @@ class MainActivity : Activity() {
             isEnabled = false
             setOnClickListener {
                 val p = player ?: return@setOnClickListener
-                if (p.isPlaying) p.pause() else p.play()
+                if (p.isPlaying) p.pause() else {
+                    if (p.playbackState == Player.STATE_ENDED) p.seekTo(0)
+                    p.play()
+                }
                 text = if (p.isPlaying) "Pause" else "Resume"
             }
         }
