@@ -111,9 +111,9 @@ class MainActivity : Activity() {
                 }
             }
         }
-        socialActions.addView(socialButton("Like"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        socialActions.addView(socialButton("Follow"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        socialActions.addView(socialButton("Gift artist"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        socialActions.addView(socialButton("Like on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        socialActions.addView(socialButton("Follow on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        socialActions.addView(socialButton("Gift on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         root.addView(socialActions)
         playPause = Button(this).apply {
             text = "Pause / Resume"
