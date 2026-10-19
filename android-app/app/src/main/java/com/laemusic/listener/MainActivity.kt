@@ -34,9 +34,7 @@ class MainActivity : Activity() {
     private lateinit var search: EditText
     private lateinit var playPause: Button
     private var activeId: Long? = null
-    private data class Song(val id: Long, val title: String, val artist: String)
-    private val catalogue = mutableListOf<Song>()
-    private var currentIndex = -1
+    private val queue = PlaybackQueue()
     private lateinit var seek: SeekBar
     private lateinit var elapsed: TextView
     private val tick = object : Runnable {
@@ -103,11 +101,11 @@ class MainActivity : Activity() {
         val controls = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         val previous = Button(this).apply {
             text = "Previous"
-            setOnClickListener { playAt(currentIndex - 1) }
+            setOnClickListener { playSongFromQueue(queue.previous()) }
         }
         val next = Button(this).apply {
             text = "Next"
-            setOnClickListener { playAt(currentIndex + 1) }
+            setOnClickListener { playSongFromQueue(queue.next()) }
         }
         controls.addView(previous, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         controls.addView(next, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
@@ -156,15 +154,15 @@ class MainActivity : Activity() {
                 main.post {
                     if (isFinishing || isDestroyed) return@post
                     songs.removeAllViews()
-                    catalogue.clear()
+                    val results = mutableListOf<PlaybackQueue.Song>()
                     status.text = "${tracks.length()} songs found"
                     for (i in 0 until tracks.length()) {
                         val t = tracks.getJSONObject(i)
                         val id = t.getLong("id")
                         val title = t.optString("title", "Untitled")
                         val artist = t.optString("artist", "Unknown artist")
-                        catalogue.add(Song(id, title, artist))
-                        val index = catalogue.lastIndex
+                        results.add(PlaybackQueue.Song(id, title, artist))
+                        val index = results.lastIndex
                         val button = Button(this).apply {
                             text = "$title — $artist"
                             isAllCaps = false
@@ -172,6 +170,7 @@ class MainActivity : Activity() {
                         }
                         songs.addView(button)
                     }
+                    queue.replace(results)
                 }
             } catch (e: Exception) {
                 main.post { if (!isFinishing) status.text = "Could not load music: ${e.message}" }
@@ -179,11 +178,10 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun playAt(index: Int) {
-        if (index !in catalogue.indices) return
-        currentIndex = index
-        val song = catalogue[index]
-        playSong(song.id, song.title, song.artist)
+    private fun playAt(index: Int) = playSongFromQueue(queue.select(index))
+
+    private fun playSongFromQueue(song: PlaybackQueue.Song?) {
+        if (song != null) playSong(song.id, song.title, song.artist)
     }
 
     private fun playSong(id: Long, title: String, artist: String) {
