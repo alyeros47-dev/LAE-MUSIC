@@ -44,6 +44,8 @@ class MainActivity : Activity() {
     private var activeId: Long? = null
     private var activeArtistId: Long? = null
     private lateinit var socialActions: LinearLayout
+    private lateinit var engagementStatus: TextView
+    private var engagementToken = 0
     private var activeTitle = ""
     private var activeArtist = ""
     private val queue = PlaybackQueue()
@@ -115,6 +117,10 @@ class MainActivity : Activity() {
         socialActions.addView(socialButton("Follow on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         socialActions.addView(socialButton("Gift on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         root.addView(socialActions)
+        val commentsButton = socialButton("View and write comments on website")
+        root.addView(commentsButton)
+        engagementStatus = label("Select a song to see likes and comments", 12f)
+        root.addView(engagementStatus)
         playPause = Button(this).apply {
             text = "Pause / Resume"
             isEnabled = false
@@ -264,6 +270,7 @@ class MainActivity : Activity() {
         activeId = id
         activeTitle = title
         activeArtist = artist
+        loadEngagement(id, activeArtistId)
         pendingStream = null
         player?.pause()
         playPause.isEnabled = false
@@ -290,6 +297,30 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun loadEngagement(trackId: Long, artistId: Long?) {
+        val request = ++engagementToken
+        engagementStatus.text = "Loading likes and comments…"
+        executor.execute {
+            try {
+                val data = getJson("/api/listener/song-engagement?trackId=$trackId")
+                val follow = artistId?.let { getJson("/api/music/artist-follow?artistId=$it") }
+                main.post {
+                    if (isDestroyed || isFinishing || request != engagementToken) return@post
+                    val likes = data.optInt("likes", 0)
+                    val comments = data.optInt("comments", 0)
+                    val followers = follow?.optInt("followers", 0)
+                    engagementStatus.text = "$likes likes · $comments comments" +
+                        (if (followers != null) " · $followers artist followers" else "")
+                }
+            } catch (e: Exception) {
+                main.post {
+                    if (!isDestroyed && !isFinishing && request == engagementToken)
+                        engagementStatus.text = "Engagement counts unavailable"
+                }
+            }
+        }
+    }
+
     private fun startStream(url: String, title: String, artist: String) {
         try {
             val p = player ?: return
@@ -308,6 +339,7 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         playbackToken++
+        engagementToken++
         main.removeCallbacks(tick)
         controllerFuture?.let { MediaController.releaseFuture(it) }
         controllerFuture = null
