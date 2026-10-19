@@ -2,7 +2,10 @@ package com.laemusic.listener
 
 import android.app.Activity
 import android.os.Bundle
-import android.media.MediaPlayer
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.PlaybackException
+import androidx.media3.exoplayer.ExoPlayer
 import android.graphics.Color
 import android.view.Gravity
 import android.view.View
@@ -25,7 +28,7 @@ class MainActivity : Activity() {
     private val origin = "https://lae-music.onrender.com"
     private val executor = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
-    private var player: MediaPlayer? = null
+    private var player: ExoPlayer? = null
     private var playbackToken = 0
     private lateinit var songs: LinearLayout
     private lateinit var status: TextView
@@ -33,7 +36,6 @@ class MainActivity : Activity() {
     private lateinit var search: EditText
     private lateinit var playPause: Button
     private var activeId: Long? = null
-    private var playing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +74,8 @@ class MainActivity : Activity() {
             isEnabled = false
             setOnClickListener {
                 val p = player ?: return@setOnClickListener
-                if (p.isPlaying) { p.pause(); playing = false }
-                else { p.start(); playing = true }
-                text = if (playing) "Pause" else "Resume"
+                if (p.isPlaying) p.pause() else p.play()
+                text = if (p.isPlaying) "Pause" else "Resume"
             }
         }
         root.addView(playPause)
@@ -142,30 +143,38 @@ class MainActivity : Activity() {
                 main.post {
                     if (token != playbackToken || isFinishing || isDestroyed) return@post
                     try {
-                        val p = MediaPlayer()
+                        val p = ExoPlayer.Builder(this).build()
                         player = p
-                        p.setDataSource(url)
-                        p.setOnPreparedListener {
-                            if (token == playbackToken) {
-                                it.start()
-                                playing = true
-                                nowPlaying.text = "Playing: $title — $artist"
-                                playPause.text = "Pause"
-                                playPause.isEnabled = true
+                        p.addListener(object : Player.Listener {
+                            override fun onPlaybackStateChanged(state: Int) {
+                                if (token != playbackToken) return
+                                when (state) {
+                                    Player.STATE_READY -> {
+                                        nowPlaying.text = "Playing: $title — $artist"
+                                        playPause.isEnabled = true
+                                        playPause.text = if (p.isPlaying) "Pause" else "Resume"
+                                    }
+                                    Player.STATE_ENDED -> {
+                                        nowPlaying.text = "Finished: $title — $artist"
+                                        playPause.text = "Replay"
+                                    }
+                                    Player.STATE_BUFFERING -> nowPlaying.text = "Buffering: $title"
+                                }
                             }
-                        }
-                        p.setOnCompletionListener {
-                            playing = false
-                            playPause.text = "Replay"
-                            nowPlaying.text = "Finished: $title — $artist"
-                            it.seekTo(0)
-                        }
-                        p.setOnErrorListener { _, _, _ ->
-                            nowPlaying.text = "Playback failed. Please try again."
-                            playPause.isEnabled = false
-                            true
-                        }
-                        p.prepareAsync()
+                            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                                if (token == playbackToken && playPause.isEnabled)
+                                    playPause.text = if (isPlaying) "Pause" else "Resume"
+                            }
+                            override fun onPlayerError(error: PlaybackException) {
+                                if (token == playbackToken) {
+                                    nowPlaying.text = "Playback failed. Check connection and try again."
+                                    playPause.isEnabled = false
+                                }
+                            }
+                        })
+                        p.setMediaItem(MediaItem.fromUri(url))
+                        p.prepare()
+                        p.play()
                     } catch (e: Exception) {
                         nowPlaying.text = "Unable to play: ${e.message}"
                     }
@@ -176,6 +185,12 @@ class MainActivity : Activity() {
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Stage 3 will move playback to a MediaSessionService for background listening.
+        player?.pause()
     }
 
     override fun onDestroy() {
