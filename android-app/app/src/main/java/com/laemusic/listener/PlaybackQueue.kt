@@ -20,6 +20,10 @@ class PlaybackQueue {
         index = position
         return selected
     }
+    fun selectById(id: Long?): Song? {
+        val position = songs.indexOfFirst { it.id == id }
+        return if (position >= 0) select(position) else null
+    }
     fun next(): Song? = if (index == -1) null else select(index + 1)
     fun previous(): Song? = select(index - 1)
 }
