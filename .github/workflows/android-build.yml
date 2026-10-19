@@ -23,14 +23,26 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Run Android unit tests
+      - name: Diagnose and build Android APK
         working-directory: android-app
-        run: gradle --no-daemon :app:testDebugUnitTest
-      - name: Compile debug APK
-        working-directory: android-app
-        run: gradle --no-daemon :app:assembleDebug
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p build-diagnostics
+          java -version 2>&1 | tee build-diagnostics/java.txt
+          gradle --version 2>&1 | tee build-diagnostics/gradle.txt
+          gradle --no-daemon --stacktrace --console=plain :app:testDebugUnitTest :app:assembleDebug 2>&1 | tee build-diagnostics/build.log
+      - name: Upload build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build-diagnostics
+          path: android-app/build-diagnostics/
+          if-no-files-found: warn
       - name: Upload test APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: lae-music-debug-apk
           path: android-app/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
