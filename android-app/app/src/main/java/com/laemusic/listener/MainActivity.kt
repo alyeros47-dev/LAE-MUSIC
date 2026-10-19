@@ -215,6 +215,7 @@ class MainActivity : Activity() {
                     activeArtist = metadata?.artist?.toString().orEmpty()
                     nowPlaying.text = "Now playing: $activeTitle — $activeArtist"
                     activeId = player!!.currentMediaItem?.mediaId?.toLongOrNull()
+                    activeArtistId = queue.selectById(activeId)?.artistId
                 }
                 pendingStream?.let { (url, title, artist) ->
                     pendingStream = null
