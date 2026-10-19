@@ -9,7 +9,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.common.MediaMetadata
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
+import androidx.core.content.ContextCompat
 import android.content.ComponentName
 import android.graphics.Color
 import android.view.ViewGroup
@@ -34,6 +34,8 @@ class MainActivity : Activity() {
     private var player: MediaController? = null
     private var controllerFuture: ListenableFuture<MediaController>? = null
     private var playbackToken = 0
+    private var searchToken = 0
+    private var pendingStream: Triple<String, String, String>? = null
     private lateinit var songs: LinearLayout
     private lateinit var status: TextView
     private lateinit var nowPlaying: TextView
@@ -170,10 +172,14 @@ class MainActivity : Activity() {
                     }
                 })
                 playPause.isEnabled = player!!.mediaItemCount > 0
+                pendingStream?.let { (url, title, artist) ->
+                    pendingStream = null
+                    startStream(url, title, artist)
+                }
             } catch (e: Exception) {
                 nowPlaying.text = "Player unavailable: " + (e.message ?: "connection error")
             }
-        }, MoreExecutors.directExecutor())
+        }, ContextCompat.getMainExecutor(this))
         loadSongs("")
     }
 
@@ -190,12 +196,13 @@ class MainActivity : Activity() {
 
     private fun loadSongs(query: String) {
         status.text = "Loading songs…"
+        val request = ++searchToken
         executor.execute {
             try {
                 val encoded = java.net.URLEncoder.encode(query.trim(), "UTF-8")
                 val tracks = getJson("/api/music/tracks?limit=50&q=$encoded").getJSONArray("tracks")
                 main.post {
-                    if (isFinishing || isDestroyed) return@post
+                    if (isFinishing || isDestroyed || request != searchToken) return@post
                     songs.removeAllViews()
                     val results = mutableListOf<PlaybackQueue.Song>()
                     status.text = "${tracks.length()} songs found"
@@ -216,7 +223,7 @@ class MainActivity : Activity() {
                     queue.replace(results)
                 }
             } catch (e: Exception) {
-                main.post { if (!isFinishing) status.text = "Could not load music: ${e.message}" }
+                main.post { if (!isFinishing && !isDestroyed && request == searchToken) status.text = "Could not load music: ${e.message}" }
             }
         }
     }
@@ -233,6 +240,8 @@ class MainActivity : Activity() {
         activeId = id
         activeTitle = title
         activeArtist = artist
+        pendingStream = null
+        player?.pause()
         playPause.isEnabled = false
         seek.progress = 0
         elapsed.text = "0:00 / 0:00"
@@ -242,17 +251,11 @@ class MainActivity : Activity() {
                 val url = getJson("/api/music/tracks/$id/stream").getString("url")
                 main.post {
                     if (token != playbackToken || isFinishing || isDestroyed) return@post
-                    try {
-                        val p = player ?: throw IllegalStateException("Player is connecting")
-                        p.setMediaItem(MediaItem.Builder()
-                            .setUri(url)
-                            .setMediaMetadata(MediaMetadata.Builder()
-                                .setTitle(title).setArtist(artist).build())
-                            .build())
-                        p.prepare()
-                        p.play()
-                    } catch (e: Exception) {
-                        nowPlaying.text = "Unable to play: ${e.message}"
+                    if (player == null) {
+                        pendingStream = Triple(url, title, artist)
+                        nowPlaying.text = "Connecting player: $title"
+                    } else {
+                        startStream(url, title, artist)
                     }
                 }
             } catch (e: Exception) {
@@ -260,6 +263,22 @@ class MainActivity : Activity() {
                     if (token == playbackToken && !isFinishing) nowPlaying.text = "Stream unavailable: ${e.message}"
                 }
             }
+        }
+    }
+
+    private fun startStream(url: String, title: String, artist: String) {
+        try {
+            val p = player ?: return
+            p.setMediaItem(MediaItem.Builder()
+                .setUri(url)
+                .setMediaMetadata(MediaMetadata.Builder()
+                    .setTitle(title).setArtist(artist).build())
+                .build())
+            p.prepare()
+            p.play()
+        } catch (e: Exception) {
+            nowPlaying.text = "Unable to play: " + (e.message ?: "player error")
+            playPause.isEnabled = false
         }
     }
 
