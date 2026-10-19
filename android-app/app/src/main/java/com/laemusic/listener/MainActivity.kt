@@ -258,12 +258,12 @@ class MainActivity : Activity() {
                         val artist = t.optString("artist", "Unknown artist")
                         val artistId = t.optLong("artist_id", 0L)
                         results.add(PlaybackQueue.Song(id, title, artist, artistId.takeIf { it > 0 }))
-                        val index = results.lastIndex
+                        val songId = id
                         val button = Button(this).apply {
                             text = "$title — $artist"
                             isAllCaps = false
                             setOnClickListener {
-                                playAt(index)
+                                playSongFromQueue(queue.selectById(songId))
                             }
                         }
                         songs.addView(button)
