@@ -187,7 +187,7 @@ class MainActivity : Activity() {
                                 playPause.text = if (player?.isPlaying == true) "Pause" else "Resume"
                             }
                             Player.STATE_ENDED -> {
-                                val upcoming = queue.next()
+                                val upcoming = if (queue.current()?.id == activeId) queue.next() else null
                                 if (upcoming != null) {
                                     playSongFromQueue(upcoming)
                                 } else {
