@@ -238,13 +238,12 @@ class MainActivity : Activity() {
                         val title = t.optString("title", "Untitled")
                         val artist = t.optString("artist", "Unknown artist")
                         val artistId = t.optLong("artist_id", 0L)
-                        results.add(PlaybackQueue.Song(id, title, artist))
+                        results.add(PlaybackQueue.Song(id, title, artist, artistId.takeIf { it > 0 }))
                         val index = results.lastIndex
                         val button = Button(this).apply {
                             text = "$title — $artist"
                             isAllCaps = false
                             setOnClickListener {
-                                activeArtistId = artistId.takeIf { it > 0 }
                                 playAt(index)
                             }
                         }
@@ -261,7 +260,10 @@ class MainActivity : Activity() {
     private fun playAt(index: Int) = playSongFromQueue(queue.select(index))
 
     private fun playSongFromQueue(song: PlaybackQueue.Song?) {
-        if (song != null) playSong(song.id, song.title, song.artist)
+        if (song != null) {
+            activeArtistId = song.artistId
+            playSong(song.id, song.title, song.artist)
+        }
     }
 
     private fun playSong(id: Long, title: String, artist: String) {
