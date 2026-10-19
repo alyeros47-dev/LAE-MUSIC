@@ -117,7 +117,11 @@ class MainActivity : Activity() {
         socialActions.addView(socialButton("Follow on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         socialActions.addView(socialButton("Gift on web"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         root.addView(socialActions)
-        val commentsButton = socialButton("View and write comments on website")
+        val commentsButton = Button(this).apply {
+            text = "Read song comments"
+            isAllCaps = false
+            setOnClickListener { showComments() }
+        }
         root.addView(commentsButton)
         engagementStatus = label("Select a song to see likes and comments", 12f)
         root.addView(engagementStatus)
@@ -294,6 +298,48 @@ class MainActivity : Activity() {
             } catch (e: Exception) {
                 main.post {
                     if (token == playbackToken && !isFinishing) nowPlaying.text = "Stream unavailable: ${e.message}"
+                }
+            }
+        }
+    }
+
+    private fun showComments() {
+        val id = activeId ?: run {
+            status.text = "Select a song first"
+            return
+        }
+        val requestedId = id
+        status.text = "Loading comments…"
+        executor.execute {
+            try {
+                val array = getJson("/api/listener/comments?trackId=$requestedId")
+                    .getJSONArray("comments")
+                val text = StringBuilder()
+                val count = minOf(array.length(), 30)
+                for (i in 0 until count) {
+                    val comment = array.getJSONObject(i)
+                    val author = comment.optString("author", "Listener").ifBlank { "Listener" }
+                    val body = comment.optString("body", "")
+                    text.append(author).append(": ").append(body).append("\\n\\n")
+                }
+                if (array.length() > count) text.append("Showing first $count comments")
+                main.post {
+                    if (isDestroyed || isFinishing || activeId != requestedId) return@post
+                    status.text = "Comments loaded"
+                    android.app.AlertDialog.Builder(this)
+                        .setTitle("Song comments")
+                        .setMessage(if (text.isEmpty()) "No comments yet" else text.toString())
+                        .setPositiveButton("Close", null)
+                        .setNeutralButton("Write or reply on web") { _, _ ->
+                            startActivity(Intent(Intent.ACTION_VIEW,
+                                Uri.parse("$origin/listen?play=$requestedId")))
+                        }
+                        .show()
+                }
+            } catch (e: Exception) {
+                main.post {
+                    if (!isDestroyed && !isFinishing && activeId == requestedId)
+                        status.text = "Could not load comments: " + (e.message ?: "connection error")
                 }
             }
         }
