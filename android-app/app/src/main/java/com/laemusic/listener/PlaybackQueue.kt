@@ -8,8 +8,7 @@ class PlaybackQueue {
         private set
 
     val size: Int get() = songs.size
-    fun replace(results: List<Song>) {
-        val playingId = current()?.id
+    fun replace(results: List<Song>, playingId: Long? = current()?.id) {
         songs.clear()
         songs.addAll(results)
         index = songs.indexOfFirst { it.id == playingId }
