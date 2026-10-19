@@ -42,6 +42,8 @@ class MainActivity : Activity() {
     private lateinit var search: EditText
     private lateinit var playPause: Button
     private var activeId: Long? = null
+    private var activeArtistId: Long? = null
+    private lateinit var socialActions: LinearLayout
     private var activeTitle = ""
     private var activeArtist = ""
     private val queue = PlaybackQueue()
@@ -95,6 +97,24 @@ class MainActivity : Activity() {
         root.addView(scroll, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         nowPlaying = label("Select a song to listen", 15f)
         root.addView(nowPlaying)
+        socialActions = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        fun socialButton(label: String): Button = Button(this).apply {
+            text = label
+            isAllCaps = false
+            setOnClickListener {
+                val id = activeId
+                if (id == null) {
+                    status.text = "Select a song first"
+                } else {
+                    val destination = "$origin/listen?play=$id"
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(destination)))
+                }
+            }
+        }
+        socialActions.addView(socialButton("Like"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        socialActions.addView(socialButton("Follow"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        socialActions.addView(socialButton("Gift artist"), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        root.addView(socialActions)
         playPause = Button(this).apply {
             text = "Pause / Resume"
             isEnabled = false
@@ -211,12 +231,16 @@ class MainActivity : Activity() {
                         val id = t.getLong("id")
                         val title = t.optString("title", "Untitled")
                         val artist = t.optString("artist", "Unknown artist")
+                        val artistId = t.optLong("artist_id", 0L)
                         results.add(PlaybackQueue.Song(id, title, artist))
                         val index = results.lastIndex
                         val button = Button(this).apply {
                             text = "$title — $artist"
                             isAllCaps = false
-                            setOnClickListener { playAt(index) }
+                            setOnClickListener {
+                                activeArtistId = artistId.takeIf { it > 0 }
+                                playAt(index)
+                            }
                         }
                         songs.addView(button)
                     }
