@@ -2,7 +2,7 @@ package com.laemusic.listener
 
 /** In-memory navigation of the currently displayed search results. */
 class PlaybackQueue {
-    data class Song(val id: Long, val title: String, val artist: String)
+    data class Song(val id: Long, val title: String, val artist: String, val artistId: Long? = null)
     private val songs = mutableListOf<Song>()
     var index: Int = -1
         private set
