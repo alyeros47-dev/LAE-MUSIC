@@ -303,6 +303,7 @@ public class MainActivity extends Activity {
             }
         });
     }
+    private int lastPlaybackErrorVersion = -1;
     private void playTrack(Track track) {
         current = track;
         final int version = ++playbackVersion;
@@ -325,11 +326,17 @@ public class MainActivity extends Activity {
                             updateMini();
                         });
                         player.setOnCompletionListener(p -> {
+                            if (version != playbackVersion) return;
                             if (repeat) { p.seekTo(0); p.start(); } else skip(1);
                         });
                         player.setOnErrorListener((p, what, extra) -> {
+                            if (version != playbackVersion || isFinishing() || isDestroyed()) return true;
                             preparing = false;
-                            new AlertDialog.Builder(this).setMessage("Unable to play this track.").setPositiveButton("OK", null).show();
+                            if (lastPlaybackErrorVersion != version) {
+                                lastPlaybackErrorVersion = version;
+                                android.widget.Toast.makeText(this, "Track temporarily unavailable. Choose another song.", android.widget.Toast.LENGTH_LONG).show();
+                            }
+                            main.post(() -> { if (version == playbackVersion) { releasePlayer(); updateMini(); } });
                             return true;
                         });
                         player.prepareAsync();
@@ -341,7 +348,7 @@ public class MainActivity extends Activity {
         });
     }
     private void showError(String message) {
-        new AlertDialog.Builder(this).setTitle("Playback unavailable").setMessage(message).setPositiveButton("OK", null).show();
+        android.widget.Toast.makeText(this, "Playback unavailable. Please try again.", android.widget.Toast.LENGTH_LONG).show();
     }
     private boolean isPlaying() {
         try { return player != null && player.isPlaying(); } catch (IllegalStateException e) { return false; }
@@ -375,7 +382,12 @@ public class MainActivity extends Activity {
         return (s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
     }
     private void releasePlayer() {
-        if (player != null) { player.release(); player = null; }
+        if (player != null) {
+            MediaPlayer old = player;
+            player = null;
+            try { old.setOnErrorListener(null); old.setOnCompletionListener(null); old.setOnPreparedListener(null); old.release(); }
+            catch (IllegalStateException ignored) {}
+        }
     }
     @Override public void onDestroy() {
         ++playbackVersion; ++requestVersion;
