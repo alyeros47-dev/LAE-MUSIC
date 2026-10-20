@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -77,12 +78,25 @@ public class MainActivity extends Activity {
         loadSongs("");
         main.post(ticker);
     }
+    private int dp(int n) { return (int)(n * getResources().getDisplayMetrics().density + .5f); }
+    private GradientDrawable shape(int color, int radius) {
+        GradientDrawable d = new GradientDrawable();
+        d.setColor(color); d.setCornerRadius(dp(radius)); return d;
+    }
+    private TextView cover(String label, int size) {
+        TextView v = text(label.isEmpty() ? "♫" : label.substring(0, 1).toUpperCase(), size / 3, true);
+        v.setGravity(Gravity.CENTER);
+        v.setTextColor(Color.WHITE);
+        v.setBackground(new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+            new int[]{Color.rgb(106, 42, 104), Color.rgb(42, 39, 99), Color.rgb(22, 78, 89)}));
+        return v;
+    }
     private TextView text(String value, int size, boolean bold) {
         TextView view = new TextView(this);
         view.setText(value);
         view.setTextColor(Color.WHITE);
         view.setTextSize(size);
-        view.setPadding(18, 16, 18, 16);
+        view.setPadding(dp(12), dp(10), dp(12), dp(10));
         if (bold) view.setTypeface(null, Typeface.BOLD);
         return view;
     }
@@ -99,12 +113,17 @@ public class MainActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(background);
-        TextView brand = text("LAE-MUSIC", 27, true);
+        getWindow().setStatusBarColor(background);
+        getWindow().setNavigationBarColor(background);
+        TextView brand = text("LAE  MUSIC", 23, true);
         brand.setTextColor(accent);
+        brand.setPadding(dp(20), dp(20), dp(16), dp(10));
         root.addView(brand);
         ScrollView scroll = new ScrollView(this);
         content = new LinearLayout(this);
         content.setOrientation(LinearLayout.VERTICAL);
+        content.setPadding(dp(12), 0, dp(12), dp(12));
+        scroll.setFillViewport(true);
         scroll.addView(content);
         root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         if ("Home".equals(page)) renderHome();
@@ -113,31 +132,44 @@ public class MainActivity extends Activity {
         else renderLibrary();
         LinearLayout mini = new LinearLayout(this);
         mini.setGravity(Gravity.CENTER_VERTICAL);
+        mini.setPadding(dp(10), dp(4), dp(10), dp(4));
+        mini.setBackground(shape(Color.rgb(35, 32, 52), 14));
         miniTitle = text(current == null ? "Choose a song" : current.title + " · " + current.artist, 13, true);
         miniTitle.setOnClickListener(v -> showPage("Player"));
         mini.addView(miniTitle, new LinearLayout.LayoutParams(0, -2, 1));
         miniPlay = action(isPlaying() ? "Ⅱ" : "▶", this::togglePlayback);
         mini.addView(miniPlay);
-        root.addView(mini);
+        LinearLayout.LayoutParams miniParams = new LinearLayout.LayoutParams(-1, -2);
+        miniParams.setMargins(dp(10), dp(4), dp(10), dp(4));
+        root.addView(mini, miniParams);
         LinearLayout nav = new LinearLayout(this);
         for (String tab : new String[]{"Home", "Search", "Player", "Library"}) {
             Button button = action(tab, () -> showPage(tab));
             button.setTextSize(11);
+            button.setTextColor(tab.equals(page) ? accent : Color.WHITE);
+            button.setBackgroundColor(background);
             nav.addView(button, new LinearLayout.LayoutParams(0, -2, 1));
         }
         root.addView(nav);
         setContentView(root);
     }
     private void renderHome() {
-        content.addView(text("Discover music", 24, true));
+        content.addView(text("Your music. Your mood.", 24, true));
+        TextView sub = text("Discover fresh sounds and your favorite artists", 13, false);
+        sub.setTextColor(Color.LTGRAY); content.addView(sub);
         HorizontalScrollView horizontal = new HorizontalScrollView(this);
         LinearLayout genres = new LinearLayout(this);
         for (String genre : new String[]{"All", "Gospel", "Worship", "Praise", "Afrobeats", "Reggae"}) {
-            genres.addView(action(genre, () -> loadSongs("All".equals(genre) ? "" : genre)));
+            Button chip = action(genre, () -> loadSongs("All".equals(genre) ? "" : genre));
+            chip.setTextColor(Color.WHITE);
+            chip.setBackground(shape(Color.rgb(46, 41, 64), 22));
+            LinearLayout.LayoutParams chipParams = new LinearLayout.LayoutParams(-2, dp(46));
+            chipParams.setMargins(dp(3), dp(6), dp(6), dp(10));
+            genres.addView(chip, chipParams);
         }
         horizontal.addView(genres);
         content.addView(horizontal);
-        content.addView(text("Quick picks", 21, true));
+        content.addView(text("Made for your listening", 21, true));
         status = text("Loading music catalog…", 13, false);
         content.addView(status);
         renderTracks(false);
@@ -167,16 +199,38 @@ public class MainActivity extends Activity {
             count++;
             LinearLayout row = new LinearLayout(this);
             row.setGravity(Gravity.CENTER_VERTICAL);
-            TextView label = text(track.title + "\n" + track.artist, 16, true);
+            TextView artwork = cover(track.title, 54);
+            LinearLayout.LayoutParams artParams = new LinearLayout.LayoutParams(dp(54), dp(54));
+            artParams.setMargins(dp(3), dp(5), dp(10), dp(5));
+            row.addView(artwork, artParams);
+            LinearLayout labels = new LinearLayout(this);
+            labels.setOrientation(LinearLayout.VERTICAL);
+            TextView label = text(track.title, 15, true);
+            label.setSingleLine(true); label.setEllipsize(android.text.TextUtils.TruncateAt.END);
+            label.setPadding(0, dp(5), 0, 0);
+            TextView artist = text(track.artist, 12, false);
+            artist.setTextColor(Color.LTGRAY); artist.setPadding(0, 0, 0, dp(4));
+            labels.addView(label); labels.addView(artist);
             label.setOnClickListener(v -> playTrack(track));
-            row.addView(label, new LinearLayout.LayoutParams(0, -2, 1));
-            row.addView(action(liked.contains(track.id) ? "♥" : "♡", () -> toggleFavorite(track)));
-            content.addView(row);
+            row.addView(labels, new LinearLayout.LayoutParams(0, -2, 1));
+            artwork.setOnClickListener(v -> playTrack(track));
+            Button heart = action(liked.contains(track.id) ? "♥" : "♡", () -> toggleFavorite(track));
+            heart.setTextColor(liked.contains(track.id) ? accent : Color.WHITE);
+            heart.setBackgroundColor(Color.TRANSPARENT);
+            row.addView(heart, new LinearLayout.LayoutParams(dp(54), dp(52)));
+            row.setBackground(shape(Color.rgb(24, 23, 42), 12));
+            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(-1, -2);
+            rowParams.setMargins(0, dp(3), 0, dp(5));
+            content.addView(row, rowParams);
         }
         if (count == 0) content.addView(text(favoritesOnly ? "No liked songs yet" : "No songs loaded", 15, false));
     }
     private void renderPlayer() {
-        content.addView(text("Now playing", 24, true));
+        content.addView(text("NOW PLAYING", 16, true));
+        TextView artwork = cover(current == null ? "" : current.title, 90);
+        LinearLayout.LayoutParams largeCover = new LinearLayout.LayoutParams(-1, dp(290));
+        largeCover.setMargins(dp(8), dp(14), dp(8), dp(22));
+        content.addView(artwork, largeCover);
         content.addView(text(current == null ? "Select a song from Home" : current.title, 26, true));
         content.addView(text(current == null ? "" : current.artist, 17, false));
         seek = new SeekBar(this);
