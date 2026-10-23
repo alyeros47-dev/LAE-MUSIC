@@ -23,7 +23,7 @@ module.exports=async function voice(req,res,p,ctx){
  }
  if(p==='/api/voice/train'&&req.method==='POST'){
  const x=await get();if(!x||x.status!=='uploading')return send(res,409,{error:'Upload a voice sample first'}),true;
- const store=storage();await headObject(store,x.object_key);
+ const store=storage();if(!store)return send(res,503,{error:'Audio storage unavailable'}),true;const info=await headObject(store,x.object_key);if(info.ContentLength>12000000)return send(res,400,{error:'Voice sample too large'}),true;
  if(!process.env.MUSICAPI_API_KEY)return send(res,503,{error:'MusicAPI key missing'}),true;
  const audio_url=presign(store,x.object_key,'get',86400);
  const response=await fetch('https://api.musicapi.ai/api/v1/sonic/create-voice',{method:'POST',headers:{Authorization:'Bearer '+process.env.MUSICAPI_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({audio_url}),signal:AbortSignal.timeout(45000)});
@@ -37,7 +37,7 @@ module.exports=async function voice(req,res,p,ctx){
  const response=await fetch('https://api.musicapi.ai/api/v1/sonic/task/'+encodeURIComponent(x.task_id),{headers:{Authorization:'Bearer '+process.env.MUSICAPI_API_KEY},signal:AbortSignal.timeout(30000)});
  const j=await response.json();const id=j.data?.persona_id||j.persona_id;
  if(id){await pool.query("UPDATE artist_voice_profiles SET persona_id=$1,status='ready' WHERE creator_id=$2",[id,user.id]);x.status='ready'}
- else if(j.type==='failed'||j.status==='failed'){await pool.query("UPDATE artist_voice_profiles SET status='failed' WHERE creator_id=$1",[user.id]);x.status='failed'}
+ else if(j.type==='failed'||j.type==='api_error'||j.status==='failed'){await pool.query("UPDATE artist_voice_profiles SET status='failed' WHERE creator_id=$1",[user.id]);x.status='failed'}
  }
  return send(res,200,{status:x.status}),true;
  }
