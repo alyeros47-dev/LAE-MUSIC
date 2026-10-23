@@ -2,7 +2,7 @@
 const API='https://api.musicapi.ai/api/v1/sonic';
 function send(res,status,data){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))}
 async function body(req){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>16000)throw Error('Request too large')}return JSON.parse(raw)}
-function songs(data){const items=Array.isArray(data)?data:Array.isArray(data?.data)?data.data:Array.isArray(data?.songs)?data.songs:[];return items.map(s=>({title:String(s.title||'Generated song'),audio_url:s.audio_url||s.audioUrl||s.audio||'',image_url:s.image_url||''})).filter(s=>/^https:\/\//.test(s.audio_url))}
+function songs(data){const items=Array.isArray(data)?data:Array.isArray(data?.data)?data.data:Array.isArray(data?.songs)?data.songs:[];return items.map(s=>({title:String(s.title||'Generated song'),audio_url:s.audio_url||s.audioUrl||s.audio||'',image_url:s.image_url||s.imageUrl||s.image||''})).filter(s=>/^https:\/\//.test(s.audio_url))}
 async function remote(path,method,payload){const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),45000);try{const r=await fetch(API+path,{method,headers:{Authorization:'Bearer '+process.env.MUSICAPI_API_KEY,'Content-Type':'application/json'},body:payload?JSON.stringify(payload):undefined,signal:controller.signal});const j=await r.json().catch(()=>({}));if(!r.ok||j.code&&j.code!==200&&r.status!==202){const e=new Error(String(j.message||j.error||j.type||'Music provider request failed'));e.status=r.status;throw e}return j}finally{clearTimeout(timeout)}}
 module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(!p.startsWith('/api/music/sonic/'))return false;
@@ -19,7 +19,9 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
   if(recent.rows[0].active>0)return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true;
   if(recent.rows[0].total>=5)return send(res,429,{error:'Testing limit: 5 generation requests per account per 24 hours.'}),true;
-  const result=await remote('/create','POST',{task_type:'create_music',custom_mode:true,mv:'sonic-v6',title,prompt:lyrics,tags:style,make_instrumental:false});
+  let voiceId=null;
+  if(b.useVoice===true){const v=await pool.query("SELECT persona_id FROM artist_voice_profiles WHERE creator_id=$1 AND status='ready'",[user.id]);voiceId=v.rows[0]?.persona_id;if(!voiceId)return send(res,409,{error:'Train your voice profile before selecting Use My Voice'}),true}
+  const result=await remote('/create','POST',{task_type:voiceId?'persona_music':'create_music',...(voiceId?{persona_id:voiceId,audio_weight:0.8,variety:'off'}:{}),custom_mode:true,mv:'sonic-v6',title:title.slice(0,80),prompt:lyrics.slice(0,4900),tags:style.slice(0,900),make_instrumental:false});
   const id=result.task_id||result.data?.task_id;
   if(!id)return send(res,502,{error:'Music provider did not return a task ID.'}),true;
   await pool.query('INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,$3)',[id,user.id,'pending']);
