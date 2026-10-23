@@ -16,15 +16,18 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(p==='/api/music/sonic/create'&&req.method==='POST'){
   const b=await body(req),title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
   if(title.length<2||title.length>120||lyrics.length<20||lyrics.length>6000||style.length<3||style.length>2000)return send(res,400,{error:'Enter a title, lyrics and music style within the permitted lengths.'}),true;
-  const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
+  // A saved voice is optional. Only look up a persona when the member explicitly opts in.
+    const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
   if(recent.rows[0].active>0)return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true;
   if(recent.rows[0].total>=5)return send(res,429,{error:'Testing limit: 5 generation requests per account per 24 hours.'}),true;
   let voiceId=null;
   if(b.useVoice===true){const v=await pool.query("SELECT persona_id FROM artist_voice_profiles WHERE creator_id=$1 AND status='ready'",[user.id]);voiceId=v.rows[0]?.persona_id;if(!voiceId)return send(res,409,{error:'Train your voice profile before selecting Use My Voice'}),true}
-  const result=await remote('/create','POST',{task_type:voiceId?'persona_music':'create_music',...(voiceId?{persona_id:voiceId,audio_weight:0.8,variety:'off'}:{}),custom_mode:true,mv:'sonic-v6',title:title.slice(0,80),prompt:lyrics.slice(0,4900),tags:style.slice(0,900),make_instrumental:false});
+  let result;
+  try { result=await remote('/create','POST',{task_type:voiceId?'persona_music':'create_music',...(voiceId?{persona_id:voiceId,audio_weight:0.8,variety:'off'}:{}),custom_mode:true,mv:'sonic-v6',title:title.slice(0,80),prompt:lyrics.slice(0,4900),tags:style.slice(0,900),make_instrumental:false}); }
+  catch(e){console.error('[sonic/create] provider failure',e.status||'',e.message);const code=Number(e.status)||0;const message=code===401||code===403?'Music provider rejected the API key or account permissions. Check MUSICAPI_API_KEY and provider access.':code===402||code===429?'Music provider credits or rate limit may be exhausted. Check your MusicAPI.ai balance and limits.':code===400||code===422?'Music provider rejected the song request or model settings. Check Render logs for the provider message.':e.name==='AbortError'?'Music provider timed out. Please retry shortly.':'Music provider request failed: '+String(e.message||'Unknown error').slice(0,180);return send(res,502,{error:message}),true}
   const id=result.task_id||result.data?.task_id;
   if(!id)return send(res,502,{error:'Music provider did not return a task ID.'}),true;
-  await pool.query('INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,$3)',[id,user.id,'pending']);
+  try{await pool.query('INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,$3)',[id,user.id,'pending'])}catch(e){console.error('[sonic/create] task persistence failed',e.message);return send(res,503,{error:'Song request was accepted by the music provider, but LAE-MUSIC could not save its task reference. Contact support before retrying to avoid spending credits twice.'}),true}
   return send(res,200,{task_id:id,status:'pending'}),true;
  }
  if(p==='/api/music/sonic/premium-wav'&&req.method==='POST'){
