@@ -140,7 +140,7 @@ function create({pool,me,authAdmin}){
  if(p==='/api/music/admin/remove'&&req.method==='POST'){if(!authAdmin(req)||!origin(req))return send(res,403,{error:'Admin access required'}),true;const b=await parse(req),id=integer(b.id,1,9007199254740991);if(!id)return send(res,400,{error:'Invalid ID'}),true;await pool.query("UPDATE music_tracks SET status='removed' WHERE id=$1",[id]);return send(res,200,{ok:true}),true;}
  return send(res,404,{error:'Unknown music endpoint'}),true;
  }catch(e){console.error('Music error:',e);if(!res.headersSent)send(res,e.status||500,{error:e.status?e.message:'Music request failed'});return true;}}
- return {init,handler};
+ return {init,handler,storage,presign,headObject};
 }
 return {create};
 })().create({pool,me,authAdmin});
@@ -154,7 +154,7 @@ const adminDashboardHtml="<!doctype html><html lang=\"en\"><head><meta charset=\
 async function ensureCoinTables(){if(!pool)return;await pool.query("CREATE TABLE IF NOT EXISTS generation_wallets(creator_id BIGINT PRIMARY KEY REFERENCES creators(id) ON DELETE CASCADE,credits INTEGER NOT NULL DEFAULT 0 CHECK(credits>=0),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");await pool.query("CREATE TABLE IF NOT EXISTS generation_ledger(id BIGSERIAL PRIMARY KEY,creator_id BIGINT NOT NULL REFERENCES creators(id),delta INTEGER NOT NULL,reason TEXT NOT NULL,reference TEXT NOT NULL UNIQUE,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");await pool.query("CREATE TABLE IF NOT EXISTS generation_records(id BIGSERIAL PRIMARY KEY,creator_id BIGINT NOT NULL REFERENCES creators(id),code_hash CHAR(64) NOT NULL UNIQUE,model TEXT NOT NULL,title TEXT NOT NULL,lyrics TEXT NOT NULL,style TEXT NOT NULL,used_at TIMESTAMPTZ,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");await pool.query('ALTER TABLE generation_records ADD COLUMN IF NOT EXISTS generated_track_id BIGINT UNIQUE')}
 async function grantWelcomeCredits(creatorId=null){if(!pool)return;await ensureCoinTables();const sql="WITH awarded AS (INSERT INTO generation_ledger(creator_id,delta,reason,reference) SELECT id,4,'welcome_test_credits','welcome-2026:' || id::text FROM creators WHERE ($1::bigint IS NULL OR id=$1::bigint) ON CONFLICT(reference) DO NOTHING RETURNING creator_id,delta), totals AS (SELECT creator_id,SUM(delta)::integer AS credits FROM awarded GROUP BY creator_id) INSERT INTO generation_wallets(creator_id,credits) SELECT creator_id,credits FROM totals ON CONFLICT(creator_id) DO UPDATE SET credits=generation_wallets.credits+EXCLUDED.credits,updated_at=NOW()";await pool.query(sql,[creatorId])}
 const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');const p=url.pathname;
- if(await require('./artist-voice')(req,res,p,{me,pool,validOrigin,storage,presign,headObject}))return;
+ if(await require('./artist-voice')(req,res,p,{me,pool,validOrigin,storage:music.storage,presign:music.presign,headObject:music.headObject}))return;
  if(await require('./musicapi-sonic')(req,res,p,{me,pool,validOrigin}))return;
  if(p!=='/api/music/lyrics-generate'&&await music.handler(req,res,url))return;
  if(p==='/api/generation/wallet'&&req.method==='GET'){const u=await me(req);if(!u)return json(res,401,{error:'Member sign-in required'});await grantWelcomeCredits(u.id);const w=await pool.query('SELECT credits FROM generation_wallets WHERE creator_id=$1',[u.id]);return json(res,200,{credits:w.rows[0]?.credits||0,package:{credits:4,usd:2},checkout_enabled:false,models:['gpt-6.1-sol','gpt-6-astra']})}
