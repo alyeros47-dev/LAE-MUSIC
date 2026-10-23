@@ -2,7 +2,7 @@
 const API='https://api.musicapi.ai/api/v1/sonic';
 function send(res,status,data){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))}
 async function body(req){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>16000)throw Error('Request too large')}return JSON.parse(raw)}
-function songs(data){const items=Array.isArray(data)?data:Array.isArray(data?.data)?data.data:Array.isArray(data?.songs)?data.songs:[];return items.map(s=>({title:String(s.title||'Generated song'),audio_url:s.audio_url||s.audioUrl||s.audio||'',image_url:s.image_url||s.imageUrl||s.image||''})).filter(s=>/^https:\/\//.test(s.audio_url))}
+function songs(data){const items=Array.isArray(data)?data:Array.isArray(data?.data)?data.data:Array.isArray(data?.songs)?data.songs:[];return items.map(s=>({clip_id:String(s.clip_id||s.music_id||s.id||''),title:String(s.title||'Generated song'),audio_url:s.audio_url||s.audioUrl||s.audio||'',image_url:s.image_url||s.imageUrl||s.image||''})).filter(s=>/^https:\/\//.test(s.audio_url))}
 async function remote(path,method,payload){const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),45000);try{const r=await fetch(API+path,{method,headers:{Authorization:'Bearer '+process.env.MUSICAPI_API_KEY,'Content-Type':'application/json'},body:payload?JSON.stringify(payload):undefined,signal:controller.signal});const j=await r.json().catch(()=>({}));if(!r.ok||j.code&&j.code!==200&&r.status!==202){const e=new Error(String(j.message||j.error||j.type||'Music provider request failed'));e.status=r.status;throw e}return j}finally{clearTimeout(timeout)}}
 module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(!p.startsWith('/api/music/sonic/'))return false;
@@ -26,6 +26,20 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   if(!id)return send(res,502,{error:'Music provider did not return a task ID.'}),true;
   await pool.query('INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,$3)',[id,user.id,'pending']);
   return send(res,200,{task_id:id,status:'pending'}),true;
+ }
+ if(p==='/api/music/sonic/premium-wav'&&req.method==='POST'){
+  const b=await body(req),taskId=String(b.task_id||''),clipId=String(b.clip_id||'');
+  if(!/^[a-zA-Z0-9_-]{8,128}$/.test(taskId)||!/^[a-zA-Z0-9_-]{8,128}$/.test(clipId))return send(res,400,{error:'Invalid song reference'}),true;
+  const owned=await pool.query("SELECT task_id FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2 AND status='succeeded'",[taskId,user.id]);
+  if(!owned.rowCount)return send(res,403,{error:'Only your completed songs can be downloaded'}),true;
+  const original=await remote('/task/'+encodeURIComponent(taskId),'GET');
+  const tracks=songs(original.data||original.results||original);
+  if(!tracks.some(t=>t.clip_id===clipId))return send(res,403,{error:'This clip does not belong to your generation'}),true;
+  const result=await remote('/download','POST',{clip_id:clipId,formats:['wav']});
+  const wav=result.data?.files?.find(f=>f.format==='wav')?.file_url;
+  if(wav&&/^https:\/\//.test(wav))return send(res,200,{status:'ready',url:wav}),true;
+  if(result.type==='not_ready'||result.status==='processing'||result.code===202||result.message?.toLowerCase().includes('prepar'))return send(res,202,{status:'processing',message:'WAV is being prepared. Check again shortly.'}),true;
+  return send(res,502,{error:'Provider did not return a WAV file yet'}),true;
  }
  if(p==='/api/music/sonic/status'&&req.method==='GET'){
   const id=new URL(req.url,'http://localhost').searchParams.get('id')||'';
