@@ -107,6 +107,6 @@ module.exports=async(t,{pool})=>{
   const restarted=createCheckoutService({pool,rates,adapters,mode:'sandbox',callbackOrigin:'https://lae.test'}),before=calls;const current=await restarted.start(artist.id,'checkout_after_crash_key_123',{quote_id:x.quote.id});assert.equal(current.id,id);assert.equal(current.status,'review');assert.equal(calls,before);await assert.rejects(restarted.reconcile(artist.id,id),e=>e.status===503);assert.equal(calls,before);
  });
 
- await require('./refunds-postgres.cjs')(t,{pool,service,api,register,fresh,paid,webhook,commerce,refunds,payments,refundCount:()=>refundCalls,setRefundTimeout:v=>{refundTimeout=v;}});
+ await require('./refunds-postgres.cjs')(t,{pool,service,adapters,api,register,fresh,paid,webhook,commerce,refunds,payments,refundCount:()=>refundCalls,setRefundTimeout:v=>{refundTimeout=v;}});
 
 };
