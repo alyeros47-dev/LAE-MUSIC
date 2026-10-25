@@ -12,7 +12,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
  async function account(name){const r=await api('/api/register',{body:{name,country:'Nigeria',email:name+'@commerce-ci.invalid',password:'CommerceFixturePassword123',confirmPassword:'CommerceFixturePassword123',plan:'starter'}});assert.equal(r.status,201);return {id:r.data.user.id,cookie:r.cookie};}
  function signed(id,paymentId){const raw=Buffer.from(JSON.stringify({id,paymentId}));return [raw,{signature:crypto.createHmac('sha256',secret).update(raw).digest('hex')}];}
  async function settle(order,override={},paymentId='payment_'+(++sequence),eventId='event_'+sequence,service=commerce){payments.set(paymentId,{id:paymentId,orderId:order.id,merchantId:adapter.merchantId,currency:'USD',amountMinor:Number(order.amount_minor),status:'paid',...override});return service.ingest(...signed(eventId,paymentId));}
- let buyer,partner,leader,extraBuyer,primary,firstSubscription;
+ let buyer,partner,leader,extraBuyer,primary,firstSubscription,primaryDetails;
  await t.test('actual purchase endpoints keep registration free, isolate accounts and distrust client price',async()=>{
   buyer=await account('commerce_buyer');partner=await account('commerce_partner');leader=await account('commerce_leader');extraBuyer=await account('commerce_extra');
   await pool.query('UPDATE creators SET referred_by=$1 WHERE id=$2',[leader.id,partner.id]);
@@ -20,6 +20,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM commerce_orders')).rows[0].n,0);
   const referral=await api('/api/affiliate/prepare-purchase',{cookie:buyer.cookie,body:{plan:'starter',ref:String(partner.id)}});assert.equal(referral.status,200);
   const body={kind:'artist_subscription',plan:'starter',referral_token:referral.data.referral_token,amount_minor:1,paid:true};
+  primaryDetails=body;
   const responses=await Promise.all([api('/api/platform/purchases',{cookie:buyer.cookie,body,key:'commerce_http_create_123'}),api('/api/platform/purchases',{cookie:buyer.cookie,body,key:'commerce_http_create_123'})]);
   assert(responses.every(r=>r.status===201));primary=responses[0].data.order;assert.equal(primary.id,responses[1].data.order.id);assert.equal(Number(primary.amount_minor),600);assert.equal(primary.status,'pending');assert.equal(primary.checkout_enabled,false);
   assert.equal((await api('/api/platform/purchases',{cookie:partner.cookie})).data.orders.length,0);
@@ -40,6 +41,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   assert.equal(await finance.balance(pool,'artist:'+partner.id+':pending:USD'),90);assert.equal(await finance.balance(pool,finance.earnedAccount(partner.id,'USD')),0);
   await assert.rejects(finance.requestWithdrawal(pool,partner.id,'pending_commission_withdraw_123','USD',90),e=>e.status===409);
   assert.equal((await api('/api/platform/purchases',{cookie:buyer.cookie})).data.orders[0].status,'paid');
+  assert.equal((await api('/api/platform/purchases',{cookie:buyer.cookie,body:primaryDetails,key:'commerce_http_create_123'})).data.order.status,'paid');
   assert.equal((await commerce.ingest(...signed('another_event_same_payment',paymentId))).outcome,'duplicate');
   const changed=Buffer.from(JSON.stringify({id:'concurrent_event',paymentId:'changed_payment'}));await assert.rejects(commerce.ingest(changed,{signature:crypto.createHmac('sha256',secret).update(changed).digest('hex')}),e=>e.status===409);
  });
@@ -86,6 +88,12 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
  });
  await t.test('purchase evidence and quotes are immutable and reconciliation detects entitlement drift',async()=>{
   await assert.rejects(pool.query('UPDATE commerce_orders SET amount_minor=1 WHERE id=$1',[primary.id]),/immutable/);await assert.rejects(pool.query('DELETE FROM commerce_receipts WHERE order_id=$1',[primary.id]),/append-only/);await assert.rejects(pool.query('UPDATE commerce_events SET outcome=\'accepted\' WHERE outcome=\'review\''),/append-only/);
+  const pending=await commerce.create(extraBuyer.id,'foreign_entitlement_key_123',{kind:'artist_subscription',plan:'growth'});
+  const foreign=(await pool.query('SELECT s.id FROM artist_subscriptions s WHERE s.artist_id<>$1 AND NOT EXISTS(SELECT 1 FROM commerce_orders o WHERE o.subscription_id=s.id) LIMIT 1',[extraBuyer.id])).rows[0];assert(foreign);
+  await assert.rejects(pool.query("UPDATE commerce_orders SET status='paid',paid_at=NOW(),subscription_id=$2 WHERE id=$1",[pending.id,foreign.id]),e=>e.code==='23503');
+  await assert.rejects(pool.query('INSERT INTO finance_transfers(journal_id,debit_account,credit_account,currency,amount_minor) SELECT journal_id,debit_account,credit_account,currency,amount_minor FROM finance_transfers LIMIT 1'),e=>e.code==='23505');
+  const noReceipt=await commerce.create(extraBuyer.id,'unverified_grant_key_123',{kind:'studio_generation',plan:'starter'});
+  await assert.rejects(pool.query('INSERT INTO studio_purchased_credits(order_id,artist_id) VALUES($1,$2)',[noReceipt.id,extraBuyer.id]),e=>e.code==='23503');
   assert.equal(Number((await commerce.report()).summary.discrepancies),0);
   await pool.query('UPDATE artist_subscriptions SET amount_cents=601 WHERE id=$1',[firstSubscription.id]);assert.equal(Number((await commerce.report()).summary.discrepancies),1);await pool.query('UPDATE artist_subscriptions SET amount_cents=600 WHERE id=$1',[firstSubscription.id]);
   const admin=await api('/api/admin/login',{body:{password:'isolated-ci-operator-key-123456'}});assert.equal((await api('/api/platform/admin/commerce',{cookie:admin.cookie})).status,200);
