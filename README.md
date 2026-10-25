@@ -2,7 +2,7 @@
 
 Music discovery, artist tools, an AI music studio, and **LAE-MUSIC Partners & Affiliate Network** on the existing Node.js HTTP server, PostgreSQL, and Cloudflare R2 architecture. This development branch adds a shared dark interface and persistent browser player; it does not replace the backend or Android app.
 
-**Release status: draft candidate. Not launch-ready.** Payment checkout, provider webhooks, bank payouts, and automatic royalty/commission settlement remain disabled. See [the audit](docs/AUDIT.md), [release status and evidence](docs/RELEASE.md), and [staging instructions](docs/DEPLOYMENT.md).
+**Release status: draft candidate. Not launch-ready.** Live-money processing, bank payouts and automatic royalty/commission settlement remain unavailable. Reviewed staging accounts can use the prepared sandbox checkout; the committed merchant manifest is disabled. See [the audit](docs/AUDIT.md), [release status and evidence](docs/RELEASE.md), and [staging instructions](docs/DEPLOYMENT.md). The [feature/launch matrix](docs/FEATURE-STATUS.md) lists implemented behavior and remaining work.
 
 ## Local development
 
@@ -15,7 +15,7 @@ npm start
 
 Open `http://localhost:3000`. Public pages render without a database and show an honest unavailable state for catalog data. Real public streaming requires published PostgreSQL tracks and working R2 objects. Authentication uses Secure cookies: use HTTPS when testing signed-in flows outside the test harness.
 
-Routes: `/` and `/discover`, `/artists`, `/library`, `/workspace`, `/studio`, `/partners`, `/account`, `/join`, `/recover`, `/verify-email`, `/admin/console`. Existing entry points such as `/start`, `/dashboard`, `/earnings`, `/music-prompt-studio` and `/admin` open the shared interface. Existing backend APIs remain in place, with stricter financial idempotency and private earnings checks. Original page implementations can be inspected with `?legacy=1`; `/artist` retains advanced legacy upload support and `/admin/studio` retains the protected content studio.
+Routes: `/` and `/discover`, `/artists`, `/library`, `/workspace`, `/studio`, `/partners`, `/account`, `/join`, `/recover`, `/verify-email`, `/admin/console` and private operator enrollment at `/admin/enroll`. Existing entry points such as `/start`, `/dashboard`, `/earnings`, `/music-prompt-studio` and `/admin` open the shared interface. Existing backend APIs remain in place, with stricter financial idempotency and private earnings checks. Original page implementations can be inspected with `?legacy=1`; `/artist` retains advanced legacy upload support and `/admin/studio` retains the protected content studio.
 
 The persistent audio element sits outside the page router. Player preferences retain track identifiers and position, never expiring R2 signed URLs or account secrets. Reloading requires an explicit play action to resume.
 
@@ -55,3 +55,9 @@ The merchant country is Nigeria. [Milestone 5](docs/MILESTONE-5.md) connects the
 [Milestone 6](docs/MILESTONE-6.md) adds purchase refund requests, protected administrative review, Paystack sandbox refund verification, original-currency evidence, USD reversal journals and entitlement/commission holds. Flutterwave refunds, partial-refund policy, dispute resolution and live settlement remain release gates.
 
 [Milestone 7](docs/MILESTONE-7.md) connects account session controls, transactional password changes and reset/verification flows with an encrypted email queue. Listener and artist identities remain separate. Email delivery stays disabled until the provider, sender and credentials are verified. The SMTP test requires OpenSSL and uses an isolated loopback TLS server; no outside email is sent.
+
+## Current operations additions
+
+Artist Insights provides dated engagement and private CSV exports. Editorial administration manages real catalog spotlights and scheduled homepage promotions. Named administrator accounts use authenticator/recovery codes, scoped permissions and versioned session revocation; shared-key mode ends only after owner enrollment. Artist notifications record account events and subscription reminders. Community moderation includes guest comments and preserves platform holds, review history and source records.
+
+`npm run preflight` prints a redacted configuration/release report; `npm run --silent preflight -- --database` adds read-only schema/accounting checks against the explicitly configured database. Exit 2 currently means unresolved release gates. It does not apply migrations or authorize deployment.

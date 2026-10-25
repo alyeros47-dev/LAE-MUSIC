@@ -1,0 +1,37 @@
+{
+  "version": "0.12.0-rc.12",
+  "release_status": "blocked",
+  "configuration": {
+    "database_transport": "unconfigured",
+    "owner_key_configured": false,
+    "administrator_mfa_key_configured": false,
+    "r2_credentials_present": false,
+    "music_key_present": false,
+    "lyrics_key_present": false,
+    "trusted_media_hosts_present": false,
+    "payment_manifest_enabled": false,
+    "email_manifest_enabled": false,
+    "email_credentials_present": false
+  },
+  "required_external_evidence": [
+    "Sanitized production-schema upgrade/replay and query-plan/load review",
+    "R2 test-bucket uploads, private reads, Range/HEAD and actual audio playback",
+    "Authorized music/lyrics account capabilities, success/failure and ambiguous-result reconciliation",
+    "Nigeria merchant test accounts, approved currencies and independent charge/refund evidence",
+    "Verified email sender and actual staging delivery",
+    "Administrator key custody, clock synchronization and recovery rehearsal",
+    "Physical-device, keyboard/screen-reader and real browser audio-policy review"
+  ],
+  "remaining_commercial_work": [
+    "Approved paid-download pricing and eligible royalty revenue bases",
+    "Approved streaming revenue funding/allocation rules",
+    "Verified production payment settlement and bank payout implementation",
+    "Flutterwave v3 refunds and approved partial/consumed-service/dispute policies",
+    "Resolution of documented quarterly commission/upload-entitlement contradictions"
+  ],
+  "notice": "Credential presence is not integration verification. This read-only report cannot enable payments, send messages, grant benefits, apply migrations or declare the website deployment-ready.",
+  "database": {
+    "status": "not_run",
+    "checks_complete": false
+  }
+}

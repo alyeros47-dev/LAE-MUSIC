@@ -54,5 +54,10 @@ module.exports=async(t,{pool})=>{
   const user=await register('pages');await pool.query("INSERT INTO artist_notifications(artist_id,source_key,kind,title,message,destination) SELECT $1,'page:'||n,'studio','Fixture update','Fixture account update.','/studio' FROM generate_series(1,65)n",[user.id]);const first=await service.list(user.id);assert.equal(first.notifications.length,60);assert(first.next_before);await pool.query("INSERT INTO artist_notifications(artist_id,source_key,kind,title,message,destination) VALUES($1,'page:new','studio','New fixture update','Fixture account update.','/studio')",[user.id]);const second=await service.list(user.id,{before:first.next_before});assert.equal(second.notifications.length,5);assert.equal(second.next_before,null);assert.equal(new Set([...first.notifications,...second.notifications].map(x=>String(x.id))).size,65);
   const health=await service.health();assert.equal(health.external_delivery_enabled,false);assert.equal(health.channel,'in_app');assert(!JSON.stringify(health).includes('Fixture account update'));
  });
+ await t.test('staging workers run the coordinated startup reminder scan and can pause scheduling without external delivery',async()=>{
+  const user=await register('scheduled');await subscribe(user,"NOW()+INTERVAL '5 days'");const workers=[1,2].map(()=>createArtistNotifications({pool,env:{NODE_ENV:'staging'}}));
+  try{workers.forEach(worker=>worker.start());assert.equal((await workers[0].health()).scheduled_reminders,true);let count=0;for(let i=0;i<100;i++){count=(await pool.query('SELECT COUNT(*)::int AS n FROM artist_notifications WHERE artist_id=$1',[user.id])).rows[0].n;if(count)break;await new Promise(resolve=>setTimeout(resolve,10));}assert.equal(count,1);assert.equal((await workers[0].health()).external_delivery_enabled,false);}finally{workers.forEach(worker=>worker.stop());}
+  assert.equal((await workers[0].health()).scheduled_reminders,false);
+ });
  service.stop();
 };

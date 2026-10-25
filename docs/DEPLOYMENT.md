@@ -97,3 +97,7 @@ Migration 011 creates the inbox and atomic event triggers; do not edit already-a
 ## Community moderation (migration 012)
 
 Migration 012 retains comments/reports and adds revisioned review state. Existing held comments become explicit platform holds. Artists cannot restore platform-held comments; owners/content operators review them under Moderation. Legacy approve/hide routes are preserved; permanent comment deletion is unavailable and database history guards block destructive cascades. Verify guest comment visibility, report threshold, operator roles and catalog unpublishing in staging. Original report text and resolved decisions remain available; do not reset report tables. See [MILESTONE-11.md](MILESTONE-11.md).
+
+## Read-only preflight and launch checklist
+
+Run `npm run --silent preflight` for configuration presence and outstanding gates. Add `-- --database` to inspect the configured sanitized staging/schema clone using a read-only snapshot, bounded query/lock timeouts and the application's verified transport policy. Exit 2 is expected while this candidate remains blocked; a database-only pass is not proof of provider readiness. The command never applies migrations, changes financial records or sends external requests other than the explicitly requested database connection. Review [MILESTONE-12.md](MILESTONE-12.md) and [FEATURE-STATUS.md](FEATURE-STATUS.md).

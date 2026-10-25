@@ -20,3 +20,4 @@ require('./engagement-editorial.test.cjs');
 require('./admin-security.test.cjs');
 require('./artist-notifications.test.cjs');
 require('./moderation.test.cjs');
+require('./preflight.test.cjs');
