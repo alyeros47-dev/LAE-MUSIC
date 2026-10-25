@@ -296,7 +296,7 @@ if(p==='/api/demo/activate'&&req.method==='POST'){if(process.env.ENABLE_LEGACY_D
  if(p==='/api/artist/studio-history'&&req.method==='GET'){
  if(!pool)return json(res,503,{error:'Database unavailable'});
  const u=await me(req);if(!u)return json(res,401,{error:'Sign in first'});
- const exists=await pool.query("SELECT to_regclass('public.sonic_test_tasks') AS table_name");
+ const exists=await pool.query("SELECT to_regclass('sonic_test_tasks') AS table_name");
  const rows=await pool.query(exists.rows[0].table_name?"SELECT su.generation_reference,su.created_at,st.status FROM artist_studio_usage su LEFT JOIN sonic_test_tasks st ON st.task_id=su.generation_reference AND st.creator_id=su.artist_id WHERE su.artist_id=$1 ORDER BY su.created_at DESC LIMIT 30":"SELECT generation_reference,created_at,'reserved' AS status FROM artist_studio_usage WHERE artist_id=$1 ORDER BY created_at DESC LIMIT 30",[u.id]);
  return json(res,200,{generations:rows.rows,limit:30,payments_enabled:false});
 }
