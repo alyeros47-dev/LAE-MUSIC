@@ -6,6 +6,8 @@ const source=fs.readFileSync('server.js','utf8');
 new vm.Script(source,{filename:'server.js'});
 function contains(needle,label){assert(source.includes(needle),label);}
 contains("if(p==='/api/dashboard/summary'","Unified dashboard summary API");
+contains("api('/api/dashboard/summary').then","Dashboard UI live data integration");
+contains("id=\"dashboardMetrics\"","Dashboard live overview element");
 contains("if(p==='/api/affiliate/prepare-purchase'","Product purchase intent API");
 contains("affiliate_product_intents","Referral token ledger");
 contains("consumed_at IS NULL FOR UPDATE","Single-use token locking");
