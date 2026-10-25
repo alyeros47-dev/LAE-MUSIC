@@ -88,4 +88,19 @@ module.exports=async(t,{pool})=>{
   const a={id:crypto.randomUUID(),order_id:o.id,quote_id:id,provider:'paystack',reference:'lae-'+crypto.randomUUID()};await pool.query("INSERT INTO payment_checkout_attempts(id,order_id,quote_id,provider,merchant_id,merchant_country,mode,reference) VALUES($1,$2,$3,'paystack','isolated_ps','NG','test',$4)",[a.id,o.id,id,a.reference]);payments.set(a.reference,{provider:'paystack',data:{domain:'test',reference:a.reference,status:'success',amount:600,currency:'USD',metadata:{lae_order_id:o.id,lae_quote_id:id}}});
   assert.equal((await webhook(a)).data.reason,'checkout_quote_expired');assert.equal((await pool.query('SELECT status FROM commerce_orders WHERE id=$1',[o.id])).rows[0].status,'pending');assert.equal((await service.status(artist.id,a.id)).checkout_url,null);
  });
+ await t.test('bound local studio purchases grant one generation without adding an unapproved affiliate commission',async()=>{
+  const o=await commerce.create(artist.id,'checkout_local_studio_order',{kind:'studio_generation',plan:'starter'}),q=await service.prepare(artist.id,{order_id:o.id,provider:'paystack',currency:'NGN'});assert.equal(Number(q.base_minor),300);assert.equal(Number(q.charge_minor),480000);
+  const a=await service.start(artist.id,'checkout_local_studio_start',{quote_id:q.id});paid(a);assert.equal((await webhook(a)).data.outcome,'accepted');assert.equal((await webhook(a)).data.outcome,'accepted');
+  assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM studio_purchased_credits WHERE order_id=$1',[o.id])).rows[0].n,1);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM affiliate_subscription_commissions c JOIN commerce_orders o ON o.subscription_id=c.subscription_id WHERE o.id=$1',[o.id])).rows[0].n,0);
+ });
+
+ await t.test('rapid owner verification requests share a durable lookup limit without triggering new charges',async()=>{
+  const x=await fresh(),a=await service.start(artist.id,'checkout_lookup_limit_start',{quote_id:x.quote.id}),beforeLookups=lookups,beforeCalls=calls;
+  await Promise.all(Array.from({length:5},()=>service.reconcile(artist.id,a.id)));assert.equal(lookups,beforeLookups+1);assert.equal(calls,beforeCalls);assert.equal((await pool.query('SELECT status FROM commerce_orders WHERE id=$1',[x.order.id])).rows[0].status,'pending');paid(a);assert.equal((await webhook(a)).data.outcome,'accepted');
+ });
+ await t.test('an interrupted process after reservation cannot restart initialization on another worker',async()=>{
+  const x=await fresh('flutterwave'),id=crypto.randomUUID(),reference='lae-'+crypto.randomUUID();await pool.query("INSERT INTO payment_checkout_attempts(id,order_id,quote_id,provider,merchant_id,merchant_country,mode,reference,created_at) VALUES($1,$2,$3,'flutterwave','12345','NG','test',$4,NOW()-INTERVAL '1 minute')",[id,x.order.id,x.quote.id,reference]);
+  const restarted=createCheckoutService({pool,rates,adapters,mode:'sandbox',callbackOrigin:'https://lae.test'}),before=calls;const current=await restarted.start(artist.id,'checkout_after_crash_key_123',{quote_id:x.quote.id});assert.equal(current.id,id);assert.equal(current.status,'review');assert.equal(calls,before);await assert.rejects(restarted.reconcile(artist.id,id),e=>e.status===503);assert.equal(calls,before);
+ });
+
 };
