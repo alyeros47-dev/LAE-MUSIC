@@ -16,3 +16,5 @@ Local browser attempt was blocked; actual browser journeys passed on the GitHub 
 2026-10-25T10:19:15.8228654Z # tests 9
 2026-10-25T10:19:15.8230516Z # pass 9
 2026-10-25T10:19:15.8230764Z # fail 0
+
+Additional locked-dependency verification: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184463625 passed npm ci, application, HTTP, desktop/mobile browser and PostgreSQL jobs. Desktop and mobile rendered fixture screenshots were retrieved from that job and visually inspected; actual R2 artwork/audio was not used.

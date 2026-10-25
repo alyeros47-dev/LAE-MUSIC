@@ -34,7 +34,7 @@ The browser and PostgreSQL evidence above is from [successful run 40184247862](h
 
 ## Remaining launch gates and decisions
 
-1. **Visual/browser/accessibility review:** inspect the passing browser screenshots and review tablet/physical-device sizes, complete keyboard and screen-reader review, verify touch seeking and real browser audio/autoplay policies. Current responsive CSS and DOM-level player tests are not visual verification.
+1. **Visual/browser/accessibility review:** Desktop/mobile CI fixture screenshots have been inspected. Review tablet/physical-device sizes, complete keyboard and screen-reader review, verify touch seeking and real browser audio/autoplay policies. Current responsive CSS and DOM-level player tests are not visual verification.
 2. **Database:** use the committed CI-resolved lockfile. Fresh PostgreSQL 16 initialization, migration replay, immutable history, real gift/studio/credit/withdrawal concurrency and restart preservation now pass. Run the same checks against a sanitized production-schema clone, add actual upload-reservation concurrency and examine query plans/migration lock duration. Existing legacy initialization still runs before the versioned additions. Review the existing remote TLS `rejectUnauthorized:false` setting and configure verified CA trust before launch.
 3. **Storage:** supply R2 credentials and a test bucket, verify private reads, HEAD and Range requests, complete audio/artwork uploads and real playback. New song uploads use a same-origin proxy, so catalog upload no longer relies on exposing a reusable signed PUT URL. Advanced legacy voice uploads still require CORS verification. File-prefix checks are not a full audio decoder or malware scan.
 4. **Music provider:** verify official Sonic model/task/voice/output/WAV capabilities and account permissions. Exercise actual success, rejection, timeout, malformed reference, concurrent polling and support reconciliation. Current status history stores task references; durable hosting/copying of generated previews and automatic publication into the catalog are not completed.
@@ -53,3 +53,5 @@ Review `docs/AUDIT.md` for the baseline and preserved pricing. Follow `docs/DEPL
 ## Defects confirmed by the real integration run
 
 Fresh initialization originally referenced music/comment tables before creating them; their DDL now runs before notification/gift foreign keys and comment alterations. Concurrent music retries could receive a provisional reference that became invalid after provider acceptance; an owner-scoped stable reservation mapping now resolves it to the canonical provider task. Both paths are covered by the passing PostgreSQL journey.
+
+The interface preserves the existing guest-comment path and does not introduce a new $1 withdrawal minimum. Fees are rounded to currency minor units; a one-minor-unit request has a zero rounded fee. Provider-specific payout limits must be approved with the eventual payout integration.

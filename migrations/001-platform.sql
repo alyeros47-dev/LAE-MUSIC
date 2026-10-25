@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS finance_payment_events (
 );
 CREATE TABLE IF NOT EXISTS finance_withdrawals (
  id BIGSERIAL PRIMARY KEY, artist_id BIGINT NOT NULL REFERENCES creators(id),
- currency TEXT NOT NULL CHECK(currency IN ('USD','NGN')), gross_minor BIGINT NOT NULL CHECK(gross_minor>=100),
+ currency TEXT NOT NULL CHECK(currency IN ('USD','NGN')), gross_minor BIGINT NOT NULL CHECK(gross_minor>=1),
  fee_minor BIGINT NOT NULL CHECK(fee_minor>=0), net_minor BIGINT NOT NULL CHECK(net_minor>0),
  CHECK(gross_minor=fee_minor+net_minor),
  request_key TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected','paid')),
