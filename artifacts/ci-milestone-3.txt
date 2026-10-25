@@ -1,0 +1,40 @@
+Milestone 3 verification — 2026-10-25 UTC
+Branch: codex/premium-platform-release (draft PR #6)
+Verified commit: 1bf77fd638d0b7e0babab9d610c310dfcde63374
+Run: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40192948981
+Application job 121167666333: PASS (npm ci, 72 default cases, existing 25 mocked Sonic cases, 31 source invariants, integrity, 1 socket HTTP test, desktop/tablet/mobile browser journeys).
+PostgreSQL job 121167666475: PASS (27 checks, PostgreSQL 16, migrations 001–004, actual SQL/concurrency/restart tests).
+Providers/payments/media: isolated fixtures only. No live money, provider generations or production records were used.
+Purchase screenshots: desktop/tablet/mobile-purchases.png in the browser-evidence CI artifact. All three purchase layouts visually reviewed from JPEG previews.
+
+2026-10-25T12:24:50.5913218Z # Subtest: isolated PostgreSQL application journeys, migrations, concurrency and durability
+2026-10-25T12:24:50.5914561Z     # Subtest: actual initialization and checksummed migration replay are safe
+2026-10-25T12:24:50.7323746Z     # Subtest: actual account handlers preserve free registration and session authorization
+2026-10-25T12:24:50.7694590Z     # Subtest: actual concurrent withdrawals, fee rounding, rejection reversal and immutable transfers
+2026-10-25T12:24:50.7878843Z     # Subtest: actual concurrent gift requests debit once and preserve the approved split
+2026-10-25T12:24:50.8033829Z     # Subtest: actual concurrent lyrics reservations and repeated refunds preserve credits
+2026-10-25T12:24:50.8341471Z     # Subtest: actual studio reservation retries resolve provisional references without duplicate provider calls
+2026-10-25T12:24:50.8484511Z     # Subtest: studio release routes enforce ownership and durable idempotency before any copying
+2026-10-25T12:24:50.9055674Z     # Subtest: media copy uses real HTTP PUT/HEAD/Range requests and stores a durable private draft
+2026-10-25T12:24:50.9307837Z     # Subtest: concurrent publish requests create one catalog song, one event and no extra generation debit
+2026-10-25T12:24:50.9556745Z     # Subtest: invalid media fails safely and retry reuses the private release without charging a generation
+2026-10-25T12:24:50.9820317Z     # Subtest: a resumed worker fences an expired lease and preserves the newer copy
+2026-10-25T12:24:51.1198184Z     # Subtest: a healthy copy renews its lease while media transfer is in progress
+2026-10-25T12:24:51.2473388Z     # Subtest: playlist ownership, ordering revisions and real creation/size limits survive concurrent requests
+2026-10-25T12:24:51.2833813Z     # Subtest: cursor discovery does not skip equal-timestamp songs and keeps genre/search filters
+2026-10-25T12:24:51.3135982Z     # Subtest: concurrent additions cannot exceed the existing 500-song playlist limit
+2026-10-25T12:24:51.3354322Z     # Subtest: studio publish and legacy upload reservation share the same annual quota lock
+2026-10-25T12:24:51.5203233Z     # Subtest: actual purchase endpoints keep registration free, isolate accounts and distrust client price
+2026-10-25T12:24:51.5621168Z     # Subtest: signed concurrent verified settlement fulfills once and records approved pending sale commission
+2026-10-25T12:24:51.5975892Z     # Subtest: merchant, amount, currency, state and payment identifier mismatches quarantine without entitlements
+2026-10-25T12:24:51.6221831Z     # Subtest: cancelled, expired and already consumed payments cannot fulfill another purchase
+2026-10-25T12:24:51.6557642Z     # Subtest: concurrent early renewals keep the active package and create contiguous annual future terms
+2026-10-25T12:24:51.6781414Z     # Subtest: settlement rolls back receipt, subscription, ledger and event together on persistence failure
+2026-10-25T12:24:51.7173771Z     # Subtest: verified additional generations reserve one paid credit and restore it after provider failure
+2026-10-25T12:24:51.7625270Z     # Subtest: purchase evidence and quotes are immutable and reconciliation detects entitlement drift
+2026-10-25T12:24:51.7854684Z     # Subtest: protected reports execute against actual schemas and approvals cannot send money
+2026-10-25T12:24:51.9094121Z     # Subtest: restart retains account/financial data and does not repeat migrations or credit campaigns
+2026-10-25T12:24:51.9134890Z ok 1 - isolated PostgreSQL application journeys, migrations, concurrency and durability
+2026-10-25T12:24:51.9181113Z # tests 27
+2026-10-25T12:24:51.9182072Z # pass 27
+2026-10-25T12:24:51.9182533Z # fail 0

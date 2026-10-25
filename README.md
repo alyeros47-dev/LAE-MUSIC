@@ -31,7 +31,7 @@ npm run test:http
 
 The default suite executes source checks, existing mocked Sonic tests, and behavioral tests of actual request handlers, player logic, transactions, permissions, uploads, referrals and migrations with controlled services. It does **not** establish real PostgreSQL, storage, payment or music-provider compatibility.
 
-The browser runner uses isolated test fixtures at two viewport sizes and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; the application, browser, HTTP and isolated PostgreSQL jobs passed in [CI run 40184247862](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184247862).
+The browser runner uses isolated test fixtures at three viewport sizes (desktop, tablet and mobile) and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; the application, browser, HTTP and isolated PostgreSQL jobs passed in [CI run 40192948981](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40192948981).
 
 ## Layout
 
@@ -44,3 +44,5 @@ The browser runner uses isolated test fixtures at two viewport sizes and produce
 - `musicapi-sonic.js`, `artist-voice.js`: preserved provider integrations, with durable generation-request keys and ownership checks.
 
 Do not merge into production or deploy to Render until the release gates are verified and deployment is approved. Existing production records must never be reset for testing.
+
+The connected release-copying/listener collection milestone is described in [milestone 2](docs/MILESTONE-2.md). [Milestone 3](docs/MILESTONE-3.md) adds unpaid purchase review/history, verified-sale accounting contracts, future renewal terms and purchased studio credits. The production server still has no payment adapter; checkout and payouts remain disabled.

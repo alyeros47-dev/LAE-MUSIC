@@ -2134,3 +2134,5 @@
 
 h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .purchase-reference{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere}.purchase-card h2{font-size:1.4rem}.purchase-card .badge{text-transform:capitalize}
+
+.purchase-grid{margin-top:24px}
