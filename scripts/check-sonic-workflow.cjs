@@ -17,13 +17,15 @@ const cases=[
  ['validates provider task identifier',source.includes("Music provider returned an invalid task ID.")],
  ['enforces task ownership for status',source.includes("SELECT task_id,status FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")],
  ['enforces task ownership for WAV',source.includes("SELECT task_id FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2 AND status='succeeded'")],
- ['releases credit on failed task',source.includes("if(status==='failed')await pool.query")],
+ ['releases credit on failed task',source.includes("if(status==='failed')await db.query")],
  ['handles cancelled provider tasks',source.includes("'cancelled','canceled'")],
  ['task schema initialized outside request handler',!source.includes('CREATE TABLE IF NOT EXISTS sonic_test_tasks')],
  ['does not lock schema on every request',!source.includes('ALTER TABLE sonic_test_tasks')],
  ['terminal failed status skips provider request',source.includes("owned.rows[0].status==='failed'")],
  ['refunds failed task transactionally',source.includes("if(status==='failed')await db.query")],
- ['validates locked artist account',source.includes('if(!locked.rowCount)')]
+ ['validates locked artist account',source.includes('if(!locked.rowCount)')],
+ ['rejects invalid JSON with client error',source.includes('Invalid JSON request')],
+ ['rejects oversized request with 413',source.includes('e.status=413')]
 ];
 for(const [label,ok] of cases){assert(ok,label);console.log('PASS',label)}
 console.log('All '+cases.length+' Sonic static invariants passed. These are not database or provider integration tests.');
