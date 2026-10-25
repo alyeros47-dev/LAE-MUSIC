@@ -93,3 +93,7 @@ Set a dedicated `ADMIN_MFA_KEY` (64 lowercase hex characters) and retain a priva
 ## Artist account notifications (migration 011)
 
 Migration 011 creates the inbox and atomic event triggers; do not edit already-applied migration files. It preserves existing listener notifications and historical data. Production/staging schedules subscription reminder scans every 15 minutes; `ARTIST_NOTIFICATION_WORKER_ENABLED=false` pauses the global scan. Artist inbox access still checks that artist's due reminders. Verify continuous paid renewal suppression, due windows and aggregate Security operations health in staging. No notification sends email/push, renews a package, creates available funds or executes a payout. See [MILESTONE-10.md](MILESTONE-10.md).
+
+## Community moderation (migration 012)
+
+Migration 012 retains comments/reports and adds revisioned review state. Existing held comments become explicit platform holds. Artists cannot restore platform-held comments; owners/content operators review them under Moderation. Legacy approve/hide routes are preserved; permanent comment deletion is unavailable and database history guards block destructive cascades. Verify guest comment visibility, report threshold, operator roles and catalog unpublishing in staging. Original report text and resolved decisions remain available; do not reset report tables. See [MILESTONE-11.md](MILESTONE-11.md).

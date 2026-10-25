@@ -53,6 +53,9 @@ module.exports=async(t,{pool})=>{
  });
  await t.test('actual HTTP permissions reject cross-role mutations and unknown protected endpoints before changing records',async()=>{
   assert.equal((await api('/api/platform/admin/editorial',{cookie:content.cookie})).status,200);
+  assert.equal((await api('/api/platform/admin/moderation',{cookie:content.cookie})).status,200);
+  assert.equal((await api('/api/platform/admin/moderation',{cookie:support.cookie})).status,403);
+  assert.equal((await api('/api/platform/admin/moderation/comment',{cookie:finance.cookie,body:{}})).status,403);
   assert.equal((await api('/api/platform/admin/commerce',{cookie:finance.cookie})).status,200);
   assert.equal((await api('/api/platform/admin/account-security',{cookie:support.cookie})).status,200);
   for(const u of [finance,content,support])assert.equal((await api('/api/platform/admin/operators',{cookie:u.cookie})).status,403);
