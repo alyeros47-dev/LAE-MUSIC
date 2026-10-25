@@ -12,7 +12,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
  try{for(const [label,viewport]of [['desktop',{width:1440,height:1000}],['tablet',{width:768,height:1024}],['mobile',{width:390,height:844}]]){
   const tracks=seedTracks.map(t=>({...t}));
   const rateTime=Math.floor(Date.now()/1000);const fx=createExchangeRates({env:{},fetchImpl:async()=>new Response(JSON.stringify({result:'success',base_code:'USD',time_last_update_unix:rateTime,time_next_update_unix:rateTime+86400,rates:{USD:1,NGN:1600,EUR:.92,JPY:150.25,KWD:.3065}}),{status:200})});
-  const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage();const errors=[];page.on('pageerror',error=>{errors.push(error.message);console.error('Browser fixture error:',error.message);});
   let session={artist:null,listener:null,admin:false};let playlists=[],playlistTracks=[],studioJobs=[],purchaseOrders=[];const generationKeys=[];const calls=[];
   await context.route('https://lae.test/**',async route=>{
    const request=route.request(),url=new URL(request.url()),p=url.pathname;let data={},status=200;try{data=request.postDataJSON()||{};}catch{}
