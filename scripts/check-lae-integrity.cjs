@@ -42,7 +42,7 @@ contains("if(p==='/api/artist/studio-history'","Artist studio generation history
 contains("if(p==='/api/artist/studio-allowance'","Artist generation allowance API");
 assert(sonic.includes("SELECT id FROM creators WHERE id=$1 FOR UPDATE"),'Per-artist concurrent generation serialization');
 assert(sonic.includes("const active=await client.query"),'Active generation check inside locked transaction');
-assert(sonic.includes("creator_id BIGINT NOT NULL"),'Sonic task creator IDs match BIGINT creator schema');
+assert(source.includes("CREATE TABLE IF NOT EXISTS sonic_test_tasks(task_id TEXT PRIMARY KEY,creator_id BIGINT NOT NULL"),'Sonic task creator IDs match BIGINT creator schema');
 assert(sonic.includes("INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,'pending')"),'Task reserved before provider request');
 assert(sonic.indexOf("INSERT INTO sonic_test_tasks(task_id,creator_id,status)")<sonic.indexOf("try { result=await remote('/create'"),'Task reservation occurs before provider request');
 assert(sonic.includes("UPDATE sonic_test_tasks SET task_id=$1 WHERE task_id=$2 AND creator_id=$3 RETURNING task_id"),'Provider task reference replaces reservation');
