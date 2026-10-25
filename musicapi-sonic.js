@@ -75,6 +75,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const owned=await pool.query('SELECT task_id,status FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2',[id,user.id]);
   if(!owned.rowCount)return send(res,404,{error:'Song request not found for this account'}),true;
   if(owned.rows[0].status==='failed')return send(res,200,{task_id:id,status:'failed',songs:[],error:'Generation failed; the included generation has been released.'}),true;
+  if(id.startsWith('sonic-'))return send(res,202,{task_id:id,status:'verification_required',songs:[],error:'Music provider response is unresolved. Contact support with this reference; do not submit another generation until it is reconciled.'}),true;
   const result=await remote('/task/'+encodeURIComponent(id),'GET');
   const state=String(result.status||result.state||result.data?.status||result.data?.state|| (result.code===102?'running':'pending')).toLowerCase();
   const found=songs(result.data||result.results||result);
