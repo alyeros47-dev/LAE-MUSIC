@@ -1,0 +1,33 @@
+LAE-MUSIC — condensed executed CI evidence (25 October 2026)
+Development branch: codex/premium-platform-release; draft PR #6.
+No production merge or Render deployment; no outside provider or production database credentials used.
+
+Engagement/editorial — commit 8610be7e2b8802e89329210fe7410df9a1198da0
+Run 40223334896: SUCCESS. Application 121; PostgreSQL 83; HTTP 1; SMTP 4; Chromium desktop/tablet/mobile.
+
+Named administration/TLS — commit 46ad91eca14a30eb2dc233431d541ec3788b0b74
+Run 40225506642: SUCCESS. Application 125; PostgreSQL 94; HTTP 1; SMTP 4; Chromium desktop/tablet/mobile.
+
+Artist notifications — commit dbe160986b44c0c731eb8228e313d6262a85c747
+Run 40226041256: SUCCESS. Application 126; PostgreSQL 101; HTTP 1; SMTP 4; Chromium desktop/tablet/mobile.
+
+Community/catalog moderation — commit 1a11dc898124a9581eb4ac3e36fc846e8df4dbc0
+Run 40226808349: SUCCESS. Application 127; PostgreSQL 109; HTTP 1; SMTP 4; Chromium desktop/tablet/mobile.
+
+Read-only release preflight — commit c37a3eb8d439b6edbaad34af0b29f51f806e18f6
+Run 40227539676: SUCCESS. Application 130; PostgreSQL 111; HTTP 1; SMTP 4; Chromium desktop/tablet/mobile.
+Application job 121272006584 and PostgreSQL job 121272006775 both completed successfully.
+npm ci reported zero known vulnerabilities in this run.
+Existing 25 mocked Sonic handler cases, 31 Sonic source invariants and integrity checks also passed.
+
+PostgreSQL is actual disposable PostgreSQL 16: guarded local lae_music_ci only.
+SMTP uses actual Nodemailer 10.2.1 with loopback TLS; no actual external email account.
+Browser uses rendered UI and an actual audio element with fixture WAV; all external services are mocked.
+Gateway/FX/music/storage/account-delivery transports are isolated fixtures, not real integration evidence.
+Visual inspection included desktop/mobile Insights, editorial, operators, inbox, moderation and corrected mobile homepage.
+Default local preflight executed: exit 2, release_status blocked, database not_run.
+Fresh-schema database inspection passed in CI; sanitized production-schema upgrade and actual Render trust remain unverified.
+
+Remaining: real test-provider credentials/evidence, download/streaming revenue decisions, live settlement and bank payouts, Flutterwave v3 refunds/dispute policies, production-schema/load/recovery and real-device/accessibility review.
+Do not issue the final deployment-ready announcement on this evidence.
+

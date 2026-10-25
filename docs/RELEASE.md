@@ -1,78 +1,64 @@
-# Release candidate: 0.8.0-rc.7
+# LAE-MUSIC release candidate 0.12.0-rc.12
 
-**Draft for review, not launch-ready.** No Render deployment or production merge has been performed. Existing production records were not accessed, modified, deleted or reset.
+**Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
-## Delivered on the development branch
+See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remaining-work matrix and [DEPLOYMENT.md](DEPLOYMENT.md) for environment, migration, staging and rollback instructions.
 
-- Shared dark design system, local brand artwork, responsive navigation and connected listener, artist, studio, partner, account and admin screens. No framework replacement, new hosting service or Android changes.
-- One audio element outside the page router, real catalog stream URLs, race-safe track loading, seeking, duration, volume/mute, shuffle, repeat, editable queue, expanded/mobile views, media-session actions, useful failures and opt-in resume after reload. Notification navigation posts to the existing player document.
-- Discovery search/genre/popularity filters, artist pages, song details, comments, guest likes, account favorites, playlists, history and release notifications using the existing APIs. Separate listener and artist/partner registration is preserved.
-- Artist overview, real catalog/play/follower data, profile editing/photos, metadata editing, controlled R2 proxy uploads, subscription selection/status and earnings/withdrawal records. No per-stream revenue is invented.
-- Studio title/lyrics/style/language-direction inputs, AI lyrics assistance using the configured server model, owned task progress/history/previews/WAV requests, and visible package/lyrics allowances. No claim of guaranteed African-language quality, voice support or exactly two provider outputs.
-- Durable, owner-scoped idempotency for music generation, transactional lyrics debit/ledger/result persistence/refunds, and transactional gift debit/result recording. Ambiguous provider acceptance retains the reservation for reconciliation. An unresolved music request blocks another request even after fifteen minutes.
-- Free partner enrollment, product-specific referral links, approved direct-sale percentages, verified-sales summaries/history and monthly sales charts. Dormant paid-enrollment/recruitment rewards cannot be activated by calling the legacy enrollment helper; historical tables remain intact.
-- Additive, checksummed migrations with advisory locking; append-only balanced transfer history; currency-separated accounts; withdrawal requests with gross/3% fee/net, atomic reservations, rejection reversals, protected approval and audit records. Approval cannot mark money paid or send a bank transfer.
-- Protected admin overview, artist/listener/catalog/subscription/affiliate/payment/gift/generation/withdrawal reports, catalog unpublishing, content/video controls and audit reporting. No arbitrary user-facing SQL or client “mark paid” endpoint.
-- Central origin/fetch-metadata checks, account-attempt limiting, shell CSP, security headers, private gift-income access, serialized upload quota reservation, controlled upload endpoints and stored-file format-prefix validation before publication.
-- Durable studio-release copying with trusted-host/public-address checks, leased workers, owner previews, explicit publication, shared annual upload quota locking and a durable follower-notification outbox. Playlist rename/reorder/remove/delete uses ownership, revision conflicts and capacity locks; discovery pagination preserves filters and timestamp precision.
-- Immutable unpaid product records, purchase review/history/cancellation, active/upcoming renewal terms, provider-neutral verified settlement, pending product-sale commissions, purchased studio-credit reservations/refunds and administrative accounting reconciliation. The actual gateway remains unconfigured; no environment flag enables live checkout.
+## Integrated development
+
+- Shared premium dark interface and connected public, listener, artist, studio, partner, account and administrator screens on the existing native Node.js/PostgreSQL/R2 architecture.
+- Persistent real-source music player, queue/shuffle/repeat/seeking/volume, expanded/mobile controls, media-session integration, explicit resume and useful playback errors. Slow editorial requests cannot block catalog playback.
+- Discovery/search/genres/pagination, artist/song pages, public streaming and guest comments, likes/follows, favorites, revisioned playlists, history and listener release notifications.
+- Artist onboarding/profile/photos, metadata and quota-safe uploads, annual subscriptions/renewals, studio allowances and earnings records. Dated UTC Insights includes period filters, charts and private CSV; engagement does not create payable royalties.
+- Owned AI studio requests/history/progress/previews, duplicate-safe music/lyrics reservations, ambiguous-result protection, trusted-origin durable media copying, private drafts/editing and explicit publication. Voice/language/WAV capabilities and exactly two outputs still require provider evidence.
+- Free LAE-MUSIC Partners & Affiliate Network, product referral attribution, team sales/statistics, approved direct verified-sale commissions, pending journals and history. No recruitment/enrollment rewards or unapproved quarterly payments.
+- Immutable USD orders/benefits, prepaid renewals, extra studio credits, original NGN/USD charge evidence, independent gateway verification and one permanent attempt per order. Nigeria Paystack/Flutterwave staging checkout is prepared; the committed manifest is disabled.
+- Paystack full-refund review/submission/independent lookup, immutable evidence, benefit holds and sale/commission reversals. Partial/disputed/consumed-service cases retain review states. Flutterwave v3 refund operations remain unavailable.
+- Currency-separated balanced accounting, duplicate-safe gifts with the approved 70% artist / 30% platform split, withdrawal reservations, 3% fees, protected approval/rejection and audit. Approval cannot send funds or mark money paid.
+- Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
+- Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
+- Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
+- Additive checksummed migrations 001–012, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+
+## Preserved commercial contracts
+
+| Package | Annual USD | Royalty | Generations | Upload quota | External uploads | Extra generation USD | Direct commission |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Starter | $6 | 50% | 2 | 7 | 3 | $3 | 15% |
+| Growth | $10 | 50% | 3 | 6 | 0 | $2.50 | 25% |
+| Professional | $20 | 60% | 6 | 12 | 0 | $2 | 25% |
+
+Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. No per-stream funding/rate was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
 ## Executed evidence
 
-`npm test` passes in this workspace. The recorded output is in `artifacts/test-results.txt`:
+The integrated code candidate passed [run 40227539676](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40227539676), commit `c37a3eb8d439b6edbaad34af0b29f51f806e18f6`.
 
-| Suite | Result | What it establishes |
+| Verification | Result | Scope |
 | --- | --- | --- |
-| Existing integrity/onboarding checks | Pass | Existing source integration and legacy inline-script syntax |
-| Existing Sonic static checks | 31 pass | Reservation/ownership source invariants; two obsolete assertions updated to the current reservation-preserving behavior |
-| Existing Sonic handler suite | 25 mocked cases pass | Authentication, quota reservation, provider success/failure and refund handling |
-| New platform suite | 115 cases pass | Transaction/fee/credit/gift services, actual account/server request handlers, admin signatures and authorization, migration replay/checksum, player queue/driver/request races/resume, R2 signing/upload ownership/forged-file rejection/quota races, approved commercial contracts, product commissions, safe notification navigation, session isolation, purpose-bound recovery and transport safety |
-| Browser runner | **Pass in GitHub Actions** | Desktop/tablet/mobile fixtures exercise actual rendered UI and a real audio element using a test WAV. The local sandbox attempt remains recorded in `artifacts/browser-attempt.txt` |
-| Socket-based HTTP test | **Pass in GitHub Actions** | Actual HTTP routing, public access and safe failure responses; local binding remains blocked |
-| PostgreSQL 16 | **71 tests pass in GitHub Actions** | Fresh initialization, migrations 001–008, real concurrent gifts/credits/withdrawals/studio requests, media copy/publish, playlist/discovery constraints, signed-fixture settlement, renewals, pending commissions, purchased-credit refunds, immutable evidence, account-session/recovery concurrency, atomic signup, reconciliation and restart preservation; providers remain mocked |
-| SMTP library and TLS fixture | **4 checks pass in GitHub Actions** | Actual Nodemailer 10.2.1, local TLS authentication, MIME output, recipient rejection and untrusted-certificate rejection; no outside email server |
-| Live R2 / music / payment / email providers | **Not run** | No live credentials or services attached |
+| Application suite | **130 pass**, locally and in CI | Native handlers/services, transactions, player, uploads, commercial terms, payments/refunds, account/admin security, editorial, notifications, moderation and preflight |
+| Existing Sonic checks | **25 mocked cases and 31 source invariants pass** | Reservation, ownership and failure behavior; no external music account |
+| PostgreSQL 16 | **111 pass** | Actual migrations 001–012, concurrency/rollback/restart, fixture-verified fulfillment/refunds, accounts/MFA, analytics/editorial, inbox/moderation, read-only schema inspection and coordinated staging-worker startup |
+| Socket HTTP | **1 pass** | Actual HTTP routing, public access, security headers and safe errors |
+| SMTP library/TLS | **4 pass** | Real pinned Nodemailer 10.2.1 with local TLS, MIME, recipient rejection and untrusted-CA rejection |
+| Chromium journeys | **Desktop, tablet and mobile pass** | Rendered UI and real audio element with isolated WAV; connected user journeys and playback-preserving navigation |
+| Dependency installation | `npm ci`; zero known vulnerabilities reported | Advisory result at the recorded installation, not a permanent guarantee |
+| Real providers / production-schema clone | **Not run** | Required R2, music/lyrics, gateway, email and clone credentials/services are not attached |
 
-The account-security code candidate passed 115 application tests, the HTTP suite, all three Chromium journeys, 71 PostgreSQL 16 tests and four local SMTP/TLS checks in [run 40217758806](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40217758806), at commit `718b00f4274a05c8441ab3acc8e9d43327fc5e7b`. Condensed evidence is in `artifacts/ci-milestone-7.txt`; screenshots are in the browser-evidence artifact. Desktop and mobile account-security layouts were visually inspected from run 40217403239; tablet behavior and screenshots also passed. The SMTP checks use the actual library and a loopback TLS server with fixture credentials. Payment, FX, music, storage and account-delivery journeys otherwise use isolated provider fixtures. No external email account, real sandbox payment account, production integration or sanitized production-schema clone was verified. Automated screenshots do not replace physical-device or accessibility verification.
+Local output: `artifacts/test-results.txt`. Condensed CI evidence: `artifacts/ci-milestones-8-12.txt`. Browser screenshots/journey records: the linked run's browser-evidence artifact. Desktop/mobile Insights, editorial discovery, operator security, notifications and moderation were visually inspected, as was the corrected mobile homepage. Tablet behavior/screenshots pass automated journeys. Screenshots and a WAV fixture do not establish physical-device, screen-reader or real-media verification.
 
-## Remaining launch gates and decisions
+Earlier passing runs: engagement/editorial [40223334896](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40223334896) (121 application / 83 PostgreSQL); named administration [40225506642](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40225506642) (125 / 94); notifications [40226041256](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40226041256) (126 / 101); moderation [40226808349](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40226808349) (127 / 109). Each also passed HTTP, SMTP and three viewport journeys. Details remain in the milestone documents.
 
-1. **Visual/browser/accessibility review:** Desktop/tablet/mobile CI fixture screenshots have been inspected. Review physical-device sizes, complete keyboard and screen-reader review, verify touch seeking and real browser audio/autoplay policies. Current responsive CSS and DOM-level player tests are not visual verification.
-2. **Database:** use the committed CI-resolved lockfile. Fresh PostgreSQL 16 initialization, migration replay, immutable history, real gift/studio/credit/withdrawal concurrency and restart preservation now pass. Run the same checks against a sanitized production-schema clone, repeat upload-reservation concurrency and examine query plans/migration lock duration. Existing legacy initialization still runs before the versioned additions. Review the existing remote TLS `rejectUnauthorized:false` setting and configure verified CA trust before launch.
-3. **Storage:** supply R2 credentials and a test bucket, verify private reads, HEAD and Range requests, complete audio/artwork uploads and real playback. New song uploads use a same-origin proxy, so catalog upload no longer relies on exposing a reusable signed PUT URL. Advanced legacy voice uploads still require CORS verification. File-prefix checks are not a full audio decoder or malware scan.
-4. **Music provider:** verify official Sonic model/task/voice/output/WAV capabilities and account permissions. Exercise actual success, rejection, timeout, malformed reference, concurrent polling and support reconciliation. Owned completed outputs now have durable copying to R2, leased retries, private previews and explicit artist publication into the catalog. These paths pass fixture-backed PostgreSQL/browser tests; actual provider CDN hosts, media compatibility, R2 lifecycle/cleanup and permissions still require live verification.
-5. **Lyrics provider:** provide an authorized OpenAI project/key and confirm the configured model, billing and language behavior. Legacy Sol/Astra UI selections do not authorize arbitrary model names; the server uses `OPENAI_LYRICS_MODEL` (default `gpt-4.1-mini`). Ambiguous requests require reconciliation rather than a second debit/provider submission.
-6. **Payments and settlement:** Flutterwave and Paystack are selected; Nigeria and USD base prices are confirmed. The closed-by-default staging runtime supports reviewed test accounts only. Sandbox checkout and original NGN/USD charge verification are connected. Paystack full refunds have one-attempt submission, independent verification, benefit holds and reversal journals. Signed lifecycle notices hold benefits and quarantine out-of-order references without claiming a completed refund. Verify real merchant accounts, permissions, credentials and provider outcomes; complete Flutterwave v3 refunds, approved partial/consumed-service policies, dispute outcome verification and hold release, actual fees/FX/settlement and bank payouts. Provider receivables and pending commissions remain non-withdrawable. Paid-download and coin checkout remain unavailable. See `docs/MILESTONE-5.md` and `docs/MILESTONE-6.md`.
-7. **Accounting:** approve music download pricing, eligible revenue bases, streaming revenue funding/rates and reconciliation rules. Approved integer royalty allocation calculations are implemented and tested; automatic royalty funding and settlement are not implemented. Historical gift/commission balances are preserved and are not silently imported or made withdrawable in the new ledger. Real withdrawal disbursement is not implemented.
-8. **Commercial contradictions:** obtain a decision on the legacy 10% quarterly team-sale proposal, external-upload limits (3/0/0 are declared but legacy enforcement uses total upload quotas), and the legacy generated-song upload-code entitlement. A code is currently issued after lyrics creation and permits an owned generated-song upload without a paid membership; this is not proof that the uploaded audio came from Sonic. That legacy path is retained for compatibility, not promoted as verified provider provenance. New UI records a rights declaration, but legacy audio-rights verification and catalog moderation need a complete launch review.
-9. **Operational security:** session controls, atomic signup, stale-login rejection, password changes and single-use recovery/verification now have PostgreSQL/browser coverage. Email delivery remains disabled pending provider/sender approval, verified credentials, key custody and actual staging delivery. Review upstream proxy/abuse controls, dependency advisories, expired-session cleanup and load/recovery exercises. Named administrator identities and stronger administrator authentication remain gates if multiple operators need individual accountability; the preserved shared-key admin cookie identifies a session class, not a named operator.
+The local default preflight returned exit 2 (`blocked`), with database inspection `not_run`; its redacted report is `artifacts/preflight-report.json`. CI's database preflight uses a fresh disposable schema, not a production clone or actual Render connection. Payment, FX, media and account-delivery responses otherwise use isolated fixtures; SMTP specifically uses the real library with loopback TLS.
 
-## Explicitly unavailable commercial actions
+## Remaining deployment gates
 
-Payment checkout and webhook endpoints return unavailable. Coin purchases do not simulate receipt. Artist plan selection does not activate a subscription. Music-generation extras cannot be bought without a verified purchase integration. Public streaming stays open; an account is requested for personal or paid actions. Recruitment and registration themselves earn no new reward.
+1. Supply authorized test R2, music/lyrics, Paystack/Flutterwave and email credentials securely. Verify real outcomes, account/currency permissions, trusted media origins, sender identity, Range/HEAD and actual audio. Never place secrets in chat, Git or PR artifacts.
+2. Approve paid-download pricing/eligible royalty revenue, streaming funding/rates/allocation, refund policies and commercial contradictions. Paid-download checkout/entitlements, automatic royalty funding, Flutterwave v3 refunds, final dispute handling and actual bank payouts still require implementation/verification. They are not launch-complete.
+3. Run migration/preflight on a sanitized production-schema clone; review bootstrap DDL, compatibility, lock duration, indexes/query plans, load, reconciliation, backups/recovery and actual Render TLS/private-network trust.
+4. Configure dedicated `ADMIN_MFA_KEY`, verify owner enrollment/recovery-code custody and clock synchronization. Configure the approved SMTP sender/transport and `ACCOUNT_EMAIL_KEY`, and verify staging delivery before enabling email recovery.
+5. Complete physical-device, keyboard/screen-reader, touch seeking, real browser audio/autoplay and operational abuse-control review.
 
-Review `docs/AUDIT.md` for the baseline and preserved pricing. Follow `docs/DEPLOYMENT.md` for staging and rollback preparation. Production deployment and merge require owner approval after these gates are assessed.
+No live-money runtime is enabled or implemented. No environment flag alone activates it. Current merchant/email manifests are disabled. Coin purchases and paid downloads cannot simulate receipt; package selection grants nothing by itself. Provider receivables and pending commissions are not spendable artist cash.
 
-## Defects confirmed by the real integration run
-
-Fresh initialization originally referenced music/comment tables before creating them; their DDL now runs before notification/gift foreign keys and comment alterations. Concurrent music retries could receive a provisional reference that became invalid after provider acceptance; an owner-scoped stable reservation mapping now resolves it to the canonical provider task. Both paths are covered by the passing PostgreSQL journey.
-
-The interface preserves the existing guest-comment path and does not introduce a new $1 withdrawal minimum. Fees are rounded to currency minor units; a one-minor-unit request has a zero rounded fee. Provider-specific payout limits must be approved with the eventual payout integration.
-
-## Currency and selected gateway expansion
-
-`docs/MILESTONE-4.md` records the chosen providers, USD accounting policy, country/display conversion, immutable FX quotes, documented Paystack/Flutterwave protocol differences and remaining local-currency checkout/settlement work. Local tests pass 89 cases; the expanded provider/currency PostgreSQL and browser journeys pass in the linked CI run. No gateway, bank payout or local-currency charge is enabled by this expansion.
-
-## Nigeria checkout coordination
-
-The owner confirmed Nigeria. `docs/MILESTONE-5.md` records the durable checkout coordinator, exact local-charge/quote verification, independent reference lookup, original-charge evidence, review/status screens and closed-by-default staging runtime. Live checkout, refunds/disputes, bank settlement and payouts remain disabled or unfinished. The milestone-5 coordinator/runtime/UI run passed 101 local cases and 44 PostgreSQL tests and all three viewport journeys. Gateway/FX/media transport responses remain isolated fixtures.
-
-
-## Refund recovery and benefit protection
-
-`docs/MILESTONE-6.md` records purchase refund requests and protected administrative review, Paystack sandbox submission and independently verified full refunds, original-currency observations, USD product-sale reversals, pending commission reversals, durable benefit holds and safe withdrawal approval guards. Upload publication rechecks benefits under the refund lock after storage verification. Lifecycle notifications arriving before charge confirmation quarantine the checkout instead of permitting a later grant. Partial refunds, already-cleared commissions, consumed services and unresolved disputes retain explicit review states. Migration 007 and the updated rollback instructions preserve history and prevent older code from reusing held benefits. Flutterwave refund operations and live payments remain disabled.
-
-
-## Account security and recovery
-
-`docs/MILESTONE-7.md` records isolated listener/artist sessions, reauthenticated revocation, atomic signup and password changes, credential-fenced login, single-use purpose-bound action links, encrypted delivery envelopes, duplicate-safe worker claims and private administrator delivery health. URL fragments are scrubbed before the page is used; recovery pages disable caching and referrers. Email verification stays optional and public streaming stays open. Prepared SMTP uses mandatory TLS and verified certificates; the committed delivery manifest remains disabled. `docs/DEPLOYMENT.md` adds key-retention, staging and compatible-rollback instructions.
+Use Node.js 22, the committed lockfile and `.env.example`. Preserve migration checksums and history. There are no destructive down migrations. Do not roll back to code that ignores payment holds, named administrator mode/revocation or platform moderation holds; use a compatible revision and reviewed recovery procedure. Only the user will perform the final production deployment after all gates are resolved.

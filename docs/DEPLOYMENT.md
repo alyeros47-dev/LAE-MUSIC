@@ -7,7 +7,7 @@ This document prepares a reviewable release; it does not authorize a deployment 
 1. Review the source diff and `docs/RELEASE.md`. Verify the development branch still descends from the intended main revision and resolve any new upstream changes on the development branch.
 2. Create a disposable PostgreSQL database and a sanitized clone of the production schema/data. Do not point automated tests at production and do not drop production tables. Take and verify a backup before an approved production migration.
 3. Use Node 22 and `npm ci` with the committed dependency lockfile. It was captured from the successful CI installation, not guessed. That installation reported zero known vulnerabilities; repeat the advisory review before an approved release.
-4. Supply `DATABASE_URL`, a strong `ADMIN_KEY`, R2 account/bucket credentials, `MUSICAPI_API_KEY` and `OPENAI_API_KEY` only through the staging secret manager. `OPENAI_LYRICS_MODEL` must be an allowed model for that project. Review PostgreSQL CA/TLS verification; the old server configuration disables remote certificate verification.
+4. Supply `DATABASE_URL`, a strong `ADMIN_KEY`, R2 account/bucket credentials, `MUSICAPI_API_KEY` and `OPENAI_API_KEY` only through the staging secret manager. `OPENAI_LYRICS_MODEL` must be an allowed model for that project. Remote PostgreSQL now requires verified TLS. Configure the reviewed CA chain, or explicitly select the exact Render private hostname as described below; verify actual staging connectivity before upgrading.
 5. Legacy demo activation/payment variables no longer enable mutation routes; remove any stale values from hosting configuration. No supported environment toggle in this candidate can activate real checkout, settlement or payouts.
 
 ## Validation commands
@@ -50,7 +50,7 @@ Lyrics reservations with an interrupted provider response also remain pending. T
 
 ## Render candidate and approval
 
-Keep the existing Node service architecture. Build is `npm ci`; start remains `npm start`. Bind uses Render's `PORT`. Use a separately approved staging service/database/bucket, not an automatic production deploy from the development branch. Check `/health`, protected APIs, application logs, migration status and all real integration journeys. Review screenshots and test evidence, then request explicit owner approval for the production merge/deployment.
+Keep the existing Node service architecture. Build is `npm ci`; start remains `npm start`. Bind uses Render's `PORT`. Use a separately approved staging service/database/bucket, not an automatic production deploy from the development branch. Check `/health`, protected APIs, application logs, migration status and all real integration journeys. Review screenshots and test evidence. The user will handle final production merge/deployment after the documented gates are resolved; do not trigger either from the development branch.
 
 ## Rollback
 
@@ -101,3 +101,7 @@ Migration 012 retains comments/reports and adds revisioned review state. Existin
 ## Read-only preflight and launch checklist
 
 Run `npm run --silent preflight` for configuration presence and outstanding gates. Add `-- --database` to inspect the configured sanitized staging/schema clone using a read-only snapshot, bounded query/lock timeouts and the application's verified transport policy. Exit 2 is expected while this candidate remains blocked; a database-only pass is not proof of provider readiness. The command never applies migrations, changes financial records or sends external requests other than the explicitly requested database connection. Review [MILESTONE-12.md](MILESTONE-12.md) and [FEATURE-STATUS.md](FEATURE-STATUS.md).
+
+## Compatible rollback after administrator and moderation upgrades
+
+After migration 010/owner enrollment, retain named-mode checks, session/version revocation, MFA and key custody. Do not deploy older shared-key-only authentication against an enabled named-operator database. After migration 012, retain platform-hold enforcement and revisioned review handlers; older artist handlers can bypass platform review. Keep a compatible revision or pause affected authenticated mutations while preparing recovery. Preserve all history/checksums and do not use destructive down migrations. The user performs the final production rollout.

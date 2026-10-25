@@ -60,3 +60,11 @@ The owner confirmed Nigeria. Milestone 5 adds a sandbox-only checkout coordinato
 ## Account-security follow-through
 
 Milestone 7 adds atomic registration/session issuance, transactional password changes and outstanding-link invalidation, account-row locking against stale-password login, account-scoped session revocation, encrypted recovery email envelopes, purpose/identity-bound single-use links and private delivery-health reporting. The actual Nodemailer library passes local TLS fixture checks; no external SMTP account or sender is verified. The delivery manifest remains disabled. Separate artist/listener identities, including the same email in both roles, have PostgreSQL/browser coverage. Named admin identities, live email setup and production abuse/load verification remain gates.
+
+## Integrated follow-through through candidate 0.12.0-rc.12
+
+The development branch now adds dated, durable engagement/Insights and CSV, revisioned editorial/promotional content, named administrator MFA/scopes/revocation, verified remote TLS with explicit Render private transport, durable artist notifications/reminders, guest-inclusive moderation and a read-only release preflight. The moderation audit confirmed that inner joins omitted guest comments and that artist approval could bypass platform holds. Those paths now use owned, transactional, revisioned reviews and retained report history.
+
+The combined code candidate passed CI run 40227539676: 130 application cases, 111 actual PostgreSQL checks, HTTP, four SMTP/TLS checks and desktop/tablet/mobile browser journeys. These extend earlier milestones; they do not verify outside gateway/media/email accounts or production-schema compatibility. See RELEASE.md and artifacts/ci-milestones-8-12.txt. Named administration is implemented; actual owner enrollment/key custody/recovery is still a staging gate. Remote certificate checks no longer use rejectUnauthorized:false.
+
+The owner supplied standing authorization for continued development, commits and draft-PR maintenance, while prohibiting production merge/deployment. That boundary remains in force. FEATURE-STATUS.md lists unfinished paid-download, royalty funding, live settlement/payout and provider-dependent work. Default preflight correctly reports blocked. No production-ready declaration is justified.
