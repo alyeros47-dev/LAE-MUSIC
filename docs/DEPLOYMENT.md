@@ -83,3 +83,9 @@ Reset requests enqueue encrypted envelopes and return a neutral response. Inspec
 Retain the encryption key while queued messages exist. Rotation requires draining the queue or deliberately invalidating pending action tokens and skipping their outbox jobs in one approved, audited transaction before switching the key. Do not interpret decryption failure as permission to reveal ciphertext, print tokens or send an unverified replacement link. Expired temporary tokens and their encrypted envelopes are removed after a seven-day retention window by bounded maintenance; account and financial records are preserved.
 
 Verify both account roles, same-email dual identities, sign-out of other devices, password-change/reset races, single-use and expired links, rejected SMTP recipients, untrusted certificates, and worker interruption before enabling account emails. `npm run test:email` uses an isolated loopback TLS server and fixture credentials; it is not proof of an external SMTP account or inbox delivery.
+
+## Named administration and PostgreSQL transport (migration 010)
+
+Read [MILESTONE-9.md](MILESTONE-9.md) before upgrading. Remote PostgreSQL now requires verified TLS; validate `PG_CA_CERT` and the external database certificate chain, or explicitly configure the exact Render internal hostname with `DATABASE_SSL_MODE=private` and `DATABASE_PRIVATE_HOST`. No hostname/password substring disables TLS. CI loopback tests do not verify Render connectivity.
+
+Set a dedicated `ADMIN_MFA_KEY` (64 lowercase hex characters) and retain a private backup. Apply migration 010 through normal startup. Existing shared-key access remains until an owner completes password/authenticator enrollment under Access & security; completion disables shared-key cookies/sign-in. Save recovery codes and verify access before inviting staff. Do not reset production settings or operator records to recover access. Invite links are manually shared, never automatically emailed.

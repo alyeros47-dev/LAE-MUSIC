@@ -2,10 +2,10 @@
 const vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const {Readable}=require('node:stream');const {createRequire}=require('node:module');
 // Executes the actual server request callback without opening a network socket.
-async function runtime({pool=null,env={},paymentService,accountService}={}){
+async function runtime({pool=null,env={},paymentService,accountService,adminService}={}){
  const root=path.join(__dirname,'..'),load=createRequire(path.join(root,'server.js'));let handler,ready;
  const started=new Promise(resolve=>{ready=resolve;});
- const sandbox={require(name){if(name==='./lib/platform'&&(paymentService||accountService))return {createPlatform:options=>load(name).createPlatform({...options,...(paymentService?{paymentService}:{}),...(accountService?{accountService}:{})})};if(name==='pg')return {Pool:class{constructor(){return pool;}}};if(name==='web-push')return {generateVAPIDKeys:()=>({publicKey:'test-public',privateKey:'test-private'}),setVapidDetails(){}};if(name==='node:http')return {createServer(fn){handler=fn;return {listen(_port,_host,callback){callback();ready();}};}};return load(name);},process:{env:{...env,...(pool?{DATABASE_URL:'postgres://127.0.0.1/test'}:{})},exit(code){throw Error('Startup failed: '+code);}},__dirname:root,console,Buffer,URL,URLSearchParams,fetch,AbortSignal,setTimeout,clearTimeout,setInterval,clearInterval};
+ const sandbox={require(name){if(name==='./lib/platform'&&(paymentService||accountService||adminService))return {createPlatform:options=>load(name).createPlatform({...options,...(paymentService?{paymentService}:{}),...(accountService?{accountService}:{}),...(adminService?{adminService}:{})})};if(name==='pg')return {Pool:class{constructor(){return pool;}}};if(name==='web-push')return {generateVAPIDKeys:()=>({publicKey:'test-public',privateKey:'test-private'}),setVapidDetails(){}};if(name==='node:http')return {createServer(fn){handler=fn;return {listen(_port,_host,callback){callback();ready();}};}};return load(name);},process:{env:{...env,...(pool?{DATABASE_URL:'postgres://127.0.0.1/test'}:{})},exit(code){throw Error('Startup failed: '+code);}},__dirname:root,console,Buffer,URL,URLSearchParams,fetch,AbortSignal,setTimeout,clearTimeout,setInterval,clearInterval};
  vm.runInNewContext(fs.readFileSync(path.join(root,'server.js'),'utf8'),sandbox,{filename:'server.js'});await started;
  return {async request(url,{method='GET',body,headers={}}={}){
   const raw=body===undefined?'':typeof body==='string'?body:JSON.stringify(body),req=Readable.from([Buffer.from(raw)]);req.url=url;req.method=method;req.headers={host:'lae.test',...headers};req.socket={remoteAddress:'test-address'};
@@ -19,6 +19,7 @@ class AccountPool{
  async query(sql,args=[]){this.calls.push({sql,args});const row=x=>({rowCount:1,rows:[x]}),none=()=>({rowCount:0,rows:[]});
   if(sql.startsWith('INSERT INTO creators(')||sql.startsWith('INSERT INTO listeners(')){const table=sql.startsWith('INSERT INTO creators')?this.users:this.listeners;if(table.some(u=>u.email===args[1]))throw Object.assign(Error('duplicate'),{code:'23505'});const u={id:table.length+1,display_name:args[0],email:args[1],password_salt:args[2],password_hash:args[3],plan:args[4]||'starter',membership_status:'pending_payment'};table.push(u);const result={...u};delete result.password_salt;delete result.password_hash;return row(result);}
   if(sql.startsWith('INSERT INTO sessions(')){this.sessions.set(args[0],args[1]);return none();}if(sql.startsWith('INSERT INTO listener_sessions(')){this.listenerSessions.set(args[0],args[1]);return none();}
+  if(sql.startsWith('SELECT named_enabled FROM admin_auth_settings'))return row({named_enabled:false});
   if(sql.startsWith('INSERT INTO account_security_rates'))return row({attempts:1});
   if(sql.startsWith('SELECT * FROM creators WHERE id='))return this.users.find(u=>String(u.id)===String(args[0]))?row(this.users.find(u=>String(u.id)===String(args[0]))):none();
   if(sql.startsWith('SELECT * FROM listeners WHERE id='))return this.listeners.find(u=>String(u.id)===String(args[0]))?row(this.listeners.find(u=>String(u.id)===String(args[0]))):none();
