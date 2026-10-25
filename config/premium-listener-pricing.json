@@ -1,0 +1,51 @@
+{
+  "revision": "premium-usd-2026-10-25-v1",
+  "base_currency": "USD",
+  "status": "approved",
+  "approval": {
+    "approved_at": "2026-10-25T23:14:44.653670+00:00",
+    "evidence": "Owner explicitly approved in this conversation: Daily USD 0.08; Weekly USD 0.23; Monthly USD 0.60; Two months USD 1.21; Annual USD 5.88. Approval does not authorize live payments, production merge or deployment."
+  },
+  "reference": {
+    "currency": "NGN",
+    "source": "ExchangeRate-API",
+    "source_url": "https://open.er-api.com/v6/latest/USD",
+    "source_as_of": "2026-10-25T00:02:31.000Z",
+    "retrieved_at": "2026-10-25T23:05:41.791962+00:00",
+    "ngn_per_usd": "1325.718117",
+    "response_sha256": "c98ba54c6011a4db34e7025fa894f153de95abe5c00ab724223d4d791ab5ad17",
+    "rounding": "nearest USD cent, half up; base prices remain fixed after approval"
+  },
+  "plans": {
+    "daily": {
+      "name": "Daily Pass",
+      "days": 1,
+      "usd_minor": 8,
+      "reference_ngn_minor": 10000
+    },
+    "weekly": {
+      "name": "Weekly Premium",
+      "days": 7,
+      "usd_minor": 23,
+      "reference_ngn_minor": 30000
+    },
+    "monthly": {
+      "name": "Monthly Premium",
+      "days": 30,
+      "usd_minor": 60,
+      "reference_ngn_minor": 80000
+    },
+    "two_month": {
+      "name": "Two-Month Premium",
+      "days": 60,
+      "usd_minor": 121,
+      "reference_ngn_minor": 160000
+    },
+    "annual": {
+      "name": "Annual Premium",
+      "days": 365,
+      "usd_minor": 588,
+      "reference_ngn_minor": 780000
+    }
+  }
+}

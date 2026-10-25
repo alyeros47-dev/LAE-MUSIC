@@ -2,7 +2,7 @@
 const test = require("node:test"),
   assert = require("node:assert/strict"),
   p = require("../lib/premium-policy");
-test("approved listener NGN prices, exact fixed durations and commissions preserve artist package terms", () => {
+test("historical NGN pricing references, exact fixed durations and commissions preserve artist package terms", () => {
   for (const [code, minor, days] of [
     ["daily", 10000, 1],
     ["weekly", 30000, 7],
@@ -10,9 +10,9 @@ test("approved listener NGN prices, exact fixed durations and commissions preser
     ["two_month", 160000, 60],
     ["annual", 780000, 365],
   ]) {
-    assert.equal(p.plan(code).minor, minor);
-    assert.equal(p.plan(code).days, days);
-    assert.equal(p.plan(code).currency, "NGN");
+    assert.equal(p.referencePlan(code).minor, minor);
+    assert.equal(p.referencePlan(code).days, days);
+    assert.equal(p.referencePlan(code).currency, "NGN");
     assert.equal(p.percentage(minor, 10), minor / 10);
     assert.equal(p.percentage(minor, 5), minor / 20);
   }

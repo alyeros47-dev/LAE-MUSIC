@@ -1,5 +1,7 @@
 # Milestone 13 — Premium Listener subscriptions and streaming royalties
 
+**Historical milestone. Its NGN-only pricing and charge policy is superseded by the owner-approved USD catalog and shared international quote system in [MILESTONE-14.md](MILESTONE-14.md). Historical NGN records are preserved.**
+
 **Development candidate 0.13.0-rc.13; no production merge or deployment.** This extends the existing website, account model, payment adapters, player and accounting services. Migration 013 is additive; migrations 001–012 and historical financial/package records are unchanged.
 
 ## Approved commercial policy

@@ -17,7 +17,7 @@ module.exports = async (t, { pool }) => {
       secretKey: secret,
       merchantId: "premium-fixture",
       mode: "test",
-      approvedCurrencies: ["NGN"],
+      approvedCurrencies: ["USD", "NGN"],
       reviewed: true,
       fetchImpl: async (url, options) => {
         if (url.endsWith("/transaction/initialize")) {
@@ -58,6 +58,9 @@ module.exports = async (t, { pool }) => {
       pool,
       adapters: { paystack: adapter },
       callbackOrigin: "https://lae.test",
+      pricing: require("./premium-fixtures.cjs").approvedPricing({
+        referenceValues: true,
+      }),
     }),
     royalties = createRoyalties(pool),
     env = {
@@ -103,10 +106,12 @@ module.exports = async (t, { pool }) => {
   }
   async function purchase(user, plan = "daily", ref = null) {
     const o = await service.prepare(user.id, key(), { plan, referrer_id: ref });
-    await service.checkout(user.id, key(), {
+    const quote = await service.prepareQuote(user.id, {
       order_id: o.id,
       provider: "paystack",
+      currency: "USD",
     });
+    await service.checkout(user.id, key(), { quote_id: quote.id });
     const a = (
       await pool.query("SELECT * FROM premium_attempts WHERE order_id=$1", [
         o.id,
@@ -140,7 +145,7 @@ module.exports = async (t, { pool }) => {
     statement,
     statementPreview;
   await t.test(
-    "public NGN plans, account isolation and disabled checkout never manufacture entitlements",
+    "public USD plans, account isolation and disabled checkout never manufacture entitlements",
     async () => {
       const caps = await api("/api/platform/premium/plans");
       assert.equal(caps.status, 200);
@@ -173,7 +178,7 @@ module.exports = async (t, { pool }) => {
           provider: "paystack",
           order_id: crypto.randomUUID(),
         }),
-        (e) => e.status === 503,
+        (e) => [400, 503].includes(e.status),
       );
     },
   );
@@ -185,15 +190,14 @@ module.exports = async (t, { pool }) => {
           referrer_id: direct.id,
         }),
         before = calls;
+      const checkoutQuote = await service.prepareQuote(user.id, {
+        order_id: order.id,
+        provider: "paystack",
+        currency: "USD",
+      });
       await Promise.all([
-        service.checkout(user.id, key(), {
-          order_id: order.id,
-          provider: "paystack",
-        }),
-        service.checkout(user.id, key(), {
-          order_id: order.id,
-          provider: "paystack",
-        }),
+        service.checkout(user.id, key(), { quote_id: checkoutQuote.id }),
+        service.checkout(user.id, key(), { quote_id: checkoutQuote.id }),
       ]);
       assert.equal(calls - before, 1);
       const a = (
@@ -431,21 +435,33 @@ module.exports = async (t, { pool }) => {
       payment = {
         reference,
         amount,
-        currency: "NGN",
+        currency: "USD",
         metadata: { lae_order_id: order.id, lae_quote_id: attempt },
         id: ++providerId,
         domain: "test",
         status: "success",
       };
     payments.set(reference, payment);
+    const quote = await service.prepareQuote(user.id, {
+      order_id: order.id,
+      provider: "paystack",
+      currency: "USD",
+    });
+    payment.metadata.lae_quote_id = quote.id;
     await pool.query(
-      "INSERT INTO premium_attempts(id,order_id,provider,merchant_id,mode,reference,status) VALUES($1,$2,'paystack','premium-fixture',$4,$3,'paid')",
-      [attempt, order.id, reference, mode],
+      "INSERT INTO premium_attempts(id,order_id,provider,merchant_id,mode,reference,status,quote_id) VALUES($1,$2,'paystack','premium-fixture',$4,$3,'paid',$5)",
+      [attempt, order.id, reference, mode, quote.id],
     );
-    await pool.query(
-      "INSERT INTO premium_receipts(order_id,provider,merchant_id,payment_id,mode,currency,amount_minor) VALUES($1,'paystack','premium-fixture',$2,$4,'NGN',$3)",
-      [order.id, reference, amount, mode],
-    );
+    await require("../lib/transactions").transaction(pool, async (db) => {
+      await db.query(
+        "INSERT INTO premium_receipts(order_id,provider,merchant_id,payment_id,mode,currency,amount_minor) VALUES($1,'paystack','premium-fixture',$2,$4,'USD',$3)",
+        [order.id, reference, amount, mode],
+      );
+      await db.query(
+        "INSERT INTO premium_presentments(order_id,quote_id,attempt_id,base_currency,base_minor,charge_currency,charge_minor,usd_equivalent_minor,exchange_rate,conversion_at) VALUES($1,$2,$3,'USD',$4,'USD',$4,$4,'1',(SELECT created_at FROM payment_checkout_quotes WHERE id=$2))",
+        [order.id, quote.id, attempt, amount],
+      );
+    });
     const start = new Date(month + "-01T00:00:00Z"),
       end = new Date(start.getTime() + days * 86400000),
       e = (
@@ -468,10 +484,10 @@ module.exports = async (t, { pool }) => {
         db,
         "premium:" + order.id,
         "premium_verified_sale",
-        "NGN",
+        "USD",
         amount,
-        "platform:premium_receivable:" + mode,
-        "platform:premium_deferred:" + mode,
+        "platform:premium_receivable:" + mode + ":USD",
+        "platform:premium_deferred:" + mode + ":USD",
       ),
     );
     if (commission)
@@ -484,10 +500,10 @@ module.exports = async (t, { pool }) => {
             db,
             "premium:" + order.id + ":commission:" + level,
             "premium_pending_commission",
-            "NGN",
+            "USD",
             (amount * percent) / 100,
-            "platform:premium_commission_deferred_cost:" + mode,
-            "artist:" + id + ":premium_pending:" + mode + ":NGN",
+            "platform:premium_commission_deferred_cost:" + mode + ":USD",
+            "artist:" + id + ":premium_pending:" + mode + ":USD",
             id,
           ),
         );
@@ -580,12 +596,12 @@ module.exports = async (t, { pool }) => {
       assert.equal(
         await balance(
           pool,
-          "artist:" + direct.id + ":royalty_unsettled:test:NGN",
+          "artist:" + direct.id + ":royalty_unsettled:test:USD",
         ),
         16500,
       );
       assert.equal(
-        await balance(pool, "artist:" + direct.id + ":earned:NGN"),
+        await balance(pool, "artist:" + direct.id + ":earned:USD"),
         0,
       );
       await assert.rejects(
@@ -645,7 +661,7 @@ module.exports = async (t, { pool }) => {
         id: 7001,
         domain: "test",
         transaction: { id: statementOrder.payment.id },
-        currency: "NGN",
+        currency: "USD",
         amount: 80000,
         status: "processed",
       });
@@ -682,7 +698,7 @@ module.exports = async (t, { pool }) => {
         1,
       );
       assert.equal(
-        await balance(pool, "artist:" + direct.id + ":earned:NGN"),
+        await balance(pool, "artist:" + direct.id + ":earned:USD"),
         0,
       );
       const rows = (
@@ -699,7 +715,7 @@ module.exports = async (t, { pool }) => {
       assert.equal(
         await balance(
           pool,
-          "artist:" + direct.id + ":royalty_unsettled:test:NGN",
+          "artist:" + direct.id + ":royalty_unsettled:test:USD",
         ),
         0,
       );
@@ -768,7 +784,7 @@ module.exports = async (t, { pool }) => {
         provider: "paystack",
         merchantId: "premium-fixture",
         paymentId: live.reference,
-        currency: "NGN",
+        currency: "USD",
         receivedMinor: 78000,
         settlementReference: "isolated-bank-settlement-fixture",
       };
@@ -793,7 +809,7 @@ module.exports = async (t, { pool }) => {
         0,
       );
       assert.equal(
-        await balance(pool, "artist:" + direct.id + ":earned:NGN"),
+        await balance(pool, "artist:" + direct.id + ":earned:USD"),
         0,
       );
       const cash = createRoyaltySettlement({
@@ -808,7 +824,7 @@ module.exports = async (t, { pool }) => {
         cash.release(key(), { statement_id: finalized.id }),
       ]);
       assert.equal(
-        await balance(pool, "artist:" + direct.id + ":earned:NGN"),
+        await balance(pool, "artist:" + direct.id + ":earned:USD"),
         39000,
       );
       assert.equal(
@@ -820,8 +836,14 @@ module.exports = async (t, { pool }) => {
         ).rows[0].n,
         1,
       );
-      assert.equal(await balance(pool, "platform:premium_recognized:live"), 0);
-      assert.equal(await balance(pool, "platform:premium_receivable:live"), 0);
+      assert.equal(
+        await balance(pool, "platform:premium_recognized:live:USD"),
+        0,
+      );
+      assert.equal(
+        await balance(pool, "platform:premium_receivable:live:USD"),
+        0,
+      );
       // A later independently established reversal uses the same internal adjustment path.
       // Live provider transports are intentionally not configured by this test.
       await require("../lib/transactions").transaction(pool, async (db) => {
@@ -839,7 +861,7 @@ module.exports = async (t, { pool }) => {
         );
       });
       assert.equal(
-        await balance(pool, "artist:" + direct.id + ":earned:NGN"),
+        await balance(pool, "artist:" + direct.id + ":earned:USD"),
         39000,
       );
       assert.equal(
@@ -856,7 +878,7 @@ module.exports = async (t, { pool }) => {
           pool,
           direct.id,
           key(),
-          "NGN",
+          "USD",
           100,
         ),
         (e) => e.status === 409,

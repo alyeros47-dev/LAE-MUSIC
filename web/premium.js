@@ -3,10 +3,10 @@ const dateTime = (value) =>
     dateStyle: "medium",
     timeStyle: "long",
   });
-const ngn = (value) =>
+const accountAmount = (value, row = {}) =>
   new Intl.NumberFormat(undefined, {
     style: "currency",
-    currency: "NGN",
+    currency: row.currency || "USD",
   }).format(Number(value || 0) / 100);
 export class PremiumListeningTracker {
   constructor({ api, audio, listener }) {
@@ -114,115 +114,183 @@ export async function premiumPage(view, url, ctx) {
     clearKey,
     toast,
     route,
-    date,
     currencyDisplay,
   } = ctx;
-  const plans = await api(
-      "/api/platform/premium/plans?currency=" +
-        encodeURIComponent(currencyDisplay.currency),
-    ),
-    data = session.listener ? await api("/api/platform/premium/status") : null;
-  const selectedProvider = plans.providers[0];
+  const plans = await api("/api/platform/premium/plans"),
+    data = session.listener ? await api("/api/platform/premium/status") : null,
+    approved = plans.price_status === "approved";
+  const amount = (n, currency = "USD") =>
+    new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      currencyDisplay: "code",
+    }).format(
+      Number(n) /
+        10 **
+          new Intl.NumberFormat("en", {
+            style: "currency",
+            currency,
+          }).resolvedOptions().maximumFractionDigits,
+    );
+  const record = (o) =>
+    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h3>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h3>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open sandbox checkout ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
     !view.set(
       heading(
         "PREMIUM LISTENING",
         "A little more music. A direct connection.",
-        "Affordable listening that supports the artists behind your soundtrack.",
+        "Listen worldwide. Support the artists behind your soundtrack.",
         buttonLink("/discover", "Keep listening for free", true),
       ) +
         notice(
           "Public streaming, playlists and favorites remain available. Premium does not grant commercial or public-performance rights.",
         ) +
-        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2><p>${data?.active ? "Activated " + dateTime(data.current.starts_at) + " · Expires " + dateTime(data.current.expires_at) : "Choose a fixed-term pass. A new pass starts after verified payment; renewals preserve your remaining cover."}</p><p>Ad-free playback without advertising interruptions · Premium badge · detailed Premium listening insights · qualifying listening supports artist royalty accounting.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section><div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === "monthly" ? "featured" : ""}"><span class="eyebrow">${e(p.days)} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${ngn(p.amount_minor)}</div>${p.estimated_minor !== undefined ? `<p>Approx. ${e(new Intl.NumberFormat(undefined, { style: "currency", currency: plans.display_currency }).format(p.estimated_minor / 10 ** new Intl.NumberFormat("en", { style: "currency", currency: plans.display_currency }).resolvedOptions().maximumFractionDigits))}</p>` : ""}<p>${p.code === "daily" ? "For your birthday, gathering or a day with your favorite sounds." : "A fixed term, with clear start and end dates."}</p><button class="button secondary" data-premium-plan="${e(p.code)}">Review ${e(p.name)}</button></article>`).join("")}</div>${notice("Introductory Nigerian prices are charged in NGN. Other currency displays are estimates, never permanent USD prices. Automatic renewal is off. No saved-card charge is authorized.")}${!plans.providers.length ? notice("Payment checkout is unavailable until the merchant’s sandbox account and credentials are reviewed. Unpaid records do not activate Premium.", true) : notice("Sandbox checkout only. Test payments never create withdrawable artist earnings.", true)}${data ? `<div class="section-heading"><h2>Your subscriptions and purchase records</h2></div><section class="panel">${data.orders.length ? data.orders.map((o) => `<article class="purchase-card"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "UNPAID"}</span><h3>${e(o.plan)} · ${ngn(o.amount_minor)}</h3><p>Reference ${e(o.reference || o.id)}</p>${o.attempt_id ? `<button class="button secondary" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : selectedProvider ? `<button class="button secondary" data-premium-checkout="${e(o.id)}">Open sandbox checkout</button>` : ""}${o.checkout_url ? `<a class="button secondary" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open provider checkout ↗</a>` : ""}</article>`).join("") : "<p>No purchase records yet.</p>"}</section><section class="panel"><h2>Your entitlement history</h2>${data.entitlements.map((t) => `<p>${e(t.plan)} · ${dateTime(t.starts_at)} → ${dateTime(t.expires_at)} · ${t.reversed ? "Reversed" : t.held ? "Under payment review" : new Date(t.expires_at) < new Date() ? "Expired" : "Paid cover"} · ${e(t.mode)}</p>`).join("") || "<p>No verified subscriptions yet.</p>"}</section>` : ""}`,
+        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
+        (!approved
+          ? notice(
+              "USD price proposal awaiting approval. These proposed prices are not available for purchase.",
+              true,
+            )
+          : "") +
+        `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === "monthly" ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-premium-plan="${e(p.code)}" ${approved && plans.providers.length > 0 ? "" : "disabled"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
+        currencyDisplay.info() +
+        notice(
+          "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
+        ) +
+        notice(
+          plans.providers.length
+            ? "Sandbox checkout only. Test payments never create withdrawable artist earnings."
+            : "Payment checkout is unavailable until merchant accounts and supported currencies are verified.",
+          true,
+        ) +
+        (data
+          ? heading("YOUR PREMIUM", "Your subscriptions and purchase records") +
+            data.orders.map(record).join("") +
+            `<section class="panel"><h2>Your entitlement history</h2>${data.entitlements.length ? data.entitlements.map((t) => `<p>${e(t.plan)} · ${e(dateTime(t.starts_at))} → ${e(dateTime(t.expires_at))} · ${t.reversed ? "Reversed" : t.held ? "Under review" : "Paid cover"} · ${e(t.mode)}</p>`).join("") : "<p>No paid terms yet. Free listening stays available.</p>"}</section>`
+          : ""),
     )
   )
     return;
-  document.querySelectorAll("[data-premium-plan]").forEach((button) => {
-    button.onclick = () => {
-      if (!session.listener) {
-        ctx.navigate(
-          "/join?role=listener&return=premium" +
-            (url.searchParams.get("ref")
-              ? "&ref=" + encodeURIComponent(url.searchParams.get("ref"))
-              : ""),
+  currencyDisplay.paint();
+  document.querySelectorAll("[data-premium-plan]").forEach(
+    (button) =>
+      (button.onclick = () => {
+        if (!session.listener) {
+          ctx.navigate(
+            "/join?role=listener&return=premium" +
+              (url.searchParams.get("ref")
+                ? "&ref=" + encodeURIComponent(url.searchParams.get("ref"))
+                : ""),
+          );
+          return;
+        }
+        const p = plans.plans.find(
+          (p) => p.code === button.dataset.premiumPlan,
         );
-        return;
-      }
-      const plan = plans.plans.find(
-        (p) => p.code === button.dataset.premiumPlan,
-      );
-      ctx.actionDialog(
-        `<h2>Review ${e(plan.name)}.</h2><p>${ngn(plan.amount_minor)} · ${e(plan.days * 24)} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. Eligible subscription referrals use 10% direct and up to 5% indirect.</p><button class="button" type="submit">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
-        (root) =>
-          bindForm(root.querySelector("form"), async (b) => {
-            const payload = {
-              plan: plan.code,
-              referrer_id: b.referrer_id || null,
-            };
-            await api("/api/platform/premium/orders", "POST", payload, {
-              headers: { "Idempotency-Key": keyFor("premium-order", payload) },
-            });
-            clearKey("premium-order");
-            document.getElementById("action-dialog").close();
-            toast(
-              "Purchase prepared. Premium starts only after verified payment.",
-            );
-            route(true);
-          }),
-      );
-    };
-  });
-  document.querySelectorAll("[data-premium-checkout]").forEach((button) => {
-    button.onclick = () =>
-      ctx.actionDialog(
-        '<h2>Choose your sandbox provider.</h2><form><label>Provider<select name="provider" aria-label="Provider">' +
-          plans.providers.map((p) => "<option>" + e(p) + "</option>").join("") +
-          '</select></label><p>NGN charge. Keep the original reference if the provider response is uncertain. No automatic renewal.</p><button class="button" type="submit">Create sandbox reference</button><p class="form-status" role="status"></p></form>',
-        (root) =>
-          bindForm(root.querySelector("form"), async (b) => {
-            const payload = {
-              order_id: button.dataset.premiumCheckout,
-              provider: b.provider,
-            };
-            await api("/api/platform/premium/checkout", "POST", payload, {
-              headers: {
-                "Idempotency-Key": keyFor(
-                  "premium-checkout:" + payload.order_id,
-                  payload,
+        ctx.actionDialog(
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. Verified listener-product referrals use 10% direct and up to 5% eligible indirect.</p><button type="submit" class="button">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
+          (root) =>
+            bindForm(root.querySelector("form"), async (b) => {
+              const payload = {
+                plan: p.code,
+                referrer_id: b.referrer_id || null,
+              };
+              await api("/api/platform/premium/orders", "POST", payload, {
+                headers: {
+                  "Idempotency-Key": keyFor("premium-order", payload),
+                },
+              });
+              clearKey("premium-order");
+              document.getElementById("action-dialog").close();
+              route(true);
+            }),
+        );
+      }),
+  );
+  document.querySelectorAll("[data-premium-checkout]").forEach(
+    (button) =>
+      (button.onclick = () =>
+        ctx.actionDialog(
+          `<h2>Your payment options.</h2><form><label>Provider<select name="provider" aria-label="Provider">${plans.providers.map((p) => `<option value="${e(p.id)}">${e(p.id)}</option>`).join("")}</select></label><label>Payment currency<select name="currency" aria-label="Payment currency"></select></label><p class="payment-alternative"></p><button type="submit" class="button">Review final payment amount</button><p class="form-status" role="status"></p></form>`,
+          (root) => {
+            const form = root.querySelector("form"),
+              provider = form.elements.provider,
+              currency = form.elements.currency;
+            const update = () => {
+              const account = plans.providers.find(
+                  (p) => p.id === provider.value,
                 ),
-              },
+                preferred = currencyDisplay.currency;
+              currency.replaceChildren(
+                ...account.currencies.map((c) => new Option(c, c)),
+              );
+              currency.value = account.currencies.includes(preferred)
+                ? preferred
+                : account.currencies.includes("USD")
+                  ? "USD"
+                  : account.currencies[0];
+              root.querySelector(".payment-alternative").textContent =
+                account.currencies.includes(preferred)
+                  ? "Choose a supported payment currency."
+                  : preferred +
+                    " is unavailable on this merchant account. Supported alternatives: " +
+                    account.currencies.join(", ") +
+                    ".";
+            };
+            provider.onchange = update;
+            update();
+            bindForm(form, async (b) => {
+              const q = await api("/api/platform/premium/quote", "POST", {
+                order_id: button.dataset.premiumCheckout,
+                ...b,
+              });
+              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>USD base price: ${e(amount(q.base_minor))}</p><p>Exchange rate: 1 USD = ${e(q.rate)} ${e(q.charge_currency)} · ${e(dateTime(q.conversion_at))}</p><p>Quote expires ${e(dateTime(q.expires_at))}. No money has been charged.</p><form><button type="submit" class="button">Create sandbox reference</button><p class="form-status" role="status"></p></form>`;
+              bindForm(root.querySelector("form"), async () => {
+                const payload = { quote_id: q.id };
+                await api("/api/platform/premium/checkout", "POST", payload, {
+                  headers: {
+                    "Idempotency-Key": keyFor(
+                      "premium-checkout:" + q.id,
+                      payload,
+                    ),
+                  },
+                });
+                document.getElementById("action-dialog").close();
+                route(true);
+              });
             });
-            document.getElementById("action-dialog").close();
-            route(true);
-          }),
-      );
-  });
-  document.querySelectorAll("[data-premium-verify]").forEach((button) => {
-    button.onclick = async () => {
-      button.disabled = true;
-      try {
-        await api("/api/platform/premium/verify", "POST", {
-          attempt_id: button.dataset.premiumVerify,
-        });
-        await ctx.refreshSession();
-        toast("Original payment checked");
-        route(true);
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        button.disabled = false;
-      }
-    };
-  });
+          },
+        )),
+  );
+  document.querySelectorAll("[data-premium-verify]").forEach(
+    (button) =>
+      (button.onclick = async () => {
+        button.disabled = true;
+        try {
+          await api("/api/platform/premium/verify", "POST", {
+            attempt_id: button.dataset.premiumVerify,
+          });
+          await ctx.refreshSession();
+          toast("Original payment checked");
+          route(true);
+        } catch (error) {
+          toast(error.message, true);
+        } finally {
+          button.disabled = false;
+        }
+      }),
+  );
 }
 export async function artistRoyaltiesPage(view, url, intro, ctx) {
   const { api, e, heading, notice, table, bindForm, date } = ctx,
     month =
       url.searchParams.get("month") || new Date().toISOString().slice(0, 7),
     mode = url.searchParams.get("mode") || "live",
+    currency = url.searchParams.get("currency") || "USD",
+    price = (value) => accountAmount(value, { currency }),
     x = await api(
-      "/api/platform/artist-royalties?" + new URLSearchParams({ month, mode }),
+      "/api/platform/artist-royalties?" +
+        new URLSearchParams({ month, mode, currency }),
     );
   if (
     !view.set(
@@ -232,17 +300,20 @@ export async function artistRoyaltiesPage(view, url, intro, ctx) {
           "Your sound. Your share.",
           "50% of attributable net eligible Premium Listener revenue, for every artist package.",
         ) +
-        `<form id="royalty-filter" class="row-actions"><label>Accounting month<input type="month" name="month" value="${e(month)}" required></label><label>Records<select name="mode" aria-label="Records"><option value="live" ${mode === "live" ? "selected" : ""}>Live</option><option value="test" ${mode === "test" ? "selected" : ""}>Sandbox · not cash</option></select></label><button type="submit" class="button secondary">View period</button><p class="form-status" role="status"></p></form><div class="metrics">${[
+        `<form id="royalty-filter" class="row-actions"><label>Accounting month<input type="month" name="month" value="${e(month)}" required></label><label>Records<select name="mode" aria-label="Records"><option value="live" ${mode === "live" ? "selected" : ""}>Live</option><option value="test" ${mode === "test" ? "selected" : ""}>Sandbox · not cash</option></select></label><label>Accounting currency<select name="currency"><option value="USD" ${currency === "USD" ? "selected" : ""}>USD</option><option value="NGN" ${currency === "NGN" ? "selected" : ""}>Legacy NGN</option></select></label><button type="submit" class="button secondary">View period</button><p class="form-status" role="status"></p></form><div class="metrics">${[
           ["TOTAL PLAYS", x.counts.total_plays],
           ["QUALIFYING PREMIUM PLAYS", x.counts.qualifying_premium_plays],
           ["RECORDED FREE PLAYS", x.counts.free_plays],
-          ["ESTIMATED THIS PERIOD", ngn(x.estimated_minor)],
-          ["PREVIOUS MONTH FINALIZED", ngn(x.previous_month_finalized_minor)],
+          ["ESTIMATED THIS PERIOD", price(x.estimated_minor)],
+          ["PREVIOUS MONTH FINALIZED", price(x.previous_month_finalized_minor)],
           [
             "LIFETIME FINALIZED LESS ADJUSTMENTS",
-            ngn(x.lifetime_finalized_minor - x.lifetime_adjustments_minor),
+            price(x.lifetime_finalized_minor - x.lifetime_adjustments_minor),
           ],
-          ["AVAILABLE VERIFIED NGN BALANCE", ngn(x.available_minor)],
+          [
+            "AVAILABLE VERIFIED " + currency + " BALANCE",
+            price(x.available_minor),
+          ],
         ]
           .map(
             ([label, value]) =>
@@ -260,20 +331,20 @@ export async function artistRoyaltiesPage(view, url, intro, ctx) {
         table(x.songs, [
           ["track_id", "Song ID"],
           ["streams", "Eligible plays"],
-          ["amount_minor", "Estimated royalty", ngn],
+          ["amount_minor", "Estimated royalty", price],
         ]) +
         heading("FINALIZED STATEMENTS", "A permanent record.") +
         table(x.finalized, [
           ["month", "Month"],
           ["mode", "Records"],
           ["streams", "Plays"],
-          ["amount_minor", "Finalized liability", ngn],
+          ["amount_minor", "Finalized liability", accountAmount],
         ]) +
         heading("ADJUSTMENTS", "Corrections stay visible.") +
         table(x.adjustments, [
           ["month", "Month"],
           ["mode", "Records"],
-          ["amount_minor", "Adjustment", ngn],
+          ["amount_minor", "Adjustment", accountAmount],
           ["resolution", "Recovery status"],
         ]) +
         heading("WITHDRAWALS", "Reserved and completed requests.") +
@@ -315,27 +386,57 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
         heading(
           "ROYALTY ACCOUNTING",
           "Review the month. Keep the evidence.",
-          "Separate NGN books, immutable statements and no invented per-stream rate.",
+          "USD base accounting, separate legacy books, immutable statements and no invented per-stream rate.",
         ) +
         notice(
           "Finalize only after reviewing eligibility, fraud exclusions, actual payment costs and the approved universal 50% policy. Finalized royalties are liabilities until verified cash settlement; sandbox amounts are never withdrawable.",
           true,
         ) +
-        `<section class="panel"><h2>Monthly statement preview</h2><form id="royalty-preview"><label>Month<input name="month" type="month" required></label><label>Records<select name="mode" aria-label="Records"><option value="test">Sandbox</option><option value="live">Live</option></select></label><button type="submit" class="button">Calculate preview</button><p class="form-status" role="status"></p></form><div id="royalty-preview-output"></div></section>` +
+        `<section class="panel"><h2>Monthly statement preview</h2><form id="royalty-preview"><label>Month<input name="month" type="month" required></label><label>Records<select name="mode" aria-label="Records"><option value="test">Sandbox</option><option value="live">Live</option></select></label><label>Accounting currency<select name="currency"><option value="USD">USD</option><option value="NGN">Legacy NGN</option></select></label><button type="submit" class="button">Calculate preview</button><p class="form-status" role="status"></p></form><div id="royalty-preview-output"></div></section>` +
         heading("VERIFIED PAYMENTS", "Original receipt evidence.") +
         table(x.payments, [
           ["order_id", "Order"],
           ["provider", "Provider"],
           ["mode", "Records"],
           ["currency", "Currency"],
-          ["amount_minor", "Gross", ngn],
-          ["fees_minor", "Actual fees", ngn],
-          ["tax_minor", "Excluded taxes", ngn],
+          ["amount_minor", "USD or legacy gross", accountAmount],
+          ["charge_currency", "Original currency"],
+          [
+            "charge_minor",
+            "Original charge",
+            (value, row) =>
+              value === null || value === undefined
+                ? "Legacy receipt"
+                : new Intl.NumberFormat(undefined, {
+                    style: "currency",
+                    currency: row.charge_currency,
+                  }).format(
+                    Number(value) /
+                      10 **
+                        new Intl.NumberFormat("en", {
+                          style: "currency",
+                          currency: row.charge_currency,
+                        }).resolvedOptions().maximumFractionDigits,
+                  ),
+          ],
+          ["exchange_rate", "Original rate / USD"],
+          [
+            "conversion_at",
+            "Rate timestamp",
+            (value) => (value ? dateTime(value) : "Legacy receipt"),
+          ],
+          [
+            "refund_base_minor",
+            "Refunded base",
+            (value, row) => (value == null ? "—" : accountAmount(value, row)),
+          ],
+          ["fees_minor", "Actual fees", accountAmount],
+          ["tax_minor", "Excluded taxes", accountAmount],
         ]) +
         `<div class="two-column">` +
         form(
           "premium-costs",
-          '<label>Receipt order ID<input name="order_id" required></label><label>Existing cost revision<input name="revision" type="number" min="0" value="0" required></label><label>Actual provider fees · kobo<input name="fees_minor" type="number" min="0" required></label><label>Excluded taxes · kobo<input name="tax_minor" type="number" min="0" required></label><label>Statement/invoice evidence<textarea name="evidence" minlength="10" maxlength="1000" required></textarea></label>',
+          '<label>Receipt order ID<input name="order_id" required></label><label>Existing cost revision<input name="revision" type="number" min="0" value="0" required></label><label>Cost currency<input name="cost_currency" value="USD" pattern="[A-Z]{3}" required></label><label>Actual provider fees · minor units<input name="fees_minor" type="number" min="0" required></label><label>Excluded taxes · minor units<input name="tax_minor" type="number" min="0" required></label><label>Statement/invoice evidence<textarea name="evidence" minlength="10" maxlength="1000" required></textarea></label>',
           "Record verified payment costs",
         ) +
         form(
@@ -353,13 +454,13 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
         table(x.statements, [
           ["month", "Month"],
           ["mode", "Records"],
-          ["gross_minor", "Recognized gross", ngn],
-          ["net_minor", "Net eligible", ngn],
-          ["artist_pool_minor", "Artist pool", ngn],
-          ["platform_minor", "Platform", ngn],
+          ["gross_minor", "Recognized gross", accountAmount],
+          ["net_minor", "Net eligible", accountAmount],
+          ["artist_pool_minor", "Artist pool", accountAmount],
+          ["platform_minor", "Platform", accountAmount],
           ["stream_count", "Eligible plays"],
-          ["undistributed_minor", "Undistributed liability", ngn],
-          ["released_minor", "Cash-backed release", ngn],
+          ["undistributed_minor", "Undistributed liability", accountAmount],
+          ["released_minor", "Cash-backed release", accountAmount],
         ]) +
         heading("CALCULATION HISTORY", "Review and reconciliation events.") +
         table(x.calculations || [], [
@@ -392,16 +493,16 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
       table(
         [preview],
         [
-          ["gross_minor", "Recognized gross", ngn],
-          ["refund_minor", "Refunds", ngn],
-          ["tax_minor", "Excluded tax", ngn],
-          ["fees_minor", "Actual fees", ngn],
-          ["commissions_minor", "Earned referrals", ngn],
-          ["rounding_minor", "Rounding reconciliation", ngn],
-          ["net_minor", "Net eligible", ngn],
-          ["artist_pool_minor", "50% artist pool", ngn],
+          ["gross_minor", "Recognized gross", accountAmount],
+          ["refund_minor", "Refunds", accountAmount],
+          ["tax_minor", "Excluded tax", accountAmount],
+          ["fees_minor", "Actual fees", accountAmount],
+          ["commissions_minor", "Earned referrals", accountAmount],
+          ["rounding_minor", "Rounding reconciliation", accountAmount],
+          ["net_minor", "Net eligible", accountAmount],
+          ["artist_pool_minor", "50% artist pool", accountAmount],
           ["stream_count", "Qualifying plays"],
-          ["undistributed_minor", "Undistributed liability", ngn],
+          ["undistributed_minor", "Undistributed liability", accountAmount],
         ],
       ) +
       notice(
@@ -409,7 +510,7 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
           ? "Variable royalty per eligible stream: " +
               new Intl.NumberFormat(undefined, {
                 style: "currency",
-                currency: "NGN",
+                currency: preview.currency || "USD",
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 8,
               }).format(preview.artist_pool_minor / 100 / preview.stream_count)

@@ -4,7 +4,7 @@ Music discovery, artist tools, an AI music studio, and **LAE-MUSIC Partners & Af
 
 **Release status: draft candidate. Not launch-ready.** Live-money processing, bank payouts and automatic royalty/commission settlement remain unavailable. Reviewed staging accounts can use the prepared sandbox checkout; the committed merchant manifest is disabled. See [the audit](docs/AUDIT.md), [release status and evidence](docs/RELEASE.md), and [staging instructions](docs/DEPLOYMENT.md). The [feature/launch matrix](docs/FEATURE-STATUS.md) lists implemented behavior and remaining work.
 
-Premium Listener subscriptions and the approved universal 50% streaming revenue pool are implemented with immutable monthly accounting and separate cash-release safeguards. [Milestone 13](docs/MILESTONE-13.md) records pricing, qualifying-stream rules, refund behavior and the unconfigured live settlement verifier. Existing free listening remains available.
+Premium Listener subscriptions use the owner-approved USD base prices ($0.08 / $0.23 / $0.60 / $1.21 / $5.88), shared international currency conversion and approved universal 50% streaming revenue pool with immutable monthly accounting and separate cash-release safeguards. [Milestone 14](docs/MILESTONE-14.md) records pricing, qualifying-stream rules, refund behavior and the unconfigured live settlement verifier. Existing free listening remains available.
 
 ## Local development
 

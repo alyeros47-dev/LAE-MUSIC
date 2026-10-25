@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.13.0-rc.13
+# LAE-MUSIC release candidate 0.14.0-rc.14
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,11 +18,13 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–013, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–014, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
 ## Premium Listener and streaming policy
 
-[Milestone 13](MILESTONE-13.md) implements the owner-approved NGN listener plans (₦100/300/800/1,600/7,800), exact 1/7/30/60/365-day terms, approved Premium benefits with free listening preserved, verified-sale 10%/eligible 5% referrals and universal **50% streaming royalties**. Recognition uses actual entitlement duration; only eligible Premium streams enter the pool. Reviewed monthly statements, annual deferral, zero-stream liabilities, immutable refunds/adjustments, recovery holds and protected available-balance release are implemented. A provider-specific live settlement verifier is **unconfigured**, so release remains unavailable in HTTP and no sandbox amounts become cash.
+[Milestone 14](MILESTONE-14.md) implements the explicitly approved **USD** Premium Listener base prices: **$0.08 / $0.23 / $0.60 / $1.21 / $5.88** for 1/7/30/60/365 days. It replaces M13's NGN-only pricing with the same country selector, daily rate cache and immutable quote system used by artist products. Local payments use reviewed account currencies and a final-amount confirmation. Original local charge/refund evidence and USD equivalent/rate/timestamp are preserved; costs normalize once at the original snapshot. Historical NGN contracts remain in a separate legacy book.
+
+The universal 50% recognized-net streaming pool, eligible Premium streams, annual deferral, no-stream liabilities, immutable finalization/refund recovery and free listening remain intact. Low-cent commission rounding cannot exceed the 15% listener-product cap. Cross-currency cash release remains blocked without independently verified treasury conversion. Live settlement/payout adapters remain unconfigured; sandbox liabilities are never cash.
 
 ## Preserved historical package fields
 
@@ -36,6 +38,10 @@ Two outputs per generation remains an intention, not a verified API guarantee. E
 
 ## Current local evidence
 
+Candidate 0.14.0-rc.14 passed **140 application tests, 133 actual PostgreSQL 16 checks, one socket HTTP test, four real-library SMTP/TLS tests and three Chromium viewport journeys**. Existing Sonic 25 mocked cases / 31 source invariants pass. Populated-database read-only preflight reported zero financial/FX discrepancies, while overall deployment remains blocked. A separate real public-feed check through the shared pricing service verified current NGN/GHS/KES/LRD estimates. New gateway/treasury/media responses are otherwise fixtures. See [MILESTONE-14.md](MILESTONE-14.md). Final published-head CI will be recorded on PR #6.
+
+## Previous M13 evidence
+
 Candidate 0.13.0-rc.13 passed 136 application tests, 122 actual PostgreSQL 16 checks (migrations 001–013), one socket HTTP test, four SMTP/TLS tests and three Chromium viewport journeys. Existing 25 mocked Sonic cases and 31 source invariants pass. All financial/provider transports in the new journeys use controlled fixtures; live-book accounting fixtures do not establish real cash receipt. No outside gateway/media/email account or production-schema clone was tested. The integrated candidate also passed [GitHub Actions run 40241567230](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40241567230), code commit `ff3138841859ffae40d8c24d31a77e81805881f4`, with the same application/PostgreSQL/HTTP/SMTP/browser results. Condensed evidence: `artifacts/ci-premium-listeners.txt`. A final money-input hardening follow-up rejects arrays/objects and normalizes canonical integer strings; its application and PostgreSQL suites pass locally, with final-head CI recorded on PR #6.
 
 ## Previous executed CI evidence
@@ -46,7 +52,7 @@ The integrated code candidate passed [run 40227539676](https://github.com/alyero
 | --- | --- | --- |
 | Application suite | **130 pass**, locally and in CI | Native handlers/services, transactions, player, uploads, commercial terms, payments/refunds, account/admin security, editorial, notifications, moderation and preflight |
 | Existing Sonic checks | **25 mocked cases and 31 source invariants pass** | Reservation, ownership and failure behavior; no external music account |
-| PostgreSQL 16 | **111 pass** | Actual migrations 001–013, concurrency/rollback/restart, fixture-verified fulfillment/refunds, accounts/MFA, analytics/editorial, inbox/moderation, read-only schema inspection and coordinated staging-worker startup |
+| PostgreSQL 16 | **111 pass** | Actual migrations 001–012, concurrency/rollback/restart, fixture-verified fulfillment/refunds, accounts/MFA, analytics/editorial, inbox/moderation, read-only schema inspection and coordinated staging-worker startup |
 | Socket HTTP | **1 pass** | Actual HTTP routing, public access, security headers and safe errors |
 | SMTP library/TLS | **4 pass** | Real pinned Nodemailer 10.2.1 with local TLS, MIME, recipient rejection and untrusted-CA rejection |
 | Chromium journeys | **Desktop, tablet and mobile pass** | Rendered UI and real audio element with isolated WAV; connected user journeys and playback-preserving navigation |
