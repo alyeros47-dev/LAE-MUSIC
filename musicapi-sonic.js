@@ -79,8 +79,8 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const state=String(result.status||result.state||result.data?.status||result.data?.state|| (result.code===102?'running':'pending')).toLowerCase();
   const found=songs(result.data||result.results||result);
   const status=owned.rows[0].status==='succeeded'?'succeeded':['failed','error','cancelled','canceled'].includes(state)?'failed':found.length?'succeeded':state==='succeeded'?'running':['running','processing','in_progress'].includes(state)?'running':'pending';
-  const db=await pool.connect();try{await db.query('BEGIN');await db.query('UPDATE sonic_test_tasks SET status=$1 WHERE task_id=$2 AND creator_id=$3',[status,id,user.id]);if(status==='failed')await db.query('DELETE FROM artist_studio_usage WHERE artist_id=$1 AND generation_reference=$2',[user.id,id]);await db.query('COMMIT')}catch(e){await db.query('ROLLBACK').catch(()=>{});throw e}finally{db.release()}
-  return send(res,200,{task_id:id,status,songs:found,error:status==='failed'?String(result.message||result.error||'Generation failed'):undefined}),true;
+  const db=await pool.connect();let finalStatus=status;try{await db.query('BEGIN');const updated=await db.query("UPDATE sonic_test_tasks SET status=CASE WHEN status IN ('succeeded','failed') THEN status ELSE $1 END WHERE task_id=$2 AND creator_id=$3 RETURNING status",[status,id,user.id]);if(!updated.rowCount)throw Error('Generation task disappeared during status update');finalStatus=updated.rows[0].status;if(finalStatus==='failed')await db.query('DELETE FROM artist_studio_usage WHERE artist_id=$1 AND generation_reference=$2',[user.id,id]);await db.query('COMMIT')}catch(e){await db.query('ROLLBACK').catch(()=>{});throw e}finally{db.release()}
+  return send(res,200,{task_id:id,status:finalStatus,songs:finalStatus==='failed'?[]:found,error:finalStatus==='failed'?String(result.message||result.error||'Generation failed'):undefined}),true;
  }
  return send(res,404,{error:'Unknown music endpoint'}),true;
 };
