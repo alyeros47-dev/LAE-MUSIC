@@ -9,3 +9,5 @@ require('./gifts.test.cjs');
 require('./notifications.test.cjs');
 require('./music-routes.test.cjs');
 require('./commissions.test.cjs');
+require('./media-release.test.cjs');
+require('./discovery-playlists.test.cjs');

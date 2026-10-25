@@ -96,3 +96,14 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  return send(res,404,{error:'Unknown music endpoint'}),true;
 };
 
+// Read-only completed-output adapter shared by the durable release importer.
+module.exports.releaseProvider={
+ configured:()=>!!process.env.MUSICAPI_API_KEY,
+ async clips(taskId){
+  if(!process.env.MUSICAPI_API_KEY)throw Object.assign(Error('Completed songs are temporarily unavailable.'),{status:503});
+  let result;try{result=await remote('/task/'+encodeURIComponent(taskId),'GET');}catch{throw Object.assign(Error('Completed songs could not be retrieved. Please try again later.'),{status:502});}
+  const state=String(result.status||result.data?.status||'').toLowerCase();
+  if(['failed','error','cancelled','canceled'].includes(state))throw Object.assign(Error('The provider no longer reports this generation as completed.'),{status:409});
+  return songs(result.data||result.results||result);
+ }
+};

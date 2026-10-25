@@ -2129,3 +2129,5 @@
   font-size:11px;
   text-align:left
 }
+
+.draft-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.draft-top{display:flex;gap:16px;align-items:center;margin-bottom:20px}.draft-top>img{width:88px;height:88px;border-radius:10px}.draft-top>div{min-width:0}.draft-top h2{font-size:25px;margin:10px 0;overflow-wrap:anywhere}.draft-card>small{display:block;margin-top:24px;font-size:10px}.draft-card audio{display:block;width:100%;height:42px;margin:20px 0 12px}.draft-card .row-actions{margin-top:20px}.playlist-songs{margin-top:24px}.pagination{display:flex;gap:12px;justify-content:center;margin:24px 0}.pagination:empty{display:none}@media(max-width:900px){.draft-grid{grid-template-columns:1fr}}@media(max-width:420px){.draft-top>img{width:64px;height:64px}.draft-top h2{font-size:21px}}
