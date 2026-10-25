@@ -13,7 +13,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(!pool)return send(res,503,{error:'Music studio database unavailable'}),true;
  if(!process.env.MUSICAPI_API_KEY)return send(res,503,{error:'MusicAPI key is not configured on Render'}),true;
  await pool.query("CREATE TABLE IF NOT EXISTS sonic_test_tasks (task_id TEXT PRIMARY KEY, creator_id BIGINT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
- await pool.query('ALTER TABLE sonic_test_tasks ALTER COLUMN creator_id TYPE BIGINT');
+
  if(p==='/api/music/sonic/create'&&req.method==='POST'){
   const b=await body(req),title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
   if(title.length<2||title.length>120||lyrics.length<20||lyrics.length>6000||style.length<3||style.length>2000)return send(res,400,{error:'Enter a title, lyrics and music style within the permitted lengths.'}),true;
@@ -27,7 +27,8 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const client=await pool.connect();let reservation=null;
   try{
    await client.query('BEGIN');
-   await client.query('SELECT id FROM creators WHERE id=$1 FOR UPDATE',[user.id]);
+   const locked=await client.query('SELECT id FROM creators WHERE id=$1 FOR UPDATE',[user.id]);
+   if(!locked.rowCount){await client.query('ROLLBACK');return send(res,404,{error:'Artist account not found'}),true}
    const active=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes'",[user.id]);
    if(active.rows[0].n>0){await client.query('ROLLBACK');return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true}
    const daily=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
@@ -71,11 +72,12 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   if(!/^[a-zA-Z0-9_-]{8,128}$/.test(id))return send(res,400,{error:'Invalid task ID'}),true;
   const owned=await pool.query('SELECT task_id,status FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2',[id,user.id]);
   if(!owned.rowCount)return send(res,404,{error:'Song request not found for this account'}),true;
+  if(owned.rows[0].status==='failed')return send(res,200,{task_id:id,status:'failed',songs:[],error:'Generation failed; the included generation has been released.'}),true;
   const result=await remote('/task/'+encodeURIComponent(id),'GET');
   const state=String(result.status||result.state||result.data?.status||result.data?.state|| (result.code===102?'running':'pending')).toLowerCase();
   const found=songs(result.data||result.results||result);
-  const status=found.length?'succeeded':['failed','error','cancelled','canceled'].includes(state)?'failed':state==='succeeded'?'succeeded':['running','processing','in_progress'].includes(state)?'running':'pending';
-  await pool.query('UPDATE sonic_test_tasks SET status=$1 WHERE task_id=$2',[status,id]);if(status==='failed')await pool.query('DELETE FROM artist_studio_usage WHERE artist_id=$1 AND generation_reference=$2',[user.id,id]);
+  const status=['failed','error','cancelled','canceled'].includes(state)?'failed':found.length?'succeeded':state==='succeeded'?'succeeded':['running','processing','in_progress'].includes(state)?'running':'pending';
+  const db=await pool.connect();try{await db.query('BEGIN');await db.query('UPDATE sonic_test_tasks SET status=$1 WHERE task_id=$2 AND creator_id=$3',[status,id,user.id]);if(status==='failed')await db.query('DELETE FROM artist_studio_usage WHERE artist_id=$1 AND generation_reference=$2',[user.id,id]);await db.query('COMMIT')}catch(e){await db.query('ROLLBACK').catch(()=>{});throw e}finally{db.release()}
   return send(res,200,{task_id:id,status,songs:found,error:status==='failed'?String(result.message||result.error||'Generation failed'):undefined}),true;
  }
  return send(res,404,{error:'Unknown music endpoint'}),true;
