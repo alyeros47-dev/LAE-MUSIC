@@ -20,6 +20,7 @@ async function run({method='GET',path='/api/music/sonic/status',url=path+'?id=va
  x=await run({url:'/api/music/sonic/status?id=bad!'});assert.equal(x.status,400);
  x=await run({queries:[{match:'SELECT task_id,status',result:{rowCount:0,rows:[]}}]});assert.equal(x.status,404);
  x=await run({queries:[{match:'SELECT task_id,status',result:{rowCount:1,rows:[{status:'failed'}]}}]});assert.equal(x.status,200);assert.equal(x.body.status,'failed');assert.equal(x.network,0);
+ x=await run({url:'/api/music/sonic/status?id=sonic-12345678901234567890',queries:[{match:'SELECT task_id,status',result:{rowCount:1,rows:[{status:'pending'}]}}]});assert.equal(x.status,202);assert.equal(x.body.status,'verification_required');assert.equal(x.network,0);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:'{bad'});assert.equal(x.status,400);assert.match(x.body.error,/JSON/);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:'"hello"'});assert.equal(x.status,400);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:JSON.stringify({title:'A',lyrics:'too short',style:'pop'})});assert.equal(x.status,400);
@@ -31,5 +32,5 @@ async function run({method='GET',path='/api/music/sonic/status',url=path+'?id=va
  x=await run({queries:[{match:'SELECT task_id,status',result:{rowCount:1,rows:[{status:'pending'}]}}],transactions:[{match:'BEGIN'},{match:'UPDATE sonic_test_tasks'},{match:'COMMIT'}],fetchImpl:async()=>({ok:true,status:200,json:async()=>({status:'running'})})});assert.equal(x.status,200);assert.equal(x.body.status,'running');assert.equal(x.network,1);
  x=await run({queries:[{match:'SELECT task_id,status',result:{rowCount:1,rows:[{status:'succeeded'}]}}],transactions:[{match:'BEGIN'},{match:'UPDATE sonic_test_tasks'},{match:'COMMIT'}],fetchImpl:async()=>({ok:true,status:200,json:async()=>({status:'pending'})})});assert.equal(x.status,200);assert.equal(x.body.status,'succeeded');
  x=await run({queries:[{match:'SELECT task_id,status',result:{rowCount:1,rows:[{status:'pending'}]}}],transactions:[{match:'BEGIN'},{match:'UPDATE sonic_test_tasks'},{match:'DELETE FROM artist_studio_usage'},{match:'COMMIT'}],fetchImpl:async()=>({ok:true,status:200,json:async()=>({status:'failed'})})});assert.equal(x.status,200);assert.equal(x.body.status,'failed');assert(x.calls.some(c=>c.sql.includes('DELETE FROM artist_studio_usage')));
- console.log('PASS: 17 mocked Sonic HTTP/authorization/validation and provider-state tests (no live database or provider).');
+ console.log('PASS: 18 mocked Sonic HTTP/authorization/validation and provider-state tests (no live database or provider).');
 })().catch(e=>{console.error(e);process.exitCode=1});
