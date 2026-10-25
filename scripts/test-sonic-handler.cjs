@@ -24,5 +24,9 @@ async function run({method='GET',path='/api/music/sonic/status',url=path+'?id=va
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:'"hello"'});assert.equal(x.status,400);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:JSON.stringify({title:'A',lyrics:'too short',style:'pop'})});assert.equal(x.status,400);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:'x'.repeat(16001)});assert.equal(x.status,413);
- console.log('PASS: 10 mocked Sonic HTTP/authorization/validation tests (no live database or provider).');
+ x=await run({method:'POST',path:'/api/music/sonic/premium-wav',requestBody:'{bad'});assert.equal(x.status,400);
+ x=await run({method:'POST',path:'/api/music/sonic/premium-wav',requestBody:'[]'});assert.equal(x.status,400);
+ x=await run({method:'POST',path:'/api/music/sonic/premium-wav',requestBody:JSON.stringify({task_id:'invalid!',clip_id:'invalid!'})});assert.equal(x.status,400);
+ x=await run({method:'POST',path:'/api/music/sonic/premium-wav',requestBody:JSON.stringify({task_id:'valid_task_123',clip_id:'valid_clip_123'}),queries:[{match:'SELECT task_id FROM sonic_test_tasks',result:{rowCount:0,rows:[]}}]});assert.equal(x.status,403);assert.equal(x.network,0);
+ console.log('PASS: 14 mocked Sonic HTTP/authorization/validation tests (no live database or provider).');
 })().catch(e=>{console.error(e);process.exitCode=1});
