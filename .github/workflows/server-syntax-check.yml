@@ -5,6 +5,8 @@ on:
       - 'server.js'
       - 'musicapi-sonic.js'
       - 'scripts/check-lae-integrity.cjs'
+      - 'scripts/check-sonic-workflow.cjs'
+      - 'package.json'
       - '.github/workflows/server-syntax-check.yml'
   workflow_dispatch:
 jobs:
@@ -19,5 +21,7 @@ jobs:
         run: |
           node --check server.js
           node --check musicapi-sonic.js
-      - name: Check account and referral integration
-        run: node scripts/check-lae-integrity.cjs
+          node --check scripts/check-lae-integrity.cjs
+          node --check scripts/check-sonic-workflow.cjs
+      - name: Run regression checks
+        run: npm test
