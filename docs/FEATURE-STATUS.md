@@ -29,7 +29,7 @@
 ## Essential owner inputs
 
 1. Supply authorized **test** credentials through secure host/environment configuration for Paystack, Flutterwave, R2, music/lyrics providers and transactional email. Do not put secret values in chat, repository files, PR descriptions or test artifacts. Confirm merchant identity/currency permissions, music media origins and email sender/provider.
-2. Approve paid-download pricing and the royalty-eligible revenue base, Streaming revenue policy is approved and implemented in [MILESTONE-13.md](MILESTONE-13.md); no fixed per-stream payout is promised.
+2. Approve paid-download pricing and the royalty-eligible revenue base. Streaming revenue policy is approved and implemented in [MILESTONE-13.md](MILESTONE-13.md); no fixed per-stream payout is promised.
 3. Resolve the already documented quarterly team-sale proposal, external-upload quota contradiction and legacy generated-song upload-code entitlement. Existing terms/data are preserved while these decisions are pending.
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for environment/migration/rollback instructions, [RELEASE.md](RELEASE.md) for executed evidence [MILESTONE-12.md](MILESTONE-12.md) for the read-only preflight and [MILESTONE-13.md](MILESTONE-13.md) for Premium Listener accounting. User approval for a final production deployment does not replace the unresolved implementation and verification above.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for environment/migration/rollback instructions, [RELEASE.md](RELEASE.md) for executed evidence, [MILESTONE-12.md](MILESTONE-12.md) for the read-only preflight and [MILESTONE-13.md](MILESTONE-13.md) for Premium Listener accounting. User approval for a final production deployment does not replace the unresolved implementation and verification above.

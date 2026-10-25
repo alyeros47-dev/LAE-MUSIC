@@ -98,6 +98,12 @@ test("allocation handles zero streams, scarce minor units and deterministic roun
   assert.throws(() => p.netBasis({ gross: 100, refund: 100, tax: 0, fees: 1 }));
   assert.throws(() => p.month("2026-13"));
   assert.throws(() => p.minor(1.2));
+  for (const value of [[], [100], {}, true, null, undefined, "1e2", "01"])
+    assert.throws(() => p.minor(value));
+  assert.equal(
+    p.netBasis({ gross: "100", tax: "10", fees: "10", commissions: "5" }),
+    75,
+  );
   assert.throws(() =>
     p.allocate(10, [
       { id: "1", weight: 1 },

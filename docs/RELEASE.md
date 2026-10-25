@@ -36,7 +36,7 @@ Two outputs per generation remains an intention, not a verified API guarantee. E
 
 ## Current local evidence
 
-Candidate 0.13.0-rc.13 passed 136 application tests, 122 actual PostgreSQL 16 checks (migrations 001–013), one socket HTTP test, four SMTP/TLS tests and three Chromium viewport journeys. Existing 25 mocked Sonic cases and 31 source invariants pass. All financial/provider transports in the new journeys use controlled fixtures; live-book accounting fixtures do not establish real cash receipt. No outside gateway/media/email account or production-schema clone was tested. Final CI results for this candidate will be recorded after publication.
+Candidate 0.13.0-rc.13 passed 136 application tests, 122 actual PostgreSQL 16 checks (migrations 001–013), one socket HTTP test, four SMTP/TLS tests and three Chromium viewport journeys. Existing 25 mocked Sonic cases and 31 source invariants pass. All financial/provider transports in the new journeys use controlled fixtures; live-book accounting fixtures do not establish real cash receipt. No outside gateway/media/email account or production-schema clone was tested. The integrated candidate also passed [GitHub Actions run 40241567230](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40241567230), code commit `ff3138841859ffae40d8c24d31a77e81805881f4`, with the same application/PostgreSQL/HTTP/SMTP/browser results. Condensed evidence: `artifacts/ci-premium-listeners.txt`. A final money-input hardening follow-up rejects arrays/objects and normalizes canonical integer strings; its application and PostgreSQL suites pass locally, with final-head CI recorded on PR #6.
 
 ## Previous executed CI evidence
 

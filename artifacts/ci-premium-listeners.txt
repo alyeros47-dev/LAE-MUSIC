@@ -1,0 +1,26 @@
+LAE-MUSIC Premium Listener integration — GitHub Actions evidence
+Commit: ff3138841859ffae40d8c24d31a77e81805881f4
+Run: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40241567230
+Application job 121314280161 and PostgreSQL job 121314279930: success
+
+2026-10-25T22:44:14.4493542Z found 0 vulnerabilities
+2026-10-25T22:44:14.7312602Z All 31 Sonic static invariants passed. These are not database or provider integration tests.
+2026-10-25T22:44:14.7791990Z PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
+2026-10-25T22:44:17.7273846Z # tests 136
+2026-10-25T22:44:17.7275287Z # pass 136
+2026-10-25T22:44:17.7275813Z # fail 0
+2026-10-25T22:44:18.0955770Z # tests 1
+2026-10-25T22:44:18.0959528Z # pass 1
+2026-10-25T22:44:18.0961093Z # fail 0
+2026-10-25T22:44:18.5926968Z # tests 4
+2026-10-25T22:44:18.5928242Z # pass 4
+2026-10-25T22:44:18.5928852Z # fail 0
+2026-10-25T22:45:22.1137905Z PASS browser journeys at desktop, tablet and mobile sizes; all external services mocked.
+
+2026-10-25T22:44:28.3073284Z # tests 122
+2026-10-25T22:44:28.3074176Z # pass 122
+2026-10-25T22:44:28.3074516Z # fail 0
+
+PostgreSQL 16 is an isolated service with fixtures. Browser journeys use real Chromium/audio element with an isolated WAV. Provider/FX/media/settlement transports are simulated; SMTP uses actual Nodemailer with local TLS. No production clone, live money, actual bank payout, production merge or Render deployment was verified or performed.
+A subsequent hardening commit rejects nonprimitive monetary inputs and normalizes canonical minor-unit strings; application and PostgreSQL suites passed locally. Check PR #6 for final-head CI status.
+
