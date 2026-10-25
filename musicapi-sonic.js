@@ -12,7 +12,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(!user)return send(res,401,{error:'Sign in to your LAE-MUSIC artist account first.'}),true;
  if(!pool)return send(res,503,{error:'Music studio database unavailable'}),true;
  if(!process.env.MUSICAPI_API_KEY)return send(res,503,{error:'MusicAPI key is not configured on Render'}),true;
- await pool.query("CREATE TABLE IF NOT EXISTS sonic_test_tasks (task_id TEXT PRIMARY KEY, creator_id BIGINT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
+
 
  if(p==='/api/music/sonic/create'&&req.method==='POST'){
   const b=await body(req),title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
