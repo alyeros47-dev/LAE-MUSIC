@@ -19,7 +19,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
   if(title.length<2||title.length>120||lyrics.length<20||lyrics.length>6000||style.length<3||style.length>2000)return send(res,400,{error:'Enter a title, lyrics and music style within the permitted lengths.'}),true;
   // A saved voice is optional. Only look up a persona when the member explicitly opts in.
-    const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
+    const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE ((task_id LIKE 'sonic-%' AND status='pending') OR (status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')))::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
   if(recent.rows[0].active>0)return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true;
   if(recent.rows[0].total>=5)return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true;
   let voiceId=null;
@@ -30,7 +30,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    await client.query('BEGIN');
    const locked=await client.query('SELECT id FROM creators WHERE id=$1 FOR UPDATE',[user.id]);
    if(!locked.rowCount){await client.query('ROLLBACK');return send(res,404,{error:'Artist account not found'}),true}
-   const active=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes'",[user.id]);
+   const active=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND ((task_id LIKE 'sonic-%' AND status='pending') OR (status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes'))",[user.id]);
    if(active.rows[0].n>0){await client.query('ROLLBACK');return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true}
    const daily=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
    if(daily.rows[0].n>=5){await client.query('ROLLBACK');return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true}
