@@ -5,7 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "test": "node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs"
+    "test": "node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs"
   },
   "engines": {
     "node": ">=20"
