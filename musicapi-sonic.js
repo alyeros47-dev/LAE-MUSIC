@@ -44,10 +44,15 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    if(!sub.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'An active paid artist package is required to generate music.'}),true}
    const limits={starter:2,growth:3,professional:6};
    const limit=limits[sub.rows[0].plan]||0;
-   const usage=await client.query("SELECT COUNT(*)::int AS used FROM artist_studio_usage WHERE subscription_id=$1",[sub.rows[0].id]);
-   if(usage.rows[0].used>=limit){await client.query('ROLLBACK');return send(res,402,{error:'Your included studio generations are exhausted. Additional generations require a verified purchase.'}),true}
+   const usage=await client.query("SELECT COUNT(*)::int AS used FROM artist_studio_usage WHERE subscription_id=$1 AND purchase_order_id IS NULL",[sub.rows[0].id]);
+   let purchase=null;
+   if(usage.rows[0].used>=limit){
+    const extra=await client.query('SELECT p.order_id FROM studio_purchased_credits p LEFT JOIN artist_studio_usage u ON u.purchase_order_id=p.order_id WHERE p.artist_id=$1 AND u.id IS NULL ORDER BY p.created_at,p.order_id LIMIT 1 FOR UPDATE OF p',[user.id]);
+    if(!extra.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'Your included studio generations are exhausted. Additional generations require a verified purchase.'}),true}
+    purchase=extra.rows[0].order_id;
+   }
    const ref='sonic-'+require('node:crypto').randomBytes(16).toString('hex');
-   await client.query("INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)",[sub.rows[0].id,user.id,ref]);
+   await client.query("INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference,purchase_order_id) VALUES($1,$2,$3,$4)",[sub.rows[0].id,user.id,ref,purchase]);
    await client.query("INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,'pending')",[ref,user.id]);
    await client.query('INSERT INTO studio_request_keys(artist_id,request_key,payload_hash,task_reference,reservation_reference) VALUES($1,$2,$3,$4,$4)',[user.id,requestKey,payloadHash,ref]);
    await client.query('COMMIT');reservation=ref;

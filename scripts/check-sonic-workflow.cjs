@@ -10,7 +10,7 @@ const cases=[
  ['checks active generation inside transaction',source.includes("const active=await client.query")],
  ['checks 24-hour limit inside transaction',source.includes("const daily=await client.query")],
  ['requires verified active subscription',source.includes("status='paid' AND starts_at<=NOW() AND expires_at>NOW()")],
- ['reserves generation usage',source.includes("INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference)")],
+ ['reserves generation usage',source.includes("INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference,purchase_order_id)")],
  ['atomically replaces provisional task reference',source.includes("UPDATE sonic_test_tasks SET task_id=$1 WHERE task_id=$2 AND creator_id=$3 RETURNING task_id")],
  ['atomically replaces provisional usage reference',source.includes("UPDATE artist_studio_usage SET generation_reference=$1 WHERE generation_reference=$2 AND artist_id=$3 RETURNING id")],
  ['releases failed reservation',source.includes("DELETE FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")&&source.includes("DELETE FROM artist_studio_usage WHERE generation_reference=$1 AND artist_id=$2")],
