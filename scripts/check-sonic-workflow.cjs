@@ -25,7 +25,10 @@ const cases=[
  ['refunds failed task transactionally',source.includes("if(status==='failed')await db.query")],
  ['validates locked artist account',source.includes('if(!locked.rowCount)')],
  ['rejects invalid JSON with client error',source.includes('Invalid JSON request')],
- ['rejects oversized request with 413',source.includes('e.status=413')]
+ ['rejects oversized request with 413',source.includes('e.status=413')],
+ ['retains reservations after ambiguous provider failures',source.includes('if(!uncertain)await release()')],
+ ['returns reconciliation reference on uncertain failures',source.includes("status:'verification_required'")],
+ ['does not refund accepted provider task without ID',!source.includes("if(!/^[a-zA-Z0-9_-]{8,128}$/.test(id)){await release()") ]
 ];
 for(const [label,ok] of cases){assert(ok,label);console.log('PASS',label)}
 console.log('All '+cases.length+' Sonic static invariants passed. These are not database or provider integration tests.');
