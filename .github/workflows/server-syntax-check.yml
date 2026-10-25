@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'server.js'
+      - 'scripts/check-lae-integrity.cjs'
       - '.github/workflows/server-syntax-check.yml'
   workflow_dispatch:
 jobs:
@@ -15,3 +16,5 @@ jobs:
           node-version: '22'
       - name: Check server syntax
         run: node --check server.js
+      - name: Check account and referral integration
+        run: node scripts/check-lae-integrity.cjs
