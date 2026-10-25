@@ -19,7 +19,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
   if(title.length<2||title.length>120||lyrics.length<20||lyrics.length>6000||style.length<3||style.length>2000)return send(res,400,{error:'Enter a title, lyrics and music style within the permitted lengths.'}),true;
   // A saved voice is optional. Only look up a persona when the member explicitly opts in.
-    const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE ((task_id LIKE 'sonic-%' AND status='pending') OR (status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')))::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
+    const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE ((task_id LIKE 'sonic-%' AND status='pending') OR (status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')))::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND (created_at>NOW()-INTERVAL '24 hours' OR (task_id LIKE 'sonic-%' AND status='pending'))",[user.id]);
   if(recent.rows[0].active>0)return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true;
   if(recent.rows[0].total>=5)return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true;
   let voiceId=null;
