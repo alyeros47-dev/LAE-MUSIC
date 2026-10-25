@@ -86,6 +86,13 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   const retry=await runner('/api/music/sonic/create',lyrics,'purchased_generation_retry_123');assert.equal(retry.status,200);assert.equal(providerCalls,2);
   const allowance=(await api('/api/artist/studio-allowance',{cookie:extraBuyer.cookie})).data;assert.equal(allowance.used_generations,2);assert.equal(allowance.purchased_generations_remaining,0);
  });
+ await t.test('legacy reporting cannot generate referral earnings from active or registered accounts',async()=>{
+  await pool.query('UPDATE creators SET referred_by=$1 WHERE id=$2',[partner.id,buyer.id]);
+  const before=(await pool.query('SELECT COUNT(*)::int AS n FROM demo_referral_earnings')).rows[0].n;
+  const referrals=await api('/api/referrals',{cookie:partner.cookie});assert.equal(referrals.status,200);
+  const wallet=await api('/api/demo/wallet',{cookie:partner.cookie});assert.equal(wallet.status,200);assert.equal(wallet.data.availableCents,0);assert.equal(wallet.data.withdrawals_enabled,false);
+  assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM demo_referral_earnings')).rows[0].n,before);
+ });
  await t.test('purchase evidence and quotes are immutable and reconciliation detects entitlement drift',async()=>{
   await assert.rejects(pool.query('UPDATE commerce_orders SET amount_minor=1 WHERE id=$1',[primary.id]),/immutable/);await assert.rejects(pool.query('DELETE FROM commerce_receipts WHERE order_id=$1',[primary.id]),/append-only/);await assert.rejects(pool.query('UPDATE commerce_events SET outcome=\'accepted\' WHERE outcome=\'review\''),/append-only/);
   const pending=await commerce.create(extraBuyer.id,'foreign_entitlement_key_123',{kind:'artist_subscription',plan:'growth'});

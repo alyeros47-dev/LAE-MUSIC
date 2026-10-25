@@ -13,7 +13,7 @@ contains("affiliate_product_intents","Referral token ledger");
 contains("consumed_at IS NULL FOR UPDATE","Single-use token locking");
 contains("ON CONFLICT(subscription_id,tier) DO NOTHING","Idempotent direct commission");
 contains("quarter_start","Quarterly team ledger");
-contains("ENABLE_LEGACY_DEMO_ARTIST_ACTIVATION","Demo artist activation disabled by default");
+contains("Legacy demo activation is permanently disabled","No environment switch can activate demo artist purchases");
 assert(fs.readFileSync('lib/subscription-view.js','utf8').includes("starts_at<=NOW() AND expires_at>NOW()"),'Artist access requires the current paid valid subscription');
 contains("paymentEnabled:false","Payment remains disabled without gateway");
 const marker='const onboardingHtml=String.raw`';

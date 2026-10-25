@@ -36,8 +36,8 @@ PASS preserves terminal state during concurrent status polls
 PASS refunds based on committed terminal state
 All 31 Sonic static invariants passed. These are not database or provider integration tests.
 [sonic/create] provider failure 400 Bad song uncertain_acceptance=false reservation=
-[sonic/create] provider failure 503 Provider busy uncertain_acceptance=true reservation=sonic-374f19e36d630ac38752c88deecf9de6
-[sonic/create] provider failure  Connection reset uncertain_acceptance=true reservation=sonic-7885223b9b6c04ae1c4e67795fcfeaf2
+[sonic/create] provider failure 503 Provider busy uncertain_acceptance=true reservation=sonic-e76cf72815532b7ffcba139b5ad5fab2
+[sonic/create] provider failure  Connection reset uncertain_acceptance=true reservation=sonic-9fd8936f6942aa646535ab71b517cd14
 PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
 No DATABASE_URL: homepage and demo enabled; accounts and persistent admin settings disabled
 LAE Music v0.8.0-rc.3 listening on 3000
@@ -45,98 +45,101 @@ Request error: Error: The music database is unavailable. Please try again shortl
     at fail (/workspace/LAE-MUSIC/lib/transactions.js:4:49)
     at requireDb (/workspace/LAE-MUSIC/lib/platform.js:37:43)
     at Object.handler (/workspace/LAE-MUSIC/lib/platform.js:94:5)
-    at server.js:168:20
+    at server.js:167:20
     at Object.request (/workspace/LAE-MUSIC/tests/runtime.cjs:13:9)
     at TestContext.<anonymous> (/workspace/LAE-MUSIC/tests/router.test.cjs:4:319)
     at async Test.run (node:internal/test_runner/test:1389:7)
     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
 Database ready
 LAE Music v0.8.0-rc.3 listening on 3000
-✔ withdrawal computes 3% in minor units and rejects invalid financial input (2.291219ms)
-✔ balanced transfers replay without duplicate money and reject reused references (1.531146ms)
-✔ parallel withdrawal requests cannot reserve more than the available balance (serialized mock) (1.058884ms)
-✔ withdrawal retry is idempotent and conflicting input is rejected (1.057633ms)
-✔ rejection releases reserved funds exactly once; approval cannot send or mark paid (1.32832ms)
-✔ approval holds gross including fee; currencies stay independent (1.330353ms)
-✔ lyrics reservation debit and ledger roll back together on storage failure (0.653754ms)
-✔ lyrics retries do not debit twice and completed requests replay original output (0.708987ms)
-✔ lyrics refunds are durable, auditable, and safe under duplicate calls (0.841356ms)
-✔ idempotency rolls back business changes when response recording fails (0.374544ms)
-✔ additive migration is versioned, repeatable, checksum-checked and transaction-locked (mock) (1.184754ms)
-✔ public shell renders without a database, uses CSP and never needs registration (2.388016ms)
-✔ shell HEAD sends no body and rejects arbitrary methods (0.29215ms)
-✔ unconfigured checkout and webhook never claim money was received (0.269716ms)
-✔ cross-site mutations are blocked centrally, including legacy auth (0.142965ms)
-✔ auth attempts are rate limited without leaking data (0.426512ms)
-✔ sensitive reports require administrator authorization before querying (0.593794ms)
-✔ library and artist finances enforce their account types (0.288284ms)
-✔ artist gift earnings cannot be fetched by another artist (0.243036ms)
-✔ catalog metadata uses owner-scoped parameters and returns unavailable for foreign IDs (0.316837ms)
-✔ discovery search values are parameterized and order is whitelisted (0.575506ms)
-✔ free affiliate status does not create enrollment or recruitment rewards (0.154052ms)
-✔ real server routing without a database keeps public pages open and payments safely unavailable (14.265479ms)
-✔ listener registration, login, cookie authentication and logout run through actual server handlers (mock database) (143.167616ms)
+✔ withdrawal computes 3% in minor units and rejects invalid financial input (2.491479ms)
+✔ balanced transfers replay without duplicate money and reject reused references (1.237432ms)
+✔ parallel withdrawal requests cannot reserve more than the available balance (serialized mock) (1.128829ms)
+✔ withdrawal retry is idempotent and conflicting input is rejected (1.025964ms)
+✔ rejection releases reserved funds exactly once; approval cannot send or mark paid (1.16332ms)
+✔ approval holds gross including fee; currencies stay independent (1.404453ms)
+✔ lyrics reservation debit and ledger roll back together on storage failure (0.651921ms)
+✔ lyrics retries do not debit twice and completed requests replay original output (0.874095ms)
+✔ lyrics refunds are durable, auditable, and safe under duplicate calls (0.53839ms)
+✔ idempotency rolls back business changes when response recording fails (0.384098ms)
+✔ additive migration is versioned, repeatable, checksum-checked and transaction-locked (mock) (1.390863ms)
+✔ public shell renders without a database, uses CSP and never needs registration (2.668345ms)
+✔ shell HEAD sends no body and rejects arbitrary methods (0.318139ms)
+✔ unconfigured checkout and webhook never claim money was received (0.347443ms)
+✔ cross-site mutations are blocked centrally, including legacy auth (0.14658ms)
+✔ auth attempts are rate limited without leaking data (0.503528ms)
+✔ sensitive reports require administrator authorization before querying (0.62492ms)
+✔ library and artist finances enforce their account types (0.400232ms)
+✔ artist gift earnings cannot be fetched by another artist (0.270256ms)
+✔ catalog metadata uses owner-scoped parameters and returns unavailable for foreign IDs (0.276997ms)
+✔ discovery search values are parameterized and order is whitelisted (0.581935ms)
+✔ free affiliate status does not create enrollment or recruitment rewards (0.149125ms)
+✔ real server routing without a database keeps public pages open and payments safely unavailable (16.947044ms)
+✔ listener registration, login, cookie authentication and logout run through actual server handlers (mock database) (145.230001ms)
 Database ready
 LAE Music v0.8.0-rc.3 listening on 3000
-✔ artist/partner registration is free, never activates a paid subscription, and ordinary accounts cannot administer (35.082052ms)
+✔ artist/partner registration is free, never activates a paid subscription, and ordinary accounts cannot administer (35.340474ms)
 Database ready
 LAE Music v0.8.0-rc.3 listening on 3000
-✔ malformed, null and array JSON produce client errors; registration confirmation is validated (3.209973ms)
+✔ malformed, null and array JSON produce client errors; registration confirmation is validated (3.454648ms)
 Database ready
 LAE Music v0.8.0-rc.3 listening on 3000
-✔ listener password changes verify the current password and invalidate old sessions (225.926765ms)
+✔ listener password changes verify the current password and invalidate old sessions (208.419879ms)
 Database ready
 LAE Music v0.8.0-rc.3 listening on 3000
-✔ administrator session is signed, requires the configured key, and grants protected access only after login (3.677788ms)
-✔ queue advances, respects repeat-one on ended, and stops at the end with repeat off (0.274633ms)
-✔ shuffle excludes the current track and previous follows actual history (0.141983ms)
-✔ queue reordering and removal preserve current song and disallow removal of the playing item (0.162335ms)
-✔ time formatting handles invalid duration and empty queues safely (0.155063ms)
-✔ real player driver fetches platform audio, survives navigation outside its DOM, and ignores stale stream requests (1.863045ms)
-✔ player restore keeps queue and position without autoplay or persisting expiring signed stream URLs (0.469668ms)
-✔ uploaded file signatures reject renamed HTML or executables (0.201504ms)
-✔ storage verification requests only a prefix and closes the read stream (0.382416ms)
-✔ studio requires a durable request key before reserving quota or calling provider (1.702804ms)
-✔ same studio request replays the owned task without another provider call (0.851141ms)
-✔ studio refuses a conflicting payload under an existing key (0.648817ms)
-✔ definitively failed studio requests replay failure without consuming quota (0.681186ms)
-✔ gift retries do not debit twice; recorded NGN split remains 70/30 (1.261149ms)
-✔ gift conflicting retry and insufficient funds cannot mutate balances (0.83077ms)
-✔ push links cannot open a different origin using protocol-relative URLs (0.813765ms)
-✔ push navigation posts to an existing player document instead of reloading it (0.704421ms)
-✔ public streaming signs a real platform object without requiring a listener account (storage mocked) (9.370148ms)
-✔ upload proxy rejects another artist’s pending target before reaching storage (0.966295ms)
-✔ publication rejects forged audio bytes even if stored MIME and length match (27.255128ms)
-✔ concurrent upload reservations respect the final annual slot inside a transaction (serialized mock) (2.234054ms)
-✔ approved annual package prices, royalty shares, quotas and extra-generation prices are preserved (0.148653ms)
-✔ trusted verified-purchase helper applies only approved direct sale percentages (0.410268ms)
-✔ self-referrals, invalid referrers, and missing products do not mint a commission (0.198779ms)
-✔ team relationship records verified product volume without minting recruitment rewards (0.500644ms)
-✔ media URL policy requires HTTPS, exact trusted hosts, standard ports and no credentials (0.429858ms)
-✔ private, loopback, link-local and special IP addresses are not accepted as resolved media hosts (0.499552ms)
-✔ media downloader rejects a private DNS result before opening the connection (0.570009ms)
-✔ redirects cannot escape the trusted host list or reach a private endpoint (0.515516ms)
-✔ bounded media reads reject oversized, incomplete and forged files (0.926976ms)
-✔ approved media downloads are bounded and use no cookies, authorization or referrer (0.509077ms)
-✔ release creation accepts identity and metadata only, requires rights, and rejects provisional tasks (0.312ms)
-✔ discovery rejects malformed page sizes and mismatched or malformed cursors (0.297237ms)
-✔ discovery returns an opaque stable continuation with filters bound to that cursor (0.63794ms)
-✔ playlist names and IDs reject unsafe or oversized values (0.323437ms)
-✔ forged cursor dates and oversized play counts fail before a database cast (0.366642ms)
-✔ purchase quotes use approved server prices and reject unsupported products and prototype plans (0.397568ms)
-✔ royalty allocations preserve approved shares and exact integer totals without minting ledger funds (0.264298ms)
-✔ no payment adapter or an incomplete adapter can activate verified settlement (0.436657ms)
-✔ signature rejection stops before provider retrieval or financial writes (0.309105ms)
-✔ empty or oversized original webhook bytes are rejected before verification (0.286461ms)
-✔ invalid purchase bodies and unsupported referrals fail before touching the database (0.437148ms)
-✔ provider lookup failures remain retriable and never record a successful event (0.266942ms)
-✔ active package stays authoritative when a different future renewal exists (0.31247ms)
-✔ future-only subscription does not activate access or look like an expired package (0.1397ms)
-ℹ tests 72
+✔ administrator session is signed, requires the configured key, and grants protected access only after login (3.425824ms)
+No DATABASE_URL: homepage and demo enabled; accounts and persistent admin settings disabled
+LAE Music v0.8.0-rc.3 listening on 3000
+✔ legacy demo money mutations cannot be re-enabled by historical environment switches (1.691595ms)
+✔ queue advances, respects repeat-one on ended, and stops at the end with repeat off (0.260782ms)
+✔ shuffle excludes the current track and previous follows actual history (0.136705ms)
+✔ queue reordering and removal preserve current song and disallow removal of the playing item (0.368194ms)
+✔ time formatting handles invalid duration and empty queues safely (0.178639ms)
+✔ real player driver fetches platform audio, survives navigation outside its DOM, and ignores stale stream requests (1.765266ms)
+✔ player restore keeps queue and position without autoplay or persisting expiring signed stream URLs (0.514524ms)
+✔ uploaded file signatures reject renamed HTML or executables (0.195584ms)
+✔ storage verification requests only a prefix and closes the read stream (0.421354ms)
+✔ studio requires a durable request key before reserving quota or calling provider (1.550603ms)
+✔ same studio request replays the owned task without another provider call (1.251013ms)
+✔ studio refuses a conflicting payload under an existing key (0.59823ms)
+✔ definitively failed studio requests replay failure without consuming quota (0.613664ms)
+✔ gift retries do not debit twice; recorded NGN split remains 70/30 (1.137061ms)
+✔ gift conflicting retry and insufficient funds cannot mutate balances (0.817129ms)
+✔ push links cannot open a different origin using protocol-relative URLs (0.729758ms)
+✔ push navigation posts to an existing player document instead of reloading it (0.749828ms)
+✔ public streaming signs a real platform object without requiring a listener account (storage mocked) (8.755363ms)
+✔ upload proxy rejects another artist’s pending target before reaching storage (0.826834ms)
+✔ publication rejects forged audio bytes even if stored MIME and length match (19.713182ms)
+✔ concurrent upload reservations respect the final annual slot inside a transaction (serialized mock) (1.976634ms)
+✔ approved annual package prices, royalty shares, quotas and extra-generation prices are preserved (0.142644ms)
+✔ trusted verified-purchase helper applies only approved direct sale percentages (0.280562ms)
+✔ self-referrals, invalid referrers, and missing products do not mint a commission (0.117978ms)
+✔ team relationship records verified product volume without minting recruitment rewards (0.196916ms)
+✔ media URL policy requires HTTPS, exact trusted hosts, standard ports and no credentials (0.446212ms)
+✔ private, loopback, link-local and special IP addresses are not accepted as resolved media hosts (0.436798ms)
+✔ media downloader rejects a private DNS result before opening the connection (0.410938ms)
+✔ redirects cannot escape the trusted host list or reach a private endpoint (0.399672ms)
+✔ bounded media reads reject oversized, incomplete and forged files (0.698541ms)
+✔ approved media downloads are bounded and use no cookies, authorization or referrer (0.424188ms)
+✔ release creation accepts identity and metadata only, requires rights, and rejects provisional tasks (0.283457ms)
+✔ discovery rejects malformed page sizes and mismatched or malformed cursors (0.303147ms)
+✔ discovery returns an opaque stable continuation with filters bound to that cursor (0.728436ms)
+✔ playlist names and IDs reject unsafe or oversized values (0.227052ms)
+✔ forged cursor dates and oversized play counts fail before a database cast (0.339141ms)
+✔ purchase quotes use approved server prices and reject unsupported products and prototype plans (0.26624ms)
+✔ royalty allocations preserve approved shares and exact integer totals without minting ledger funds (0.309757ms)
+✔ no payment adapter or an incomplete adapter can activate verified settlement (0.488825ms)
+✔ signature rejection stops before provider retrieval or financial writes (0.15905ms)
+✔ empty or oversized original webhook bytes are rejected before verification (0.282925ms)
+✔ invalid purchase bodies and unsupported referrals fail before touching the database (0.363377ms)
+✔ provider lookup failures remain retriable and never record a successful event (0.27887ms)
+✔ active package stays authoritative when a different future renewal exists (0.29959ms)
+✔ future-only subscription does not activate access or look like an expired package (0.187372ms)
+ℹ tests 73
 ℹ suites 0
-ℹ pass 72
+ℹ pass 73
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 533.547043
+ℹ duration_ms 509.528006
