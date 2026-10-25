@@ -33,7 +33,7 @@ function clearKey(scope) { requestKeys.delete(scope); try { sessionStorage.remov
 const art = id => `/api/music/tracks/${encodeURIComponent(id)}/cover-image`;
 const image = (src, className = '', alt = '') => `<img src="${e(src)}" class="${className}" alt="${e(alt)}" loading="lazy" decoding="async" data-fallback>`;
 document.addEventListener('error', event => { const img = event.target; if (img instanceof HTMLImageElement && img.hasAttribute('data-fallback')) { img.removeAttribute('data-fallback'); img.src = '/web/artwork.svg'; } }, true);
-const empty = (title, text, action = '', error = false) => `<div class="empty ${error ? 'error' : ''}">${icon('music')}<h3>${e(title)}</h3><p>${e(text)}</p>${action}</div>`;
+const empty = (title, text, action = '', error = false) => `<div class="empty ${error ? 'error' : ''}">${icon('music')}<h2>${e(title)}</h2><p>${e(text)}</p>${action}</div>`;
 const heading = (eyebrow, title, text = '', action = '') => `<div class="page-heading"><div><span class="eyebrow">${e(eyebrow)}</span><h1>${e(title)}</h1><p>${e(text)}</p></div>${action}</div>`;
 const notice = (message, warning = false) => `<div class="notice ${warning ? 'warning' : ''}">${e(message)}</div>`;
 const metric = (label, value, note = '') => `<div class="metric"><span>${e(label)}</span><strong>${e(value)}</strong><small>${e(note)}</small></div>`;
@@ -43,7 +43,9 @@ function requireAccount(view, role = 'artist') { if (session[role === 'listener'
 function formData(form) { return Object.fromEntries(new FormData(form)); }
 function bindForm(form, action) { form.onsubmit = async event => { event.preventDefault(); const buttons = [...form.querySelectorAll('button[type=submit]')]; const status = form.querySelector('.form-status'); buttons.forEach(b => { b.disabled = true; b.dataset.originalText = b.textContent; b.textContent = 'Please wait…'; }); if (status) { status.textContent = ''; status.classList.remove('error'); }
   try { await action(formData(form), form); } catch (error) { if (status) { status.textContent = error.message; status.classList.add('error'); } else toast(error.message, true); } finally { buttons.forEach(b => { b.disabled = false; b.textContent = b.dataset.originalText; }); } }; }
-function actionDialog(html, bind) { $('action-content').innerHTML = html; if (!$('action-dialog').open) $('action-dialog').showModal(); bind?.($('action-content')); }
+function labelActionDialog(){const dialog=$('action-dialog'),title=$('action-content').querySelector('h2,h1,h3');if(title){title.id='action-dialog-title';dialog.setAttribute('aria-labelledby',title.id);dialog.removeAttribute('aria-label');}else{dialog.removeAttribute('aria-labelledby');dialog.setAttribute('aria-label','Action details');}}
+new MutationObserver(labelActionDialog).observe($('action-content'),{childList:true,subtree:true,characterData:true});
+function actionDialog(html, bind) { $('action-content').innerHTML = html;labelActionDialog(); if (!$('action-dialog').open) $('action-dialog').showModal(); bind?.($('action-content')); }
 for (const button of document.querySelectorAll('[data-close]')) button.onclick = () => button.closest('dialog').close();
 for (const dialog of document.querySelectorAll('dialog')) dialog.addEventListener('click', event => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close(); } });
 const player = new MusicPlayer({ api, toast, onLike: likeSong, onDetail: track => navigate('/discover?track=' + track.id) });

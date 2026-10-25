@@ -4,7 +4,7 @@
 
 | Required area | Implemented and covered by automated journeys | Remaining verification or implementation |
 | --- | --- | --- |
-| Premium interface | Shared dark design, brand artwork, responsive public/artist/partner/admin/account screens; desktop/tablet/mobile browser journeys and inspected desktop/mobile screenshots | Physical-device, complete keyboard/screen-reader and production content review |
+| Premium interface | Shared dark design, brand artwork, responsive public/artist/partner/admin/account screens; desktop/tablet/mobile browser journeys, 27 axe accessibility scans, keyboard dialog checks and inspected desktop/mobile screenshots | Physical-device, incomplete contrast checks, complete keyboard/screen-reader and production content review |
 | Music player | Actual catalog stream endpoints, persistent audio element, play/pause/next/previous/seek/volume/shuffle/repeat/queue, expanded/mobile views, favorites/playlists, media-session controls, load/error handling and explicit resume | Real R2 audio, expiring URLs/ranges, real-device playback/autoplay/touch testing; test audio is an isolated WAV |
 | Listener experience | Free registration, guest streaming/comments, discovery/filtering/search, artist/song pages, likes/follows, history, favorites/playlists, comment reporting and release notifications | Actual catalog/storage and browser push delivery verification |
 | Premium Listener | Five approved USD base plans, shared country/FX display, final local quotes, original conversion/refund evidence, exact terms/renewals/expiration, badge, listening insights and verified sandbox activation; free features preserved | Actual merchant sandbox results and reviewed currencies, live checkout/settlement and independently verified treasury FX |

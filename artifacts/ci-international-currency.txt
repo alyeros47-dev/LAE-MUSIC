@@ -1,0 +1,25 @@
+LAE-MUSIC 0.14.0-rc.14 — verified international currency implementation
+Commit: eb3a4cbcd53f778635578cc54e1cf60bba338339
+CI: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40245909162
+Application and PostgreSQL jobs: success
+
+2026-10-25T23:41:44.1491786Z found 0 vulnerabilities
+2026-10-25T23:41:44.3391142Z All 31 Sonic static invariants passed. These are not database or provider integration tests.
+2026-10-25T23:41:44.3782421Z PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
+2026-10-25T23:41:46.8212394Z # tests 140
+2026-10-25T23:41:46.8212719Z # pass 140
+2026-10-25T23:41:46.8212872Z # fail 0
+2026-10-25T23:41:47.1109573Z # tests 1
+2026-10-25T23:41:47.1111973Z # pass 1
+2026-10-25T23:41:47.1112831Z # fail 0
+2026-10-25T23:41:47.4386083Z # tests 4
+2026-10-25T23:41:47.4386978Z # pass 4
+2026-10-25T23:41:47.4387289Z # fail 0
+2026-10-25T23:42:47.7011196Z PASS browser journeys at desktop, tablet and mobile sizes; all external services mocked.
+
+2026-10-25T23:42:00.1200861Z found 0 vulnerabilities
+2026-10-25T23:42:07.9109650Z # tests 133
+2026-10-25T23:42:07.9110134Z # pass 133
+2026-10-25T23:42:07.9110371Z # fail 0
+
+The separate local public FX feed check is recorded in international-currency-local-results.txt. Gateway, media and treasury services in CI are fixtures. No live settlement, bank payout, production clone, merge or Render deployment is claimed.
