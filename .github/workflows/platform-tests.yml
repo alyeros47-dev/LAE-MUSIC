@@ -18,7 +18,9 @@ jobs:
       - run: npm test
       - run: npm run test:http
       - name: Preserve resolved dependency lockfile
-        run: cp package-lock.json artifacts/resolved-package-lock.json
+        run: |
+          cp package-lock.json artifacts/resolved-package-lock.json
+          node -e "process.stdout.write('LAE_LOCKFILE_BEGIN'+JSON.stringify(require('./package-lock.json'))+'LAE_LOCKFILE_END')"
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - uses: actions/upload-artifact@v4
