@@ -23,7 +23,7 @@ const html=source.slice(start+marker.length,end);
 assert(html.includes('id="dashboard"'),'Unified dashboard markup');
 assert(html.includes('id="referralLink"'),'Affiliate links available in dashboard');
 assert(html.includes('id="subscriptionStatus"'),'Subscription status visible');
-const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)];
+const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
 assert(scripts.length>0,'Onboarding JavaScript present');
 for(let i=0;i<scripts.length;i++)new vm.Script(scripts[i][1],{filename:'onboarding-script-'+i+'.js'});
 console.log('LAE-MUSIC: server syntax, unified dashboard, referral invariants and onboarding scripts passed.');
