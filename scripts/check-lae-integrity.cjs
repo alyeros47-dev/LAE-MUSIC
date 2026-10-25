@@ -26,4 +26,14 @@ assert(html.includes('id="subscriptionStatus"'),'Subscription status visible');
 const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
 assert(scripts.length>0,'Onboarding JavaScript present');
 for(let i=0;i<scripts.length;i++)new vm.Script(scripts[i][1],{filename:'onboarding-script-'+i+'.js'});
+const sonic=fs.readFileSync('musicapi-sonic.js','utf8');
+new vm.Script(sonic,{filename:'musicapi-sonic.js'});
+for(const [needle,label] of [
+ ["FOR UPDATE","Subscription-level generation lock"],
+ ["artist_studio_usage","Studio usage ledger"],
+ ["An active paid artist package is required","Paid subscription requirement"],
+ ["Your included studio generations are exhausted","Generation quota enforcement"],
+ ["await release()","Failed request credit release"],
+ ["status==='failed'","Failed task credit refund"]
+])assert(sonic.includes(needle),label);
 console.log('LAE-MUSIC: server syntax, unified dashboard, referral invariants and onboarding scripts passed.');
