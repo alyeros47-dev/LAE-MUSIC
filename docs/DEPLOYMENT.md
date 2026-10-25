@@ -54,6 +54,8 @@ Keep the existing Node service architecture. Build is `npm ci`; start remains `n
 
 ## Rollback
 
+After migration 008, retain the shared account lock, session revalidation and recovery-token protections in any rollback. Older password handlers can race a reset or recreate sessions with stale credentials. Pause authenticated account mutations while preparing a compatible rollback. Do not delete user accounts or reset passwords as a deployment shortcut.
+
 After migration 007 and any refund hold or reversal, do not roll application code back to a version that ignores subscription holds or refunded purchased credits. Keep the compatible entitlement checks, or pause authenticated publishing, generation and financial mutations while preparing a compatible rollback. Public streaming can remain available. Do not clear holds or delete refund records to make an older version run.
 
 Prefer rolling application code back while retaining additive tables and data. Do not run destructive down migrations or clear request, financial, subscription, session or user records. Keep the failed candidate logs and reconciliation references. Review the old version's demo-credit startup routines before rollback, since this candidate stops automatically applying the legacy extra-credit campaign at startup. A database restore is a separate approved incident operation, not a normal rollback step.
@@ -71,3 +73,13 @@ If a commission was already cleared or its pending balance is inconsistent, its 
 ## Recorded CI evidence
 
 [Run 40184247862](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184247862) passed application checks, browser journeys at 1440×1000 and 390×844, local HTTP routing, and nine PostgreSQL integration checks (one parent journey plus eight subtests) against a fresh disposable PostgreSQL 16 service. The PostgreSQL run uses an explicitly named loopback CI database and fixture credentials; it cannot be pointed at production by merely changing DATABASE_URL. Live R2, music and payment providers are still unverified.
+
+## Account email staging and key custody
+
+Keep `config/account-email.json` disabled until a transactional email provider and sender are approved. The prepared SMTP integration requires a verified hostname, port 465/TLS or 587/STARTTLS, sender address and canonical HTTPS public origin in that reviewed manifest. Set `SMTP_USER`, `SMTP_PASSWORD` and a dedicated 32-byte `ACCOUNT_EMAIL_KEY` encoded as 64 lowercase hex characters through the hosting secret manager. Do not reuse payment or session secrets. Run `npm ci` with the committed lockfile. Configure domain SPF/DKIM/DMARC with the selected provider and verify actual delivery to controlled staging recipients. This candidate has not performed that external verification or sent real mail.
+
+Reset requests enqueue encrypted envelopes and return a neutral response. Inspect Admin → Security for queued, sent, uncertain and skipped counts; no recovery URL is exposed there. A sent status means SMTP accepted the recipient, not that the inbox received the message. Interrupted sends become uncertain after two minutes and are not automatically retried. The user can request a new link within the rate limit; previous links for that account and purpose stop working.
+
+Retain the encryption key while queued messages exist. Rotation requires draining the queue or deliberately invalidating pending action tokens and skipping their outbox jobs in one approved, audited transaction before switching the key. Do not interpret decryption failure as permission to reveal ciphertext, print tokens or send an unverified replacement link. Expired temporary tokens and their encrypted envelopes are removed after a seven-day retention window by bounded maintenance; account and financial records are preserved.
+
+Verify both account roles, same-email dual identities, sign-out of other devices, password-change/reset races, single-use and expired links, rejected SMTP recipients, untrusted certificates, and worker interruption before enabling account emails. `npm run test:email` uses an isolated loopback TLS server and fixture credentials; it is not proof of an external SMTP account or inbox delivery.

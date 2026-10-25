@@ -2140,3 +2140,5 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .checkout-summary{width:100%;border-top:1px solid var(--border);padding-top:16px;margin-top:4px}.checkout-summary p{font-size:.85rem}.checkout-summary .row-actions{margin-top:12px}
 
 .session-card{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}.session-card:last-child{border:0}.session-card p{margin:8px 0 0}.session-card h3{margin:8px 0 0}@media(max-width:600px){.session-card{align-items:flex-start;flex-direction:column;gap:12px}}
+
+.security-email{overflow-wrap:anywhere}
