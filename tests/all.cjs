@@ -12,3 +12,4 @@ require('./commissions.test.cjs');
 require('./media-release.test.cjs');
 require('./discovery-playlists.test.cjs');
 require('./commerce.test.cjs');
+require('./currency-payments.test.cjs');

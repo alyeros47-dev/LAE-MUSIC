@@ -2136,3 +2136,4 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .purchase-reference{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere}.purchase-card h2{font-size:1.4rem}.purchase-card .badge{text-transform:capitalize}
 
 .purchase-grid{margin-top:24px}
+.local-price{display:block;color:var(--accent);font-size:.85rem;margin:.6rem 0 1rem;overflow-wrap:anywhere}.currency-note{font-size:.8rem;line-height:1.6;color:var(--muted);max-width:78ch}.currency-note a{text-decoration:underline}.currency-trigger{min-width:54px}#currency-dialog{max-width:520px}#currency-dialog form{display:grid;gap:16px}@media(max-width:600px){.header-actions{gap:6px}.topbar{gap:8px}.global-search{min-width:0;flex:1}.header-actions .button{padding:10px 11px}.currency-trigger{min-width:48px}}
