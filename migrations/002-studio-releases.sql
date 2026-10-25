@@ -1,4 +1,5 @@
 -- Additive: durable studio drafts and their media-copy leases; no existing balances or entitlements change.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_sonic_task_owner ON sonic_test_tasks(task_id,creator_id);
 CREATE TABLE IF NOT EXISTS studio_releases (
  id BIGSERIAL PRIMARY KEY,
  artist_id BIGINT NOT NULL REFERENCES creators(id),
@@ -24,6 +25,8 @@ CREATE TABLE IF NOT EXISTS studio_releases (
  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  UNIQUE(artist_id,task_id,clip_id),
+ UNIQUE(id,artist_id),
+ FOREIGN KEY(task_id,artist_id) REFERENCES sonic_test_tasks(task_id,creator_id),
  CHECK(status NOT IN ('ready','published') OR (audio_key IS NOT NULL AND audio_mime IS NOT NULL AND audio_bytes IS NOT NULL AND audio_sha256 IS NOT NULL)),
  CHECK(status<>'published' OR track_id IS NOT NULL),
  CHECK(status<>'copying' OR (lease_token IS NOT NULL AND lease_until IS NOT NULL))
@@ -31,6 +34,7 @@ CREATE TABLE IF NOT EXISTS studio_releases (
 CREATE INDEX IF NOT EXISTS idx_studio_releases_owner ON studio_releases(artist_id,created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_studio_releases_jobs ON studio_releases(status,lease_until,created_at);
 ALTER TABLE music_tracks ADD COLUMN IF NOT EXISTS studio_release_id BIGINT UNIQUE REFERENCES studio_releases(id);
+ALTER TABLE music_tracks ADD CONSTRAINT fk_music_studio_owner FOREIGN KEY(studio_release_id,creator_id) REFERENCES studio_releases(id,artist_id);
 CREATE TABLE IF NOT EXISTS catalog_release_events (
  track_id BIGINT PRIMARY KEY REFERENCES music_tracks(id),
  artist_id BIGINT NOT NULL REFERENCES creators(id),
