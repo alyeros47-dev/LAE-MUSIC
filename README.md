@@ -48,3 +48,5 @@ Do not merge into production or deploy to Render until the release gates are ver
 The connected release-copying/listener collection milestone is described in [milestone 2](docs/MILESTONE-2.md). [Milestone 3](docs/MILESTONE-3.md) adds unpaid purchase review/history, verified-sale accounting contracts, future renewal terms and purchased studio credits. The production server still has no payment adapter; checkout and payouts remain disabled.
 
 Flutterwave and Paystack are the selected gateways. USD remains the standard currency; the header control displays country-based local estimates with a manual override and clear USD fallback. See [milestone 4](docs/MILESTONE-4.md) for reference-rate coverage, gateway protocol contracts and the remaining merchant/checkout/settlement gates.
+
+The merchant country is Nigeria. [Milestone 5](docs/MILESTONE-5.md) connects the guarded sandbox checkout, exact local-currency verification and original-charge accounting evidence. The committed merchant manifest disables checkout; adding environment keys does not activate production payments.

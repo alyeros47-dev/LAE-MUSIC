@@ -4,7 +4,7 @@
   "checkout_mode": "disabled",
   "initial_charge_currencies": ["NGN", "USD"],
   "providers": {
-    "paystack": { "account_verified": false, "approved_currencies": [] },
-    "flutterwave": { "account_verified": false, "approved_currencies": [] }
+    "paystack": { "account_verified": false, "merchant_id": "", "approved_currencies": [] },
+    "flutterwave": { "account_verified": false, "merchant_id": "", "approved_currencies": [] }
   }
 }

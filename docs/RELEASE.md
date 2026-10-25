@@ -1,4 +1,4 @@
-# Release candidate: 0.8.0-rc.4
+# Release candidate: 0.8.0-rc.5
 
 **Draft for review, not launch-ready.** No Render deployment or production merge has been performed. Existing production records were not accessed, modified, deleted or reset.
 
@@ -26,7 +26,7 @@
 | Existing integrity/onboarding checks | Pass | Existing source integration and legacy inline-script syntax |
 | Existing Sonic static checks | 31 pass | Reservation/ownership source invariants; two obsolete assertions updated to the current reservation-preserving behavior |
 | Existing Sonic handler suite | 25 mocked cases pass | Authentication, quota reservation, provider success/failure and refund handling |
-| New platform suite | 89 cases pass | Transaction/fee/credit/gift services, actual account/server request handlers, admin signatures and authorization, migration replay/checksum, player queue/driver/request races/resume, R2 signing/upload ownership/forged-file rejection/quota races, approved commercial contracts, product commissions and safe notification navigation |
+| New platform suite | 101 cases pass | Transaction/fee/credit/gift services, actual account/server request handlers, admin signatures and authorization, migration replay/checksum, player queue/driver/request races/resume, R2 signing/upload ownership/forged-file rejection/quota races, approved commercial contracts, product commissions and safe notification navigation |
 | Browser runner | **Pass in GitHub Actions** | Desktop/tablet/mobile fixtures exercise actual rendered UI and a real audio element using a test WAV. The local sandbox attempt remains recorded in `artifacts/browser-attempt.txt` |
 | Socket-based HTTP test | **Pass in GitHub Actions** | Actual HTTP routing, public access and safe failure responses; local binding remains blocked |
 | PostgreSQL 16 | **32 tests pass in GitHub Actions** | Fresh initialization, migrations 001–005, real concurrent gifts/credits/withdrawals/studio requests, media copy/publish, playlist/discovery constraints, signed-fixture settlement, renewals, pending commissions, purchased-credit refunds, immutable evidence, reconciliation and restart preservation; providers remain mocked |
@@ -61,3 +61,7 @@ The interface preserves the existing guest-comment path and does not introduce a
 ## Currency and selected gateway expansion
 
 `docs/MILESTONE-4.md` records the chosen providers, USD accounting policy, country/display conversion, immutable FX quotes, documented Paystack/Flutterwave protocol differences and remaining local-currency checkout/settlement work. Local tests pass 89 cases; the expanded provider/currency PostgreSQL and browser journeys pass in the linked CI run. No gateway, bank payout or local-currency charge is enabled by this expansion.
+
+## Nigeria checkout coordination
+
+The owner confirmed Nigeria. `docs/MILESTONE-5.md` records the durable checkout coordinator, exact local-charge/quote verification, independent reference lookup, original-charge evidence, review/status screens and closed-by-default staging runtime. Live checkout, refunds/disputes, bank settlement and payouts remain disabled or unfinished. Current local tests pass 101 cases; the preceding coordinator/UI CI run passed, with final runtime/layout verification recorded as it completes.
