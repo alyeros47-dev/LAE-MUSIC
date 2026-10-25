@@ -18,3 +18,4 @@ require('./refunds.test.cjs');
 require('./account-security.test.cjs');
 require('./engagement-editorial.test.cjs');
 require('./admin-security.test.cjs');
+require('./artist-notifications.test.cjs');
