@@ -31,7 +31,7 @@ npm run test:http
 
 The default suite executes source checks, existing mocked Sonic tests, and behavioral tests of actual request handlers, player logic, transactions, permissions, uploads, referrals and migrations with controlled services. It does **not** establish real PostgreSQL, storage, payment or music-provider compatibility.
 
-The browser runner uses isolated test fixtures at three viewport sizes (desktop, tablet and mobile) and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; the application, browser, HTTP and isolated PostgreSQL jobs passed in [CI run 40193499188](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40193499188).
+The browser runner uses isolated test fixtures at three viewport sizes (desktop, tablet and mobile) and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; the application, browser, HTTP and isolated PostgreSQL jobs passed in [CI run 40195809624](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40195809624).
 
 ## Layout
 
