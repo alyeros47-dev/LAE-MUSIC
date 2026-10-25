@@ -14,15 +14,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Prepare SMTP dependency lock for review
-        run: |
-          npm install --package-lock-only --ignore-scripts --save-exact nodemailer@10.2.1
-          node -e "console.log('LAE_EMAIL_LOCK_BEGIN'+require('fs').readFileSync('package-lock.json').toString('base64')+'LAE_EMAIL_LOCK_END')"
       - run: npm ci
       - run: npm test
       - run: npm run test:http
+      - run: npm run test:email
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+        env:
+          LAE_VISUAL_REVIEW: security
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -50,10 +49,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Prepare SMTP dependency lock for review
-        run: |
-          npm install --package-lock-only --ignore-scripts --save-exact nodemailer@10.2.1
-          node -e "console.log('LAE_EMAIL_LOCK_BEGIN'+require('fs').readFileSync('package-lock.json').toString('base64')+'LAE_EMAIL_LOCK_END')"
       - run: npm ci
       - run: npm run test:postgres
         env:

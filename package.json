@@ -8,7 +8,8 @@
     "test": "node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs",
     "test:browser": "node tests/browser.cjs",
     "test:http": "LAE_NETWORK_TESTS=1 node tests/http.test.cjs",
-    "test:postgres": "node tests/postgres.cjs"
+    "test:postgres": "node tests/postgres.cjs",
+    "test:email": "LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs"
   },
   "engines": {
     "node": ">=20"
