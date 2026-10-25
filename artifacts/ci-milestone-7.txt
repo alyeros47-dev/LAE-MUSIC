@@ -1,0 +1,42 @@
+LAE-MUSIC milestone 7 account security verification
+Code commit: 718b00f4274a05c8441ab3acc8e9d43327fc5e7b
+CI: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40217758806
+Application and PostgreSQL jobs: success
+
+Application, HTTP and real library/local TLS fixture:
+found 0 vulnerabilities
+# tests 115
+# pass 115
+# fail 0
+# tests 1
+# pass 1
+# fail 0
+# tests 4
+# pass 4
+# fail 0
+PASS browser journeys at desktop, tablet and mobile sizes; all external services mocked.
+
+PostgreSQL 16 (disposable loopback CI database):
+    ok 57 - session revocation requires current password and ownership and can retain the current session
+    ok 58 - known and unknown recovery requests share a response and queue encrypted delivery without SMTP timing
+    ok 59 - reset links are purpose- and role-bound, GET does not consume them, and concurrent use succeeds once
+    ok 60 - verification confirms only the selected identity and never creates an authenticated session
+    ok 61 - superseded and expired password-reset links are rejected without mutating credentials
+    ok 62 - authenticated password changes invalidate pending links and listener sessions transactionally
+    ok 63 - a login started with an old password cannot recreate a session after password change
+    ok 64 - reset persistence failure rolls credentials, session revocation and token consumption back together
+    ok 65 - multiple email workers send a queued link once and quarantine interrupted sends without retry
+    ok 66 - concurrent security requests share durable limits across service instances
+    ok 67 - registration rolls back the identity if session creation fails and still creates no paid entitlement
+    ok 68 - only administrators can view delivery health, without plaintext tokens or encrypted envelopes
+    ok 69 - protected reports execute against actual schemas and approvals cannot send money
+    ok 70 - restart retains account/financial data and does not repeat migrations or credit campaigns
+# tests 71
+# pass 71
+# fail 0
+
+Visual review: desktop and mobile account security screenshots inspected from run 40217403239; tablet journey and screenshots also pass.
+All three browser viewport journeys cover session revocation, correct account password settings, URL token scrubbing, password reset, verification and unavailable email delivery.
+SMTP uses the real pinned Nodemailer package and a loopback TLS server with generated fixture certificates and fictional credentials. No outside SMTP account, recipient inbox or real email is used.
+External email, payment, FX, music and storage responses remain fixtures or unverified. No production data was accessed or reset; no Render deployment or production merge.
+

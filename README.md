@@ -15,7 +15,7 @@ npm start
 
 Open `http://localhost:3000`. Public pages render without a database and show an honest unavailable state for catalog data. Real public streaming requires published PostgreSQL tracks and working R2 objects. Authentication uses Secure cookies: use HTTPS when testing signed-in flows outside the test harness.
 
-Routes: `/` and `/discover`, `/artists`, `/library`, `/workspace`, `/studio`, `/partners`, `/account`, `/join`, `/admin/console`. Existing entry points such as `/start`, `/dashboard`, `/earnings`, `/music-prompt-studio` and `/admin` open the shared interface. Existing backend APIs remain in place, with stricter financial idempotency and private earnings checks. Original page implementations can be inspected with `?legacy=1`; `/artist` retains advanced legacy upload support and `/admin/studio` retains the protected content studio.
+Routes: `/` and `/discover`, `/artists`, `/library`, `/workspace`, `/studio`, `/partners`, `/account`, `/join`, `/recover`, `/verify-email`, `/admin/console`. Existing entry points such as `/start`, `/dashboard`, `/earnings`, `/music-prompt-studio` and `/admin` open the shared interface. Existing backend APIs remain in place, with stricter financial idempotency and private earnings checks. Original page implementations can be inspected with `?legacy=1`; `/artist` retains advanced legacy upload support and `/admin/studio` retains the protected content studio.
 
 The persistent audio element sits outside the page router. Player preferences retain track identifiers and position, never expiring R2 signed URLs or account secrets. Reloading requires an explicit play action to resume.
 
@@ -26,6 +26,7 @@ npm test
 npx playwright install --with-deps chromium
 npm run test:browser
 npm run test:http
+npm run test:email
 # Disposable CI database only: npm run test:postgres
 ```
 
@@ -52,3 +53,5 @@ Flutterwave and Paystack are the selected gateways. USD remains the standard cur
 The merchant country is Nigeria. [Milestone 5](docs/MILESTONE-5.md) connects the guarded sandbox checkout, exact local-currency verification and original-charge accounting evidence. The committed merchant manifest disables checkout; adding environment keys does not activate production payments.
 
 [Milestone 6](docs/MILESTONE-6.md) adds purchase refund requests, protected administrative review, Paystack sandbox refund verification, original-currency evidence, USD reversal journals and entitlement/commission holds. Flutterwave refunds, partial-refund policy, dispute resolution and live settlement remain release gates.
+
+[Milestone 7](docs/MILESTONE-7.md) connects account session controls, transactional password changes and reset/verification flows with an encrypted email queue. Listener and artist identities remain separate. Email delivery stays disabled until the provider, sender and credentials are verified. The SMTP test requires OpenSSL and uses an isolated loopback TLS server; no outside email is sent.
