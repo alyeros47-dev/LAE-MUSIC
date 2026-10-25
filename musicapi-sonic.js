@@ -13,6 +13,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(!pool)return send(res,503,{error:'Music studio database unavailable'}),true;
  if(!process.env.MUSICAPI_API_KEY)return send(res,503,{error:'MusicAPI key is not configured on Render'}),true;
  await pool.query("CREATE TABLE IF NOT EXISTS sonic_test_tasks (task_id TEXT PRIMARY KEY, creator_id BIGINT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
+ await pool.query('ALTER TABLE sonic_test_tasks ALTER COLUMN creator_id TYPE BIGINT');
  if(p==='/api/music/sonic/create'&&req.method==='POST'){
   const b=await body(req),title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
   if(title.length<2||title.length>120||lyrics.length<20||lyrics.length>6000||style.length<3||style.length>2000)return send(res,400,{error:'Enter a title, lyrics and music style within the permitted lengths.'}),true;
@@ -46,8 +47,8 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   let result;
   try { result=await remote('/create','POST',{task_type:voiceId?'persona_music':'create_music',...(voiceId?{persona_id:voiceId,audio_weight:0.8,variety:'off'}:{}),custom_mode:true,mv:'sonic-v6',title:title.slice(0,80),prompt:lyrics.slice(0,4900),tags:style.slice(0,900),make_instrumental:false}); }
   catch(e){await release();console.error('[sonic/create] provider failure',e.status||'',e.message);const code=Number(e.status)||0;const message=code===401||code===403?'Music provider rejected the API key or account permissions. Check MUSICAPI_API_KEY and provider access.':code===402||code===429?'Music provider credits or rate limit may be exhausted. Check your MusicAPI.ai balance and limits.':code===400||code===422?'Music provider rejected the song request or model settings. Check Render logs for the provider message.':e.name==='AbortError'?'Music provider timed out. Please retry shortly.':'Music provider request failed: '+String(e.message||'Unknown error').slice(0,180);return send(res,502,{error:message}),true}
-  const id=result.task_id||result.data?.task_id;
-  if(!id){await release();return send(res,502,{error:'Music provider did not return a task ID.'}),true}
+  const id=String(result.task_id||result.data?.task_id||'');
+  if(!/^[a-zA-Z0-9_-]{8,128}$/.test(id)){await release();return send(res,502,{error:'Music provider returned an invalid task ID.'}),true}
   try{const db=await pool.connect();try{await db.query('BEGIN');const saved=await db.query('UPDATE sonic_test_tasks SET task_id=$1 WHERE task_id=$2 AND creator_id=$3 RETURNING task_id',[id,reservation,user.id]);if(!saved.rowCount)throw Error('Reserved generation task missing');const used=await db.query('UPDATE artist_studio_usage SET generation_reference=$1 WHERE generation_reference=$2 AND artist_id=$3 RETURNING id',[id,reservation,user.id]);if(!used.rowCount)throw Error('Reserved generation usage missing');await db.query('COMMIT');reservation=null}catch(e){await db.query('ROLLBACK').catch(()=>{});throw e}finally{db.release()}}catch(e){console.error('[sonic/create] task persistence failed',e.message);return send(res,503,{error:'Song request was accepted by the music provider, but LAE-MUSIC could not save its task reference. Contact support before retrying to avoid spending credits twice.'}),true}
   return send(res,200,{task_id:id,status:'pending'}),true;
  }
@@ -73,7 +74,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const result=await remote('/task/'+encodeURIComponent(id),'GET');
   const state=String(result.status||result.state||result.data?.status||result.data?.state|| (result.code===102?'running':'pending')).toLowerCase();
   const found=songs(result.data||result.results||result);
-  const status=found.length?'succeeded':state==='failed'?'failed':state==='succeeded'?'succeeded':state==='running'?'running':'pending';
+  const status=found.length?'succeeded':['failed','error','cancelled','canceled'].includes(state)?'failed':state==='succeeded'?'succeeded':['running','processing','in_progress'].includes(state)?'running':'pending';
   await pool.query('UPDATE sonic_test_tasks SET status=$1 WHERE task_id=$2',[status,id]);if(status==='failed')await pool.query('DELETE FROM artist_studio_usage WHERE artist_id=$1 AND generation_reference=$2',[user.id,id]);
   return send(res,200,{task_id:id,status,songs:found,error:status==='failed'?String(result.message||result.error||'Generation failed'):undefined}),true;
  }
