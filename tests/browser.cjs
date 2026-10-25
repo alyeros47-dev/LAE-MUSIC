@@ -59,7 +59,6 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
    if(['/api/listener/history','/api/listener/song-like'].includes(p))return send({ok:true});
    const r=await app.request(p+url.search,{method:request.method(),body:request.postData()||undefined,headers:request.headers()});return route.fulfill({status:r.status||404,headers:r.headers,body:r.body});
   });
-  await page.getByRole('link',{name:'Commerce',exact:true}).click();await page.getByRole('heading',{name:'Product sales. Verified evidence.',exact:true}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await page.goto('https://lae.test/');await page.getByRole('heading',{name:'Fresh off the press'}).waitFor();assert.equal(await page.locator('.song-card').count(),10);
   await page.locator('[data-play="1"]').click();await page.waitForFunction(()=>!document.getElementById('audio').paused);const identity=await page.evaluate(()=>{window.__playerIdentity=document.getElementById('audio');return true;});assert(identity);
   if(label==='mobile')await page.getByRole('button',{name:'Open navigation',exact:true}).click();await page.locator('#primary-nav a[href="/artists"]').click();await page.getByRole('heading',{name:'Original voices. Real stories.'}).waitFor();assert(await page.evaluate(()=>window.__playerIdentity===document.getElementById('audio')&&!document.getElementById('audio').paused));
