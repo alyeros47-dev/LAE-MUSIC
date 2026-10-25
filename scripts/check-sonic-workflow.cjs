@@ -19,7 +19,11 @@ const cases=[
  ['enforces task ownership for WAV',source.includes("SELECT task_id FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2 AND status='succeeded'")],
  ['releases credit on failed task',source.includes("if(status==='failed')await pool.query")],
  ['handles cancelled provider tasks',source.includes("'cancelled','canceled'")],
- ['migrates older creator ID column',source.includes("ALTER TABLE sonic_test_tasks ALTER COLUMN creator_id TYPE BIGINT")]
+ ['uses BIGINT creator IDs',source.includes('creator_id BIGINT NOT NULL')],
+ ['does not lock schema on every request',!source.includes('ALTER TABLE sonic_test_tasks')],
+ ['terminal failed status skips provider request',source.includes("owned.rows[0].status==='failed'")],
+ ['refunds failed task transactionally',source.includes("if(status==='failed')await db.query")],
+ ['validates locked artist account',source.includes('if(!locked.rowCount)')]
 ];
 for(const [label,ok] of cases){assert(ok,label);console.log('PASS',label)}
 console.log('All '+cases.length+' Sonic static invariants passed. These are not database or provider integration tests.');
