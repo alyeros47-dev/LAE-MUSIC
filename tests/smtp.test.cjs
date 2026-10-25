@@ -3,6 +3,8 @@
 if(process.env.LAE_EMAIL_TESTS!=='1')throw Error('SMTP fixture requires explicit LAE_EMAIL_TESTS=1.');
 const test=require('node:test'),assert=require('node:assert/strict'),tls=require('node:tls'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),{execFileSync}=require('node:child_process');
 const nodemailer=require('nodemailer'),{emailRuntime}=require('../lib/account-email');
+function decodedBody(raw){const split=raw.indexOf('\r\n\r\n'),headers=raw.slice(0,split),body=raw.slice(split+4),encoding=/^Content-Transfer-Encoding:\s*(\S+)/im.exec(headers)?.[1]?.toLowerCase();if(encoding==='base64')return Buffer.from(body,'base64').toString('utf8');if(encoding==='quoted-printable')return Buffer.from(body.replace(/=\r?\n/g,'').replace(/=([a-f0-9]{2})/gi,(_,hex)=>String.fromCharCode(parseInt(hex,16))),'latin1').toString('utf8');return body;}
+
 test('real SMTP library and verified TLS use an isolated local mail server',async t=>{
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'lae-smtp-')),certPath=path.join(directory,'cert.pem'),keyPath=path.join(directory,'key.pem');
  execFileSync('openssl',['req','-x509','-newkey','rsa:2048','-nodes','-days','1','-subj','/CN=localhost','-addext','subjectAltName=DNS:localhost','-keyout',keyPath,'-out',certPath],{stdio:'ignore'});
@@ -15,7 +17,7 @@ test('real SMTP library and verified TLS use an isolated local mail server',asyn
  const create=trust=>emailRuntime({config,env,createTransport:options=>nodemailer.createTransport({...options,host:'127.0.0.1',port:server.address().port,tls:{...options.tls,servername:'localhost',...(trust?{ca:cert}:{})}})});
  const message={email:'recipient@fixture.invalid',purpose:'reset_password',url:'https://lae.test/recover#token='+'a'.repeat(64)+'&role=listener'};
  try{
-  await t.test('SMTP authentication, MIME encoding and recipient acceptance use the actual library',async()=>{await create(true).send(message);assert.equal(messages.length,1);assert.match(messages[0],/Subject: Reset your LAE-MUSIC password/);assert.match(messages[0],/Content-Type: text\/plain/);assert.match(messages[0],/recipient@fixture.invalid/);assert.match(messages[0],/https:\/\/lae.test\/recover/);});
+  await t.test('SMTP authentication, MIME encoding and recipient acceptance use the actual library',async()=>{await create(true).send(message);assert.equal(messages.length,1);assert.match(messages[0],/Subject: Reset your LAE-MUSIC password/);assert.match(messages[0],/Content-Type: text\/plain/);assert.match(messages[0],/recipient@fixture.invalid/);assert(decodedBody(messages[0]).includes(message.url),'The decoded email must retain the complete recovery URL');assert.match(decodedBody(messages[0]),/Account: Listener/);});
   await t.test('recipient rejection is not reported as accepted',async()=>{refuse=true;await assert.rejects(create(true).send(message));refuse=false;assert.equal(messages.length,1);});
   await t.test('an untrusted SMTP certificate fails closed',async()=>{await assert.rejects(create(false).send(message));assert.equal(messages.length,1);});
  }finally{for(const socket of sockets)socket.destroy();await new Promise(resolve=>server.close(resolve));fs.rmSync(directory,{recursive:true,force:true});}
