@@ -1,5 +1,5 @@
 
-> lae-music@0.8.0-rc.4 test
+> lae-music@0.8.0-rc.5 test
 > node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs
 
 LAE-MUSIC: server syntax, unified dashboard, referral invariants and onboarding scripts passed.
@@ -36,126 +36,136 @@ PASS preserves terminal state during concurrent status polls
 PASS refunds based on committed terminal state
 All 31 Sonic static invariants passed. These are not database or provider integration tests.
 [sonic/create] provider failure 400 Bad song uncertain_acceptance=false reservation=
-[sonic/create] provider failure 503 Provider busy uncertain_acceptance=true reservation=sonic-b89862981e8f2a0cad4cecd9c31b088b
-[sonic/create] provider failure  Connection reset uncertain_acceptance=true reservation=sonic-69953a86b448834d00f1eed6f1cac229
+[sonic/create] provider failure 503 Provider busy uncertain_acceptance=true reservation=sonic-f369835000f81fa692d4b18f3e407817
+[sonic/create] provider failure  Connection reset uncertain_acceptance=true reservation=sonic-49abfce46e5f51d1b29c01ecc3c1f91f
 PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
 No DATABASE_URL: homepage and demo enabled; accounts and persistent admin settings disabled
-LAE Music v0.8.0-rc.4 listening on 3000
+LAE Music v0.8.0-rc.5 listening on 3000
 Request error: Error: The music database is unavailable. Please try again shortly.
     at fail (/workspace/LAE-MUSIC/lib/transactions.js:4:49)
-    at requireDb (/workspace/LAE-MUSIC/lib/platform.js:38:43)
-    at Object.handler (/workspace/LAE-MUSIC/lib/platform.js:97:5)
+    at requireDb (/workspace/LAE-MUSIC/lib/platform.js:40:43)
+    at Object.handler (/workspace/LAE-MUSIC/lib/platform.js:107:5)
     at server.js:167:20
     at Object.request (/workspace/LAE-MUSIC/tests/runtime.cjs:13:9)
     at TestContext.<anonymous> (/workspace/LAE-MUSIC/tests/router.test.cjs:4:319)
     at async Test.run (node:internal/test_runner/test:1389:7)
     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
 Database ready
-LAE Music v0.8.0-rc.4 listening on 3000
-✔ withdrawal computes 3% in minor units and rejects invalid financial input (2.61097ms)
-✔ balanced transfers replay without duplicate money and reject reused references (1.328064ms)
-✔ parallel withdrawal requests cannot reserve more than the available balance (serialized mock) (1.064426ms)
-✔ withdrawal retry is idempotent and conflicting input is rejected (2.230856ms)
-✔ rejection releases reserved funds exactly once; approval cannot send or mark paid (1.006639ms)
-✔ approval holds gross including fee; currencies stay independent (0.444731ms)
-✔ lyrics reservation debit and ledger roll back together on storage failure (0.743011ms)
-✔ lyrics retries do not debit twice and completed requests replay original output (0.710652ms)
-✔ lyrics refunds are durable, auditable, and safe under duplicate calls (0.619826ms)
-✔ idempotency rolls back business changes when response recording fails (0.500415ms)
-✔ additive migration is versioned, repeatable, checksum-checked and transaction-locked (mock) (1.097215ms)
-✔ public shell renders without a database, uses CSP and never needs registration (2.658131ms)
-✔ shell HEAD sends no body and rejects arbitrary methods (0.326943ms)
-✔ unconfigured checkout and webhook never claim money was received (0.280714ms)
-✔ cross-site mutations are blocked centrally, including legacy auth (1.114913ms)
-✔ auth attempts are rate limited without leaking data (0.505032ms)
-✔ sensitive reports require administrator authorization before querying (0.587947ms)
-✔ library and artist finances enforce their account types (0.341265ms)
-✔ artist gift earnings cannot be fetched by another artist (0.308786ms)
-✔ catalog metadata uses owner-scoped parameters and returns unavailable for foreign IDs (0.271229ms)
-✔ discovery search values are parameterized and order is whitelisted (0.593586ms)
-✔ free affiliate status does not create enrollment or recruitment rewards (0.147283ms)
-✔ public currency settings and USD prices need no registration, database or external rates (19.377259ms)
-✔ real server routing without a database keeps public pages open and payments safely unavailable (13.414652ms)
-✔ listener registration, login, cookie authentication and logout run through actual server handlers (mock database) (144.893886ms)
+LAE Music v0.8.0-rc.5 listening on 3000
+✔ withdrawal computes 3% in minor units and rejects invalid financial input (2.851424ms)
+✔ balanced transfers replay without duplicate money and reject reused references (1.203012ms)
+✔ parallel withdrawal requests cannot reserve more than the available balance (serialized mock) (1.910477ms)
+✔ withdrawal retry is idempotent and conflicting input is rejected (1.284164ms)
+✔ rejection releases reserved funds exactly once; approval cannot send or mark paid (1.213378ms)
+✔ approval holds gross including fee; currencies stay independent (0.585041ms)
+✔ lyrics reservation debit and ledger roll back together on storage failure (0.719895ms)
+✔ lyrics retries do not debit twice and completed requests replay original output (0.702738ms)
+✔ lyrics refunds are durable, auditable, and safe under duplicate calls (0.669519ms)
+✔ idempotency rolls back business changes when response recording fails (0.329136ms)
+✔ additive migration is versioned, repeatable, checksum-checked and transaction-locked (mock) (1.645078ms)
+✔ public shell renders without a database, uses CSP and never needs registration (5.020181ms)
+✔ shell HEAD sends no body and rejects arbitrary methods (0.374735ms)
+✔ unconfigured checkout and webhook never claim money was received (0.427564ms)
+✔ cross-site mutations are blocked centrally, including legacy auth (0.260141ms)
+✔ auth attempts are rate limited without leaking data (0.547104ms)
+✔ sensitive reports require administrator authorization before querying (0.784883ms)
+✔ library and artist finances enforce their account types (0.50468ms)
+✔ artist gift earnings cannot be fetched by another artist (0.685312ms)
+✔ catalog metadata uses owner-scoped parameters and returns unavailable for foreign IDs (0.317037ms)
+✔ discovery search values are parameterized and order is whitelisted (0.635728ms)
+✔ free affiliate status does not create enrollment or recruitment rewards (0.174083ms)
+✔ public currency settings and USD prices need no registration, database or external rates (19.874363ms)
+✔ Nigeria checkout policy is public while unconfigured provider webhooks stay unavailable (0.327113ms)
+✔ real server routing without a database keeps public pages open and payments safely unavailable (13.429546ms)
+✔ listener registration, login, cookie authentication and logout run through actual server handlers (mock database) (159.995631ms)
 Database ready
-LAE Music v0.8.0-rc.4 listening on 3000
-✔ artist/partner registration is free, never activates a paid subscription, and ordinary accounts cannot administer (40.136434ms)
+LAE Music v0.8.0-rc.5 listening on 3000
+✔ artist/partner registration is free, never activates a paid subscription, and ordinary accounts cannot administer (38.162547ms)
 Database ready
-LAE Music v0.8.0-rc.4 listening on 3000
-✔ malformed, null and array JSON produce client errors; registration confirmation is validated (4.309143ms)
+LAE Music v0.8.0-rc.5 listening on 3000
+✔ malformed, null and array JSON produce client errors; registration confirmation is validated (3.921766ms)
 Database ready
-LAE Music v0.8.0-rc.4 listening on 3000
-✔ listener password changes verify the current password and invalidate old sessions (229.999171ms)
+LAE Music v0.8.0-rc.5 listening on 3000
+✔ listener password changes verify the current password and invalidate old sessions (228.495569ms)
 Database ready
-LAE Music v0.8.0-rc.4 listening on 3000
-✔ administrator session is signed, requires the configured key, and grants protected access only after login (3.801356ms)
+LAE Music v0.8.0-rc.5 listening on 3000
+✔ administrator session is signed, requires the configured key, and grants protected access only after login (3.697389ms)
 No DATABASE_URL: homepage and demo enabled; accounts and persistent admin settings disabled
-LAE Music v0.8.0-rc.4 listening on 3000
-✔ legacy demo money mutations cannot be re-enabled by historical environment switches (2.201292ms)
-✔ queue advances, respects repeat-one on ended, and stops at the end with repeat off (0.23152ms)
-✔ shuffle excludes the current track and previous follows actual history (0.184038ms)
-✔ queue reordering and removal preserve current song and disallow removal of the playing item (0.148824ms)
-✔ time formatting handles invalid duration and empty queues safely (0.108745ms)
-✔ real player driver fetches platform audio, survives navigation outside its DOM, and ignores stale stream requests (1.71574ms)
-✔ player restore keeps queue and position without autoplay or persisting expiring signed stream URLs (0.554036ms)
-✔ uploaded file signatures reject renamed HTML or executables (0.5302ms)
-✔ storage verification requests only a prefix and closes the read stream (0.427715ms)
-✔ studio requires a durable request key before reserving quota or calling provider (1.634957ms)
-✔ same studio request replays the owned task without another provider call (0.897565ms)
-✔ studio refuses a conflicting payload under an existing key (2.194612ms)
-✔ definitively failed studio requests replay failure without consuming quota (0.724453ms)
-✔ gift retries do not debit twice; recorded NGN split remains 70/30 (1.241433ms)
-✔ gift conflicting retry and insufficient funds cannot mutate balances (0.853568ms)
-✔ push links cannot open a different origin using protocol-relative URLs (1.132188ms)
-✔ push navigation posts to an existing player document instead of reloading it (0.689039ms)
-✔ public streaming signs a real platform object without requiring a listener account (storage mocked) (3.031384ms)
-✔ upload proxy rejects another artist’s pending target before reaching storage (1.023435ms)
-✔ publication rejects forged audio bytes even if stored MIME and length match (20.479953ms)
-✔ concurrent upload reservations respect the final annual slot inside a transaction (serialized mock) (2.053349ms)
-✔ approved annual package prices, royalty shares, quotas and extra-generation prices are preserved (0.176286ms)
-✔ trusted verified-purchase helper applies only approved direct sale percentages (0.633907ms)
-✔ self-referrals, invalid referrers, and missing products do not mint a commission (0.184599ms)
-✔ team relationship records verified product volume without minting recruitment rewards (0.310429ms)
-✔ media URL policy requires HTTPS, exact trusted hosts, standard ports and no credentials (0.5629ms)
-✔ private, loopback, link-local and special IP addresses are not accepted as resolved media hosts (0.485783ms)
-✔ media downloader rejects a private DNS result before opening the connection (0.4439ms)
-✔ redirects cannot escape the trusted host list or reach a private endpoint (0.895441ms)
-✔ bounded media reads reject oversized, incomplete and forged files (0.691694ms)
-✔ approved media downloads are bounded and use no cookies, authorization or referrer (0.811405ms)
-✔ release creation accepts identity and metadata only, requires rights, and rejects provisional tasks (0.390279ms)
-✔ discovery rejects malformed page sizes and mismatched or malformed cursors (0.39759ms)
-✔ discovery returns an opaque stable continuation with filters bound to that cursor (0.804073ms)
-✔ playlist names and IDs reject unsafe or oversized values (0.323118ms)
-✔ forged cursor dates and oversized play counts fail before a database cast (0.421526ms)
-✔ purchase quotes use approved server prices and reject unsupported products and prototype plans (0.365642ms)
-✔ royalty allocations preserve approved shares and exact integer totals without minting ledger funds (0.274654ms)
-✔ no payment adapter or an incomplete adapter can activate verified settlement (0.459393ms)
-✔ signature rejection stops before provider retrieval or financial writes (0.206912ms)
-✔ empty or oversized original webhook bytes are rejected before verification (0.270558ms)
-✔ invalid purchase bodies and unsupported referrals fail before touching the database (0.492883ms)
-✔ provider lookup failures remain retriable and never record a successful event (1.49746ms)
-✔ active package stays authoritative when a different future renewal exists (0.365972ms)
-✔ future-only subscription does not activate access or look like an expired package (0.340694ms)
-✔ all current countries have explicit currency choices, with honest no-currency fallback (1.11982ms)
-✔ USD conversions use exact integer rounding for zero, two and three digit currencies (0.739326ms)
-✔ currency amount parsing rejects fractional minor units and floating-point overflows (0.306783ms)
-✔ reference feed rejects wrong base, stale/future data, missing USD and invalid update windows (1.877774ms)
-✔ concurrent local pricing shares a cached trusted fetch and never exports the raw rate dataset (4.49319ms)
-✔ unavailable rates keep USD product prices and do not silently substitute a local rate (0.592795ms)
-✔ disabled source and unsupported country/rate values are explicit and make no provider call (0.440866ms)
-✔ fresh cache supports a brief source outage; expired data cannot create apparently current prices (1.480214ms)
-✔ Paystack XOF uses its documented 100 multiplier without allowing fractional francs (0.179261ms)
-✔ payment adapters are not reviewed or enabled by default and reject missing account credentials (0.804053ms)
-✔ Paystack authenticates original bytes with SHA512 and independently checks domain and reference (0.962983ms)
-✔ Paystack checkout binds quote and metadata, rejects unexpected hosts and account currencies (1.168573ms)
-✔ Flutterwave v3 authenticates its specific secret header and verifies merchant, metadata and decimal amounts (0.796622ms)
-✔ Flutterwave Standard checkout uses a server quote, explicit currency and restricted hosted checkout domain (0.408246ms)
-✔ checkout quotes cannot be prepared for a currency not approved on the specific merchant account (0.439743ms)
-ℹ tests 89
+LAE Music v0.8.0-rc.5 listening on 3000
+✔ legacy demo money mutations cannot be re-enabled by historical environment switches (2.597553ms)
+✔ queue advances, respects repeat-one on ended, and stops at the end with repeat off (0.226822ms)
+✔ shuffle excludes the current track and previous follows actual history (0.155624ms)
+✔ queue reordering and removal preserve current song and disallow removal of the playing item (0.15954ms)
+✔ time formatting handles invalid duration and empty queues safely (0.187542ms)
+✔ real player driver fetches platform audio, survives navigation outside its DOM, and ignores stale stream requests (1.848924ms)
+✔ player restore keeps queue and position without autoplay or persisting expiring signed stream URLs (0.447144ms)
+✔ uploaded file signatures reject renamed HTML or executables (0.18545ms)
+✔ storage verification requests only a prefix and closes the read stream (0.418ms)
+✔ studio requires a durable request key before reserving quota or calling provider (1.695414ms)
+✔ same studio request replays the owned task without another provider call (0.707786ms)
+✔ studio refuses a conflicting payload under an existing key (0.603068ms)
+✔ definitively failed studio requests replay failure without consuming quota (0.588567ms)
+✔ gift retries do not debit twice; recorded NGN split remains 70/30 (1.313508ms)
+✔ gift conflicting retry and insufficient funds cannot mutate balances (1.064403ms)
+✔ push links cannot open a different origin using protocol-relative URLs (0.95594ms)
+✔ push navigation posts to an existing player document instead of reloading it (0.755178ms)
+✔ public streaming signs a real platform object without requiring a listener account (storage mocked) (3.10023ms)
+✔ upload proxy rejects another artist’s pending target before reaching storage (0.873716ms)
+✔ publication rejects forged audio bytes even if stored MIME and length match (24.463015ms)
+✔ concurrent upload reservations respect the final annual slot inside a transaction (serialized mock) (1.963397ms)
+✔ approved annual package prices, royalty shares, quotas and extra-generation prices are preserved (0.222555ms)
+✔ trusted verified-purchase helper applies only approved direct sale percentages (0.331619ms)
+✔ self-referrals, invalid referrers, and missing products do not mint a commission (0.108504ms)
+✔ team relationship records verified product volume without minting recruitment rewards (0.704712ms)
+✔ media URL policy requires HTTPS, exact trusted hosts, standard ports and no credentials (0.455916ms)
+✔ private, loopback, link-local and special IP addresses are not accepted as resolved media hosts (0.523609ms)
+✔ media downloader rejects a private DNS result before opening the connection (0.3853ms)
+✔ redirects cannot escape the trusted host list or reach a private endpoint (0.457248ms)
+✔ bounded media reads reject oversized, incomplete and forged files (0.671362ms)
+✔ approved media downloads are bounded and use no cookies, authorization or referrer (0.494554ms)
+✔ release creation accepts identity and metadata only, requires rights, and rejects provisional tasks (0.25182ms)
+✔ discovery rejects malformed page sizes and mismatched or malformed cursors (0.346091ms)
+✔ discovery returns an opaque stable continuation with filters bound to that cursor (0.662558ms)
+✔ playlist names and IDs reject unsafe or oversized values (0.506252ms)
+✔ forged cursor dates and oversized play counts fail before a database cast (0.295766ms)
+✔ purchase quotes use approved server prices and reject unsupported products and prototype plans (0.294654ms)
+✔ royalty allocations preserve approved shares and exact integer totals without minting ledger funds (0.2586ms)
+✔ no payment adapter or an incomplete adapter can activate verified settlement (0.509197ms)
+✔ signature rejection stops before provider retrieval or financial writes (0.157768ms)
+✔ empty or oversized original webhook bytes are rejected before verification (0.222486ms)
+✔ invalid purchase bodies and unsupported referrals fail before touching the database (0.389136ms)
+✔ provider lookup failures remain retriable and never record a successful event (0.287783ms)
+✔ active package stays authoritative when a different future renewal exists (0.270177ms)
+✔ future-only subscription does not activate access or look like an expired package (0.181273ms)
+✔ all current countries have explicit currency choices, with honest no-currency fallback (1.236202ms)
+✔ USD conversions use exact integer rounding for zero, two and three digit currencies (0.591271ms)
+✔ currency amount parsing rejects fractional minor units and floating-point overflows (0.238209ms)
+✔ reference feed rejects wrong base, stale/future data, missing USD and invalid update windows (1.02246ms)
+✔ concurrent local pricing shares a cached trusted fetch and never exports the raw rate dataset (3.750659ms)
+✔ unavailable rates keep USD product prices and do not silently substitute a local rate (0.485311ms)
+✔ disabled source and unsupported country/rate values are explicit and make no provider call (0.406121ms)
+✔ fresh cache supports a brief source outage; expired data cannot create apparently current prices (1.623815ms)
+✔ Paystack XOF uses its documented 100 multiplier without allowing fractional francs (0.206682ms)
+✔ payment adapters are not reviewed or enabled by default and reject missing account credentials (0.582317ms)
+✔ Paystack authenticates original bytes with SHA512 and independently checks domain and reference (1.485187ms)
+✔ Paystack checkout binds quote and metadata, rejects unexpected hosts and account currencies (1.091935ms)
+✔ Flutterwave v3 authenticates its specific secret header and verifies merchant, metadata and decimal amounts (0.933997ms)
+✔ Flutterwave Standard checkout uses a server quote, explicit currency and restricted hosted checkout domain (0.4848ms)
+✔ checkout quotes cannot be prepared for a currency not approved on the specific merchant account (0.358139ms)
+✔ Nigeria is the confirmed merchant country while approved accounts stay disabled (0.107632ms)
+✔ only reviewed sandbox adapters and a non-production callback can enable test checkout (0.442667ms)
+✔ checkout capabilities disclose approved charge choices without claiming global local-currency acceptance (0.190087ms)
+✔ default payment operations cannot reach a database or provider even with client success flags (0.409317ms)
+✔ only exact POST provider webhook paths bypass browser origin checks (0.137827ms)
+✔ provider request parser preserves the original UTF-8 bytes before any JSON processing (2.657918ms)
+✔ provider body limits reject huge, empty and non-JSON requests (0.702358ms)
+✔ Flutterwave reference reconciliation independently checks the merchant and payment identifiers (0.671411ms)
+✔ malformed provider metadata produces a safe protocol error (0.340333ms)
+ℹ tests 99
 ℹ suites 0
-ℹ pass 89
+ℹ pass 99
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 584.282308
+ℹ duration_ms 597.082102

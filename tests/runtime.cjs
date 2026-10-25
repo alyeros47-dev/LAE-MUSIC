@@ -2,10 +2,10 @@
 const vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const {Readable}=require('node:stream');const {createRequire}=require('node:module');
 // Executes the actual server request callback without opening a network socket.
-async function runtime({pool=null,env={}}={}){
+async function runtime({pool=null,env={},paymentService}={}){
  const root=path.join(__dirname,'..'),load=createRequire(path.join(root,'server.js'));let handler,ready;
  const started=new Promise(resolve=>{ready=resolve;});
- const sandbox={require(name){if(name==='pg')return {Pool:class{constructor(){return pool;}}};if(name==='web-push')return {generateVAPIDKeys:()=>({publicKey:'test-public',privateKey:'test-private'}),setVapidDetails(){}};if(name==='node:http')return {createServer(fn){handler=fn;return {listen(_port,_host,callback){callback();ready();}};}};return load(name);},process:{env:{...env,...(pool?{DATABASE_URL:'postgres://127.0.0.1/test'}:{})},exit(code){throw Error('Startup failed: '+code);}},__dirname:root,console,Buffer,URL,URLSearchParams,fetch,AbortSignal,setTimeout,clearTimeout,setInterval,clearInterval};
+ const sandbox={require(name){if(name==='./lib/platform'&&paymentService)return {createPlatform:options=>load(name).createPlatform({...options,paymentService})};if(name==='pg')return {Pool:class{constructor(){return pool;}}};if(name==='web-push')return {generateVAPIDKeys:()=>({publicKey:'test-public',privateKey:'test-private'}),setVapidDetails(){}};if(name==='node:http')return {createServer(fn){handler=fn;return {listen(_port,_host,callback){callback();ready();}};}};return load(name);},process:{env:{...env,...(pool?{DATABASE_URL:'postgres://127.0.0.1/test'}:{})},exit(code){throw Error('Startup failed: '+code);}},__dirname:root,console,Buffer,URL,URLSearchParams,fetch,AbortSignal,setTimeout,clearTimeout,setInterval,clearInterval};
  vm.runInNewContext(fs.readFileSync(path.join(root,'server.js'),'utf8'),sandbox,{filename:'server.js'});await started;
  return {async request(url,{method='GET',body,headers={}}={}){
   const raw=body===undefined?'':typeof body==='string'?body:JSON.stringify(body),req=Readable.from([Buffer.from(raw)]);req.url=url;req.method=method;req.headers={host:'lae.test',...headers};req.socket={remoteAddress:'test-address'};
