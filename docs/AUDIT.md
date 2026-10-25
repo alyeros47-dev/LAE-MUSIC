@@ -46,3 +46,8 @@ Real PostgreSQL migration replay/concurrency tests; verified R2 credentials, COR
 ## Verification follow-up
 
 The new real PostgreSQL CI job confirmed a fresh-install ordering defect: notification/gift/comment-extension DDL ran before its music/comment parent tables. Initialization was reordered without deleting data. Real concurrency testing also required a stable, owner-scoped mapping from provisional studio references to accepted provider task IDs. These fixes, fresh initialization/replay, concurrent money/credit operations and restart preservation passed in CI run 40184247862. Browser and actual HTTP tests also passed there after local sandbox execution was blocked.
+
+
+## Accounting milestone follow-through
+
+Purchase/entitlement, media-copy/publication and collection changes are documented in `docs/MILESTONE-2.md` and `docs/MILESTONE-3.md`; current test evidence is in `docs/RELEASE.md`. The audit also confirmed that legacy initialization and two GET reports could mint new demo referral rows solely from active-account status. Those accruals have been removed. Demo activation, withdrawal submission and demo admin review are permanently disabled even if old environment switches are set. Historical demo tables and reports remain readable, with zero available cash in the demo wallet. No historical rows were reset or imported into verified balances. These disabled simulations are not approved product commissions or live purchases.

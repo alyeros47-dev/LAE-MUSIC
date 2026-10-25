@@ -8,7 +8,7 @@ This document prepares a reviewable release; it does not authorize a deployment 
 2. Create a disposable PostgreSQL database and a sanitized clone of the production schema/data. Do not point automated tests at production and do not drop production tables. Take and verify a backup before an approved production migration.
 3. Use Node 22 and `npm ci` with the committed dependency lockfile. It was captured from the successful CI installation, not guessed. That installation reported zero known vulnerabilities; repeat the advisory review before an approved release.
 4. Supply `DATABASE_URL`, a strong `ADMIN_KEY`, R2 account/bucket credentials, `MUSICAPI_API_KEY` and `OPENAI_API_KEY` only through the staging secret manager. `OPENAI_LYRICS_MODEL` must be an allowed model for that project. Review PostgreSQL CA/TLS verification; the old server configuration disables remote certificate verification.
-5. Leave legacy demo activation/payment variables unset. No supported environment toggle in this candidate can activate real checkout, settlement or payouts.
+5. Legacy demo activation/payment variables no longer enable mutation routes; remove any stale values from hosting configuration. No supported environment toggle in this candidate can activate real checkout, settlement or payouts.
 
 ## Validation commands
 
