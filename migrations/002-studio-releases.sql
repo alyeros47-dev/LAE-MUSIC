@@ -39,3 +39,6 @@ CREATE TABLE IF NOT EXISTS catalog_release_events (
 );
 ALTER TABLE listener_playlists ADD COLUMN IF NOT EXISTS revision BIGINT NOT NULL DEFAULT 0;
 ALTER TABLE listener_playlist_tracks ADD COLUMN IF NOT EXISTS position INTEGER NOT NULL DEFAULT 0;
+
+CREATE INDEX IF NOT EXISTS idx_music_discovery_new ON music_tracks((COALESCE(published_at,created_at)) DESC,id DESC) WHERE status='published';
+CREATE INDEX IF NOT EXISTS idx_music_discovery_popular ON music_tracks(plays DESC,(COALESCE(published_at,created_at)) DESC,id DESC) WHERE status='published';
