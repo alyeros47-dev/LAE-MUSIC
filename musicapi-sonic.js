@@ -40,14 +40,14 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    if(active.rows[0].n>0){await client.query('ROLLBACK');return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true}
    const daily=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
    if(daily.rows[0].n>=5){await client.query('ROLLBACK');return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true}
-   const sub=await client.query("SELECT id,plan FROM artist_subscriptions WHERE artist_id=$1 AND status='paid' AND starts_at<=NOW() AND expires_at>NOW() ORDER BY expires_at DESC LIMIT 1 FOR UPDATE",[user.id]);
+   const sub=await client.query("SELECT id,plan FROM artist_subscriptions WHERE artist_id=$1 AND status='paid' AND starts_at<=NOW() AND expires_at>NOW() AND NOT payment_hold ORDER BY expires_at DESC LIMIT 1 FOR UPDATE",[user.id]);
    if(!sub.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'An active paid artist package is required to generate music.'}),true}
    const limits={starter:2,growth:3,professional:6};
    const limit=limits[sub.rows[0].plan]||0;
    const usage=await client.query("SELECT COUNT(*)::int AS used FROM artist_studio_usage WHERE subscription_id=$1 AND purchase_order_id IS NULL",[sub.rows[0].id]);
    let purchase=null;
    if(usage.rows[0].used>=limit){
-    const extra=await client.query('SELECT p.order_id FROM studio_purchased_credits p LEFT JOIN artist_studio_usage u ON u.purchase_order_id=p.order_id WHERE p.artist_id=$1 AND u.id IS NULL ORDER BY p.created_at,p.order_id LIMIT 1 FOR UPDATE OF p',[user.id]);
+    const extra=await client.query('SELECT p.order_id FROM studio_purchased_credits p LEFT JOIN payment_refund_cases h ON h.order_id=p.order_id LEFT JOIN artist_studio_usage u ON u.purchase_order_id=p.order_id WHERE p.artist_id=$1 AND u.id IS NULL AND COALESCE(h.benefit_hold,FALSE)=FALSE ORDER BY p.created_at,p.order_id LIMIT 1 FOR UPDATE OF p',[user.id]);
     if(!extra.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'Your included studio generations are exhausted. Additional generations require a verified purchase.'}),true}
     purchase=extra.rows[0].order_id;
    }

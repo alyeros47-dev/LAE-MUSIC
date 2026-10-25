@@ -9,12 +9,16 @@ const {createFlutterwave}=require('../lib/payments/flutterwave');
 const {createCommerce}=require('../lib/commerce');
 module.exports=async(t,{pool})=>{
  const psKey='sk_test_isolated_checkout_fixture_12345',flwKey='FLWSECK_TEST-isolated_checkout_fixture_12345-X',secretHash='isolated_checkout_hash_fixture_123456789';
- let calls=0,lookups=0,sequence=200,gate=null,throwInitialize=false;
+ let calls=0,lookups=0,sequence=200,gate=null,throwInitialize=false,refundCalls=0,refundTimeout=false;const refunds=new Map();
  const payments=new Map(),byId=new Map();const response=data=>new Response(JSON.stringify(data),{status:200});
  async function fetchFixture(url,options){
-  const u=new URL(url);if(options.method==='POST'){
+  const u=new URL(url);
+  if(u.hostname==='api.paystack.co'&&u.pathname==='/refund'&&options.method==='POST'){refundCalls++;const b=JSON.parse(options.body),payment=payments.get(b.transaction).data,id=900+refundCalls;refunds.set(String(id),{id,transaction:payment.id,domain:'test',currency:b.currency,amount:b.amount,status:'pending'});if(refundTimeout)throw Error('Refund accepted before timeout');return response({status:true,data:{id}});}
+  if(u.hostname==='api.paystack.co'&&u.pathname==='/refund')return response({status:true,data:[...refunds.values()].filter(r=>String(r.transaction)===u.searchParams.get('transaction'))});
+  if(u.hostname==='api.paystack.co'&&u.pathname.startsWith('/refund/'))return response({status:true,data:refunds.get(u.pathname.split('/').pop())});
+  if(options.method==='POST'){
    calls++;const b=JSON.parse(options.body),provider=u.hostname==='api.paystack.co'?'paystack':'flutterwave',reference=b.reference||b.tx_ref;
-   const data=provider==='paystack'?{reference,domain:'test',status:'pending',amount:Number(b.amount),currency:b.currency,metadata:JSON.parse(b.metadata)}:{id:++sequence,account_id:12345,tx_ref:reference,status:'pending',amount:b.amount,currency:b.currency,meta:b.meta};
+   const data=provider==='paystack'?{id:++sequence,reference,domain:'test',status:'pending',amount:Number(b.amount),currency:b.currency,metadata:JSON.parse(b.metadata)}:{id:++sequence,account_id:12345,tx_ref:reference,status:'pending',amount:b.amount,currency:b.currency,meta:b.meta};
    payments.set(reference,{provider,data});if(provider==='flutterwave')byId.set(String(data.id),data);
    if(gate)await gate;if(throwInitialize)throw Error('Isolated provider timeout after acceptance');
    return response(provider==='paystack'?{status:true,data:{reference,authorization_url:'https://checkout.paystack.com/isolated-checkout'}}:{status:'success',data:{link:'https://checkout.flutterwave.com/v3/hosted/pay/isolated-checkout'}});
@@ -25,7 +29,7 @@ module.exports=async(t,{pool})=>{
  const adapters={paystack:createPaystack({secretKey:psKey,merchantId:'isolated_ps',approvedCurrencies:['USD','NGN'],reviewed:true,fetchImpl:fetchFixture}),flutterwave:createFlutterwave({secretKey:flwKey,secretHash,merchantId:'12345',approvedCurrencies:['USD','NGN'],reviewed:true,fetchImpl:fetchFixture})};
  const rates=createExchangeRates({pool,env:{},fetchImpl:async()=>response({result:'success',base_code:'USD',time_last_update_unix:Math.floor(Date.now()/1000),time_next_update_unix:Math.floor(Date.now()/1000)+86400,rates:{USD:1,NGN:1600}})});
  const service=createCheckoutService({pool,rates,adapters,mode:'sandbox',merchantCountry:'NG',callbackOrigin:'https://lae.test'});
- const app=await runtime({pool,paymentService:service,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
+ const app=await runtime({pool,paymentService:service,env:{NODE_ENV:'test',ADMIN_KEY:'isolated-refund-admin-key-123456',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
  const commerce=createCommerce({pool});
  async function api(path,{body,cookie,key,headers={}}={}){const r=await app.request(path,{method:body!==undefined?'POST':'GET',body,headers:{...(cookie?{cookie}:{}),...(key?{'idempotency-key':key}:{}),...headers}});return {status:r.status,data:r.json(),cookie:r.headers['set-cookie']?.split(';')[0]};}
  async function register(name){const r=await api('/api/register',{body:{name,country:'Nigeria',email:name+'@checkout-ci.invalid',password:'CheckoutFixturePassword123',confirmPassword:'CheckoutFixturePassword123',plan:'starter'}});assert.equal(r.status,201);return {id:r.data.user.id,cookie:r.cookie};}
@@ -102,5 +106,7 @@ module.exports=async(t,{pool})=>{
   const x=await fresh('flutterwave'),id=crypto.randomUUID(),reference='lae-'+crypto.randomUUID();await pool.query("INSERT INTO payment_checkout_attempts(id,order_id,quote_id,provider,merchant_id,merchant_country,mode,reference,created_at) VALUES($1,$2,$3,'flutterwave','12345','NG','test',$4,NOW()-INTERVAL '1 minute')",[id,x.order.id,x.quote.id,reference]);
   const restarted=createCheckoutService({pool,rates,adapters,mode:'sandbox',callbackOrigin:'https://lae.test'}),before=calls;const current=await restarted.start(artist.id,'checkout_after_crash_key_123',{quote_id:x.quote.id});assert.equal(current.id,id);assert.equal(current.status,'review');assert.equal(calls,before);await assert.rejects(restarted.reconcile(artist.id,id),e=>e.status===503);assert.equal(calls,before);
  });
+
+ await require('./refunds-postgres.cjs')(t,{pool,service,api,register,fresh,paid,webhook,commerce,refunds,payments,refundCount:()=>refundCalls,setRefundTimeout:v=>{refundTimeout=v;}});
 
 };
