@@ -1,0 +1,40 @@
+LAE-MUSIC milestone 6 verification
+Commit: d434f778a61b884daeb86560b705b45ac89e9195
+Run: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40211884076
+Application and PostgreSQL jobs: success
+External provider, FX, music and storage transports are fixtures. No real sandbox or live payment was made.
+
+Application:
+All 31 Sonic static invariants passed. These are not database or provider integration tests.
+# tests 107
+# pass 107
+# fail 0
+# tests 1
+# pass 1
+# fail 0
+PASS browser journeys at desktop, tablet and mobile sizes; all external services mocked.
+
+PostgreSQL 16:
+    ok 42 - refund requests require purchase ownership and admin review, without revoking benefits on request
+    ok 43 - concurrent admin refund submissions reserve once and independently verified NGN full refund reverses USD once
+    ok 44 - a timeout after provider acceptance survives restart and never submits a second refund
+    ok 45 - partial refunds hold product benefits without inventing proration or reversing a full sale
+    ok 46 - mismatched refund currency or original provider transaction cannot revoke another purchase
+    ok 47 - signed dispute notices hold entitlements without creating refund evidence or journal reversals
+    ok 48 - full refunded purchased generation remains in history but cannot be reserved or counted as available
+    ok 49 - consumed studio purchases cannot be submitted for refund without an approved consumed-service policy
+    ok 50 - full refunds reverse pending direct commissions and leave registration and original paid evidence intact
+    ok 51 - failed reversal persistence keeps a durable benefit hold, rolls back journals and recovers once
+    ok 52 - cleared commissions require reconciliation and block both new withdrawals and approval of reserved requests
+    ok 53 - upload publication rechecks refund holds after storage verification and preserves pending source data
+    ok 54 - a dispute delivered before charge confirmation is retained and prevents later fulfillment
+    ok 55 - refund evidence and reversal journals are append-only and the commerce report accepts explicit reversals
+    ok 56 - protected reports execute against actual schemas and approvals cannot send money
+    ok 57 - restart retains account/financial data and does not repeat migrations or credit campaigns
+# tests 58
+# pass 58
+# fail 0
+
+Refund dashboard visual review: desktop and mobile inspected from run 40211525089. Tablet browser journey also passed.
+No Render deployment or production merge. Live payments and Flutterwave refunds disabled.
+
