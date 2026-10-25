@@ -29,6 +29,8 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    await client.query('SELECT id FROM creators WHERE id=$1 FOR UPDATE',[user.id]);
    const active=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes'",[user.id]);
    if(active.rows[0].n>0){await client.query('ROLLBACK');return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true}
+   const daily=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
+   if(daily.rows[0].n>=5){await client.query('ROLLBACK');return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true}
    const sub=await client.query("SELECT id,plan FROM artist_subscriptions WHERE artist_id=$1 AND status='paid' AND starts_at<=NOW() AND expires_at>NOW() ORDER BY expires_at DESC LIMIT 1 FOR UPDATE",[user.id]);
    if(!sub.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'An active paid artist package is required to generate music.'}),true}
    const limits={starter:2,growth:3,professional:6};
