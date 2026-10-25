@@ -36,4 +36,8 @@ for(const [needle,label] of [
  ["await release()","Failed request credit release"],
  ["status==='failed'","Failed task credit refund"]
 ])assert(sonic.includes(needle),label);
+contains("if(p==='/api/artist/studio-history'","Artist studio generation history API");
+contains("if(p==='/api/artist/studio-allowance'","Artist generation allowance API");
+assert(sonic.includes("SELECT id FROM creators WHERE id=$1 FOR UPDATE"),'Per-artist concurrent generation serialization');
+assert(sonic.includes("const active=await client.query"),'Active generation check inside locked transaction');
 console.log('LAE-MUSIC: server syntax, unified dashboard, referral invariants and onboarding scripts passed.');
