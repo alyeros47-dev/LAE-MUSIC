@@ -19,7 +19,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   // A saved voice is optional. Only look up a persona when the member explicitly opts in.
     const recent=await pool.query("SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('pending','running') AND created_at>NOW()-INTERVAL '15 minutes')::int AS active FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
   if(recent.rows[0].active>0)return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true;
-  if(recent.rows[0].total>=5)return send(res,429,{error:'Testing limit: 5 generation requests per account per 24 hours.'}),true;
+  if(recent.rows[0].total>=5)return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true;
   let voiceId=null;
   if(b.useVoice===true){const v=await pool.query("SELECT persona_id FROM artist_voice_profiles WHERE creator_id=$1 AND status='ready'",[user.id]);voiceId=v.rows[0]?.persona_id;if(!voiceId)return send(res,409,{error:'Train your voice profile before selecting Use My Voice'}),true}
   // Reserve one included generation atomically before calling the paid music provider.
