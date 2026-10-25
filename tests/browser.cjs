@@ -1,0 +1,64 @@
+'use strict';
+// Isolated browser fixtures: no provider, payment, storage or production data is contacted.
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {runtime}=require('./runtime.cjs');
+const {chromium}=require(process.env.LAE_PLAYWRIGHT_MODULE||'playwright');
+const tracks=Array.from({length:10},(_,i)=>({id:String(i+1),title:'Test release '+String(i+1).padStart(2,'0'),artist:'Test artist '+(i%3+1),artist_id:String(i%3+1),genre:['Afrobeats','Highlife','Amapiano'][i%3],description:'Isolated browser test fixture.',plays:i*8,status:'published',published_at:'2026-10-01T10:00:00Z'}));
+function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');b.writeUInt32LE(36+length,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(8000,24);b.writeUInt32LE(16000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(length,40);return b;}
+(async()=>{
+ const app=await runtime(),audio=wav();const browser=await chromium.launch({headless:true,...(process.env.LAE_CHROMIUM_PATH?{executablePath:process.env.LAE_CHROMIUM_PATH}:{}),args:['--no-sandbox','--disable-dev-shm-usage']});
+ const evidence=[];
+ try{for(const [label,viewport]of [['desktop',{width:1440,height:1000}],['mobile',{width:390,height:844}]]){
+  const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  let session={artist:null,listener:null,admin:false};let playlists=[];const generationKeys=[];const calls=[];
+  await context.route('https://lae.test/**',async route=>{
+   const request=route.request(),url=new URL(request.url()),p=url.pathname;let data={},status=200;try{data=request.postDataJSON()||{};}catch{}
+   calls.push({p,method:request.method()});
+   const send=(body,code=200)=>route.fulfill({status:code,contentType:'application/json',body:JSON.stringify(body)});
+   if(p==='/__test__/audio.wav'){const range=request.headers().range;if(range){const m=/bytes=(\d+)-(\d*)/.exec(range);if(m){const start=Number(m[1]),end=m[2]?Math.min(Number(m[2]),audio.length-1):audio.length-1;return route.fulfill({status:206,headers:{'Content-Type':'audio/wav','Accept-Ranges':'bytes','Content-Range':`bytes ${start}-${end}/${audio.length}`},body:audio.subarray(start,end+1)});}}return route.fulfill({contentType:'audio/wav',body:audio});}
+   if(p.endsWith('/cover-image')||p==='/api/artist/photo')return route.fulfill({contentType:'image/svg+xml',body:fs.readFileSync('web/artwork.svg')});
+   if(p==='/api/platform/session')return send(session);
+   if(p==='/api/platform/discover')return send({tracks:tracks.filter(t=>(!url.searchParams.get('genre')||url.searchParams.get('genre')===t.genre)&&(!url.searchParams.get('q')||t.title.includes(url.searchParams.get('q')))),genres:[{genre:'Afrobeats'},{genre:'Highlife'},{genre:'Amapiano'}],artists:[1,2,3].map(id=>({id,display_name:'Test artist '+id,tracks:3,plays:90}))});
+   if(p==='/api/music/artists')return send({artists:[1,2,3].map(id=>({id,display_name:'Test artist '+id,track_count:3,plays:90}))});
+   if(p==='/api/music/artist'){const id=url.searchParams.get('id');return send({artist:{id,display_name:'Test artist '+id},tracks:tracks.filter(t=>t.artist_id===id)});}
+   if(p==='/api/platform/artist-profile')return send({artist:{id:url.searchParams.get('id'),display_name:'Test artist 1',bio:'An isolated test biography.'}});
+   if(/^\/api\/music\/track\/\d+$/.test(p))return send({track:tracks.find(t=>t.id===p.split('/').at(-1))});
+   if(p.endsWith('/stream'))return send({url:'https://lae.test/__test__/audio.wav'});
+   if(p==='/api/listener/song-engagement')return send({likes:3,comments:0,liked:false});
+   if(p==='/api/listener/comments')return send({comments:[],message:'Comment published'});
+   if(p==='/api/listener/favorites')return send({artists:[]});
+   if(['/api/listener/register','/api/listener/login','/api/register','/api/login'].includes(p)){const u={id:7,display_name:data.name||'Test account',email:data.email,plan:'starter',membership_status:'pending_payment'};session[p.includes('/listener/')?'listener':'artist']=u;return send({user:u},p.endsWith('register')?201:200);}
+   if(p==='/api/platform/library')return send({likes:tracks.slice(0,2),history:tracks.slice(2,4),playlists});
+   if(p==='/api/listener/playlists'){if(request.method()==='POST'){playlists.push({id:1,name:data.name,song_count:0});return send({playlist:playlists[0]},201);}return send({playlists});}
+   if(p==='/api/listener/playlist/tracks')return send({tracks:tracks.slice(0,2),ok:true});
+   if(p==='/api/platform/artist-overview')return send({artist:session.artist,stats:{published:2,plays:120,followers:3},activity:[],tracks:tracks.slice(0,2)});
+   if(p==='/api/artist/subscription')return send({plan:'starter',artist_features_active:true,uploads_used:2,upload_limit:7,studio_generations_included:2,subscription:{expires_at:'2027-10-01T00:00:00Z'}});
+   if(p==='/api/music/status')return send({uploadsEnabled:true});
+   if(p==='/api/artist/studio-allowance')return send({active:true,included_generations:2,remaining_generations:2});
+   if(p==='/api/platform/capabilities')return send({payments:false,payouts:false,music_provider_configured:true,lyrics_configured:true});
+   if(p==='/api/artist/studio-history')return send({generations:[]});
+   if(p==='/api/generation/wallet')return send({credits:4});
+   if(p==='/api/music/sonic/create'){generationKeys.push(request.headers()['idempotency-key']);return send({error:'Provider acceptance is unresolved. Do not retry with a new request.',reference:'sonic-test-reservation',status:'verification_required'},503);}
+   if(p==='/api/platform/partners-overview')return send({stats:{verified_sales:0,team_sales:0},monthly:[]});
+   if(p==='/api/affiliate/earnings')return send({totals:[],history:[]});
+   if(p==='/api/affiliate/product-links')return send({links:{starter:'https://lae.test/start?ref=7&product=starter'}});
+   if(p==='/api/admin/login'){session.admin=true;return send({ok:true});}
+   if(p==='/api/platform/admin/overview')return send({stats:{artists:1,listeners:1,tracks:10,plays:120,active_subscriptions:1,active_generations:0,pending_withdrawals:0}});
+   if(p==='/api/platform/admin/report')return send({rows:[]});
+   if(['/api/listener/history','/api/listener/song-like'].includes(p))return send({ok:true});
+   const r=await app.request(p+url.search,{method:request.method(),body:request.postData()||undefined,headers:request.headers()});return route.fulfill({status:r.status||404,headers:r.headers,body:r.body});
+  });
+  await page.goto('https://lae.test/');await page.getByRole('heading',{name:'Fresh off the press'}).waitFor();assert.equal(await page.locator('.song-card').count(),10);
+  await page.locator('[data-play="1"]').click();await page.waitForFunction(()=>!document.getElementById('audio').paused);const identity=await page.evaluate(()=>{window.__playerIdentity=document.getElementById('audio');return true;});assert(identity);
+  if(label==='mobile')await page.getByRole('button',{name:'Open navigation',exact:true}).click();await page.locator('#primary-nav a[href="/artists"]').click();await page.getByRole('heading',{name:'Original voices. Real stories.'}).waitFor();assert(await page.evaluate(()=>window.__playerIdentity===document.getElementById('audio')&&!document.getElementById('audio').paused));
+  await page.getByRole('button',{name:'Open queue'}).click();await page.getByRole('heading',{name:'Up next'}).waitFor();assert.equal(await page.locator('#queue-list .song-row').count(),10);await page.getByRole('button',{name:'Close queue',exact:true}).click();
+  await page.goto('https://lae.test/join?role=listener&mode=register');await page.getByLabel('Display name').fill('Browser Listener');await page.getByLabel('Email address').fill('listener@test.invalid');await page.getByLabel('Password',{exact:true}).fill('LongOriginalPass123');await page.getByLabel('Confirm password').fill('LongOriginalPass123');await page.getByRole('button',{name:'Create free account'}).click();await page.getByRole('heading',{name:'Your library.'}).waitFor();
+  await page.getByRole('button',{name:'New playlist'}).click();await page.getByLabel('Playlist name').fill('Test soundtrack');await page.getByRole('button',{name:'Create playlist',exact:true}).click();await page.getByText('Test soundtrack',{exact:true}).waitFor();
+  await page.goto('https://lae.test/join?role=artist&mode=register');await page.getByLabel('Display name').fill('Browser Artist');await page.getByLabel('Email address').fill('artist@test.invalid');await page.getByLabel('Country').fill('Nigeria');await page.getByLabel('Password',{exact:true}).fill('LongOriginalPass123');await page.getByLabel('Confirm password').fill('LongOriginalPass123');await page.getByRole('button',{name:'Create free account'}).click();await page.getByRole('heading',{name:/Make your next move/}).waitFor();
+  await page.goto('https://lae.test/studio');await page.getByLabel('Song title',{exact:true}).fill('Isolated browser test song');await page.getByLabel('Lyrics',{exact:true}).fill('Original words for an isolated browser test of generation safety.');await page.getByLabel('Music style & arrangement').fill('Warm Highlife guitars and gentle percussion');await page.getByRole('checkbox').check();await page.getByRole('button',{name:/Generate music/}).click();await page.getByText(/Reference: sonic-test-reservation/).waitFor();await page.getByRole('button',{name:/Generate music/}).click();await page.waitForFunction(()=>!document.querySelector('#studio-form button[type=submit]').disabled);assert.equal(generationKeys.length,2);assert(generationKeys[0]);assert.equal(generationKeys[0],generationKeys[1]);
+  await page.goto('https://lae.test/partners');await page.getByRole('heading',{name:'Your connections. Real possibility.'}).waitFor();assert.equal(await page.getByText('Free registration. Commissions from verified product sales.',{exact:true}).count(),1);
+  await page.goto('https://lae.test/admin/console');await page.getByLabel('Administrator key').fill('isolated-browser-test-key');await page.getByRole('button',{name:'Sign in securely'}).click();await page.getByRole('heading',{name:'The control room.'}).waitFor();
+  await page.goto('https://lae.test/');await page.getByRole('heading',{name:'Fresh off the press'}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:path.join('artifacts',label+'-home.png'),fullPage:true});
+  assert.deepEqual(errors,[]);evidence.push({viewport:label,checks:['public discovery','real audio element with test WAV','playback survives navigation','queue','listener registration UI','playlist creation','artist registration UI','studio ambiguous retry key','free partners','admin sign-in UI','no horizontal page overflow','no uncaught page errors'],api:'isolated fixtures, not live services',requests:calls.length});await context.close();
+ }fs.writeFileSync('artifacts/browser-evidence.json',JSON.stringify(evidence,null,2));console.log('PASS browser journeys at desktop and mobile sizes; all external services mocked.');}finally{await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

@@ -14,7 +14,7 @@ const cases=[
  ['atomically replaces provisional task reference',source.includes("UPDATE sonic_test_tasks SET task_id=$1 WHERE task_id=$2 AND creator_id=$3 RETURNING task_id")],
  ['atomically replaces provisional usage reference',source.includes("UPDATE artist_studio_usage SET generation_reference=$1 WHERE generation_reference=$2 AND artist_id=$3 RETURNING id")],
  ['releases failed reservation',source.includes("DELETE FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")&&source.includes("DELETE FROM artist_studio_usage WHERE generation_reference=$1 AND artist_id=$2")],
- ['validates provider task identifier',source.includes("Music provider returned an invalid task ID.")],
+ ['validates provider task identifier',source.includes("The music provider responded without a usable task reference.")],
  ['enforces task ownership for status',source.includes("SELECT task_id,status FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")],
  ['enforces task ownership for WAV',source.includes("SELECT task_id FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2 AND status='succeeded'")],
  ['releases credit on failed task',source.includes("if(finalStatus==='failed')await db.query")],
@@ -22,7 +22,7 @@ const cases=[
  ['task schema initialized outside request handler',!source.includes('CREATE TABLE IF NOT EXISTS sonic_test_tasks')],
  ['does not lock schema on every request',!source.includes('ALTER TABLE sonic_test_tasks')],
  ['terminal failed status skips provider request',source.includes("owned.rows[0].status==='failed'")],
- ['refunds failed task transactionally',source.includes("if(status==='failed')await db.query")],
+ ['refunds failed task transactionally',source.includes("if(finalStatus==='failed')await db.query")],
  ['validates locked artist account',source.includes('if(!locked.rowCount)')],
  ['rejects invalid JSON with client error',source.includes('Invalid JSON request')],
  ['rejects oversized request with 413',source.includes('e.status=413')],
@@ -39,3 +39,4 @@ const cases=[
 ];
 for(const [label,ok] of cases){assert(ok,label);console.log('PASS',label)}
 console.log('All '+cases.length+' Sonic static invariants passed. These are not database or provider integration tests.');
+

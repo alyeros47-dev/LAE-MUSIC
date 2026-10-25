@@ -1,0 +1,122 @@
+
+> lae-music@0.8.0-rc.1 test
+> node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs
+
+LAE-MUSIC: server syntax, unified dashboard, referral invariants and onboarding scripts passed.
+PASS reserves before contacting provider
+PASS locks artist before quota checks
+PASS checks active generation inside transaction
+PASS checks 24-hour limit inside transaction
+PASS requires verified active subscription
+PASS reserves generation usage
+PASS atomically replaces provisional task reference
+PASS atomically replaces provisional usage reference
+PASS releases failed reservation
+PASS validates provider task identifier
+PASS enforces task ownership for status
+PASS enforces task ownership for WAV
+PASS releases credit on failed task
+PASS handles cancelled provider tasks
+PASS task schema initialized outside request handler
+PASS does not lock schema on every request
+PASS terminal failed status skips provider request
+PASS refunds failed task transactionally
+PASS validates locked artist account
+PASS rejects invalid JSON with client error
+PASS rejects oversized request with 413
+PASS retains reservations after ambiguous provider failures
+PASS returns reconciliation reference on uncertain failures
+PASS does not refund accepted provider task without ID
+PASS locks unresolved provider reservations beyond 15 minutes
+PASS preflight includes older unresolved reservations
+PASS keeps per-artist transactional lock
+PASS transient provider errors preserve credits for reconciliation
+PASS unresolved provisional task returns reconciliation state
+PASS preserves terminal state during concurrent status polls
+PASS refunds based on committed terminal state
+All 31 Sonic static invariants passed. These are not database or provider integration tests.
+[sonic/create] provider failure 400 Bad song uncertain_acceptance=false reservation=
+[sonic/create] provider failure 503 Provider busy uncertain_acceptance=true reservation=sonic-47dfc91a51d283c06a8180573697e800
+[sonic/create] provider failure  Connection reset uncertain_acceptance=true reservation=sonic-3c4fd8a08ae3d3cc3a6946539964a0ee
+PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
+No DATABASE_URL: homepage and demo enabled; accounts and persistent admin settings disabled
+LAE Music v0.8.0-rc.1 listening on 3000
+Request error: Error: The music database is unavailable. Please try again shortly.
+    at fail (/workspace/LAE-MUSIC/lib/transactions.js:4:49)
+    at requireDb (/workspace/LAE-MUSIC/lib/platform.js:34:43)
+    at Object.handler (/workspace/LAE-MUSIC/lib/platform.js:88:5)
+    at server.js:190:20
+    at Object.request (/workspace/LAE-MUSIC/tests/runtime.cjs:13:9)
+    at TestContext.<anonymous> (/workspace/LAE-MUSIC/tests/router.test.cjs:4:319)
+    at async Test.run (node:internal/test_runner/test:1389:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+Database ready
+LAE Music v0.8.0-rc.1 listening on 3000
+✔ withdrawal computes 3% in minor units and rejects invalid financial input (1.780351ms)
+✔ balanced transfers replay without duplicate money and reject reused references (1.36202ms)
+✔ parallel withdrawal requests cannot reserve more than the available balance (serialized mock) (1.031383ms)
+✔ withdrawal retry is idempotent and conflicting input is rejected (0.876459ms)
+✔ rejection releases reserved funds exactly once; approval cannot send or mark paid (1.442472ms)
+✔ approval holds gross including fee; currencies stay independent (0.694065ms)
+✔ lyrics reservation debit and ledger roll back together on storage failure (0.620945ms)
+✔ lyrics retries do not debit twice and completed requests replay original output (0.729328ms)
+✔ lyrics refunds are durable, auditable, and safe under duplicate calls (4.960958ms)
+✔ idempotency rolls back business changes when response recording fails (0.476337ms)
+✔ additive migration is versioned, repeatable, checksum-checked and transaction-locked (mock) (1.236913ms)
+✔ public shell renders without a database, uses CSP and never needs registration (2.263749ms)
+✔ shell HEAD sends no body and rejects arbitrary methods (0.283186ms)
+✔ unconfigured checkout and webhook never claim money was received (0.261174ms)
+✔ cross-site mutations are blocked centrally, including legacy auth (0.221133ms)
+✔ auth attempts are rate limited without leaking data (0.482787ms)
+✔ sensitive reports require administrator authorization before querying (0.270167ms)
+✔ library and artist finances enforce their account types (0.24544ms)
+✔ artist gift earnings cannot be fetched by another artist (0.337017ms)
+✔ catalog metadata uses owner-scoped parameters and returns unavailable for foreign IDs (0.373592ms)
+✔ discovery search values are parameterized and order is whitelisted (0.420904ms)
+✔ free affiliate status does not create enrollment or recruitment rewards (0.27237ms)
+✔ real server routing without a database keeps public pages open and payments safely unavailable (13.366943ms)
+✔ listener registration, login, cookie authentication and logout run through actual server handlers (mock database) (159.128195ms)
+Database ready
+LAE Music v0.8.0-rc.1 listening on 3000
+✔ artist/partner registration is free, never activates a paid subscription, and ordinary accounts cannot administer (45.457204ms)
+Database ready
+LAE Music v0.8.0-rc.1 listening on 3000
+✔ malformed, null and array JSON produce client errors; registration confirmation is validated (4.600577ms)
+Database ready
+LAE Music v0.8.0-rc.1 listening on 3000
+✔ listener password changes verify the current password and invalidate old sessions (264.717863ms)
+Database ready
+LAE Music v0.8.0-rc.1 listening on 3000
+✔ administrator session is signed, requires the configured key, and grants protected access only after login (3.150664ms)
+✔ queue advances, respects repeat-one on ended, and stops at the end with repeat off (0.224017ms)
+✔ shuffle excludes the current track and previous follows actual history (0.129775ms)
+✔ queue reordering and removal preserve current song and disallow removal of the playing item (0.259441ms)
+✔ time formatting handles invalid duration and empty queues safely (0.127952ms)
+✔ real player driver fetches platform audio, survives navigation outside its DOM, and ignores stale stream requests (2.029335ms)
+✔ player restore keeps queue and position without autoplay or persisting expiring signed stream URLs (0.64435ms)
+✔ uploaded file signatures reject renamed HTML or executables (0.193061ms)
+✔ storage verification requests only a prefix and closes the read stream (0.467284ms)
+✔ studio requires a durable request key before reserving quota or calling provider (1.530764ms)
+✔ same studio request replays the owned task without another provider call (1.044282ms)
+✔ studio refuses a conflicting payload under an existing key (0.647595ms)
+✔ definitively failed studio requests replay failure without consuming quota (0.632912ms)
+✔ gift retries do not debit twice; recorded NGN split remains 70/30 (0.884591ms)
+✔ gift conflicting retry and insufficient funds cannot mutate balances (0.796439ms)
+✔ push links cannot open a different origin using protocol-relative URLs (0.714696ms)
+✔ push navigation posts to an existing player document instead of reloading it (0.693855ms)
+✔ public streaming signs a real platform object without requiring a listener account (storage mocked) (8.483472ms)
+✔ upload proxy rejects another artist’s pending target before reaching storage (0.952564ms)
+✔ publication rejects forged audio bytes even if stored MIME and length match (23.477094ms)
+✔ concurrent upload reservations respect the final annual slot inside a transaction (serialized mock) (4.626024ms)
+✔ approved annual package prices, royalty shares, quotas and extra-generation prices are preserved (0.149014ms)
+✔ trusted verified-purchase helper applies only approved direct sale percentages (0.33169ms)
+✔ self-referrals, invalid referrers, and missing products do not mint a commission (0.118608ms)
+✔ team relationship records verified product volume without minting recruitment rewards (0.217738ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 579.649066

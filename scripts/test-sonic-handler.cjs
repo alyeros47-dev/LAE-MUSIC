@@ -5,11 +5,11 @@ const vm=require('node:vm');
 const source=fs.readFileSync('musicapi-sonic.js','utf8');
 async function run({method='GET',path='/api/music/sonic/status',url=path+'?id=valid_task_123',user={id:7},origin=true,key='test',queries=[],transactions=[],requestBody='',fetchImpl}={}){
  const calls=[];let network=0;
- const pool={query:async(sql,args)=>{calls.push({sql,args});if(!queries.length)throw Error('Unexpected SQL: '+sql);const item=queries.shift();if(item.match&&!String(sql).includes(item.match))throw Error('Expected SQL '+item.match+' got '+sql);return item.result||{rowCount:0,rows:[]}},connect:async()=>({query:async(sql,args)=>{calls.push({sql,args});if(!transactions.length)throw Error('Unexpected transaction SQL: '+sql);const item=transactions.shift();if(item.match&&!String(sql).includes(item.match))throw Error('Expected transaction SQL '+item.match+' got '+sql);return item.result||(String(sql).includes('UPDATE sonic_test_tasks')?{rowCount:1,rows:[{status:args[0]}]}:{rowCount:1,rows:[]})},release(){}})};
+ const pool={query:async(sql,args)=>{calls.push({sql,args});if(sql.includes('studio_request_keys'))return {rowCount:0,rows:[]};if(!queries.length)throw Error('Unexpected SQL: '+sql);const item=queries.shift();if(item.match&&!String(sql).includes(item.match))throw Error('Expected SQL '+item.match+' got '+sql);return item.result||{rowCount:0,rows:[]}},connect:async()=>({query:async(sql,args)=>{calls.push({sql,args});if(sql.includes('studio_request_keys'))return {rowCount:0,rows:[]};if(!transactions.length)throw Error('Unexpected transaction SQL: '+sql);const item=transactions.shift();if(item.match&&!String(sql).includes(item.match))throw Error('Expected transaction SQL '+item.match+' got '+sql);return item.result||(String(sql).includes('UPDATE sonic_test_tasks')?{rowCount:1,rows:[{status:args[0]}]}:{rowCount:1,rows:[]})},release(){}})};
  const response={status:0,body:null,writeHead(status){this.status=status},end(payload){this.body=JSON.parse(payload)}};
  const sandbox={module:{exports:null},console,process:{env:{MUSICAPI_API_KEY:key}},URL,AbortController,setTimeout,clearTimeout,fetch:async(...args)=>{network++;if(!fetchImpl)throw Error('Unexpected provider request');return fetchImpl(...args)},require};
  vm.runInNewContext(source,sandbox,{filename:'musicapi-sonic.js'});
- const req={method,url,async *[Symbol.asyncIterator](){yield requestBody}};
+ const req={method,url,headers:{'idempotency-key':'test_request_key_12345'},async *[Symbol.asyncIterator](){yield requestBody}};
  await sandbox.module.exports(req,response,path,{me:async()=>user,pool,validOrigin:()=>origin});
  return {status:response.status,body:response.body,calls,network};
 }
@@ -54,3 +54,4 @@ async function run({method='GET',path='/api/music/sonic/status',url=path+'?id=va
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(),transactions:reserve(),fetchImpl:async()=>{throw Error('Connection reset')}});assert.equal(x.status,503);assert.equal(x.body.status,'verification_required');
  console.log('PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).');
 })().catch(e=>{console.error(e);process.exitCode=1});
+

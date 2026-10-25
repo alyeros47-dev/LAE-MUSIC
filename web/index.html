@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101210"><meta name="description" content="Discover independent African music. Find your next favorite artist, create original music, and build your audience with LAE-MUSIC.">
+<title>LAE-MUSIC — Independent sound. Infinite possibility.</title>
+<link rel="icon" href="/web/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/web/ui.css">
+<script type="module" src="/web/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#page">Skip to content</a>
+<div class="shell">
+<aside class="sidebar" id="sidebar" aria-label="Main navigation">
+<a class="brand" href="/" data-nav><img src="/web/mark.svg" width="38" height="38" alt=""><span>LAE<span class="brand-light">MUSIC</span><small>THE SOUND OF POSSIBILITY</small></span></a>
+<button class="mobile-close icon-button" id="close-menu" aria-label="Close navigation">×</button>
+<p class="nav-label">YOUR WORLD OF MUSIC</p>
+<nav id="primary-nav">
+<a href="/" data-nav data-icon="home">Discover</a><a href="/artists" data-nav data-icon="people">Artists</a><a href="/library" data-nav data-icon="library">Your library</a>
+</nav>
+<p class="nav-label">MAKE YOUR NEXT MOVE</p>
+<nav><a href="/workspace" data-nav data-icon="grid">Artist workspace</a><a href="/studio" data-nav data-icon="spark">AI music studio<span class="nav-badge">CREATE</span></a><a href="/partners" data-nav data-icon="link">Partners network</a></nav>
+<div class="sidebar-bottom"><div class="creator-invite"><span class="eyebrow">MADE FOR INDEPENDENTS</span><h3>Your sound.<br>Your next chapter.</h3><p>Bring your music to a new audience.</p><a class="button secondary small" href="/join?role=artist" data-nav>Become an artist <span>↗</span></a></div><a class="account-link" href="/account" data-nav><span class="avatar" id="account-avatar">L</span><span id="account-label">Your account<small>Listen. Create. Connect.</small></span><span>↗</span></a></div>
+</aside>
+<button id="menu-backdrop" class="menu-backdrop" aria-label="Close navigation" hidden></button>
+<div class="main-shell">
+<header class="topbar"><button class="icon-button mobile-menu" id="open-menu" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">☰</button><form class="global-search" id="global-search" role="search"><span id="search-icon" aria-hidden="true"></span><label class="sr-only" for="global-query">Search songs and artists</label><input id="global-query" name="q" placeholder="Search songs, artists, and sounds" autocomplete="off"><kbd>/</kbd></form><div class="header-actions"><span class="independent"><i></i> Independent by nature</span><a class="button secondary small" href="/join" data-nav id="header-signin">Sign in <span>↗</span></a></div></header>
+<main id="page" tabindex="-1" aria-live="polite"><div class="skeleton-page" aria-label="Loading music"><div></div><div></div><div></div></div></main>
+<footer class="site-footer"><a href="/" data-nav>LAE-MUSIC</a><span>Independent sound. Infinite possibility.</span><a href="/partners" data-nav>Partners & Affiliate Network</a></footer>
+</div>
+</div>
+<section id="player" class="player" aria-label="Music player" hidden>
+<button id="player-art-button" class="art-button" aria-label="Expand music player"><img id="player-art" alt="" src="/web/artwork.svg" width="56" height="56"></button>
+<div class="player-identity"><button id="player-title" class="text-button">Choose your next sound</button><a id="player-artist" href="/artists" data-nav>LAE-MUSIC</a><span id="playback-status" role="status"></span></div>
+<button class="icon-button optional" id="player-like" aria-label="Like current song" aria-pressed="false">♡</button>
+<div class="transport"><div class="transport-buttons"><button class="icon-button optional" id="shuffle" aria-label="Shuffle" aria-pressed="false">⤨</button><button class="icon-button" id="previous" aria-label="Previous track">Ⅰ◀</button><button class="play-toggle" id="play-toggle" aria-label="Play">▶</button><button class="icon-button" id="next" aria-label="Next track">▶Ⅰ</button><button class="icon-button optional" id="repeat" aria-label="Repeat off" aria-pressed="false">↻</button></div><div class="timeline"><span id="elapsed">0:00</span><label class="sr-only" for="seek">Playback position</label><input id="seek" type="range" min="0" max="1000" value="0" disabled><span id="duration">0:00</span></div></div>
+<div class="player-tools"><button id="queue-toggle" class="icon-button" aria-label="Open queue">☷</button><button id="mute" class="icon-button optional" aria-label="Mute">◖</button><label class="sr-only" for="volume">Volume</label><input id="volume" class="optional" type="range" min="0" max="1" step="0.01" value="0.8"><button id="expand" class="icon-button optional" aria-label="Expand player">⤢</button></div>
+<audio id="audio" preload="metadata"></audio>
+</section>
+<dialog id="expanded-player" class="expanded-player"><button class="icon-button dialog-close" data-close aria-label="Close expanded player">×</button><p class="eyebrow">NOW PLAYING · LAE-MUSIC</p><img id="expanded-art" src="/web/artwork.svg" alt="Album artwork" width="360" height="360"><h2 id="expanded-title">Your next sound</h2><p id="expanded-artist"></p><div class="expanded-timeline"><span id="expanded-elapsed">0:00</span><label class="sr-only" for="expanded-seek">Expanded player playback position</label><input id="expanded-seek" type="range" min="0" max="1000" value="0" disabled><span id="expanded-duration">0:00</span></div><div class="expanded-controls"><button class="icon-button" id="expanded-previous" aria-label="Previous track in expanded player">Ⅰ◀</button><button class="button" id="expanded-toggle">Play / pause</button><button class="icon-button" id="expanded-next" aria-label="Next track in expanded player">▶Ⅰ</button></div><label class="expanded-volume">Volume<input id="expanded-volume" type="range" min="0" max="1" step="0.01" value="0.8"></label><button class="button secondary" id="expanded-queue">View queue</button></dialog>
+<dialog id="queue-dialog" class="queue-dialog"><button class="icon-button dialog-close" data-close aria-label="Close queue">×</button><p class="eyebrow">YOUR LISTENING SESSION</p><h2>Up next</h2><p class="muted">Choose a track, move it up, or remove it.</p><div id="queue-list"></div><button class="button secondary" id="queue-clear">Keep current track only</button></dialog>
+<dialog id="action-dialog"><button class="icon-button dialog-close" data-close aria-label="Close dialog">×</button><div id="action-content"></div></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+</body></html>

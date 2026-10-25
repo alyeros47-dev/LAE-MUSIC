@@ -1,0 +1,11 @@
+'use strict';
+require('./services.test.cjs');
+require('./platform.test.cjs');
+require('./router.test.cjs');
+require('./player.test.cjs');
+require('./uploads.test.cjs');
+require('./sonic-idempotency.test.cjs');
+require('./gifts.test.cjs');
+require('./notifications.test.cjs');
+require('./music-routes.test.cjs');
+require('./commissions.test.cjs');
