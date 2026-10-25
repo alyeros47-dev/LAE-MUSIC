@@ -23,7 +23,7 @@ export class PlaybackQueue {
 export class MusicPlayer {
   constructor({ api, toast, onLike, onDetail }) {
     this.api = api; this.toast = toast; this.onLike = onLike; this.onDetail = onDetail;
-    this.queue = new PlaybackQueue(); this.audio = $('audio'); this.request = 0; this.controller = null; this.counted = false; this.listened = 0; this.lastTime = 0; this.resumeAt = 0;
+    this.queue = new PlaybackQueue(); this.audio = $('audio'); this.request = 0; this.controller = null; this.counted = false; this.playRecordKey=null; this.listened = 0; this.lastTime = 0; this.resumeAt = 0;
     this.audio.volume = 0.8;
     $('play-toggle').onclick = () => this.toggle(); $('expanded-toggle').onclick = () => this.toggle();
     $('expanded-previous').onclick=()=>$('previous').click(); $('expanded-next').onclick=()=>$('next').click();
@@ -61,7 +61,7 @@ export class MusicPlayer {
   async playIndex(index, autoplay = true) {
     if (index < 0 || index >= this.queue.tracks.length) return;
     const request = ++this.request; this.controller?.abort(); this.controller = new AbortController();
-    this.queue.index = index; this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.streamFailed = false; this.counted = false; this.listened = 0; this.lastTime = 0;
+    this.queue.index = index; this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.streamFailed = false; this.counted = false; this.playRecordKey=crypto.randomUUID(); this.listened = 0; this.lastTime = 0;
     const track = this.queue.current; this.renderTrack(track); this.renderQueue(); this.message('Preparing your music…'); this.save();
     try {
       const data = await this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`, 'GET', undefined, { signal: this.controller.signal });
@@ -98,11 +98,12 @@ export class MusicPlayer {
     const delta = this.audio.currentTime - this.lastTime; if (!this.audio.paused && delta > 0 && delta < 2) this.listened += delta; this.lastTime = this.audio.currentTime;
     if (!this.counted && this.listened >= Math.min(30, Number.isFinite(this.audio.duration) ? this.audio.duration * .5 : 30)) {
       this.counted = true; const id = this.queue.current?.id;
-      if (id) { this.api(`/api/music/tracks/${id}/play`, 'POST', {}).catch(() => {}); this.api('/api/listener/history', 'POST', { trackId: id }).catch(() => {}); }
+      if (id) { this.recordPlay(id,this.playRecordKey); }
     }
     if (!this.savedAt || Date.now() - this.savedAt > 5000) { this.savedAt = Date.now(); this.save(); }
     if ('mediaSession' in navigator && navigator.mediaSession.setPositionState && Number.isFinite(this.audio.duration) && this.audio.duration > 0) { try { navigator.mediaSession.setPositionState({ duration: this.audio.duration, playbackRate: this.audio.playbackRate, position: Math.min(this.audio.currentTime, this.audio.duration) }); } catch {} }
   }
+  async recordPlay(id,key){try{await this.api(`/api/music/tracks/${id}/play`,'POST',{}, {headers:{'Idempotency-Key':key}});}catch{setTimeout(()=>{this.api(`/api/music/tracks/${id}/play`,'POST',{}, {headers:{'Idempotency-Key':key}}).catch(()=>{});},1500);}}
   openQueue() { this.renderQueue(); if (!$('queue-dialog').open) $('queue-dialog').showModal(); }
   renderQueue() {
     const box = $('queue-list'); box.replaceChildren();

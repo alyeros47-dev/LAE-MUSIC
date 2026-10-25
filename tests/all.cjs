@@ -16,3 +16,4 @@ require('./currency-payments.test.cjs');
 require('./checkout.test.cjs');
 require('./refunds.test.cjs');
 require('./account-security.test.cjs');
+require('./engagement-editorial.test.cjs');
