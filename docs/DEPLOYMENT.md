@@ -6,14 +6,14 @@ This document prepares a reviewable release; it does not authorize a deployment 
 
 1. Review the source diff and `docs/RELEASE.md`. Verify the development branch still descends from the intended main revision and resolve any new upstream changes on the development branch.
 2. Create a disposable PostgreSQL database and a sanitized clone of the production schema/data. Do not point automated tests at production and do not drop production tables. Take and verify a backup before an approved production migration.
-3. Install dependencies under Node 22, generate/review the package lockfile, run an advisory review, and use `npm ci` after that lockfile is committed. Shell package installation was unavailable in the development sandbox; no lockfile has been guessed.
+3. Use Node 22 and `npm ci` with the committed dependency lockfile. It was captured from the successful CI installation, not guessed. That installation reported zero known vulnerabilities; repeat the advisory review before an approved release.
 4. Supply `DATABASE_URL`, a strong `ADMIN_KEY`, R2 account/bucket credentials, `MUSICAPI_API_KEY` and `OPENAI_API_KEY` only through the staging secret manager. `OPENAI_LYRICS_MODEL` must be an allowed model for that project. Review PostgreSQL CA/TLS verification; the old server configuration disables remote certificate verification.
 5. Leave legacy demo activation/payment variables unset. No supported environment toggle in this candidate can activate real checkout, settlement or payouts.
 
 ## Validation commands
 
 ```sh
-npm install
+npm ci
 npm test
 npx playwright install --with-deps chromium
 npm run test:browser
@@ -48,8 +48,12 @@ Lyrics reservations with an interrupted provider response also remain pending. T
 
 ## Render candidate and approval
 
-Keep the existing Node service architecture. Build remains `npm install` until a reviewed lockfile is present, then `npm ci`; start remains `npm start`. Bind uses Render's `PORT`. Use a separately approved staging service/database/bucket, not an automatic production deploy from the development branch. Check `/health`, protected APIs, application logs, migration status and all real integration journeys. Review screenshots and test evidence, then request explicit owner approval for the production merge/deployment.
+Keep the existing Node service architecture. Build is `npm ci`; start remains `npm start`. Bind uses Render's `PORT`. Use a separately approved staging service/database/bucket, not an automatic production deploy from the development branch. Check `/health`, protected APIs, application logs, migration status and all real integration journeys. Review screenshots and test evidence, then request explicit owner approval for the production merge/deployment.
 
 ## Rollback
 
 Prefer rolling application code back while retaining additive tables and data. Do not run destructive down migrations or clear request, financial, subscription, session or user records. Keep the failed candidate logs and reconciliation references. Review the old version's demo-credit startup routines before rollback, since this candidate stops automatically applying the legacy extra-credit campaign at startup. A database restore is a separate approved incident operation, not a normal rollback step.
+
+## Recorded CI evidence
+
+[Run 40184247862](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184247862) passed application checks, browser journeys at 1440×1000 and 390×844, local HTTP routing, and nine PostgreSQL integration checks (one parent journey plus eight subtests) against a fresh disposable PostgreSQL 16 service. The PostgreSQL run uses an explicitly named loopback CI database and fixture credentials; it cannot be pointed at production by merely changing DATABASE_URL. Live R2, music and payment providers are still unverified.

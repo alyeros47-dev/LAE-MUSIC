@@ -42,3 +42,7 @@ Existing gifts allocate 70% to artist and 30% platform in NGN; preserve this sep
 ## Launch gates
 
 Real PostgreSQL migration replay/concurrency tests; verified R2 credentials, CORS and actual audio/upload tests; documented MusicAPI capability and credential tests; payment-provider selection, webhook signature/replay and bank payout verification; approved refund/chargeback/royalty policies; quarterly affiliate decision; production-like full end-to-end and accessibility review. This audit is source evidence, not a declaration of launch readiness.
+
+## Verification follow-up
+
+The new real PostgreSQL CI job confirmed a fresh-install ordering defect: notification/gift/comment-extension DDL ran before its music/comment parent tables. Initialization was reordered without deleting data. Real concurrency testing also required a stable, owner-scoped mapping from provisional studio references to accepted provider task IDs. These fixes, fresh initialization/replay, concurrent money/credit operations and restart preservation passed in CI run 40184247862. Browser and actual HTTP tests also passed there after local sandbox execution was blocked.

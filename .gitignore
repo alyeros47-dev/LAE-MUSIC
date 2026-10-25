@@ -5,3 +5,5 @@ node_modules/
 artifacts/*.png
 artifacts/*.webm
 artifacts/*.json
+artifacts/*.jpg
+artifacts/*.patch

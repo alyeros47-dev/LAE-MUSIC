@@ -14,15 +14,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install
+      - run: npm ci
       - run: npm test
       - run: npm run test:http
-      - name: Preserve resolved dependency lockfile
-        run: |
-          cp package-lock.json artifacts/resolved-package-lock.json
-          node -e "process.stdout.write('LAE_LOCKFILE_BEGIN'+JSON.stringify(require('./package-lock.json'))+'LAE_LOCKFILE_END')"
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+        env:
+          LAE_VISUAL_REVIEW: 'true'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -50,7 +48,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install
+      - run: npm ci
       - run: npm run test:postgres
         env:
           LAE_DB_TESTS: 'true'

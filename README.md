@@ -9,7 +9,7 @@ Music discovery, artist tools, an AI music studio, and **LAE-MUSIC Partners & Af
 Use Node.js 22 (supported runtime minimum: 20). Install dependencies and configure environment variables from `.env.example` in your shell or hosting configuration. The server does not load `.env` automatically.
 
 ```sh
-npm install
+npm ci
 npm start
 ```
 
@@ -26,11 +26,12 @@ npm test
 npx playwright install --with-deps chromium
 npm run test:browser
 npm run test:http
+# Disposable CI database only: npm run test:postgres
 ```
 
 The default suite executes source checks, existing mocked Sonic tests, and behavioral tests of actual request handlers, player logic, transactions, permissions, uploads, referrals and migrations with controlled services. It does **not** establish real PostgreSQL, storage, payment or music-provider compatibility.
 
-The browser runner uses isolated test fixtures at two viewport sizes and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; a successful remote run has not yet been verified in this workspace.
+The browser runner uses isolated test fixtures at two viewport sizes and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; the application, browser, HTTP and isolated PostgreSQL jobs passed in [CI run 40184247862](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184247862).
 
 ## Layout
 
