@@ -32,6 +32,7 @@ const cases=[
  ['locks unresolved provider reservations beyond 15 minutes',source.includes("task_id LIKE 'sonic-%' AND status='pending'")],
  ['preflight includes older unresolved reservations',source.includes("OR (task_id LIKE 'sonic-%' AND status='pending'))")],
  ['keeps per-artist transactional lock',source.includes('SELECT id FROM creators WHERE id=$1 FOR UPDATE')],
+ ['transient provider errors preserve credits for reconciliation',source.includes('providerStatus>=500')&&source.includes('providerStatus===408')],
  ['unresolved provisional task returns reconciliation state',source.includes("if(id.startsWith('sonic-'))return send(res,202")],
  ['preserves terminal state during concurrent status polls',source.includes("CASE WHEN status IN ('succeeded','failed') THEN status ELSE $1 END")],
  ['refunds based on committed terminal state',source.includes("if(finalStatus==='failed')await db.query") ]
