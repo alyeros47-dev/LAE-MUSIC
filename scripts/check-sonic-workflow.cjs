@@ -17,7 +17,7 @@ const cases=[
  ['validates provider task identifier',source.includes("Music provider returned an invalid task ID.")],
  ['enforces task ownership for status',source.includes("SELECT task_id,status FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")],
  ['enforces task ownership for WAV',source.includes("SELECT task_id FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2 AND status='succeeded'")],
- ['releases credit on failed task',source.includes("if(status==='failed')await db.query")],
+ ['releases credit on failed task',source.includes("if(finalStatus==='failed')await db.query")],
  ['handles cancelled provider tasks',source.includes("'cancelled','canceled'")],
  ['task schema initialized outside request handler',!source.includes('CREATE TABLE IF NOT EXISTS sonic_test_tasks')],
  ['does not lock schema on every request',!source.includes('ALTER TABLE sonic_test_tasks')],
@@ -31,7 +31,9 @@ const cases=[
  ['does not refund accepted provider task without ID',!source.includes("if(!/^[a-zA-Z0-9_-]{8,128}$/.test(id)){await release()") ],
  ['locks unresolved provider reservations beyond 15 minutes',source.includes("task_id LIKE 'sonic-%' AND status='pending'")],
  ['preflight includes older unresolved reservations',source.includes("OR (task_id LIKE 'sonic-%' AND status='pending'))")],
- ['keeps per-artist transactional lock',source.includes('SELECT id FROM creators WHERE id=$1 FOR UPDATE')]
+ ['keeps per-artist transactional lock',source.includes('SELECT id FROM creators WHERE id=$1 FOR UPDATE')],
+ ['preserves terminal state during concurrent status polls',source.includes("CASE WHEN status IN ('succeeded','failed') THEN status ELSE $1 END")],
+ ['refunds based on committed terminal state',source.includes("if(finalStatus==='failed')await db.query") ]
 ];
 for(const [label,ok] of cases){assert(ok,label);console.log('PASS',label)}
 console.log('All '+cases.length+' Sonic static invariants passed. These are not database or provider integration tests.');
