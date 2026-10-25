@@ -50,3 +50,5 @@ The connected release-copying/listener collection milestone is described in [mil
 Flutterwave and Paystack are the selected gateways. USD remains the standard currency; the header control displays country-based local estimates with a manual override and clear USD fallback. See [milestone 4](docs/MILESTONE-4.md) for reference-rate coverage, gateway protocol contracts and the remaining merchant/checkout/settlement gates.
 
 The merchant country is Nigeria. [Milestone 5](docs/MILESTONE-5.md) connects the guarded sandbox checkout, exact local-currency verification and original-charge accounting evidence. The committed merchant manifest disables checkout; adding environment keys does not activate production payments.
+
+[Milestone 6](docs/MILESTONE-6.md) adds purchase refund requests, protected administrative review, Paystack sandbox refund verification, original-currency evidence, USD reversal journals and entitlement/commission holds. Flutterwave refunds, partial-refund policy, dispute resolution and live settlement remain release gates.

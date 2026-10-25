@@ -54,7 +54,19 @@ Keep the existing Node service architecture. Build is `npm ci`; start remains `n
 
 ## Rollback
 
+After migration 007 and any refund hold or reversal, do not roll application code back to a version that ignores subscription holds or refunded purchased credits. Keep the compatible entitlement checks, or pause authenticated publishing, generation and financial mutations while preparing a compatible rollback. Public streaming can remain available. Do not clear holds or delete refund records to make an older version run.
+
 Prefer rolling application code back while retaining additive tables and data. Do not run destructive down migrations or clear request, financial, subscription, session or user records. Keep the failed candidate logs and reconciliation references. Review the old version's demo-credit startup routines before rollback, since this candidate stops automatically applying the legacy extra-credit campaign at startup. A database restore is a separate approved incident operation, not a normal rollback step.
+
+## Sandbox refund and dispute operations
+
+Use the same reviewed Nigeria staging manifest and test credentials as sandbox checkout. Live refunds are unsupported. Artists can request a review from Purchases; operators review it in Admin → Refunds. Review notes are visible to the artist. Paystack submission checks the original payment and existing provider refunds, then submits the full original NGN/USD charge amount once. A consumed studio service needs an approved refund policy before submission. Flutterwave refund operations remain disabled pending verified v3 account evidence.
+
+Keep an uncertain case and its original reference. Inspect the provider dashboard for the refund ID and use Check provider refund; this only retrieves evidence. Never retry a POST or change providers after a timeout. `processed` means Paystack reports processing complete, not proof of bank receipt. A full independently verified refund reverses the USD product sale and pending direct commission while preserving the original charge and order. Partial refunds and unresolved disputes hold the affected benefit for review. There is no manual mark-success or hold-release endpoint.
+
+Authenticated lifecycle notifications delivered before charge confirmation quarantine the checkout reference and block a later charge event from granting benefits. Review unfulfilled notices in Audit and the original Checkout report; no receipt or refund success is fabricated. Late payments, unmatched notices, ambiguous bank outcomes and hold release need independently verified evidence and a separately reviewed support decision.
+
+If a commission was already cleared or its pending balance is inconsistent, its status becomes `reconciliation_required`; new USD withdrawals and approvals of reserved USD withdrawals are blocked for that partner. Rejection can still release a reserved withdrawal. Approval never sends funds. Resolve the underlying accounting evidence before adding any payout integration.
 
 ## Recorded CI evidence
 
