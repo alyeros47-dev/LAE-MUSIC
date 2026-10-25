@@ -22,12 +22,27 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   if(recent.rows[0].total>=5)return send(res,429,{error:'Testing limit: 5 generation requests per account per 24 hours.'}),true;
   let voiceId=null;
   if(b.useVoice===true){const v=await pool.query("SELECT persona_id FROM artist_voice_profiles WHERE creator_id=$1 AND status='ready'",[user.id]);voiceId=v.rows[0]?.persona_id;if(!voiceId)return send(res,409,{error:'Train your voice profile before selecting Use My Voice'}),true}
+  // Reserve one included generation atomically before calling the paid music provider.
+  const client=await pool.connect();let reservation=null;
+  try{
+   await client.query('BEGIN');
+   const sub=await client.query("SELECT id,plan FROM artist_subscriptions WHERE artist_id=$1 AND status='paid' AND starts_at<=NOW() AND expires_at>NOW() ORDER BY expires_at DESC LIMIT 1 FOR UPDATE",[user.id]);
+   if(!sub.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'An active paid artist package is required to generate music.'}),true}
+   const limits={starter:2,growth:3,professional:6};
+   const limit=limits[sub.rows[0].plan]||0;
+   const usage=await client.query("SELECT COUNT(*)::int AS used FROM artist_studio_usage WHERE subscription_id=$1",[sub.rows[0].id]);
+   if(usage.rows[0].used>=limit){await client.query('ROLLBACK');return send(res,402,{error:'Your included studio generations are exhausted. Additional generations require a verified purchase.'}),true}
+   const ref='sonic-'+require('node:crypto').randomBytes(16).toString('hex');
+   await client.query("INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)",[sub.rows[0].id,user.id,ref]);
+   await client.query('COMMIT');reservation=ref;
+  }catch(e){try{await client.query('ROLLBACK')}catch{}throw e}finally{client.release()}
+  const release=async()=>{if(reservation){try{await pool.query("DELETE FROM artist_studio_usage WHERE generation_reference=$1",[reservation])}catch(e){console.error('[sonic] failed to release generation reservation',e.message)}}};
   let result;
   try { result=await remote('/create','POST',{task_type:voiceId?'persona_music':'create_music',...(voiceId?{persona_id:voiceId,audio_weight:0.8,variety:'off'}:{}),custom_mode:true,mv:'sonic-v6',title:title.slice(0,80),prompt:lyrics.slice(0,4900),tags:style.slice(0,900),make_instrumental:false}); }
-  catch(e){console.error('[sonic/create] provider failure',e.status||'',e.message);const code=Number(e.status)||0;const message=code===401||code===403?'Music provider rejected the API key or account permissions. Check MUSICAPI_API_KEY and provider access.':code===402||code===429?'Music provider credits or rate limit may be exhausted. Check your MusicAPI.ai balance and limits.':code===400||code===422?'Music provider rejected the song request or model settings. Check Render logs for the provider message.':e.name==='AbortError'?'Music provider timed out. Please retry shortly.':'Music provider request failed: '+String(e.message||'Unknown error').slice(0,180);return send(res,502,{error:message}),true}
+  catch(e){await release();console.error('[sonic/create] provider failure',e.status||'',e.message);const code=Number(e.status)||0;const message=code===401||code===403?'Music provider rejected the API key or account permissions. Check MUSICAPI_API_KEY and provider access.':code===402||code===429?'Music provider credits or rate limit may be exhausted. Check your MusicAPI.ai balance and limits.':code===400||code===422?'Music provider rejected the song request or model settings. Check Render logs for the provider message.':e.name==='AbortError'?'Music provider timed out. Please retry shortly.':'Music provider request failed: '+String(e.message||'Unknown error').slice(0,180);return send(res,502,{error:message}),true}
   const id=result.task_id||result.data?.task_id;
-  if(!id)return send(res,502,{error:'Music provider did not return a task ID.'}),true;
-  try{await pool.query('INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,$3)',[id,user.id,'pending'])}catch(e){console.error('[sonic/create] task persistence failed',e.message);return send(res,503,{error:'Song request was accepted by the music provider, but LAE-MUSIC could not save its task reference. Contact support before retrying to avoid spending credits twice.'}),true}
+  if(!id){await release();return send(res,502,{error:'Music provider did not return a task ID.'}),true}
+  try{await pool.query('INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,$3)',[id,user.id,'pending']);await pool.query('UPDATE artist_studio_usage SET generation_reference=$1 WHERE generation_reference=$2',[id,reservation]);reservation=null}catch(e){console.error('[sonic/create] task persistence failed',e.message);return send(res,503,{error:'Song request was accepted by the music provider, but LAE-MUSIC could not save its task reference. Contact support before retrying to avoid spending credits twice.'}),true}
   return send(res,200,{task_id:id,status:'pending'}),true;
  }
  if(p==='/api/music/sonic/premium-wav'&&req.method==='POST'){
@@ -53,7 +68,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   const state=String(result.status||result.state||result.data?.status||result.data?.state|| (result.code===102?'running':'pending')).toLowerCase();
   const found=songs(result.data||result.results||result);
   const status=found.length?'succeeded':state==='failed'?'failed':state==='succeeded'?'succeeded':state==='running'?'running':'pending';
-  await pool.query('UPDATE sonic_test_tasks SET status=$1 WHERE task_id=$2',[status,id]);
+  await pool.query('UPDATE sonic_test_tasks SET status=$1 WHERE task_id=$2',[status,id]);if(status==='failed')await pool.query('DELETE FROM artist_studio_usage WHERE artist_id=$1 AND generation_reference=$2',[user.id,id]);
   return send(res,200,{task_id:id,status,songs:found,error:status==='failed'?String(result.message||result.error||'Generation failed'):undefined}),true;
  }
  return send(res,404,{error:'Unknown music endpoint'}),true;
