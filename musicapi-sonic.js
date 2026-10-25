@@ -49,7 +49,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    const ref='sonic-'+require('node:crypto').randomBytes(16).toString('hex');
    await client.query("INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)",[sub.rows[0].id,user.id,ref]);
    await client.query("INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES($1,$2,'pending')",[ref,user.id]);
-   await client.query('INSERT INTO studio_request_keys(artist_id,request_key,payload_hash,task_reference) VALUES($1,$2,$3,$4)',[user.id,requestKey,payloadHash,ref]);
+   await client.query('INSERT INTO studio_request_keys(artist_id,request_key,payload_hash,task_reference,reservation_reference) VALUES($1,$2,$3,$4,$4)',[user.id,requestKey,payloadHash,ref]);
    await client.query('COMMIT');reservation=ref;
   }catch(e){try{await client.query('ROLLBACK')}catch{}throw e}finally{client.release()}
   const release=async()=>{if(!reservation)return;const db=await pool.connect();try{await db.query('BEGIN');await db.query('DELETE FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2',[reservation,user.id]);await db.query('DELETE FROM artist_studio_usage WHERE generation_reference=$1 AND artist_id=$2',[reservation,user.id]);await db.query('UPDATE studio_request_keys SET result=$3 WHERE artist_id=$1 AND request_key=$2',[user.id,requestKey,JSON.stringify({status:'failed',error:'The provider rejected this request. The generation credit was restored. Prepare a new request before retrying.'})]);await db.query('COMMIT');reservation=null}catch(e){await db.query('ROLLBACK').catch(()=>{});console.error('[sonic] failed to release generation reservation',e.message)}finally{db.release()}};
@@ -77,11 +77,14 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
   return send(res,502,{error:'Provider did not return a WAV file yet'}),true;
  }
  if(p==='/api/music/sonic/status'&&req.method==='GET'){
-  const id=new URL(req.url,'http://localhost').searchParams.get('id')||'';
+  let id=new URL(req.url,'http://localhost').searchParams.get('id')||'';
   if(!/^[a-zA-Z0-9_-]{8,128}$/.test(id))return send(res,400,{error:'Invalid task ID'}),true;
+  let submitting=false;
+  if(id.startsWith('sonic-')){const mapping=await pool.query('SELECT task_reference,result,created_at FROM studio_request_keys WHERE artist_id=$1 AND reservation_reference=$2',[user.id,id]);if(mapping.rowCount){const known=mapping.rows[0];if(known.result?.status==='failed')return send(res,200,{task_id:id,status:'failed',songs:[],error:known.result.error}),true;id=known.task_reference;submitting=Date.now()-new Date(known.created_at).getTime()<60000;}}
   const owned=await pool.query('SELECT task_id,status FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2',[id,user.id]);
   if(!owned.rowCount)return send(res,404,{error:'Song request not found for this account'}),true;
   if(owned.rows[0].status==='failed')return send(res,200,{task_id:id,status:'failed',songs:[],error:'Generation failed; the included generation has been released.'}),true;
+  if(id.startsWith('sonic-')&&submitting)return send(res,202,{task_id:id,status:'pending',songs:[],message:'The provider submission is still being confirmed. Keep this request open; do not submit another generation.'}),true;
   if(id.startsWith('sonic-'))return send(res,202,{task_id:id,status:'verification_required',songs:[],error:'Music provider response is unresolved. Contact support with this reference; do not submit another generation until it is reconciled.'}),true;
   const result=await remote('/task/'+encodeURIComponent(id),'GET');
   const state=String(result.status||result.state||result.data?.status||result.data?.state|| (result.code===102?'running':'pending')).toLowerCase();

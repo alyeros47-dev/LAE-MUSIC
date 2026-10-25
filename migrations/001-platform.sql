@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS finance_withdrawals (
 CREATE INDEX IF NOT EXISTS idx_withdrawals_owner ON finance_withdrawals(artist_id,created_at DESC);
 CREATE TABLE IF NOT EXISTS studio_request_keys (
  artist_id BIGINT NOT NULL REFERENCES creators(id), request_key TEXT NOT NULL,
- payload_hash TEXT NOT NULL, task_reference TEXT NOT NULL, result JSONB,
+ payload_hash TEXT NOT NULL, task_reference TEXT NOT NULL, reservation_reference TEXT NOT NULL, result JSONB,
  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), PRIMARY KEY(artist_id,request_key)
 );
 -- Financial history is append-only; corrections require a reversing transfer.
@@ -68,3 +68,5 @@ CREATE TRIGGER finance_journals_immutable BEFORE UPDATE OR DELETE ON finance_jou
 CREATE TRIGGER finance_transfers_immutable BEFORE UPDATE OR DELETE ON finance_transfers FOR EACH ROW EXECUTE FUNCTION lae_reject_history_mutation();
 CREATE TRIGGER finance_events_immutable BEFORE UPDATE OR DELETE ON finance_payment_events FOR EACH ROW EXECUTE FUNCTION lae_reject_history_mutation();
 CREATE TRIGGER platform_audit_immutable BEFORE UPDATE OR DELETE ON platform_audit FOR EACH ROW EXECUTE FUNCTION lae_reject_history_mutation();
+
+CREATE INDEX IF NOT EXISTS idx_studio_reservation_owner ON studio_request_keys(artist_id,reservation_reference);

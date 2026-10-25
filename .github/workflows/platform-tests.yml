@@ -16,6 +16,9 @@ jobs:
           node-version: '22'
       - run: npm install
       - run: npm test
+      - run: npm run test:http
+      - name: Preserve resolved dependency lockfile
+        run: cp package-lock.json artifacts/resolved-package-lock.json
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - uses: actions/upload-artifact@v4
@@ -23,3 +26,30 @@ jobs:
         with:
           name: browser-evidence
           path: artifacts/
+
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: lae_ci_fixture_only
+          POSTGRES_DB: lae_music_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d lae_music_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run test:postgres
+        env:
+          LAE_DB_TESTS: 'true'
+          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
