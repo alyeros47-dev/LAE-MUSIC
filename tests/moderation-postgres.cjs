@@ -3,7 +3,7 @@ const assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {runtime}=require('./runtime.cjs'),{createModeration}=require('../lib/moderation');
 module.exports=async(t,{pool})=>{
  const env={NODE_ENV:'test',ADMIN_KEY:'isolated-moderation-key-123456',STUDIO_RELEASE_WORKER_ENABLED:'false'},app=await runtime({pool,env}),service=createModeration(pool);
- const api=async(path,{body,cookie,key}={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),...(key?{'idempotency-key':key}:{})}});return {status:r.status,data:r.json(),cookie:r.headers['set-cookie']?.split(';')[0]};};
+ const api=async(path,{body,cookie,key}={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),...(key?{'idempotency-key':key}:{})}});return {status:r.status,data:r.json(),cookie:(Array.isArray(r.headers['set-cookie'])?r.headers['set-cookie'][0]:r.headers['set-cookie'])?.split(';')[0]};};
  const key=()=>crypto.randomUUID();
  async function register(role,name){const r=await api(role==='artist'?'/api/register':'/api/listener/register',{body:{name:'Moderation '+name,email:name+'@moderation-ci.invalid',country:'Nigeria',password:'ModerationPassword123',confirmPassword:'ModerationPassword123',plan:'starter'}});assert.equal(r.status,201);return {id:r.data.user.id,cookie:r.cookie};}
  const current=async()=>((await pool.query('SELECT * FROM song_comments WHERE id=$1',[comment.id])).rows[0]);
