@@ -6,7 +6,7 @@ test('purchase quotes use approved server prices and reject unsupported products
  for(const [plan,subscription,extra]of [['starter',600,300],['growth',1000,250],['professional',2000,200]]){assert.equal(quote('artist_subscription',plan).amount_minor,subscription);assert.equal(quote('studio_generation',plan).amount_minor,extra);assert.equal(quote('studio_generation',plan).quantity,1);}
  for(const [kind,plan]of [['recruitment','starter'],['download','growth'],['artist_subscription','constructor'],['studio_generation','__proto__']])assert.throws(()=>quote(kind,plan));
 });
-test('royalty allocations preserve approved shares and exact integer totals without minting ledger funds',()=>{
+test('legacy non-streaming allocation snapshots preserve historical shares and exact integer totals without minting ledger funds',()=>{
  for(const plan of ['starter','growth','professional'])for(const amount of [0,1,99,101,100000000]){const r=royaltySplit(amount,plan);assert.equal(r.artist_minor+r.platform_minor,amount);assert.equal(r.royalty_percent,plan==='professional'?60:50);}
  assert.deepEqual(royaltySplit(101,'professional'),{eligible_minor:101,artist_minor:61,platform_minor:40,royalty_percent:60});
  for(const amount of [-1,1.1,'100',Infinity,NaN,100000001])assert.throws(()=>royaltySplit(amount,'starter'));assert.throws(()=>royaltySplit(100,'__proto__'));

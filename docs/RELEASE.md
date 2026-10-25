@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.12.0-rc.12
+# LAE-MUSIC release candidate 0.13.0-rc.13
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,19 +18,27 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–012, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–013, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
-## Preserved commercial contracts
+## Premium Listener and streaming policy
 
-| Package | Annual USD | Royalty | Generations | Upload quota | External uploads | Extra generation USD | Direct commission |
+[Milestone 13](MILESTONE-13.md) implements the owner-approved NGN listener plans (₦100/300/800/1,600/7,800), exact 1/7/30/60/365-day terms, approved Premium benefits with free listening preserved, verified-sale 10%/eligible 5% referrals and universal **50% streaming royalties**. Recognition uses actual entitlement duration; only eligible Premium streams enter the pool. Reviewed monthly statements, annual deferral, zero-stream liabilities, immutable refunds/adjustments, recovery holds and protected available-balance release are implemented. A provider-specific live settlement verifier is **unconfigured**, so release remains unavailable in HTTP and no sandbox amounts become cash.
+
+## Preserved historical package fields
+
+| Package | Annual USD | Legacy royalty snapshot | Generations | Upload quota | External uploads | Extra generation USD | Direct commission |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Starter | $6 | 50% | 2 | 7 | 3 | $3 | 15% |
 | Growth | $10 | 50% | 3 | 6 | 0 | $2.50 | 25% |
 | Professional | $20 | 60% | 6 | 12 | 0 | $2 | 25% |
 
-Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. No per-stream funding/rate was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
+Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
-## Executed evidence
+## Current local evidence
+
+Candidate 0.13.0-rc.13 passed 136 application tests, 122 actual PostgreSQL 16 checks (migrations 001–013), one socket HTTP test, four SMTP/TLS tests and three Chromium viewport journeys. Existing 25 mocked Sonic cases and 31 source invariants pass. All financial/provider transports in the new journeys use controlled fixtures; live-book accounting fixtures do not establish real cash receipt. No outside gateway/media/email account or production-schema clone was tested. Final CI results for this candidate will be recorded after publication.
+
+## Previous executed CI evidence
 
 The integrated code candidate passed [run 40227539676](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40227539676), commit `c37a3eb8d439b6edbaad34af0b29f51f806e18f6`.
 
@@ -38,7 +46,7 @@ The integrated code candidate passed [run 40227539676](https://github.com/alyero
 | --- | --- | --- |
 | Application suite | **130 pass**, locally and in CI | Native handlers/services, transactions, player, uploads, commercial terms, payments/refunds, account/admin security, editorial, notifications, moderation and preflight |
 | Existing Sonic checks | **25 mocked cases and 31 source invariants pass** | Reservation, ownership and failure behavior; no external music account |
-| PostgreSQL 16 | **111 pass** | Actual migrations 001–012, concurrency/rollback/restart, fixture-verified fulfillment/refunds, accounts/MFA, analytics/editorial, inbox/moderation, read-only schema inspection and coordinated staging-worker startup |
+| PostgreSQL 16 | **111 pass** | Actual migrations 001–013, concurrency/rollback/restart, fixture-verified fulfillment/refunds, accounts/MFA, analytics/editorial, inbox/moderation, read-only schema inspection and coordinated staging-worker startup |
 | Socket HTTP | **1 pass** | Actual HTTP routing, public access, security headers and safe errors |
 | SMTP library/TLS | **4 pass** | Real pinned Nodemailer 10.2.1 with local TLS, MIME, recipient rejection and untrusted-CA rejection |
 | Chromium journeys | **Desktop, tablet and mobile pass** | Rendered UI and real audio element with isolated WAV; connected user journeys and playback-preserving navigation |
@@ -54,11 +62,11 @@ The local default preflight returned exit 2 (`blocked`), with database inspectio
 ## Remaining deployment gates
 
 1. Supply authorized test R2, music/lyrics, Paystack/Flutterwave and email credentials securely. Verify real outcomes, account/currency permissions, trusted media origins, sender identity, Range/HEAD and actual audio. Never place secrets in chat, Git or PR artifacts.
-2. Approve paid-download pricing/eligible royalty revenue, streaming funding/rates/allocation, refund policies and commercial contradictions. Paid-download checkout/entitlements, automatic royalty funding, Flutterwave v3 refunds, final dispute handling and actual bank payouts still require implementation/verification. They are not launch-complete.
+2. Approve paid-download pricing/eligible royalty revenue, remaining partial/dispute policies and commercial contradictions. The streaming model is now approved and implemented. Provider-specific live royalty funding, commission clearance, generic post-finalization corrections, paid-download checkout/entitlements, Flutterwave v3 refunds, final dispute handling and actual bank payouts still require implementation/verification. They are not launch-complete.
 3. Run migration/preflight on a sanitized production-schema clone; review bootstrap DDL, compatibility, lock duration, indexes/query plans, load, reconciliation, backups/recovery and actual Render TLS/private-network trust.
 4. Configure dedicated `ADMIN_MFA_KEY`, verify owner enrollment/recovery-code custody and clock synchronization. Configure the approved SMTP sender/transport and `ACCOUNT_EMAIL_KEY`, and verify staging delivery before enabling email recovery.
 5. Complete physical-device, keyboard/screen-reader, touch seeking, real browser audio/autoplay and operational abuse-control review.
 
-No live-money runtime is enabled or implemented. No environment flag alone activates it. Current merchant/email manifests are disabled. Coin purchases and paid downloads cannot simulate receipt; package selection grants nothing by itself. Provider receivables and pending commissions are not spendable artist cash.
+No live-money checkout or provider-specific settlement/payout runtime is enabled. The new cash-release contract is tested with mocked independent evidence only. No environment flag alone activates it. Current merchant/email manifests are disabled. Coin purchases and paid downloads cannot simulate receipt; package selection grants nothing by itself. Provider receivables and pending commissions are not spendable artist cash.
 
 Use Node.js 22, the committed lockfile and `.env.example`. Preserve migration checksums and history. There are no destructive down migrations. Do not roll back to code that ignores payment holds, named administrator mode/revocation or platform moderation holds; use a compatible revision and reviewed recovery procedure. Only the user will perform the final production deployment after all gates are resolved.

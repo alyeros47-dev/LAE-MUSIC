@@ -4,6 +4,8 @@ Music discovery, artist tools, an AI music studio, and **LAE-MUSIC Partners & Af
 
 **Release status: draft candidate. Not launch-ready.** Live-money processing, bank payouts and automatic royalty/commission settlement remain unavailable. Reviewed staging accounts can use the prepared sandbox checkout; the committed merchant manifest is disabled. See [the audit](docs/AUDIT.md), [release status and evidence](docs/RELEASE.md), and [staging instructions](docs/DEPLOYMENT.md). The [feature/launch matrix](docs/FEATURE-STATUS.md) lists implemented behavior and remaining work.
 
+Premium Listener subscriptions and the approved universal 50% streaming revenue pool are implemented with immutable monthly accounting and separate cash-release safeguards. [Milestone 13](docs/MILESTONE-13.md) records pricing, qualifying-stream rules, refund behavior and the unconfigured live settlement verifier. Existing free listening remains available.
+
 ## Local development
 
 Use Node.js 22 (supported runtime minimum: 20). Install dependencies and configure environment variables from `.env.example` in your shell or hosting configuration. The server does not load `.env` automatically.
@@ -15,7 +17,7 @@ npm start
 
 Open `http://localhost:3000`. Public pages render without a database and show an honest unavailable state for catalog data. Real public streaming requires published PostgreSQL tracks and working R2 objects. Authentication uses Secure cookies: use HTTPS when testing signed-in flows outside the test harness.
 
-Routes: `/` and `/discover`, `/artists`, `/library`, `/workspace`, `/studio`, `/partners`, `/account`, `/join`, `/recover`, `/verify-email`, `/admin/console` and private operator enrollment at `/admin/enroll`. Existing entry points such as `/start`, `/dashboard`, `/earnings`, `/music-prompt-studio` and `/admin` open the shared interface. Existing backend APIs remain in place, with stricter financial idempotency and private earnings checks. Original page implementations can be inspected with `?legacy=1`; `/artist` retains advanced legacy upload support and `/admin/studio` retains the protected content studio.
+Routes: `/` and `/discover`, `/artists`, `/library`, `/premium`, `/workspace`, `/studio`, `/partners`, `/account`, `/join`, `/recover`, `/verify-email`, `/admin/console` and private operator enrollment at `/admin/enroll`. Existing entry points such as `/start`, `/dashboard`, `/earnings`, `/music-prompt-studio` and `/admin` open the shared interface. Existing backend APIs remain in place, with stricter financial idempotency and private earnings checks. Original page implementations can be inspected with `?legacy=1`; `/artist` retains advanced legacy upload support and `/admin/studio` retains the protected content studio.
 
 The persistent audio element sits outside the page router. Player preferences retain track identifiers and position, never expiring R2 signed URLs or account secrets. Reloading requires an explicit play action to resume.
 
