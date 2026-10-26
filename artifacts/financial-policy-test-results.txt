@@ -117,3 +117,4 @@ The website remains not deployment-ready. No live-finance activation or Render a
 
 Final follow-up checks 2026-10-26T06:52:59.827702+00:00: 173 application / 166 PostgreSQL / seven upgrade checks pass. Declined refund decisions are immutable, and ambiguous HTTP-success/error-envelope responses retain the generation. Checkbox submission uses a real boolean and is checked by the browser fixture. Exact published-head CI is authoritative for the final browser revision.
 Final Chromium UI rerun also submits the review form and verifies boolean evidence acknowledgement; all 36 UI axe scans pass.
+The first M19 push syntax/regression workflow lacked dependency installation and failed on the real pg driver import; the main application/PostgreSQL jobs install dependencies correctly. The workflow now runs npm ci before the complete regression suite. Final remote verification is required.

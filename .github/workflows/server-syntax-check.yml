@@ -25,5 +25,8 @@ jobs:
           node --check scripts/check-lae-integrity.cjs
           node --check scripts/check-sonic-workflow.cjs
           node --check scripts/test-sonic-handler.cjs
+      - name: Install regression dependencies
+        run: npm ci
       - name: Run regression checks
         run: npm test
+
