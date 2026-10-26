@@ -2,6 +2,16 @@
 
 The development code is on `codex/premium-platform-release`, PR #6. It is not deployed on the existing production URL. A review environment is the immediate priority; it does not require enabling live money or completing every launch gate.
 
+## Automated temporary preview through GitHub Actions
+
+The owner configured `RENDER_API_KEY` as a repository Actions secret and requested that Codex create the separate test site. `.github/workflows/review-site.yml` runs only on the development branch in the exact repository when its provisioning files change. It uses that secret inside the GitHub runner; secret values are never copied into chat, artifacts, application containers or the repository.
+
+The automated route creates only **lae-music-review-sandbox**, a free Docker web service with automatic deploys disabled. The existing application runs with its own loopback PostgreSQL 16 inside this disposable review container. It requires no second managed-database plan and refuses an external `DATABASE_URL`. A prominent site notice explains that test accounts/data can reset when the service restarts or redeploys. This preview is for interface, registration and connected review; it is not durable staging or a production-clone rehearsal.
+
+Only the review service is created. The workflow never patches, deletes, redeploys or reads database contents from production. It stops for invalid credentials, ambiguous workspaces, unexpected existing configuration or a paid-plan requirement. Build minutes/bandwidth remain subject to the owner's Render workspace limits; no paid compute fallback is allowed. The existing manual managed-database Blueprint below remains an alternative and is not automatically applied.
+
+The actual server-returned URL and 12-probe result appear in the workflow summary after successful startup. Real studio/storage/email/payment credentials and valid test entitlements are still required for those integrations. Do not enter real payment details or rely on temporary accounts/data being retained.
+
 ## One separate Render Blueprint
 
 In your Render dashboard choose **New → Blueprint**, connect `alyeros47-dev/LAE-MUSIC`, select branch **codex/premium-platform-release**, and use root **render.yaml**. Review the resources before confirming creation. This is the owner action that starts deployment; Codex has not performed it.

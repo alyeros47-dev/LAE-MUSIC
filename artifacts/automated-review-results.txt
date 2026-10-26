@@ -1,0 +1,23 @@
+Automated isolated review-site preparation
+No production service, database, credentials or records were modified.
+
+Local: 183 application tests pass (includes seven new provisioning safeguard tests).
+Actual review Docker build passes with Node 22 and PostgreSQL 16.
+Within a 512 MB / one-CPU disposable local container:
+- All 12 read-only HTTP probes pass.
+- The temporary-data warning is present.
+- Actual listener and artist registration succeed; listener session authenticates.
+- Artist membership remains pending_payment; no payment or paid benefit was invented.
+
+The test image rejects external DATABASE_URL configuration and production mode.
+Provisioning requests only a new named free Docker web service, development branch,
+automatic deployments off, and no external database or provider credentials.
+It never patches/deletes/redeploys production or automatically upgrades a paid plan.
+API response bodies, account keys, generated admin keys and database passwords are not logged.
+The owner explicitly configured the GitHub Actions secret for this isolated test-site purpose.
+Real credential availability and Render deployment are verified by the workflow, not by these mock API tests.
+
+Two initial local packaging attempts caught source file permissions and missing currency-data files.
+Both were corrected before publishing or attempting a Render deployment; the final real container checks pass.
+Only task-created disposable containers/images were removed to recover test disk space.
+Temporary test data can reset on restart/redeploy. Durable staging and real provider verification remain required.

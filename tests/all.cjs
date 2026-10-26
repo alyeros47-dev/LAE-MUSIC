@@ -33,3 +33,5 @@ require('./offline.test.cjs');
 require('./reconciliation.test.cjs');
 
 require('./request-protection.test.cjs');
+
+require('./provision-review.test.cjs');

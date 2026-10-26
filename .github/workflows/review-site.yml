@@ -1,0 +1,43 @@
+name: Isolated LAE-MUSIC review site
+on:
+  push:
+    branches: [codex/premium-platform-release]
+    paths:
+      - .github/workflows/review-site.yml
+      - scripts/provision-review.cjs
+      - deploy/review.Dockerfile
+      - deploy/review-entrypoint.sh
+      - tests/provision-review.test.cjs
+      - tests/review-container-smoke.cjs
+      - .dockerignore
+permissions:
+  contents: read
+concurrency:
+  group: lae-music-isolated-review-provisioning
+  cancel-in-progress: false
+jobs:
+  review:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test review provisioning safeguards
+        run: node --test tests/provision-review.test.cjs
+      - name: Build and verify the isolated review container
+        run: |
+          docker build -f deploy/review.Dockerfile -t lae-review-ci .
+          docker run -d --name lae-review-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-review-ci-only-key lae-review-ci
+          LAE_REVIEW_CONTAINER_TESTS=1 node tests/review-container-smoke.cjs
+      - name: Stop only the CI review container
+        if: always()
+        run: docker rm -f lae-review-ci 2>/dev/null || true
+      - name: Create or inspect only the isolated free review service
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/provision-review.cjs
