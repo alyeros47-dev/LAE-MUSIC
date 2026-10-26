@@ -8,6 +8,8 @@ on:
       - scripts/bootstrap-review-r2.cjs
       - scripts/verify-review-storage.cjs
       - lib/review-storage.js
+      - lib/account-login.js
+      - web/password-controls.js
       - tests/review-storage.test.cjs
       - tests/review-integrations.test.cjs
       - deploy/review-provider-budget.cjs

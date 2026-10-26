@@ -27,3 +27,7 @@ test('R2 browser uploads allow only the exact configured storage origin; tempora
  r=await call(setup({env:{R2_ACCOUNT_ID:account,LAE_REVIEW_R2_MODE:'scoped-temporary-v1'}}),'/');assert(!r.headers['Content-Security-Policy'].includes('.r2.cloudflarestorage.com'));
  r=await call(setup({env:{R2_ACCOUNT_ID:"bad; https://evil.invalid"}}),'/');assert(!r.headers['Content-Security-Policy'].includes('evil.invalid'));
 });
+
+test('shared password controls are served as an executable module without authentication',async()=>{const r=await call(setup(),'/web/password-controls.js');assert.equal(r.status,200);assert.match(r.headers['Content-Type'],/javascript/);assert.match(r.body,/export function installPasswordControls/);});
+
+test('temporary review account notice is limited to the staging review marker',async()=>{for(const [env,expected]of [[{NODE_ENV:'staging',LAE_REVIEW_ENVIRONMENT:'pr6-ephemeral-review-v1'},'temporary_review'],[{NODE_ENV:'production',LAE_REVIEW_ENVIRONMENT:'pr6-ephemeral-review-v1'},undefined],[{NODE_ENV:'staging'},undefined]]){const r=await call(setup({env}),'/api/platform/session');assert.equal(JSON.parse(r.body).review_environment,expected);}});

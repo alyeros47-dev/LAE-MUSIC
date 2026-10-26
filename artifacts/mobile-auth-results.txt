@@ -1,0 +1,8 @@
+Mobile registration and session correction — October 26, 2026
+Application: 227 pass, 0 fail (npm test), plus existing Sonic workflow/handler checks.
+Native HTTP: 1 pass, 0 fail.
+Chromium 154: expanded desktop/tablet/mobile journeys and 39 axe scans pass, including eyes, mismatch correction without registration POST, role-aware sign-in, mobile account menu and transient-session retry.
+Real PWA desktop/mobile local regression: encrypted offline storage/reload/playback, expiry/clock checks, once-only sync and cross-account cleanup pass; 2 offline axe scans pass.
+Unit/browser external account/provider/payment responses are fixtures; PostgreSQL and actual hosted HTTPS verification are pending the published candidate.
+No schema, existing password hash, provider credential, music-generation engine or live service changed.
+Review Sandbox accounts can reset during redeploy/restart. Production data is unaffected. R2 upload/voice tests remain deferred.

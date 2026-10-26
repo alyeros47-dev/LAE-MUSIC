@@ -42,3 +42,5 @@ require('./review-provider-budget.test.cjs');
 require('./review-storage.test.cjs');
 
 require('./lyrics-library.test.cjs');
+
+require('./account-login.test.cjs');
