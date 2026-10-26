@@ -2,13 +2,16 @@
 
 This document prepares a reviewable release; it does not authorize a deployment or merge.
 
+**Production target: the existing LAE-MUSIC Render service and existing PostgreSQL database, R2 bucket, users, uploads and environment variables.** Review infrastructure is temporary testing infrastructure. It must not replace production or be promoted by copying its temporary database/settings. See [Upgrade the existing service](UPGRADE-EXISTING-SERVICE.md). R2-dependent sandbox upload/voice checks are deferred by the owner and remain pending for final integration.
+
+
 ## Before staging
 
 1. Review the source diff and `docs/RELEASE.md`. Verify the development branch still descends from the intended main revision and resolve any new upstream changes on the development branch.
 2. Create a disposable PostgreSQL database and a sanitized clone of the production schema/data. Do not point automated tests at production and do not drop production tables. Take and verify a backup before an approved production migration.
 3. Use Node 22 and `npm ci` with the committed dependency lockfile. It was captured from the successful CI installation, not guessed. That installation reported zero known vulnerabilities; repeat the advisory review before an approved release.
 4. Supply `DATABASE_URL`, a strong `ADMIN_KEY`, R2 account/bucket credentials, `MUSICAPI_API_KEY` and `OPENAI_API_KEY` only through the staging secret manager. `OPENAI_LYRICS_MODEL` must be an allowed model for that project. Remote PostgreSQL now requires verified TLS. Configure the reviewed CA chain, or explicitly select the exact Render private hostname as described below; verify actual staging connectivity before upgrading.
-5. Legacy demo activation/payment variables no longer enable mutation routes; remove any stale values from hosting configuration. No supported environment toggle in this candidate can activate real checkout, settlement or payouts.
+5. Legacy demo activation/payment variables no longer enable mutation routes. Preserve existing environment values; any cleanup or change needs separate review and is not a prerequisite for upgrading the code. No supported environment toggle in this candidate can activate real checkout, settlement or payouts.
 
 ## Validation commands
 
@@ -52,7 +55,7 @@ Lyrics reservations with an interrupted provider response also remain pending. T
 
 ## Render candidate and approval
 
-Keep the existing Node service architecture. Build is `npm ci`; start remains `npm start`. Bind uses Render's `PORT`. Use a separately approved staging service/database/bucket, not an automatic production deploy from the development branch. Check `/health`, protected APIs, application logs, migration status and all real integration journeys. Review screenshots and test evidence. The user will handle final production merge/deployment after the documented gates are resolved; do not trigger either from the development branch.
+Keep the existing Node service architecture. Build is `npm ci`; start remains `npm start`. Bind uses Render's `PORT`. Use the isolated review service for testing; any separate sanitized database or storage is test infrastructure only. Creating additional R2 storage is currently deferred. After explicit production approval, update the existing live service in place, retaining its database, bucket and environment configuration; never apply the review Blueprint to production or promote review credentials/data. Disable automatic production deployment from the development branch. Check `/health`, protected APIs, application logs, migration status and all real integration journeys. Review screenshots and test evidence. The user will handle final production merge/deployment after the documented gates are resolved; do not trigger either from the development branch.
 
 ## Rollback
 
