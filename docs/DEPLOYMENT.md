@@ -15,9 +15,11 @@ This document prepares a reviewable release; it does not authorize a deployment 
 ```sh
 npm ci
 npm test
-npx playwright install --with-deps chromium
-npm run test:browser
+npx playwright install --with-deps chromium firefox webkit
+npm run test:browser:all
 npm run test:http
+npm run test:email
+npm audit --omit=dev
 npm start
 ```
 
@@ -25,7 +27,7 @@ Default tests use mocks and execute the actual server callback without opening p
 
 ## Database upgrade
 
-On server startup the existing initialization runs first, followed by `lib/migrations.js`. The new runner holds a transaction-scoped advisory lock, validates checksums and applies unapplied files from `migrations/` in order. Do not edit a migration after it is applied; add a new migration instead.
+On server startup the existing initialization runs first, followed by `lib/migrations.js`. The runner holds a transaction-scoped advisory lock, validates the entire recorded history and applies unapplied files from `migrations/` in order. Unknown future versions, changed checksums and gaps in applied history are rejected before pending migration SQL executes. Do not run older application code against a newer database or edit/delete migration history to force startup. Do not edit a migration after it is applied; add a new migration instead.
 
 `001-platform.sql` adds profile metadata, indexes, request-key registries, finance/audit tables and append-only triggers. It does not reset records, backfill imaginary revenue or convert historic balances. Test first startup and a second startup on fresh and sanitized existing schemas. Check legacy BIGINT conversions and foreign-key compatibility before release. For large existing tables, measure index creation and schedule an approved maintenance window or have a DBA pre-create matching indexes concurrently before the startup migration.
 
@@ -155,3 +157,14 @@ Configure `NODE_ENV=production` for production. Discover and verify the real hos
 Exercise two separately started app instances against the staging database. Confirm shared limits and restart persistence, independent genuine clients, forged leftmost/invalid chains, IPv4/IPv6 variants, account limits across sessions, useful Retry-After responses and store failure without downstream execution. Recheck guest catalog/player access, normal offline-save/revalidation volume, signed payment webhook retries and existing financial idempotency. Review the owner/support Protection dashboard and read-only preflight. Account and network counters are separate budget checks, not people or fraud findings.
 
 Maintenance removes only old technical buckets/aggregates in bounded batches; check progress and sanitized maintenance logs under representative load. Never erase live request budgets, account security history, licenses, financial journals or user records to force a deployment pass. Configure upstream hosting/edge protections and verify load, proxy/NAT and recovery behavior separately. Keep the existing account/financial/MFA/hold/offline protections in any rollback; older code using process memory lacks this shared protection.
+
+
+## Cross-browser and populated fixture upgrade verification (M18)
+
+Read [MILESTONE-18.md](MILESTONE-18.md). `npm run test:browser` preserves Chromium as the default. `LAE_TEST_BROWSER=firefox npm run test:browser` and `LAE_TEST_BROWSER=webkit npm run test:browser` run the same full website and actual PWA journeys; `npm run test:browser:all` runs all three sequentially. Install the matching engines/system dependencies first. Headless Linux WebKit is not physical Safari/iOS certification. Review every engine's artifacts, including incomplete/manual accessibility checks and browser storage/codec limitations.
+
+`npm run test:upgrade` requires `LAE_DB_TESTS=true` and a loopback `DATABASE_URL` whose database is exactly `lae_music_ci`, with permission to create/drop uniquely named fixture databases. It creates historical checkpoints, preserves seeded data through concurrent upgrade/replay, injects a SQL failure and verifies fail-closed history checks. Run it only on your own disposable PostgreSQL instance. It never targets a remote clone or production and never drops the supplied base database. Existing applied migrations 001–017 remain unchanged; M18 introduces no new migration.
+
+`LAE_PUBLIC_FX_TESTS=true npm run verify:fx` deliberately contacts the real public FX service once and checks the shared cache and approved USD Premium base prices across five country choices. It fails if current supported data cannot be verified. It is not a gateway or treasury settlement test and does not update fixed prices. Use your host's approved proxy/CA settings when required, without disabling TLS.
+
+The owner has not confirmed staging credentials or a sanitized production clone. Follow [SECURE-STAGING-SETUP.md](SECURE-STAGING-SETUP.md) for secure setup and [FINANCIAL-POLICY-OPTIONS.md](FINANCIAL-POLICY-OPTIONS.md) for inactive proposals requiring a business decision. Until unfinished live financial workflows and real integration/operational gates are complete, preflight must remain blocked. Do not infer deployment approval from fixture test results.

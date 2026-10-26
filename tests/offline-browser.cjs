@@ -6,9 +6,32 @@ const assert = require("node:assert/strict"),
   path = require("node:path"),
   crypto = require("node:crypto");
 const AxeBuilder = require("@axe-core/playwright").default;
-const { chromium } = require(process.env.LAE_PLAYWRIGHT_MODULE || "playwright"),
-  { canonical, message, LIMITS } = require("../web/offline-protocol"),
+const {
+  engine,
+  launchBrowser,
+  artifactLabel,
+} = require("./browser-engine.cjs");
+const { canonical, message, LIMITS } = require("../web/offline-protocol"),
   { signing, deviceKey } = require("../lib/offline-listening");
+async function waitForOfflineEvents(page, count) {
+  // Evaluate imports in the page's main realm. An isolated polling realm can
+  // instantiate the application's module again and replace its event handlers.
+  const deadline = Date.now() + 15000;
+  let actual;
+  do {
+    actual = await page.evaluate(async () => {
+      const { offline } = await import("/web/offline-app.js");
+      return (await offline.all("events")).length;
+    });
+    if (actual === count) return;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  } while (Date.now() < deadline);
+  assert.equal(
+    actual,
+    count,
+    "offline reports must reach the expected durable state",
+  );
+}
 function wav() {
   const length = 8000 * 90 * 2,
     b = Buffer.alloc(44 + length);
@@ -39,6 +62,7 @@ function wav() {
       tickets: new Map(),
       events: new Map(),
       qualified: 0,
+      requests: [],
     };
   let origin;
   const song = {
@@ -54,6 +78,7 @@ function wav() {
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, origin),
       p = url.pathname;
+    state.requests.push({ path: p, method: req.method });
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
     const send = (x, status = 200) => {
@@ -256,15 +281,13 @@ function wav() {
   });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   origin = "http://127.0.0.1:" + server.address().port;
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-dev-shm-usage"],
-  });
+  const browser = await launchBrowser();
   try {
-    for (const [label, viewport] of [
+    for (const [size, viewport] of [
       ["desktop", { width: 1440, height: 1000 }],
       ["mobile", { width: 390, height: 844 }],
     ]) {
+      const label = artifactLabel(size);
       state.signedIn = true;
       const context = await browser.newContext({
           viewport,
@@ -371,10 +394,7 @@ function wav() {
           document.getElementById("audio").src.startsWith("blob:"),
         ),
       );
-      await page.waitForFunction(async () => {
-        const { offline } = await import("/web/offline-app.js");
-        return (await offline.all("events")).length === 1;
-      });
+      await waitForOfflineEvents(page, 1);
       const audit = await new AxeBuilder({ page }).analyze();
       fs.writeFileSync(
         "artifacts/accessibility-" + label + "-offline.json",
@@ -398,16 +418,36 @@ function wav() {
         path: "artifacts/" + label + "-pwa-offline.png",
         fullPage: true,
       });
-      await context.setOffline(false);
       const before = state.qualified;
+      await context.setOffline(false);
       await page
         .getByRole("button", { name: "Verify & sync online", exact: true })
         .click();
-      await page.waitForFunction(async () => {
-        const { offline } = await import("/web/offline-app.js");
-        return (await offline.all("events")).length === 0;
-      });
-      assert.equal(state.qualified, before + 1);
+      await waitForOfflineEvents(page, 0);
+      assert.equal(
+        state.qualified,
+        before + 1,
+        JSON.stringify({
+          label,
+          before,
+          qualified: state.qualified,
+          accepted: state.events.size,
+          requests: state.requests
+            .filter((r) => r.path.startsWith("/api/platform/offline/"))
+            .slice(-20),
+          browser: await page.evaluate(async () => {
+            const { offline } = await import("/web/offline-app.js");
+            return {
+              online: navigator.onLine,
+              owner: offline.owner,
+              device: !!offline.device,
+              syncing: offline.syncing,
+              pending: (await offline.all("events")).length,
+              toast: document.getElementById("toast").textContent,
+            };
+          }),
+        }),
+      );
       await page
         .getByRole("button", { name: "Verify & sync online", exact: true })
         .click();
@@ -515,7 +555,9 @@ function wav() {
       .waitFor();
     await unsupported.close();
     console.log(
-      "PASS 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.",
+      "PASS " +
+        engine +
+        " 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.",
     );
   } finally {
     await browser.close();

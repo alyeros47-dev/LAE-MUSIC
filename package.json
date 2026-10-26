@@ -1,15 +1,18 @@
 {
   "name": "lae-music",
-  "version": "0.17.0-rc.17",
+  "version": "0.18.0-rc.18",
   "private": true,
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
     "test": "node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs",
     "test:browser": "node scripts/test-browsers.cjs",
+    "test:browser:all": "LAE_TEST_BROWSERS=chromium,firefox,webkit node scripts/test-browsers.cjs",
     "test:http": "LAE_NETWORK_TESTS=1 node tests/http.test.cjs",
     "test:postgres": "node tests/postgres.cjs",
+    "test:upgrade": "node tests/upgrade-postgres.cjs",
     "preflight": "node scripts/preflight.cjs",
+    "verify:fx": "node scripts/verify-public-fx.cjs",
     "test:email": "LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs"
   },
   "engines": {

@@ -25,16 +25,20 @@ The persistent audio element sits outside the page router. Player preferences re
 
 ```sh
 npm test
-npx playwright install --with-deps chromium
-npm run test:browser
+npx playwright install --with-deps chromium firefox webkit
+npm run test:browser:all
 npm run test:http
 npm run test:email
-# Disposable CI database only: npm run test:postgres
+# Disposable local CI database only: npm run test:postgres and npm run test:upgrade
 ```
 
 The default suite executes source checks, existing mocked Sonic tests, and behavioral tests of actual request handlers, player logic, transactions, permissions, uploads, referrals and migrations with controlled services. It does **not** establish real PostgreSQL, storage, payment or music-provider compatibility.
 
-The browser runner also executes actual service-worker installation, encrypted IndexedDB storage, offline reload and 31 seconds of real audio playback at desktop/mobile sizes, plus expiry, signature/cipher protections, exactly-once synchronization and unsupported-browser handling. Financial/R2 responses remain fixtures. The existing interface runner uses isolated test fixtures at three viewport sizes (desktop, tablet and mobile), runs 33 automated axe accessibility scans plus dialog keyboard checks, and produces `artifacts/` screenshots and evidence. It requires a sandbox that permits Chromium processes. The optional socket-based HTTP test requires local networking. GitHub Actions includes both application and browser checks; the application, browser, HTTP and isolated PostgreSQL jobs passed in [CI run 40208068233](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40208068233).
+The same website and real PWA journeys run in Chromium, Firefox and WebKit. They execute service-worker installation, encrypted IndexedDB storage, offline reload and 31 seconds of native audio playback at desktop/mobile sizes, expiry, signature/cipher protections, exactly-once synchronization and unsupported-browser handling. The interface journeys cover desktop/tablet/mobile sizes, 33 axe scans per engine and dialog keyboard checks; the PWA adds two scans per engine (105 total). Financial/R2/session responses are isolated fixtures. Linux WebKit is not physical Safari/iOS certification. Use `npm run test:browser` for Chromium alone or `LAE_TEST_BROWSER=firefox` / `webkit` for one engine.
+
+The populated upgrade suite creates and removes only its own uniquely named fixture databases, checks historical checkpoints 0/7/13/17, exact existing-record preservation, concurrent upgrades and SQL failure rollback. It refuses remote/production targets; a sanitized production clone still needs separate review. `LAE_PUBLIC_FX_TESTS=true npm run verify:fx` optionally contacts the real public FX service without database writes or permanent repricing. Current evidence and published-head CI are recorded in [release notes](docs/RELEASE.md) and [PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6).
+
+Before real integration testing, follow [secure staging setup](docs/SECURE-STAGING-SETUP.md). The owner-requested [financial policy options](docs/FINANCIAL-POLICY-OPTIONS.md) are inactive proposals requiring selection and subsequent implementation/testing.
 
 ## Layout
 

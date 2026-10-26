@@ -2,7 +2,7 @@ name: Platform release candidate verification
 on:
   pull_request:
     paths-ignore:
-      - 'android-app/**'
+      - "android-app/**"
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,9 +13,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
       - run: npm ci
       - run: npm test
+      - run: npm audit --omit=dev
       - run: npm run test:http
       - run: npm run test:email
       - run: npx playwright install --with-deps chromium
@@ -46,9 +47,35 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
       - run: npm ci
       - run: npm run test:postgres
         env:
-          LAE_DB_TESTS: 'true'
+          LAE_DB_TESTS: "true"
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
+      - run: npm run test:upgrade
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
+
+  browser-compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npm run test:browser
+        env:
+          LAE_TEST_BROWSER: ${{ matrix.browser }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence-${{ matrix.browser }}
+          path: artifacts/

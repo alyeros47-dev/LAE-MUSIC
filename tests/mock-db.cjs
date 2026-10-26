@@ -16,6 +16,7 @@ class MockPool {
     if (sql.startsWith('SELECT 1 FROM affiliate_subscription_commissions')) return none();
     if (sql.startsWith('SELECT id FROM creators')) return row({ id: args[0] });
     if (sql.startsWith('SELECT checksum FROM platform_migrations')) return this.state.migration[args[0]] ? row({ checksum: this.state.migration[args[0]] }) : none();
+    if (sql.startsWith('SELECT version,checksum FROM platform_migrations')) { const rows=Object.entries(this.state.migration).map(([version,checksum])=>({version,checksum}));return {rowCount:rows.length,rows}; }
     if (sql.startsWith('-- Additive')) return none();
     if (sql.startsWith('INSERT INTO platform_migrations')) { this.state.migration[args[0]]=args[1];return none(); }
     const requestId = args[0] + ':' + args[1];

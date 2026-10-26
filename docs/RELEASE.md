@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.17.0-rc.17
+# LAE-MUSIC release candidate 0.18.0-rc.18
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -30,7 +30,7 @@ The universal 50% recognized-net streaming pool, eligible Premium streams, annua
 
 [Milestone 15](MILESTONE-15.md) supersedes every earlier paid-download proposal. Premium saves are included at no extra cost, inside the website's controlled browser library. There is no listener MP3 export, separate song purchase or download commission. Actual service workers/IndexedDB/Web Crypto/native audio are tested with an isolated R2/gateway fixture. Dedicated signing-key and real R2 staging verification remain required. Free ad infrastructure is integrated, but the reviewed creative manifest is disabled until actual approved media is supplied. No synthetic ad or paid impression is claimed.
 
-Signed access ends at the earlier of 24 hours or Premium expiry; reconnection checks holds, ownership, publication and device revocation. Valid pre-expiry plays may sync within 48 hours, once per signed event/sequence, into the existing 50% recognized-net model. Royalty finalization waits 48 hours after UTC month-end. Browser storage is not DRM and cannot prove a human listened; physical-device/Safari/Firefox testing and operational fraud review remain gates.
+Signed access ends at the earlier of 24 hours or Premium expiry; reconnection checks holds, ownership, publication and device revocation. Valid pre-expiry plays may sync within 48 hours, once per signed event/sequence, into the existing 50% recognized-net model. Royalty finalization waits 48 hours after UTC month-end. Browser storage is not DRM and cannot prove a human listened; physical-device/branded Safari testing and operational fraud review remain gates; M18 adds Linux Firefox/WebKit engine coverage.
 
 ## Preserved historical package fields
 
@@ -43,6 +43,14 @@ Signed access ends at the earlier of 24 hours or Premium expiry; reconnection ch
 Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
 ## Current local evidence
+
+[Milestone 18](MILESTONE-18.md) passes **166 application tests, 160 actual PostgreSQL checks, seven populated upgrade checks, one socket HTTP check and four actual-library SMTP/TLS checks**. All three engines (Chromium, Firefox and WebKit) pass the connected website at desktop/tablet/mobile sizes and real offline PWA desktop/mobile journeys: **105 axe scans**, zero automated violations. Browser APIs/audio and database behavior are real; external payment/music/storage/session services remain fixtures. A real public FX check verified the shared cached source for NG/NGN, GH/GHS, KE/KES, LR/LRD and US/USD, preserving all five approved USD prices with one upstream request. This does not verify merchant charge currencies or treasury FX.
+
+The migration runner now rejects unknown future versions and gaps before pending migration SQL executes. Populated historical checkpoints 0/7/13/17 preserve representative accounts/catalog/wallets/credits/subscriptions, historical royalty snapshots, legacy NGN Premium records and separate USD/NGN books; concurrent upgrade/replay and actual SQL fault rollback pass. Applied SQL files 001–017 are unchanged, with no M18 migration. A populated read-only fixture preflight passes all nine discrepancy checks while overall release status remains **blocked**. The production dependency advisory check reports zero known vulnerabilities at this check.
+
+Evidence: `artifacts/launch-verification-test-results.txt`; exact published-head CI is recorded on PR #6. Linux engines are not physical phones/branded Safari certification, and fixture upgrades are not a sanitized production-clone rehearsal. The environment is connected but lacks configured test credentials/clone. Follow [SECURE-STAGING-SETUP.md](SECURE-STAGING-SETUP.md). [FINANCIAL-POLICY-OPTIONS.md](FINANCIAL-POLICY-OPTIONS.md) contains inactive proposals requiring owner selection and subsequent implementation/testing. Live financial workflows and other launch gates remain unfinished.
+
+## Previous M17 evidence
 
 [Milestone 17](MILESTONE-17.md) adds production/staging shared request budgets, verified account scope, explicit proxy-chain trust, private aggregate monitoring and additive migration 017. Local verification passes **165 application / 160 actual PostgreSQL checks**, **one socket HTTP / four actual-library SMTP/TLS checks**, connected Chromium desktop/tablet/mobile and both actual offline PWA journeys, and **35 axe scans**. Native HTTP restart/proxy and 240-request two-session identity journeys are included in the PostgreSQL suite. Read-only schema/accounting/FX/offline/review integrity remains clean; overall release remains blocked. All provider/media/session fixture distinctions and real-hosting requirements remain documented. Exact published-head CI is recorded on PR #6; local evidence is `artifacts/request-protection-test-results.txt`.
 
