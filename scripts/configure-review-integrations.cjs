@@ -156,6 +156,7 @@ async function configure({
   attempts = 110,
   verify = true,
   bootstrapStorage = false,
+  verifyStorage = false,
 } = {}) {
   if (!key?.trim()) throw Error("GitHub RENDER_API_KEY secret is required.");
   if (!/^[a-f0-9]{40}$/.test(sha || ""))
@@ -365,7 +366,7 @@ async function configure({
     }
   }
   const storageProbe =
-    verify && STORAGE.every((k) => !!targetEnv[k])
+    verify && verifyStorage && STORAGE.every((k) => !!targetEnv[k])
       ? await require("./verify-review-storage.cjs").verifyStorage(targetEnv, {
           source: sourceEnv,
           fetchImpl,
@@ -427,6 +428,7 @@ if (require.main === module)
       sha: process.env.GITHUB_SHA,
       sandbox,
       bootstrapStorage: process.env.LAE_BOOTSTRAP_REVIEW_R2 === "1",
+      verifyStorage: process.env.LAE_VERIFY_REVIEW_STORAGE === "1",
     });
     console.log(JSON.stringify(result));
     if (process.env.GITHUB_STEP_SUMMARY)

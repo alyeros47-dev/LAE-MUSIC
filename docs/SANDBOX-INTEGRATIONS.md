@@ -31,6 +31,10 @@ After configuration, `LAE_REVIEW_LYRICS_TEST=1 node scripts/verify-review-lyrics
 
 Music generation and voice training require separate verified executions and eligible entitlements/authorized voice samples. Neither is declared successful from a key-presence flag or a balance lookup. Payment/email and provider billing/account changes remain separate work. Sources: [Render environment API](https://api-docs.render.com/reference/update-env-var), [sandbox deploy API](https://api-docs.render.com/reference/create-deploy), [MusicAPI read-only credits](https://docs.musicapi.ai/get-credits).
 
+## Owner-directed storage deferral
+
+The owner subsequently postponed creating a review bucket and all storage-dependent upload/voice tests. The workflow now explicitly disables automatic bucket bootstrap and real storage probes (`LAE_BOOTSTRAP_REVIEW_R2=0`, `LAE_VERIFY_REVIEW_STORAGE=0`). These tests remain **pending**, not passed. No live bucket is used as a substitute. Resume this section’s setup only during owner-authorized final integration; the historical 403 result below is retained as evidence. Provider/lyrics/studio/account/payment regression work continues independently.
+
 ## Restricted temporary R2 mode
 
 Cloudflare supports locally signed, restricted temporary credentials (official [temporary credentials](https://developers.cloudflare.com/r2/api/s3/temporary-credentials/) and [examples](https://developers.cloudflare.com/r2/examples/authenticate-r2-temp-credentials/)). The private configuration runner may create only `lae-music-review-sandbox`, then derive a seven-day grant limited to GetObject, HeadObject and PutObject in that bucket. The parent access identifier is reused as required by Cloudflare; its secret is never installed in the sandbox. No parent key rotation or live-bucket writes occur.

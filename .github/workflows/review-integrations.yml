@@ -42,7 +42,8 @@ jobs:
         run: docker rm -f lae-integrations-ci 2>/dev/null || true
       - name: Configure and verify only the review sandbox
         env:
-          LAE_BOOTSTRAP_REVIEW_R2: "1"
+          LAE_BOOTSTRAP_REVIEW_R2: "0"
+          LAE_VERIFY_REVIEW_STORAGE: "0"
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           SANDBOX_R2_ACCOUNT_ID: ${{ secrets.SANDBOX_R2_ACCOUNT_ID }}
           SANDBOX_R2_ACCESS_KEY_ID: ${{ secrets.SANDBOX_R2_ACCESS_KEY_ID }}

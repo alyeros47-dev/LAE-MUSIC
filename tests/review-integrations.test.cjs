@@ -330,3 +330,9 @@ test("only cryptographically verified temporary review storage can reuse a paren
     0,
   );
 });
+test('deferred storage makes no R2 request even when isolated storage is already configured',async()=>{
+ const f=fixture({targetEnvironment:{...isolated,R2_ACCOUNT_ID:'a'.repeat(32),R2_ACCESS_KEY_ID:'dedicated-review-id',R2_SECRET_ACCESS_KEY:'dedicated-review-secret',R2_BUCKET:BUCKET}});
+ const result=await configure({key:'isolated-render-fixture',sha,fetchImpl:f.fetchImpl,sleep:async()=>{},log:()=>{},bootstrapStorage:false,verifyStorage:false});
+ assert.equal(result.storage_probe,null);assert.equal(result.storage_bootstrap,null);assert.equal(result.storage_upload_verified,false);
+ assert(!f.calls.some(c=>new URL(c.url).hostname.endsWith('.r2.cloudflarestorage.com')));
+});
