@@ -401,4 +401,62 @@ module.exports = async (t, { pool }) => {
       );
     },
   );
+  await t.test(
+    "expired ready references and stalled initializations stay visible without treating a fresh checkout as failed",
+    async () => {
+      const listener = (
+          await pool.query("SELECT id FROM listeners ORDER BY id LIMIT 1")
+        ).rows[0].id,
+        book = require("../lib/premium-pricing").catalog();
+      await transaction(pool, (db) =>
+        require("../lib/premium-pricing").recordApproval(db, book),
+      );
+      for (const kind of ["artist_checkout", "listener_checkout"])
+        for (const [status, age, attention] of [
+          ["ready", 60, true],
+          ["initializing", 60, true],
+          ["initializing", 0, false],
+        ]) {
+          const order = key(),
+            quote = key(),
+            attempt = key(),
+            reference = "recon-expiry-" + key(),
+            premium = kind === "listener_checkout",
+            amount = premium ? 60 : 600;
+          await transaction(pool, async (db) => {
+            if (premium)
+              await db.query(
+                "INSERT INTO premium_orders(id,listener_id,plan,currency,amount_minor,days,expires_at,pricing_revision) VALUES($1,$2,'monthly','USD',60,30,NOW()+INTERVAL '30 minutes',$3)",
+                [order, listener, book.revision],
+              );
+            else
+              await db.query(
+                "INSERT INTO commerce_orders(id,artist_id,kind,plan,currency,amount_minor,royalty_percent,direct_referral_percent,expires_at) VALUES($1,$2,'artist_subscription','starter','USD',600,50,15,NOW()+INTERVAL '30 minutes')",
+                [order, artist],
+              );
+            await db.query(
+              "INSERT INTO payment_checkout_quotes(id,order_id,premium_order_id,provider,base_currency,base_minor,charge_currency,charge_minor,created_at,expires_at) VALUES($1,$2,$3,'paystack','USD',$4,'USD',$4,NOW()-INTERVAL '10 minutes',NOW()-INTERVAL '5 minutes')",
+              [quote, premium ? null : order, premium ? order : null, amount],
+            );
+            if (premium)
+              await db.query(
+                "INSERT INTO premium_attempts(id,order_id,quote_id,provider,merchant_id,mode,reference,status,checkout_url,created_at) VALUES($1,$2,$3,'paystack','fixture','test',$4,$5,'https://checkout.paystack.com/fixture',NOW()-($6*INTERVAL '1 second'))",
+                [attempt, order, quote, reference, status, age],
+              );
+            else
+              await db.query(
+                "INSERT INTO payment_checkout_attempts(id,order_id,quote_id,provider,merchant_id,merchant_country,mode,reference,status,checkout_url,created_at) VALUES($1,$2,$3,'paystack','fixture','NG','test',$4,$5,'https://checkout.paystack.com/fixture',NOW()-($6*INTERVAL '1 second'))",
+                [attempt, order, quote, reference, status, age],
+              );
+          });
+          const result = await service.detail(kind, attempt);
+          assert.equal(result.attention, attention);
+          assert.equal(result.source.status, status);
+          assert.equal(
+            (await service.queue({ search: reference })).rows.length,
+            attention ? 1 : 0,
+          );
+        }
+    },
+  );
 };

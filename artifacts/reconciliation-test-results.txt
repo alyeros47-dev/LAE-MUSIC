@@ -3,7 +3,7 @@ Recorded 2026-10-26T01:16:45.800148+00:00
 Development branch: codex/premium-platform-release; draft PR #6. No merge/deployment.
 
 Application: 153 pass; existing 25 mocked Sonic cases / 31 source invariants pass.
-Actual PostgreSQL 16: 152 pass; migrations 001–016; isolated local fixture database only.
+Actual PostgreSQL 16: 153 pass; migrations 001–016; isolated local fixture database only.
 Socket HTTP: 1 pass. Actual Nodemailer/loopback SMTP TLS: 4 pass.
 Browser: desktop/tablet/mobile connected journeys plus actual PWA desktop/mobile and unsupported browser pass.
 Accessibility: 30 existing/reconciliation + 2 offline-library axe scans, zero automated violations; incomplete checks still require manual review.
@@ -26,3 +26,5 @@ PASS browser journeys and 30 axe accessibility audits at desktop, tablet and mob
 PASS real PWA desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
 PASS real PWA mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
 PASS 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.
+
+Expired-reference follow-up verified 2026-10-26T03:58:08.138101+00:00: actual artist/listener source queries retain expired ready links and stalled initializations, while fresh attempts remain pending without financial mutation. Application 153 / PostgreSQL 153 pass. Core code 7e65bb0 passed CI run 40266126333; final-head follow-up CI is recorded on PR #6.
