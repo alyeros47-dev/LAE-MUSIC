@@ -55,10 +55,19 @@ Required verification still outstanding for the **upgraded candidate**, without 
 
 1. Complete authorized real MusicAPI generation/output/history/voice behavior through the upgraded interface with an eligible artist entitlement. Do not fabricate paid membership to bypass this gate. Authentication/key presence and mocked success are not this verification.
 2. Complete owner-deferred safe final R2 upload/artwork/import/voice-training tests. Review the inherited training route’s sample validation and duplicate-submission protection before exposing a new training interface; that route was preserved, not certified by these read-only/profile adapter tests. Do not connect the sandbox to the live bucket for upload/deletion testing. Existing uploads remain in place.
-3. Rehearse migrations on a sanitized actual production-schema copy and verify backup/restore and existing record/object references. Current populated fixtures are not that copy.
+3. Rehearse migrations on a sanitized actual production-schema copy and verify backup/restore and existing record/object references. Review actual Render PostgreSQL TLS/private-host trust settings without replacing the existing DATABASE_URL or database. Current populated fixtures are not that copy.
 4. Finish real gateway checkout/settlement/payout/reconciliation verification and other previously recorded launch gates. Keep approved USD prices, affiliate/royalty rules and financial safeguards unchanged. Historical records are not automatically spendable new-ledger balances.
-5. Physical phone/Safari/manual accessibility, operational load and final owner review remain required. Candidate code integration and all-green automated tests alone do not authorize production deployment.
+5. Resolve the previously documented legacy generated-song upload-code entitlement and external-upload quota contradictions before promoting conflicting UI promises. The existing API/code records remain; this audit does not silently change their commercial meaning.
+6. Physical phone/Safari/manual accessibility, operational load and final owner review remain required. Candidate code integration and all-green automated tests alone do not authorize production deployment.
 
 See [UPGRADE-EXISTING-SERVICE.md](UPGRADE-EXISTING-SERVICE.md), [FEATURE-STATUS.md](FEATURE-STATUS.md) and [DEPLOYMENT.md](DEPLOYMENT.md). The final target is one upgraded existing LAE-MUSIC platform. No production deployment is performed by this audit.
 
 Read-only HTTPS checks of the live service returned health/music-status 200 with database/storage configuration present. The review service returned 200 with database present and storage disabled as intended. These are presence/health checks, not production upload or streaming verification. No production storage operation was attempted.
+
+## Observed integration verification
+
+Initial integration head `ffe56e7cec211b3d4a0eba4e6282fae809945f99` passed all four jobs in CI run 40416358539. Canonical-navigation follow-up `09a6ab8743bf9d706411bf3d0ab0acebee7972e6` passed 175 native PostgreSQL tests and 8 populated upgrades; its remaining browser jobs are recorded separately when completed. Review-only configuration run 40422449582 passed with unchanged production environment/deployment, no key updates, and null R2 bootstrap/probes.
+
+After that deployment, real HTTPS listener/artist signup, session, logout and opposite-entry-point login checks passed again. `/artist`, `/artist.html` and `/artist/profile-photo` returned the shared frontend (200); the UI adapter was served as JavaScript; existing music/lyrics provider configuration remained present. Review release imports/payments remained disabled as expected. These HTTP reads and account tests did not generate music, upload/train voices, touch R2 or process payments.
+
+Follow-up CI run 40422458278 has passed application/Chromium, PostgreSQL and WebKit. Firefox job 121919941874 is still installing dependencies; its test step has not run, so it is not certified for that exact follow-up. The preceding integration candidate passed Firefox as well. CI is retained unchanged; no engine/check was skipped to produce a green result.

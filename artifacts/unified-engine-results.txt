@@ -14,3 +14,12 @@ Local native desktop/mobile PWA regressions and 2 additional axe scans pass.
 Canonical legacy artist URL navigation/title/menu checks pass in expanded local Chromium desktop/tablet/mobile journeys.
 Read-only health/music-status: live 200/200, database=true/storage_configured=true; review 200/200, database=true/storage_configured=false. Presence is not an R2 write test.
 A follow-up keeps old listener account selection and canonical titles/menu consistent. Exact follow-up CI/sandbox results remain pending until recorded.
+
+Initial integration CI run 40416358539: all four jobs passed at ffe56e7cec211b3d4a0eba4e6282fae809945f99.
+Follow-up 09a6ab8743bf9d706411bf3d0ab0acebee7972e6: 175 native PostgreSQL + 8 upgrade tests pass (job 121919941776); browser CI results still pending when this entry was written.
+Review configuration run 40422449582 / job 121919915022: success. Production configuration/deployment unchanged; updated_keys=[]; R2 bootstrap/probe=null.
+Real HTTPS auth rerun: both roles pass signup, repeat session/security reads, logout invalidation, bad-password rejection, opposite-entry-point login, whitespace preservation and role isolation.
+Real review legacy artist URL GET checks: 200 shared frontend for /artist, /artist.html, /artist/profile-photo. Studio UI adapter served 200. Existing music/lyrics configuration=true; imports=false; payments=false.
+No actual generation, R2 write/delete or real payment executed by this verification.
+
+Follow-up CI run 40422458278: application/Chromium, PostgreSQL and WebKit jobs passed at 09a6ab8743bf9d706411bf3d0ab0acebee7972e6. Firefox job 121919941874 remains in browser dependency installation; its test step has not run and is not counted as passed for this exact revision. The preceding integration head passed all four jobs, including Firefox. No browser engine/check was removed or weakened.
