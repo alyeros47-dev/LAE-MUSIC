@@ -1,3 +1,4 @@
+import { refundConditions } from "./financial-policy.js";
 const dateTime = (value) =>
   new Date(value).toLocaleString(undefined, {
     dateStyle: "medium",
@@ -16,9 +17,15 @@ export class PremiumListeningTracker {
     this.generation = 0;
     document.addEventListener("trackchange", (event) => {
       this.track = event.detail.id;
-      this.skip=event.detail.playbackPending===true||event.detail.offline===true;this.begin();
+      this.skip =
+        event.detail.playbackPending === true || event.detail.offline === true;
+      this.begin();
     });
-    document.addEventListener('playbacksource',event=>{this.skip=event.detail.offline===true;this.track=event.detail.track.id;this.begin();});
+    document.addEventListener("playbacksource", (event) => {
+      this.skip = event.detail.offline === true;
+      this.track = event.detail.track.id;
+      this.begin();
+    });
     audio.addEventListener("play", () => this.schedule());
     for (const event of ["pause", "ended"])
       audio.addEventListener(event, () => {
@@ -117,6 +124,7 @@ export async function premiumPage(view, url, ctx) {
     route,
     currencyDisplay,
   } = ctx;
+  const policy = await api("/api/platform/financial-policy");
   const plans = await api("/api/platform/premium/plans"),
     data = session.listener ? await api("/api/platform/premium/status") : null,
     approved = plans.price_status === "approved";
@@ -154,6 +162,7 @@ export async function premiumPage(view, url, ctx) {
             )
           : "") +
         `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === "monthly" ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-premium-plan="${e(p.code)}" ${approved && plans.providers.length > 0 ? "" : "disabled"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
+        notice(policy.premium) +
         currencyDisplay.info() +
         notice(
           "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
@@ -245,9 +254,15 @@ export async function premiumPage(view, url, ctx) {
                 order_id: button.dataset.premiumCheckout,
                 ...b,
               });
-              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>USD base price: ${e(amount(q.base_minor))}</p><p>Exchange rate: 1 USD = ${e(q.rate)} ${e(q.charge_currency)} · ${e(dateTime(q.conversion_at))}</p><p>Quote expires ${e(dateTime(q.expires_at))}. No money has been charged.</p><form><button type="submit" class="button">Create sandbox reference</button><p class="form-status" role="status"></p></form>`;
+              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>USD base price: ${e(amount(q.base_minor))}</p><p>Exchange rate: 1 USD = ${e(q.rate)} ${e(q.charge_currency)} · ${e(dateTime(q.conversion_at))}</p><p>Quote expires ${e(dateTime(q.expires_at))}. No money has been charged.</p><form>${refundConditions(policy, e, "listener")}<button type="submit" class="button">Create sandbox reference</button><p class="form-status" role="status"></p></form>`;
               bindForm(root.querySelector("form"), async () => {
-                const payload = { quote_id: q.id };
+                const payload = {
+                  quote_id: q.id,
+                  policy_revision: policy.revision,
+                  policy_accepted: root.querySelector(
+                    '[name="policy_accepted"]',
+                  ).checked,
+                };
                 await api("/api/platform/premium/checkout", "POST", payload, {
                   headers: {
                     "Idempotency-Key": keyFor(
@@ -394,8 +409,31 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
           true,
         ) +
         `<section class="panel"><h2>Monthly statement preview</h2><form id="royalty-preview"><label>Month<input name="month" type="month" required></label><label>Records<select name="mode" aria-label="Records"><option value="test">Sandbox</option><option value="live">Live</option></select></label><label>Accounting currency<select name="currency"><option value="USD">USD</option><option value="NGN">Legacy NGN</option></select></label><button type="submit" class="button">Calculate preview</button><p class="form-status" role="status"></p></form><div id="royalty-preview-output"></div></section>` +
+        heading(
+          "PLATFORM PROTECTION",
+          "Refund losses. Artist royalties protected.",
+        ) +
+        notice(
+          "Legitimate finalized artist allocations are not automatically clawed back. These recorded losses are expenses, not funded cash reserves. Cash release still requires independent funding verification; unsupported corrections remain under review.",
+        ) +
+        table(
+          x.platform_losses || [],
+          [
+            ["order_id", "Order"],
+            ["month", "Statement month"],
+            ["mode", "Records"],
+            ["currency", "Currency"],
+            ["amount_minor", "Platform loss", accountAmount],
+            ["created_at", "Recorded", date],
+          ],
+          "Platform refund losses",
+        ) +
         heading("OFFLINE SYNC", "Validated once. Reviewed with the period.") +
-        table(x.offline || [], [["status","Validation result"],["events","Reported plays"],["latest_at","Latest sync",date]]) +
+        table(x.offline || [], [
+          ["status", "Validation result"],
+          ["events", "Reported plays"],
+          ["latest_at", "Latest sync", date],
+        ]) +
         heading("VERIFIED PAYMENTS", "Original receipt evidence.") +
         table(x.payments, [
           ["order_id", "Order"],

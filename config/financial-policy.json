@@ -1,0 +1,12 @@
+{
+  "revision": "owner-financial-2026-10-26-v1",
+  "status": "approved",
+  "approved_at": "2026-10-26",
+  "approval_evidence": "Owner explicitly approved company-protective financial and refund rules in this development session on 2026-10-26.",
+  "premium": "Full refunds are available for duplicate charges, failed activation or verified service errors. After access begins, voluntary cancellation does not automatically refund unused time, except where required by law. Your paid access continues until expiration. Automatic renewal is off.",
+  "artist": "A full package refund is available before activation if no paid benefits have been used. After uploads, AI credits or other paid services are used, refunds are limited to verified failures, unused refundable benefits or legal requirements.",
+  "studio": "Reserved credits are restored only for verified provider failures with no usable result, once only. Completed generations are not refundable simply because you dislike the result. Uncertain outcomes require review before retrying.",
+  "royalties": "Legitimate finalized artist royalties are protected. Refund and chargeback losses first require appropriate platform reserves. Fraud, duplicate payments and accounting errors require documented, reviewable adjustments.",
+  "currency": "Refunds use the original payment currency and conversion evidence. A request or approval does not confirm that money was returned. Mandatory consumer protections apply.",
+  "live_operations_enabled": false
+}

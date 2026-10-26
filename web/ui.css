@@ -2163,3 +2163,5 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .reconciliation-scroll:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.activity-plot .receipt-point{fill:var(--lime)}
 
 .activity-plot .plot-limited{stroke:var(--lavender)}.activity-plot .budget-admitted{fill:var(--lime)}.activity-plot .budget-limited{fill:var(--lavender)}
+
+.review-basis{border:1px solid var(--line);border-radius:12px;padding:18px;margin:16px 0}.review-basis legend{color:var(--muted);padding:0 6px;font-size:.85rem}

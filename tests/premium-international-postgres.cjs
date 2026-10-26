@@ -210,7 +210,12 @@ module.exports = async (t, { pool }) => {
       );
       const stolen = await api(
         "/api/platform/premium/checkout",
-        { quote_id: quote.id },
+        {
+          policy_accepted: true,
+          policy_revision: require("../lib/financial-policy").disclosure()
+            .revision,
+          quote_id: quote.id,
+        },
         other.cookie,
       );
       assert.equal(stolen.status, 404);
@@ -221,8 +226,18 @@ module.exports = async (t, { pool }) => {
     "confirmed local charges preserve original evidence and credit USD benefits/commissions exactly once",
     async () => {
       await Promise.all([
-        service.checkout(user.id, key(), { quote_id: quote.id }),
-        service.checkout(user.id, key(), { quote_id: quote.id }),
+        service.checkout(user.id, key(), {
+          policy_accepted: true,
+          policy_revision: require("../lib/financial-policy").disclosure()
+            .revision,
+          quote_id: quote.id,
+        }),
+        service.checkout(user.id, key(), {
+          policy_accepted: true,
+          policy_revision: require("../lib/financial-policy").disclosure()
+            .revision,
+          quote_id: quote.id,
+        }),
       ]);
       assert.equal(initialized, 1);
       attempt = (
@@ -380,7 +395,12 @@ module.exports = async (t, { pool }) => {
           now: () => Date.now() + 360000,
         });
         await assert.rejects(
-          late.checkout(other.id, key(), { quote_id: q.id }),
+          late.checkout(other.id, key(), {
+            policy_accepted: true,
+            policy_revision: require("../lib/financial-policy").disclosure()
+              .revision,
+            quote_id: q.id,
+          }),
           (e) => e.status === 409,
         );
       }
@@ -486,7 +506,12 @@ module.exports = async (t, { pool }) => {
         });
       assert.equal(Number(purchase.amount_minor), 8);
       assert.equal(Number(q.charge_minor), 12800);
-      await service.checkout(other.id, key(), { quote_id: q.id });
+      await service.checkout(other.id, key(), {
+        policy_accepted: true,
+        policy_revision: require("../lib/financial-policy").disclosure()
+          .revision,
+        quote_id: q.id,
+      });
       const a = (
           await pool.query(
             "SELECT reference FROM premium_attempts WHERE order_id=$1",
@@ -801,7 +826,12 @@ module.exports = async (t, { pool }) => {
         });
       assert.equal(Number(q.base_minor), 60);
       assert.equal(Number(q.charge_minor), 7800);
-      await international.checkout(user.id, key(), { quote_id: q.id });
+      await international.checkout(user.id, key(), {
+        policy_accepted: true,
+        policy_revision: require("../lib/financial-policy").disclosure()
+          .revision,
+        quote_id: q.id,
+      });
       const a = (
           await pool.query("SELECT * FROM premium_attempts WHERE order_id=$1", [
             o.id,

@@ -97,3 +97,8 @@ The process-local/socket-keyed auth counter is replaced by production/staging Po
 ## M18 launch verification update (2026-10-26)
 
 The current managed environment is connected and supports outbound networking, unlike the initial baseline snapshot above. No provider/staging secrets or sanitized production clone are configured. Cross-browser website/PWA journeys now cover Chromium, Firefox and WebKit with 105 axe scans; populated historical upgrade fixtures, failure rollback and future/gapped-history rejection pass. The real public FX display/cache probe passed for five countries without repricing approved USD products. See M18 evidence and feature-status documentation for precise scopes. These checks do not complete the outstanding financial workflows, live integrations or production operational verification. The owner requested written policy options; the proposed rules remain inactive pending selection.
+
+
+## M19 approved financial protection update
+
+The owner replaced the proration proposal with explicit company-protective refund/royalty rules. New checkout acknowledgement, immutable policy/decision records, database-derived artist refund facts, once-only verified failure handling with persistent usable-output evidence, and protected finalized liabilities are implemented in the development candidate. Platform loss expenses are not treasury deposits or cash-release authorization. Independent live funding, complete support/dispute/correction workflows and actual outside-account verification remain launch gates. Migration 018 is additive; prior records and migration checksums remain intact.

@@ -1,6 +1,6 @@
 # Approved LAE-MUSIC financial protection and refund policy
 
-Owner-approved on **2026-10-26** in this development session. This supersedes the earlier A/B proposals, including the proposed automatic unused-time Premium proration. **Implementation and verification are in progress; this document does not enable live financial operations or authorize deployment.**
+Owner-approved on **2026-10-26** in this development session. This supersedes the earlier A/B proposals, including the proposed automatic unused-time Premium proration. **Core protections are implemented in candidate M19; real-provider and remaining financial workflows are not complete. This document does not enable live financial operations or authorize deployment.**
 
 1. **Premium listeners.** Full refunds are allowed for duplicate charges, failed activation or verified service errors. After access begins, voluntary cancellation does not automatically refund unused time, except where required by law. Access remains available until the paid expiration date.
 2. **Artist packages.** A full refund is available before activation if no paid benefits have been used. After uploads, AI credits or other paid services have been used, refunds are limited to verified failures, unused refundable benefits or legal requirements. An unsupported partial-benefit calculation must remain under review rather than inventing a price for consumed benefits.
@@ -13,3 +13,5 @@ Owner-approved on **2026-10-26** in this development session. This supersedes th
 Gateway submission, independent confirmation and accounting are separate operations. A completed external refund must be recorded accurately even if it requires a policy exception investigation. Never represent a refund request, approval, webhook or ambiguous response as returned money. Refunds use the original payment currency and conversion records, bounded by the actual charge; no duplicate conversion or currency mixing.
 
 The owner explicitly instructed: **“Implement and test these policies. Do not activate live financial operations or deploy without my authorization.”** The earlier proposal document is retained as history, not active terms.
+
+See [MILESTONE-19.md](MILESTONE-19.md) for implemented checkout acknowledgements, artist refund review, verified failure handling, finalized-liability protection, tests and precise remaining limitations. No generic fraud/error correction or reserve-funding workflow is represented as finished.

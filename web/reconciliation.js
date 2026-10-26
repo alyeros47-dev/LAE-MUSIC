@@ -63,7 +63,7 @@ export async function reconciliationPage(view, intro, ctx, url) {
   } = ctx;
   const table = (rows, columns, label = "Financial records") =>
     renderTable(rows, columns).replace(
-      '<div class="scroll">',
+      /<div class="scroll"[^>]*>/,
       '<div class="scroll reconciliation-scroll" tabindex="0" role="region" aria-label="' +
         e(label) +
         '">',

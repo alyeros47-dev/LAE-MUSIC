@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.18.0-rc.18
+# LAE-MUSIC release candidate 0.19.0-rc.19
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,7 +18,7 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–017, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–018, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
 ## Premium Listener and streaming policy
 
@@ -43,6 +43,14 @@ Signed access ends at the earlier of 24 hours or Premium expiry; reconnection ch
 Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
 ## Current local evidence
+
+[Milestone 19](MILESTONE-19.md) passes **173 application tests, 166 actual PostgreSQL checks, seven populated-upgrade checks, one socket HTTP check and four actual-library SMTP/TLS checks**, plus **29 mocked Sonic cases / 31 source invariants**. All three engines pass connected desktop/tablet/mobile website and actual offline desktop/mobile journeys: **114 axe scans**, zero automated violations. Manual/device/incomplete checks remain. Evidence: `artifacts/financial-policy-test-results.txt`; exact published-head CI is recorded on PR #6.
+
+The owner's approved company-protective rules now govern current checkout acknowledgements and artist refund review, with immutable owner-bound policy/evidence records. Terminal generation failures restore a reservation once only without usable output; conflicting or previously seen output remains protected and auditable. New verified-refund accounting preserves legitimate finalized artist allocations and records a platform expense, without pretending a reserve has been funded or releasing cash. Historical snapshots/adjustments remain intact. Additive migration **018** is required; prior SQL checksums are unchanged. Populated fixture preflight passes all nine discrepancy checks, including platform-loss source/journal consistency, while overall release stays **blocked**.
+
+External financial/music/storage/email responses remain fixtures. Real provider capability/account verification, reserve funding, live settlement/payout and remaining support/dispute/correction/valuation workflows are unfinished. Policy approval is not a deployment-ready claim. Follow [secure staging setup](SECURE-STAGING-SETUP.md) and [deployment instructions](DEPLOYMENT.md).
+
+## Previous M18 evidence
 
 [Milestone 18](MILESTONE-18.md) passes **168 application tests, 160 actual PostgreSQL checks, seven populated upgrade checks, one socket HTTP check and four actual-library SMTP/TLS checks**. All three engines (Chromium, Firefox and WebKit) pass the connected website at desktop/tablet/mobile sizes and real offline PWA desktop/mobile journeys: **105 axe scans**, zero automated violations. Browser APIs/audio and database behavior are real; external payment/music/storage/session services remain fixtures. A real public FX check verified the shared cached source for NG/NGN, GH/GHS, KE/KES, LR/LRD and US/USD, preserving all five approved USD prices with one upstream request. This does not verify merchant charge currencies or treasury FX.
 

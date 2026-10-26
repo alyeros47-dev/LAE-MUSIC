@@ -111,7 +111,11 @@ module.exports = async (t, { pool }) => {
       provider: "paystack",
       currency: "USD",
     });
-    await service.checkout(user.id, key(), { quote_id: quote.id });
+    await service.checkout(user.id, key(), {
+      policy_accepted: true,
+      policy_revision: require("../lib/financial-policy").disclosure().revision,
+      quote_id: quote.id,
+    });
     const a = (
       await pool.query("SELECT * FROM premium_attempts WHERE order_id=$1", [
         o.id,
@@ -195,11 +199,34 @@ module.exports = async (t, { pool }) => {
         provider: "paystack",
         currency: "USD",
       });
+      await assert.rejects(
+        service.checkout(user.id, key(), { quote_id: checkoutQuote.id }),
+        (e) => e.status === 409,
+      );
+      assert.equal(calls, before);
       await Promise.all([
-        service.checkout(user.id, key(), { quote_id: checkoutQuote.id }),
-        service.checkout(user.id, key(), { quote_id: checkoutQuote.id }),
+        service.checkout(user.id, key(), {
+          policy_accepted: true,
+          policy_revision: require("../lib/financial-policy").disclosure()
+            .revision,
+          quote_id: checkoutQuote.id,
+        }),
+        service.checkout(user.id, key(), {
+          policy_accepted: true,
+          policy_revision: require("../lib/financial-policy").disclosure()
+            .revision,
+          quote_id: checkoutQuote.id,
+        }),
       ]);
       assert.equal(calls - before, 1);
+      const consent = (
+        await pool.query(
+          "SELECT * FROM payment_policy_acceptances WHERE premium_order_id=$1",
+          [order.id],
+        )
+      ).rows;
+      assert.equal(consent.length, 1);
+      assert.equal(String(consent[0].account_id), String(user.id));
       const a = (
         await pool.query("SELECT * FROM premium_attempts WHERE order_id=$1", [
           order.id,
@@ -655,7 +682,7 @@ module.exports = async (t, { pool }) => {
     },
   );
   await t.test(
-    "verified full refund after finalization appends adjustments and reverses unsettled liabilities without rewriting history",
+    "verified full refund protects finalized artist liabilities and records a platform loss once without rewriting history",
     async () => {
       refunds.set("7001", {
         id: 7001,
@@ -665,6 +692,11 @@ module.exports = async (t, { pool }) => {
         amount: 80000,
         status: "processed",
       });
+      const protectedBefore = await balance(
+        pool,
+        "artist:" + direct.id + ":royalty_unsettled:test:USD",
+      );
+      assert(protectedBefore > 0);
       const before = (
         await pool.query(
           "SELECT snapshot_hash FROM royalty_statements WHERE id=$1",
@@ -707,17 +739,48 @@ module.exports = async (t, { pool }) => {
           [statement.id],
         )
       ).rows;
-      assert.equal(
-        rows.reduce((n, r) => n + Number(r.amount_minor), 0),
-        33000,
+      assert.equal(rows.length, 0);
+      const loss = (
+        await pool.query(
+          "SELECT * FROM royalty_platform_losses WHERE statement_id=$1",
+          [statement.id],
+        )
+      ).rows;
+      const adminProtection = await require("../lib/streaming-royalties")
+        .createRoyalties(pool)
+        .report();
+      assert.equal(adminProtection.reserve_funding_enabled, false);
+      assert(
+        adminProtection.platform_losses.some(
+          (r) => r.order_id === statementOrder.order.id,
+        ),
       );
-      assert(rows.every((r) => r.resolution === "unsettled_reversed"));
+      assert.equal(loss.length, 1);
+      assert.equal(loss[0].amount_minor, "33000");
+      assert.equal(loss[0].currency, "USD");
+      assert.equal(loss[0].mode, "test");
+      assert.equal(
+        (
+          await pool.query(
+            "SELECT artist_reduction_minor FROM royalty_adjustments WHERE statement_id=$1",
+            [statement.id],
+          )
+        ).rows[0].artist_reduction_minor,
+        "0",
+      );
+      await assert.rejects(
+        pool.query(
+          "UPDATE royalty_platform_losses SET amount_minor=1 WHERE statement_id=$1",
+          [statement.id],
+        ),
+        /append-only/,
+      );
       assert.equal(
         await balance(
           pool,
           "artist:" + direct.id + ":royalty_unsettled:test:USD",
         ),
-        0,
+        protectedBefore,
       );
     },
   );
@@ -871,17 +934,25 @@ module.exports = async (t, { pool }) => {
             [finalized.id],
           )
         ).rows[0].n,
-        1,
+        0,
       );
-      await assert.rejects(
-        require("../lib/finance").requestWithdrawal(
-          pool,
-          direct.id,
-          key(),
-          "USD",
-          100,
-        ),
-        (e) => e.status === 409,
+      const reservation = await require("../lib/finance").requestWithdrawal(
+        pool,
+        direct.id,
+        key(),
+        "USD",
+        100,
+      );
+      assert.equal(reservation.status, "pending");
+      await require("../lib/finance").reviewWithdrawal(
+        pool,
+        reservation.id,
+        "rejected",
+        key(),
+      );
+      assert.equal(
+        await balance(pool, "artist:" + direct.id + ":earned:USD"),
+        39000,
       );
     },
   );

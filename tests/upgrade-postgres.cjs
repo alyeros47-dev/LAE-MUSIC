@@ -87,6 +87,10 @@ async function seed(pool, checkpoint) {
     "INSERT INTO song_comments(track_id,listener_id,body) VALUES($1,$2,'Preserve this comment')",
     [track, listener],
   );
+  await pool.query(
+    "INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES('preserved-completed-task',$1,'succeeded')",
+    [artist],
+  );
   const tables = {
     creators:
       "id,display_name,email,password_salt,password_hash,plan,membership_status",
@@ -102,6 +106,7 @@ async function seed(pool, checkpoint) {
       "id,creator_id,title,genre,audio_key,audio_mime,audio_bytes,status,plays",
     song_likes: "track_id,listener_id",
     song_comments: "id,track_id,listener_id,body,status",
+    sonic_test_tasks: "task_id,creator_id,status",
     platform_migrations: "version,checksum,applied_at",
   };
   if (checkpoint >= 1) {
@@ -207,6 +212,14 @@ test("populated historical upgrades preserve accounts, catalog and separate curr
             after,
             before,
             "upgrades must preserve exact existing records",
+          );
+          assert.equal(
+            (
+              await pool.query(
+                "SELECT usable_output_seen FROM sonic_test_tasks WHERE task_id='preserved-completed-task'",
+              )
+            ).rows[0].usable_output_seen,
+            true,
           );
           for (const table of ["creators", "listeners"])
             assert(

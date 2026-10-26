@@ -51,7 +51,7 @@ export async function requestSecurityPage(view, intro, ctx, url) {
     ctx
       .table(rows, columns)
       .replace(
-        '<div class="scroll">',
+        /<div class="scroll"[^>]*>/,
         '<div class="scroll" tabindex="0" role="region" aria-label="' +
           e(label) +
           '">',

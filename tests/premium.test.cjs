@@ -133,6 +133,7 @@ function trackerFixture(api) {
   const Tracker = vm.runInNewContext(
     fs
       .readFileSync(require.resolve("../web/premium.js"), "utf8")
+      .replace(/^import .*?;\n/gm, "")
       .replace(/\bexport /g, "") + ";PremiumListeningTracker",
     {
       document: { addEventListener: (name, fn) => (events[name] = fn) },
