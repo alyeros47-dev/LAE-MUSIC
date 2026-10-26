@@ -283,3 +283,50 @@ test("absent or invalid credentials stop before deployment", async () => {
   );
   assert.equal(calls, 1);
 });
+
+test("only cryptographically verified temporary review storage can reuse a parent access identifier", () => {
+  const storage = require("../lib/review-storage"),
+    grants = require("../scripts/bootstrap-review-r2.cjs");
+  const source = { ...live, R2_ACCOUNT_ID: "a".repeat(32) };
+  const child = grants.derive({
+    account: source.R2_ACCOUNT_ID,
+    key: source.R2_ACCESS_KEY_ID,
+    secret: source.R2_SECRET_ACCESS_KEY,
+    bucket: source.R2_BUCKET,
+  });
+  const proposal = {
+    R2_ACCOUNT_ID: child.account,
+    R2_ACCESS_KEY_ID: child.key,
+    R2_SECRET_ACCESS_KEY: child.secret,
+    R2_BUCKET: child.bucket,
+    R2_SESSION_TOKEN: child.sessionToken,
+    LAE_REVIEW_R2_MODE: storage.MODE,
+    REVIEW_STORAGE_ORIGIN: storage.ORIGIN,
+    REVIEW_STORAGE_TICKET_KEY: "a".repeat(64),
+  };
+  const updates = planEnvironment(source, isolated, proposal);
+  assert(updates.some((x) => x.key === "R2_SESSION_TOKEN"));
+  assert(!updates.some((x) => x.value === source.R2_SECRET_ACCESS_KEY));
+  assert.throws(
+    () =>
+      planEnvironment(source, isolated, {
+        ...proposal,
+        R2_SECRET_ACCESS_KEY: source.R2_SECRET_ACCESS_KEY,
+      }),
+    /Invalid or expired/,
+  );
+  assert.throws(
+    () =>
+      planEnvironment(source, isolated, {
+        ...proposal,
+        REVIEW_STORAGE_ORIGIN: "https://unrelated.example",
+      }),
+    /proxy/,
+  );
+  assert.equal(
+    planEnvironment(source, { ...isolated, ...proposal }).filter((x) =>
+      x.key.startsWith("R2_"),
+    ).length,
+    0,
+  );
+});

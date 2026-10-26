@@ -5,6 +5,10 @@ on:
     paths:
       - .github/workflows/review-integrations.yml
       - scripts/configure-review-integrations.cjs
+      - scripts/bootstrap-review-r2.cjs
+      - scripts/verify-review-storage.cjs
+      - lib/review-storage.js
+      - tests/review-storage.test.cjs
       - tests/review-integrations.test.cjs
       - deploy/review-provider-budget.cjs
       - deploy/review-entrypoint.sh
@@ -27,7 +31,7 @@ jobs:
         with:
           node-version: "22"
       - name: Test independent environment safeguards
-        run: node --test tests/review-integrations.test.cjs tests/review-provider-budget.test.cjs
+        run: node --test tests/review-integrations.test.cjs tests/review-provider-budget.test.cjs tests/review-storage.test.cjs
       - name: Verify the actual sandbox container before configuration
         run: |
           docker build -f deploy/review.Dockerfile -t lae-integrations-ci .
@@ -38,6 +42,7 @@ jobs:
         run: docker rm -f lae-integrations-ci 2>/dev/null || true
       - name: Configure and verify only the review sandbox
         env:
+          LAE_BOOTSTRAP_REVIEW_R2: "1"
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           SANDBOX_R2_ACCOUNT_ID: ${{ secrets.SANDBOX_R2_ACCOUNT_ID }}
           SANDBOX_R2_ACCESS_KEY_ID: ${{ secrets.SANDBOX_R2_ACCESS_KEY_ID }}

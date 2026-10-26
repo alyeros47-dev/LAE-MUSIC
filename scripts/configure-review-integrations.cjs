@@ -23,7 +23,13 @@ const STORAGE = [
   "R2_SECRET_ACCESS_KEY",
   "R2_BUCKET",
 ];
-const ALLOWED = new Set([...COPY, ...STORAGE]);
+const DELEGATED = [
+  "R2_SESSION_TOKEN",
+  "LAE_REVIEW_R2_MODE",
+  "REVIEW_STORAGE_ORIGIN",
+  "REVIEW_STORAGE_TICKET_KEY",
+];
+const ALLOWED = new Set([...COPY, ...STORAGE, ...DELEGATED]);
 function envMap(rows) {
   if (!Array.isArray(rows)) throw Error("Invalid environment inventory.");
   const out = {};
@@ -77,6 +83,35 @@ function planEnvironment(source, target, sandbox = {}) {
     (target.R2_BUCKET !== BUCKET || target.R2_BUCKET === source.R2_BUCKET)
   )
     throw Error("Sandbox must not use production storage.");
+  const grant = require("./bootstrap-review-r2.cjs");
+  const proposalTemporary =
+    sandbox.LAE_REVIEW_R2_MODE === require("../lib/review-storage").MODE &&
+    grant.verifyDerived(source, sandbox);
+  if (
+    sandbox.LAE_REVIEW_R2_MODE === require("../lib/review-storage").MODE &&
+    !proposalTemporary
+  )
+    throw Error("Invalid or expired review storage delegation.");
+  const targetTemporary =
+    target.LAE_REVIEW_R2_MODE === require("../lib/review-storage").MODE &&
+    grant.verifyDerived(source, target);
+  if (proposalTemporary || targetTemporary) {
+    const updates = [];
+    for (const key of COPY)
+      if (!target[key]?.trim() && source[key]?.trim())
+        updates.push({ key, value: source[key].trim() });
+    if (proposalTemporary) {
+      if (
+        sandbox.REVIEW_STORAGE_ORIGIN !== ORIGIN ||
+        !/^[a-f0-9]{64}$/.test(sandbox.REVIEW_STORAGE_TICKET_KEY || "")
+      )
+        throw Error("Invalid review object proxy configuration.");
+      for (const key of [...STORAGE, ...DELEGATED])
+        if (target[key] !== sandbox[key])
+          updates.push({ key, value: sandbox[key] });
+    }
+    return updates;
+  }
   const existingStorage = STORAGE.filter((k) => !!target[k]);
   if (existingStorage.length && existingStorage.length !== 4)
     throw Error(
@@ -120,6 +155,7 @@ async function configure({
   log = console.log,
   attempts = 110,
   verify = true,
+  bootstrapStorage = false,
 } = {}) {
   if (!key?.trim()) throw Error("GitHub RENDER_API_KEY secret is required.");
   if (!/^[a-f0-9]{40}$/.test(sha || ""))
@@ -227,6 +263,32 @@ async function configure({
     targetEnv = await readEnv(TARGET),
     before = fingerprint(sourceEnv),
     sourceDeploys = await api("/services/" + sourceId + "/deploys?limit=1");
+  let storageBootstrap = null;
+  if (bootstrapStorage && !STORAGE.some((k) => sandbox["SANDBOX_" + k])) {
+    const storageModule = require("../lib/review-storage");
+    let refresh = !STORAGE.every((k) => targetEnv[k]);
+    if (targetEnv.LAE_REVIEW_R2_MODE === storageModule.MODE) {
+      try {
+        refresh =
+          storageModule.decodeGrant(targetEnv.R2_SESSION_TOKEN).claims.exp *
+            1000 -
+            Date.now() <
+          86400000;
+      } catch {
+        refresh = true;
+      }
+    }
+    if (refresh) {
+      const prepared = await require("./bootstrap-review-r2.cjs").bootstrap(
+        sourceEnv,
+        { fetchImpl, ticketKey: targetEnv.REVIEW_STORAGE_TICKET_KEY },
+      );
+      const { environment, ...safeReport } = prepared;
+      storageBootstrap = safeReport;
+      if (prepared.configured) sandbox = { ...sandbox, ...environment };
+      log("Review storage bootstrap: " + JSON.stringify(safeReport));
+    }
+  }
   const updates = planEnvironment(sourceEnv, targetEnv, sandbox);
   for (const item of updates) {
     await api("/services/" + TARGET + "/env-vars/" + item.key, "PUT", {
@@ -302,6 +364,13 @@ async function configure({
       }
     }
   }
+  const storageProbe =
+    verify && STORAGE.every((k) => !!targetEnv[k])
+      ? await require("./verify-review-storage.cjs").verifyStorage(targetEnv, {
+          source: sourceEnv,
+          fetchImpl,
+        })
+      : null;
   const sourceAfter = await readEnv(sourceId),
     deploysAfter = await api("/services/" + sourceId + "/deploys?limit=1");
   if (
@@ -323,7 +392,9 @@ async function configure({
     storage_requires_separate_credentials: !STORAGE.every(
       (k) => !!targetEnv[k],
     ),
-    storage_upload_verified: false,
+    storage_bootstrap: storageBootstrap,
+    storage_upload_verified: storageProbe?.verified === true,
+    storage_probe: storageProbe,
     voice_training_verified: false,
     music_generation_verified: false,
     production_ready: false,
@@ -355,6 +426,7 @@ if (require.main === module)
       key: process.env.RENDER_API_KEY,
       sha: process.env.GITHUB_SHA,
       sandbox,
+      bootstrapStorage: process.env.LAE_BOOTSTRAP_REVIEW_R2 === "1",
     });
     console.log(JSON.stringify(result));
     if (process.env.GITHUB_STEP_SUMMARY)

@@ -48,9 +48,10 @@ function parse(req,max=12000){return new Promise((resolve,reject)=>{let bytes=0,
 function origin(req){if(!req.headers.origin)return true;try{return new URL(req.headers.origin).host===req.headers.host}catch{return false}}
 function safeText(v,max){return typeof v==='string'?v.trim().slice(0,max):''}
 function integer(v,min,max){return Number.isSafeInteger(Number(v))&&Number(v)>=min&&Number(v)<=max?Number(v):null}
-function storage(){const {R2_ACCOUNT_ID,R2_ACCESS_KEY_ID,R2_SECRET_ACCESS_KEY,R2_BUCKET}=process.env;if(!R2_ACCOUNT_ID||!R2_ACCESS_KEY_ID||!R2_SECRET_ACCESS_KEY||!R2_BUCKET)return null;return {account:R2_ACCOUNT_ID,key:R2_ACCESS_KEY_ID,secret:R2_SECRET_ACCESS_KEY,bucket:R2_BUCKET}}
+function storage(){const {R2_ACCOUNT_ID,R2_ACCESS_KEY_ID,R2_SECRET_ACCESS_KEY,R2_BUCKET}=process.env;if(!R2_ACCOUNT_ID||!R2_ACCESS_KEY_ID||!R2_SECRET_ACCESS_KEY||!R2_BUCKET)return null;return require('./lib/review-storage').configuration({account:R2_ACCOUNT_ID,key:R2_ACCESS_KEY_ID,secret:R2_SECRET_ACCESS_KEY,bucket:R2_BUCKET},process.env)}
 function hmac(key,msg){return crypto.createHmac('sha256',key).update(msg).digest()}
 function presign(s,key,action,expires=900){
+ if(s.reviewProxy)return require('./lib/review-storage').ticket(s,key,action,expires);
  const now=new Date(),stamp=now.toISOString().replace(/[:-]|\.\d{3}/g,''),date=stamp.slice(0,8),region='auto',service='s3',host=s.account+'.r2.cloudflarestorage.com';
  const uri='/'+[s.bucket,...key.split('/')].map(encodeURIComponent).join('/');
  const scope=date+'/'+region+'/'+service+'/aws4_request';

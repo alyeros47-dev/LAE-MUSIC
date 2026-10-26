@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test');const assert=require('node:assert/strict');const {createPlatform}=require('../lib/platform');
-function setup({pool=null,user=null,listener=null,admin=false,origin=true}={}){const ctx={pool,me:async()=>user,listenerMe:async()=>listener,authAdmin:()=>admin,validOrigin:()=>origin,body:async req=>req.data||{},json(res,status,value){res.writeHead(status,{'Content-Type':'application/json'});res.end(JSON.stringify(value));}};return createPlatform(ctx);}
+function setup({pool=null,user=null,listener=null,admin=false,origin=true,env}={}){const ctx={pool,env,me:async()=>user,listenerMe:async()=>listener,authAdmin:()=>admin,validOrigin:()=>origin,body:async req=>req.data||{},json(res,status,value){res.writeHead(status,{'Content-Type':'application/json'});res.end(JSON.stringify(value));}};return createPlatform(ctx);}
 function response(){return {headers:{},status:0,body:'',setHeader(k,v){this.headers[k]=v;},writeHead(n,h){this.status=n;Object.assign(this.headers,h);},end(b){this.body=b?.toString()||'';}};}
 async function call(platform,p,{method='GET',headers={},data={}}={}){const req={method,url:p,headers,socket:{remoteAddress:'127.0.0.1'},data};const res=response();try{if(!await platform.guard(req,res,new URL(p,'http://localhost')))await platform.handler(req,res,new URL(p,'http://localhost'));}catch(error){res.status=error.status;res.body=JSON.stringify({error:error.message});}return res;}
 test('public shell renders without a database, uses CSP and never needs registration',async()=>{for(const p of ['/','/discover','/artists','/studio','/partners','/library','/admin/console']){const r=await call(setup(),p);assert.equal(r.status,200);assert.match(r.body,/id="audio"/);assert.match(r.headers['Content-Security-Policy'],/object-src 'none'/);}const r=await call(setup(),'/web/app.js');assert.equal(r.status,200);assert.match(r.headers['Content-Type'],/javascript/);});
@@ -20,3 +20,10 @@ test('public currency settings and USD prices need no registration, database or 
 });
 
 test('Nigeria checkout policy is public while unconfigured provider webhooks stay unavailable',async()=>{const p=setup({origin:false});const caps=await call(p,'/api/platform/payments/capabilities');assert.equal(JSON.parse(caps.body).merchant_country,'NG');assert.equal(JSON.parse(caps.body).enabled,false);for(const provider of ['paystack','flutterwave'])assert.equal((await call(p,'/api/platform/payments/webhooks/'+provider,{method:'POST'})).status,503);assert.equal((await call(p,'/api/platform/payments/webhooks/paystack/extra',{method:'POST'})).status,403);assert.equal((await call(p,'/api/platform/checkout',{method:'POST'})).status,403);});
+
+test('R2 browser uploads allow only the exact configured storage origin; temporary review credentials stay same-origin',async()=>{
+ const account='a'.repeat(32);let r=await call(setup({env:{R2_ACCOUNT_ID:account}}),'/');
+ assert(r.headers['Content-Security-Policy'].includes("connect-src 'self' https://"+account+'.r2.cloudflarestorage.com;'));
+ r=await call(setup({env:{R2_ACCOUNT_ID:account,LAE_REVIEW_R2_MODE:'scoped-temporary-v1'}}),'/');assert(!r.headers['Content-Security-Policy'].includes('.r2.cloudflarestorage.com'));
+ r=await call(setup({env:{R2_ACCOUNT_ID:"bad; https://evil.invalid"}}),'/');assert(!r.headers['Content-Security-Policy'].includes('evil.invalid'));
+});

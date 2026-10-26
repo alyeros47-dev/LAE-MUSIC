@@ -38,3 +38,5 @@ require('./provision-review.test.cjs');
 
 require('./review-integrations.test.cjs');
 require('./review-provider-budget.test.cjs');
+
+require('./review-storage.test.cjs');

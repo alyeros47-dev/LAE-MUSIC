@@ -1,0 +1,7 @@
+R2 review infrastructure checks, 2026-10-26
+Application: 216 pass, 0 fail (npm test).
+Native HTTP: 1 pass, 0 fail.
+Includes restricted grants, object tickets, isolation, streaming/range transport, expiry, forged grants, probe cleanup, source-secret protection and CSP tests.
+External S3/Render responses in unit tests are mocks.
+Real R2 bootstrap/public gateway checks are pending the isolated configuration workflow.
+No production deployment, migration, data mutation or live financial activation.
