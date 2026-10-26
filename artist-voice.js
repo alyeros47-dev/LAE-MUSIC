@@ -21,6 +21,16 @@ module.exports=async function voice(req,res,p,ctx){
  await pool.query("INSERT INTO artist_voice_profiles(creator_id,object_key,task_id,persona_id,status) VALUES($1,$2,NULL,NULL,'uploading') ON CONFLICT(creator_id) DO UPDATE SET object_key=$2,task_id=NULL,persona_id=NULL,status='uploading',updated_at=NOW()",[user.id,key]);
  return send(res,200,{url:presign(store,key,'put',900)}),true;
  }
+ if(p==='/api/voice/upload-bytes'&&req.method==='PUT'){
+ const x=await get();if(!x||x.status!=='uploading')return send(res,409,{error:'Request a voice upload first'}),true;
+ const mime=String(req.headers['content-type']||'').split(';')[0].toLowerCase();
+ const length=Number(req.headers['content-length']);
+ if(!['audio/mpeg','audio/wav','audio/x-wav'].includes(mime)||!Number.isSafeInteger(length)||length<10000||length>12000000)return send(res,413,{error:'Voice file must be MP3 or WAV, between 10 KB and 12 MB'}),true;
+ const store=storage();if(!store)return send(res,503,{error:'Audio storage unavailable'}),true;
+ const upstream=await fetch(presign(store,x.object_key,'put'),{method:'PUT',headers:{'Content-Type':mime,'Content-Length':String(length)},body:req,duplex:'half',signal:AbortSignal.timeout(120000)});
+ if(!upstream.ok){console.error('Voice storage upload rejected:',upstream.status);return send(res,502,{error:'Voice storage rejected upload ('+upstream.status+'). Check R2 credentials and bucket access.'}),true}
+ return send(res,200,{uploaded:true}),true;
+ }
  if(p==='/api/voice/train'&&req.method==='POST'){
  const x=await get();if(!x||x.status!=='uploading')return send(res,409,{error:'Upload a voice sample first'}),true;
  const store=storage();if(!store)return send(res,503,{error:'Audio storage unavailable'}),true;const info=await headObject(store,x.object_key);if(info.ContentLength>12000000)return send(res,400,{error:'Voice sample too large'}),true;
