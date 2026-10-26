@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.16.0-rc.16
+# LAE-MUSIC release candidate 0.17.0-rc.17
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,7 +18,7 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–016, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–017, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
 ## Premium Listener and streaming policy
 
@@ -43,6 +43,10 @@ Signed access ends at the earlier of 24 hours or Premium expiry; reconnection ch
 Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
 ## Current local evidence
+
+[Milestone 17](MILESTONE-17.md) adds production/staging shared request budgets, verified account scope, explicit proxy-chain trust, private aggregate monitoring and additive migration 017. Local verification passes **165 application / 160 actual PostgreSQL checks**, **one socket HTTP / four actual-library SMTP/TLS checks**, connected Chromium desktop/tablet/mobile and both actual offline PWA journeys, and **35 axe scans**. Native HTTP restart/proxy and 240-request two-session identity journeys are included in the PostgreSQL suite. Read-only schema/accounting/FX/offline/review integrity remains clean; overall release remains blocked. All provider/media/session fixture distinctions and real-hosting requirements remain documented. Exact published-head CI is recorded on PR #6; local evidence is `artifacts/request-protection-test-results.txt`.
+
+## Previous M16 evidence
 
 [Milestone 16](MILESTONE-16.md) adds a unified owner/finance reconciliation workspace with separate currency/mode reporting, exact ledger exports, independently verified checkout lookup through existing coordinators and revisioned operator annotations. Notes cannot change money, holds or benefits; resolving an active source is refused. Additive migration 016 protects identity/history and the read-only preflight checks annotation consistency. Local application and actual PostgreSQL suites pass **153 / 153 checks**; HTTP and real-library SMTP/TLS pass **1 / 4**. The full Chromium command passes existing desktop/tablet/mobile journeys, reconciliation claim/wait/filter/CSV/original-provider-lookup controls, both actual offline PWA journeys and **32 axe scans with zero automated violations**. All nine populated read-only preflight discrepancy counts are zero. Published-head CI evidence is recorded on PR #6 and in `artifacts/reconciliation-test-results.txt`. All outside financial/media services remain fixtures or unconfigured. This does not establish production readiness.
 

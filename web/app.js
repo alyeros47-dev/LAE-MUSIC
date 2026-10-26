@@ -1,3 +1,4 @@
+import {requestSecurityPage} from './request-security.js';
 import {reconciliationPage} from './reconciliation.js';
 import {ListeningAds} from './listening-ads.js';
 import {OfflineLibrary,offlinePage} from './offline.js';
@@ -306,9 +307,10 @@ async function adminPage(view,url) {
   if(!session.admin){await adminSignIn(view,ctx);return;}
   const requested=url.searchParams.get('section')||'overview';
   const permitted=session.admin_user?.sections;
-  const sections=['overview','reconciliation','artists','listeners','catalog','subscriptions','affiliates','commerce','payments','checkouts','refunds','security','withdrawals','gifts','generations','releases','content','editorial','moderation','audit','royalties','operators'].filter(s=>!permitted||s==='operators'||permitted.includes(s));
+  const sections=['overview','protection','reconciliation','artists','listeners','catalog','subscriptions','affiliates','commerce','payments','checkouts','refunds','security','withdrawals','gifts','generations','releases','content','editorial','moderation','audit','royalties','operators'].filter(s=>!permitted||s==='operators'||permitted.includes(s));
   const section=sections.includes(requested)?requested:'overview';
   const intro=heading('PLATFORM OPERATIONS','The control room.',session.admin_user?.source==='named'?session.admin_user.display_name+' · '+session.admin_user.role:'Protected management. Verified records. Clear decisions.','<div class="row-actions">'+(session.admin_user?.source==='named'?'<button class="button secondary" id="admin-verify-session">Verify session</button>':'')+'<button class="button secondary" id="admin-logout">Admin sign out</button></div>')+`<nav class="tabs" aria-label="Administration">${sections.map(s=>`<a href="/admin/console?section=${s}" data-nav class="${s===section?'active':''}">${e(s==='operators'?'Access & security':s.charAt(0).toUpperCase()+s.slice(1))}</a>`).join('')}</nav>`;
+  if(section==='protection'){await requestSecurityPage(view,intro,{...ctx,table},url);bindAdminToolbar(ctx);return;}
   if(section==='reconciliation'){await reconciliationPage(view,intro,{...ctx,table},url);bindAdminToolbar(ctx);return;}
   if(section==='operators'){await operatorsPage(view,intro,ctx);bindAdminToolbar(ctx);return;}
   if(section==='overview'){

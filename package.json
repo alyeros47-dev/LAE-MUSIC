@@ -1,6 +1,6 @@
 {
   "name": "lae-music",
-  "version": "0.16.0-rc.16",
+  "version": "0.17.0-rc.17",
   "private": true,
   "type": "commonjs",
   "scripts": {
