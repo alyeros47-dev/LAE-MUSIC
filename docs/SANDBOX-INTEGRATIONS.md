@@ -40,3 +40,16 @@ Installation requires real upload/HEAD/read/range checks plus a denied cross-buc
 The browser receives short-lived HMAC tickets bound to a single object and method. The sandbox streams data to/from R2 and preserves byte-range seeking. R2 session tokens stay server-side: exposing a derived JWT in an ordinary presigned URL would disclose the derived bucket credential. Expired grants fail closed. Rerun the configuration workflow before seven days to renew; renewal is not a production deployment. This temporary mode is review infrastructure, not a production credential-management system.
 
 After deployment, a disposable one-second WAV fixture verifies public HTTPS upload, HEAD, exact bytes and range reads through the gateway, then deletes only that generated review fixture. This is storage transport verification, not proof of artist publishing, provider music generation or voice training. No catalog entries, paid benefits or successful payments are invented. Failed checks are reported explicitly.
+
+## Observed review check — October 26, 2026
+
+[Configuration run 40366060838](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40366060838), commit `bcb0c8683435cee5b20d50a5b63fa70b592d768f`, passed safeguard tests and actual 512 MB container checks, then deployed only the review sandbox. The existing R2 credential returned **403** for the separate bucket HEAD, reported as `separate_bucket_access_not_authorized`. No storage credentials were installed (`updated_keys: []`); upload/voice/music-generation success is not claimed. Production environment and deployment snapshots remained unchanged. Both provider read-only authentication checks returned 200. Independent sandbox and live health checks also returned 200; sandbox database is available and payments remain disabled.
+
+### Owner setup to unblock storage
+
+1. In Cloudflare → R2 Object Storage, create `lae-music-review-sandbox` (or confirm the existing bucket). Leave the live bucket unchanged.
+2. Create a new R2 API token with **Object Read & Write**, restricted to **this bucket only**. Keep the live token; do not rotate or revoke it. Store the resulting secret securely when Cloudflare first shows it.
+3. In GitHub → `alyeros47-dev/LAE-MUSIC` → Settings → Secrets and variables → Actions → New repository secret, add `SANDBOX_R2_ACCOUNT_ID`, `SANDBOX_R2_ACCESS_KEY_ID`, `SANDBOX_R2_SECRET_ACCESS_KEY`, and `SANDBOX_R2_BUCKET` (`lae-music-review-sandbox`). Do not put them in Git, issue comments or chat.
+4. Rerun the **Configure isolated review integrations** workflow on the development branch. It preserves provider keys, validates bucket/key separation, configures only the review service, then verifies HTTPS PUT/HEAD/GET/Range using a disposable audio fixture. Ordinary artist publishing and actual provider generation still need their own authorized end-to-end checks afterward.
+
+A green workflow means the safety/configuration process completed; consult `storage_upload_verified` and `storage_probe` before treating storage as working. Missing permissions intentionally return a safe blocked result rather than fabricating upload success.
