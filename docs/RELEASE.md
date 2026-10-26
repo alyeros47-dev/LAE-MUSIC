@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.14.0-rc.14
+# LAE-MUSIC release candidate 0.15.0-rc.15
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,13 +18,19 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–014, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–015, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
 ## Premium Listener and streaming policy
 
 [Milestone 14](MILESTONE-14.md) implements the explicitly approved **USD** Premium Listener base prices: **$0.08 / $0.23 / $0.60 / $1.21 / $5.88** for 1/7/30/60/365 days. It replaces M13's NGN-only pricing with the same country selector, daily rate cache and immutable quote system used by artist products. Local payments use reviewed account currencies and a final-amount confirmation. Original local charge/refund evidence and USD equivalent/rate/timestamp are preserved; costs normalize once at the original snapshot. Historical NGN contracts remain in a separate legacy book.
 
 The universal 50% recognized-net streaming pool, eligible Premium streams, annual deferral, no-stream liabilities, immutable finalization/refund recovery and free listening remain intact. Low-cent commission rounding cannot exceed the 15% listener-product cap. Cross-currency cash release remains blocked without independently verified treasury conversion. Live settlement/payout adapters remain unconfigured; sandbox liabilities are never cash.
+
+## Premium website offline listening
+
+[Milestone 15](MILESTONE-15.md) supersedes every earlier paid-download proposal. Premium saves are included at no extra cost, inside the website's controlled browser library. There is no listener MP3 export, separate song purchase or download commission. Actual service workers/IndexedDB/Web Crypto/native audio are tested with an isolated R2/gateway fixture. Dedicated signing-key and real R2 staging verification remain required. Free ad infrastructure is integrated, but the reviewed creative manifest is disabled until actual approved media is supplied. No synthetic ad or paid impression is claimed.
+
+Signed access ends at the earlier of 24 hours or Premium expiry; reconnection checks holds, ownership, publication and device revocation. Valid pre-expiry plays may sync within 48 hours, once per signed event/sequence, into the existing 50% recognized-net model. Royalty finalization waits 48 hours after UTC month-end. Browser storage is not DRM and cannot prove a human listened; physical-device/Safari/Firefox testing and operational fraud review remain gates.
 
 ## Preserved historical package fields
 
@@ -37,6 +43,10 @@ The universal 50% recognized-net streaming pool, eligible Premium streams, annua
 Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
 ## Current local evidence
+
+Candidate 0.15.0-rc.15 passes **146 application tests, 141 actual PostgreSQL 16 checks, one socket HTTP check and four real-library SMTP/TLS checks**. The database suite includes migrations 001–015, concurrent offline retry/deduplication, interval overlap, malformed-batch rollback, expiry/grace, payment holds and append-only protection. Real Chromium PWA desktop/mobile runs verify encrypted/nonextractable-key storage, corrupt-cipher rejection, actual offline reload/playback, clock/expiry guards, once-only sync and cross-tab/account cleanup. The full combined browser command passes existing desktop/tablet/mobile journeys, both real PWA desktop/mobile journeys, unsupported-browser handling and **29 axe scans with zero automated violations**. Final evidence is recorded in `artifacts/offline-test-results.txt` and PR #6. A populated read-only fixture preflight passes with zero discrepancies in all eight schema/accounting/FX/offline-stream integrity counts, while overall deployment status stays blocked. Media/gateway/account services remain fixtures. See [MILESTONE-15.md](MILESTONE-15.md).
+
+## Previous M14 evidence
 
 Candidate 0.14.0-rc.14 passed **140 application tests, 133 actual PostgreSQL 16 checks, one socket HTTP test, four real-library SMTP/TLS tests and three Chromium viewport journeys**. Existing Sonic 25 mocked cases / 31 source invariants pass. Populated-database read-only preflight reported zero financial/FX discrepancies, while overall deployment remains blocked. A separate real public-feed check through the shared pricing service verified current NGN/GHS/KES/LRD estimates. New gateway/treasury/media responses are otherwise fixtures. See [MILESTONE-14.md](MILESTONE-14.md). The published currency code passed [CI run 40245909162](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40245909162), commit `eb3a4cbcd53f778635578cc54e1cf60bba338339`; see `artifacts/ci-international-currency.txt`. The accessibility follow-up adds 27 passing local axe/Chromium scans, current dialog naming and keyboard focus checks, with incomplete contrast checks explicitly retained for manual review. Final-head follow-up CI is recorded on PR #6.
 
@@ -68,11 +78,11 @@ The local default preflight returned exit 2 (`blocked`), with database inspectio
 ## Remaining deployment gates
 
 1. Supply authorized test R2, music/lyrics, Paystack/Flutterwave and email credentials securely. Verify real outcomes, account/currency permissions, trusted media origins, sender identity, Range/HEAD and actual audio. Never place secrets in chat, Git or PR artifacts.
-2. Approve paid-download pricing/eligible royalty revenue, remaining partial/dispute policies and commercial contradictions. The streaming model is now approved and implemented. Provider-specific live royalty funding, commission clearance, generic post-finalization corrections, paid-download checkout/entitlements, Flutterwave v3 refunds, final dispute handling and actual bank payouts still require implementation/verification. They are not launch-complete.
+2. Configure the dedicated offline signing key, verify real R2 offline playback and supply reviewed free-listener ad creative. Resolve remaining partial/dispute policies and commercial contradictions. The streaming model is now approved and implemented. Provider-specific live royalty funding, commission clearance, generic post-finalization corrections, Flutterwave v3 refunds, final dispute handling and actual bank payouts still require implementation/verification. They are not launch-complete.
 3. Run migration/preflight on a sanitized production-schema clone; review bootstrap DDL, compatibility, lock duration, indexes/query plans, load, reconciliation, backups/recovery and actual Render TLS/private-network trust.
 4. Configure dedicated `ADMIN_MFA_KEY`, verify owner enrollment/recovery-code custody and clock synchronization. Configure the approved SMTP sender/transport and `ACCOUNT_EMAIL_KEY`, and verify staging delivery before enabling email recovery.
 5. Complete physical-device, keyboard/screen-reader, touch seeking, real browser audio/autoplay and operational abuse-control review.
 
-No live-money checkout or provider-specific settlement/payout runtime is enabled. The new cash-release contract is tested with mocked independent evidence only. No environment flag alone activates it. Current merchant/email manifests are disabled. Coin purchases and paid downloads cannot simulate receipt; package selection grants nothing by itself. Provider receivables and pending commissions are not spendable artist cash.
+No live-money checkout or provider-specific settlement/payout runtime is enabled. The new cash-release contract is tested with mocked independent evidence only. No environment flag alone activates it. Current merchant/email manifests are disabled. Coin purchases cannot simulate receipt; paid listener song purchases and MP3 exports are prohibited; package selection grants nothing by itself. Provider receivables and pending commissions are not spendable artist cash.
 
 Use Node.js 22, the committed lockfile and `.env.example`. Preserve migration checksums and history. There are no destructive down migrations. Do not roll back to code that ignores payment holds, named administrator mode/revocation or platform moderation holds; use a compatible revision and reviewed recovery procedure. Only the user will perform the final production deployment after all gates are resolved.

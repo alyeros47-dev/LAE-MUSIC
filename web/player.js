@@ -1,7 +1,7 @@
 const $ = id => document.getElementById(id);
 export const time = seconds => Number.isFinite(seconds) && seconds >= 0 ? Math.floor(seconds / 60) + ':' + String(Math.floor(seconds % 60)).padStart(2, '0') : '0:00';
 const cover = track => track?.id ? `/api/music/tracks/${encodeURIComponent(track.id)}/cover-image` : '/web/artwork.svg';
-const safeTrack = t => ({ id: String(t.id), title: String(t.title || 'Untitled'), artist: String(t.artist || 'Independent artist'), artist_id: t.artist_id ? String(t.artist_id) : '', genre: String(t.genre || '') });
+const safeTrack = t => ({ id: String(t.id), title: String(t.title || 'Untitled'), artist: String(t.artist || 'Independent artist'), artist_id: t.artist_id ? String(t.artist_id) : '', genre: String(t.genre || ''),...(t.offline===true?{offline:true}:{}) });
 export class PlaybackQueue {
   constructor() { this.tracks = []; this.index = -1; this.shuffle = false; this.repeat = 'off'; this.history = []; }
   set(tracks, index = 0) { this.tracks = tracks.map(safeTrack); this.index = this.tracks.length ? Math.max(0, Math.min(index, this.tracks.length - 1)) : -1; this.history = []; }
@@ -56,18 +56,18 @@ export class MusicPlayer {
   message(value) { $('playback-status').textContent = value; $('playback-status').title = value; }
   playState(playing) { $('play-toggle').textContent = playing ? 'Ⅱ' : '▶'; $('play-toggle').setAttribute('aria-label', playing ? 'Pause' : 'Play'); $('expanded-toggle').textContent = playing ? 'Pause' : 'Play'; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused'; }
   updateMute() { $('mute').setAttribute('aria-label', this.audio.muted ? 'Unmute' : 'Mute'); $('mute').textContent = this.audio.muted || !this.audio.volume ? '⊘' : '◖'; }
-  async setTracks(tracks, index = 0) { this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
+  async setTracks(tracks, index = 0) { if(this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
   add(track) { this.queue.tracks.push(safeTrack(track)); this.toast('Added to your queue'); this.renderQueue(); this.save(); }
   async playIndex(index, autoplay = true) {
-    if (index < 0 || index >= this.queue.tracks.length) return;
+    if (this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}if (index < 0 || index >= this.queue.tracks.length) return;
     const request = ++this.request; this.controller?.abort(); this.controller = new AbortController();
-    this.queue.index = index; this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.streamFailed = false; this.counted = false; this.playRecordKey=crypto.randomUUID(); this.listened = 0; this.lastTime = 0;
+    this.currentSourceOffline=false;this.queue.index = index; this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.streamFailed = false; this.counted = false; this.playRecordKey=crypto.randomUUID(); this.listened = 0; this.lastTime = 0;
     const track = this.queue.current; this.renderTrack(track); this.renderQueue(); this.message('Preparing your music…'); this.save();
     try {
-      const data = await this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`, 'GET', undefined, { signal: this.controller.signal });
+      const online=()=>this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`, 'GET', undefined, { signal: this.controller.signal });const data = this.sourceProvider?await this.sourceProvider(track,online):await online();
       if (request !== this.request) return;
-      const url = new URL(data.url); if (url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
-      this.audio.src = url.href; this.audio.load(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
+      const url = new URL(data.url); if (!(data.offline===true&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
+      this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; this.audio.load(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
       if (autoplay) await this.audio.play();
     } catch (error) {
       if (request !== this.request || error.name === 'AbortError') return;
@@ -76,12 +76,13 @@ export class MusicPlayer {
     }
   }
   async toggle() {
+    if(this.advertiser?.active)return this.advertiser.toggle();
     if (!this.queue.current) return;
     if (!this.audio.paused) { this.audio.pause(); return; }
     if (this.streamFailed || !this.audio.getAttribute('src')) { this.resumeAt = this.audio.currentTime || this.resumeAt; await this.playIndex(this.queue.index); return; }
-    try { await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
+    try { if(this.beforeResume)await this.beforeResume();await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
   }
-  advance(ended = false) { const index = this.queue.next(ended); if (index < 0) { this.playState(false); this.message('You’ve reached the end of your queue'); this.save(); } else this.playIndex(index); }
+  async advance(ended = false) { if(this.advertiser?.active||this.advancing)return;this.advancing=true;try{let autoplay=true;if(ended&&this.advertiser)autoplay=(await this.advertiser.beforeAdvance())!==false;const index = this.queue.next(ended); if (index < 0) { this.playState(false); this.message('You’ve reached the end of your queue'); this.save(); } else await this.playIndex(index,autoplay);}finally{this.advancing=false;} }
   renderTrack(track) {
     $('player').hidden = false; document.body.classList.add('has-player');
     $('player-title').textContent = track.title; $('player-artist').textContent = track.artist; $('player-artist').href = track.artist_id ? '/artists?id=' + track.artist_id : '/artists';
@@ -89,7 +90,7 @@ export class MusicPlayer {
     for (const id of ['player-art', 'expanded-art']) { $(id).onerror = () => { $(id).onerror = null; $(id).src = '/web/artwork.svg'; }; $(id).src = cover(track); }
     $('elapsed').textContent = '0:00'; $('duration').textContent = '0:00'; $('seek').value = 0; $('seek').disabled = true; $('expanded-elapsed').textContent='0:00';$('expanded-duration').textContent='0:00';$('expanded-seek').value=0;$('expanded-seek').disabled=true;
     $('player-like').setAttribute('aria-pressed', 'false');
-    document.dispatchEvent(new CustomEvent('trackchange', { detail: track }));
+    document.dispatchEvent(new CustomEvent('trackchange', { detail: {...track,playbackPending:true} }));
     if ('mediaSession' in navigator && 'MediaMetadata' in window) navigator.mediaSession.metadata = new MediaMetadata({ title: track.title, artist: track.artist, album: 'LAE-MUSIC', artwork: [{ src: new URL(cover(track), location.origin).href }] });
   }
   timeUpdate() {
@@ -103,7 +104,7 @@ export class MusicPlayer {
     if (!this.savedAt || Date.now() - this.savedAt > 5000) { this.savedAt = Date.now(); this.save(); }
     if ('mediaSession' in navigator && navigator.mediaSession.setPositionState && Number.isFinite(this.audio.duration) && this.audio.duration > 0) { try { navigator.mediaSession.setPositionState({ duration: this.audio.duration, playbackRate: this.audio.playbackRate, position: Math.min(this.audio.currentTime, this.audio.duration) }); } catch {} }
   }
-  async recordPlay(id,key){try{await this.api(`/api/music/tracks/${id}/play`,'POST',{}, {headers:{'Idempotency-Key':key}});}catch{setTimeout(()=>{this.api(`/api/music/tracks/${id}/play`,'POST',{}, {headers:{'Idempotency-Key':key}}).catch(()=>{});},1500);}}
+  async recordPlay(id,key){if(this.currentSourceOffline)return;try{await this.api(`/api/music/tracks/${id}/play`,'POST',{}, {headers:{'Idempotency-Key':key}});}catch{setTimeout(()=>{this.api(`/api/music/tracks/${id}/play`,'POST',{}, {headers:{'Idempotency-Key':key}}).catch(()=>{});},1500);}}
   openQueue() { this.renderQueue(); if (!$('queue-dialog').open) $('queue-dialog').showModal(); }
   renderQueue() {
     const box = $('queue-list'); box.replaceChildren();

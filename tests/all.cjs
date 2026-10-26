@@ -24,3 +24,5 @@ require('./preflight.test.cjs');
 require('./premium.test.cjs');
 
 require('./premium-international.test.cjs');
+
+require('./offline.test.cjs');

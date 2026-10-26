@@ -1,0 +1,24 @@
+LAE-MUSIC 0.15.0-rc.15 — local verification
+Recorded 2026-10-26T00:45:00.853906+00:00
+Development branch: codex/premium-platform-release; draft PR #6. No merge/deployment.
+
+Application: 146 pass. Existing Sonic: 25 mocked cases / 31 source invariants pass.
+Actual PostgreSQL 16: 141 pass; additive migrations 001–015; fixture database only.
+Socket HTTP: 1 pass. Actual Nodemailer/loopback SMTP TLS: 4 pass.
+Chromium: existing desktop/tablet/mobile journeys + real PWA desktop/mobile + unsupported browser pass.
+Accessibility: 27 existing + 2 offline-library axe scans, zero automated violations. Incomplete checks require manual review.
+
+Actual PWA coverage: service worker; IndexedDB; nonextractable Web Crypto device/AES keys; cipher tamper rejection; offline reload; 31 seconds actual native WAV playback; expiry/clock guard; exactly-once sync; cross-tab clear removes buffered audio and account keys.
+R2/payment/session sources in browser tests are fixtures. PostgreSQL suite verifies actual handler transactions/constraints with fixture receipts; not real cash/provider evidence.
+
+Read-only populated fixture preflight: pass
+{"commerce_discrepancies": 0, "ledger_discrepancies": 0, "negative_artist_balances": 0, "offline_stream_discrepancies": 0, "premium_conversion_discrepancies": 0, "premium_receipt_discrepancies": 0, "royalty_release_discrepancies": 0, "royalty_statement_discrepancies": 0}
+Overall release status: blocked. Key/R2 staging, reviewed ad creative, external providers, live settlement/payouts, production clone, physical-browser/device/manual accessibility and other documented gates remain.
+
+No paid listener MP3 downloads, separate song purchases or download commissions. Offline saves are included in Premium. Approved USD cents: 8 / 23 / 60 / 121 / 588. Streaming pool: existing 50% recognized net.
+
+Browser output:
+PASS browser journeys and 27 axe accessibility audits at desktop, tablet and mobile sizes; all payment/media services mocked.
+PASS real PWA desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS real PWA mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.

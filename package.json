@@ -1,12 +1,12 @@
 {
   "name": "lae-music",
-  "version": "0.14.0-rc.14",
+  "version": "0.15.0-rc.15",
   "private": true,
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
     "test": "node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs",
-    "test:browser": "node tests/browser.cjs",
+    "test:browser": "node scripts/test-browsers.cjs",
     "test:http": "LAE_NETWORK_TESTS=1 node tests/http.test.cjs",
     "test:postgres": "node tests/postgres.cjs",
     "preflight": "node scripts/preflight.cjs",

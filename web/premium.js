@@ -16,8 +16,9 @@ export class PremiumListeningTracker {
     this.generation = 0;
     document.addEventListener("trackchange", (event) => {
       this.track = event.detail.id;
-      this.begin();
+      this.skip=event.detail.playbackPending===true||event.detail.offline===true;this.begin();
     });
+    document.addEventListener('playbacksource',event=>{this.skip=event.detail.offline===true;this.track=event.detail.track.id;this.begin();});
     audio.addEventListener("play", () => this.schedule());
     for (const event of ["pause", "ended"])
       audio.addEventListener(event, () => {
@@ -44,7 +45,7 @@ export class PremiumListeningTracker {
     this.ticket = null;
     clearInterval(this.timer);
     this.timer = null;
-    if (!this.track || !this.listener()) return;
+    if (this.skip || !this.track || !this.listener()) return;
     void this.api("/api/platform/premium/playback", "POST", {
       track_id: String(this.track),
     })
@@ -145,7 +146,7 @@ export async function premiumPage(view, url, ctx) {
         notice(
           "Public streaming, playlists and favorites remain available. Premium does not grant commercial or public-performance rights.",
         ) +
-        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
+        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights · in-app offline listening on supported browsers · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
         (!approved
           ? notice(
               "USD price proposal awaiting approval. These proposed prices are not available for purchase.",
@@ -389,10 +390,12 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
           "USD base accounting, separate legacy books, immutable statements and no invented per-stream rate.",
         ) +
         notice(
-          "Finalize only after reviewing eligibility, fraud exclusions, actual payment costs and the approved universal 50% policy. Finalized royalties are liabilities until verified cash settlement; sandbox amounts are never withdrawable.",
+          "Wait 48 hours after UTC month-end for offline synchronization. Finalize only after reviewing eligibility, offline reports, fraud exclusions, actual payment costs and the approved universal 50% policy. Finalized royalties are liabilities until verified cash settlement; sandbox amounts are never withdrawable.",
           true,
         ) +
         `<section class="panel"><h2>Monthly statement preview</h2><form id="royalty-preview"><label>Month<input name="month" type="month" required></label><label>Records<select name="mode" aria-label="Records"><option value="test">Sandbox</option><option value="live">Live</option></select></label><label>Accounting currency<select name="currency"><option value="USD">USD</option><option value="NGN">Legacy NGN</option></select></label><button type="submit" class="button">Calculate preview</button><p class="form-status" role="status"></p></form><div id="royalty-preview-output"></div></section>` +
+        heading("OFFLINE SYNC", "Validated once. Reviewed with the period.") +
+        table(x.offline || [], [["status","Validation result"],["events","Reported plays"],["latest_at","Latest sync",date]]) +
         heading("VERIFIED PAYMENTS", "Original receipt evidence.") +
         table(x.payments, [
           ["order_id", "Order"],
