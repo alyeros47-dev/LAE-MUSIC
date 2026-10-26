@@ -7,6 +7,7 @@ on:
       - scripts/provision-review.cjs
       - deploy/review.Dockerfile
       - deploy/review-entrypoint.sh
+      - deploy/review-provider-budget.cjs
       - tests/provision-review.test.cjs
       - tests/review-container-smoke.cjs
       - .dockerignore

@@ -35,3 +35,6 @@ require('./reconciliation.test.cjs');
 require('./request-protection.test.cjs');
 
 require('./provision-review.test.cjs');
+
+require('./review-integrations.test.cjs');
+require('./review-provider-budget.test.cjs');

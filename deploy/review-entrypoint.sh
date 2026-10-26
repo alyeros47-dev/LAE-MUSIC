@@ -4,6 +4,10 @@ if [ "${NODE_ENV:-}" != staging ] || [ -n "${DATABASE_URL:-}" ]; then
   echo 'Review image requires staging mode and refuses external database configuration.' >&2
   exit 64
 fi
+if [ -n "${R2_BUCKET:-}" ] && [ "$R2_BUCKET" != lae-music-review-sandbox ]; then
+  echo 'Review image refuses a production or unrelated storage bucket.' >&2
+  exit 64
+fi
 export PATH="/usr/lib/postgresql/16/bin:$PATH"
 review_data=/tmp/lae-review-postgres
 review_pass=/tmp/lae-review-password
@@ -28,6 +32,6 @@ review_password=$(cat "$review_pass")
 export DATABASE_URL="postgres://postgres:${review_password}@127.0.0.1:55432/lae_music_review"
 export DATABASE_SSL_MODE=local
 unset review_password
-node server.js &
+node --require /app/deploy/review-provider-budget.cjs server.js &
 review_child=$!
 wait "$review_child"

@@ -1,0 +1,16 @@
+Independent sandbox integration preparation
+Local verification: 200 application tests pass, including 10 source/target environment safeguards and 7 bounded provider-budget tests.
+
+Only missing sandbox OpenAI/MusicAPI/model/approved media-host values may be filled from the owner's live service.
+The live source is read-only; its environment and deploy snapshots are compared before/after.
+Only the pinned sandbox can receive allowlisted PUTs and an exact-development-commit deploy.
+No provider/admin/payment/database secret values are printed, persisted in files or returned in results.
+Existing dedicated sandbox values remain unchanged.
+Production R2 credentials/bucket are not copied. A complete separate SANDBOX_R2 credential group is required.
+The temporary image rejects external databases and a production/unrelated bucket.
+Charging provider calls are capped per temporary instance: two OpenAI, one MusicAPI.
+Read-only provider authentication and polling do not consume that local allowance.
+Counters persist through Node restarts while the temporary filesystem remains; corrupted counters fail closed.
+No production package price, commission, royalty, withdrawal, upload or studio entitlement rule changes.
+
+Real Render configuration, real provider access, actual lyrics generation, upload, voice training and music generation are separate results, not established by these mocked API tests. The workflow and subsequent explicit sandbox verification record the real outcomes on PR #6.
