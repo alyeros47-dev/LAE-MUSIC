@@ -8,3 +8,9 @@ Chromium desktop/tablet/mobile UI: expanded existing-artist-URL, saved-voice req
 External provider/payment/media responses in these regression checks are mocks. R2 upload/training tests remain owner-deferred and pending.
 No production database access/reset, upload/delete, key rotation/transfer, production deployment or paid benefit creation.
 Published-candidate CI and review HTTPS verification results are recorded separately when completed.
+
+Initial integration head ffe56e7cec211b3d4a0eba4e6282fae809945f99 published; all 12 blobs match local.
+Local native desktop/mobile PWA regressions and 2 additional axe scans pass.
+Canonical legacy artist URL navigation/title/menu checks pass in expanded local Chromium desktop/tablet/mobile journeys.
+Read-only health/music-status: live 200/200, database=true/storage_configured=true; review 200/200, database=true/storage_configured=false. Presence is not an R2 write test.
+A follow-up keeps old listener account selection and canonical titles/menu consistent. Exact follow-up CI/sandbox results remain pending until recorded.
