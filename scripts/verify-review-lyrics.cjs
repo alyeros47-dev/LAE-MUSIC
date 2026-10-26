@@ -102,6 +102,15 @@ const origin = "https://lae-music-review-sandbox.onrender.com";
   const history = await request("/api/generation/history", { cookie });
   assert.equal(history.status, 200);
   assert(history.data.records.length >= 1);
+  const saved=history.data.records.find(x=>x.title===generated.data.title && x.lyrics===generated.data.lyrics);
+  assert(saved, 'The owned library must recover the actual generated lyrics.');
+  assert.equal(saved.style,generated.data.style);
+  assert(!Object.hasOwn(saved,'code_hash'));
+  const reopened=await request('/api/generation/history',{cookie});
+  assert(reopened.data.records.some(x=>String(x.id)===String(saved.id)&&x.lyrics===saved.lyrics));
+  const afterReopen=await request('/api/generation/wallet',{cookie});
+  assert.equal(afterReopen.data.credits,replayWallet.data.credits);
+
   const voice = await request("/api/voice/profile", { cookie });
   assert.equal(voice.status, 200);
   assert.equal(voice.data.hasVoice, false);
@@ -110,6 +119,8 @@ const origin = "https://lae-music-review-sandbox.onrender.com";
       url: origin,
       real_lyrics_generation: true,
       owned_history_verified: true,
+      saved_lyrics_recovery_verified: true,
+      history_reopen_spent_no_credit: true,
       credit_deducted_once: true,
       idempotent_replay_verified: true,
       artist_remains_unpaid: true,

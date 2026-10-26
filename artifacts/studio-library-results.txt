@@ -3,8 +3,15 @@ npm test: 220 application tests pass, 0 fail; existing Sonic invariants and mock
 npm run test:http: 1 pass, 0 fail.
 npm run test:email: 4 loopback transport checks pass, 0 fail.
 Chromium 154: desktop/tablet/mobile journeys and 39 axe scans pass, including saved lyrics review/restore without generation and mocked final-credit disabling.
-Native PostgreSQL owned-history test added; awaiting exact-head CI execution.
+Exact application-head CI 40369499147: 174 native PostgreSQL tests and 8 populated upgrades pass, including owned-history recovery, cross-artist exclusion and unchanged credits.
 Real R2 setup/upload/voice tests deferred by owner, not passed. Automatic bootstrap and real probes disabled.
 External payment/media/provider responses in browser/unit tests are mocked.
 Previously verified real sandbox lyrics generation is historical evidence, not a new MusicAPI-generation claim.
 No production merge/deployment, live storage mutation, commercial-rule changes or live financial activation.
+
+Local Chromium PWA desktop/mobile: real encrypted offline reload/playback, expiry/clock guard, once-only synchronization and account cleanup pass; 2 additional axe scans pass.
+Sandbox config run 40369487848: success at application head a1adc1846ade71a6c714b3904cd1d20734c66a47.
+source_configuration_unchanged=true; source_deployment_unchanged=true; updated_keys=[]; storage_bootstrap=null; storage_probe=null.
+OpenAI/MusicAPI read-only authentication both HTTP 200; sandbox health/public app HTTP 200; new lyrics library present.
+Real hosted OpenAI verification after this deployment: generated original lyrics, exact saved lyrics/style recovered from owned library, repeat history reads spent no credit; generation replay spent no additional credit; exactly one credit deducted; artist remains unpaid.
+Voice profile route HTTP check passed, but voice training and full music generation remain unverified. No R2 upload/delete was attempted.
