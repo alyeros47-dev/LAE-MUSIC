@@ -1,0 +1,39 @@
+# Isolated review environment only. Creating this Blueprint requires owner action in Render.
+# Never reuse a production service/database or change this branch to main.
+services:
+  - type: web
+    name: lae-music-review
+    runtime: node
+    plan: free
+    branch: codex/premium-platform-release
+    autoDeployTrigger: 'off'
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: NODE_ENV
+        value: staging
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lae-music-review-db
+          property: connectionString
+      - key: DATABASE_SSL_MODE
+        value: private
+      - key: DATABASE_PRIVATE_HOST
+        fromDatabase:
+          name: lae-music-review-db
+          property: host
+      - key: ADMIN_KEY
+        generateValue: true
+      - key: STUDIO_RELEASE_WORKER_ENABLED
+        value: 'false'
+      - key: ARTIST_NOTIFICATION_WORKER_ENABLED
+        value: 'false'
+databases:
+  - name: lae-music-review-db
+    plan: free
+    databaseName: lae_music_review
+    user: lae_music_review
+    ipAllowList: []
