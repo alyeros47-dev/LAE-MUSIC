@@ -1,6 +1,8 @@
 # LAE-MUSIC release candidate 0.20.0-rc.20
 
-**Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
+**Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge/deployment, production data reset or Android changes were performed. The temporary Review Sandbox was deployed under owner authorization for testing only.
+
+The latest [existing-engine integration audit](EXISTING-ENGINE-INTEGRATION-AUDIT.md) compares the production branch with the redesigned candidate, maps shared APIs/tables/configuration and records corrected old artist links/saved-voice integration. This remains one existing backend with a redesigned frontend; the review environment is temporary testing infrastructure.
 
 See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remaining-work matrix and [DEPLOYMENT.md](DEPLOYMENT.md) for environment, migration, staging and rollback instructions.
 

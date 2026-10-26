@@ -1,0 +1,10 @@
+Existing-engine integration batch — October 26, 2026
+Source audit: main 24718b32df138711a73426fb4fd5042767b74f74 vs candidate 858cb93b77d52adc277f1fef1c43ebc626ca0191.
+All 44 inventoried legacy initialization table names retained; 106 literal baseline routes accounted for (102 in server + 4 delegated). Inventory is not actual production schema certification.
+Same Node entrypoint/pool/provider modules and existing keys/config names; no engine/voice/server.js runtime source replacement in this batch.
+npm test: 231 pass, 0 fail, plus 31 mocked Sonic cases and existing source invariants.
+Native HTTP: 1 pass. Loopback SMTP: 4 pass.
+Chromium desktop/tablet/mobile UI: expanded existing-artist-URL, saved-voice request, storage-unavailable and standard-generation availability checks pass; 39 axe scans pass.
+External provider/payment/media responses in these regression checks are mocks. R2 upload/training tests remain owner-deferred and pending.
+No production database access/reset, upload/delete, key rotation/transfer, production deployment or paid benefit creation.
+Published-candidate CI and review HTTPS verification results are recorded separately when completed.

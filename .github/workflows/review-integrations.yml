@@ -10,6 +10,7 @@ on:
       - lib/review-storage.js
       - lib/account-login.js
       - web/password-controls.js
+      - web/studio-engine.js
       - tests/review-storage.test.cjs
       - tests/review-integrations.test.cjs
       - deploy/review-provider-budget.cjs
