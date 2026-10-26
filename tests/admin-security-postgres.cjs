@@ -57,6 +57,8 @@ module.exports=async(t,{pool})=>{
   assert.equal((await api('/api/platform/admin/moderation',{cookie:support.cookie})).status,403);
   assert.equal((await api('/api/platform/admin/moderation/comment',{cookie:finance.cookie,body:{}})).status,403);
   assert.equal((await api('/api/platform/admin/commerce',{cookie:finance.cookie})).status,200);
+  assert.equal((await api('/api/platform/admin/reconciliation',{cookie:finance.cookie})).status,200);
+  for(const u of [content,support])assert.equal((await api('/api/platform/admin/reconciliation/ledger.csv',{cookie:u.cookie})).status,403);
   assert.equal((await api('/api/platform/admin/royalties',{cookie:finance.cookie})).status,200);
   for(const u of [content,support])assert.equal((await api('/api/platform/admin/royalties',{cookie:u.cookie})).status,403);
   assert.equal((await api('/api/platform/admin/royalties/unapproved-operation',{cookie:finance.cookie,body:{}})).status,403);
@@ -80,7 +82,11 @@ module.exports=async(t,{pool})=>{
  await t.test('sensitive financial reviews require recent MFA and reauthentication rotates the current session without losing other accounts',async()=>{
   const old=finance.cookie;time+=601000;
   assert.equal((await api('/api/platform/admin/commerce',{cookie:finance.cookie})).status,200);
+  assert.equal((await api('/api/platform/admin/reconciliation',{cookie:finance.cookie})).status,200);
+  for(const u of [content,support])assert.equal((await api('/api/platform/admin/reconciliation/ledger.csv',{cookie:u.cookie})).status,403);
   const blocked=await api('/api/platform/admin/withdrawal-review',{cookie:finance.cookie,body:{id:1,decision:'approved'}});assert.equal(blocked.status,403);assert.equal(blocked.data.code,'admin_reauthentication_required');
+  assert.equal((await api('/api/platform/admin/reconciliation/verify-source',{cookie:finance.cookie,body:{}})).status,403);
+  const reconciliationBlocked=await api('/api/platform/admin/reconciliation/review',{cookie:finance.cookie,body:{}});assert.equal(reconciliationBlocked.status,403);assert.equal(reconciliationBlocked.data.code,'admin_reauthentication_required');
   const royaltyBlocked=await api('/api/platform/admin/royalties/finalize',{cookie:finance.cookie,body:{}});assert.equal(royaltyBlocked.status,403);assert.equal(royaltyBlocked.data.code,'admin_reauthentication_required');
   const refreshed=await api('/api/platform/admin/auth/reauthenticate',{cookie:finance.cookie,body:proof(finance)});assert.equal(refreshed.status,200);finance.cookie=refreshed.cookie;assert.notEqual(old,finance.cookie);assert.equal((await api('/api/platform/admin/commerce',{cookie:old})).status,401);
   const permitted=await api('/api/platform/admin/withdrawal-review',{cookie:finance.cookie,body:{id:1,decision:'paid'}});assert.equal(permitted.status,400);

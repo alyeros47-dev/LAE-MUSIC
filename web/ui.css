@@ -2156,3 +2156,8 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .moderation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:18px}.moderation-card{min-width:0}.moderation-card h2{font-size:21px;overflow-wrap:anywhere}.moderation-card small{color:var(--muted)}.moderation-quote{padding:18px;border:1px solid var(--line);border-left:3px solid var(--lime);border-radius:8px;background:var(--bg);white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}.moderation-card form{margin-top:22px}
 
 .premium-status{margin-bottom:24px;background:radial-gradient(ellipse at top right,#c4f87720,transparent 70%),var(--panel)}.premium-prices{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}.premium-prices .price-card{display:flex;flex-direction:column;align-items:start}.premium-prices .price-card .button{margin-top:auto}.premium-prices .price{font-size:34px}#royalty-preview-output{margin-top:24px}.moderation-card details p{overflow-wrap:anywhere}
+
+/* Financial review workspaces share the existing responsive system. */
+.reconciliation-item{min-width:0}.reconciliation-item .page-heading{align-items:flex-start}.reconciliation-id{overflow-wrap:anywhere;word-break:break-word}.review-note{padding:18px 0;border-top:1px solid var(--line)}.review-note p{white-space:pre-wrap;overflow-wrap:anywhere}#reconciliation-filters label{flex:1;min-width:160px}#reconciliation-detail{scroll-margin-top:90px}#reconciliation-detail form{margin:24px 0}
+
+.reconciliation-scroll:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.activity-plot .receipt-point{fill:var(--lime)}

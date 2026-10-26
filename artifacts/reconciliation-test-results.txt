@@ -1,0 +1,28 @@
+LAE-MUSIC 0.16.0-rc.16 — local verification
+Recorded 2026-10-26T01:16:45.800148+00:00
+Development branch: codex/premium-platform-release; draft PR #6. No merge/deployment.
+
+Application: 153 pass; existing 25 mocked Sonic cases / 31 source invariants pass.
+Actual PostgreSQL 16: 152 pass; migrations 001–016; isolated local fixture database only.
+Socket HTTP: 1 pass. Actual Nodemailer/loopback SMTP TLS: 4 pass.
+Browser: desktop/tablet/mobile connected journeys plus actual PWA desktop/mobile and unsupported browser pass.
+Accessibility: 30 existing/reconciliation + 2 offline-library axe scans, zero automated violations; incomplete checks still require manual review.
+Dependency audit: zero known vulnerabilities reported at this check.
+
+Reconciliation coverage: currency/mode separation; exact large integers; safe CSV; owner/finance access and support/content denial; recent MFA; database-derived checkout ownership; closed real-provider configuration; concurrent retry deduplication; stale revisions; active-source resolution refusal; waiting/assignment; source workflow before annotation resolution; immutable/deferred note history; literal reference searches and bounded stable queue pages.
+Actual browser: claim and wait; escaped malicious-looking note; currencies and CSV download; original-provider-lookup control; responsive layout and keyboard-focusable scroll regions.
+Existing real offline PWA tests remain passing: service worker, IDB/AES/nonextractable keys, offline native audio, expiry, clock/tamper protection, once-only sync and cross-tab/account cleanup.
+
+All financial/media/session external responses in journeys are fixtures. Independent checkout ownership dispatch is exercised with injected callbacks; the actual unconfigured runtime denies verification. Existing trusted gateway coordinators are exercised by their own integration fixtures. None of this proves an authorized merchant account, R2, real money receipt, treasury settlement or bank payout.
+
+Read-only populated fixture preflight: pass
+{"commerce_discrepancies": 0, "ledger_discrepancies": 0, "negative_artist_balances": 0, "offline_stream_discrepancies": 0, "premium_conversion_discrepancies": 0, "premium_receipt_discrepancies": 0, "reconciliation_history_discrepancies": 0, "royalty_release_discrepancies": 0, "royalty_statement_discrepancies": 0}
+Overall release status: blocked. Production clone/load/backup/recovery, outside providers, actual settlement/payout/commission clearance, remaining financial policies, key/creative setup and physical-device/manual accessibility checks remain.
+
+Approved USD Premium cents unchanged: 8 / 23 / 60 / 121 / 588. Existing 50% recognized-net pool and commercial terms preserved. No paid/permanent listener MP3 exports, separate song purchases or download commissions.
+
+Browser output:
+PASS browser journeys and 30 axe accessibility audits at desktop, tablet and mobile sizes; all payment/media services mocked.
+PASS real PWA desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS real PWA mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.

@@ -26,3 +26,5 @@ require('./premium.test.cjs');
 require('./premium-international.test.cjs');
 
 require('./offline.test.cjs');
+
+require('./reconciliation.test.cjs');

@@ -1,3 +1,4 @@
+import {reconciliationPage} from './reconciliation.js';
 import {ListeningAds} from './listening-ads.js';
 import {OfflineLibrary,offlinePage} from './offline.js';
 import { PremiumListeningTracker, premiumPage, artistRoyaltiesPage, adminRoyaltiesPage } from './premium.js';
@@ -301,13 +302,14 @@ async function account(view,url) {
   if($('read-notifications'))$('read-notifications').onclick=async()=>{await api('/api/listener/notifications/read','POST',{});route();};
 }
 async function adminPage(view,url) {
-  const ctx={api,e,session,heading,notice,bindForm,actionDialog,refreshSession,navigate,route,toast,date};
+  const ctx={api,e,session,heading,notice,bindForm,actionDialog,refreshSession,navigate,route,toast,date,keyFor,clearKey};
   if(!session.admin){await adminSignIn(view,ctx);return;}
   const requested=url.searchParams.get('section')||'overview';
   const permitted=session.admin_user?.sections;
-  const sections=['overview','artists','listeners','catalog','subscriptions','affiliates','commerce','payments','checkouts','refunds','security','withdrawals','gifts','generations','releases','content','editorial','moderation','audit','royalties','operators'].filter(s=>!permitted||s==='operators'||permitted.includes(s));
+  const sections=['overview','reconciliation','artists','listeners','catalog','subscriptions','affiliates','commerce','payments','checkouts','refunds','security','withdrawals','gifts','generations','releases','content','editorial','moderation','audit','royalties','operators'].filter(s=>!permitted||s==='operators'||permitted.includes(s));
   const section=sections.includes(requested)?requested:'overview';
   const intro=heading('PLATFORM OPERATIONS','The control room.',session.admin_user?.source==='named'?session.admin_user.display_name+' · '+session.admin_user.role:'Protected management. Verified records. Clear decisions.','<div class="row-actions">'+(session.admin_user?.source==='named'?'<button class="button secondary" id="admin-verify-session">Verify session</button>':'')+'<button class="button secondary" id="admin-logout">Admin sign out</button></div>')+`<nav class="tabs" aria-label="Administration">${sections.map(s=>`<a href="/admin/console?section=${s}" data-nav class="${s===section?'active':''}">${e(s==='operators'?'Access & security':s.charAt(0).toUpperCase()+s.slice(1))}</a>`).join('')}</nav>`;
+  if(section==='reconciliation'){await reconciliationPage(view,intro,{...ctx,table},url);bindAdminToolbar(ctx);return;}
   if(section==='operators'){await operatorsPage(view,intro,ctx);bindAdminToolbar(ctx);return;}
   if(section==='overview'){
     const x=await api('/api/platform/admin/overview');view.set(intro+`<div class="metrics">${metric('ARTIST / PARTNER ACCOUNTS',number(x.stats.artists))}${metric('LISTENER ACCOUNTS',number(x.stats.listeners))}${metric('PUBLISHED TRACKS',number(x.stats.tracks))}${metric('TOTAL PLAYS',number(x.stats.plays))}${metric('ACTIVE SUBSCRIPTIONS',number(x.stats.active_subscriptions))}${metric('ACTIVE GENERATIONS',number(x.stats.active_generations))}${metric('PENDING WITHDRAWALS',number(x.stats.pending_withdrawals))}${metric('LIVE PAYMENTS','Disabled','Provider verification required')}</div>${notice('Financial approvals do not send funds. Real checkout and payouts remain disabled until a payment provider, webhook verification, reconciliation and bank payout integration are reviewed.',true)}`);

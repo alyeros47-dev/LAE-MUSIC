@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.15.0-rc.15
+# LAE-MUSIC release candidate 0.16.0-rc.16
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,7 +18,7 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–015, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–016, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
 ## Premium Listener and streaming policy
 
@@ -43,6 +43,10 @@ Signed access ends at the earlier of 24 hours or Premium expiry; reconnection ch
 Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
 ## Current local evidence
+
+[Milestone 16](MILESTONE-16.md) adds a unified owner/finance reconciliation workspace with separate currency/mode reporting, exact ledger exports, independently verified checkout lookup through existing coordinators and revisioned operator annotations. Notes cannot change money, holds or benefits; resolving an active source is refused. Additive migration 016 protects identity/history and the read-only preflight checks annotation consistency. Local application and actual PostgreSQL suites pass **153 / 152 checks**; HTTP and real-library SMTP/TLS pass **1 / 4**. The full Chromium command passes existing desktop/tablet/mobile journeys, reconciliation claim/wait/filter/CSV/original-provider-lookup controls, both actual offline PWA journeys and **32 axe scans with zero automated violations**. All nine populated read-only preflight discrepancy counts are zero. Published-head CI evidence is recorded on PR #6 and in `artifacts/reconciliation-test-results.txt`. All outside financial/media services remain fixtures or unconfigured. This does not establish production readiness.
+
+## Previous M15 evidence
 
 Candidate 0.15.0-rc.15 passes **146 application tests, 141 actual PostgreSQL 16 checks, one socket HTTP check and four real-library SMTP/TLS checks**. The database suite includes migrations 001–015, concurrent offline retry/deduplication, interval overlap, malformed-batch rollback, expiry/grace, payment holds and append-only protection. Real Chromium PWA desktop/mobile runs verify encrypted/nonextractable-key storage, corrupt-cipher rejection, actual offline reload/playback, clock/expiry guards, once-only sync and cross-tab/account cleanup. The full combined browser command passes existing desktop/tablet/mobile journeys, both real PWA desktop/mobile journeys, unsupported-browser handling and **29 axe scans with zero automated violations**. Final evidence is recorded in `artifacts/offline-test-results.txt` and PR #6. A populated read-only fixture preflight passes with zero discrepancies in all eight schema/accounting/FX/offline-stream integrity counts, while overall deployment status stays blocked. Media/gateway/account services remain fixtures. See [MILESTONE-15.md](MILESTONE-15.md).
 
