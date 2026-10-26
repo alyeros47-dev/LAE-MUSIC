@@ -682,7 +682,7 @@ module.exports = async (t, { pool }) => {
     },
   );
   await t.test(
-    "verified full refund protects finalized artist liabilities and records a platform loss once without rewriting history",
+    "verified late refund preserves history and enters review without automatically assigning platform or artist losses",
     async () => {
       refunds.set("7001", {
         id: 7001,
@@ -742,7 +742,7 @@ module.exports = async (t, { pool }) => {
       assert.equal(rows.length, 0);
       const loss = (
         await pool.query(
-          "SELECT * FROM royalty_platform_losses WHERE statement_id=$1",
+          "SELECT * FROM royalty_late_disputes WHERE statement_id=$1",
           [statement.id],
         )
       ).rows;
@@ -751,12 +751,13 @@ module.exports = async (t, { pool }) => {
         .report();
       assert.equal(adminProtection.reserve_funding_enabled, false);
       assert(
-        adminProtection.platform_losses.some(
+        adminProtection.late_disputes.some(
           (r) => r.order_id === statementOrder.order.id,
         ),
       );
       assert.equal(loss.length, 1);
-      assert.equal(loss[0].amount_minor, "33000");
+      assert.equal(loss[0].artist_exposure_minor, "33000");
+      assert.equal((await pool.query("SELECT COUNT(*)::int AS n FROM royalty_platform_losses WHERE statement_id=$1",[statement.id])).rows[0].n,0);
       assert.equal(loss[0].currency, "USD");
       assert.equal(loss[0].mode, "test");
       assert.equal(
@@ -770,7 +771,7 @@ module.exports = async (t, { pool }) => {
       );
       await assert.rejects(
         pool.query(
-          "UPDATE royalty_platform_losses SET amount_minor=1 WHERE statement_id=$1",
+          "UPDATE royalty_late_disputes SET artist_exposure_minor=1 WHERE statement_id=$1",
           [statement.id],
         ),
         /append-only/,

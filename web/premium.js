@@ -126,6 +126,9 @@ export async function premiumPage(view, url, ctx) {
   } = ctx;
   const policy = await api("/api/platform/financial-policy");
   const plans = await api("/api/platform/premium/plans"),
+    complaintData = session.listener
+      ? await api("/api/platform/premium/complaints")
+      : { complaints: [] },
     data = session.listener ? await api("/api/platform/premium/status") : null,
     approved = plans.price_status === "approved";
   const amount = (n, currency = "USD") =>
@@ -142,7 +145,7 @@ export async function premiumPage(view, url, ctx) {
           }).resolvedOptions().maximumFractionDigits,
     );
   const record = (o) =>
-    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open sandbox checkout ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
+    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open sandbox checkout ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
     !view.set(
       heading(
@@ -163,6 +166,8 @@ export async function premiumPage(view, url, ctx) {
           : "") +
         `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === "monthly" ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-premium-plan="${e(p.code)}" ${approved && plans.providers.length > 0 ? "" : "disabled"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
         notice(policy.premium) +
+        notice(policy.complaints) +
+        notice(policy.royalties) +
         currencyDisplay.info() +
         notice(
           "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
@@ -176,12 +181,40 @@ export async function premiumPage(view, url, ctx) {
         (data
           ? heading("YOUR PREMIUM", "Your subscriptions and purchase records") +
             data.orders.map(record).join("") +
+            `<section class="panel"><h2>Your payment complaints</h2>${complaintData.complaints.length ? complaintData.complaints.map((c) => `<p>${e(c.id)} · ${e(c.review_status || c.intake)} · Deadline ${e(dateTime(c.deadline_at))}</p>`).join("") : "<p>No complaints submitted.</p>"}</section>` +
             `<section class="panel"><h2>Your entitlement history</h2>${data.entitlements.length ? data.entitlements.map((t) => `<p>${e(t.plan)} · ${e(dateTime(t.starts_at))} → ${e(dateTime(t.expires_at))} · ${t.reversed ? "Reversed" : t.held ? "Under review" : "Paid cover"} · ${e(t.mode)}</p>`).join("") : "<p>No paid terms yet. Free listening stays available.</p>"}</section>`
           : ""),
     )
   )
     return;
   currencyDisplay.paint();
+  document.querySelectorAll("[data-complaint]").forEach(
+    (button) =>
+      (button.onclick = () =>
+        ctx.actionDialog(
+          `<h2>Submit a payment complaint.</h2><p>${e(policy.complaints)}</p><p>A complaint does not confirm a refund or interrupt your paid access. Reported incidents require verification; a typed date cannot restart the deadline.</p><form><label>Complaint basis<select name="ground" aria-label="Complaint basis"><option value="voluntary">Ordinary voluntary request</option><option value="duplicate_charge">Duplicate charge</option><option value="failed_activation">Failed activation</option><option value="service_error">Service incident requiring verification</option><option value="legal_requirement">Applicable legal rights</option><option value="provider_rule">Payment-provider rule</option><option value="verified_fraud">Fraud requiring verification</option></select></label><label>Verified incident reference, if supplied by support<input name="incident_id"></label><label>Explain your complaint<textarea name="reason" minlength="10" maxlength="1000" required></textarea></label><button class="button" type="submit">Submit for review</button><p class="form-status" role="status"></p></form>`,
+          (root) =>
+            bindForm(root.querySelector("form"), async (b) => {
+              await api(
+                "/api/platform/premium/complaints",
+                "POST",
+                { ...b, order_id: button.dataset.complaint },
+                {
+                  headers: {
+                    "Idempotency-Key": keyFor(
+                      "premium-complaint:" + button.dataset.complaint,
+                      b,
+                    ),
+                  },
+                },
+              );
+              document.getElementById("action-dialog").close();
+              toast("Complaint recorded for review. No refund has been sent.");
+              route(true);
+            }),
+        )),
+  );
+
   document.querySelectorAll("[data-premium-plan]").forEach(
     (button) =>
       (button.onclick = () => {
@@ -405,28 +438,60 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
           "USD base accounting, separate legacy books, immutable statements and no invented per-stream rate.",
         ) +
         notice(
-          "Wait 48 hours after UTC month-end for offline synchronization. Finalize only after reviewing eligibility, offline reports, fraud exclusions, actual payment costs and the approved universal 50% policy. Finalized royalties are liabilities until verified cash settlement; sandbox amounts are never withdrawable.",
+          "Wait seven full UTC calendar days after month-end for settlement and reconciliation, including the 48-hour offline sync window. Finalize only after reviewing eligibility, offline reports, fraud exclusions, actual payment costs and the approved universal 50% policy. Finalized royalties are liabilities until verified cash settlement; sandbox amounts are never withdrawable.",
           true,
         ) +
         `<section class="panel"><h2>Monthly statement preview</h2><form id="royalty-preview"><label>Month<input name="month" type="month" required></label><label>Records<select name="mode" aria-label="Records"><option value="test">Sandbox</option><option value="live">Live</option></select></label><label>Accounting currency<select name="currency"><option value="USD">USD</option><option value="NGN">Legacy NGN</option></select></label><button type="submit" class="button">Calculate preview</button><p class="form-status" role="status"></p></form><div id="royalty-preview-output"></div></section>` +
-        heading(
-          "PLATFORM PROTECTION",
-          "Refund losses. Artist royalties protected.",
-        ) +
+        heading("LATE DISPUTES", "Review later reversals by source.") +
         notice(
-          "Legitimate finalized artist allocations are not automatically clawed back. These recorded losses are expenses, not funded cash reserves. Cash release still requires independent funding verification; unsupported corrections remain under review.",
+          "The seven-day complaint window does not eliminate enforceable chargebacks. Later losses are not automatically assigned to LAE-MUSIC or artists. Record a reserve, legal or fraud-recovery review; this does not debit earnings, fund a reserve or clear a payment hold.",
         ) +
         table(
-          x.platform_losses || [],
+          x.late_disputes || [],
           [
             ["order_id", "Order"],
-            ["month", "Statement month"],
-            ["mode", "Records"],
+            ["statement_id", "Statement"],
             ["currency", "Currency"],
-            ["amount_minor", "Platform loss", accountAmount],
-            ["created_at", "Recorded", date],
+            ["mode", "Records"],
+            ["recognized_refund_minor", "Refund exposure", accountAmount],
+            [
+              "artist_exposure_minor",
+              "Artist allocation at issue",
+              accountAmount,
+            ],
+            ["route", "Review route"],
+            ["revision", "Revision"],
           ],
-          "Platform refund losses",
+          "Later royalty disputes",
+        ) +
+        form(
+          "premium-late-review",
+          '<label>Order ID<input name="order_id" required></label><label>Statement ID<input name="statement_id" required></label><label>Current revision<input name="revision" type="number" min="0" required></label><label>Review route<select name="route" aria-label="Review route"><option value="reconciliation">Reconciliation</option><option value="reserve_review">Reserve review</option><option value="legal_review">Legally permitted adjustment review</option><option value="fraud_review">Fraud recovery review</option></select></label><label>Review note<textarea name="note" minlength="10" maxlength="1000" required></textarea></label><label>Reviewed evidence reference<input name="evidence_reference" minlength="10" maxlength="500" required></label>',
+          "Record late-dispute review",
+        ) +
+        heading("COMPLAINTS", "Timely reports and protected exceptions.") +
+        table(
+          x.complaints || [],
+          [
+            ["id", "Complaint"],
+            ["ground", "Basis"],
+            ["received_at", "Received", date],
+            ["deadline_at", "Ordinary deadline", date],
+            ["intake", "Intake"],
+            ["review_status", "Review state"],
+            ["revision", "Revision"],
+          ],
+          "Payment complaints",
+        ) +
+        form(
+          "premium-complaint-review",
+          '<label>Complaint ID<input name="complaint_id" required></label><label>Current revision<input name="revision" type="number" min="0" required></label><label>Review outcome<select name="status" aria-label="Review outcome"><option value="under_review">Under review</option><option value="resolved_no_refund">Reviewed · no refund due</option><option value="provider_review">Provider verification required</option></select></label><label>Review note<textarea name="note" minlength="10" maxlength="1000" required></textarea></label><label>Reviewed evidence reference<input name="evidence_reference" minlength="10" maxlength="500" required></label>',
+          "Record complaint review",
+        ) +
+        form(
+          "premium-incident",
+          '<label>Product<select name="kind" aria-label="Product"><option value="listener">Premium listener</option><option value="artist">Artist purchase</option></select></label><label>Paid order ID<input name="order_id" required></label><label>Verified incident time (ISO timestamp with timezone)<input name="occurred_at" required></label><label>Reviewed evidence reference<input name="evidence_reference" minlength="10" maxlength="500" required></label>',
+          "Record a verified incident",
         ) +
         heading("OFFLINE SYNC", "Validated once. Reviewed with the period.") +
         table(x.offline || [], [
@@ -530,7 +595,17 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
       b,
     );
     const root = document.getElementById("royalty-preview-output");
+    const waiting =
+      preview.reconciliation?.release_not_before &&
+      Date.now() < Date.parse(preview.reconciliation.release_not_before);
     root.innerHTML =
+      (preview.reconciliation
+        ? notice(
+            "Seven-day reconciliation ends " +
+              dateTime(preview.reconciliation.release_not_before) +
+              ". Finalization and cash release require review and verified settled funding.",
+          )
+        : "") +
       table(
         [preview],
         [
@@ -558,7 +633,7 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
           : "No qualifying streams: keep the artist pool as an undistributed liability.",
       ) +
       preview.issues.map((message) => notice(message, true)).join("") +
-      `<form><label>Eligibility, fraud and accounting review note<textarea name="review_note" minlength="10" maxlength="1000" required></textarea></label><button type="submit" class="button" ${preview.issues.length ? "disabled" : ""}>Finalize reviewed statement</button><p class="form-status" role="status"></p></form>`;
+      `<form><label>Eligibility, fraud and accounting review note<textarea name="review_note" minlength="10" maxlength="1000" required></textarea></label><button type="submit" class="button" ${preview.issues.length || waiting ? "disabled" : ""}>Finalize reviewed statement</button><p class="form-status" role="status"></p></form>`;
     bindForm(root.querySelector("form"), async (proof) => {
       const payload = { ...b, ...proof, snapshot_hash: preview.snapshot_hash };
       await api("/api/platform/admin/royalties/finalize", "POST", payload, {
@@ -574,6 +649,9 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
   for (const [id, action] of [
     ["costs", "costs"],
     ["refund", "refund"],
+    ["late-review", "late-review"],
+    ["complaint-review", "complaint-review"],
+    ["incident", "incident"],
     ["exclude", "exclude"],
   ]) {
     const node = document.getElementById("premium-" + id);

@@ -91,6 +91,10 @@ async function seed(pool, checkpoint) {
     "INSERT INTO sonic_test_tasks(task_id,creator_id,status) VALUES('preserved-completed-task',$1,'succeeded')",
     [artist],
   );
+  if (checkpoint >= 18)
+    await pool.query(
+      "UPDATE sonic_test_tasks SET usable_output_seen=TRUE WHERE task_id='preserved-completed-task'",
+    );
   const tables = {
     creators:
       "id,display_name,email,password_salt,password_hash,plan,membership_status",
@@ -164,6 +168,13 @@ async function seed(pool, checkpoint) {
     tables.premium_entitlements =
       "id,order_id,listener_id,starts_at,expires_at";
   }
+  if (checkpoint >= 18) {
+    await pool.query(
+      "INSERT INTO royalty_statements(id,month,currency,mode,snapshot_hash,snapshot,review_note,gross_minor,refund_minor,tax_minor,fees_minor,commissions_minor,rounding_minor,net_minor,artist_pool_minor,platform_minor,stream_count,undistributed_minor) VALUES('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',$1,'USD','test',$2,'{}','Historical early-finalized fixture; preserve but do not release early',0,0,0,0,0,0,0,0,0,0,0)",
+      [new Date().toISOString().slice(0, 7), "a".repeat(64)],
+    );
+    tables.royalty_statements = "id,month,currency,mode,snapshot_hash,snapshot";
+  }
   return { tables, artist, listener };
 }
 async function snapshot(pool, tables) {
@@ -190,7 +201,7 @@ async function ownedDatabase(run) {
 }
 test("populated historical upgrades preserve accounts, catalog and separate currency books", async (t) => {
   try {
-    for (const checkpoint of [0, 7, 13, 17])
+    for (const checkpoint of [0, 7, 13, 17, 18])
       await t.test("upgrade from checkpoint " + checkpoint, () =>
         ownedDatabase(async (pool) => {
           await bootstrap(pool);
@@ -201,6 +212,13 @@ test("populated historical upgrades preserve accounts, catalog and separate curr
           assert.equal(applied.flat().length, migrations.length - checkpoint);
           await bootstrap(pool);
           assert.deepEqual(await migrate(pool), []);
+          if (checkpoint >= 18)
+            await assert.rejects(
+              pool.query(
+                "INSERT INTO royalty_cash_releases(statement_id,amount_minor) VALUES('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',0)",
+              ),
+              /Seven-day/,
+            );
           const after = await snapshot(pool, tables);
           assert.deepEqual(
             after.platform_migrations.slice(0, checkpoint),

@@ -1,6 +1,7 @@
 'use strict';
 require('./ci-database.test.cjs');
 require('./financial-policy.test.cjs');
+require('./settlement-policy.test.cjs');
 require('./services.test.cjs');
 require('./platform.test.cjs');
 require('./router.test.cjs');

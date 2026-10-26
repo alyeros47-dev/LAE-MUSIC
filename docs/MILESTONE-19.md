@@ -1,5 +1,7 @@
 # M19 — Approved financial policy and protected artist liabilities
 
+**Historical milestone:** M20 supersedes the automatic platform-expense assignment for new reversals and adds the seven-day complaint/month-end reconciliation rules. Existing records remain immutable. Read [current financial policy](FINANCIAL-POLICY.md) and [M20](MILESTONE-20.md).
+
 Candidate `0.19.0-rc.19`, development branch `codex/premium-platform-release`, draft PR #6. **Not production-ready. No live financial activation, production merge, Render deployment or production-data access.**
 
 The owner approved replacement [financial protection/refund rules](FINANCIAL-POLICY.md) on 2026-10-26. They supersede the earlier proposed unused-time Premium proration. Approved USD prices, artist-package/affiliate terms, 50% streaming royalty rate, gift split and withdrawal fee remain unchanged.

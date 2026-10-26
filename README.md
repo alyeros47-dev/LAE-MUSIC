@@ -6,6 +6,8 @@ Music discovery, artist tools, an AI music studio, and **LAE-MUSIC Partners & Af
 
 Premium Listener subscriptions use the owner-approved USD base prices ($0.08 / $0.23 / $0.60 / $1.21 / $5.88), shared international currency conversion and approved universal 50% streaming revenue pool with immutable monthly accounting and separate cash-release safeguards. [Milestone 14](docs/MILESTONE-14.md) records pricing, qualifying-stream rules, refund behavior and the unconfigured live settlement verifier. Existing free listening remains available. [Milestone 15](docs/MILESTONE-15.md) adds Premium website offline listening with encrypted browser storage, expiring access and once-only synchronized eligible plays. Listener MP3 exports, paid song purchases and download commissions are not supported.
 
+[Milestone 20](docs/MILESTONE-20.md) applies the approved seven-day complaint window and seven-day UTC month-end royalty reconciliation. Later disputes require documented review; losses are not automatically assigned to LAE-MUSIC or artists. Live financial operations remain unavailable.
+
 ## Local development
 
 Use Node.js 22 (supported runtime minimum: 20). Install dependencies and configure environment variables from `.env.example` in your shell or hosting configuration. The server does not load `.env` automatically.

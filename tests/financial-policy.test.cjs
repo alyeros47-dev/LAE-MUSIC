@@ -9,7 +9,7 @@ test("approved financial conditions protect Premium expiration, failed-credit ru
   assert.match(p.premium, /does not automatically refund/);
   assert.match(p.premium, /continues until expiration/);
   assert.match(p.studio, /no usable result/);
-  assert.match(p.royalties, /Legitimate finalized/);
+  assert.equal(p.settlement_days,7);assert.equal(p.complaint_days,7);assert.match(p.royalties,/not automatically assigned/);
   assert.equal(p.document_hash.length, 64);
   assert.deepEqual(
     require("../lib/premium-pricing")

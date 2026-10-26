@@ -1,4 +1,4 @@
-# LAE-MUSIC release candidate 0.19.0-rc.19
+# LAE-MUSIC release candidate 0.20.0-rc.20
 
 **Draft candidate; not ready for production deployment.** Development branch: `codex/premium-platform-release`. [Draft PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6). No production merge, Render deployment, production data reset or Android changes were performed.
 
@@ -18,7 +18,7 @@ See [FEATURE-STATUS.md](FEATURE-STATUS.md) for the complete implemented/remainin
 - Atomic signup/password/session controls, stale-login fencing, identity-bound single-use recovery/verification, encrypted delivery outbox and mandatory-TLS SMTP structure. Real email delivery remains unconfigured.
 - Named administrators with authenticator/recovery codes, scoped roles, recent verification, versioned access/session revocation and actor attribution. Shared-key mode ends only after confirmed owner enrollment.
 - Editorial curation/promotions/artwork, durable artist notifications and renewal reminders, unread/filter/pagination controls and private operational health. Guest-inclusive moderation preserves platform holds, review notes/revisions/idempotency, reports and source records.
-- Additive checksummed migrations 001–018, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
+- Additive checksummed migrations 001–019, verified remote TLS with explicit Render private-host configuration, origin/security guards, upload validation and read-only schema/accounting preflight.
 
 ## Premium Listener and streaming policy
 
@@ -30,7 +30,7 @@ The universal 50% recognized-net streaming pool, eligible Premium streams, annua
 
 [Milestone 15](MILESTONE-15.md) supersedes every earlier paid-download proposal. Premium saves are included at no extra cost, inside the website's controlled browser library. There is no listener MP3 export, separate song purchase or download commission. Actual service workers/IndexedDB/Web Crypto/native audio are tested with an isolated R2/gateway fixture. Dedicated signing-key and real R2 staging verification remain required. Free ad infrastructure is integrated, but the reviewed creative manifest is disabled until actual approved media is supplied. No synthetic ad or paid impression is claimed.
 
-Signed access ends at the earlier of 24 hours or Premium expiry; reconnection checks holds, ownership, publication and device revocation. Valid pre-expiry plays may sync within 48 hours, once per signed event/sequence, into the existing 50% recognized-net model. Royalty finalization waits 48 hours after UTC month-end. Browser storage is not DRM and cannot prove a human listened; physical-device/branded Safari testing and operational fraud review remain gates; M18 adds Linux Firefox/WebKit engine coverage.
+Signed access ends at the earlier of 24 hours or Premium expiry; reconnection checks holds, ownership, publication and device revocation. Valid pre-expiry plays may sync within 48 hours, once per signed event/sequence, into the existing 50% recognized-net model. M20 extends royalty finalization to seven full UTC calendar days after month-end; the offline sync deadline remains 48 hours. Browser storage is not DRM and cannot prove a human listened; physical-device/branded Safari testing and operational fraud review remain gates; M18 adds Linux Firefox/WebKit engine coverage.
 
 ## Preserved historical package fields
 
@@ -42,13 +42,15 @@ Signed access ends at the earlier of 24 hours or Premium expiry; reconnection ch
 
 Two outputs per generation remains an intention, not a verified API guarantee. External limits, the legacy generated-song upload-code entitlement and quarterly team-sale proposal remain documented contradictions. Historical package royalty fields are preserved; the new streaming rate is 50% for all packages. The owner confirmed no binding 60% streaming commitments. No fixed per-stream payout was invented. Fees use rounded minor units; a one-minor-unit withdrawal can have a zero rounded fee. No new $1 minimum was introduced.
 
-## Current local evidence
+## Current verification and financial policy
 
-[Milestone 19](MILESTONE-19.md) passes **173 application tests, 166 actual PostgreSQL checks, seven populated-upgrade checks, one socket HTTP check and four actual-library SMTP/TLS checks**, plus **29 mocked Sonic cases / 31 source invariants**. All three engines pass connected desktop/tablet/mobile website and actual offline desktop/mobile journeys: **114 axe scans**, zero automated violations. Manual/device/incomplete checks remain. Evidence: `artifacts/financial-policy-test-results.txt`; exact published-head CI is recorded on PR #6.
+[Milestone 20](MILESTONE-20.md) implements the owner's corrected [financial policy](FINANCIAL-POLICY.md): seven-day complaint intake with protected exceptions, seven full UTC days after month-end before finalization/release, verified reversals deducted before closing, and documented late-dispute review without automatically assigning all losses to LAE-MUSIC or artists. Current checkout consent and artist withdrawal disclosures use revision v2. Additive migration **019** preserves all earlier checksums, policy records, statements and historical expense/adjustment entries.
 
-The owner's approved company-protective rules now govern current checkout acknowledgements and artist refund review, with immutable owner-bound policy/evidence records. Terminal generation failures restore a reservation once only without usable output; conflicting or previously seen output remains protected and auditable. New verified-refund accounting preserves legitimate finalized artist allocations and records a platform expense, without pretending a reserve has been funded or releasing cash. Historical snapshots/adjustments remain intact. Additive migration **018** is required; prior SQL checksums are unchanged. Populated fixture preflight passes all nine discrepancy checks, including platform-loss source/journal consistency, while overall release stays **blocked**.
+The candidate passes **176 application tests, 173 actual PostgreSQL checks, eight populated-upgrade checks, one socket HTTP check and four actual-library SMTP/TLS checks**, plus **29 mocked Sonic cases / 31 source invariants**. Chromium, Firefox and WebKit cover desktop/tablet/mobile website journeys and desktop/mobile actual PWA journeys: **123 axe scans**, zero automated violations. Exact results are recorded in `artifacts/seven-day-policy-test-results.txt`; exact published-head CI is recorded on PR #6. Manual/device/incomplete accessibility checks remain.
 
-External financial/music/storage/email responses remain fixtures. Real provider capability/account verification, reserve funding, live settlement/payout and remaining support/dispute/correction/valuation workflows are unfinished. Policy approval is not a deployment-ready claim. Follow [secure staging setup](SECURE-STAGING-SETUP.md) and [deployment instructions](DEPLOYMENT.md).
+Populated disposable-fixture preflight passes all nine accounting/schema discrepancy checks while overall release remains **blocked**. External financial/music/storage/email services are fixtures. Independently verified reserve funding, live settlement/payout, reviewed corrections/recovery, complete listener refund/dispute outcomes, required partial-benefit valuations and real-service staging verification remain unfinished. No approval, review note or deadline is represented as settled cash or the elimination of enforceable chargebacks.
+
+M19's new platform-expense assignment is superseded for subsequent reversals by M20 pending-allocation clearing and source-bound late review; existing M19 rows remain history. Other M19 checkout, artist refund and usable-output/once-only generation protections are retained. Follow [secure staging setup](SECURE-STAGING-SETUP.md) and [deployment instructions](DEPLOYMENT.md). This is not deployment authorization.
 
 ## Previous M18 evidence
 
