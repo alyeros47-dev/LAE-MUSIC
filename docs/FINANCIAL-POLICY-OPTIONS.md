@@ -1,6 +1,6 @@
 # Refund, dispute and royalty-correction options for owner review
 
-**Proposal only — not approved, not an active policy, and not customer terms.** The owner confirmed on 2026-10-26 that written rules have not yet been chosen. Current unsupported outcomes remain held for review. Approval of this document does not enable live payments, authorize a production merge or deploy the website. Implementation and verification must follow the selected rules.
+**Historical proposal — superseded by the owner-specific [approved policy](FINANCIAL-POLICY.md) on 2026-10-26. These A/B options are not active terms.** The owner confirmed on 2026-10-26 that written rules have not yet been chosen. Current unsupported outcomes remain held for review. Approval of this document does not enable live payments, authorize a production merge or deploy the website. Implementation and verification must follow the selected rules.
 
 The existing approved rules stay fixed: USD product prices, universal 50% eligible Premium net-revenue streaming pool, artist-package referral percentages, Premium Listener verified-sale commissions, 70/30 gifts and 3% withdrawal service charge. No paid/permanent listener MP3 exports, separate song purchases or download commissions. Registration remains free.
 

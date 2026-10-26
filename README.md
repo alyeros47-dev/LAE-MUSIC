@@ -38,7 +38,7 @@ The same website and real PWA journeys run in Chromium, Firefox and WebKit. They
 
 The populated upgrade suite creates and removes only its own uniquely named fixture databases, checks historical checkpoints 0/7/13/17, exact existing-record preservation, concurrent upgrades and SQL failure rollback. It refuses remote/production targets; a sanitized production clone still needs separate review. `LAE_PUBLIC_FX_TESTS=true npm run verify:fx` optionally contacts the real public FX service without database writes or permanent repricing. Current evidence and published-head CI are recorded in [release notes](docs/RELEASE.md) and [PR #6](https://github.com/alyeros47-dev/LAE-MUSIC/pull/6).
 
-Before real integration testing, follow [secure staging setup](docs/SECURE-STAGING-SETUP.md). The owner-requested [financial policy options](docs/FINANCIAL-POLICY-OPTIONS.md) are inactive proposals requiring selection and subsequent implementation/testing.
+Before real integration testing, follow [secure staging setup](docs/SECURE-STAGING-SETUP.md). The owner-specific [financial policy](docs/FINANCIAL-POLICY.md) supersedes earlier proposals; implementation and testing continue with live operations disabled.
 
 ## Layout
 

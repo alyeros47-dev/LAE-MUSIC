@@ -250,7 +250,13 @@ exports.verifyBrowserReconciliation = async ({
   await page
     .getByRole("link", { name: "Export USD ledger CSV", exact: true })
     .click();
-  assert.equal((await download).suggestedFilename(), "lae-ledger-USD.csv");
+  const reportDownload = await download;
+  assert.equal(reportDownload.suggestedFilename(), "lae-ledger-USD.csv");
+  assert(
+    (
+      await require("./browser-export-server.cjs").downloadText(reportDownload)
+    ).includes('"USD","1234"'),
+  );
   const form = page.locator("#reconciliation-filters");
   await form
     .getByLabel("Accounting currency", { exact: true })
@@ -264,7 +270,10 @@ exports.verifyBrowserReconciliation = async ({
     0,
   );
   await page.goto(
-    "https://lae.test/admin/console?section=reconciliation&source_kind=artist_checkout&source_id=f0000000-0000-4000-8000-000000000002",
+    new URL(
+      "/admin/console?section=reconciliation&source_kind=artist_checkout&source_id=f0000000-0000-4000-8000-000000000002",
+      page.url(),
+    ).href,
   );
   await page
     .getByRole("heading", { name: "Artist checkout review", exact: true })

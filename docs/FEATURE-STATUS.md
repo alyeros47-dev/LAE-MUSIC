@@ -38,3 +38,5 @@
 See [DEPLOYMENT.md](DEPLOYMENT.md) for environment/migration/rollback instructions, [RELEASE.md](RELEASE.md) for executed evidence, [MILESTONE-12.md](MILESTONE-12.md) for the read-only preflight and [MILESTONE-14.md](MILESTONE-14.md) for the approved USD Premium Listener integration and [MILESTONE-15.md](MILESTONE-15.md) for website offline listening. User approval for a final production deployment does not replace the unresolved implementation and verification above.
 
 M18 adds cross-browser verification, populated upgrade rehearsals and a real public FX check. The owner confirmed staging/test credentials and a sanitized production clone are not yet established, and requested written policy options. See [SECURE-STAGING-SETUP.md](SECURE-STAGING-SETUP.md) and [FINANCIAL-POLICY-OPTIONS.md](FINANCIAL-POLICY-OPTIONS.md); policy proposals are not active terms.
+
+The owner subsequently approved specific [financial protection/refund rules](FINANCIAL-POLICY.md), superseding the A/B proposals. Policy implementation/testing remains in progress; no live finance or deployment was authorized.

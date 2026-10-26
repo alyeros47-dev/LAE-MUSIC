@@ -1,8 +1,7 @@
 'use strict';
 // Runs only against the explicitly named disposable local CI database. Never production.
-const connectionString=process.env.DATABASE_URL||'';let target;
-try{target=new URL(connectionString);}catch{throw Error('PostgreSQL integration requires the isolated CI test database.');}
-if(process.env.LAE_DB_TESTS!=='true'||!['127.0.0.1','localhost'].includes(target.hostname)||target.pathname!=='/lae_music_ci')throw Error('Refusing database tests outside the disposable local lae_music_ci database.');
+const target=require('./ci-database.cjs').ciDatabase();
+const connectionString=target.href;
 const test=require('node:test'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),fs=require('node:fs'),vm=require('node:vm');const {Readable}=require('node:stream');const {Pool}=require('pg');
 const {migrate}=require('../lib/migrations'),finance=require('../lib/finance'),credits=require('../lib/credits'),{transaction}=require('../lib/transactions');
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));const pool=new Pool({connectionString,ssl:false});const port=3198,origin='http://127.0.0.1:'+port;

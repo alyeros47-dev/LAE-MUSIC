@@ -23,7 +23,7 @@ Do not paste secrets into chat, GitHub issues/PRs, committed files, screenshots 
 
 Provide non-secret merchant account IDs, merchant-approved settlement/charge currencies and reviewed API version information. Review `config/payment-merchant.json` in a development commit; keep USD as base and Nigeria as the merchant jurisdiction, not the audience boundary. A reviewed sandbox manifest and `NODE_ENV=staging` are both required. Keys alone cannot open checkout. The committed manifest remains disabled. Register the actual staging webhook routes with the providers after review; verify signatures and independently retrieve payments using the original merchant account.
 
-Test success, failure, cancellation, duplicate/reordered callbacks, local-currency quoting, minimum gateway amounts, refunds and ambiguous outcomes with provider-supported test instruments. Do not use a real card or represent a sandbox receipt as real revenue. **Live checkout, independent live settlement, payouts and commission clearance remain unfinished; adding production keys cannot enable them.** Refund/dispute/correction policy options are in [FINANCIAL-POLICY-OPTIONS.md](FINANCIAL-POLICY-OPTIONS.md).
+Test success, failure, cancellation, duplicate/reordered callbacks, local-currency quoting, minimum gateway amounts, refunds and ambiguous outcomes with provider-supported test instruments. Do not use a real card or represent a sandbox receipt as real revenue. **Live checkout, independent live settlement, payouts and commission clearance remain unfinished; adding production keys cannot enable them.** The owner-specific [financial policy](FINANCIAL-POLICY.md) is approved; implementation and verification remain in progress.
 
 ## 3. Storage, studio and offline playback
 

@@ -2,7 +2,7 @@ LAE-MUSIC 0.18.0-rc.18 local verification
 Recorded 2026-10-26T05:47:26.078835+00:00
 Development only. No production merge, Render deployment or production-data access.
 
-application: 166 pass / 0 fail
+application: 168 pass / 0 fail
 postgres: 160 pass / 0 fail
 upgrade: 7 pass / 0 fail
 http: 1 pass / 0 fail
@@ -151,3 +151,10 @@ Real public FX service verification (read-only; no permanent repricing):
 
 Unresolved: policy approval/implementation; live checkout/settlement/payout/commission clearance; real gateway/R2/music/lyrics/email/ad verification; sanitized production clone/load/backup/recovery; real Render proxy path; key custody and manual device/accessibility review.
 No live credentials are attached. Business policy options are inactive proposals. This evidence is not a deployment-ready announcement.
+
+Follow-up verification 2026-10-26T06:03:29.718941+00:00:
+Shared CI database guard rejects query/fragment/protocol overrides before connecting; two new application checks pass.
+Fresh owned PostgreSQL instance: 160 existing checks and seven upgrade checks pass.
+All three full UI suites pass after moving CSV export fixtures to native loopback HTTP, preserving download assertions and checking exact CSV content.
+Initial published CI 40276518805: application/Chromium, PostgreSQL and Firefox passed; WebKit failed at an intercepted CSV download. Follow-up exact-head CI must be verified before reporting remote success.
+The owner supplied replacement approved financial rules on 2026-10-26; see docs/FINANCIAL-POLICY.md. Their implementation/testing continues separately; live finances remain disabled.

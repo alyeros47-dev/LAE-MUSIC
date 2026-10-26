@@ -11,21 +11,7 @@ const { migrate } = require("../lib/migrations"),
   { hashPassword, verifyPassword } = require("../lib/passwords");
 const finance = require("../lib/finance"),
   { transaction } = require("../lib/transactions");
-let target;
-try {
-  target = new URL(process.env.DATABASE_URL || "");
-} catch {
-  throw Error("Upgrade rehearsal requires the disposable local CI database.");
-}
-if (
-  process.env.LAE_DB_TESTS !== "true" ||
-  !["127.0.0.1", "localhost"].includes(target.hostname) ||
-  target.pathname !== "/lae_music_ci"
-) {
-  throw Error(
-    "Refusing upgrade rehearsal outside the disposable local lae_music_ci database.",
-  );
-}
+const target = require("./ci-database.cjs").ciDatabase();
 const control = new Pool({ connectionString: target.href, ssl: false });
 const migrations = fs
   .readdirSync(path.join(__dirname, "../migrations"))
