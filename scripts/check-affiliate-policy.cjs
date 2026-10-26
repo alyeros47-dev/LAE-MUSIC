@@ -1,0 +1,15 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const {execFileSync}=require('node:child_process');
+const source=fs.readFileSync(require('node:path').join(__dirname,'..','server.js'),'utf8');
+execFileSync(process.execPath,['--check','server.js'],{cwd:require('node:path').join(__dirname,'..')});
+assert.match(source,/directReferralPercent:15/,'Starter direct rate must stay at 15%');
+assert.equal((source.match(/directReferralPercent:25/g)||[]).length,2,'Growth and Professional direct rates must stay at 25%');
+assert.match(source,/const leader=check\.rows\[0\]\.referred_by/,'Team leader must be the direct referrer of the selling affiliate');
+assert.match(source,/affiliate_team_sales\(subscription_id,affiliate_id,team_leader_id/,'Sales must be attributed to the immediate team leader');
+assert.match(source,/team_reward_percent:10/,'Quarterly team reward must remain 10%');
+assert.match(source,/quarter_start=date_trunc\('quarter',NOW\(\)\)::date/,'Quarterly totals must use the calendar quarter');
+assert.match(source,/activation_required:false/,'Free affiliates must not require paid activation');
+assert.match(source,/bonus_status:'estimated_pending_reconciliation'/,'Unsettled team rewards must not appear as available cash');
+console.log('LAE-MUSIC affiliate policy checks passed; server syntax valid.');
