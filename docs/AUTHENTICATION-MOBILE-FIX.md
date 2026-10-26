@@ -20,3 +20,13 @@ Unit/router checks cover correct role selection/fallback, same-email isolation, 
 `scripts/verify-review-auth.cjs` is an explicit opt-in HTTPS check pinned to the existing review origin. It registers isolated artist/listener test identities, verifies secure registration cookies and repeat authenticated reads, logout invalidation, wrong-password denial, opposite-entry-point login, password whitespace preservation and role isolation. It performs no music, storage or payment operation and never prints credentials/cookies. Record its actual execution separately from unit/browser results.
 
 This update changes no schema, existing password hashes, production data, provider keys or music-generation engine. Test accounts remain temporary in the current review hosting architecture; permanent staging storage is not implied. Production deployment still requires owner approval.
+
+## Observed isolated verification
+
+Application head `030d52a8d7d0543f545fb23d63f5e9a8d4b47a9e` passed local 227 application tests and expanded Chromium desktop/tablet/mobile journeys. Exact-head PostgreSQL CI passed 175 native tests and 8 populated upgrades. Review configuration run 40400882111 deployed only the sandbox, preserving live configuration/deployment and running no R2 bootstrap/probe. The opt-in HTTPS check then passed for both roles: fresh registration, repeat authenticated reads, logout, invalid-token rejection, wrong-password rejection, successful sign-in through the opposite entry point, role isolation and password-whitespace preservation.
+
+### Phone retest
+
+Open the review site, refresh the page, and create a fresh **sandbox** test account after this update. The temporary sandbox restarted during deployment, so earlier sandbox test accounts may no longer exist. Do not use the live site for this test. Check both password eyes, correct a deliberate mismatch, register, navigate between the account/library or artist workspace/studio, sign out and sign back in with the same credentials. A listener opening the studio should see that they are signed in and need an optional artist profile; it should not claim they are logged out. Existing live users and credentials remain unchanged.
+
+[Exact-head CI run 40400888999](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40400888999) subsequently passed all four jobs: application/Chromium, PostgreSQL, Firefox and WebKit, including the expanded account journeys and real PWA regressions. These are emulated desktop/tablet/mobile browser checks; the owner's phone retest is still needed.
