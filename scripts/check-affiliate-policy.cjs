@@ -11,5 +11,9 @@ assert.match(source,/affiliate_team_sales\(subscription_id,affiliate_id,team_lea
 assert.match(source,/team_reward_percent:10/,'Quarterly team reward must remain 10%');
 assert.match(source,/quarter_start=date_trunc\('quarter',NOW\(\)\)::date/,'Quarterly totals must use the calendar quarter');
 assert.match(source,/activation_required:false/,'Free affiliates must not require paid activation');
+assert.match(source,/reconcileClosedAffiliateQuarter/,'Quarter-close reconciliation must exist');
+assert.match(source,/affiliate_quarterly_rewards/,'Quarterly reward ledger must exist');
+assert.match(source,/s\.status='paid'/,'Refunded sales must be excluded');
+assert.match(source,/pg_advisory_xact_lock/,'Concurrent reconciliation must be locked');
 assert.match(source,/bonus_status:'estimated_pending_reconciliation'/,'Unsettled team rewards must not appear as available cash');
 console.log('LAE-MUSIC affiliate policy checks passed; server syntax valid.');
