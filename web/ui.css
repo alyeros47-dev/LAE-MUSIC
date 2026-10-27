@@ -2170,3 +2170,11 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .password-control{display:block;position:relative;width:100%}.password-control input{padding-right:54px!important}.password-visibility{position:absolute;right:3px;top:50%;transform:translateY(-50%);min-width:44px;min-height:44px;display:grid;place-items:center;border:0;background:transparent;color:var(--text,#f4f5f1);cursor:pointer;border-radius:8px}.password-visibility svg{fill:none;stroke:currentColor;stroke-width:1.8}.password-visibility:focus-visible{outline:2px solid var(--lime,#c9fb75);outline-offset:-2px}.password-visibility[aria-pressed=true]{color:var(--lime,#c9fb75)}#password-help{font-size:.85rem;color:var(--muted)}
 
 @media(max-width:640px){.header-actions .button{font-size:12px;min-height:44px;padding:8px 10px}.mobile-menu{min-width:44px;min-height:44px}}
+
+/* Keep all three studio stages discoverable on small screens. */
+.studio-steps{position:sticky;top:0;z-index:8;display:flex;gap:8px;padding:12px 0;background:var(--bg,#101017);flex-wrap:wrap;margin-bottom:20px}
+.studio-steps .button{flex:1;min-width:130px}
+#studio-idea,#studio-voice,#studio-production{scroll-margin-top:160px}
+.studio-upload-code{padding:20px;border:1px solid var(--border,#393943);border-radius:16px;margin:20px 0}
+#studio-upload-code{font-family:monospace;letter-spacing:.04em;font-size:14px;width:100%}
+#studio-voice-preview{width:100%;margin:16px 0}

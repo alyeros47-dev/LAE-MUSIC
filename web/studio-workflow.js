@@ -1,0 +1,393 @@
+// Presentation adapter for the original lyrics/voice/music handlers.
+// A recording is local until an explicit save; no auto-training or provider calls.
+export function pcmWav(samples, sampleRate) {
+  if (
+    !Number.isInteger(sampleRate) ||
+    sampleRate < 8000 ||
+    sampleRate > 192000 ||
+    samples.length > sampleRate * 60 ||
+    samples.length * 2 + 44 > 12000000
+  )
+    throw Error(
+      "Record up to 60 seconds at a supported microphone sample rate.",
+    );
+  const bytes = new ArrayBuffer(44 + samples.length * 2),
+    view = new DataView(bytes);
+  const text = (offset, value) =>
+    [...value].forEach((c, i) => view.setUint8(offset + i, c.charCodeAt(0)));
+  text(0, "RIFF");
+  view.setUint32(4, bytes.byteLength - 8, true);
+  text(8, "WAVE");
+  text(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  text(36, "data");
+  view.setUint32(40, samples.length * 2, true);
+  samples.forEach((sample, i) => {
+    const s = Math.max(-1, Math.min(1, Number(sample) || 0));
+    view.setInt16(44 + i * 2, s < 0 ? s * 32768 : s * 32767, true);
+  });
+  return new Blob([bytes], { type: "audio/wav" });
+}
+export function bindStudioWorkflow({
+  form,
+  artistId,
+  voiceProfile,
+  api,
+  active,
+  toast,
+  storageReady = false,
+}) {
+  const by = (id) => form.querySelector("#" + id);
+  let captureVersion = 0;
+  let disposed = false,
+    speech = null,
+    stream = null,
+    context = null,
+    source = null,
+    processor = null,
+    timer = null,
+    sample = null,
+    previewURL = null;
+  const canAct = () => !disposed && active() && form.isConnected;
+  const persist = () =>
+    form.dispatchEvent(new Event("input", { bubbles: true }));
+  function setUploadCode(code, title) {
+    const valid = /^[A-F0-9]{36}$/.test(code || "");
+    by("studio-upload-code").value = valid ? code : "";
+    by("copy-studio-code").disabled = !valid;
+    by("studio-code-status").textContent = valid
+      ? "Your upload code is ready. Keep it with “" +
+        title +
+        "”. The server checks ownership, title and one-time use. A lyrics code alone does not authenticate an audio file."
+      : "No upload code was returned. Your lyrics are preserved. Do not spend another credit just to obtain a code; contact support.";
+  }
+  try {
+    const draft = JSON.parse(
+      localStorage.getItem("lae_studio_draft:" + artistId),
+    );
+    if (draft?.uploadCode)
+      setUploadCode(draft.uploadCode, draft.title || "your song");
+  } catch {}
+  by("copy-studio-code").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(by("studio-upload-code").value);
+      toast("Upload code copied");
+    } catch {
+      by("studio-upload-code").focus();
+      by("studio-upload-code").select();
+      toast("Select and copy your upload code.");
+    }
+  };
+  document.querySelectorAll("[data-studio-step]").forEach((button) => {
+    button.onclick = () => {
+      const target = by(button.dataset.studioStep);
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
+    };
+  });
+  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const dictation = by("studio-dictation-status"),
+    dictate = by("studio-dictate");
+  if (!Speech) {
+    dictate.disabled = true;
+    dictation.textContent =
+      "Speech dictation is unavailable in this browser. Use your phone keyboard’s microphone or type your idea.";
+  } else
+    dictate.onclick = () => {
+      if (speech) {
+        speech.stop();
+        return;
+      }
+      const recognition = new Speech();
+      speech = recognition;
+      recognition.lang = document.documentElement.lang || "en";
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      const initial = form.elements.idea.value;
+      recognition.onresult = (event) => {
+        if (!canAct()) return;
+        const transcript = Array.from(event.results)
+          .filter((r) => r.isFinal)
+          .map((r) => r[0].transcript)
+          .join(" ");
+        form.elements.idea.value = [initial, transcript]
+          .filter(Boolean)
+          .join(" ")
+          .slice(0, 1200);
+        persist();
+        dictation.textContent =
+          "Added your spoken idea. Review the text before generating.";
+      };
+      recognition.onerror = () => {
+        if (canAct())
+          dictation.textContent =
+            "Dictation could not continue. Check microphone permission, use keyboard dictation, or type your idea.";
+      };
+      recognition.onend = () => {
+        if (speech === recognition) speech = null;
+        if (canAct()) {
+          dictate.textContent = "🎙 Dictate my song idea";
+          dictate.setAttribute("aria-pressed", "false");
+        }
+      };
+      try {
+        recognition.start();
+        dictate.textContent = "Stop dictation";
+        dictate.setAttribute("aria-pressed", "true");
+        dictation.textContent =
+          "Listening to your idea. Your browser may send speech to its online recognition service. Press Stop when finished.";
+      } catch {
+        speech = null;
+        dictation.textContent =
+          "Dictation could not start. You can type your idea instead.";
+      }
+    };
+  const voiceStatus = by("studio-voice-status"),
+    save = by("studio-save-voice"),
+    record = by("studio-record-voice"),
+    stop = by("studio-stop-voice");
+  const refreshSave = () => {
+    save.disabled =
+      !storageReady || !sample || !by("studio-voice-consent").checked;
+  };
+  function clearSample() {
+    if (previewURL) URL.revokeObjectURL(previewURL);
+    previewURL = null;
+    sample = null;
+    by("studio-voice-preview").removeAttribute("src");
+    by("studio-voice-preview").hidden = true;
+    refreshSave();
+  }
+  function useSample(file) {
+    clearSample();
+    sample = file;
+    previewURL = URL.createObjectURL(file);
+    by("studio-voice-preview").src = previewURL;
+    by("studio-voice-preview").hidden = false;
+    refreshSave();
+  }
+  by("studio-voice-file").onchange = () => {
+    const file = by("studio-voice-file").files[0];
+    if (!file) return;
+    const type =
+      file.type ||
+      (/\.mp3$/i.test(file.name)
+        ? "audio/mpeg"
+        : /\.wav$/i.test(file.name)
+          ? "audio/wav"
+          : "");
+    if (
+      !["audio/mpeg", "audio/wav", "audio/x-wav"].includes(type) ||
+      file.size < 10000 ||
+      file.size > 12000000
+    ) {
+      voiceStatus.textContent =
+        "Choose a clear MP3 or WAV recording between 10 KB and 12 MB.";
+      clearSample();
+      return;
+    }
+    useSample(
+      new Blob([file], { type: type === "audio/x-wav" ? "audio/wav" : type }),
+    );
+    voiceStatus.textContent =
+      "Local sample ready to preview. " +
+      (storageReady
+        ? "Confirm your consent before saving."
+        : "Uploading and training remain pending safe storage verification.");
+  };
+  function endCapture() {
+    captureVersion++;
+    clearTimeout(timer);
+    timer = null;
+    if (processor) {
+      processor.onaudioprocess = null;
+      processor.disconnect();
+      processor = null;
+    }
+    source?.disconnect();
+    source = null;
+    stream?.getTracks().forEach((track) => track.stop());
+    stream = null;
+    const previous = context;
+    context = null;
+    previous?.close().catch(() => {});
+    if (canAct()) {
+      record.disabled = false;
+      stop.disabled = true;
+    }
+  }
+  let finish = null;
+  record.disabled =
+    !navigator.mediaDevices?.getUserMedia ||
+    !(window.AudioContext || window.webkitAudioContext);
+  record.onclick = async () => {
+    clearSample();
+    const ticket = ++captureVersion;
+    record.disabled = true;
+    voiceStatus.textContent = "Requesting microphone permission…";
+    try {
+      const granted = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      if (!canAct() || ticket !== captureVersion) {
+        granted.getTracks().forEach((track) => track.stop());
+        return;
+      }
+      stream = granted;
+      const Audio = window.AudioContext || window.webkitAudioContext;
+      context = new Audio();
+      await context.resume();
+      if (!canAct() || ticket !== captureVersion) {
+        if (ticket === captureVersion) endCapture();
+        return;
+      }
+      const rate = context.sampleRate,
+        chunks = [];
+      const maxSamples = Math.min(rate * 60, Math.floor((12000000 - 44) / 2));
+      let count = 0;
+      source = context.createMediaStreamSource(stream);
+      processor = context.createScriptProcessor(4096, 1, 1);
+      finish = () => {
+        const data = new Float32Array(count);
+        let offset = 0;
+        for (const chunk of chunks) {
+          data.set(chunk, offset);
+          offset += chunk.length;
+        }
+        endCapture();
+        if (canAct()) {
+          if (count < rate * 15) {
+            voiceStatus.textContent =
+              "Record at least 15 seconds of solo singing. No sample was uploaded.";
+            return;
+          }
+          useSample(pcmWav(data, rate));
+          voiceStatus.textContent =
+            "Your singing sample is ready for local preview. " +
+            (storageReady
+              ? "Confirm consent to save and train."
+              : "Upload and training remain pending safe storage verification.");
+        }
+      };
+      processor.onaudioprocess = (event) => {
+        if (!canAct()) {
+          endCapture();
+          return;
+        }
+        const input = event.inputBuffer.getChannelData(0),
+          left = maxSamples - count;
+        if (left > 0) {
+          const copy = input.slice(0, left);
+          chunks.push(copy);
+          count += copy.length;
+        }
+        if (count >= maxSamples) finish();
+      };
+      source.connect(processor);
+      processor.connect(context.destination); // output stays silent; capture input only.
+      stop.disabled = false;
+      voiceStatus.textContent =
+        "Recording your singing voice locally. Sing alone for 15–60 seconds, then press Stop recording.";
+      timer = setTimeout(() => finish?.(), 60000);
+    } catch {
+      if (ticket !== captureVersion) return;
+      endCapture();
+      if (canAct())
+        voiceStatus.textContent =
+          "Recording could not start. Check microphone permission or choose an MP3/WAV file.";
+    }
+  };
+  stop.onclick = () => finish?.();
+  by("studio-clear-voice").onclick = () => {
+    endCapture();
+    clearSample();
+    by("studio-voice-file").value = "";
+    voiceStatus.textContent = "Local sample cleared. Nothing was uploaded.";
+  };
+  by("studio-voice-consent").onchange = refreshSave;
+  async function refreshVoice() {
+    const result = await api("/api/voice/status");
+    if (!canAct()) return;
+    const ready = result.status === "ready";
+    voiceProfile.status = result.status;
+    voiceProfile.hasVoice = ready;
+    form.elements.useVoice.disabled = !ready;
+    if (!ready) form.elements.useVoice.checked = false;
+    voiceStatus.textContent = ready
+      ? "Your singing voice is ready. Select “Use my saved voice profile” to use it."
+      : result.status === "training"
+        ? "Your voice profile is training. Check again shortly."
+        : "Voice profile status: " +
+          result.status +
+          ". Standard voice generation is still available.";
+  }
+  by("studio-refresh-voice").onclick = async () => {
+    try {
+      await refreshVoice();
+    } catch (error) {
+      if (canAct()) voiceStatus.textContent = error.message;
+    }
+  };
+  save.onclick = async () => {
+    if (!storageReady || !sample || !by("studio-voice-consent").checked) return;
+    if (
+      !window.confirm(
+        "Save this voice sample and start provider voice training? This may use provider credits.",
+      )
+    )
+      return;
+    save.disabled = true;
+    try {
+      const upload = await api("/api/voice/upload", "POST", {
+        type: sample.type,
+        bytes: sample.size,
+        consent: true,
+      });
+      if (!/^https:\/\//.test(upload.url))
+        throw Error("Secure upload URL was not returned.");
+      const response = await fetch(upload.url, {
+        method: "PUT",
+        headers: { "Content-Type": sample.type },
+        body: sample,
+        credentials: "omit",
+      });
+      if (!response.ok)
+        throw Error("Voice upload failed. Training was not started.");
+      await api("/api/voice/train", "POST", {});
+      if (canAct())
+        voiceStatus.textContent =
+          "Voice training submitted. Check voice profile before using your own voice.";
+    } catch (error) {
+      if (canAct()) voiceStatus.textContent = error.message;
+    } finally {
+      if (canAct()) refreshSave();
+    }
+  };
+  function dispose() {
+    if (disposed) return;
+    disposed = true;
+    speech?.abort();
+    speech = null;
+    endCapture();
+    clearSample();
+    observer.disconnect();
+    window.removeEventListener("pagehide", dispose);
+  }
+  const observer = new MutationObserver(() => {
+    if (!form.isConnected) dispose();
+  });
+  observer.observe(form.ownerDocument.body, { childList: true, subtree: true });
+  window.addEventListener("pagehide", dispose);
+  return { setUploadCode, dispose };
+}

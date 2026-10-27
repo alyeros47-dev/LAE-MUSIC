@@ -22,6 +22,7 @@ on:
       - tests/review-container-smoke.cjs
       - web/password-controls.js
       - web/studio-engine.js
+      - web/studio-workflow.js
       - web/app.js
       - tests/review-storage.test.cjs
       - tests/review-integrations.test.cjs

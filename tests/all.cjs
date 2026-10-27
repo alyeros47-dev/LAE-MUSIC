@@ -56,3 +56,4 @@ require('./navigation-routing.test.cjs');
 require('./review-accounts.test.cjs');
 
 require('./review-testing.test.cjs');
+require('./studio-workflow.test.cjs');
