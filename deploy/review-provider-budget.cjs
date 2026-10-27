@@ -32,7 +32,10 @@ function createBudget({
         ((url.origin === "https://api.openai.com" &&
           ["/v1/responses", "/v1/chat/completions"].includes(url.pathname)) ||
           (url.origin === "https://api.musicapi.ai" &&
-            url.pathname === "/api/v1/sonic/create"));
+            ((url.pathname === "/api/v1/sonic/create" &&
+              context?.reference?.startsWith("sonic-")) ||
+              (url.pathname === "/api/v1/sonic/create-voice" &&
+                context?.reference?.startsWith("voice-")))));
       const deny = (message, status = 503, definitelyNotSent = true) =>
         new Response(JSON.stringify({ error: { message } }), {
           status,
@@ -48,7 +51,9 @@ function createBudget({
         !allowed ||
         context?.kind !== kind ||
         !/^[1-9][0-9]*$/.test(context?.artistId || "") ||
-        !/^(?:sonic-[a-f0-9]{32}|[a-f0-9-]{36})$/.test(context?.reference || "")
+        !/^(?:sonic-[a-f0-9]{32}|voice-[a-f0-9-]{36}|[a-f0-9-]{36})$/.test(
+          context?.reference || "",
+        )
       )
         return deny(
           "This sandbox provider request has no authenticated generation reservation. No provider charge was made.",

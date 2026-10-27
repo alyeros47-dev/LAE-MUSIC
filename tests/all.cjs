@@ -61,3 +61,5 @@ require('./review-auth-diagnostic.test.cjs');
 require('./lyrics-models.test.cjs');
 require('./review-state.test.cjs');
 require('./review-persistence-plan.test.cjs');
+
+require('./review-voice.test.cjs');

@@ -239,7 +239,12 @@ export function bindStudioWorkflow({
     stop = by("studio-stop-voice");
   const refreshSave = () => {
     save.disabled =
-      !storageReady || !sample || !by("studio-voice-consent").checked;
+      !storageReady ||
+      !sample ||
+      ["training", "submitting", "verification_required"].includes(
+        voiceProfile.status,
+      ) ||
+      !by("studio-voice-consent").checked;
   };
   function clearSample() {
     if (previewURL) URL.revokeObjectURL(previewURL);
@@ -393,7 +398,8 @@ export function bindStudioWorkflow({
     endCapture();
     clearSample();
     by("studio-voice-file").value = "";
-    voiceStatus.textContent = "Local sample cleared. Nothing was uploaded.";
+    voiceStatus.textContent =
+      "Local preview cleared. Any submitted voice profile is unchanged.";
   };
   by("studio-voice-consent").onchange = refreshSave;
   async function refreshVoice() {
@@ -402,6 +408,7 @@ export function bindStudioWorkflow({
     const ready = result.status === "ready";
     voiceProfile.status = result.status;
     voiceProfile.hasVoice = ready;
+    refreshSave();
     musicForm.elements.useVoice.disabled = !ready;
     if (!ready) musicForm.elements.useVoice.checked = false;
     voiceStatus.textContent = ready
@@ -414,19 +421,27 @@ export function bindStudioWorkflow({
   }
   by("studio-refresh-voice").onclick = async () => {
     try {
-      await refreshVoice();
+      await pollVoice();
     } catch (error) {
       if (canAct()) voiceStatus.textContent = error.message;
     }
   };
+  let voicePoll;
+  const pollVoice = async () => {
+    clearTimeout(voicePoll);
+    try {
+      await refreshVoice();
+      if (canAct() && voiceProfile.status === "training")
+        voicePoll = setTimeout(pollVoice, 15000);
+    } catch (error) {
+      if (canAct())
+        voiceStatus.textContent =
+          error.message +
+          " Select Check voice profile to retry the status check; do not submit training again.";
+    }
+  };
   save.onclick = async () => {
     if (!storageReady || !sample || !by("studio-voice-consent").checked) return;
-    if (
-      !window.confirm(
-        "Save this voice sample and start provider voice training? This may use provider credits.",
-      )
-    )
-      return;
     save.disabled = true;
     try {
       const upload = await api("/api/voice/upload", "POST", {
@@ -444,12 +459,18 @@ export function bindStudioWorkflow({
       });
       if (!response.ok)
         throw Error("Voice upload failed. Training was not started.");
-      await api("/api/voice/train", "POST", {});
-      if (canAct())
+      const trained = await api("/api/voice/train", "POST", {});
+      voiceProfile.status = trained.status;
+      if (canAct()) {
         voiceStatus.textContent =
-          "Voice training submitted. Check voice profile before using your own voice.";
+          "Voice training submitted. Checking automatically; you can keep editing your music.";
+        void pollVoice();
+      }
     } catch (error) {
-      if (canAct()) voiceStatus.textContent = error.message;
+      if (canAct()) {
+        voiceStatus.textContent = error.message;
+        if (error.status === 503) voiceProfile.status = "verification_required";
+      }
     } finally {
       if (canAct()) refreshSave();
     }
@@ -457,6 +478,7 @@ export function bindStudioWorkflow({
   function dispose() {
     if (disposed) return;
     disposed = true;
+    clearTimeout(voicePoll);
     speech?.abort();
     speech = null;
     endCapture();
