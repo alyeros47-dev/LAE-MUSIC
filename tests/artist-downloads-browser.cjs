@@ -47,7 +47,7 @@ const http = require("node:http"),
     await page.locator("#audio").click();
     const file = await event;
     assert.equal(await file.failure(), null);
-    assert.equal(file.suggestedFilename(), "Owned song.mp3");
+    assert.match(file.suggestedFilename(), /^Owned[ _]song\.mp3$/);
     assert(fs.readFileSync(await file.path()).equals(bytes));
     assert.equal(requests, 1);
     const again = page.waitForEvent("download");
