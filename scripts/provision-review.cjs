@@ -181,6 +181,12 @@ async function provision({
     log(
       "Existing isolated review service found; configuration and credentials were not replaced.",
     );
+    // Existing services have automatic deployment disabled. Do not occupy the
+    // shared release lock waiting for code that the queued integration job deploys.
+    return {
+      url:safeUrl(s.serviceDetails.url),status:'awaiting_configured_deployment',
+      production_ready:false,temporary_database:true,service_id:s.id,
+    };
   } else {
     const result = await api("/services", "POST", servicePayload(owner));
     s = validateService(result.service || result, owner);
@@ -208,7 +214,7 @@ async function provision({
       const report = await verifyPreview(origin);
       if (report.status === "available_for_review") {
         log(
-          "PASS: all 12 read-only review probes. Test data is temporary; real providers remain unverified.",
+          "PASS: read-only review probes. Test data is temporary; real providers remain unverified.",
         );
         return {
           url: origin,
@@ -252,7 +258,7 @@ if (require.main === module)
     const text =
       "## LAE-MUSIC test site\n\n" +
       result.url +
-      "\n\nTemporary isolated database; data can reset on restart. No production merge/deploy or live finance. Actual studio/storage providers remain unconfigured.\n";
+      "\n\nStatus: " + result.status + ". Temporary isolated database; data can reset on restart. Existing services hand off to the isolated integration workflow for deployment and verification. No production merge/deploy or live finance is authorized.\n";
     console.log(JSON.stringify(result));
     if (process.env.GITHUB_STEP_SUMMARY)
       fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, text);

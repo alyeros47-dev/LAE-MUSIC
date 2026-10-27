@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/review-integrations.yml
       - scripts/configure-review-integrations.cjs
+      - scripts/provision-review.cjs
       - scripts/bootstrap-review-r2.cjs
       - scripts/verify-review-storage.cjs
       - lib/review-storage.js

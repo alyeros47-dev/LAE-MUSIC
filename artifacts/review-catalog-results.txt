@@ -1,10 +1,10 @@
 Existing-catalog restoration candidate
-Application: 245 tests passed; no skipped application cases.
+Application: 246 tests passed; no skipped application cases.
 Actual local HTTP route/security test: 1 passed.
 Chromium desktop/tablet/mobile journeys: passed, 39 axe audits per viewport.
 Real local PWA desktop/mobile offline suites: passed, 2 additional axe audits.
 Existing public-source songs: 7 stream endpoints HTTP 200; each real audio range GET returned HTTP 206 with 64 bytes.
 Snapshot: 7 published songs, 4 public artist profiles. No private logins, passwords, sessions, unpublished songs, balances or payment records copied.
 Production writes: none; original public media fetched with GET only.
-Local isolated Node 22/PostgreSQL 16 container restoration smoke: passed at 512 MB using candidate files in the existing local review image (not a fresh Docker recipe build). New Docker recipe build and public sandbox rollout: pending.
+Local isolated Node 22/PostgreSQL 16 container restoration smoke: passed at 512 MB using candidate files in the existing local review image (not a fresh Docker recipe build). Fresh GitHub Docker recipe build and restoration smoke: passed in job 122013393509 on catalog commit 7e95f76a5dba2152986ee09d5ab6b4af0e42e092. Public rollout pending the tested provisioning/deployment queue handoff correction.
 No claim of complete private artist-account restoration or whole-platform deployment readiness.

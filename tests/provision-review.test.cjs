@@ -186,3 +186,13 @@ test("a payment-required response stops without a paid fallback", async () => {
   );
   assert.equal(writes, 1);
 });
+
+test('existing verified review service hands off immediately instead of blocking its queued deployment',async()=>{
+ const calls=[];const result=await provision({key,log:()=>{},sleep:async()=>{throw Error('Must not wait for another workflow');},verifyPreview:async()=>{throw Error('Existing readiness is not certified by provisioning');},fetchImpl:async(url,o)=>{
+  const p=new URL(url).pathname;calls.push({p,method:o.method});
+  if(p.endsWith('/owners'))return response([{owner:{id:owner}}]);
+  if(p.endsWith('/services'))return response([{service:service()}]);
+  if(p.endsWith('/env-vars'))return response([{envVar:{key:'LAE_REVIEW_ENVIRONMENT',value:'pr6-ephemeral-review-v1'}}]);
+  throw Error('Unexpected wait or mutation');
+ }});assert.equal(result.status,'awaiting_configured_deployment');assert.equal(result.production_ready,false);assert.equal(result.url,service().serviceDetails.url);assert.equal(calls.length,3);assert(calls.every(x=>x.method==='GET'));
+});
