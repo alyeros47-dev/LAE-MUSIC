@@ -1,10 +1,17 @@
 Existing-catalog restoration candidate
 Application: 246 tests passed; no skipped application cases.
 Actual local HTTP route/security test: 1 passed.
-Chromium desktop/tablet/mobile journeys: passed, 39 axe audits per viewport.
+Chromium desktop/tablet/mobile journeys: passed, 39 website axe audits across the three viewports per browser engine.
 Real local PWA desktop/mobile offline suites: passed, 2 additional axe audits.
 Existing public-source songs: 7 stream endpoints HTTP 200; each real audio range GET returned HTTP 206 with 64 bytes.
 Snapshot: 7 published songs, 4 public artist profiles. No private logins, passwords, sessions, unpublished songs, balances or payment records copied.
 Production writes: none; original public media fetched with GET only.
-Local isolated Node 22/PostgreSQL 16 container restoration smoke: passed at 512 MB using candidate files in the existing local review image (not a fresh Docker recipe build). Fresh GitHub Docker recipe build and restoration smoke: passed in job 122013393509 on catalog commit 7e95f76a5dba2152986ee09d5ab6b4af0e42e092. Public rollout pending the tested provisioning/deployment queue handoff correction.
+Local isolated Node 22/PostgreSQL 16 container restoration smoke: passed at 512 MB using candidate files in the existing local review image (not a fresh Docker recipe build). Fresh GitHub Docker recipe build, restoration smoke and sandbox-only rollout: passed in run 40451285656, job 122014504227, for application commit 1dd0270db4f6cebefbc76fb22435783cfb688b7a.
 No claim of complete private artist-account restoration or whole-platform deployment readiness.
+
+Verified application revision: 1dd0270db4f6cebefbc76fb22435783cfb688b7a.
+CI 40451291033: all four jobs passed (246 application, 175 native PostgreSQL, 8 upgrade, HTTP 1, SMTP 4; Chromium/Firefox/WebKit website and offline journeys).
+Accessibility: 39 website + 2 offline audits per engine, 123 total; this corrects the earlier per-viewport wording.
+Hosted HTTPS verification: 4 public profiles, 7 published songs, all 7 actual audio range reads and 8 navigation shells passed on the sandbox.
+Render verification: source_configuration_unchanged=true, source_deployment_unchanged=true, updated_keys=[]; storage remains disabled and R2 bootstrap/probes are null.
+No private artist-login restoration, real full music-generation or whole-platform launch-readiness claim.

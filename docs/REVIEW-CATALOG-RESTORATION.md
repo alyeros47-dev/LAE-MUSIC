@@ -30,8 +30,16 @@ Production deployment later uses the existing production database and real accou
 
 ## Candidate test evidence
 
-246 application cases pass, including nine catalog isolation/error cases and the static navigation audit. The actual HTTP suite passes. Chromium desktop/tablet/mobile journeys pass with 39 accessibility audits at each size; real desktop/mobile offline suites and two additional accessibility audits pass. The local 512 MB Node 22/PostgreSQL 16 review container, loaded with candidate files, passes restoration counts, artist song listings, studio metadata, registrations and session checks. This local reuse test is distinct from the fresh Docker recipe build in CI. Public sandbox rollout and real review-media checks are reported separately.
+246 application cases pass, including nine catalog isolation/error cases and the static navigation audit. The actual HTTP suite passes. Chromium desktop/tablet/mobile journeys pass with 39 website accessibility audits across those sizes per browser engine; real desktop/mobile offline suites and two additional accessibility audits pass. The local 512 MB Node 22/PostgreSQL 16 review container, loaded with candidate files, passes restoration counts, artist song listings, studio metadata, registrations and session checks. This local reuse test is distinct from the fresh Docker recipe build in CI. Public sandbox rollout and real review-media checks are reported separately.
 
 ## Review release queue correction
 
 A fresh CI Docker build already passed the real restoration smoke test. The subsequent provisioning job found the existing service and waited for the new readiness checks, but that service has auto-deploy disabled and the actual integration-deploy job shared the same concurrency group behind it. Provisioning now validates the existing service and isolation marker, returns `awaiting_configured_deployment` immediately, and releases the queue. It does not claim readiness or mutate/recreate the service. A regression test rejects any waiting, extra API calls or readiness claims in that handoff. The separate configured-deployment workflow retains source configuration/deployment fingerprints and sandbox-only mutations.
+
+## Verified sandbox rollout
+
+Application revision `1dd0270db4f6cebefbc76fb22435783cfb688b7a` passed every job in CI run 40451291033: 246 application tests, 175 native PostgreSQL cases, 8 populated upgrades, HTTP and SMTP, Chromium, Firefox and WebKit. Each engine runs 39 website audits across desktop/tablet/mobile and two offline audits (123 total across engines). Earlier per-viewport audit wording was overstated and is corrected here.
+
+Configuration run 40451285656 built the actual image, passed restoration smoke checks, deployed only the review service and verified unchanged production configuration and deployment, no key updates, disabled storage and null R2 bootstrap/probes. The real HTTPS verification script subsequently passed all 4 public profile lookups, 7 published songs, all 7 actual 64-byte audio range reads and 8 shared navigation shells. These are real media-availability checks; physical phone listening and complete-track decoding remain distinct.
+
+Private artist logins and unpublished songs remain pending a secure, isolated account/data copy. No passwords, live sessions or private account records were restored by this public-catalog batch.
