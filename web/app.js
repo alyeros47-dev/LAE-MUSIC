@@ -1,3 +1,4 @@
+import {bindArtistDownloads} from './artist-downloads.js';
 import {bindStudioWorkflow} from './studio-workflow.js';
 import {musicRequest,lyricsRequest} from './studio-engine.js';
 import {installPasswordControls,bindPasswordConfirmation} from './password-controls.js';
@@ -440,6 +441,7 @@ async function adminPage(view,url) {
 }
 function closeMenu(){ $('sidebar').classList.remove('open');$('open-menu').setAttribute('aria-expanded','false');$('menu-backdrop').hidden=true; }
 $('open-menu').onclick=()=>{$('sidebar').classList.add('open');$('open-menu').setAttribute('aria-expanded','true');$('menu-backdrop').hidden=false;$('close-menu').focus();};$('close-menu').onclick=()=>{closeMenu();$('open-menu').focus();};$('menu-backdrop').onclick=closeMenu;
+bindArtistDownloads({toast});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeMenu();}if(event.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){event.preventDefault();$('global-query').focus();}if(event.key==='Tab'&&$('sidebar').classList.contains('open')){const focusables=[...$('sidebar').querySelectorAll('a,button')];const first=focusables[0],last=focusables.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
 function navigate(href){const target=new URL(href,location.origin);if(target.origin!==location.origin)return;history.pushState({},'',target.pathname+target.search+target.hash);document.querySelectorAll('dialog[open]').forEach(d=>d.close());closeMenu();route(true);}
 document.addEventListener('click',event=>{const anchor=event.target.closest('a[data-nav]');if(!anchor||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||anchor.target==='_blank')return;event.preventDefault();navigate(anchor.href);});

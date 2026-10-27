@@ -205,6 +205,18 @@ async function api(p, b) {
   const first = await api("/api/music/upload/start", upload);
   assert.equal(first.r.status, 200);
   assert.equal((await api("/api/music/upload/start", upload)).r.status, 409);
+  assert.equal(
+    (await api("/api/platform/review-upload/cancel", { id: first.data.id })).r
+      .status,
+    200,
+  );
+  assert.equal(
+    (await api("/api/generation/code/check", { code })).data.valid,
+    true,
+  );
+  const retry = await api("/api/music/upload/start", upload);
+  assert.equal(retry.r.status, 200);
+  first.data = retry.data;
   const put = await fetch(
     origin + "/api/music/upload/file?id=" + first.data.id + "&kind=audio",
     {
