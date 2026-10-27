@@ -31,3 +31,11 @@ Unit tests cover mode/database isolation, traversal/ranges, rights/format valida
 The actual 512 MB Node 22/PostgreSQL 16 container verifies fresh signup/session, free upload/publish/replay, anonymous MP3 range delivery and the absence of a paid subscription. Additional real desktop/mobile Chromium journeys register through the actual backend, upload original encoded MP3/PNG fixtures, publish, check artist ownership/navigation, decode/play audio, display artwork and enter the trial studio. The mobile fixture omits MIME metadata to test filename fallback followed by server-side signature verification. No provider or R2 call is made by these journeys.
 
 `verify-review-fresh.cjs` is separately opted in and pinned to the hosted sandbox. It creates only a synthetic test account/media, verifies HTTPS registration/relogin, upload, full file bytes, artwork, seek range and owned catalog, then unpublishes its test audio and signs out. It never calls a paid provider or production mutation endpoint. Hosted results and CI must be reported separately from local/mocked evidence. This batch does not make the complete platform production-ready.
+
+## Hosted verification
+
+The sandbox is deployed on application revision `289b41b1107e36872e41f7fc13552aecf4a2ffbe`. Configuration run 40475851289 built the actual container, passed free-upload/import fixtures and deployed only the review service, with unchanged production configuration/deployment and no key updates. The actual importer is paused/null; R2 bootstrap/probes are null and no R2 write test was performed.
+
+The real HTTPS fresh-account verifier passed registration, free access, actual MP3/PNG upload and full-byte integrity, Range streaming, logout/relogin and owned catalog. It unpublished its synthetic QA audio afterward. The shared music test remained available (1), and the verifier made zero charged provider requests. Real MusicAPI audio output has not been certified. The existing 7 songs and 4 public profiles passed their separate read-only regression checks too.
+
+The 265-case application/Chromium job, PostgreSQL job and WebKit job passed CI 40475858606; Firefox was still running when this evidence was recorded. Local real-container desktop/mobile browser journeys passed, including codec playback and mobile MIME fallback; physical device testing remains distinct.
