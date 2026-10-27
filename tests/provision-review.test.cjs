@@ -196,3 +196,12 @@ test('existing verified review service hands off immediately instead of blocking
   throw Error('Unexpected wait or mutation');
  }});assert.equal(result.status,'awaiting_configured_deployment');assert.equal(result.production_ready,false);assert.equal(result.url,service().serviceDetails.url);assert.equal(calls.length,3);assert(calls.every(x=>x.method==='GET'));
 });
+
+for(const file of ['review-site.yml','review-integrations.yml'])test(file+' cannot reset an active review test through automatic code-push deployment',()=>{
+ const source=require('node:fs').readFileSync('.github/workflows/'+file,'utf8');
+ const triggers=source.slice(source.indexOf('\non:\n'),source.indexOf('\npermissions:\n'));
+ assert.match(triggers,/\n  workflow_dispatch:\s*$/);
+ assert(!/\n  (push|pull_request|schedule|workflow_run):/.test(triggers));
+ assert(source.includes("github.ref == 'refs/heads/codex/premium-platform-release'"));
+ assert(source.includes("github.repository == 'alyeros47-dev/LAE-MUSIC'"));
+});

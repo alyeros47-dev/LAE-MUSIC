@@ -1,34 +1,7 @@
 name: Configure isolated review integrations
+# Deploy review updates explicitly so active mobile tests are not reset by code pushes.
 on:
-  push:
-    branches: [codex/premium-platform-release]
-    paths:
-      - .github/workflows/review-integrations.yml
-      - scripts/configure-review-integrations.cjs
-      - scripts/provision-review.cjs
-      - scripts/bootstrap-review-r2.cjs
-      - scripts/verify-review-storage.cjs
-      - lib/review-storage.js
-      - lib/account-login.js
-      - lib/studio-catalog.js
-      - lib/review-catalog.js
-      - lib/review-accounts.js
-      - lib/review-testing.js
-      - musicapi-sonic.js
-      - scripts/export-review-artists.cjs
-      - data/review-public-catalog.json
-      - music-prompt-studio.html
-      - scripts/check-preview.cjs
-      - tests/review-container-smoke.cjs
-      - web/password-controls.js
-      - web/studio-engine.js
-      - web/studio-workflow.js
-      - web/app.js
-      - tests/review-storage.test.cjs
-      - tests/review-integrations.test.cjs
-      - deploy/review-provider-budget.cjs
-      - deploy/review-entrypoint.sh
-      - deploy/review.Dockerfile
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:

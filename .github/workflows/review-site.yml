@@ -1,16 +1,7 @@
 name: Isolated LAE-MUSIC review site
+# Deploy review updates explicitly so active mobile tests are not reset by code pushes.
 on:
-  push:
-    branches: [codex/premium-platform-release]
-    paths:
-      - .github/workflows/review-site.yml
-      - scripts/provision-review.cjs
-      - deploy/review.Dockerfile
-      - deploy/review-entrypoint.sh
-      - deploy/review-provider-budget.cjs
-      - tests/provision-review.test.cjs
-      - tests/review-container-smoke.cjs
-      - .dockerignore
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:

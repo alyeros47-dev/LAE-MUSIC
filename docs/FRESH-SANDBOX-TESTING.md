@@ -2,6 +2,14 @@
 
 The owner paused existing-account restoration and authorized fresh artist accounts to test audio uploads and the studio without buying a package. The failed Neon export is therefore disabled by `LAE_IMPORT_NEON_ARTISTS=0`; its stored secret is preserved but is not used for an export. It no longer blocks the sandbox release.
 
+## Stable test window and account persistence
+
+Review provisioning and integration/deployment now run only on explicit `workflow_dispatch` on the development branch. Ordinary code pushes and PR checks do not redeploy/reset the sandbox while the owner tests. The current application is held at its verified revision until a deliberate sandbox release is prepared. This is not a production deployment or a change to production auto-deployment settings.
+
+The review PostgreSQL database still lives inside a free Render container. An instance replacement, service restart or deliberate deployment can lose test accounts and local media. Disabling automatic review updates reduces avoidable resets; it does not provide durable storage. A separately configured persistent review database or sandbox-only persistent disk remains necessary for reliable long-term account testing. The original production database is unaffected and must not be reused for write tests.
+
+When a reported test-account email is absent from both complete artist/listener reports, do not claim its password was verified incorrect or reset it. Confirm the identifier, distinguish missing records from a demonstrated password defect, and keep the current service unchanged during reproduction. Never request or log the tester’s password.
+
 ## Temporary access
 
 Only the isolated review Docker image sets `LAE_REVIEW_TEST_ACCESS=1`. The backend additionally requires staging mode, the exact review marker and the actual loopback review PostgreSQL identity before initializing test tables. Production's existing Node service, database, users, package prices, payment checks and R2 configuration are unchanged.
