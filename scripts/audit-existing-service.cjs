@@ -29,9 +29,55 @@ function serviceValid(s) {
     /^srv-[a-z0-9]+$/.test(s.id)
   );
 }
+async function providerChecks(env, fetcher = fetch) {
+  const report = {
+    billed_generation_requests: 0,
+    lyrics: { configured: !!env.OPENAI_API_KEY, verified: false },
+    music: { configured: !!env.MUSICAPI_API_KEY, verified: false },
+  };
+  for (const [name, url, key] of [
+    ["lyrics", "https://api.openai.com/v1/models", env.OPENAI_API_KEY],
+    [
+      "music",
+      "https://api.musicapi.ai/api/v1/get-credits",
+      env.MUSICAPI_API_KEY,
+    ],
+  ]) {
+    if (!key) continue;
+    try {
+      const r = await fetcher(url, {
+        method: "GET",
+        headers: { Authorization: "Bearer " + key },
+        redirect: "error",
+        signal: AbortSignal.timeout(20000),
+      });
+      report[name].http_status = r.status;
+      const data = await r.json();
+      if (name === "lyrics") {
+        report.lyrics.verified = r.ok && Array.isArray(data.data);
+        report.lyrics.approved_models =
+          require("../lib/lyrics-models").MODELS.map((m) => ({
+            id: m.id,
+            available:
+              r.ok &&
+              Array.isArray(data.data) &&
+              data.data.some((x) => x.id === m.id),
+          }));
+      } else
+        report.music.verified =
+          r.ok &&
+          Number.isFinite(data.credits ?? data.data?.credits) &&
+          Number(data.credits ?? data.data?.credits) >= 0;
+    } catch {
+      report[name].verification_error = true;
+    }
+  }
+  return report;
+}
 async function audit({
   key,
   fetcher = fetch,
+  verifyProviders = false,
   dbFactory = (options) => new (require("pg").Pool)(options),
 } = {}) {
   if (!key?.trim()) throw Error("Render read access is not configured");
@@ -168,11 +214,13 @@ async function audit({
   const after = inventory(await get("/services/" + service.id + "/env-vars"));
   report.environment_unchanged = before === digest(after);
   report.configuration_values_exposed = false;
+  if (verifyProviders)
+    report.provider_checks = await providerChecks(env, fetcher);
   return report;
 }
-module.exports = { audit, inventory, serviceValid };
+module.exports = { audit, inventory, serviceValid, providerChecks };
 if (require.main === module)
-  audit({ key: process.env.RENDER_API_KEY })
+  audit({ key: process.env.RENDER_API_KEY, verifyProviders: true })
     .then((r) => console.log(JSON.stringify(r, null, 2)))
     .catch((e) => {
       console.error("Existing-service read-only audit failed:", e.message);

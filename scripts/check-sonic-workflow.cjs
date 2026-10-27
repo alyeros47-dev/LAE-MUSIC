@@ -15,7 +15,7 @@ const cases=[
  ['atomically replaces provisional usage reference',source.includes("UPDATE artist_studio_usage SET generation_reference=$1 WHERE generation_reference=$2 AND artist_id=$3 RETURNING id")],
  ['releases failed reservation',source.includes("DELETE FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")&&source.includes("DELETE FROM artist_studio_usage WHERE generation_reference=$1 AND artist_id=$2")],
  ['validates provider task identifier',source.includes("The music provider responded without a usable task reference.")],
- ['enforces task ownership for status',source.includes("SELECT task_id,status,usable_output_seen FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")],
+ ['enforces task ownership for status',source.includes("SELECT task_id,status,usable_output_seen,EXISTS(SELECT 1 FROM artist_test_generations a WHERE a.artist_id=$2 AND a.task_reference=$1) AS complimentary FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2")],
  ['enforces task ownership for WAV',source.includes("SELECT task_id FROM sonic_test_tasks WHERE task_id=$1 AND creator_id=$2 AND status='succeeded'")],
  ['releases credit on failed task',source.includes("if(finalStatus==='failed')await db.query")],
  ['handles cancelled provider tasks',source.includes("'cancelled','canceled'")],

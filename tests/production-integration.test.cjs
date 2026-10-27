@@ -74,6 +74,43 @@ test("production audit performs GET and read-only SQL without publishing secret 
   assert(calls.every((c) => c.method === "GET"));
   assert(queries.some((q) => q.includes("READ ONLY")));
 });
+test("existing-provider checks are GET-only and expose neither keys, balances nor arbitrary model metadata", async () => {
+  const { providerChecks } = require("../scripts/audit-existing-service.cjs");
+  let calls = 0;
+  const result = await providerChecks(
+    {
+      OPENAI_API_KEY: "private-openai-fixture",
+      MUSICAPI_API_KEY: "private-music-fixture",
+    },
+    async (url, options) => {
+      calls++;
+      assert.equal(options.method, "GET");
+      assert.equal(options.redirect, "error");
+      return new Response(
+        JSON.stringify(
+          url.includes("openai")
+            ? {
+                data: [
+                  { id: "gpt-6.1-sol", private_metadata: "not-for-output" },
+                  { id: "gpt-6-astra" },
+                ],
+              }
+            : { credits: 1234567 },
+        ),
+      );
+    },
+  );
+  assert.equal(calls, 2);
+  assert.equal(result.billed_generation_requests, 0);
+  assert(result.lyrics.verified && result.music.verified);
+  assert(result.lyrics.approved_models.every((x) => x.available));
+  assert(!/private-|not-for-output|1234567/.test(JSON.stringify(result)));
+  const bad = await providerChecks(
+    { MUSICAPI_API_KEY: "fixture" },
+    async () => new Response(JSON.stringify({ error: "not authorized" })),
+  );
+  assert.equal(bad.music.verified, false);
+});
 test("practice examples use approved product rates and cannot mint real commissions", async () => {
   for (const [plan, cents] of [
     ["starter", 90],
