@@ -15,11 +15,11 @@ vm.runInContext(referral+'\n'+reconciliation,context);
 async function run(){
  await context.recordVerifiedProductReferral(client,101,99,'starter',20);
  assert.equal(calls.filter(c=>c.sql.includes('INSERT INTO affiliate_subscription_commissions')).length,1);
- assert.equal(calls.find(c=>c.sql.includes('INSERT INTO affiliate_subscription_commissions')).params[4],90);
+ assert.equal(calls.find(c=>c.sql.includes('INSERT INTO affiliate_subscription_commissions')).params[3],90);
  assert.equal(calls.find(c=>c.sql.includes('INSERT INTO affiliate_team_sales')).params[2],10);
  calls.length=0;
  await context.recordVerifiedProductReferral(client,102,99,'growth',30);
- assert.equal(calls.find(c=>c.sql.includes('INSERT INTO affiliate_subscription_commissions')).params[4],250);
+ assert.equal(calls.find(c=>c.sql.includes('INSERT INTO affiliate_subscription_commissions')).params[3],250);
  assert.equal(calls.find(c=>c.sql.includes('INSERT INTO affiliate_team_sales')).params[2],20,'C sales must benefit B, never A');
  calls.length=0;
  await context.recordVerifiedProductReferral(client,103,20,'professional',20);
