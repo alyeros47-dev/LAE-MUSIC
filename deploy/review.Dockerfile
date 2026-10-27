@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Temporary review service only. No production data or external database access.
+# Isolated review service. Optional dedicated disk; never production database access.
 FROM node:22-bookworm-slim AS node
 FROM postgres:16-bookworm
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
@@ -18,11 +18,12 @@ COPY config ./config
 COPY data ./data
 COPY migrations ./migrations
 COPY deploy/review-entrypoint.sh ./deploy/review-entrypoint.sh
+COPY deploy/review-state.cjs ./deploy/review-state.cjs
 COPY deploy/review-provider-budget.cjs ./deploy/review-provider-budget.cjs
 # The notice is specific to this isolated image; production source HTML is unchanged.
 RUN node -e 'const fs=require("fs"),p="web/index.html",s=fs.readFileSync(p,"utf8");if(!s.includes("<main id=\"page\""))throw Error("Review notice anchor missing");fs.writeFileSync(p,s.replace("<main id=\"page\"","<p class=\"notice\" role=\"note\" id=\"review-notice\"><strong>TEMPORARY TEST SITE.</strong> Test accounts and data can reset when this service restarts. Shared-provider test allowance: two lyrics requests and one music/voice request per temporary instance. Fresh artist accounts can test audio uploads without payment. Test files/accounts can reset. One shared music-generation test is available per instance. Live artist logins are not copied; real payments and R2 upload testing remain disabled. Do not enter real payment details.</p><main id=\"page\""));' \
     && chmod -R a+rX /app && chmod 755 deploy/review-entrypoint.sh
 ENV LAE_REVIEW_ENVIRONMENT=pr6-ephemeral-review-v1 NODE_ENV=staging LAE_REVIEW_TEST_ACCESS=1 PORT=10000 STUDIO_RELEASE_WORKER_ENABLED=false ARTIST_NOTIFICATION_WORKER_ENABLED=false
-USER postgres
+USER root
 EXPOSE 10000
 ENTRYPOINT ["/app/deploy/review-entrypoint.sh"]

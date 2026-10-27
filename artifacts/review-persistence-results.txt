@@ -1,0 +1,24 @@
+Review persistence candidate — 2026-10-27
+
+Application suite: 287 passed, 0 failed.
+HTTP integration: 1 passed, 0 failed.
+SMTP/email fixtures: 4 passed, 0 failed.
+Chromium desktop/tablet/mobile journeys: passed; 42 accessibility audits.
+Browser external providers were mocked.
+
+Actual local PostgreSQL16/Node review container replacement: PASS.
+Same email/password/account ID retained; actual MP3 Range bytes retained;
+local database password unchanged; provider budget persisted; no paid
+subscription fabricated. No real provider, Render or production operation.
+This local check reused the existing local image with candidate source copied in.
+Fresh Dockerfile build/replacement proof is configured in PR CI.
+
+Verified public Render docs: disks require a paid service.
+Public price estimate: USD 7/month service + USD .25/month for one GB disk.
+https://render.com/docs/disks
+https://render.com/pricing
+
+Paid activation: NOT AUTHORIZED / NOT PERFORMED.
+Live sandbox persistence: NOT ENABLED / NOT CERTIFIED.
+Current sandbox application remains the owner's deployed two-studio release.
+Production data, deployment, storage and configuration are unchanged.

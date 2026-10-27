@@ -29,7 +29,7 @@ const DELEGATED = [
   "REVIEW_STORAGE_ORIGIN",
   "REVIEW_STORAGE_TICKET_KEY",
 ];
-const ALLOWED = new Set([...COPY, ...STORAGE, ...DELEGATED, "LAE_REVIEW_ARTIST_SNAPSHOT"]);
+const ALLOWED = new Set([...COPY, ...STORAGE, ...DELEGATED, "LAE_REVIEW_ARTIST_SNAPSHOT", "LAE_REVIEW_PERSISTENT_STORAGE"]);
 function envMap(rows) {
   if (!Array.isArray(rows)) throw Error("Invalid environment inventory.");
   const out = {};
@@ -295,6 +295,10 @@ async function configure({
     }
   }
   const updates = planEnvironment(sourceEnv, targetEnv, sandbox);
+  const diskReady=require('../deploy/review-state.cjs').persistentService(target);
+  if(targetEnv.LAE_REVIEW_PERSISTENT_STORAGE==='1'&&!diskReady)throw Error('Persistent review storage flag requires the verified dedicated disk.');
+  if(diskReady&&targetEnv.LAE_REVIEW_PERSISTENT_STORAGE!=='1')updates.push({key:'LAE_REVIEW_PERSISTENT_STORAGE',value:'1'});
+
   let artistSnapshotCount=null;
   if(snapshotDatabaseUrl&&(!targetEnv.LAE_REVIEW_ARTIST_SNAPSHOT||refreshArtistSnapshot)){
     const snapshot=await exportArtistSnapshot({connectionString:snapshotDatabaseUrl,productionConnectionString:sourceEnv.DATABASE_URL});

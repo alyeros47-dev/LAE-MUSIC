@@ -36,6 +36,7 @@ function fixture({
   sourceEnvironment = live,
   mutateSource = false,
   wrongTarget = false,
+  persistent = false,
 } = {}) {
   const calls = [],
     logs = [];
@@ -49,7 +50,7 @@ function fixture({
       branch: wrongTarget ? "main" : BRANCH,
       type: "web_service",
       autoDeployTrigger: "off",
-      serviceDetails: { plan: "free", url: ORIGIN },
+      serviceDetails: { plan: persistent?"starter":"free", url: ORIGIN, ...(persistent?{disk:{id:"dsk-fixture",name:"lae-music-review-state",sizeGB:1,mountPath:"/var/lib/lae-review"}}:{}) },
     },
     source = {
       id: "srv-production",
@@ -345,3 +346,6 @@ test('a saved sanitized snapshot survives expiration of the temporary Neon sourc
  const snapshot={version:1,scope:'artist_profiles_without_credentials',captured_at:'2026-10-27T00:00:00Z',artists:[{source_id:'7',display_name:'Owned artist',country:'Nigeria',bio:'',plan:'starter'}]};const f=fixture({targetEnvironment:{...isolated,LAE_REVIEW_ARTIST_SNAPSHOT:JSON.stringify(snapshot)}});
  const r=await configure({...f,key:'private-key',sha,attempts:1,verify:false,snapshotDatabaseUrl:'expired-source',exportArtistSnapshot:async()=>{throw Error('Must use saved copy');},sleep:async()=>{}});assert.equal(r.imported_artist_profiles,1);assert(!f.calls.some(x=>x.method==='PUT'&&x.url.includes('LAE_REVIEW_ARTIST_SNAPSHOT')));
 });
+
+test('persistent flag is enabled only for the verified disk without copying production data or changing other services',async()=>{const f=fixture({persistent:true});const r=await configure({key:'render-fixture',sha,fetchImpl:f.fetchImpl,sleep:async()=>{},log:()=>{}});assert(r.updated_keys.includes('LAE_REVIEW_PERSISTENT_STORAGE'));const flag=f.calls.find(c=>c.method==='PUT'&&c.url.endsWith('/env-vars/LAE_REVIEW_PERSISTENT_STORAGE'));assert.equal(JSON.parse(flag.body).value,'1');assert(f.calls.filter(c=>c.method!=='GET').every(c=>c.url.includes('/services/'+TARGET+'/')));assert(r.source_configuration_unchanged);});
+test('a persistent flag on a disk-less free service stops before environment writes or deployment',async()=>{const f=fixture({targetEnvironment:{...isolated,LAE_REVIEW_PERSISTENT_STORAGE:'1'}});await assert.rejects(configure({key:'render-fixture',sha,fetchImpl:f.fetchImpl,sleep:async()=>{},log:()=>{}}),/verified dedicated disk/);assert(f.calls.every(c=>c.method==='GET'));});

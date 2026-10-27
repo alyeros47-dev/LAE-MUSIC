@@ -59,3 +59,5 @@ require('./review-testing.test.cjs');
 require('./studio-workflow.test.cjs');
 require('./review-auth-diagnostic.test.cjs');
 require('./lyrics-models.test.cjs');
+require('./review-state.test.cjs');
+require('./review-persistence-plan.test.cjs');

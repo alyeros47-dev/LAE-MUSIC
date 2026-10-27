@@ -200,8 +200,10 @@ test('existing verified review service hands off immediately instead of blocking
 for(const file of ['review-site.yml','review-integrations.yml'])test(file+' cannot reset an active review test through automatic code-push deployment',()=>{
  const source=require('node:fs').readFileSync('.github/workflows/'+file,'utf8');
  const triggers=source.slice(source.indexOf('\non:\n'),source.indexOf('\npermissions:\n'));
- assert.match(triggers,/\n  workflow_dispatch:\s*$/);
+ assert.match(triggers,/\n  workflow_dispatch:(?:\n|$)/);
  assert(!/\n  (push|pull_request|schedule|workflow_run):/.test(triggers));
  assert(source.includes("github.ref == 'refs/heads/codex/premium-platform-release'"));
  assert(source.includes("github.repository == 'alyeros47-dev/LAE-MUSIC'"));
 });
+
+test('only the exact approved persistent sandbox disk permits the paid review plan',()=>{const s=service();s.serviceDetails={...s.serviceDetails,plan:'starter',disk:{id:'dsk-test',name:'lae-music-review-state',sizeGB:1,mountPath:'/var/lib/lae-review'}};s.id='srv-dbfmk5ss728c73ded300';assert.equal(validateService(s,owner),s);assert.throws(()=>validateService({...s,id:'srv-other'},owner));assert.throws(()=>validateService({...s,serviceDetails:{...s.serviceDetails,disk:{...s.serviceDetails.disk,sizeGB:2}}},owner));});

@@ -56,7 +56,7 @@ function validateService(s, owner) {
     s.ownerId !== owner ||
     s.repo?.replace(/\.git$/, "") !== REPO ||
     s.branch !== BRANCH ||
-    s.serviceDetails?.plan !== "free" ||
+    !((s.serviceDetails?.plan === "free" && !s.serviceDetails?.disk) || require("../deploy/review-state.cjs").persistentService(s)) ||
     (s.autoDeployTrigger !== undefined
       ? s.autoDeployTrigger !== "off"
       : s.autoDeploy !== "no")

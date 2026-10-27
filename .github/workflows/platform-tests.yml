@@ -36,7 +36,26 @@ jobs:
           REVIEW_AUTH_EMAIL_SHA256: ${{ inputs.review_auth_email_sha256 }}
           REVIEW_LYRICS_MODEL_CHECK: ${{ inputs.review_lyrics_model_check }}
         run: node scripts/review-auth-diagnostic.cjs
+  review-persistence:
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build isolated review image without service credentials
+        run: docker build -f deploy/review.Dockerfile -t lae-review-persistence-ci .
+      - name: Replace container and verify retained account, audio and provider budget
+        env:
+          LAE_REVIEW_PERSISTENCE_TESTS: "1"
+          LAE_REVIEW_TEST_IMAGE: lae-review-persistence-ci
+        run: node tests/review-persistence-container.cjs
   application:
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,6 +76,7 @@ jobs:
           path: artifacts/
 
   postgres:
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -88,6 +108,7 @@ jobs:
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
 
   browser-compatibility:
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

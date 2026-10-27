@@ -8,12 +8,20 @@ if [ -n "${R2_BUCKET:-}" ] && [ "$R2_BUCKET" != lae-music-review-sandbox ]; then
   echo 'Review image refuses a production or unrelated storage bucket.' >&2
   exit 64
 fi
+# Drop privileges after preparing only the dedicated review disk.
+if [ "$(id -u)" = 0 ]; then
+  node /app/deploy/review-state.cjs prepare
+  exec gosu postgres /app/deploy/review-entrypoint.sh
+fi
+node /app/deploy/review-state.cjs verify
 export PATH="/usr/lib/postgresql/16/bin:$PATH"
 review_data=/tmp/lae-review-postgres
 review_pass=/tmp/lae-review-password
 umask 077
 if [ ! -f "$review_data/PG_VERSION" ]; then
+  if [ ! -f "$review_pass" ]; then
   node -e 'require("fs").writeFileSync(process.argv[1],require("crypto").randomBytes(32).toString("hex"),{mode:0o600,flag:"wx"})' "$review_pass"
+  fi
   initdb -D "$review_data" --username=postgres --auth-host=scram-sha-256 --auth-local=peer --pwfile="$review_pass" >/dev/null
 fi
 [ -f "$review_pass" ] || { echo 'Review database credential missing; refusing to reset data.' >&2; exit 65; }
