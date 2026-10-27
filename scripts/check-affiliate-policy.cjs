@@ -16,4 +16,9 @@ assert.match(source,/affiliate_quarterly_rewards/,'Quarterly reward ledger must 
 assert.match(source,/s\.status='paid'/,'Refunded sales must be excluded');
 assert.match(source,/pg_advisory_xact_lock/,'Concurrent reconciliation must be locked');
 assert.match(source,/bonus_status:'estimated_pending_reconciliation'/,'Unsettled team rewards must not appear as available cash');
+assert.match(source,/legacy_paid_enrollment_disabled:true/,'Legacy paid enrollment must not appear as an active affiliate product');
+assert.match(source,/registration_fee_cents:0/,'Free affiliate registration must cost zero');
+assert.match(source,/JOIN creators seller ON seller\.id=t\.affiliate_id AND seller\.referred_by=t\.team_leader_id/,'Quarterly totals must exclude deeper downlines');
+assert.match(source,/status IN \('approved','paid'\)/,'Approved or paid quarter rewards must not be silently overwritten');
+assert.match(source,/if\(!authAdmin\(req\)\)return json\(res,401/,'Quarter reconciliation must be admin protected');
 console.log('LAE-MUSIC affiliate policy checks passed; server syntax valid.');
