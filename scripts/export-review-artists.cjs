@@ -105,9 +105,8 @@ async function exportArtists({
       )
     )
       throw e;
-    throw Error(
-      "Could not read the isolated Neon snapshot. Check its secret, availability and artist schema. No source data was changed.",
-    );
+    const code=typeof e.code==='string'&&(/^[A-Z0-9]{5}$/.test(e.code)||['ENOTFOUND','ECONNREFUSED','ETIMEDOUT','ECONNRESET','CERT_HAS_EXPIRED','UNABLE_TO_VERIFY_LEAF_SIGNATURE'].includes(e.code))?' ['+e.code+']':'';
+    throw Error('Could not read the isolated Neon snapshot'+code+'. Check its secret, availability and artist schema. No source data was changed.');
   } finally {
     db?.release();
     await pool.end();
