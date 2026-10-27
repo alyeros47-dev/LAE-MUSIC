@@ -33,3 +33,9 @@ The actual 512 MB review-container smoke test imports an isolated profile fixtur
 After an authorized real import, the hosted verifier checks a copied artist (preferring one with published songs), its existing login/session, catalog ownership, lack of paid entitlement and denial of administrator access. It uses a temporary random password, replaces it with an unknown random value afterward, and signs out its sessions. It prints counts/booleans only. The owner then assigns their own test password in the UI; no shared default password is published.
 
 Real import and hosted results must be recorded separately from mocks and local fixtures. This is not restoration of original login credentials, unpublished songs, financial records, voice training or verified real music generation, and does not authorize production deployment.
+
+## Actual connection status
+
+Candidate `225142fd2c2ab762579bee7112d15bfb1de75806` uses the repository's saved source secret. The first runner failure (missing PostgreSQL dependency) was corrected by installing the existing production dependencies. The exporter then retried a pool-compatible read-only connection; actual run 40464732639 / job 122057304849 stopped with SQLSTATE `57P03`, classified without logging the raw connection error as **the review compute endpoint is disabled**.
+
+The fresh Docker fixture verifies import and owner-controlled artist login, but the real Neon profile import has not succeeded. No profile snapshot was written to the sandbox environment by that failed attempt, and the new owner controls have not been declared deployed. Enable/resume compute only on the newly created review branch, reviewing any charge prompt, then rerun the failed configuration job. Production data/settings remain unchanged; do not replace the existing Render DATABASE_URL.
