@@ -1,0 +1,23 @@
+name: LAE affiliate and regression tests
+on:
+  push:
+    branches:
+      - feature/free-affiliates-quarterly-team-bonus
+  pull_request:
+    paths:
+      - server.js
+      - package.json
+      - scripts/**
+      - .github/workflows/affiliate-tests.yml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
