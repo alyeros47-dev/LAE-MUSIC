@@ -93,10 +93,8 @@ async function verify({ adminKey, fetchImpl = fetch } = {}) {
     const allowance = await request("/api/artist/studio-allowance", {
       cookie: artistCookie,
     });
-    ensure(
-      allowance.status === 200 && allowance.data.active === false,
-      "Import unexpectedly granted paid entitlement",
-    );
+    if(allowance.data.review_test_access){const sub=await request('/api/artist/subscription',{cookie:artistCookie});ensure(sub.status===200&&sub.data.artist_features_active===false,'Import unexpectedly granted paid entitlement');}
+    else ensure(allowance.status===200&&allowance.data.active===false,'Import unexpectedly granted paid entitlement');
     const cross = await request("/api/platform/admin/review-accounts", {
       cookie: artistCookie,
     });

@@ -1,0 +1,11 @@
+Fresh-account sandbox testing candidate
+Local application suite: 265 passed, including original paid Sonic invariants and new review-only trial/storage cases.
+HTTP routing/security: 1 passed. SMTP: 4 passed.
+Full Chromium desktop/tablet/mobile fixture journeys and real offline suites: passed (39 website + 2 offline accessibility audits across the viewports).
+Actual Node 22/PostgreSQL 16 local container at 512 MB with candidate files: fresh signup/session, no paid subscription, free MP3 upload, signature/size verification, repeat-safe publishing, unauthenticated range delivery, owned catalog, five-song limit, cancellation and invalid HTML-as-audio rejection passed.
+Actual desktop/mobile Chromium against that container: signup, real MP3 and PNG upload, publish, artist navigation, PNG decoding, MP3 decoding/playback and studio test notice passed. Mobile MIME metadata fallback was exercised.
+Music trial success/replay/failure/uncertainty tests use mocked provider responses. No actual paid music generation was requested.
+Neon import is paused via LAE_IMPORT_NEON_ARTISTS=0; the source secret is preserved. No Neon setup or live R2 access is needed for this test path.
+Fresh CI build, sandbox deployment and actual hosted HTTPS verification: pending this candidate publication.
+Temporary test limits: 24-hour artist window, five songs per artist, 30 MB audio/3 MB artwork, 200 MB shared storage, one per-artist complimentary generation and existing one shared charged music request/two lyrics requests per instance.
+This is not approval of a permanent public promotion or production deployment. R2/voice/private-release tests and whole-platform launch gates remain pending.

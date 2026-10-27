@@ -54,3 +54,5 @@ require('./review-catalog.test.cjs');
 require('./navigation-routing.test.cjs');
 
 require('./review-accounts.test.cjs');
+
+require('./review-testing.test.cjs');

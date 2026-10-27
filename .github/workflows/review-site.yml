@@ -34,7 +34,7 @@ jobs:
         run: |
           docker build -f deploy/review.Dockerfile -t lae-review-ci .
           docker run -d --name lae-review-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-review-ci-only-key -e 'LAE_REVIEW_ARTIST_SNAPSHOT={"version":1,"scope":"artist_profiles_without_credentials","captured_at":"2026-10-27T00:00:00.000Z","artists":[{"source_id":"99999","display_name":"Isolated imported artist","country":"Nigeria","bio":"Isolated fixture","plan":"growth"}]}' lae-review-ci
-          LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-review-ci-only-key node tests/review-container-smoke.cjs
+          LAE_REVIEW_FRESH_TESTS=1 LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-review-ci-only-key node tests/review-container-smoke.cjs
       - name: Stop only the CI review container
         if: always()
         run: docker rm -f lae-review-ci 2>/dev/null || true

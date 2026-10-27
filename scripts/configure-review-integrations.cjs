@@ -443,7 +443,7 @@ if (require.main === module)
     const result = await configure({
       key: process.env.RENDER_API_KEY,
       sha: process.env.GITHUB_SHA,
-      snapshotDatabaseUrl: process.env.SANDBOX_NEON_DATABASE_URL || null,
+      snapshotDatabaseUrl: process.env.LAE_IMPORT_NEON_ARTISTS === '1' ? process.env.SANDBOX_NEON_DATABASE_URL || null : null,
       sandbox,
       bootstrapStorage: process.env.LAE_BOOTSTRAP_REVIEW_R2 === "1",
       verifyStorage: process.env.LAE_VERIFY_REVIEW_STORAGE === "1",

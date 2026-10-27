@@ -13,6 +13,8 @@ on:
       - lib/studio-catalog.js
       - lib/review-catalog.js
       - lib/review-accounts.js
+      - lib/review-testing.js
+      - musicapi-sonic.js
       - scripts/export-review-artists.cjs
       - data/review-public-catalog.json
       - music-prompt-studio.html
@@ -51,12 +53,13 @@ jobs:
         run: |
           docker build -f deploy/review.Dockerfile -t lae-integrations-ci .
           docker run -d --name lae-integrations-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-integration-ci-only-key -e 'LAE_REVIEW_ARTIST_SNAPSHOT={"version":1,"scope":"artist_profiles_without_credentials","captured_at":"2026-10-27T00:00:00.000Z","artists":[{"source_id":"99999","display_name":"Isolated imported artist","country":"Nigeria","bio":"Isolated fixture","plan":"growth"}]}' lae-integrations-ci
-          LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-integration-ci-only-key node tests/review-container-smoke.cjs
+          LAE_REVIEW_FRESH_TESTS=1 LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-integration-ci-only-key node tests/review-container-smoke.cjs
       - name: Stop only the CI integration container
         if: always()
         run: docker rm -f lae-integrations-ci 2>/dev/null || true
       - name: Configure and verify only the review sandbox
         env:
+          LAE_IMPORT_NEON_ARTISTS: "0"
           LAE_BOOTSTRAP_REVIEW_R2: "0"
           LAE_VERIFY_REVIEW_STORAGE: "0"
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
