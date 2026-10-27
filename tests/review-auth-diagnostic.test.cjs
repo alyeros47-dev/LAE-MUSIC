@@ -93,3 +93,66 @@ test("diagnostic rejects missing access/digest before any request", async () => 
     }),
   );
 });
+
+test("model capability diagnostic never signs into accounts, generates lyrics, changes keys or deploys", async () => {
+  const calls = [];
+  const r = await diagnose({
+    key: "render-test-only",
+    modelCheck: true,
+    fetchImpl: async (url, o) => {
+      calls.push({ url, method: o.method });
+      assert.equal(o.method, "GET");
+      const json = (j, status = 200) =>
+        new Response(JSON.stringify(j), { status });
+      if (url.startsWith("https://api.openai.com/"))
+        return url.endsWith("gpt-6.1-sol")
+          ? json({ id: "gpt-6.1-sol" })
+          : json({ error: "Never log provider payload" }, 404);
+      if (url.includes("/env-vars"))
+        return json(
+          [
+            "ADMIN_KEY",
+            "OPENAI_API_KEY",
+            "OPENAI_LYRICS_MODEL",
+            "NODE_ENV",
+            "LAE_REVIEW_ENVIRONMENT",
+          ].map((key, i) => ({
+            envVar: {
+              key,
+              value: [
+                "admin-mock",
+                "model-diagnostic-mock-secret",
+                "gpt-4.1-mini",
+                "staging",
+                "pr6-ephemeral-review-v1",
+              ][i],
+            },
+          })),
+        );
+      return json({
+        id: "srv-dbfmk5ss728c73ded300",
+        name: "lae-music-review-sandbox",
+        type: "web_service",
+        ownerId: "usr-test",
+        repo: "https://github.com/alyeros47-dev/LAE-MUSIC",
+        branch: "codex/premium-platform-release",
+        autoDeployTrigger: "off",
+        serviceDetails: {
+          plan: "free",
+          url: "https://lae-music-review-sandbox.onrender.com",
+        },
+      });
+    },
+  });
+  assert.equal(r.models[0].available, true);
+  assert.equal(r.models[1].available, false);
+  assert.equal(r.models[1].provider_status, 404);
+  assert.equal(r.accounts_read, false);
+  assert.equal(r.billed_provider_requests, 0);
+  assert(!JSON.stringify(r).includes("mock-secret"));
+  assert(
+    !calls.some((x) =>
+      /admin\/login|responses|chat\/completions|deploys/.test(x.url),
+    ),
+  );
+});

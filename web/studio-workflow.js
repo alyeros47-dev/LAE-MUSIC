@@ -36,6 +36,8 @@ export function pcmWav(samples, sampleRate) {
 }
 export function bindStudioWorkflow({
   form,
+  lyricsForm = form,
+  musicForm = form,
   artistId,
   voiceProfile,
   api,
@@ -56,7 +58,7 @@ export function bindStudioWorkflow({
     previewURL = null;
   const canAct = () => !disposed && active() && form.isConnected;
   const persist = () =>
-    form.dispatchEvent(new Event("input", { bubbles: true }));
+    lyricsForm.dispatchEvent(new Event("input", { bubbles: true }));
   function setUploadCode(code, title) {
     const valid = /^[A-F0-9]{36}$/.test(code || "");
     by("studio-upload-code").value = valid ? code : "";
@@ -96,6 +98,84 @@ export function bindStudioWorkflow({
       });
     };
   });
+  const lyricsOutput = by("lyrics-output"),
+    styleOutput = by("style-output");
+  for (const [button, output] of [
+    ["copy-studio-lyrics", lyricsOutput],
+    ["copy-studio-style", styleOutput],
+  ]) {
+    by(button).onclick = async () => {
+      if (!output.value.trim())
+        return toast("Generate or restore a draft first.");
+      try {
+        await navigator.clipboard.writeText(output.value);
+        toast(
+          button === "copy-studio-lyrics" ? "Lyrics copied" : "Style copied",
+        );
+      } catch {
+        output.focus();
+        output.select();
+        toast("Select and copy this text manually.");
+      }
+    };
+    output.addEventListener("input", persist);
+  }
+  const musicKey = "lae_music_studio_draft:" + artistId;
+  try {
+    const saved = JSON.parse(localStorage.getItem(musicKey));
+    for (const name of ["title", "lyrics", "style"])
+      if (typeof saved?.[name] === "string")
+        musicForm.elements[name].value = saved[name];
+  } catch {}
+  musicForm.addEventListener("input", () => {
+    try {
+      localStorage.setItem(
+        musicKey,
+        JSON.stringify(
+          Object.fromEntries(
+            ["title", "lyrics", "style"].map((name) => [
+              name,
+              musicForm.elements[name].value,
+            ]),
+          ),
+        ),
+      );
+    } catch {}
+  });
+  by("send-to-music").onclick = () => {
+    const values = {
+      title: lyricsForm.elements.title.value,
+      lyrics: lyricsOutput.value,
+      style: styleOutput.value,
+    };
+    if (!values.lyrics.trim() || !values.style.trim())
+      return toast("Generate or restore both lyrics and style first.");
+    const changed = Object.entries(values).some(
+      ([name, value]) =>
+        musicForm.elements[name].value.trim() &&
+        musicForm.elements[name].value !== value,
+    );
+    if (
+      changed &&
+      !window.confirm(
+        "Replace the current Music Studio title, lyrics and style with this draft?",
+      )
+    )
+      return;
+    for (const [name, value] of Object.entries(values))
+      musicForm.elements[name].value = value;
+    musicForm.dispatchEvent(new Event("input", { bubbles: true }));
+    musicForm.elements.lyrics.focus();
+    musicForm.scrollIntoView({
+      block: "start",
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+    toast(
+      "Lyrics and style transferred. No generation or credit charge was started.",
+    );
+  };
   const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
   const dictation = by("studio-dictation-status"),
     dictate = by("studio-dictate");
@@ -114,14 +194,14 @@ export function bindStudioWorkflow({
       recognition.lang = document.documentElement.lang || "en";
       recognition.continuous = true;
       recognition.interimResults = false;
-      const initial = form.elements.idea.value;
+      const initial = lyricsForm.elements.idea.value;
       recognition.onresult = (event) => {
         if (!canAct()) return;
         const transcript = Array.from(event.results)
           .filter((r) => r.isFinal)
           .map((r) => r[0].transcript)
           .join(" ");
-        form.elements.idea.value = [initial, transcript]
+        lyricsForm.elements.idea.value = [initial, transcript]
           .filter(Boolean)
           .join(" ")
           .slice(0, 1200);
@@ -322,8 +402,8 @@ export function bindStudioWorkflow({
     const ready = result.status === "ready";
     voiceProfile.status = result.status;
     voiceProfile.hasVoice = ready;
-    form.elements.useVoice.disabled = !ready;
-    if (!ready) form.elements.useVoice.checked = false;
+    musicForm.elements.useVoice.disabled = !ready;
+    if (!ready) musicForm.elements.useVoice.checked = false;
     voiceStatus.textContent = ready
       ? "Your singing voice is ready. Select “Use my saved voice profile” to use it."
       : result.status === "training"

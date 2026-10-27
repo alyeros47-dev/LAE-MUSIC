@@ -58,3 +58,4 @@ require('./review-accounts.test.cjs');
 require('./review-testing.test.cjs');
 require('./studio-workflow.test.cjs');
 require('./review-auth-diagnostic.test.cjs');
+require('./lyrics-models.test.cjs');

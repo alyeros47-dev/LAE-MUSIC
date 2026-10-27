@@ -1,11 +1,17 @@
 "use strict";
 // Owner-authorized account lookup. No password verification/reset, deployment,
-// provider call, production service access, or account mutation is permitted.
+// billed provider call, production access, or account mutation is permitted.
+// Optional model mode performs only approved-model catalog GETs, without accounts.
 const crypto = require("node:crypto");
 const TARGET = "srv-dbfmk5ss728c73ded300",
   ORIGIN = "https://lae-music-review-sandbox.onrender.com";
-async function diagnose({ key, emailHash, fetchImpl = fetch } = {}) {
-  if (!key || !/^[a-f0-9]{64}$/.test(emailHash || ""))
+async function diagnose({
+  key,
+  emailHash,
+  modelCheck = false,
+  fetchImpl = fetch,
+} = {}) {
+  if (!key || (!modelCheck && !/^[a-f0-9]{64}$/.test(emailHash || "")))
     throw Error(
       "Secure Render access and a valid account digest are required.",
     );
@@ -47,6 +53,65 @@ async function diagnose({ key, emailHash, fetchImpl = fetch } = {}) {
     throw Error(
       "Review isolation/access configuration is unexpected; stopped.",
     );
+  if (modelCheck) {
+    if (!env.OPENAI_API_KEY)
+      throw Error("Review lyrics configuration is missing.");
+    const { MODELS, verifiedModel } = require("../lib/lyrics-models");
+    const models = [];
+    for (const choice of MODELS) {
+      try {
+        await verifiedModel(choice.id, { key: env.OPENAI_API_KEY, fetchImpl });
+        models.push({ ...choice, available: true });
+      } catch (error) {
+        models.push({
+          ...choice,
+          available: false,
+          provider_status: error.providerStatus || null,
+        });
+      }
+    }
+    let available_candidates = [],
+      catalog_status = null;
+    if (models.every((choice) => !choice.available)) {
+      try {
+        const response = await fetchImpl("https://api.openai.com/v1/models", {
+          method: "GET",
+          redirect: "error",
+          headers: { Authorization: "Bearer " + env.OPENAI_API_KEY },
+          signal: AbortSignal.timeout(12000),
+        });
+        catalog_status = response.status;
+        if (response.ok) {
+          const catalog = await response.json();
+          available_candidates = (catalog.data || [])
+            .map((x) => x.id)
+            .filter(
+              (id) =>
+                typeof id === "string" &&
+                /^gpt-/.test(id) &&
+                (/^(gpt-6)(?:[.-]|$)/.test(id) || /astra|sol/i.test(id)),
+            )
+            .slice(0, 20);
+        }
+      } catch {}
+    }
+    return {
+      sandbox_only: true,
+      models,
+      available_candidates,
+      catalog_status,
+      configured_legacy_model: /^[a-zA-Z0-9_.-]{1,80}$/.test(
+        env.OPENAI_LYRICS_MODEL || "",
+      )
+        ? env.OPENAI_LYRICS_MODEL
+        : null,
+      accounts_read: false,
+      accounts_changed: false,
+      deployments_triggered: 0,
+      billed_provider_requests: 0,
+      production_access: false,
+    };
+  }
   let cookie;
   async function app(path, body) {
     const r = await fetchImpl(ORIGIN + path, {
@@ -113,6 +178,7 @@ if (require.main === module)
   diagnose({
     key: process.env.RENDER_API_KEY,
     emailHash: process.env.REVIEW_AUTH_EMAIL_SHA256,
+    modelCheck: process.env.REVIEW_LYRICS_MODEL_CHECK === "true",
   })
     .then((r) => console.log(JSON.stringify(r)))
     .catch(() => {

@@ -2178,3 +2178,8 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .studio-upload-code{padding:20px;border:1px solid var(--border,#393943);border-radius:16px;margin:20px 0}
 #studio-upload-code{font-family:monospace;letter-spacing:.04em;font-size:14px;width:100%}
 #studio-voice-preview{width:100%;margin:16px 0}
+
+.studio-lyrics-results{display:grid;gap:12px;margin-top:28px}
+.studio-lyrics-results .button{justify-self:start}
+.music-studio-panel{margin-top:28px}
+.music-studio-panel textarea.lyrics{min-height:280px;line-height:1.8}

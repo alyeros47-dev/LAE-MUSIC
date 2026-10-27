@@ -37,4 +37,8 @@ test("studio workflow is served by the actual application without a second backe
   assert(r.text.includes("export function bindStudioWorkflow"));
   assert.equal(r.text, fs.readFileSync("web/studio-workflow.js", "utf8"));
   assert(!r.text.includes("api.openai.com"));
+  const shell = await app.request("/studio");
+  assert.equal(shell.status, 200);
+  assert(shell.headers["permissions-policy"].includes("microphone=(self)"));
+  assert(shell.headers["permissions-policy"].includes("camera=()"));
 });

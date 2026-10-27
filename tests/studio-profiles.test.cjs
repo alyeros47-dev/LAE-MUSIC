@@ -24,11 +24,11 @@ test('style request keeps families exclusive and forwards every existing creativ
 async function providerRequest(payload){
  const start=source.indexOf("if(p==='/api/music/lyrics-generate'"),end=source.indexOf('if(p===',start+10);
  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
- const fn=new AsyncFunction('req','res','p','validOrigin','process','body','authAdmin','me','pool','json','grantWelcomeCredits','credits','fetch','AbortSignal','ensureCoinTables',source.slice(start,end));
+ const fn=new AsyncFunction('req','res','p','validOrigin','process','body','authAdmin','me','pool','json','grantWelcomeCredits','credits','fetch','AbortSignal','ensureCoinTables','require',source.slice(start,end));
  let upstream,reserved,completed=0;
  const result=await fn({method:'POST',headers:{'idempotency-key':'original-style-test-123'}},{},'/api/music/lyrics-generate',()=>true,{env:{OPENAI_API_KEY:'mock-only',OPENAI_LYRICS_MODEL:'configured-model'}},async()=>payload,()=>false,async()=>({id:7}),{},(_r,status,data)=>({status,data}),async()=>{},
  {reserveLyrics:async(_pool,id,key,b)=>{assert.equal(id,7);assert.equal(key,'original-style-test-123');reserved=b;return {reference:'mock-reservation'};},completeLyrics:async(_pool,id,ref,key,out)=>{completed++;return out;},refundLyrics:async()=>{throw Error('Successful generation must not refund');}},
- async(url,options)=>{upstream={url,body:JSON.parse(options.body)};return {ok:true,json:async()=>({choices:[{message:{content:JSON.stringify({title:'Original title',lyrics:'Original complete lyrics',style:'Original matching arrangement'})}}]})};},AbortSignal,async()=>{});
+ async(url,options)=>{if(options.method==='GET')return {ok:true,json:async()=>({id:payload.model})};upstream={url,body:JSON.parse(options.body)};const out=JSON.stringify({title:'Original title',lyrics:'Original complete lyrics',style:'Original matching arrangement'});return {ok:true,json:async()=>payload.model?{output_text:out}:{choices:[{message:{content:out}}]}};},AbortSignal,async()=>{},require('node:module').createRequire(require('node:path').resolve('server.js')));
  assert.equal(result.status,200);assert.equal(completed,1);return {upstream,reserved};
 }
 test('Organic Afro-Fusion selector reaches existing OpenAI system instructions, configured model and credit reservation',async()=>{
@@ -41,4 +41,8 @@ test('Organic Afro-Fusion selector reaches existing OpenAI system instructions, 
 test('gospel fusion retains its original detailed prompt without secular contamination',async()=>{
  const {lyricsRequest}=await adapter;const {upstream,reserved}=await providerRequest(lyricsRequest({idea:'A joyful original praise song',musicFamily:'gospel',musicProfile:'afro-gospel-1',genre:'Afro-Gospel',language:'English'}));
  const instructions=upstream.body.messages[0].content;assert(instructions.includes(registry('gospelProfiles')['afro-gospel-1'].guide));assert(!instructions.includes('Detailed original African secular style:'));assert.equal(reserved.gospelProfile,'afro-gospel-1');
+});
+
+test('each approved lyrics model is verified and actually selected without losing the cultural prompt or idempotency payload',async()=>{
+ const {lyricsRequest}=await adapter;for(const model of ['gpt-6.1-sol','gpt-6-astra']){const payload=lyricsRequest({idea:'A complete original cultural song',musicFamily:'secular',musicProfile:'sec-nigeria-2',lyricsModel:model});assert.equal(payload.model,model);const {upstream,reserved}=await providerRequest(payload);assert.equal(upstream.body.model,model);assert(upstream.url.endsWith('/responses'));assert.equal(reserved.model,model);assert(upstream.body.input[0].content.includes(registry('secularProfiles')['sec-nigeria-2'].guide));}
 });

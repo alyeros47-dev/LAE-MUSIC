@@ -3,7 +3,7 @@ export function musicRequest(brief, voiceProfile) {
   const useVoice = brief.useVoice === 'on' || brief.useVoice === true;
   if (useVoice && !(voiceProfile?.hasVoice === true && voiceProfile.status === 'ready'))
     throw Error('Your saved voice profile is not ready. Use the standard voice or check your profile.');
-  const style = [brief.style, 'Language direction: ' + brief.language, brief.nativeLyrics].filter(Boolean).join('\n');
+  const style = [brief.style, brief.language ? 'Language direction: ' + brief.language : '', brief.nativeLyrics].filter(Boolean).join('\n');
   if (style.length > 2000) throw Error('Shorten your style and language instructions to 2,000 characters.');
   return { title: brief.title, lyrics: brief.lyrics, style, useVoice };
 }
@@ -11,7 +11,8 @@ export function musicRequest(brief, voiceProfile) {
 // Keep the original request contract and select exactly one musical profile.
 export function lyricsRequest(brief) {
   const gospel = brief.musicFamily === 'gospel';
-  return {idea:brief.idea,genre:brief.genre,language:brief.language,
+  if(brief.lyricsModel && !['gpt-6.1-sol','gpt-6-astra'].includes(brief.lyricsModel))throw Error('Choose GPT-6.1 Sol or GPT-6 Astra.');
+  return {...(brief.lyricsModel?{model:brief.lyricsModel}:{}),idea:brief.idea,genre:brief.genre,language:brief.language,
     nativeLyrics:brief.nativeLyrics,nativeLanguage:brief.nativeLanguage || brief.language,
     extraLanguage:brief.extraLanguage || '',mood:brief.mood,voice:brief.voice,
     duration:brief.duration,beat:brief.beat || 'none',tradition:'custom',

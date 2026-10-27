@@ -10,11 +10,16 @@ on:
         required: false
         type: string
         default: ""
+      review_lyrics_model_check:
+        description: "Read-only verification of the two approved lyrics models; no billed generation or deployment"
+        required: false
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
   review-auth-diagnostic:
-    if: github.event_name == 'workflow_dispatch' && inputs.review_auth_email_sha256 != '' && github.ref == 'refs/heads/codex/premium-platform-release'
+    if: github.event_name == 'workflow_dispatch' && (inputs.review_auth_email_sha256 != '' || inputs.review_lyrics_model_check) && github.ref == 'refs/heads/codex/premium-platform-release'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -25,10 +30,11 @@ jobs:
         with:
           node-version: "22"
       - run: node --test tests/review-auth-diagnostic.test.cjs
-      - name: Inspect only the identified sandbox test account
+      - name: Read-only sandbox account or approved model check
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           REVIEW_AUTH_EMAIL_SHA256: ${{ inputs.review_auth_email_sha256 }}
+          REVIEW_LYRICS_MODEL_CHECK: ${{ inputs.review_lyrics_model_check }}
         run: node scripts/review-auth-diagnostic.cjs
   application:
     runs-on: ubuntu-latest
