@@ -58,7 +58,7 @@ test("temporary free testing is impossible outside the explicit review environme
     ),
     /connected database/,
   );
-  assert.equal(queries, 1);
+  assert.equal(queries, 2);
 });
 test("test files cannot escape the isolated media directory and seek ranges handle boundaries", () => {
   const root = "/tmp/review-unit";
@@ -118,23 +118,32 @@ test("shared provider capacity fails closed on malformed state and never invents
 });
 test("trial reservation is once-only, expiry-aware and separate from paid subscriptions", async () => {
   const calls = [];
-  let used = false;
+  const used = new Map();
   const db = {
     query: async (sql, args) => {
       calls.push({ sql, args });
       if (sql.startsWith("SELECT expires_at"))
         return { rows: [{ active: true, expires_at: "future" }] };
+      if (sql.startsWith("SELECT COUNT(*)::int AS used"))
+        return {
+          rows: [
+            { used: [...used.values()].filter((id) => id === args[0]).length },
+          ],
+        };
       if (sql.startsWith("INSERT INTO review_trial_usage")) {
-        const exists = used;
-        used = true;
+        const exists = used.has(args[1]);
+        used.set(args[1], args[0]);
         return { rowCount: exists ? 0 : 1 };
       }
       return { rows: [] };
     },
   };
   await review.reserve(db, 7, "trial-one");
+  await review.reserve(db, 7, "trial-two");
+  await review.reserve(db, 8, "another-artist-one");
+  await review.reserve(db, 8, "another-artist-two");
   await assert.rejects(
-    review.reserve(db, 7, "trial-two"),
+    review.reserve(db, 7, "trial-three"),
     (e) => e.status === 402,
   );
   assert(
@@ -214,6 +223,8 @@ function sonicTrial(provider) {
       return row({ active: 0, total: 0 });
     if (sql.startsWith("SELECT id FROM creators")) return row({ id: 7 });
     if (sql.startsWith("SELECT COUNT(*)::int AS n")) return row({ n: 0 });
+    if (sql.startsWith("SELECT COUNT(*)::int AS used"))
+      return row({ used: used ? 1 : 0 });
     if (sql.startsWith("SELECT id,plan FROM artist_subscriptions")) return none;
     if (sql.startsWith("SELECT expires_at")) return row({ active: true });
     if (sql.startsWith("INSERT INTO review_trial_usage")) {
@@ -331,10 +342,52 @@ test("mocked uncertain provider acceptance keeps the trial reserved and prevents
   assert.equal(r.status, 503);
   assert.equal(r.data.status, "verification_required");
   assert(s.used());
-  const again = await s.run("review_other_trial_key_12345");
-  assert.equal(again.status, 402);
+  const again = await s.run();
+  assert.equal(again.status, 200);
+  assert.equal(again.data.task_id,r.data.reference);
   assert.equal(s.network(), 1);
   assert(
     !s.calls.some((x) => x.sql.startsWith("DELETE FROM review_trial_usage")),
   );
+});
+
+test("lyrics trial allows exactly two independent reservations per artist without a paid package", async () => {
+  const usage = [];
+  const db = {
+    query: async (sql, args) => {
+      if (sql.startsWith("SELECT COUNT"))
+        return {
+          rows: [{ used: usage.filter((x) => x.id === args[0]).length }],
+        };
+      if (sql.startsWith("INSERT INTO review_lyrics_usage"))
+        usage.push({ id: args[0], ref: args[1] });
+      return { rows: [], rowCount: 1 };
+    },
+  };
+  for (const id of [7, 8]) {
+    await review.reserveLyrics(db, id, id + "-one");
+    await review.reserveLyrics(db, id, id + "-two");
+    await assert.rejects(
+      review.reserveLyrics(db, id, id + "-three"),
+      (e) => e.status === 402,
+    );
+  }
+  assert.equal(usage.length, 4);
+});
+test("open testing removes the temporary expiry without changing production eligibility", async () => {
+  let queryArgs;
+  const db = {
+    query: async (sql, args) => {
+      queryArgs = args;
+      return { rows: [{ active: args?.[1] === true, expires_at: "expired" }] };
+    },
+  };
+  const open = await review.access(db, 7, {
+    ...env,
+    LAE_REVIEW_TEST_OPEN: "1",
+  });
+  assert.equal(open.active, true);
+  assert.equal(open.expires_at, null);
+  assert.equal(queryArgs[1], true);
+  assert.equal((await review.access(db, 7, env)).active, false);
 });

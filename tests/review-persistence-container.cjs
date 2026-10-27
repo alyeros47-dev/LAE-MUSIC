@@ -77,6 +77,8 @@ async function boot(name) {
     "-e",
     "LAE_REVIEW_TEST_ACCESS=1",
     "-e",
+    "LAE_REVIEW_TEST_OPEN=1",
+    "-e",
     "LAE_REVIEW_PERSISTENT_STORAGE=1",
     "-e",
     "ADMIN_KEY=isolated-state-fixture-only-key",
@@ -223,9 +225,8 @@ async function boot(name) {
     const state = await api("/api/platform/session");
     assert.equal(state.data.review_environment, "persistent_review");
     assert.equal(
-      (await api("/api/artist/studio-allowance")).data
-        .review_shared_music_remaining,
-      0,
+      (await api("/api/artist/studio-allowance")).data.remaining_generations,
+      2,
     );
     assert.equal(
       (await api("/api/artist/subscription")).data.artist_features_active,

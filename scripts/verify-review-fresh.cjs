@@ -55,12 +55,9 @@ async function verify({ fetchImpl = fetch } = {}) {
     assert.equal(subscription.data.review_test_access, true);
     assert.equal(subscription.data.artist_features_active, false);
     const allowance = await request("/api/artist/studio-allowance");
-    assert.equal(allowance.data.remaining_generations, 1);
+    assert.equal(allowance.data.remaining_generations, 2);
     assert.equal(allowance.data.review_test_access, true);
-    assert(
-      allowance.data.review_shared_music_remaining >= 0 &&
-        allowance.data.review_shared_music_remaining <= 1,
-    );
+    assert.equal(allowance.data.included_generations,2);
     const audio = Buffer.from(
         fs.readFileSync("tests/fixtures/review-tone.mp3.base64", "utf8").trim(),
         "base64",
@@ -167,7 +164,7 @@ async function verify({ fetchImpl = fetch } = {}) {
       owned_catalog_verified: true,
       paid_subscription_created: false,
       music_test_capacity_remaining:
-        allowance.data.review_shared_music_remaining,
+        allowance.data.remaining_generations,
       music_generation_verified: false,
       provider_calls: 0,
       production_writes: 0,

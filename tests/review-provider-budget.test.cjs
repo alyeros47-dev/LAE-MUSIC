@@ -160,3 +160,72 @@ test("failed external calls still consume the local safety allowance", async () 
   );
   assert.equal(calls, 2);
 });
+
+test("open testing uses server reservations per artist, rejects replay across restart, and never bills voice or unauthenticated requests", async () => {
+  let journal = null,
+    network = 0,
+    context = null;
+  const fileSystem = {
+    readFileSync() {
+      if (journal === null) throw Object.assign(Error(), { code: "ENOENT" });
+      return journal;
+    },
+    writeFileSync(p, s) {
+      journal = s;
+    },
+  };
+  const make = () =>
+    createBudget({
+      mode: "account",
+      fileSystem,
+      getContext: () => context,
+      fetchImpl: async () => {
+        network++;
+        return new Response("{}");
+      },
+    });
+  const call = make(),
+    url = "https://api.musicapi.ai/api/v1/sonic/create",
+    post = { method: "POST" };
+  assert.equal((await call(url, post)).status, 503);
+  assert.equal(network, 0);
+  const refs = [];
+  for (const artistId of ["1", "2"])
+    for (let i = 0; i < 2; i++) {
+      const reference =
+        "sonic-" + require("node:crypto").randomBytes(16).toString("hex");
+      refs.push(reference);
+      context = { reviewProvider: { artistId, reference, kind: "musicapi" } };
+      assert.equal((await call(url, post)).status, 200);
+    }
+  assert.equal(network, 4);
+  context = {
+    reviewProvider: { artistId: "1", reference: refs[0], kind: "musicapi" },
+  };
+  const duplicate = await make()(url, post);
+  assert.equal(duplicate.status, 409);
+  assert.equal(duplicate.headers.get("x-lae-review-rejected"), null);
+  assert.equal(network, 4);
+  assert.equal(
+    (await call("https://api.musicapi.ai/api/v1/sonic/create-voice", post))
+      .status,
+    503,
+  );
+  context = {
+    reviewProvider: {
+      artistId: "3",
+      reference: require("node:crypto").randomUUID(),
+      kind: "openai",
+    },
+  };
+  assert.equal(
+    (await call("https://api.openai.com/v1/responses", post)).status,
+    200,
+  );
+  assert.equal(network, 5);
+  journal = "broken";
+  const denied = await call("https://api.openai.com/v1/responses", post);
+  assert.equal(denied.status, 503);
+  assert.equal(denied.headers.get("x-lae-review-rejected"), "before-provider");
+  assert.equal(network, 5);
+});

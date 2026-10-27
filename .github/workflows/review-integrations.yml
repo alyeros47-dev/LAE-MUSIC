@@ -40,6 +40,9 @@ jobs:
           docker build -f deploy/review.Dockerfile -t lae-integrations-ci .
           docker run -d --name lae-integrations-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-integration-ci-only-key -e 'LAE_REVIEW_ARTIST_SNAPSHOT={"version":1,"scope":"artist_profiles_without_credentials","captured_at":"2026-10-27T00:00:00.000Z","artists":[{"source_id":"99999","display_name":"Isolated imported artist","country":"Nigeria","bio":"Isolated fixture","plan":"growth"}]}' lae-integrations-ci
           LAE_REVIEW_FRESH_TESTS=1 LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-integration-ci-only-key node tests/review-container-smoke.cjs
+          docker exec --user 0 lae-integrations-ci mkdir -p /app/tests
+          docker cp tests/review-quotas-postgres.cjs lae-integrations-ci:/app/tests/review-quotas-postgres.cjs
+          docker exec --user 0 -e LAE_REVIEW_QUOTA_TESTS=1 lae-integrations-ci node tests/review-quotas-postgres.cjs
       - name: Verify accounts and media survive container replacement
         env:
           LAE_REVIEW_PERSISTENCE_TESTS: "1"

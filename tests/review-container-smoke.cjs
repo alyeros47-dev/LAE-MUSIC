@@ -91,7 +91,7 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
   if(process.env.LAE_REVIEW_FRESH_TESTS==='1'){
     const post=async(path,body)=>fetch(origin+path,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',Cookie:artistCookie},body:JSON.stringify(body)});
     const sub=await (await fetch(origin+'/api/artist/subscription',{headers:{Cookie:artistCookie}})).json();assert.equal(sub.review_test_access,true);assert.equal(sub.artist_features_active,false);
-    const allowance=await (await fetch(origin+'/api/artist/studio-allowance',{headers:{Cookie:artistCookie}})).json();assert.equal(allowance.review_test_access,true);assert.equal(allowance.remaining_generations,1);
+    const allowance=await (await fetch(origin+'/api/artist/studio-allowance',{headers:{Cookie:artistCookie}})).json();assert.equal(allowance.review_test_access,true);assert.equal(allowance.remaining_generations,2);
     const audio=Buffer.from(require('node:fs').readFileSync('tests/fixtures/review-tone.mp3.base64','utf8').trim(),'base64');
     const prepare=await post('/api/music/upload/start',{title:'Original sandbox test tone',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:audio.length,rightsConfirmed:true});assert.equal(prepare.status,200);const upload=await prepare.json();assert.equal(upload.temporary_review_storage,true);
     const stranger=await fetch(origin+'/api/music/upload/file?id='+upload.id+'&kind=audio',{method:'PUT',headers:{Origin:origin,'Content-Type':'audio/mpeg'},body:audio});assert.equal(stranger.status,401);
