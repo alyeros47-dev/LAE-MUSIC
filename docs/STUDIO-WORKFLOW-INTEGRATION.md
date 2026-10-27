@@ -1,5 +1,7 @@
 # Restore the original studio workflow in the redesigned interface
 
+Historical first-stage integration record. The current two-tool layout and explicit model routing supersede this layout; see [Two studios workflow](TWO-STUDIOS-WORKFLOW.md).
+
 The owner reported that the long studio screen looked like a lyrics-only tool. This change keeps the original engine and makes the entire workflow discoverable: **idea and cultural directions → complete lyrics and upload code → standard/saved/own voice → complete MusicAPI song → previews and private release**.
 
 ## Integrated changes
