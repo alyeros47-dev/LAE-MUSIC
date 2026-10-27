@@ -5,6 +5,11 @@ on:
       - "android-app/**"
   workflow_dispatch:
     inputs:
+      existing_service_audit:
+        description: "Read-only inspection of existing production service and schema; no deployment or database writes"
+        required: false
+        type: boolean
+        default: false
       review_auth_email_sha256:
         description: "Optional SHA-256 account lookup digest; sandbox only, no resets/deployment"
         required: false
@@ -18,6 +23,22 @@ on:
 permissions:
   contents: read
 jobs:
+  existing-service-audit:
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - name: Read existing production configuration and schema without changes
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/audit-existing-service.cjs
   review-auth-diagnostic:
     if: github.event_name == 'workflow_dispatch' && (inputs.review_auth_email_sha256 != '' || inputs.review_lyrics_model_check) && github.ref == 'refs/heads/codex/premium-platform-release'
     runs-on: ubuntu-latest
@@ -37,7 +58,7 @@ jobs:
           REVIEW_LYRICS_MODEL_CHECK: ${{ inputs.review_lyrics_model_check }}
         run: node scripts/review-auth-diagnostic.cjs
   review-persistence:
-    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -55,7 +76,7 @@ jobs:
           LAE_REVIEW_TEST_IMAGE: lae-review-persistence-ci
         run: node tests/review-persistence-container.cjs
   application:
-    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76,7 +97,7 @@ jobs:
           path: artifacts/
 
   postgres:
-    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit)
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -108,7 +129,7 @@ jobs:
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
 
   browser-compatibility:
-    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check)
+    if: github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
