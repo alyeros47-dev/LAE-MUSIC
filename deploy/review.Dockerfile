@@ -10,6 +10,8 @@ COPY package.json package-lock.json ./
 RUN --mount=type=secret,id=proxy_ca \
     if [ -f /run/secrets/proxy_ca ]; then NODE_EXTRA_CA_CERTS=/run/secrets/proxy_ca npm ci --omit=dev --strict-ssl=true; else npm ci --omit=dev --strict-ssl=true; fi
 COPY *.js ./
+# The shared studio catalog reads the original selection metadata at runtime.
+COPY music-prompt-studio.html ./
 COPY lib ./lib
 COPY web ./web
 COPY config ./config

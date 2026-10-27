@@ -24,11 +24,14 @@ async function checkPreview(value) {
   await probe('/api/platform/premium/plans',(r,s)=>{
     const p=JSON.parse(s);return r.status===200 && p.base_currency==='USD' && JSON.stringify(p.plans.map(x=>x.amount_minor))==='[8,23,60,121,588]';
   });
+  await probe('/api/platform/studio/catalog',(r,s)=>{
+    const c=JSON.parse(s);return r.status===200 && c.gospel?.length===66 && c.secular?.length===33 && c.secular.some(x=>x.id==='sec-nigeria-2') && c.beat?.some(x=>x.value==='none');
+  });
   await probe('/api/platform/discover',r=>r.status===200);
   await probe('/api/platform/admin/report?section=payments',r=>r.status===401);
   const passed=checks.every(x=>x.passed);
   return {status:passed?'available_for_review':'blocked',production_ready:false,checks,
-    scope:'HTTP availability, approved terms/prices, catalog access and anonymous admin denial only. No real generation, audio playback, payment or email verification.'};
+    scope:'HTTP availability, approved terms/prices, catalog access, existing studio profile availability and anonymous admin denial only. No real generation, audio playback, payment or email verification.'};
 }
 module.exports={checkPreview};
 if(require.main===module)checkPreview(process.argv[2]).then(r=>{console.log(JSON.stringify(r,null,2));process.exitCode=r.status==='available_for_review'?0:2;}).catch(()=>{console.error('Usage: node scripts/check-preview.cjs https://YOUR-REVIEW-SITE.onrender.com');process.exitCode=1;});

@@ -9,6 +9,10 @@ on:
       - scripts/verify-review-storage.cjs
       - lib/review-storage.js
       - lib/account-login.js
+      - lib/studio-catalog.js
+      - music-prompt-studio.html
+      - scripts/check-preview.cjs
+      - tests/review-container-smoke.cjs
       - web/password-controls.js
       - web/studio-engine.js
       - web/app.js

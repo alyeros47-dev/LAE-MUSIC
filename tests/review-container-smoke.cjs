@@ -61,7 +61,7 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
   assert.equal(r.status, 200);
   assert((await r.json()).listener);
   console.log(
-    "PASS: 12 HTTP probes, temporary-data notice, actual artist/listener registration, listener session and unpaid artist status; Node 22 + PostgreSQL 16 inside a 512 MB review container. No real provider or production data.",
+    "PASS: 13 HTTP probes including all 99 existing studio profiles, temporary-data notice, actual artist/listener registration, listener session and unpaid artist status; Node 22 + PostgreSQL 16 inside a 512 MB review container. No real provider or production data.",
   );
 })().catch((e) => {
   console.error(e.message);

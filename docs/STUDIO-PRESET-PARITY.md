@@ -17,3 +17,9 @@ The configured `OPENAI_LYRICS_MODEL` stays authoritative. No model, prompt, API 
 - R2 upload and voice training remain owner-deferred. This work requires neither and never contacts the live bucket.
 
 This correction is intended for PR #6 and the existing Review Sandbox. It does not authorize production deployment.
+
+## Review image correction
+
+The first published code passed source-based tests and CI, but the real sandbox catalog returned HTTP 500: its Docker recipe copied root JavaScript but omitted `music-prompt-studio.html`. The review image now explicitly includes that original file. The shared read-only readiness probe checks all 99 profiles, so the actual-container smoke test and public readiness checks catch this packaging failure. A green source test alone does not certify the deployed studio.
+
+The owner is considering a later invited-artist trial of one or two music generations. No trial quantity, sponsored account activation, public paywall removal or production deployment is enabled by this correction. The current paid-entitlement requirement remains until a separate audited sponsored allowance is implemented and the owner chooses the offer. Lyrics credits and music generations are separate.
