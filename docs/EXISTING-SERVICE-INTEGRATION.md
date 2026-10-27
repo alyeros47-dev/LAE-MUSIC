@@ -30,3 +30,15 @@ Database inspection uses read-only transactions with query timeouts. It reports 
 6. Validate the real service's login, existing songs, artwork, studio, artist exports and partner dashboards. Keep real financial operations disabled until actual provider verification is complete.
 
 No production migration, environment modification, merge or deployment is performed by the read-only workflow. This document does not claim the remaining production checks have passed.
+
+## Read-only production audit: October 27, 2026
+
+Actions run [40598373138](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40598373138) verified the existing Node service, main branch at `4339f6ec38ab88fd0afa6ca6b55b63056aa246ee`, `npm install` build and `npm start` runtime. Its database, OpenAI, MusicAPI, R2 and administrator settings are present; no review flags are enabled. Paystack and Flutterwave secret keys are absent under the expected integration names. Presence does not prove every provider operation works.
+
+The database read succeeded: 11 creators, 5 listeners, 13 tracks, 16 generation records and 3 voice profiles. There are no paid `artist_subscriptions` rows. Do not infer that existing artists have a newly verified paid subscription or fabricate payment receipts. A safe artist test-access programme still needs integration before promising unrestricted production studio testing.
+
+The upgraded migration/accounting system is absent (88 preflight-required tables missing). This is an older database requiring an additive upgrade, not a reason to replace it. Environment comparison before and after the audit matched; production writes were zero. Existing public audio also returned HTTP 206 for a Range read from the configured storage.
+
+A new populated rehearsal uses initialization DDL captured from that exact deployed commit, reordered only to satisfy fresh-fixture dependencies. It preserves invented account passwords, sessions, song storage keys and wallet balances through the upgraded initialization and all 20 migrations, and verifies repeat application is a no-op. No private production rows are included. This supplements historical checkpoint tests; it is not a production clone, verified backup or proof of all production constraints/data cases.
+
+Remaining release gates are a verified production recovery point, rehearsal against a sanitized production-schema/data copy if available, persistent free-test entitlements for invited/registered artists, and verification of the actual production flows after an approved release. Gateway test credentials are needed for genuine Paystack/Flutterwave end-to-end checkout and commission verification. The separate practice area remains an illustrative calculation, never a substitute for provider verification.

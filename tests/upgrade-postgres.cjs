@@ -201,6 +201,25 @@ async function ownedDatabase(run) {
 }
 test("populated historical upgrades preserve accounts, catalog and separate currency books", async (t) => {
   try {
+    await t.test("upgrade from exact deployed 4339 legacy initialization", () =>
+      ownedDatabase(async (pool) => {
+        const fixture = require("./fixtures/production-4339-schema.json");
+        for (const sql of fixture.queries) await pool.query(sql);
+        const { tables } = await seed(pool, 0);
+        delete tables.platform_migrations;
+        const before = await snapshot(pool, tables);
+        await bootstrap(pool);
+        assert.equal((await migrate(pool)).length, migrations.length);
+        await bootstrap(pool);
+        assert.deepEqual(await migrate(pool), []);
+        const after = await snapshot(pool, tables);
+        delete before.platform_migrations;
+        delete after.platform_migrations;
+        assert.deepEqual(after, before, "deployed-code upgrade must retain fixture accounts, sessions, storage keys and balances");
+        for (const table of ["creators", "listeners"])
+          assert(await verifyPassword("HistoricalFixturePassword123", (await pool.query("SELECT * FROM " + table)).rows[0]));
+      }),
+    );
     for (const checkpoint of [0, 7, 13, 17, 18])
       await t.test("upgrade from checkpoint " + checkpoint, () =>
         ownedDatabase(async (pool) => {
