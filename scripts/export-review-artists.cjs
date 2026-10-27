@@ -40,8 +40,6 @@ function snapshotOptions(value, production) {
       DATABASE_SSL_MODE: "verify-full",
     }),
     max: 1,
-    options:
-      "-c default_transaction_read_only=on -c statement_timeout=30000 -c lock_timeout=5000",
   };
 }
 async function exportArtists({
@@ -49,13 +47,16 @@ async function exportArtists({
   productionConnectionString,
   Pool = require("pg").Pool,
   now = () => new Date(),
+  sleep = ms => new Promise(resolve=>setTimeout(resolve,ms)),
 } = {}) {
   const options = snapshotOptions(connectionString, productionConnectionString),
     pool = new Pool(options);
   let db,
     begun = false;
   try {
-    db = await pool.connect();
+    for(let attempt=0;attempt<3;attempt++){
+      try{db=await pool.connect();break;}catch(error){if(attempt===2||!['57P03','53300'].includes(error.code))throw error;await sleep((attempt+1)*1000);}
+    }
     await db.query(
       "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY",
     );
@@ -63,6 +64,8 @@ async function exportArtists({
     const read = await db.query("SHOW transaction_read_only");
     if (read.rows[0]?.transaction_read_only !== "on")
       throw Error("Snapshot connection is not read-only");
+    await db.query("SET LOCAL statement_timeout='30s'");
+    await db.query("SET LOCAL lock_timeout='5s'");
     const columns = (
       await db.query(
         "SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name='creators'",
@@ -106,7 +109,9 @@ async function exportArtists({
     )
       throw e;
     const code=typeof e.code==='string'&&(/^[A-Z0-9]{5}$/.test(e.code)||['ENOTFOUND','ECONNREFUSED','ETIMEDOUT','ECONNRESET','CERT_HAS_EXPIRED','UNABLE_TO_VERIFY_LEAF_SIGNATURE'].includes(e.code))?' ['+e.code+']':'';
-    throw Error('Could not read the isolated Neon snapshot'+code+'. Check its secret, availability and artist schema. No source data was changed.');
+    const message=String(e.message||'').toLowerCase();
+    const detail=/quota|compute.*limit/.test(message)?' Neon compute quota is unavailable.':/endpoint.*disabled|disabled.*endpoint/.test(message)?' The review compute endpoint is disabled.':/unsupported.*(parameter|option)/.test(message)?' The review endpoint rejected startup parameters.':/starting|waking|not ready/.test(message)?' The review compute is not ready.':'';
+    throw Error('Could not read the isolated Neon snapshot'+code+'.'+detail+' Check its secret, availability and artist schema. No source data was changed.');
   } finally {
     db?.release();
     await pool.end();

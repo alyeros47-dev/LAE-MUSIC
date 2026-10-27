@@ -4,7 +4,7 @@ The owner created a temporary Neon child branch and saved its connection string 
 
 ## Import boundaries
 
-The existing sandbox configuration workflow consumes the source secret only inside its GitHub runner. It requires a verified-TLS Neon PostgreSQL endpoint different from the live endpoint, including rejection of the production endpoint's pooler alias. The PostgreSQL connection defaults to read-only and opens a repeatable-read READ ONLY transaction, then confirms `transaction_read_only=on`.
+The existing sandbox configuration workflow consumes the source secret only inside its GitHub runner. It requires a verified-TLS Neon PostgreSQL endpoint different from the live endpoint, including rejection of the production endpoint's pooler alias. The first SQL statement opens a repeatable-read READ ONLY transaction, then confirms `transaction_read_only=on` before any data read. Timeouts use transaction-local settings, compatible with Neon pooled endpoints; unsupported startup options are not sent. Temporary compute-starting/connection-limit errors have three bounded connection attempts.
 
 The query projects only artist ID, display name, country, biography and selected package. It never selects email, password/hash/salt, sessions, recovery/MFA tokens, bank/payout data, subscriptions, balances, commissions or private music. Unexpected fields, duplicate identities, unknown packages, more than 1,000 artists and snapshots larger than 48 KB are rejected rather than silently truncated. No SQL writes are issued to the Neon branch or production.
 

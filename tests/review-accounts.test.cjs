@@ -33,7 +33,7 @@ const live =
 test("Neon artist exporter rejects production, pooler aliases and non-Neon/overridden connections before connecting", () => {
   const good = snapshotOptions(copy, live);
   assert.equal(good.ssl.rejectUnauthorized, true);
-  assert.match(good.options, /default_transaction_read_only=on/);
+  assert.equal(good.options,undefined);
   assert.equal(good.max, 1);
   for (const x of [
     live,
