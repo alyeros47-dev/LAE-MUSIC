@@ -8,7 +8,7 @@ const referral=extract('async function recordVerifiedProductReferral(', '// One-
 const reconciliation=extract('async function reconcileClosedAffiliateQuarter(', 'async function reconcileDemoReferrals(');
 const calls=[];
 const members=new Map([[10,{id:10,referred_by:null}],[20,{id:20,referred_by:10}],[30,{id:30,referred_by:20}],[40,{id:40,referred_by:30}]]);
-const client={query:async(sql,params=[])=>{calls.push({sql,params});if(sql.includes('SELECT id,referred_by FROM creators')){const row=members.get(Number(params[0]));return {rowCount:row?1:0,rows:row?[row]:[]}}return {rowCount:1,rows:[]}}};
+const client={query:async(sql,params=[])=>{calls.push({sql,params});if(sql.includes('SELECT id,referred_by FROM creators')){const row=members.get(Number(params[0]));return {rowCount:row?1:0,rows:row?[row]:[]}}if(sql.includes('SELECT COUNT(*)::int AS n FROM affiliate_quarterly_rewards'))return {rowCount:1,rows:[{n:0}]};return {rowCount:1,rows:[]}}};
 const context={PLANS:{starter:{usd:6,directReferralPercent:15},growth:{usd:10,directReferralPercent:25},professional:{usd:20,directReferralPercent:25}},pool:{connect:async()=>client},Date,Error,Number,Math,console};
 vm.createContext(context);
 vm.runInContext(referral+'\n'+reconciliation,context);
