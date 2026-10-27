@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "source": "https://lae-music.onrender.com",
+  "captured_at": "2026-10-27T04:24:24.471Z",
+  "scope": "published_songs_and_public_artist_profiles_only",
+  "artists": [
+    {
+      "id": "46",
+      "display_name": "Shekinah Glory"
+    },
+    {
+      "id": "1",
+      "display_name": "Frank4Chriat"
+    },
+    {
+      "id": "50",
+      "display_name": "Helena Williams"
+    },
+    {
+      "id": "3",
+      "display_name": "Jane Esther Noah"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "13",
+      "artist_id": "50",
+      "title": "One Voice Many Praise",
+      "genre": "Gospel & Worship",
+      "description": "The song was born out my personal Experience and many encounters with God. This song will bless you.",
+      "plays": "5",
+      "created_at": "2026-10-24T14:01:58.174Z",
+      "published_at": "2026-10-24T14:02:15.630Z",
+      "status": "published"
+    },
+    {
+      "id": "12",
+      "artist_id": "1",
+      "title": "KAI NE DUKA",
+      "genre": "Gospel & Worship",
+      "description": "To Jesus all the praise",
+      "plays": "48",
+      "created_at": "2026-10-19T01:11:59.087Z",
+      "published_at": "2026-10-19T01:12:18.717Z",
+      "status": "published"
+    },
+    {
+      "id": "11",
+      "artist_id": "46",
+      "title": "Anointed By The Spirit.",
+      "genre": "Gospel & Worship",
+      "description": "",
+      "plays": "37",
+      "created_at": "2026-10-18T11:37:57.871Z",
+      "published_at": "2026-10-18T11:38:26.070Z",
+      "status": "published"
+    },
+    {
+      "id": "10",
+      "artist_id": "46",
+      "title": "Ògo tó yẹ Ọ,",
+      "genre": "Gospel & Worship",
+      "description": "I will Praise my King",
+      "plays": "25",
+      "created_at": "2026-10-18T11:11:31.598Z",
+      "published_at": "2026-10-18T11:11:48.518Z",
+      "status": "published"
+    },
+    {
+      "id": "9",
+      "artist_id": "46",
+      "title": "Na You Dey Do Am",
+      "genre": "Gospel & Worship",
+      "description": "I will Praise the Lord At All time.",
+      "plays": "27",
+      "created_at": "2026-10-18T03:24:11.219Z",
+      "published_at": "2026-10-18T03:24:32.679Z",
+      "status": "published"
+    },
+    {
+      "id": "7",
+      "artist_id": "3",
+      "title": "Omiiko gi",
+      "genre": "Gospel & Worship",
+      "description": "Helpless before my Maker, deep pure worship, moment of reflection",
+      "plays": "42",
+      "created_at": "2026-10-16T15:51:11.161Z",
+      "published_at": "2026-10-16T15:51:22.116Z",
+      "status": "published"
+    },
+    {
+      "id": "6",
+      "artist_id": "1",
+      "title": "From My heart",
+      "genre": "Gospel & Worship",
+      "description": "I Cry to you.",
+      "plays": "30",
+      "created_at": "2026-10-16T12:54:22.094Z",
+      "published_at": "2026-10-16T12:54:43.585Z",
+      "status": "published"
+    }
+  ]
+}

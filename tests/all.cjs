@@ -48,3 +48,7 @@ require('./account-login.test.cjs');
 require('./existing-engine-integration.test.cjs');
 
 require('./studio-profiles.test.cjs');
+
+require('./review-catalog.test.cjs');
+
+require('./navigation-routing.test.cjs');

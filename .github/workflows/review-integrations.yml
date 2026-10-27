@@ -10,6 +10,8 @@ on:
       - lib/review-storage.js
       - lib/account-login.js
       - lib/studio-catalog.js
+      - lib/review-catalog.js
+      - data/review-public-catalog.json
       - music-prompt-studio.html
       - scripts/check-preview.cjs
       - tests/review-container-smoke.cjs

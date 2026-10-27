@@ -9,7 +9,8 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
     );
   const origin = "http://127.0.0.1:3116";
   let healthy = false;
-  for (let i = 0; i < 120; i++) {
+  const startupDeadline=Date.now()+60000;
+  for (let i = 0; i < 120 && Date.now()<startupDeadline; i++) {
     try {
       if (
         (await fetch(origin + "/health", { signal: AbortSignal.timeout(1000) }))
@@ -24,6 +25,21 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
   assert(healthy, "review container must start within 60 seconds");
   const report = await checkPreview(origin);
   assert.equal(report.status, "available_for_review", JSON.stringify(report));
+  const publicSnapshot=require('../data/review-public-catalog.json');
+  const restored=await (await fetch(origin+'/api/platform/review-catalog/status')).json();
+  assert.equal(restored.artists,publicSnapshot.artists.length);
+  assert.equal(restored.songs,publicSnapshot.tracks.length);
+  assert.equal(restored.private_accounts_copied,false);
+  assert.equal(restored.source_writes,false);
+  const discover=await (await fetch(origin+'/api/platform/discover')).json();
+  assert.equal(discover.tracks.length,publicSnapshot.tracks.length);
+  const artists=await (await fetch(origin+'/api/music/artists')).json();
+  assert.equal(artists.artists.length,publicSnapshot.artists.length);
+  for(const artist of artists.artists){
+    const profile=await (await fetch(origin+'/api/music/artist?id='+artist.id)).json();
+    assert.equal(String(profile.artist.id),String(artist.id));
+    assert(profile.tracks.length>0);
+  }
   const html = await (await fetch(origin + "/")).text();
   assert(html.includes('id="review-notice"'));
   assert(html.includes("Test accounts and data can reset"));
@@ -61,7 +77,7 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
   assert.equal(r.status, 200);
   assert((await r.json()).listener);
   console.log(
-    "PASS: 13 HTTP probes including all 99 existing studio profiles, temporary-data notice, actual artist/listener registration, listener session and unpaid artist status; Node 22 + PostgreSQL 16 inside a 512 MB review container. No real provider or production data.",
+    "PASS: 13 HTTP probes including all 99 existing studio profiles; restored public songs/profiles and their navigation APIs, temporary-data notice, actual artist/listener registration, listener session and unpaid artist status; Node 22 + PostgreSQL 16 inside a 512 MB review container. No provider calls, private production data or production writes.",
   );
 })().catch((e) => {
   console.error(e.message);
