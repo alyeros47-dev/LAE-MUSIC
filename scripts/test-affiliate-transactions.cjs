@@ -29,7 +29,6 @@ async function run(){
  calls.length=0;
  await assert.rejects(context.reconcileClosedAffiliateQuarter('2026-02-01'),/Quarter must start/);
  await assert.rejects(context.reconcileClosedAffiliateQuarter('2099-01-01'),/Quarter is not closed/);
- await assert.rejects(context.reconcileClosedAffiliateQuarter('2026-01-01'),/Quarter is not closed/).catch(()=>{});
  // A fully closed historical quarter should reconcile in one transaction.
  calls.length=0;
  await context.reconcileClosedAffiliateQuarter('2025-01-01');
