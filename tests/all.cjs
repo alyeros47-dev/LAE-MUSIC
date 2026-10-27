@@ -46,3 +46,5 @@ require('./lyrics-library.test.cjs');
 require('./account-login.test.cjs');
 
 require('./existing-engine-integration.test.cjs');
+
+require('./studio-profiles.test.cjs');

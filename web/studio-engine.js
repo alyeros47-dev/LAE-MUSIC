@@ -7,3 +7,14 @@ export function musicRequest(brief, voiceProfile) {
   if (style.length > 2000) throw Error('Shorten your style and language instructions to 2,000 characters.');
   return { title: brief.title, lyrics: brief.lyrics, style, useVoice };
 }
+
+// Keep the original request contract and select exactly one musical profile.
+export function lyricsRequest(brief) {
+  const gospel = brief.musicFamily === 'gospel';
+  return {idea:brief.idea,genre:brief.genre,language:brief.language,
+    nativeLyrics:brief.nativeLyrics,nativeLanguage:brief.nativeLanguage || brief.language,
+    extraLanguage:brief.extraLanguage || '',mood:brief.mood,voice:brief.voice,
+    duration:brief.duration,beat:brief.beat || 'none',tradition:'custom',
+    gospelProfile:gospel ? brief.musicProfile || '' : '',
+    secularProfile:gospel ? '' : brief.musicProfile || ''};
+}
