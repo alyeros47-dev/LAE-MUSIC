@@ -52,3 +52,5 @@ require('./studio-profiles.test.cjs');
 require('./review-catalog.test.cjs');
 
 require('./navigation-routing.test.cjs');
+
+require('./review-accounts.test.cjs');

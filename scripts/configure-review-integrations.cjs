@@ -29,7 +29,7 @@ const DELEGATED = [
   "REVIEW_STORAGE_ORIGIN",
   "REVIEW_STORAGE_TICKET_KEY",
 ];
-const ALLOWED = new Set([...COPY, ...STORAGE, ...DELEGATED]);
+const ALLOWED = new Set([...COPY, ...STORAGE, ...DELEGATED, "LAE_REVIEW_ARTIST_SNAPSHOT"]);
 function envMap(rows) {
   if (!Array.isArray(rows)) throw Error("Invalid environment inventory.");
   const out = {};
@@ -157,6 +157,10 @@ async function configure({
   verify = true,
   bootstrapStorage = false,
   verifyStorage = false,
+  snapshotDatabaseUrl = null,
+  refreshArtistSnapshot = false,
+  exportArtistSnapshot = require("./export-review-artists.cjs").exportArtists,
+  verifyArtistAccounts = require("./verify-review-accounts.cjs").verify,
 } = {}) {
   if (!key?.trim()) throw Error("GitHub RENDER_API_KEY secret is required.");
   if (!/^[a-f0-9]{40}$/.test(sha || ""))
@@ -291,6 +295,15 @@ async function configure({
     }
   }
   const updates = planEnvironment(sourceEnv, targetEnv, sandbox);
+  let artistSnapshotCount=null;
+  if(snapshotDatabaseUrl&&(!targetEnv.LAE_REVIEW_ARTIST_SNAPSHOT||refreshArtistSnapshot)){
+    const snapshot=await exportArtistSnapshot({connectionString:snapshotDatabaseUrl,productionConnectionString:sourceEnv.DATABASE_URL});
+    require('../lib/review-accounts').validateSnapshot(snapshot);
+    const value=JSON.stringify(snapshot);artistSnapshotCount=snapshot.artists.length;
+    if(targetEnv.LAE_REVIEW_ARTIST_SNAPSHOT!==value)updates.push({key:'LAE_REVIEW_ARTIST_SNAPSHOT',value});
+  }else if(targetEnv.LAE_REVIEW_ARTIST_SNAPSHOT){
+    artistSnapshotCount=require('../lib/review-accounts').validateSnapshot(JSON.parse(targetEnv.LAE_REVIEW_ARTIST_SNAPSHOT)).artists.length;
+  }
   for (const item of updates) {
     await api("/services/" + TARGET + "/env-vars/" + item.key, "PUT", {
       value: item.value,
@@ -382,11 +395,15 @@ async function configure({
     throw Error(
       "Live configuration/deployment changed during verification. This workflow performed no source writes.",
     );
+  const artistAccountVerification=artistSnapshotCount&&verify?await verifyArtistAccounts({adminKey:targetEnv.ADMIN_KEY,fetchImpl}):null;
   const result = {
     url: ORIGIN,
     source_configuration_unchanged: true,
     source_deployment_unchanged: true,
     separate_environment: true,
+    imported_artist_profiles:artistSnapshotCount,
+    artist_account_verification:artistAccountVerification,
+    production_artist_credentials_copied:false,
     updated_keys: updates.map((x) => x.key),
     providers: checks,
     storage_configured: STORAGE.every((k) => !!targetEnv[k]),
@@ -426,6 +443,7 @@ if (require.main === module)
     const result = await configure({
       key: process.env.RENDER_API_KEY,
       sha: process.env.GITHUB_SHA,
+      snapshotDatabaseUrl: process.env.SANDBOX_NEON_DATABASE_URL || null,
       sandbox,
       bootstrapStorage: process.env.LAE_BOOTSTRAP_REVIEW_R2 === "1",
       verifyStorage: process.env.LAE_VERIFY_REVIEW_STORAGE === "1",

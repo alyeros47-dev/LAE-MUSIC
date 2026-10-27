@@ -336,3 +336,12 @@ test('deferred storage makes no R2 request even when isolated storage is already
  assert.equal(result.storage_probe,null);assert.equal(result.storage_bootstrap,null);assert.equal(result.storage_upload_verified,false);
  assert(!f.calls.some(c=>new URL(c.url).hostname.endsWith('.r2.cloudflarestorage.com')));
 });
+test('artist snapshot credentials stay in the runner while only sanitized metadata reaches review configuration',async()=>{
+ const f=fixture();const snapshot={version:1,scope:'artist_profiles_without_credentials',captured_at:'2026-10-27T00:00:00Z',artists:[{source_id:'7',display_name:'Owned artist',country:'Nigeria',bio:'',plan:'starter'}]};let called=0;
+ const result=await configure({...f,key:'private-key',sha,attempts:1,verify:false,snapshotDatabaseUrl:'private-neon-snapshot-url',exportArtistSnapshot:async args=>{called++;assert.equal(args.connectionString,'private-neon-snapshot-url');assert.equal(args.productionConnectionString,live.DATABASE_URL);return snapshot;},sleep:async()=>{}});
+ assert.equal(called,1);assert.equal(result.imported_artist_profiles,1);const writes=f.calls.filter(x=>x.method==='PUT');const copy=writes.find(x=>x.url.includes('LAE_REVIEW_ARTIST_SNAPSHOT'));assert(copy);assert.deepEqual(JSON.parse(JSON.parse(copy.body).value),snapshot);assert(!JSON.stringify(writes).includes('private-neon-snapshot-url'));assert(!JSON.stringify(f.logs).includes('Owned artist'));
+});
+test('a saved sanitized snapshot survives expiration of the temporary Neon source branch',async()=>{
+ const snapshot={version:1,scope:'artist_profiles_without_credentials',captured_at:'2026-10-27T00:00:00Z',artists:[{source_id:'7',display_name:'Owned artist',country:'Nigeria',bio:'',plan:'starter'}]};const f=fixture({targetEnvironment:{...isolated,LAE_REVIEW_ARTIST_SNAPSHOT:JSON.stringify(snapshot)}});
+ const r=await configure({...f,key:'private-key',sha,attempts:1,verify:false,snapshotDatabaseUrl:'expired-source',exportArtistSnapshot:async()=>{throw Error('Must use saved copy');},sleep:async()=>{}});assert.equal(r.imported_artist_profiles,1);assert(!f.calls.some(x=>x.method==='PUT'&&x.url.includes('LAE_REVIEW_ARTIST_SNAPSHOT')));
+});

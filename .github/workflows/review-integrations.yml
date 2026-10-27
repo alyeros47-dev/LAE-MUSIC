@@ -12,6 +12,8 @@ on:
       - lib/account-login.js
       - lib/studio-catalog.js
       - lib/review-catalog.js
+      - lib/review-accounts.js
+      - scripts/export-review-artists.cjs
       - data/review-public-catalog.json
       - music-prompt-studio.html
       - scripts/check-preview.cjs
@@ -42,12 +44,12 @@ jobs:
         with:
           node-version: "22"
       - name: Test independent environment safeguards
-        run: node --test tests/review-integrations.test.cjs tests/review-provider-budget.test.cjs tests/review-storage.test.cjs
+        run: node --test tests/review-integrations.test.cjs tests/review-provider-budget.test.cjs tests/review-storage.test.cjs tests/review-accounts.test.cjs
       - name: Verify the actual sandbox container before configuration
         run: |
           docker build -f deploy/review.Dockerfile -t lae-integrations-ci .
-          docker run -d --name lae-integrations-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-integration-ci-only-key lae-integrations-ci
-          LAE_REVIEW_CONTAINER_TESTS=1 node tests/review-container-smoke.cjs
+          docker run -d --name lae-integrations-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-integration-ci-only-key -e 'LAE_REVIEW_ARTIST_SNAPSHOT={"version":1,"scope":"artist_profiles_without_credentials","captured_at":"2026-10-27T00:00:00.000Z","artists":[{"source_id":"99999","display_name":"Isolated imported artist","country":"Nigeria","bio":"Isolated fixture","plan":"growth"}]}' lae-integrations-ci
+          LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-integration-ci-only-key node tests/review-container-smoke.cjs
       - name: Stop only the CI integration container
         if: always()
         run: docker rm -f lae-integrations-ci 2>/dev/null || true
@@ -56,6 +58,7 @@ jobs:
           LAE_BOOTSTRAP_REVIEW_R2: "0"
           LAE_VERIFY_REVIEW_STORAGE: "0"
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          SANDBOX_NEON_DATABASE_URL: ${{ secrets.SANDBOX_NEON_DATABASE_URL }}
           SANDBOX_R2_ACCOUNT_ID: ${{ secrets.SANDBOX_R2_ACCOUNT_ID }}
           SANDBOX_R2_ACCESS_KEY_ID: ${{ secrets.SANDBOX_R2_ACCESS_KEY_ID }}
           SANDBOX_R2_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_R2_SECRET_ACCESS_KEY }}
