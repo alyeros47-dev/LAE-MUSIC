@@ -1,0 +1,22 @@
+name: Read existing LAE-MUSIC integration requirements
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Inspect existing service and database without changing either
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/audit-existing-service.cjs
