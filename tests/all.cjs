@@ -63,3 +63,5 @@ require('./review-state.test.cjs');
 require('./review-persistence-plan.test.cjs');
 
 require('./review-voice.test.cjs');
+
+require('./studio-output.test.cjs');

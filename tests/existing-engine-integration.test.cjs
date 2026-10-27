@@ -8,7 +8,7 @@ test('studio adapter preserves the existing title, lyrics, style and explicit ow
 });
 test('standard-voice music requests remain usable without R2 or a saved voice',async()=>{
  const {musicRequest}=await adapter;for(const profile of [undefined,{status:'none',hasVoice:false},{status:'unavailable',hasVoice:false}]){assert.equal(musicRequest({title:'Song',lyrics:'Words',style:'Afrobeats',language:'English'},profile).useVoice,false);assert.throws(()=>musicRequest({useVoice:true},profile),/not ready/);}
- assert.throws(()=>musicRequest({style:'x'.repeat(2001)},null),/2,000/);
+ assert.throws(()=>musicRequest({style:'x'.repeat(2001)},null),/1,000/);
 });
 test('existing artist entry points now serve the shared frontend while old API permissions stay enforced',async()=>{
  const app=await runtime({pool:new AccountPool()});for(const path of ['/artist','/artist.html','/artist/profile-photo']){const r=await app.request(path);assert.equal(r.status,200);assert(r.text.includes('/web/app.js'));}

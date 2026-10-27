@@ -123,7 +123,7 @@ export function bindStudioWorkflow({
   const musicKey = "lae_music_studio_draft:" + artistId;
   try {
     const saved = JSON.parse(localStorage.getItem(musicKey));
-    for (const name of ["title", "lyrics", "style"])
+    for (const name of ["title", "lyrics", "style", "duration"])
       if (typeof saved?.[name] === "string")
         musicForm.elements[name].value = saved[name];
   } catch {}
@@ -133,7 +133,7 @@ export function bindStudioWorkflow({
         musicKey,
         JSON.stringify(
           Object.fromEntries(
-            ["title", "lyrics", "style"].map((name) => [
+            ["title", "lyrics", "style", "duration"].map((name) => [
               name,
               musicForm.elements[name].value,
             ]),
@@ -147,12 +147,13 @@ export function bindStudioWorkflow({
       title: lyricsForm.elements.title.value,
       lyrics: lyricsOutput.value,
       style: styleOutput.value,
+      duration: lyricsForm.elements.duration.value,
     };
     if (!values.lyrics.trim() || !values.style.trim())
       return toast("Generate or restore both lyrics and style first.");
     const changed = Object.entries(values).some(
       ([name, value]) =>
-        musicForm.elements[name].value.trim() &&
+        name!=='duration' && musicForm.elements[name].value.trim() &&
         musicForm.elements[name].value !== value,
     );
     if (

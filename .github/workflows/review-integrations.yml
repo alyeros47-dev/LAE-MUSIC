@@ -45,6 +45,10 @@ jobs:
           docker exec --user 0 -e LAE_REVIEW_QUOTA_TESTS=1 lae-integrations-ci node tests/review-quotas-postgres.cjs
           docker cp tests/review-voice-postgres.cjs lae-integrations-ci:/app/tests/review-voice-postgres.cjs
           docker exec --user 0 -e LAE_REVIEW_VOICE_TESTS=1 lae-integrations-ci node tests/review-voice-postgres.cjs
+          docker cp tests/review-releases-postgres.cjs lae-integrations-ci:/app/tests/review-releases-postgres.cjs
+          docker cp tests/fixtures lae-integrations-ci:/app/tests/fixtures
+          docker exec --user 0 lae-integrations-ci chmod -R a+rX /app/tests
+          docker exec --user postgres -e LAE_REVIEW_RELEASE_TESTS=1 lae-integrations-ci node tests/review-releases-postgres.cjs
       - name: Verify accounts and media survive container replacement
         env:
           LAE_REVIEW_PERSISTENCE_TESTS: "1"

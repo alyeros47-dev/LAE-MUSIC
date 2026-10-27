@@ -2183,3 +2183,5 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .studio-lyrics-results .button{justify-self:start}
 .music-studio-panel{margin-top:28px}
 .music-studio-panel textarea.lyrics{min-height:280px;line-height:1.8}
+
+.song-result-art{display:block;width:min(100%,240px);aspect-ratio:1;object-fit:cover;border-radius:18px;margin-bottom:16px;background:var(--panel,#181824)}
