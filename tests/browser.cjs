@@ -114,7 +114,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
    if(p==='/api/platform/capabilities')return send({payments:false,payouts:false,music_provider_configured:true,lyrics_configured:true,studio_release_import:releaseImportEnabled,voice_upload_available:voiceUploadAvailable});
    if(p==='/api/voice/profile')return send(existingVoiceProfile);
    if(p==='/api/voice/upload'){assert.equal(data.consent,true);existingVoiceProfile={status:'uploading',hasVoice:false};return send({url:'/api/voice/sample?reference=00000000-0000-4000-8000-000000000007'});}
-   if(p==='/api/voice/sample'){voicePuts++;const bytes=request.postDataBuffer();assert.equal(bytes.subarray(0,4).toString(),'RIFF');assert.equal(bytes.readUInt32LE(24),8000);assert.equal(bytes.length,44+8000*60*2);return send(voicePutFails?{error:'Fixture storage unavailable; training was not started.'}:{saved:true},voicePutFails?502:200);}
+   if(p==='/api/voice/sample')return route.continue();
    if(p==='/api/voice/train'){voiceTrains++;existingVoiceProfile={status:'training',hasVoice:false};return send(existingVoiceProfile);}
    if(p==='/api/voice/status'){existingVoiceProfile={status:'ready',hasVoice:true};return send(existingVoiceProfile);}
    if(p==='/api/artist/studio-history')return send({generations:[{generation_reference:'browser_completed_task_123',status:'succeeded',created_at:'2026-10-25T10:00:00Z'}]});
@@ -176,6 +176,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
   releaseImportEnabled=false;existingVoiceProfile={status:'none',hasVoice:false};await page.goto(origin+'/studio');assert(await page.getByLabel('Use my saved voice profile',{exact:true}).isDisabled());assert.equal(await page.getByRole('button',{name:/Generate music/}).isDisabled(),false);await page.getByRole('button',{name:'Check progress & previews',exact:true}).click();await page.getByText('Saving a private release awaits storage verification. You can still preview your completed songs.',{exact:true}).waitFor();assert(await page.getByRole('button',{name:'Save as a private release',exact:true}).isDisabled());assert(!calls.some(x=>['/api/voice/upload','/api/voice/train'].includes(x.p)));releaseImportEnabled=true;existingVoiceProfile={status:'ready',hasVoice:true};
   // Actual studio DOM + recording lifecycle, mocked microphone/storage/provider only.
   voiceUploadAvailable=true;existingVoiceProfile={status:'none',hasVoice:false};voicePutFails=true;
+  exportsServer.setVoiceUpload(bytes=>{voicePuts++;assert.equal(bytes.subarray(0,4).toString(),'RIFF');assert.equal(bytes.readUInt32LE(24),8000);assert.equal(bytes.length,44+8000*60*2);return {status:voicePutFails?502:200,body:voicePutFails?{error:'Fixture storage unavailable; training was not started.'}:{saved:true}};});
   await page.goto(origin+'/studio');
   await page.evaluate(()=>{
     window.__originalAudioContext=window.AudioContext;
