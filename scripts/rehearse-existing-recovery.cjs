@@ -51,6 +51,11 @@ if (require.main === module)
     console.error(
       JSON.stringify({
         phase: e.recoveryStage || "configuration",
+        private_stage: e.privateStage || null,
+        tool_exit_code: Number.isInteger(e.toolExitCode)
+          ? e.toolExitCode
+          : null,
+        tool_category: e.toolCategory || null,
         sqlstate: /^[0-9A-Z]{5}$/.test(e.code || "") ? e.code : null,
         management_http_status:
           Number(e.message?.match(/^Recovery management HTTP (\d{3})$/)?.[1]) ||
