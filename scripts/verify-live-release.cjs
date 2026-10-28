@@ -34,6 +34,7 @@ async function main() {
       data: await r.json(),
     };
   }
+  let migrationsVerified = 0;
   let ready = false;
   for (let n = 0; n < 10; n++) {
     try {
@@ -215,6 +216,7 @@ async function main() {
         !Object.values(differences).some((x) => x.length),
         "complete unchanged migration inventory",
       );
+      migrationsVerified = rows.length;
       const minimums = {
         creators: 11,
         listeners: 5,
@@ -249,7 +251,7 @@ async function main() {
       free_lyrics_credits: 2,
       free_music_requests: 2,
       existing_audio_ranges_passed: audio,
-      migrations_verified: 21,
+      migrations_verified: migrationsVerified,
       existing_core_records_retained: true,
       billed_generation_requests: 0,
       r2_writes: 0,

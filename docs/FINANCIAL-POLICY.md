@@ -18,3 +18,9 @@ Complaint receipt time comes from the database; a client-entered date cannot reo
 Gateway submission, independent confirmation and accounting remain separate. Record actual verified external refunds and chargebacks even when they arrive after the complaint deadline. Never represent a request, review, webhook assertion or ambiguous response as returned money. Preserve historical M19 expense records; new late cases use pending-allocation clearing and documented review, without automatic artist debits or platform expenses.
 
 See [MILESTONE-20.md](MILESTONE-20.md), [FEATURE-STATUS.md](FEATURE-STATUS.md) and [DEPLOYMENT.md](DEPLOYMENT.md) for evidence and remaining release gates. No live operations or Render deployment are authorized.
+
+The owner additionally approved the product-specific direct commission and
+quarterly two-step team policy on 2026-10-28, including the December 20 cutoff and
+December 21–31 rollover. See [PARTNER-QUARTERLY-POLICY.md](PARTNER-QUARTERLY-POLICY.md)
+for prospective contracts, legacy protection, rounding and release limitations.
+This does not authorize live finance or deployment.

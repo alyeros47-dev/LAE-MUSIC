@@ -276,7 +276,7 @@ module.exports = async (t, { pool }) => {
     },
   );
   await t.test(
-    "actual eligible listener commissions are 10%/5% with no registration reward and existing artist commissions unchanged",
+    "new listener sales preserve 10% direct, reserve 5% quarterly and never pay an immediate second-level commission",
     async () => {
       const rows = (
         await pool.query(
@@ -286,11 +286,14 @@ module.exports = async (t, { pool }) => {
       ).rows;
       assert.deepEqual(
         rows.map((x) => [x.level, Number(x.amount_minor)]),
-        [
-          [1, 1000],
-          [2, 500],
-        ],
+        [[1, 1000]],
       );
+      const team=(await pool.query('SELECT * FROM premium_quarterly_team_sales WHERE order_id=$1',[paid.o.id])).rows;
+      assert.equal(team.length,1);assert.equal(Number(team[0].reserved_minor),500);assert.equal(String(team[0].team_leader_id),String(leader.id));
+      const quarterly=await require('../lib/partner-accounting').create({pool}).overview(leader.id,{mode:'test'});
+      assert.equal(quarterly.rollup.team.eligible_minor,10000);assert.equal(quarterly.team_projection_minor,500);
+      assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),500);
+      await verifyPurchase(paid);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM premium_quarterly_team_sales WHERE order_id=$1',[paid.o.id])).rows[0].n,1);
       assert.equal(
         require("../lib/plans").professional.directReferralPercent,
         25,
@@ -957,4 +960,41 @@ module.exports = async (t, { pool }) => {
       );
     },
   );
+
+  await t.test('a pre-cutover Premium order retains its original 10/5 contract and cannot also earn the new quarterly team bonus',async()=>{
+    const oldBuyer=await register('listener','pre_cutover_contract'),id=crypto.randomUUID();
+    const o=(await pool.query("INSERT INTO premium_orders(id,listener_id,plan,currency,amount_minor,days,referrer_id,indirect_id,expires_at,pricing_revision) VALUES($1,$2,'daily','USD',10000,1,$3,$4,NOW()+INTERVAL '30 minutes',$5) RETURNING *",[id,oldBuyer.id,direct.id,leader.id,paid.o.pricing_revision])).rows[0];
+    assert.equal(o.affiliate_policy_revision,'legacy-premium-10-5');
+    const q=await service.prepareQuote(oldBuyer.id,{order_id:id,provider:'paystack',currency:'USD'});await service.checkout(oldBuyer.id,key(),{quote_id:q.id,policy_accepted:true,policy_revision:require('../lib/financial-policy').disclosure().revision});
+    const a=(await pool.query('SELECT * FROM premium_attempts WHERE order_id=$1',[id])).rows[0];await verifyPurchase({o,a});
+    assert.deepEqual((await pool.query('SELECT level,amount_minor FROM premium_commissions WHERE order_id=$1 ORDER BY level',[id])).rows.map(x=>[x.level,Number(x.amount_minor)]),[[1,1000],[2,500]]);
+    assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM premium_quarterly_team_sales WHERE order_id=$1',[id])).rows[0].n,0);
+    assert(!(await require('../lib/partner-accounting').create({pool}).overview(leader.id,{mode:'test'})).activity.some(x=>x.order_id===id));
+    await assert.rejects(pool.query("UPDATE premium_orders SET affiliate_policy_revision=$2 WHERE id=$1",[id,require('../lib/partner-policy').REVISION]),/append-only/);
+  });
+  await t.test('quarterly Premium reserves reconcile exact aggregate cents and verified late reversals preserve finalized earnings for review',async()=>{
+    const rates=require('../lib/exchange-rates').createExchangeRates({pool,env:{},fetchImpl:async()=>Response.json({result:'success',base_code:'USD',time_last_update_unix:Math.floor(Date.now()/1000),time_next_update_unix:Math.floor(Date.now()/1000)+86400,rates:{USD:1,NGN:1600}})});
+    const modern=createPremium({pool,rates,adapters:{paystack:adapter},callbackOrigin:'https://lae.test'}),ids=[];
+    const microUser=await register('listener','quarter_micro');
+    for(let n=0;n<5;n++){
+      const o=await modern.prepare(microUser.id,key(),{plan:'daily',referrer_id:String(direct.id)}),q=await modern.prepareQuote(microUser.id,{order_id:o.id,provider:'paystack',currency:'NGN'});
+      await modern.checkout(microUser.id,key(),{quote_id:q.id,policy_accepted:true,policy_revision:require('../lib/financial-policy').disclosure().revision});
+      const a=(await pool.query('SELECT * FROM premium_attempts WHERE order_id=$1',[o.id])).rows[0];await verifyPurchase({o,a});ids.push(o.id);
+    }
+    const reserves=(await pool.query('SELECT SUM(reserved_minor)::int AS n FROM premium_quarterly_team_sales WHERE team_leader_id=$1',[leader.id])).rows[0].n;
+    assert.equal(reserves,505);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),505);
+    const currentMonth=new Date().toISOString().slice(0,7),before=await royalties.preview(currentMonth,'test','USD');assert(before.issues.some(x=>x.includes('Quarterly affiliate rounding')));
+    const bonus=require('../lib/partner-statements').create({pool,now:()=>new Date(new Date().getUTCFullYear()+1,3,2)}),quarter=require('../lib/partner-policy').periodForSale(new Date());
+    const preview=await bonus.preview(leader.id,{quarter,mode:'test'});assert.equal(preview.team_projection_minor,502);assert.equal(preview.can_finalize,true);
+    const result=await bonus.finalize({role:'owner',source:'shared_key'},{artist_id:leader.id,quarter,mode:'test',snapshot_hash:preview.statement_snapshot_hash,note:'Review aggregate 5 percent Premium team bonus and return unused minor-unit rounding reserve.'});
+    assert.equal(Number(result.statement.bonus_minor),502);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),0);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_unsettled:test:USD'),502);
+    const allocations=(await pool.query('SELECT SUM(bonus_minor)::int AS bonus,SUM(reserved_minor-bonus_minor)::int AS surplus FROM partner_bonus_allocations WHERE statement_id=$1',[result.statement.id])).rows[0];assert.deepEqual(allocations,{bonus:502,surplus:3});
+    assert(!(await royalties.preview(currentMonth,'test','USD')).issues.some(x=>x.includes('Quarterly affiliate rounding')));
+    const a=(await pool.query('SELECT * FROM premium_attempts WHERE order_id=$1',[ids[0]])).rows[0],payment=payments.get(a.reference);
+    refunds.set('7101',{id:7101,transaction:payment.id,domain:'test',status:'processed',currency:payment.currency,amount:payment.amount});
+    await modern.reverse(key(),{order_id:ids[0],refund_id:'7101'});
+    assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM partner_bonus_review_holds WHERE statement_id=$1',[result.statement.id])).rows[0].n,1);
+    assert.equal(await balance(pool,'artist:'+leader.id+':quarter_unsettled:test:USD'),502);await assert.rejects(bonus.releaseCash(),e=>e.status===503);
+  });
+
 };
