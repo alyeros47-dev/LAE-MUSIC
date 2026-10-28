@@ -249,3 +249,70 @@ jobs:
         with:
           name: browser-evidence-${{ matrix.browser }}
           path: artifacts/
+
+  partner-release-prepare:
+    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode == 'plan' && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/partner-release-operations'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    concurrency:
+      group: lae-existing-production-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - run: node scripts/deploy-partner-release.cjs --selftest
+      - name: Verify approved candidate and original service without writes
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          LAE_PARTNER_MODE: plan
+        run: node scripts/deploy-partner-release.cjs
+      - name: Verify backup and private restore migration without production writes
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          LAE_EXISTING_RECOVERY_REHEARSAL: "1"
+        run: node scripts/rehearse-existing-recovery.cjs
+
+  partner-release-deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode == 'deploy' && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/partner-release-operations'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    concurrency:
+      group: lae-existing-production-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - run: node scripts/deploy-partner-release.cjs --selftest
+      - name: Deploy only approved merge to original service after verified recovery
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          LAE_PARTNER_MODE: deploy
+          LAE_PARTNER_MERGE_SHA: ${{ inputs.production_commit_sha }}
+          LAE_PARTNER_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
+        run: node scripts/deploy-partner-release.cjs
+      - name: Verify live rates, owned reports, registration, sessions, original music and migrations
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_LIVE_RELEASE_VERIFY: "1"
+        run: node scripts/verify-partner-release.cjs
