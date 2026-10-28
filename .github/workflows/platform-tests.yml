@@ -66,6 +66,7 @@ jobs:
     permissions:
       contents: read
       actions: read
+      pull-requests: read
     concurrency:
       group: lae-existing-production-release
       cancel-in-progress: false
