@@ -147,13 +147,14 @@ export function bindStudioWorkflow({
       title: lyricsForm.elements.title.value,
       lyrics: lyricsOutput.value,
       style: styleOutput.value,
-      duration: lyricsForm.elements.duration.value,
+      duration: lyricsForm.elements.duration.value || "3 minutes",
     };
     if (!values.lyrics.trim() || !values.style.trim())
       return toast("Generate or restore both lyrics and style first.");
     const changed = Object.entries(values).some(
       ([name, value]) =>
-        name!=='duration' && musicForm.elements[name].value.trim() &&
+        name !== "duration" &&
+        musicForm.elements[name].value.trim() &&
         musicForm.elements[name].value !== value,
     );
     if (
@@ -238,9 +239,11 @@ export function bindStudioWorkflow({
     save = by("studio-save-voice"),
     record = by("studio-record-voice"),
     stop = by("studio-stop-voice");
+  let savingVoice = false;
   const refreshSave = () => {
     save.disabled =
       !storageReady ||
+      savingVoice ||
       !sample ||
       ["training", "submitting", "verification_required"].includes(
         voiceProfile.status,
@@ -443,23 +446,43 @@ export function bindStudioWorkflow({
   };
   save.onclick = async () => {
     if (!storageReady || !sample || !by("studio-voice-consent").checked) return;
-    save.disabled = true;
+    if (
+      savingVoice ||
+      ["submitting", "training", "verification_required"].includes(
+        voiceProfile.status,
+      )
+    )
+      return;
+    savingVoice = true;
+    refreshSave();
+    voiceStatus.textContent = "Saving your voice sample…";
     try {
       const upload = await api("/api/voice/upload", "POST", {
         type: sample.type,
         bytes: sample.size,
         consent: true,
       });
-      if (!/^https:\/\//.test(upload.url))
+      if (
+        !/^https:\/\//.test(upload.url) &&
+        !/^\/api\/voice\/sample\?reference=[a-f0-9-]{36}$/.test(upload.url)
+      )
         throw Error("Secure upload URL was not returned.");
       const response = await fetch(upload.url, {
         method: "PUT",
         headers: { "Content-Type": sample.type },
         body: sample,
-        credentials: "omit",
+        credentials: upload.url.startsWith("/") ? "same-origin" : "omit",
+        signal: AbortSignal.timeout(90000),
       });
-      if (!response.ok)
-        throw Error("Voice upload failed. Training was not started.");
+      if (!response.ok) {
+        let message =
+          "Voice upload failed. Your local sample is kept; training was not started.";
+        try {
+          message = (await response.json()).error || message;
+        } catch {}
+        throw Error(message);
+      }
+      voiceStatus.textContent = "Voice sample saved. Creating your profile…";
       const trained = await api("/api/voice/train", "POST", {});
       voiceProfile.status = trained.status;
       if (canAct()) {
@@ -470,9 +493,15 @@ export function bindStudioWorkflow({
     } catch (error) {
       if (canAct()) {
         voiceStatus.textContent = error.message;
-        if (error.status === 503) voiceProfile.status = "verification_required";
+        // Recheck the authoritative state after a lost response. A storage/config
+        // error must not invent an ambiguous provider reservation in the browser.
+        try {
+          const current = await api("/api/voice/profile");
+          Object.assign(voiceProfile, current);
+        } catch {}
       }
     } finally {
+      savingVoice = false;
       if (canAct()) refreshSave();
     }
   };

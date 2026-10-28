@@ -3,8 +3,37 @@
 // navigations is not consistent across WebKit builds. Data remains isolated.
 const http = require("node:http");
 async function createBrowserExportServer() {
-  const server = http.createServer((req, res) => {
+  let voiceUpload = null;
+  const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, "http://127.0.0.1");
+    // WebKit does not expose Blob request bodies through route.postDataBuffer.
+    // Receive the real browser upload over local HTTP instead of skipping it.
+    if (
+      url.pathname === "/api/voice/sample" &&
+      req.method === "PUT" &&
+      voiceUpload
+    ) {
+      try {
+        const chunks = [];
+        let size = 0;
+        for await (const chunk of req) {
+          size += chunk.length;
+          if (size > 12000000) throw Error("Oversized fixture upload");
+          chunks.push(chunk);
+        }
+        const result = await voiceUpload(Buffer.concat(chunks));
+        res.writeHead(result.status, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(result.body));
+      } catch (error) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            error: "Voice fixture validation failed: " + error.message,
+          }),
+        );
+      }
+      return;
+    }
     let filename, csv;
     if (req.method !== "GET") {
       res.writeHead(405);
@@ -44,6 +73,9 @@ async function createBrowserExportServer() {
   });
   return {
     origin: "http://127.0.0.1:" + server.address().port,
+    setVoiceUpload: (handler) => {
+      voiceUpload = handler;
+    },
     close: () =>
       new Promise((resolve, reject) =>
         server.close((error) => (error ? reject(error) : resolve())),

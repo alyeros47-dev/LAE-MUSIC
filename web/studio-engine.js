@@ -47,10 +47,8 @@ export function musicRequest(brief, voiceProfile) {
 // Keep the original request contract and select exactly one musical profile.
 export function lyricsRequest(brief) {
   const gospel = brief.musicFamily === "gospel";
-  if (
-    brief.lyricsModel &&
-    !["gpt-6.1-sol", "gpt-6-astra"].includes(brief.lyricsModel)
-  )
+  const secular = brief.musicFamily === "secular";
+  if (!["gpt-6.1-sol", "gpt-6-astra"].includes(brief.lyricsModel))
     throw Error("Choose GPT-6.1 Sol or GPT-6 Astra.");
   return {
     ...(brief.lyricsModel ? { model: brief.lyricsModel } : {}),
@@ -66,6 +64,10 @@ export function lyricsRequest(brief) {
     beat: brief.beat || "none",
     tradition: "custom",
     gospelProfile: gospel ? brief.musicProfile || "" : "",
-    secularProfile: gospel ? "" : brief.musicProfile || "",
+    secularProfile: secular ? brief.musicProfile || "" : "",
+    musicCountry: brief.musicCountry || "",
+    musicFamily: ["gospel", "secular"].includes(brief.musicFamily)
+      ? brief.musicFamily
+      : "",
   };
 }
