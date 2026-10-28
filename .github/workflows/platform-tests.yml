@@ -270,6 +270,7 @@ jobs:
           node-version: "22"
       - run: npm ci --omit=dev
       - run: node scripts/deploy-partner-release.cjs --selftest
+      - run: node --test tests/neon-recovery-rehearsal.test.cjs tests/partner-recovery-history.test.cjs
       - name: Verify approved candidate and original service without writes
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
@@ -281,6 +282,8 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           LAE_EXISTING_RECOVERY_REHEARSAL: "1"
+          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
+          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
 
   partner-release-deploy:
@@ -303,6 +306,7 @@ jobs:
           node-version: "22"
       - run: npm ci --omit=dev
       - run: node scripts/deploy-partner-release.cjs --selftest
+      - run: node --test tests/neon-recovery-rehearsal.test.cjs tests/partner-recovery-history.test.cjs
       - name: Deploy only approved merge to original service after verified recovery
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
