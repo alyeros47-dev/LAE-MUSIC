@@ -40,7 +40,7 @@ module.exports = async function voice(req, res, p, ctx) {
     const user = await me(req);
     if (!user)
       return (send(res, 401, { error: "Sign in as an artist first" }), true);
-    if (req.method === "POST" && !validOrigin(req))
+    if (["POST", "PUT"].includes(req.method) && !validOrigin(req))
       return (send(res, 403, { error: "Invalid origin" }), true);
     if (!ready)
       ready = pool
@@ -97,14 +97,156 @@ module.exports = async function voice(req, res, p, ctx) {
         "voice-profiles/" + user.id + "/" + crypto.randomUUID() + "." + ext;
       if (local)
         return (send(res, 200, await local.prepare(user.id, key, b)), true);
-      await pool.query(
-        "INSERT INTO artist_voice_profiles(creator_id,object_key,task_id,persona_id,status) VALUES($1,$2,NULL,NULL,'uploading') ON CONFLICT(creator_id) DO UPDATE SET object_key=$2,task_id=NULL,persona_id=NULL,status='uploading',updated_at=NOW()",
-        [user.id, key],
-      );
+      const db = await pool.connect();
+      try {
+        await db.query("BEGIN");
+        await db.query("SELECT id FROM creators WHERE id=$1 FOR UPDATE", [
+          user.id,
+        ]);
+        const current = (
+          await db.query(
+            "SELECT status FROM artist_voice_profiles WHERE creator_id=$1",
+            [user.id],
+          )
+        ).rows[0];
+        if (
+          ["training", "submitting", "verification_required", "ready"].includes(
+            current?.status,
+          )
+        )
+          throw Object.assign(
+            Error(
+              current.status === "ready"
+                ? "Your saved voice profile is ready. Use it for your song; it has not been replaced."
+                : "Your previous voice request is processing or needs verification. Check its status instead of resubmitting.",
+            ),
+            { status: 409 },
+          );
+        await db.query(
+          "INSERT INTO artist_voice_profiles(creator_id,object_key,task_id,persona_id,status) VALUES($1,$2,NULL,NULL,'uploading') ON CONFLICT(creator_id) DO UPDATE SET object_key=$2,task_id=NULL,persona_id=NULL,status='uploading',updated_at=NOW()",
+          [user.id, key],
+        );
+        await db.query("COMMIT");
+      } catch (error) {
+        await db.query("ROLLBACK").catch(() => {});
+        throw error;
+      } finally {
+        db.release();
+      }
+      // Same-origin transport keeps R2 credentials private and does not depend
+      // on a bucket's browser CORS settings. The original R2 signer is reused.
       return (
-        send(res, 200, { url: await presign(store, key, "put", 900) }),
+        send(res, 200, {
+          url:
+            "/api/voice/sample?reference=" +
+            key.split("/").at(-1).split(".")[0],
+        }),
         true
       );
+    }
+    if (p === "/api/voice/sample" && req.method === "PUT") {
+      const reference = new URL(
+        req.url,
+        "https://lae-music.com",
+      ).searchParams.get("reference");
+      if (local || !/^[a-f0-9-]{36}$/.test(reference || ""))
+        return (
+          send(res, 400, { error: "Invalid voice sample reference" }),
+          true
+        );
+      const mime = String(req.headers["content-type"] || "").split(";")[0];
+      if (!["audio/wav", "audio/mpeg"].includes(mime))
+        return (
+          send(res, 400, { error: "Select an MP3 or WAV voice sample." }),
+          true
+        );
+      const chunks = [];
+      let size = 0;
+      for await (const chunk of req) {
+        size += chunk.length;
+        if (size > 12000000)
+          throw Object.assign(Error("Voice sample exceeds 12 MB."), {
+            status: 413,
+          });
+        chunks.push(chunk);
+      }
+      const bytes = Buffer.concat(chunks);
+      if (
+        size < 10000 ||
+        !require("./lib/review-voice").validAudio(bytes, mime)
+      )
+        return (
+          send(res, 400, {
+            error:
+              "Use a valid MP3 or WAV sample. WAV recordings must contain at least ten seconds of audio.",
+          }),
+          true
+        );
+      const store = storage();
+      if (!store)
+        return (
+          send(res, 503, {
+            error: "Audio storage unavailable. Your local sample is kept.",
+          }),
+          true
+        );
+      const db = await pool.connect();
+      try {
+        await db.query("BEGIN");
+        await db.query("SELECT id FROM creators WHERE id=$1 FOR UPDATE", [
+          user.id,
+        ]);
+        const x = (
+          await db.query(
+            "SELECT object_key,status FROM artist_voice_profiles WHERE creator_id=$1",
+            [user.id],
+          )
+        ).rows[0];
+        const ext = mime === "audio/wav" ? "wav" : "mp3";
+        if (
+          !x ||
+          x.status !== "uploading" ||
+          x.object_key !==
+            "voice-profiles/" + user.id + "/" + reference + "." + ext
+        )
+          throw Object.assign(
+            Error(
+              "This voice upload is no longer active for your account. Check your voice profile.",
+            ),
+            { status: 409 },
+          );
+        const response = await fetch(
+          await presign(store, x.object_key, "put", 300),
+          {
+            method: "PUT",
+            headers: { "Content-Type": mime },
+            body: bytes,
+            signal: AbortSignal.timeout(45000),
+          },
+        );
+        if (!response.ok)
+          throw Object.assign(
+            Error(
+              "Voice storage could not save the sample. Retry saving; training was not started.",
+            ),
+            { status: 502 },
+          );
+        const stored = await headObject(store, x.object_key);
+        if (stored.ContentLength !== size)
+          throw Object.assign(
+            Error(
+              "Voice storage verification failed. Training was not started.",
+            ),
+            { status: 502 },
+          );
+        await db.query("COMMIT");
+      } catch (error) {
+        await db.query("ROLLBACK").catch(() => {});
+        throw error;
+      } finally {
+        db.release();
+      }
+      return (send(res, 200, { saved: true }), true);
     }
     if (p === "/api/voice/train" && req.method === "POST") {
       if (!process.env.MUSICAPI_API_KEY)
@@ -153,7 +295,11 @@ module.exports = async function voice(req, res, p, ctx) {
         const info = local
           ? await local.head(x.object_key)
           : await headObject(store, x.object_key);
-        if (info.ContentLength < 10000 || info.ContentLength > 12000000)
+        if (
+          !Number.isSafeInteger(info.ContentLength) ||
+          info.ContentLength < 10000 ||
+          info.ContentLength > 12000000
+        )
           throw Object.assign(
             Error("Voice sample must be valid MP3/WAV under 12 MB"),
             { status: 400 },
