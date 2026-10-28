@@ -67,3 +67,4 @@ require('./review-voice.test.cjs');
 require('./studio-output.test.cjs');
 
 require('./production-integration.test.cjs');
+require('./neon-recovery.test.cjs');

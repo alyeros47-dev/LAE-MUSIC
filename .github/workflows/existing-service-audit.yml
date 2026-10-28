@@ -19,4 +19,5 @@ jobs:
       - name: Inspect existing service and database without changing either
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: node scripts/audit-existing-service.cjs

@@ -76,6 +76,7 @@ async function providerChecks(env, fetcher = fetch) {
 }
 async function audit({
   key,
+  neonKey,
   fetcher = fetch,
   verifyProviders = false,
   dbFactory = (options) => new (require("pg").Pool)(options),
@@ -214,13 +215,22 @@ async function audit({
   const after = inventory(await get("/services/" + service.id + "/env-vars"));
   report.environment_unchanged = before === digest(after);
   report.configuration_values_exposed = false;
+  report.recovery = await require("../lib/neon-recovery-inspection").inspect({
+    key: neonKey || env.NEON_API_KEY,
+    databaseUrl: env.DATABASE_URL,
+    fetcher,
+  });
   if (verifyProviders)
     report.provider_checks = await providerChecks(env, fetcher);
   return report;
 }
 module.exports = { audit, inventory, serviceValid, providerChecks };
 if (require.main === module)
-  audit({ key: process.env.RENDER_API_KEY, verifyProviders: true })
+  audit({
+    key: process.env.RENDER_API_KEY,
+    neonKey: process.env.NEON_API_KEY,
+    verifyProviders: true,
+  })
     .then((r) => console.log(JSON.stringify(r, null, 2)))
     .catch((e) => {
       console.error("Existing-service read-only audit failed:", e.message);

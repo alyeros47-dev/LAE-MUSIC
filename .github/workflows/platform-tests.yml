@@ -38,6 +38,7 @@ jobs:
       - name: Read existing production configuration and schema without changes
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: node scripts/audit-existing-service.cjs
   review-auth-diagnostic:
     if: github.event_name == 'workflow_dispatch' && (inputs.review_auth_email_sha256 != '' || inputs.review_lyrics_model_check) && github.ref == 'refs/heads/codex/premium-platform-release'
