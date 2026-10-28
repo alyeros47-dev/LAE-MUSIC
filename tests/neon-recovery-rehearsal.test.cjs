@@ -312,3 +312,18 @@ test("private restore rejects unsupported versions and non-Neon origins before r
     /Invalid private backup/,
   );
 });
+
+test("private dump transport requires a read-only trust mount and full TLS verification", () => {
+  const { DUMP_TLS_ARGS } = require("../lib/private-recovery-copy");
+  assert(Object.isFrozen(DUMP_TLS_ARGS));
+  assert(DUMP_TLS_ARGS.includes("PGSSLMODE=verify-full"));
+  assert(
+    DUMP_TLS_ARGS.some(
+      (x) => x.startsWith("type=bind,") && x.endsWith(",readonly"),
+    ),
+  );
+  assert(DUMP_TLS_ARGS.includes("PGSSLROOTCERT=/run/lae-recovery-ca.pem"));
+  assert(
+    !DUMP_TLS_ARGS.some((x) => /no-verify|sslmode=disable|PGPASSWORD=/.test(x)),
+  );
+});
