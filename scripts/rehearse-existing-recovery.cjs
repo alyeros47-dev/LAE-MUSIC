@@ -52,6 +52,7 @@ if (require.main === module)
       JSON.stringify({
         phase: e.recoveryStage || "configuration",
         private_stage: e.privateStage || null,
+        comparison: e.comparison || null,
         tool_exit_code: Number.isInteger(e.toolExitCode)
           ? e.toolExitCode
           : null,
