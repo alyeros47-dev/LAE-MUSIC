@@ -276,7 +276,7 @@ module.exports = async (t, { pool }) => {
     },
   );
   await t.test(
-    "new listener sales preserve 10% direct, reserve 10% quarterly and never pay an immediate second-level commission",
+    "new listener sales preserve 10% direct, reserve 5% quarterly and never pay an immediate second-level commission",
     async () => {
       const rows = (
         await pool.query(
@@ -289,10 +289,10 @@ module.exports = async (t, { pool }) => {
         [[1, 1000]],
       );
       const team=(await pool.query('SELECT * FROM premium_quarterly_team_sales WHERE order_id=$1',[paid.o.id])).rows;
-      assert.equal(team.length,1);assert.equal(Number(team[0].reserved_minor),1000);assert.equal(String(team[0].team_leader_id),String(leader.id));
+      assert.equal(team.length,1);assert.equal(Number(team[0].reserved_minor),500);assert.equal(String(team[0].team_leader_id),String(leader.id));
       const quarterly=await require('../lib/partner-accounting').create({pool}).overview(leader.id,{mode:'test'});
-      assert.equal(quarterly.rollup.team.eligible_minor,10000);assert.equal(quarterly.team_projection_minor,1000);
-      assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),1000);
+      assert.equal(quarterly.rollup.team.eligible_minor,10000);assert.equal(quarterly.team_projection_minor,500);
+      assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),500);
       await verifyPurchase(paid);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM premium_quarterly_team_sales WHERE order_id=$1',[paid.o.id])).rows[0].n,1);
       assert.equal(
         require("../lib/plans").professional.directReferralPercent,
@@ -982,19 +982,19 @@ module.exports = async (t, { pool }) => {
       const a=(await pool.query('SELECT * FROM premium_attempts WHERE order_id=$1',[o.id])).rows[0];await verifyPurchase({o,a});ids.push(o.id);
     }
     const reserves=(await pool.query('SELECT SUM(reserved_minor)::int AS n FROM premium_quarterly_team_sales WHERE team_leader_id=$1',[leader.id])).rows[0].n;
-    assert.equal(reserves,1005);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),1005);
+    assert.equal(reserves,505);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),505);
     const currentMonth=new Date().toISOString().slice(0,7),before=await royalties.preview(currentMonth,'test','USD');assert(before.issues.some(x=>x.includes('Quarterly affiliate rounding')));
     const bonus=require('../lib/partner-statements').create({pool,now:()=>new Date(new Date().getUTCFullYear()+1,3,2)}),quarter=require('../lib/partner-policy').periodForSale(new Date());
-    const preview=await bonus.preview(leader.id,{quarter,mode:'test'});assert.equal(preview.team_projection_minor,1004);assert.equal(preview.can_finalize,true);
-    const result=await bonus.finalize({role:'owner',source:'shared_key'},{artist_id:leader.id,quarter,mode:'test',snapshot_hash:preview.statement_snapshot_hash,note:'Review aggregate 10 percent and return unused minor-unit rounding reserve.'});
-    assert.equal(Number(result.statement.bonus_minor),1004);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),0);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_unsettled:test:USD'),1004);
-    const allocations=(await pool.query('SELECT SUM(bonus_minor)::int AS bonus,SUM(reserved_minor-bonus_minor)::int AS surplus FROM partner_bonus_allocations WHERE statement_id=$1',[result.statement.id])).rows[0];assert.deepEqual(allocations,{bonus:1004,surplus:1});
+    const preview=await bonus.preview(leader.id,{quarter,mode:'test'});assert.equal(preview.team_projection_minor,502);assert.equal(preview.can_finalize,true);
+    const result=await bonus.finalize({role:'owner',source:'shared_key'},{artist_id:leader.id,quarter,mode:'test',snapshot_hash:preview.statement_snapshot_hash,note:'Review aggregate 5 percent Premium team bonus and return unused minor-unit rounding reserve.'});
+    assert.equal(Number(result.statement.bonus_minor),502);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_pending:test:USD'),0);assert.equal(await balance(pool,'artist:'+leader.id+':quarter_unsettled:test:USD'),502);
+    const allocations=(await pool.query('SELECT SUM(bonus_minor)::int AS bonus,SUM(reserved_minor-bonus_minor)::int AS surplus FROM partner_bonus_allocations WHERE statement_id=$1',[result.statement.id])).rows[0];assert.deepEqual(allocations,{bonus:502,surplus:3});
     assert(!(await royalties.preview(currentMonth,'test','USD')).issues.some(x=>x.includes('Quarterly affiliate rounding')));
     const a=(await pool.query('SELECT * FROM premium_attempts WHERE order_id=$1',[ids[0]])).rows[0],payment=payments.get(a.reference);
     refunds.set('7101',{id:7101,transaction:payment.id,domain:'test',status:'processed',currency:payment.currency,amount:payment.amount});
     await modern.reverse(key(),{order_id:ids[0],refund_id:'7101'});
     assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM partner_bonus_review_holds WHERE statement_id=$1',[result.statement.id])).rows[0].n,1);
-    assert.equal(await balance(pool,'artist:'+leader.id+':quarter_unsettled:test:USD'),1004);await assert.rejects(bonus.releaseCash(),e=>e.status===503);
+    assert.equal(await balance(pool,'artist:'+leader.id+':quarter_unsettled:test:USD'),502);await assert.rejects(bonus.releaseCash(),e=>e.status===503);
   });
 
 };

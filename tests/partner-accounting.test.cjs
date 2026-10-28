@@ -37,6 +37,7 @@ test("quarter reconciliation reads a consistent snapshot, keeps sums beyond the 
               refund_minor: "20000",
               held_minor: "10000",
               eligible_minor: "100000",
+              premium_eligible_minor: "20000",
               recorded_commission_minor: "0",
             },
           ],
@@ -62,7 +63,15 @@ test("quarter reconciliation reads a consistent snapshot, keeps sums beyond the 
     pool: { connect: async () => db },
     now: () => new Date("2026-10-28"),
   }).overview(7, { mode: "test" });
-  assert.equal(x.team_projection_minor, 10000);
+  assert.equal(x.team_projection_minor, 9000);
+  assert.equal(x.team_projection_percent, null);
+  assert.deepEqual(
+    x.team_rate_breakdown.map((x) => [x.percent, x.basis_minor, x.bonus_minor]),
+    [
+      [10, 80000, 8000],
+      [5, 20000, 1000],
+    ],
+  );
   assert.equal(x.rollup.team.eligible_minor, 100000);
   assert.equal(x.activity.length, 100);
   assert.equal(x.activity_truncated, true);
@@ -177,4 +186,34 @@ test("ordinary artists cannot select another owner through a query parameter, an
   );
   assert.equal(res.status, 405);
   assert.equal(calls.length, 0);
+});
+
+test("quarter history keeps Premium volume at 5 percent when combined with artist volume", async () => {
+  const pool = {
+    async query(sql, args) {
+      assert(sql.includes("AS premium_sales_cents"));
+      assert.equal(args[0], "7");
+      assert.equal(args[3], "test");
+      return {
+        rows: [
+          {
+            period: "2027-Q1",
+            qualifying_sales: "2",
+            sales_cents: "200000",
+            premium_sales_cents: "100000",
+            refunded_cents: "0",
+            held_cents: "0",
+          },
+        ],
+      };
+    },
+  };
+  const x = await create({ pool }).history(7, {
+    quarter: "2027-Q1",
+    mode: "test",
+  });
+  assert.equal(x.quarters[0].potential_reward_cents, 15000);
+  assert.equal(x.quarters[0].quarter_start, "2026-12-21");
+  assert.equal(x.team_reward_percent, null);
+  assert.equal(x.team_rates.premium_listener, 5);
 });

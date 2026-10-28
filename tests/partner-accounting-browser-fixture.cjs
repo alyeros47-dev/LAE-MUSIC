@@ -30,7 +30,21 @@ function fixture(quarter = policy.periodForSale(new Date()), mode = "live") {
     policy: policy.disclosure,
     statements: [],
     rollup: { direct, team },
-    team_projection_minor: sample ? 10000 : 0,
+    team_projection_minor: sample ? 9000 : 0,
+    team_rate_breakdown: [
+      {
+        product_group: "artist_and_studio",
+        percent: 10,
+        basis_minor: sample ? 80000 : 0,
+        bonus_minor: sample ? 8000 : 0,
+      },
+      {
+        product_group: "premium_listener",
+        percent: 5,
+        basis_minor: sample ? 20000 : 0,
+        bonus_minor: sample ? 1000 : 0,
+      },
+    ],
     team_by_referrer: sample
       ? [
           {

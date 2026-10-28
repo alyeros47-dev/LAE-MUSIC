@@ -231,7 +231,7 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 10% direct. Eligible purchases exactly two referral steps below a leader count toward a separate quarterly 10% bonus, subject to refunds and settlement.</p><button type="submit" class="button">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 10% direct. Eligible purchases exactly two referral steps below a leader count toward a separate quarterly 5% Premium Listener team bonus, subject to refunds and settlement.</p><button type="submit" class="button">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {

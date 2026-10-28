@@ -1,13 +1,13 @@
 -- Additive: future verified sales only. Preserve all previous direct/indirect commissions.
 CREATE TABLE partner_policy_settings(id INTEGER PRIMARY KEY CHECK(id=1),revision TEXT NOT NULL,cutover_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
-INSERT INTO partner_policy_settings(id,revision) VALUES(1,'owner-direct-quarterly-2026-10-28');
+INSERT INTO partner_policy_settings(id,revision) VALUES(1,'owner-quarterly-premium5-2026-10-28');
 CREATE TRIGGER partner_policy_settings_immutable BEFORE UPDATE OR DELETE ON partner_policy_settings FOR EACH ROW EXECUTE FUNCTION lae_reject_history_mutation();
 ALTER TABLE premium_orders ADD COLUMN affiliate_policy_revision TEXT NOT NULL DEFAULT 'legacy-premium-10-5';
 CREATE TABLE premium_quarterly_team_sales(
  order_id UUID PRIMARY KEY REFERENCES premium_receipts(order_id),
  direct_referrer_id BIGINT NOT NULL REFERENCES creators(id),team_leader_id BIGINT NOT NULL REFERENCES creators(id),
- usd_minor BIGINT NOT NULL CHECK(usd_minor>0),reserved_minor BIGINT NOT NULL CHECK(reserved_minor=(usd_minor+9)/10),
- policy_revision TEXT NOT NULL CHECK(policy_revision='owner-direct-quarterly-2026-10-28'),
+ usd_minor BIGINT NOT NULL CHECK(usd_minor>0),reserved_minor BIGINT NOT NULL CHECK(reserved_minor=(usd_minor+19)/20),
+ policy_revision TEXT NOT NULL CHECK(policy_revision='owner-quarterly-premium5-2026-10-28'),
  verified_at TIMESTAMPTZ NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  CHECK(direct_referrer_id<>team_leader_id)
 );
@@ -15,7 +15,7 @@ CREATE INDEX idx_premium_quarterly_leader ON premium_quarterly_team_sales(team_l
 CREATE TABLE studio_quarterly_team_sales(
  order_id UUID PRIMARY KEY REFERENCES commerce_receipts(order_id),buyer_id BIGINT NOT NULL REFERENCES creators(id),
  direct_referrer_id BIGINT NOT NULL REFERENCES creators(id),team_leader_id BIGINT REFERENCES creators(id),
- usd_minor BIGINT NOT NULL CHECK(usd_minor>0),policy_revision TEXT NOT NULL CHECK(policy_revision='owner-direct-quarterly-2026-10-28'),
+ usd_minor BIGINT NOT NULL CHECK(usd_minor>0),policy_revision TEXT NOT NULL CHECK(policy_revision='owner-quarterly-premium5-2026-10-28'),
  verified_at TIMESTAMPTZ NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  CHECK(buyer_id<>direct_referrer_id),CHECK(team_leader_id IS NULL OR (team_leader_id<>direct_referrer_id AND team_leader_id<>buyer_id))
 );

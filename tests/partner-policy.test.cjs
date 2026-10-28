@@ -41,9 +41,56 @@ test("product-specific direct commissions are preserved and only two-step quarte
     premium_listener: 10,
     studio_generation: 0,
   });
-  assert.equal(p.disclosure.team_percent, 10);
+  assert.equal(p.disclosure.team_percent, null);
+  assert.deepEqual(p.disclosure.team_rates, {
+    artist_subscription: 10,
+    studio_generation: 10,
+    premium_listener: 5,
+  });
   assert.equal(p.disclosure.team_depth, 2);
   assert.equal(p.disclosure.immediate_indirect_percent, 0);
   assert.equal(p.disclosure.registration_reward, 0);
   assert.equal(p.disclosure.payouts_enabled, false);
+});
+
+test("mixed products calculate independent approved rates and never allocate artist-rate money to Premium", () => {
+  const lines = [
+    { order_id: "artist", source: "artist", eligible_minor: 100000 },
+    { order_id: "studio", source: "studio", eligible_minor: 100000 },
+    { order_id: "premium", source: "premium", eligible_minor: 100000 },
+  ];
+  const result = p.calculate(lines);
+  assert.equal(result.bonus_minor, 25000);
+  assert.equal(p.project(300000, 100000), 25000);
+  assert.deepEqual(
+    Object.fromEntries(result.shares.map((x) => [x.id, x.amount_minor])),
+    { artist: 10000, studio: 10000, premium: 5000 },
+  );
+  assert.throws(() => p.project(10, 11));
+  assert.throws(() =>
+    p.calculate([{ order_id: "gift", source: "gift", eligible_minor: 10000 }]),
+  );
+});
+test("Premium cents are rounded within their 5 percent group without borrowing the 10 percent artist allocation", () => {
+  const lines = [
+    { order_id: "artist", source: "artist", eligible_minor: 11 },
+    ...Array.from({ length: 5 }, (_, i) => ({
+      order_id: "premium" + i,
+      source: "premium",
+      eligible_minor: 8,
+    })),
+  ];
+  const result = p.calculate(lines);
+  assert.equal(result.bonus_minor, 3);
+  assert.equal(result.shares.find((x) => x.id === "artist").amount_minor, 1);
+  assert.equal(
+    result.shares
+      .filter((x) => x.id.startsWith("premium"))
+      .reduce((n, x) => n + x.amount_minor, 0),
+    2,
+  );
+  assert.equal(
+    p.calculate(lines.map((x) => ({ ...x, eligible_minor: 0 }))).bonus_minor,
+    0,
+  );
 });

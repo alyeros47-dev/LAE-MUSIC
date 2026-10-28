@@ -1,6 +1,6 @@
 # Direct commissions and quarterly team bonuses
 
-Owner-confirmed on 2026-10-28. This supersedes immediate second-level commission
+Owner-confirmed on 2026-10-28, corrected the same day to distinguish Premium 5% from artist services 10%. The earlier uniform-10% draft was never deployed. This supersedes immediate second-level commission
 for newly prepared Premium Listener orders. It does not rewrite historical
 orders, receipts or commissions.
 
@@ -10,7 +10,7 @@ orders, receipts or commissions.
 - Existing direct rates remain: Starter 15%; Growth 25%; Professional 25%;
   Premium Listener 10%. Additional studio generation has no approved direct
   commission, so its existing 0% direct rate remains unchanged.
-- A leader's separate bonus is 10% of eligible verified USD product volume
+- A leader's separate quarterly bonus is **10% for eligible artist packages and studio services**, and **5% for Premium Listener subscriptions**, on eligible verified USD product volume
   exactly two referral steps below them. Purchases directly referred by that
   leader are not counted again for their team bonus. No deeper levels qualify.
 - Artist packages, eligible new Premium Listener contracts and additional studio
@@ -29,7 +29,9 @@ Example: You refer Emmanuel and Lydia. Their own purchases earn you the
 applicable direct commission. Prince buys through Emmanuel and Philip buys
 through Lydia: Emmanuel/Lydia receive the applicable direct commissions. Your
 eligible team volume includes Prince/Philip's verified purchases. $1,000 of
-eligible net-of-refund volume yields a $100 quarterly calculation for you.
+eligible net-of-refund artist-service volume yields a $100 quarterly calculation;
+$1,000 of eligible Premium Listener volume yields $50. Mixed quarters calculate
+these groups separately, so $1,000 in each group yields $150. Premium volume is never calculated at the artist-service rate.
 Emmanuel/Lydia do not receive that same second-step bonus from those sales.
 
 ## Periods and Christmas rollover
@@ -74,7 +76,7 @@ cash is available. No real payouts are activated by this change.
   independent funding/payout and late-adjustment verification.
 - New Premium team obligations reserve minor units conservatively so the 50%
   streaming artist pool is not overstated. At quarterly finalization, exact
-  aggregate 10% is apportioned deterministically and any unused rounding reserve
+  aggregate 5% Premium bonus is apportioned deterministically within its own rate group and any unused rounding reserve
   is returned. A Premium source with unresolved fractional-cent team allocation
   blocks affected royalty finalization rather than silently miscalculating it.
   This can delay an affected monthly statement until its quarterly allocation is
