@@ -31,7 +31,7 @@ module.exports=async(t,{pool})=>{
  const service=createCheckoutService({pool,rates,adapters,mode:'sandbox',merchantCountry:'NG',callbackOrigin:'https://lae.test'});
  const app=await runtime({pool,paymentService:service,env:{NODE_ENV:'test',ADMIN_KEY:'isolated-refund-admin-key-123456',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
  const commerce=createCommerce({pool});
- async function api(path,{body,cookie,key,headers={}}={}){const r=await app.request(path,{method:body!==undefined?'POST':'GET',body,headers:{...(cookie?{cookie}:{}),...(key?{'idempotency-key':key}:{}),...headers}});return {status:r.status,data:r.json(),cookie:r.headers['set-cookie']?.split(';')[0]};}
+ async function api(path,{body,cookie,key,headers={}}={}){const r=await app.request(path,{method:body!==undefined?'POST':'GET',body,remoteAddress:'192.0.2.'+(1+crypto.createHash('sha256').update(String(body&&typeof body==='object'?body.email||cookie||'provider':cookie||'provider')).digest()[0]%200),headers:{...(cookie?{cookie}:{}),...(key?{'idempotency-key':key}:{}),...headers}});return {status:r.status,data:r.json(),cookie:r.headers['set-cookie']?.split(';')[0]};}
  async function register(name){const r=await api('/api/register',{body:{name,country:'Nigeria',email:name+'@checkout-ci.invalid',password:'CheckoutFixturePassword123',confirmPassword:'CheckoutFixturePassword123',plan:'starter'}});assert.equal(r.status,201);return {id:r.data.user.id,cookie:r.cookie};}
  let artist,other,order,first;
  const paid=a=>{const p=payments.get(a.reference);p.data.status=p.provider==='paystack'?'success':'successful';return p;};
@@ -119,4 +119,5 @@ module.exports=async(t,{pool})=>{
 
  await require('./refunds-postgres.cjs')(t,{pool,service,adapters,api,register,fresh,paid,webhook,commerce,refunds,payments,refundCount:()=>refundCalls,setRefundTimeout:v=>{refundTimeout=v;}});
 
+ await require('./partner-accounting-postgres.cjs')(t,{pool,service,api,register,commerce,paid,webhook,payments,refunds});
 };

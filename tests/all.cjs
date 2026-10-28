@@ -72,3 +72,9 @@ require('./neon-recovery-rehearsal.test.cjs');
 require('./production-release.test.cjs');
 
 require('./voice-production.test.cjs');
+
+require('./partner-accounting.test.cjs');
+
+require('./partner-policy.test.cjs');
+
+require('./partner-statements.test.cjs');
