@@ -61,12 +61,25 @@ test("recovery guards refuse production, foreign lineages and production host al
     ),
   );
 });
-function fixture({ drift = false, migrationFailure = false } = {}) {
+function fixture({
+  drift = false,
+  migrationFailure = false,
+  saved = false,
+  savedInvalid = false,
+} = {}) {
   const events = [],
     branches = new Map(),
     endpoints = new Map();
   let next = 0,
     created = 0;
+  if (saved)
+    branches.set("br-backup", {
+      ...branch,
+      id: "br-backup",
+      name: savedInvalid ? "other-branch" : "lae-release-123456788-backup",
+      expires_at: "2100-01-01T00:00:00Z",
+      current_state: "ready",
+    });
   const dbClient = (label) => ({
     query: async (sql, args) => {
       events.push({ db: label, sql });
@@ -120,7 +133,13 @@ function fixture({ drift = false, migrationFailure = false } = {}) {
         ],
       };
     else if (opt.method === "GET" && suffix === "")
-      data = { project: { id: PROJECT, history_retention_seconds: 21600 } };
+      data = {
+        project: {
+          id: PROJECT,
+          history_retention_seconds: 21600,
+          pg_version: 17,
+        },
+      };
     else if (opt.method === "GET" && suffix === "/branches/" + SOURCE)
       data = {
         branch: { id: SOURCE, project_id: PROJECT, current_state: "ready" },
@@ -129,7 +148,18 @@ function fixture({ drift = false, migrationFailure = false } = {}) {
       data = { snapshots: [] };
     else if (opt.method === "GET" && suffix === "/branches")
       data = { branches: [...branches.values()] };
-    else if (opt.method === "POST" && suffix === "/branches") {
+    else if (opt.method === "POST" && suffix === "/endpoints") {
+      const body = JSON.parse(opt.body);
+      assert.equal(body.endpoint.branch_id, "br-backup");
+      const e = {
+        id: "ep-backup",
+        project_id: PROJECT,
+        branch_id: "br-backup",
+        host: "ep-backup.us-east-2.aws.neon.tech",
+      };
+      endpoints.set(e.id, e);
+      data = { endpoint: e };
+    } else if (opt.method === "POST" && suffix === "/branches") {
       const body = JSON.parse(opt.body),
         kind = created++ ? "rehearsal" : "backup";
       assert.equal(body.endpoints[0].autoscaling_limit_max_cu, 0.25);
@@ -179,6 +209,23 @@ function fixture({ drift = false, migrationFailure = false } = {}) {
         productionEnv: { DATABASE_URL: source },
         runId: "123456789",
         fetcher,
+        ...(saved
+          ? { backupBranchId: "br-backup", backupRunId: "123456788" }
+          : {}),
+        restoreCopy: async ({ uri, original, migrate }) => {
+          assert(!uri.includes("ep-production."));
+          assert(!JSON.stringify(original).includes("private-fixture"));
+          if (drift) throw Error("fixture restored copy differs");
+          const applied = await migrate({});
+          assert.deepEqual(await migrate({}), []);
+          return {
+            restore_tested: true,
+            recovery_verified: true,
+            local_recovery_database_removed: true,
+            migrations_applied: applied.length,
+            existing_rows_preserved: 11,
+          };
+        },
         poolFactory,
         migrate: async (pool) => {
           if (migrationFailure) throw Error("fixture migration failed");
@@ -211,7 +258,7 @@ test("backup rehearsal hashes isolated copies, preserves original fields, remove
       .every((x) => /^(BEGIN|SET LOCAL|SELECT|COMMIT|ROLLBACK)/.test(x.sql)),
   );
 });
-test("failed comparison or migration keeps the backup and removes only its own rehearsal", async () => {
+test("failed restore or migration keeps the backup and removes only its temporary compute", async () => {
   for (const options of [{ drift: true }, { migrationFailure: true }]) {
     const f = fixture(options);
     await assert.rejects(f.run());
@@ -238,4 +285,30 @@ test("fingerprint failure releases a read-only transaction without outputting pr
   );
   assert.equal(sql.at(-1), "ROLLBACK");
   assert(released);
+});
+
+test("saved backup reuse never creates another branch and rejects a different name", async () => {
+  const f = fixture({ saved: true });
+  assert((await f.run()).recovery_verified);
+  assert(
+    !f.events.some((x) => x.method === "POST" && x.suffix === "/branches"),
+  );
+  const invalid = fixture({ saved: true, savedInvalid: true });
+  await assert.rejects(invalid.run());
+  assert(!invalid.events.some((x) => x.method === "POST"));
+});
+test("private restore rejects unsupported versions and non-Neon origins before running Docker", async () => {
+  const { restore } = require("../lib/private-recovery-copy");
+  await assert.rejects(
+    restore({ uri: source, pgVersion: 99, runId: "123456789" }),
+    /Invalid private recovery/,
+  );
+  await assert.rejects(
+    restore({
+      uri: "postgres://user:secret@other.example/db",
+      pgVersion: 17,
+      runId: "123456789",
+    }),
+    /Invalid private backup/,
+  );
 });

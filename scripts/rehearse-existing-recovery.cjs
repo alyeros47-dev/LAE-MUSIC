@@ -31,6 +31,8 @@ async function main() {
       neonKey: process.env.NEON_API_KEY,
       productionEnv: env,
       runId: process.env.GITHUB_RUN_ID,
+      backupBranchId: process.env.LAE_RECOVERY_BACKUP_BRANCH || undefined,
+      backupRunId: process.env.LAE_RECOVERY_BACKUP_RUN || undefined,
       record: (x) => console.log(JSON.stringify(x)),
     });
   } finally {

@@ -5,6 +5,16 @@ on:
       - "android-app/**"
   workflow_dispatch:
     inputs:
+      recovery_backup_branch:
+        description: "Optional previously created owned backup branch; requires its original workflow run ID"
+        required: false
+        type: string
+        default: ""
+      recovery_backup_run:
+        description: "Original workflow run ID that created the saved backup"
+        required: false
+        type: string
+        default: ""
       existing_service_recovery_rehearsal:
         description: "Create a bounded private backup and isolated recovery/migration rehearsal; never migrate production"
         required: false
@@ -50,6 +60,8 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           LAE_EXISTING_RECOVERY_REHEARSAL: "1"
+          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
+          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
   existing-service-audit:
     if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
