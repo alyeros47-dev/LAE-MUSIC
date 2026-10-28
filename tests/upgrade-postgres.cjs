@@ -220,6 +220,17 @@ test("populated historical upgrades preserve accounts, catalog and separate curr
           assert(await verifyPassword("HistoricalFixturePassword123", (await pool.query("SELECT * FROM " + table)).rows[0]));
       }),
     );
+    await t.test("real recovery fingerprints preserve original fields and detect changed private records", () => ownedDatabase(async pool => {
+      const {fingerprint} = require('../lib/neon-recovery-rehearsal');
+      await bootstrap(pool); await historical(pool,0); await seed(pool,0);
+      const all=await fingerprint(pool), cols=all.columns.filter(x=>x.table_name!=='platform_migrations');
+      const before=await fingerprint(pool,cols);
+      assert(!JSON.stringify(before).includes('artist@upgrade.invalid'));
+      await migrate(pool);
+      assert.deepEqual(await fingerprint(pool,cols),before);
+      await pool.query("UPDATE creators SET display_name='Changed fixture only'");
+      assert.notDeepEqual(await fingerprint(pool,cols),before);
+    }));
     for (const checkpoint of [0, 7, 13, 17, 18])
       await t.test("upgrade from checkpoint " + checkpoint, () =>
         ownedDatabase(async (pool) => {
