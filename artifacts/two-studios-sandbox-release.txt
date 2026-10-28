@@ -1,0 +1,24 @@
+Two studios sandbox release — 2026-10-27
+
+Deployed application: df95fe8729590933c8bd59e21a5345cc0f10f48f
+Sandbox: https://lae-music-review-sandbox.onrender.com
+Successful sandbox rollout: Actions run 40536346433 / job 122302531298
+User explicitly requested this sandbox release; automatic deployment stays off.
+
+Hosted checks PASS:
+- Main app, workflow module and CSS match tested Git source hashes.
+- Separate Lyrics Studio and Music Studio forms.
+- GPT-6.1 Sol and GPT-6 Astra options; 99 original cultural profiles.
+- Actual hosted backend: mobile-sized artist/listener registration and two
+  logout/re-login cycles per role.
+- Explicit lyrics/style transfer and independent editing between tools.
+- Storage-dependent voice training remains disabled, as required.
+
+Read-only model check previously confirmed both exact IDs available.
+No billed lyrics/music generation was consumed by these release checks.
+Live output quality and R2 voice upload/training remain unverified.
+
+Source production configuration unchanged: true
+Source production deployment unchanged: true
+Production deployment/merge performed: false
+Production-ready: false

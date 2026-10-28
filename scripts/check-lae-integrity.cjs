@@ -4,7 +4,7 @@ const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const source=fs.readFileSync('server.js','utf8');
 new vm.Script(source,{filename:'server.js'});
-function contains(needle,label){assert(source.includes(needle),label);}
+function contains(needle,label){assert((source+fs.readFileSync('lib/subscriptions.js','utf8')).includes(needle),label);}
 contains("if(p==='/api/dashboard/summary'","Unified dashboard summary API");
 contains("api('/api/dashboard/summary').then","Dashboard UI live data integration");
 contains("id=\"dashboardMetrics\"","Dashboard live overview element");
@@ -13,8 +13,8 @@ contains("affiliate_product_intents","Referral token ledger");
 contains("consumed_at IS NULL FOR UPDATE","Single-use token locking");
 contains("ON CONFLICT(subscription_id,tier) DO NOTHING","Idempotent direct commission");
 contains("quarter_start","Quarterly team ledger");
-contains("ENABLE_LEGACY_DEMO_ARTIST_ACTIVATION","Demo artist activation disabled by default");
-contains("artist_features_active:!!sub&&new Date(sub.expires_at)>new Date()","Artist access requires paid valid subscription");
+contains("Legacy demo activation is permanently disabled","No environment switch can activate demo artist purchases");
+assert(fs.readFileSync('lib/subscription-view.js','utf8').includes("starts_at<=NOW() AND expires_at>NOW()"),'Artist access requires the current paid valid subscription');
 contains("paymentEnabled:false","Payment remains disabled without gateway");
 const marker='const onboardingHtml=String.raw`';
 const start=source.indexOf(marker);
@@ -49,3 +49,4 @@ assert(sonic.includes("UPDATE sonic_test_tasks SET task_id=$1 WHERE task_id=$2 A
 assert(sonic.includes("const daily=await client.query"),'Daily limit rechecked inside artist transaction');
 assert(sonic.includes("await db.query('ROLLBACK')"),'Reservation updates roll back atomically');
 console.log('LAE-MUSIC: server syntax, unified dashboard, referral invariants and onboarding scripts passed.');
+

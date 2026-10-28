@@ -1,0 +1,95 @@
+LAE-MUSIC 0.14.0-rc.14 — local verification
+Approved USD prices: 8 / 23 / 60 / 121 / 588 cents. No base repricing from later FX updates.
+No production data, merchant account, actual treasury settlement or Render deployment was used.
+
+Application
+All 31 Sonic static invariants passed. These are not database or provider integration tests.
+PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
+ℹ tests 140
+ℹ suites 0
+ℹ pass 140
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2552.120534
+
+PostgreSQL 16 — disposable loopback database
+ℹ tests 133
+ℹ suites 0
+ℹ pass 133
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8856.917585
+
+HTTP
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 242.901495
+
+Actual Nodemailer with local TLS
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 188.147176
+
+Chromium — isolated journeys
+PASS browser journeys at desktop, tablet and mobile sizes; all external services mocked.
+
+Separate real public FX call through the shared pricing service (inherited proxy/trust):
+{
+  "source": "https://open.er-api.com/v6/latest/USD",
+  "verified": true,
+  "rows": [
+    {
+      "country": "NG",
+      "currency": "NGN",
+      "usd_minor": 60,
+      "local_minor": 79543,
+      "formatted": "NGN\u00a0795.43",
+      "as_of": "2026-10-25T00:02:31.000Z",
+      "available": true
+    },
+    {
+      "country": "GH",
+      "currency": "GHS",
+      "usd_minor": 60,
+      "local_minor": 700,
+      "formatted": "GHS\u00a07.00",
+      "as_of": "2026-10-25T00:02:31.000Z",
+      "available": true
+    },
+    {
+      "country": "KE",
+      "currency": "KES",
+      "usd_minor": 60,
+      "local_minor": 7790,
+      "formatted": "KES\u00a077.90",
+      "as_of": "2026-10-25T00:02:31.000Z",
+      "available": true
+    },
+    {
+      "country": "LR",
+      "currency": "LRD",
+      "usd_minor": 60,
+      "local_minor": 10237,
+      "formatted": "LRD\u00a0102.37",
+      "as_of": "2026-10-25T00:02:31.000Z",
+      "available": true
+    }
+  ]
+}
+This verifies the public feed locally; it is not a merchant charge or production integration.
+
+Populated read-only fixture preflight: migrations/guards pass; all seven financial and conversion discrepancy counts zero; overall release remains blocked. Provider/media/treasury responses in suites are fixtures; PostgreSQL and Chromium execution are real. Pending-price and closed-gateway UI states, NGN/GHS/KES/LRD displays, final payable amount, low-cent commissions, original-currency refunds, legacy NGN separation and unsupported treasury release are covered. Mobile Premium and desktop royalty screenshots were visually inspected.

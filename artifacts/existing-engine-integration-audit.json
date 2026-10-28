@@ -1,0 +1,90 @@
+{
+  "production_branch_baseline": "24718b32df138711a73426fb4fd5042767b74f74",
+  "candidate_audited": "858cb93b77d52adc277f1fef1c43ebc626ca0191",
+  "scope": "Public repository source comparison; not a production database inspection or deployed-commit certification",
+  "legacy_literal_server_routes": 106,
+  "retained_in_server": 102,
+  "relocated_to_shared_handler": [
+    "/api/admin/comment-moderation",
+    "/api/artist/comment-moderation",
+    "/api/artist/comment-notifications",
+    "/api/listener/comment-report"
+  ],
+  "unaccounted_literal_routes": [],
+  "legacy_init_tables": [
+    "affiliate_enrollment_commissions",
+    "affiliate_enrollments",
+    "affiliate_milestone_awards",
+    "affiliate_milestone_progress",
+    "affiliate_milestone_reserves",
+    "affiliate_product_intents",
+    "affiliate_subscription_commissions",
+    "affiliate_team_sales",
+    "artist_gift_wallets",
+    "artist_studio_usage",
+    "artist_subscriptions",
+    "coin_purchases",
+    "comment_reports",
+    "comment_restrictions",
+    "creators",
+    "demo_referral_earnings",
+    "demo_withdrawals",
+    "generation_credit_campaigns",
+    "generation_ledger",
+    "generation_records",
+    "generation_wallets",
+    "gift_catalog",
+    "gift_transactions",
+    "guest_song_likes",
+    "homepage_video",
+    "listener_coin_wallets",
+    "listener_favorite_artists",
+    "listener_history",
+    "listener_notification_preferences",
+    "listener_notifications",
+    "listener_playlist_tracks",
+    "listener_playlists",
+    "listener_push_subscriptions",
+    "listener_sessions",
+    "listeners",
+    "music_reports",
+    "music_tracks",
+    "push_config",
+    "referral_commissions",
+    "sessions",
+    "site_settings",
+    "song_comments",
+    "song_likes",
+    "sonic_test_tasks"
+  ],
+  "missing_legacy_init_tables": [],
+  "unchanged_connections": {
+    "entrypoint": "node server.js",
+    "database_config": "DATABASE_URL",
+    "r2_config": [
+      "R2_ACCOUNT_ID",
+      "R2_ACCESS_KEY_ID",
+      "R2_SECRET_ACCESS_KEY",
+      "R2_BUCKET"
+    ],
+    "providers": [
+      "OPENAI_API_KEY",
+      "OPENAI_LYRICS_MODEL",
+      "MUSICAPI_API_KEY"
+    ]
+  },
+  "voice_handler_matches_baseline_except_trailing_whitespace": true,
+  "production_mutations": false,
+  "r2_upload_and_training_checks": "owner_deferred_pending",
+  "known_candidate_integration_gaps_fixed": [
+    "Legacy artist URLs now use the redesigned workspace/profile",
+    "Ready existing voice selection forwarded to existing engine",
+    "Private release saving follows existing backend availability"
+  ],
+  "external_verification_pending": [
+    "Candidate full MusicAPI generation/voice output",
+    "R2 upload/voice training",
+    "Real gateway checkout/settlement/payout",
+    "Sanitized actual production schema upgrade rehearsal"
+  ]
+}

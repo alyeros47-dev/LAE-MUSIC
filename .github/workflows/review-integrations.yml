@@ -1,0 +1,84 @@
+name: Configure isolated review integrations
+# Deploy review updates explicitly so active mobile tests are not reset by code pushes.
+on:
+  workflow_dispatch:
+    inputs:
+      persistence_mode:
+        description: "unchanged deploys normal review code; plan is read-only; activate requires explicit cost approval"
+        type: choice
+        required: true
+        default: unchanged
+        options: [unchanged, plan, activate]
+      approve_monthly_charge:
+        description: "Owner-approved SANDBOX ONLY service plus 1 GB disk, estimated USD 7.25/month"
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: lae-music-isolated-review-provisioning
+  cancel-in-progress: false
+jobs:
+  configure:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install production database and email dependencies
+        run: npm ci --omit=dev
+      - name: Test independent environment safeguards
+        run: node --test tests/review-integrations.test.cjs tests/review-provider-budget.test.cjs tests/review-storage.test.cjs tests/review-accounts.test.cjs
+      - name: Verify the actual sandbox container before configuration
+        run: |
+          docker build -f deploy/review.Dockerfile -t lae-integrations-ci .
+          docker run -d --name lae-integrations-ci --memory=512m -p 127.0.0.1:3116:10000 -e ADMIN_KEY=isolated-integration-ci-only-key -e 'LAE_REVIEW_ARTIST_SNAPSHOT={"version":1,"scope":"artist_profiles_without_credentials","captured_at":"2026-10-27T00:00:00.000Z","artists":[{"source_id":"99999","display_name":"Isolated imported artist","country":"Nigeria","bio":"Isolated fixture","plan":"growth"}]}' lae-integrations-ci
+          LAE_REVIEW_FRESH_TESTS=1 LAE_REVIEW_CONTAINER_TESTS=1 LAE_REVIEW_ARTIST_IMPORT_TESTS=1 LAE_REVIEW_FIXTURE_ADMIN_KEY=isolated-integration-ci-only-key node tests/review-container-smoke.cjs
+          docker exec --user 0 lae-integrations-ci mkdir -p /app/tests
+          docker cp tests/review-quotas-postgres.cjs lae-integrations-ci:/app/tests/review-quotas-postgres.cjs
+          docker exec --user 0 -e LAE_REVIEW_QUOTA_TESTS=1 lae-integrations-ci node tests/review-quotas-postgres.cjs
+          docker cp tests/review-voice-postgres.cjs lae-integrations-ci:/app/tests/review-voice-postgres.cjs
+          docker exec --user 0 -e LAE_REVIEW_VOICE_TESTS=1 lae-integrations-ci node tests/review-voice-postgres.cjs
+          docker cp tests/review-releases-postgres.cjs lae-integrations-ci:/app/tests/review-releases-postgres.cjs
+          docker cp tests/fixtures lae-integrations-ci:/app/tests/fixtures
+          docker exec --user 0 lae-integrations-ci chmod -R a+rX /app/tests
+          docker exec --user postgres -e LAE_REVIEW_RELEASE_TESTS=1 lae-integrations-ci node tests/review-releases-postgres.cjs
+      - name: Verify accounts and media survive container replacement
+        env:
+          LAE_REVIEW_PERSISTENCE_TESTS: "1"
+          LAE_REVIEW_TEST_IMAGE: lae-integrations-ci
+        run: node tests/review-persistence-container.cjs
+      - name: Stop only the CI integration container
+        if: always()
+        run: docker rm -f lae-integrations-ci 2>/dev/null || true
+      - name: Plan storage or apply an explicitly approved sandbox-only upgrade
+        if: inputs.persistence_mode != 'unchanged'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          PERSISTENCE_MODE: ${{ inputs.persistence_mode }}
+          OWNER_APPROVED: ${{ inputs.approve_monthly_charge }}
+        run: |
+          unset LAE_APPROVE_REVIEW_STORAGE_COST
+          if [ "$PERSISTENCE_MODE" = activate ] && [ "$OWNER_APPROVED" = true ]; then
+            export LAE_APPROVE_REVIEW_STORAGE_COST=I_APPROVE_SANDBOX_7_25_MONTHLY
+          fi
+          node scripts/prepare-review-persistence.cjs
+      - name: Configure and verify only the review sandbox
+        if: inputs.persistence_mode == 'unchanged' || (inputs.persistence_mode == 'activate' && inputs.approve_monthly_charge == true)
+        env:
+          LAE_IMPORT_NEON_ARTISTS: "0"
+          LAE_BOOTSTRAP_REVIEW_R2: "0"
+          LAE_VERIFY_REVIEW_STORAGE: "0"
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          SANDBOX_NEON_DATABASE_URL: ${{ secrets.SANDBOX_NEON_DATABASE_URL }}
+          SANDBOX_R2_ACCOUNT_ID: ${{ secrets.SANDBOX_R2_ACCOUNT_ID }}
+          SANDBOX_R2_ACCESS_KEY_ID: ${{ secrets.SANDBOX_R2_ACCESS_KEY_ID }}
+          SANDBOX_R2_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_R2_SECRET_ACCESS_KEY }}
+          SANDBOX_R2_BUCKET: ${{ secrets.SANDBOX_R2_BUCKET }}
+        run: node scripts/configure-review-integrations.cjs

@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+artifacts/*.png
+artifacts/*.webm
+artifacts/*.json
+artifacts/*.jpg
+artifacts/*.patch
+
+# Also ignore a shared dependency symlink in isolated worktrees.
+node_modules

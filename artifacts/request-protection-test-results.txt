@@ -1,0 +1,32 @@
+LAE-MUSIC 0.17.0-rc.17 — local verification
+Recorded 2026-10-26T05:09:13.324223+00:00
+Development branch: codex/premium-platform-release; draft PR #6. No merge or Render deployment.
+
+Application: 165 pass, plus existing 25 mocked Sonic cases / 31 source invariants.
+Actual PostgreSQL 16: 160 pass, migrations 001–017. Only the guarded disposable loopback CI database was used.
+Socket HTTP suite: 1 pass. Real pinned-library loopback SMTP/TLS: 4 pass.
+Chromium: connected desktop/tablet/mobile journeys and actual offline PWA desktop/mobile journeys pass.
+Axe: 33 connected-interface + 2 offline-library scans, zero automated violations; incomplete/manual accessibility checks remain.
+Dependency advisory check: zero known vulnerabilities reported at this check.
+
+New protection coverage: IP/mapped-IPv6 normalization; explicit trusted TCP peers; forged leftmost/invalid/all-trusted header chains; bounded fixed operation groups; private keyed identifiers; useful/tightest budget headers; bounded memory without live-budget eviction; fail-closed shared storage; report privacy/permissions; exact counters.
+Actual PostgreSQL: concurrent admissions across instances, persistent shared seed/budgets, server-clock expiry, aggregate-failure rollback, bounded retention and financial-evidence preservation.
+Actual authenticated identity journey: 240 requests across two listener sessions and changing forwarded addresses, then a denied 241st request, without a qualifying stream or monetary record.
+Actual native HTTP child-server journey: 20-attempt network limit, forged leftmost headers, server restart persistence, independent genuine client, public currency access and safe unconfigured webhook path. No real merchant success was simulated.
+Browser: operator pressure dashboard, 1/7/30-day controls, blocked-heavy plot bounds, keyboard table focus and responsive layout; existing financial/artist/studio/affiliate/online/offline journeys preserved.
+
+Read-only populated fixture preflight: pass
+{"commerce_discrepancies": 0, "ledger_discrepancies": 0, "negative_artist_balances": 0, "offline_stream_discrepancies": 0, "premium_conversion_discrepancies": 0, "premium_receipt_discrepancies": 0, "reconciliation_history_discrepancies": 0, "royalty_release_discrepancies": 0, "royalty_statement_discrepancies": 0}
+Protection mode in fixture preflight: shared_database
+Private seed initialized: True (value never printed).
+Overall deployment status: blocked. Actual Render peer path/NAT/load/failover/edge controls, provider accounts, settlement/payout, production clone/backups, physical/manual device/accessibility, offline key and approved ad creative remain.
+
+Database, HTTP, browser APIs/audio and local SMTP/TLS executions are real. Other provider/media/account UI responses are fixtures. No actual Render proxy, R2, payment, treasury, bank, music or email account was verified.
+
+Approved prices and commercial rules are unchanged. Premium USD cents: 8 / 23 / 60 / 121 / 588; royalty pool 50%; in-app offline saves included; no permanent listener MP3 exports, paid songs or download commissions.
+
+Browser output:
+PASS browser journeys and 33 axe accessibility audits at desktop, tablet and mobile sizes; all payment/media services mocked.
+PASS real PWA desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS real PWA mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.

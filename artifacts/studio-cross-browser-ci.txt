@@ -1,0 +1,12 @@
+Exact tested head: d4f4b4b930e2839f0474676d78680a3d0e5deea9
+GitHub Actions run: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40370007791
+All four jobs completed successfully:
+application/Chromium 121737889347: 220 application tests, 1 native HTTP check, 4 loopback SMTP checks; production dependency audit reports zero known vulnerabilities.
+PostgreSQL 121737889807: 174 native tests and 8 populated-upgrade tests, 0 failures.
+WebKit 121737889710 and Firefox 121737889948: browser journeys and real PWA desktop/mobile checks passed.
+Each browser: 39 website axe scans + 2 offline axe scans = 123 total automated scans, no reported violations. This does not certify manual accessibility.
+Real browser audio/storage/crypto/offline reload, expiry, clock guards, exactly-once synchronization and account cleanup passed. External payment/provider/media responses in browser tests are fixtures.
+Previously recorded hosted OpenAI generation/library recovery/idempotent replay is real provider evidence; full real MusicAPI generation and bank/payment settlement remain unverified.
+These database tests use isolated disposable fixtures; no production clone/schema verification or production migration is claimed.
+R2-dependent upload/voice testing remains owner-deferred and pending. Automatic R2 bootstrap and probes remain disabled.
+No production deployment, infrastructure recreation, credential transfer/rotation or production-data changes were performed.

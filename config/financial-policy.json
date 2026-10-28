@@ -1,0 +1,17 @@
+{
+  "revision": "owner-financial-2026-10-26-v2",
+  "status": "approved",
+  "approved_at": "2026-10-26",
+  "approval_evidence": "Owner explicitly corrected the refund and royalty policy on 2026-10-26: seven calendar days for complaints, seven days of month-end reconciliation, and documented review of later disputes without automatic platform loss assignment.",
+  "premium": "Full refunds are available for duplicate charges, failed activation or verified service errors. After access begins, voluntary cancellation does not automatically refund unused time, except where required by law. Your paid access continues until expiration. Automatic renewal is off.",
+  "artist": "A full package refund is available before activation if no paid benefits have been used. After uploads, AI credits or other paid services are used, refunds are limited to verified failures, unused refundable benefits or legal requirements.",
+  "studio": "Reserved credits are restored only for verified provider failures with no usable result, once only. Completed generations are not refundable simply because you dislike the result. Uncertain outcomes require review before retrying.",
+  "royalties": "Calculate royalties at month-end, then allow seven full UTC calendar days for settlement and reconciliation before finalization or release. Valid refunds and reversals reduce the relevant revenue pool before finalization. Release requires successful verification and sufficient settled funds. Later disputes require documented reserve, legally permitted adjustment or fraud-recovery review under fair artist agreements; losses are not automatically assigned to LAE-MUSIC or an artist.",
+  "currency": "Refunds use the original payment currency and conversion evidence. A request or approval does not confirm that money was returned. Mandatory consumer protections apply.",
+  "live_operations_enabled": false,
+  "complaint_days": 7,
+  "settlement_days": 7,
+  "accounting_timezone": "UTC",
+  "complaints": "Submit an eligible refund complaint within seven calendar days of the relevant payment or verified service incident. Ordinary voluntary requests close after that window. Applicable law, payment-provider rules and verified fraud may require later review; the deadline does not eliminate enforceable chargebacks.",
+  "withdrawals": "Streaming royalties are eligible only after the seven-day month-end reconciliation period, successful verification and sufficient settled funds. A withdrawal request or approval is not a bank payment. Later disputes may remain enforceable and require documented review under applicable law and fair artist agreements."
+}

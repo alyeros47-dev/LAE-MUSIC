@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "provider": null,
+  "public_origin": "",
+  "smtp_host": "",
+  "smtp_port": 465,
+  "sender": ""
+}

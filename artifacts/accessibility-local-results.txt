@@ -1,0 +1,35 @@
+LAE-MUSIC 0.14.0-rc.14 — automated accessibility verification
+Pinned development-only @axe-core/playwright 4.11.0 / locked axe-core 4.11.4
+27 real Chromium scans across desktop, tablet and mobile; zero automated violations.
+Surface coverage: discovery, disabled Premium checkout, active Premium, country dialog, final payment dialog, artist royalties, royalty administration, playback queue and expanded player.
+Keyboard: Escape dismisses currency settings and restores focus to its trigger; final payment dialog exposes its current heading as its accessible name.
+All browser payment/media/provider services are isolated fixtures.
+Incomplete color-contrast checks remain for manual review. This is not a full WCAG conformance, screen-reader or physical-device assessment.
+
+desktop-artist-royalties: violations=0; passed_rules=50; incomplete=color-contrast
+desktop-country-dialog: violations=0; passed_rules=21; incomplete=color-contrast
+desktop-discovery: violations=0; passed_rules=44; incomplete=color-contrast
+desktop-expanded-player: violations=0; passed_rules=22; incomplete=color-contrast
+desktop-final-payment-dialog: violations=0; passed_rules=21; incomplete=
+desktop-playback-queue: violations=0; passed_rules=17; incomplete=color-contrast
+desktop-premium-active: violations=0; passed_rules=45; incomplete=color-contrast
+desktop-premium-disabled: violations=0; passed_rules=45; incomplete=color-contrast
+desktop-royalty-administration: violations=0; passed_rules=46; incomplete=color-contrast
+mobile-artist-royalties: violations=0; passed_rules=50; incomplete=color-contrast
+mobile-country-dialog: violations=0; passed_rules=21; incomplete=color-contrast
+mobile-discovery: violations=0; passed_rules=44; incomplete=color-contrast
+mobile-expanded-player: violations=0; passed_rules=22; incomplete=color-contrast
+mobile-final-payment-dialog: violations=0; passed_rules=21; incomplete=color-contrast
+mobile-playback-queue: violations=0; passed_rules=18; incomplete=color-contrast
+mobile-premium-active: violations=0; passed_rules=45; incomplete=color-contrast
+mobile-premium-disabled: violations=0; passed_rules=45; incomplete=color-contrast
+mobile-royalty-administration: violations=0; passed_rules=46; incomplete=color-contrast
+tablet-artist-royalties: violations=0; passed_rules=50; incomplete=color-contrast
+tablet-country-dialog: violations=0; passed_rules=21; incomplete=color-contrast
+tablet-discovery: violations=0; passed_rules=44; incomplete=color-contrast
+tablet-expanded-player: violations=0; passed_rules=22; incomplete=color-contrast
+tablet-final-payment-dialog: violations=0; passed_rules=21; incomplete=
+tablet-playback-queue: violations=0; passed_rules=17; incomplete=color-contrast
+tablet-premium-active: violations=0; passed_rules=45; incomplete=color-contrast
+tablet-premium-disabled: violations=0; passed_rules=45; incomplete=color-contrast
+tablet-royalty-administration: violations=0; passed_rules=46; incomplete=color-contrast

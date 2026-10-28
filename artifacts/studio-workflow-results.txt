@@ -1,0 +1,26 @@
+Studio workflow integration — 2026-10-27
+
+Original backend retained: lyrics, 66 gospel / 33 secular cultural profiles,
+MusicAPI Sonic creation/status, owned saved voice selection and upload code checker.
+
+Application suite: 267 passed, 0 failed.
+HTTP integration: 1 passed, 0 failed.
+SMTP/email fixtures: 4 passed, 0 failed.
+Chromium desktop/tablet/mobile: step navigation, code display/refresh persistence,
+local WAV playback/clear, mocked browser dictation, owned voice selection,
+idempotent music retries and 42 automated accessibility audits passed in the
+final expanded browser run, including upload-code access without a paid package.
+Exact-commit CI and sandbox rollout are recorded separately in GitHub Actions.
+
+Browser tests mock external API integrations; local voice preview uses real bytes.
+Local Firefox launch failed on profile setup; WebKit host libraries unavailable.
+Neither failed launch is a product test pass; CI must execute both engines.
+
+Live MusicAPI output quality: not verified in this batch.
+Live R2 voice upload and provider voice training: owner-deferred, pending.
+Additional lyrics model choices: pending verified API IDs/account access.
+Generated-only catalog enforcement tied to verified audio tasks: pending;
+restored lyrics codes alone do not audit MP3 contents, and legacy paid external
+upload entitlements remain unchanged.
+Original production artist credentials are not copied into the sandbox.
+Production writes/deployments/provider charges caused by these tests: zero.

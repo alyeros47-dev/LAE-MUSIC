@@ -1,0 +1,120 @@
+LAE-MUSIC candidate 0.20.0-rc.20: seven-day complaint and royalty reconciliation verification
+Recorded 2026-10-26T08:28:36.334007+00:00
+Development only; no production access/reset, merge, Render deployment or live-finance activation.
+Current owner-approved correction: docs/FINANCIAL-POLICY.md, revision owner-financial-2026-10-26-v2.
+Migrations 001–018 unchanged; additive 019 required.
+
+application: 176 pass / 0 fail
+postgres: 173 pass / 0 fail
+upgrade: 8 pass / 0 fail
+http: 1 pass / 0 fail
+email: 4 pass / 0 fail
+Existing 29 mocked Sonic cases / 31 source invariants pass.
+
+Browser evidence (external services are fixtures):
+
+chromium:
+Testing browser engine chromium 156.0.8078.4
+PASS chromium browser journeys and 39 axe accessibility audits at desktop, tablet and mobile sizes; all payment/media services mocked.
+Testing browser engine chromium 156.0.8078.4
+PASS real PWA desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS real PWA mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS chromium 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.
+
+firefox:
+Testing browser engine firefox 157.0
+PASS firefox browser journeys and 39 axe accessibility audits at desktop, tablet and mobile sizes; all payment/media services mocked.
+Testing browser engine firefox 157.0
+PASS real PWA firefox-desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS real PWA firefox-mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS firefox 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.
+
+webkit:
+Testing browser engine webkit 27.2
+PASS webkit browser journeys and 39 axe accessibility audits at desktop, tablet and mobile sizes; all payment/media services mocked.
+Testing browser engine webkit 27.2
+PASS real PWA webkit-desktop: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS real PWA webkit-mobile: encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.
+PASS webkit 2 offline-library axe audits and unsupported-browser offline fallback. No external media or payment services used.
+
+123 axe scans across three engines; zero automated violations. Incomplete/manual and physical-device checks remain.
+Actual database constraints/transactions, native HTTP, loopback CSV exports, browser audio/service workers/IndexedDB/Web Crypto/offline expiry/sync and local SMTP/TLS execute.
+Payment/music/storage/session/treasury responses are fixtures; real provider accounts remain unverified.
+Linux WebKit is not physical Safari/iOS certification. Browser storage can be evicted and is not DRM.
+
+Populated disposable-fixture read-only preflight:
+{
+  "version": "0.20.0-rc.20",
+  "release_status": "blocked",
+  "database": {
+    "status": "pass",
+    "checks_complete": true,
+    "missing_tables": [],
+    "migrations": {
+      "missing": [],
+      "changed": [],
+      "unknown": []
+    },
+    "missing_guards": [],
+    "integrity": {
+      "reconciliation_history_discrepancies": 0,
+      "offline_stream_discrepancies": 0,
+      "commerce_discrepancies": 0,
+      "ledger_discrepancies": 0,
+      "negative_artist_balances": 0,
+      "premium_receipt_discrepancies": 0,
+      "premium_conversion_discrepancies": 0,
+      "royalty_statement_discrepancies": 0,
+      "royalty_release_discrepancies": 0
+    },
+    "administration": {
+      "named_enabled": true,
+      "active_owners": 1
+    },
+    "request_security": {
+      "fingerprint_seed_initialized": true,
+      "active_budget_records": 209
+    },
+    "reconciliation": {
+      "checkout_reviews": 1,
+      "refund_reviews": 3,
+      "commission_holds": 1,
+      "offline_play_statuses": [
+        {
+          "status": "duplicate_window",
+          "count": 1
+        },
+        {
+          "status": "entitlement_unavailable",
+          "count": 1
+        },
+        {
+          "status": "invalid_time",
+          "count": 2
+        },
+        {
+          "status": "late_sync",
+          "count": 1
+        },
+        {
+          "status": "overlap",
+          "count": 1
+        },
+        {
+          "status": "qualified",
+          "count": 2
+        }
+      ]
+    },
+    "scope": "Read-only schema and accounting consistency. Does not verify provider settlement, migrations on a production clone, performance or operational readiness."
+  }
+}
+
+Production dependency audit: zero known vulnerabilities at this recorded check.
+New native coverage: inclusive seven-day UTC deadlines; leap/year/DST boundaries; expired ordinary requests and protected exceptions; forged/foreign/future incidents; distinct incidents on one purchase; concurrent retries/review conflicts; immutable histories; pending-review holds; verified pre-finalization deductions; database rejection of early finalization/release; late review without company expense or artist debit.
+Chromium and WebKit final reruns submit all new administrative review/incident forms. Firefox previously passed the full 39-UI/2-offline scan suite; a final rerun of expanded administrator submissions is in progress. Exact published-head CI will verify the complete final revision.
+One repeat PostgreSQL run incorrectly reused the populated disposable fixture and failed its fresh-database assumptions. Only the task-created disposable container was replaced; the fresh final rerun passes all 173 checks. A prior startup attempt also preceded PostgreSQL readiness. No production data was involved.
+Live settlement/payout, verified treasury FX, funded reserves and reviewed correction/recovery execution remain unavailable. Complete independently verified listener refund/dispute outcomes, real providers/ad media, sanitized-clone/load/backup/recovery and manual device/accessibility checks remain required.
+The website is not deployment-ready. No live-finance activation or deployment authorization is inferred.
+
+Final fresh verification 2026-10-26T08:29:16.685433+00:00: 173 PostgreSQL / 8 upgrade checks pass; populated fixture preflight passes all nine discrepancy checks with zero discrepancies, overall release blocked.

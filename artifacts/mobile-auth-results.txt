@@ -1,0 +1,18 @@
+Mobile registration and session correction — October 26, 2026
+Application: 227 pass, 0 fail (npm test), plus existing Sonic workflow/handler checks.
+Native HTTP: 1 pass, 0 fail.
+Chromium 154: expanded desktop/tablet/mobile journeys and 39 axe scans pass, including eyes, mismatch correction without registration POST, role-aware sign-in, mobile account menu and transient-session retry.
+Real PWA desktop/mobile local regression: encrypted offline storage/reload/playback, expiry/clock checks, once-only sync and cross-account cleanup pass; 2 offline axe scans pass.
+Unit/browser external account/provider/payment responses are fixtures; PostgreSQL and actual hosted HTTPS verification are pending the published candidate.
+No schema, existing password hash, provider credential, music-generation engine or live service changed.
+Review Sandbox accounts can reset during redeploy/restart. Production data is unaffected. R2 upload/voice tests remain deferred.
+
+Published application head: 030d52a8d7d0543f545fb23d63f5e9a8d4b47a9e (all 16 blobs match tested local files).
+Exact-head PostgreSQL job 121846101613 / run 40400888999: 175 native tests and 8 populated upgrades pass, 0 failures. Includes generic sign-in across entry points, real password verification, secure sessions and distinct same-email identity isolation.
+Review-only configuration run 40400882111: success. Source configuration/deployment unchanged; updated_keys=[]; R2 bootstrap/probe=null.
+Real pinned public HTTPS authentication verification: PASS for listener AND artist.
+Checks: signup session cookies; repeated authenticated session/security reads; logout invalidates old token; incorrect password rejected with no cookie; sign-in using opposite role entry point returns correct role and cookie; other-role protected data denied; leading/trailing password spaces preserved.
+No provider generation, storage test, real payment or production mutation attempted by this authentication verification.
+Actual mobile OS/browser device certification remains the owner's physical-device test; local journeys use mobile viewport emulation.
+
+All four exact-head CI jobs in run 40400888999 passed: application/Chromium, PostgreSQL, Firefox and WebKit. This verifies the expanded account journeys across all three browser engines, real desktop/mobile PWA regressions and 123 total automated axe scans. Manual/physical-device checks remain the owner's retest. No production release readiness claim.

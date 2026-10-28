@@ -1,0 +1,17 @@
+Isolated artist-account profile import candidate
+Local application tests: 257 passed.
+Local actual HTTP test: 1 passed; SMTP tests: 4 passed.
+Chromium desktop/tablet/mobile journeys: passed, including owner sandbox-login form, matching password controls, both eye buttons and submitted-password cleanup.
+Chromium real desktop/mobile offline regressions: passed.
+Node 22/PostgreSQL 16 at 512 MB with candidate files in existing local image: real profile import, anonymous owner-control denial, owner password setting, artist login/session and inactive paid entitlement passed.
+Source SQL/export tests: mocked pools; exact read-only projection, TLS/endpoint isolation and redaction verified. No real Neon export is claimed by these tests.
+GitHub runner will consume SANDBOX_NEON_DATABASE_URL only; source connection URL/passwords/emails/sessions/financial records are excluded from the Render snapshot.
+Real Neon connection/import, fresh Docker image and hosted imported-artist login verification: pending this candidate workflow.
+Production deployment, R2 upload/deletion tests and paid generation trials remain unauthorized/inactive.
+
+Published application candidate: 225142fd2c2ab762579bee7112d15bfb1de75806.
+Actual GitHub workflow 40464732639, job 122057304849: fresh review image and isolated import/login fixture checks passed; real export stopped with PostgreSQL 57P03 and the safe classification "The review compute endpoint is disabled."
+The saved GitHub secret reaches the exporter and passes endpoint-isolation validation. No successful source account read, real profile import, environment snapshot write, or new sandbox rollout is claimed.
+Required owner action: enable/resume the Neon REVIEW branch's compute endpoint; do not change production or upgrade without reviewing charges. The failed configuration job can then be rerun.
+Source Neon data and production Render configuration were not written by the blocked exporter.
+Fresh candidate PostgreSQL CI passed; other exact-head browser/application CI jobs were still running when this note was written.

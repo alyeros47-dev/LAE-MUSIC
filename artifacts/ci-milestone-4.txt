@@ -1,0 +1,44 @@
+Milestone 4 — selected gateways and currency display, 2026-10-25 UTC
+Verified commit: 8983aefdc9c12d4c3d02d51d3665222d287ac5cb
+Run: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40195809624
+Application job 121176268211: PASS (89 behavioral/contract tests, existing Sonic/integrity suites, socket HTTP, desktop/tablet/mobile journeys).
+PostgreSQL 16 job 121176268020: PASS (32 tests, migrations 001–005, immutable FX quotes, Paystack/Flutterwave normalization and financial regressions).
+Country currency controls preserve the existing audio element and playback. Local-price screenshots were inspected at all three viewport sizes.
+FX and gateway responses are isolated test fixtures. No live FX fetch, provider sandbox payment, real payment, payout or production migration was verified.
+
+2026-10-25T13:02:57.8692245Z # Subtest: isolated PostgreSQL application journeys, migrations, concurrency and durability
+2026-10-25T13:02:57.8696048Z     # Subtest: actual initialization and checksummed migration replay are safe
+2026-10-25T13:02:58.0326064Z     # Subtest: actual account handlers preserve free registration and session authorization
+2026-10-25T13:02:58.0665157Z     # Subtest: actual concurrent withdrawals, fee rounding, rejection reversal and immutable transfers
+2026-10-25T13:02:58.0915048Z     # Subtest: actual concurrent gift requests debit once and preserve the approved split
+2026-10-25T13:02:58.1206984Z     # Subtest: actual concurrent lyrics reservations and repeated refunds preserve credits
+2026-10-25T13:02:58.1700688Z     # Subtest: actual studio reservation retries resolve provisional references without duplicate provider calls
+2026-10-25T13:02:58.1852301Z     # Subtest: studio release routes enforce ownership and durable idempotency before any copying
+2026-10-25T13:02:58.2496285Z     # Subtest: media copy uses real HTTP PUT/HEAD/Range requests and stores a durable private draft
+2026-10-25T13:02:58.2842410Z     # Subtest: concurrent publish requests create one catalog song, one event and no extra generation debit
+2026-10-25T13:02:58.3131732Z     # Subtest: invalid media fails safely and retry reuses the private release without charging a generation
+2026-10-25T13:02:58.3445662Z     # Subtest: a resumed worker fences an expired lease and preserves the newer copy
+2026-10-25T13:02:58.4871155Z     # Subtest: a healthy copy renews its lease while media transfer is in progress
+2026-10-25T13:02:58.6435402Z     # Subtest: playlist ownership, ordering revisions and real creation/size limits survive concurrent requests
+2026-10-25T13:02:58.6727996Z     # Subtest: cursor discovery does not skip equal-timestamp songs and keeps genre/search filters
+2026-10-25T13:02:58.7133370Z     # Subtest: concurrent additions cannot exceed the existing 500-song playlist limit
+2026-10-25T13:02:58.7372148Z     # Subtest: studio publish and legacy upload reservation share the same annual quota lock
+2026-10-25T13:02:58.9556649Z     # Subtest: actual purchase endpoints keep registration free, isolate accounts and distrust client price
+2026-10-25T13:02:59.0104617Z     # Subtest: signed concurrent verified settlement fulfills once and records approved pending sale commission
+2026-10-25T13:02:59.0601952Z     # Subtest: merchant, amount, currency, state and payment identifier mismatches quarantine without entitlements
+2026-10-25T13:02:59.0890919Z     # Subtest: cancelled, expired and already consumed payments cannot fulfill another purchase
+2026-10-25T13:02:59.1364239Z     # Subtest: concurrent early renewals keep the active package and create contiguous annual future terms
+2026-10-25T13:02:59.1650630Z     # Subtest: settlement rolls back receipt, subscription, ledger and event together on persistence failure
+2026-10-25T13:02:59.2185594Z     # Subtest: verified additional generations reserve one paid credit and restore it after provider failure
+2026-10-25T13:02:59.2277867Z     # Subtest: legacy reporting cannot generate referral earnings from active or registered accounts
+2026-10-25T13:02:59.2956135Z     # Subtest: purchase evidence and quotes are immutable and reconciliation detects entitlement drift
+2026-10-25T13:02:59.3674290Z     # Subtest: currency reference snapshots persist across service restarts without changing USD orders
+2026-10-25T13:02:59.3787612Z     # Subtest: local checkout quotes bind approved account currency, owner, base price and immutable rate snapshot
+2026-10-25T13:02:59.4073946Z     # Subtest: actual Paystack adapter plus PostgreSQL settlement verifies a signed USD fixture once
+2026-10-25T13:02:59.4359800Z     # Subtest: actual Flutterwave adapter settles USD fixtures; local charge evidence cannot masquerade as USD
+2026-10-25T13:02:59.4659943Z     # Subtest: protected reports execute against actual schemas and approvals cannot send money
+2026-10-25T13:02:59.6993143Z     # Subtest: restart retains account/financial data and does not repeat migrations or credit campaigns
+2026-10-25T13:02:59.7069086Z ok 1 - isolated PostgreSQL application journeys, migrations, concurrency and durability
+2026-10-25T13:02:59.7080062Z # tests 32
+2026-10-25T13:02:59.7080863Z # pass 32
+2026-10-25T13:02:59.7081263Z # fail 0

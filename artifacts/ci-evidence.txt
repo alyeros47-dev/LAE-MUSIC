@@ -1,0 +1,20 @@
+Verified CI run: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184247862
+Application and browser jobs: success
+PostgreSQL 16 job: success
+Dependencies: 34 lockfile packages; npm reported 0 vulnerabilities
+Local browser attempt was blocked; actual browser journeys passed on the GitHub runner.
+
+2026-10-25T10:19:15.3024982Z # Subtest: isolated PostgreSQL application journeys, migrations, concurrency and durability
+2026-10-25T10:19:15.3025998Z     # Subtest: actual initialization and checksummed migration replay are safe
+2026-10-25T10:19:15.4897325Z     # Subtest: actual account handlers preserve free registration and session authorization
+2026-10-25T10:19:15.5586560Z     # Subtest: actual concurrent withdrawals, fee rounding, rejection reversal and immutable transfers
+2026-10-25T10:19:15.6430327Z     # Subtest: actual concurrent gift requests debit once and preserve the approved split
+2026-10-25T10:19:15.6552788Z     # Subtest: actual concurrent lyrics reservations and repeated refunds preserve credits
+2026-10-25T10:19:15.6712205Z     # Subtest: actual studio reservation retries resolve provisional references without duplicate provider calls
+2026-10-25T10:19:15.6898041Z     # Subtest: protected reports execute against actual schemas and approvals cannot send money
+2026-10-25T10:19:15.8156592Z     # Subtest: restart retains account/financial data and does not repeat migrations or credit campaigns
+2026-10-25T10:19:15.8228654Z # tests 9
+2026-10-25T10:19:15.8230516Z # pass 9
+2026-10-25T10:19:15.8230764Z # fail 0
+
+Additional locked-dependency verification: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40184463625 passed npm ci, application, HTTP, desktop/mobile browser and PostgreSQL jobs. Desktop and mobile rendered fixture screenshots were retrieved from that job and visually inspected; actual R2 artwork/audio was not used.

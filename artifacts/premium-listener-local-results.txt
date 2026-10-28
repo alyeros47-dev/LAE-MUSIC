@@ -1,0 +1,83 @@
+LAE-MUSIC candidate 0.13.0-rc.13 — local isolated verification
+Date: 2026-10-25 UTC
+No production data, outside provider credentials, real settlement or Render deployment was used.
+
+Application
+PASS reserves before contacting provider
+PASS locks artist before quota checks
+PASS checks active generation inside transaction
+PASS checks 24-hour limit inside transaction
+PASS requires verified active subscription
+PASS reserves generation usage
+PASS atomically replaces provisional task reference
+PASS atomically replaces provisional usage reference
+PASS releases failed reservation
+PASS validates provider task identifier
+PASS enforces task ownership for status
+PASS enforces task ownership for WAV
+PASS releases credit on failed task
+PASS handles cancelled provider tasks
+PASS task schema initialized outside request handler
+PASS does not lock schema on every request
+PASS terminal failed status skips provider request
+PASS refunds failed task transactionally
+PASS validates locked artist account
+PASS rejects invalid JSON with client error
+PASS rejects oversized request with 413
+PASS retains reservations after ambiguous provider failures
+PASS returns reconciliation reference on uncertain failures
+PASS does not refund accepted provider task without ID
+PASS locks unresolved provider reservations beyond 15 minutes
+PASS preflight includes older unresolved reservations
+PASS keeps per-artist transactional lock
+PASS transient provider errors preserve credits for reconciliation
+PASS unresolved provisional task returns reconciliation state
+PASS preserves terminal state during concurrent status polls
+PASS refunds based on committed terminal state
+All 31 Sonic static invariants passed. These are not database or provider integration tests.
+PASS: 25 mocked Sonic HTTP, quota, reservation, provider, and refund tests (no live database or provider).
+ℹ tests 136
+ℹ suites 0
+ℹ pass 136
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3286.334991
+
+PostgreSQL 16 disposable loopback database
+ℹ tests 122
+ℹ suites 0
+ℹ pass 122
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10832.166559
+
+Socket HTTP
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 279.835099
+
+Actual Nodemailer with loopback TLS
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 291.827245
+
+Chromium fixtures
+PASS browser journeys at desktop, tablet and mobile sizes; all external services mocked.
+
+Gateway/music/FX/storage and cash-settlement transports in application/browser/database journeys are mocks. PostgreSQL transactions/concurrency and Chromium rendering were executed locally. New mobile Premium and desktop artist-royalty screenshots were visually inspected. No physical-device or full screen-reader review is claimed.
+
+Read-only preflight on the populated disposable PostgreSQL fixture: schema/checksums/guards pass; commerce, ledger, negative artist balance, premium receipt, statement and cash-release discrepancies all zero. Overall release remains blocked by external and unfinished implementation gates. This was not a production clone.

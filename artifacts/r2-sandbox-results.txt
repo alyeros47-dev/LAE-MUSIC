@@ -1,0 +1,17 @@
+R2 review infrastructure checks, 2026-10-26
+Application: 216 pass, 0 fail (npm test).
+Native HTTP: 1 pass, 0 fail.
+Includes restricted grants, object tickets, isolation, streaming/range transport, expiry, forged grants, probe cleanup, source-secret protection and CSP tests.
+External S3/Render responses in unit tests are mocks.
+Real R2 bootstrap/public gateway checks are pending the isolated configuration workflow.
+No production deployment, migration, data mutation or live financial activation.
+
+Real isolated configuration run 40366060838 (bcb0c8683435cee5b20d50a5b63fa70b592d768f): success.
+Actual 512 MB sandbox container checks: pass before configuration.
+R2 bootstrap: blocked, separate_bucket_access_not_authorized, HTTP 403.
+No R2 keys installed; storage_upload_verified=false; music/voice training remain unverified.
+OpenAI read-only authentication: HTTP 200; MusicAPI read-only authentication: HTTP 200.
+Source environment fingerprint unchanged; source deployment snapshot unchanged.
+Independent HTTPS health checks: sandbox 200, live 200.
+Hosted sandbox capabilities: database=true, music_provider_configured=true, lyrics_configured=true, release_import_available=false, payments=false.
+Setup instructions: docs/SANDBOX-INTEGRATIONS.md (four restricted GitHub SANDBOX_R2_* secrets).

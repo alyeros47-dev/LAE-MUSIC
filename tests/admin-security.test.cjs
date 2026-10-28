@@ -1,0 +1,54 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const totp=require('../lib/totp'),{databaseOptions}=require('../lib/database');
+const {routePermission,createAdminAuth}=require('../lib/admin-auth');
+const context=require('../lib/request-context'),{transaction,audit}=require('../lib/transactions');
+test('authenticator codes match RFC 6238 SHA-1 vectors and reject replayed or malformed codes',()=>{
+ const secret=totp.base32(Buffer.from('12345678901234567890'));
+ assert.equal(secret,'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');assert.equal(totp.decode(secret).toString(),'12345678901234567890');
+ for(const [seconds,expected]of [[59,'94287082'],[1111111109,'07081804'],[1111111111,'14050471'],[1234567890,'89005924'],[2000000000,'69279037'],[20000000000,'65353130']])assert.equal(totp.hotp(secret,Math.floor(seconds/30),8),expected);
+ const now=1700000000000,step=Math.floor(now/30000),code=totp.hotp(secret,step);
+ assert.equal(totp.matchStep(secret,code,now),step);assert.equal(totp.matchStep(secret,code,now,String(step)),null);
+ assert.equal(totp.matchStep(secret,totp.hotp(secret,step-2),now),null);
+ for(const invalid of [null,12,'12345','1234567','000000 ',{},'<img>'])assert.equal(totp.matchStep(secret,invalid,now),null);
+ assert.match(totp.setup('owner@example.invalid').uri,/^otpauth:\/\/totp\/LAE-MUSIC%3Aowner%40example.invalid\?/);
+});
+test('administrator roles deny unknown operations and isolate content, finance and support access',()=>{
+ const can=(role,path,method='GET')=>routePermission(role,new URL(path,'https://lae.test'),method);
+ assert.deepEqual(can('content','/api/platform/admin/editorial','POST'),{allowed:true,fresh:false});
+ assert.equal(can('content','/api/platform/admin/withdrawal-review','POST').allowed,false);
+ assert.equal(can('finance','/api/platform/admin/editorial','POST').allowed,false);
+ assert.deepEqual(can('finance','/api/platform/admin/refund-review','POST'),{allowed:true,fresh:true});
+ assert.equal(can('finance','/api/platform/admin/report?section=audit').allowed,false);
+ assert.equal(can('support','/api/platform/admin/account-security').allowed,true);
+ assert.equal(can('support','/api/platform/admin/account-security','POST').allowed,false);
+ assert.equal(can('support','/api/platform/admin/catalog-action','POST').allowed,false);
+ assert.equal(can('content','/admin/studio').allowed,false);
+ assert.equal(can('owner','/api/platform/admin/operators','POST').fresh,true);
+ assert.equal(can('owner','/api/admin/logout','POST').fresh,false);
+ for(const role of ['content','finance','support','artist','',null])assert.equal(can(role,'/api/platform/admin/new-financial-operation','POST').allowed,false);
+ const service=createAdminAuth();const user={role:'finance',source:'named',mfa_recent:false};
+ assert.equal(service.access(user,new URL('https://lae.test/api/platform/admin/refund-review'),'POST').needs_mfa,true);
+ assert.equal(service.access({...user,mfa_recent:true},new URL('https://lae.test/api/platform/admin/refund-review'),'POST').allowed,true);
+});
+test('database policy verifies remote certificates and prevents URL options from overriding transport decisions',()=>{
+ assert.equal(databaseOptions({}),null);
+ const remote=databaseOptions({DATABASE_URL:'postgres://name:localhost-password@db.example.invalid/music?sslmode=require&ssl=false&sslrootcert=/private/file'});
+ assert.equal(remote.ssl.rejectUnauthorized,true);assert(!remote.connectionString.includes('ssl'));assert.equal(remote.connectionTimeoutMillis,10000);
+ for(const host of ['localhost','127.0.0.1','[::1]'])assert.equal(databaseOptions({DATABASE_URL:`postgres://name:password@${host}/music`}).ssl,false);
+ assert.equal(databaseOptions({DATABASE_URL:'postgres://localhost:pw@localhost.attacker.invalid/music'}).ssl.rejectUnauthorized,true);
+ for(const mode of ['disable','allow','prefer','no-verify'])assert.throws(()=>databaseOptions({DATABASE_URL:'postgres://user:secret@db.example.invalid/music?sslmode='+mode}),/verification cannot/);
+ for(const option of ['host=attacker.invalid','hostaddr=127.0.0.2','user=other','database=other','port=5433'])assert.throws(()=>databaseOptions({DATABASE_URL:'postgres://user:secret@localhost/music?'+option}),/authority/);
+ assert.throws(()=>databaseOptions({DATABASE_URL:'postgres://user:secret@db.example.invalid/music',DATABASE_SSL_MODE:'private',DATABASE_PRIVATE_HOST:'wrong'}),/explicitly approved/);
+ assert.equal(databaseOptions({DATABASE_URL:'postgres://user:secret@dpg-private-a/music',DATABASE_SSL_MODE:'private',DATABASE_PRIVATE_HOST:'dpg-private-a'}).ssl,false);
+ assert.throws(()=>databaseOptions({DATABASE_URL:'postgres://user:secret@public.example/music',DATABASE_SSL_MODE:'private',DATABASE_PRIVATE_HOST:'public.example'}),/internal hostname/);
+ assert.throws(()=>databaseOptions({DATABASE_URL:'postgres://user:secret@db.example.invalid/music',PG_CA_CERT:'invalid'}),/PEM/);
+ assert.throws(()=>databaseOptions({DATABASE_URL:'https://user:secret@db.example.invalid/music'}),error=>!error.message.includes('secret'));
+});
+test('parallel request contexts retain administrator attribution and authorization fences roll mutations back',async()=>{
+ const rows=[],calls=[];const pool={connect:async()=>({query:async(sql,args)=>{calls.push(sql);if(sql.startsWith('INSERT INTO platform_audit'))rows.push(args);},release(){}})};
+ await Promise.all(['a','b'].map(id=>context.run({adminId:'operator:'+id,adminFence:async()=>{await new Promise(resolve=>setImmediate(resolve));}},()=>transaction(pool,db=>audit(db,{type:'admin',id:'session'},'fixture',id)))));
+ assert.deepEqual(rows.map(r=>r[1]).sort(),['operator:a','operator:b']);let mutated=false;
+ await assert.rejects(context.run({adminFence:async()=>{throw Error('access revoked');}},()=>transaction(pool,async()=>{mutated=true;})),/access revoked/);
+ assert.equal(mutated,false);assert.equal(calls.at(-1),'ROLLBACK');
+});
