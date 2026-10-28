@@ -69,3 +69,4 @@ require('./studio-output.test.cjs');
 require('./production-integration.test.cjs');
 require('./neon-recovery.test.cjs');
 require('./neon-recovery-rehearsal.test.cjs');
+require('./production-release.test.cjs');
