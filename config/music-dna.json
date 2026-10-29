@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r4-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r5-v1",
   "status": "approved",
   "departments": [
     {
@@ -215,6 +215,12 @@
       "group_id": "R4",
       "department_id": "reggae-caribbean",
       "name": "Contemporary Conscious Reggae"
+    },
+    {
+      "id": "reggae-r5",
+      "group_id": "R5",
+      "department_id": "reggae-caribbean",
+      "name": "Dancehall & Party Reggae"
     }
   ],
   "styles": [
@@ -14425,6 +14431,466 @@
       ],
       "research_references": [
         "Tarrus Riley"
+      ]
+    },
+    {
+      "id": "R5-01",
+      "name": "Kingston Club Pressure",
+      "description": "Modern Jamaican dancehall with heavy bass, sharp drums and energetic synth hooks.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r5",
+      "tempo": {
+        "min": 94,
+        "max": 110
+      },
+      "mood": "Confident, energetic, playful and celebratory.",
+      "energy": "High-energy polished club dancehall with tight syncopation and punchy rhythmic bass; optional double-time subdivisions do not change the 94–110 BPM tempo range.",
+      "rhythm": "Contemporary Jamaican dancehall with strong syncopation, a distinctive riddim pulse and energetic club movement.",
+      "drums_percussion": "Heavy dancehall kick, sharp snare and clap accents, syncopated hi-hats, rapid shaker patterns, rimshot fills and tightly programmed Caribbean percussion.",
+      "bass": "Thick electronic sub-bass with short, punchy rhythmic notes, occasional slides and precise interaction with the kick drum.",
+      "instruments": {
+        "keys": "Bright synth plucks, rhythmic keyboard stabs, short melodic hooks and restrained atmospheric pads.",
+        "guitar": "Sparse muted reggae guitar, short offbeat accents and occasional rhythmic electric-guitar textures.",
+        "other": "Electronic percussion, handclaps, congas, whistles and tasteful transition effects."
+      },
+      "melody_harmony": "Original catchy hooks, rhythmic melodic phrasing, short memorable choruses and exciting instrumental responses.",
+      "vocal_delivery": "Original catchy rhythmic phrasing, short memorable choruses and confident melodic hooks; follow selected voice settings.",
+      "arrangement": "Immediate drum-and-bass introduction → rhythmic verse → short pre-chorus → explosive chorus → instrumental dancehall break → second verse → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Dancing, confidence, romance, celebration, friendship, enjoyment and nightlife.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois from the dancehall style. Keep words appropriate to the customer topic; do not automatically introduce explicit sexual content, violence or profanity. Do not force humor for a serious topic. Respect selected single-voice, duet and supported harmony settings without adding performers automatically. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Polished modern Jamaican dancehall with powerful electronic bass, crisp syncopated drums, bright synth hooks and high-energy club arrangements. Clean, powerful club dancehall with deep bass and sharp rhythmic clarity. Keep heavy bass clean and prominent, kick punchy, snare sharp and Caribbean percussion distinct. Preserve authentic Jamaican dancehall riddims rather than generic Afrobeats, trap or EDM; do not force roots one-drop drums or organ into profiles that do not specify them. Avoid: Generic EDM drops, overly fast Afrobeats percussion and muddy low frequencies.",
+      "variations": {
+        "introductions": [
+          "Open immediately with an original tight kick/snare riddim and short sub-bass notes.",
+          "Open with alternate syncopated drum accents and a bright synth hook."
+        ],
+        "progressions": [
+          "Use original bright synth-pluck harmony with punchy short electronic bass.",
+          "Use alternate keyboard stabs and controlled bass slides locked to the kick."
+        ],
+        "arrangements": [
+          "Vary rapid shaker patterns and rimshot fills through the dancehall break.",
+          "Develop an original short pre-chorus and explosive chorus with alternate synth replies."
+        ],
+        "melody": [
+          "Create original catchy rhythmic hooks and short memorable choruses.",
+          "Create a contrasting confident melody with exciting instrumental responses."
+        ],
+        "lyrical": [
+          "Develop the customer topic through original confident celebratory phrases.",
+          "Develop fresh dance or friendship images only when appropriate to the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pluck"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "syncopat"
+        ]
+      ],
+      "research_references": [
+        "Sean Paul"
+      ]
+    },
+    {
+      "id": "R5-02",
+      "name": "Island Party Swagger",
+      "description": "Playful reggae-dancehall with warm bass, bright keyboards and catchy melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r5",
+      "tempo": {
+        "min": 90,
+        "max": 108
+      },
+      "mood": "Playful, relaxed, confident and joyful.",
+      "energy": "Relaxed joyful reggae-dancehall bounce with playful melodic movement and gentle percussion.",
+      "rhythm": "Relaxed reggae-dancehall crossover with an easy dance bounce and playful Caribbean rhythmic movement.",
+      "drums_percussion": "Bouncy dancehall kick, crisp snare, light claps, syncopated hi-hats, shakers and gentle Caribbean percussion.",
+      "bass": "Deep, rounded electric or electronic bass with playful melodic movement, warm sustained notes and a relaxed rhythmic bounce.",
+      "instruments": {
+        "keys": "Bright organ bubbles, rhythmic piano, playful synth plucks and warm keyboard chords.",
+        "guitar": "Clean reggae offbeat skank, muted rhythmic guitar and short melodic responses.",
+        "other": "Brass accents, congas, handclaps, shakers and subtle tropical percussion."
+      },
+      "melody_harmony": "Original lighthearted melodic hooks, memorable choruses and rhythmic storytelling passages.",
+      "vocal_delivery": "Original lighthearted storytelling and catchy melodic hooks; respect selected voice settings and do not force comedy for serious subjects.",
+      "arrangement": "Playful keyboard-and-bass introduction → storytelling verse → catchy chorus → instrumental Caribbean groove → second verse → short rhythmic break → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Romance, humor, friendship, celebration, relationships, dancing and enjoyment.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois from the dancehall style. Keep words appropriate to the customer topic; do not automatically introduce explicit sexual content, violence or profanity. Do not force humor for a serious topic. Respect selected single-voice, duet and supported harmony settings without adding performers automatically. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Playful Jamaican reggae-dancehall crossover combining warm bass, bouncing drums, humorous storytelling, melodic hooks and bright Caribbean instrumentation. Warm, playful party reggae with strong bass and catchy melodic appeal. Keep heavy bass clean and prominent, kick punchy, snare sharp and Caribbean percussion distinct. Preserve authentic Jamaican dancehall riddims rather than generic Afrobeats, trap or EDM; do not force roots one-drop drums or organ into profiles that do not specify them. Avoid: Overly aggressive club drums, excessive electronic effects and forced comedy when the customer's topic is serious.",
+      "variations": {
+        "introductions": [
+          "Open with original playful organ/piano hooks and rounded melodic bass.",
+          "Open on alternate keyboard chords and a relaxed bouncy dancehall groove."
+        ],
+        "progressions": [
+          "Use original warm organ/piano harmony with sustained electric or electronic bass.",
+          "Use alternate playful synth plucks and melodic bass passing runs."
+        ],
+        "arrangements": [
+          "Vary muted guitar accents and gentle Caribbean percussion through the instrumental groove.",
+          "Develop a short rhythmic break and catchy final chorus with alternate keyboard hooks."
+        ],
+        "melody": [
+          "Create original lighthearted melodic hooks and rhythmic storytelling phrases.",
+          "Create a contrasting joyful refrain with playful guitar replies."
+        ],
+        "lyrical": [
+          "Develop original topic-led storytelling with humor only when the topic permits.",
+          "Develop fresh relationship or friendship images without forcing comedy for a serious subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "electronic bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Shaggy"
+      ]
+    },
+    {
+      "id": "R5-03",
+      "name": "Dancehall Crown Riddim",
+      "description": "Classic Jamaican dancehall with powerful riddims and rhythmic hooks.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r5",
+      "tempo": {
+        "min": 92,
+        "max": 112
+      },
+      "mood": "Confident, bold, playful and energetic.",
+      "energy": "Bold energetic classic riddim repetition with sharp stop-start breaks and chant-friendly hooks.",
+      "rhythm": "Classic Jamaican dancehall riddim with strong rhythmic repetition, syncopated drum accents and exciting breaks.",
+      "drums_percussion": "Classic dancehall kick-and-snare patterns, crisp rimshots, syncopated hi-hats, claps, rapid percussion fills and rhythmic stop-start breaks.",
+      "bass": "Heavy, repetitive electronic bass with punchy rhythmic motifs, short slides and strong synchronization with the drums.",
+      "instruments": {
+        "keys": "Sharp synth stabs, rhythmic organ accents, bright keyboard riffs and short melodic phrases.",
+        "guitar": "Minimal offbeat guitar skank, muted rhythmic accents and occasional short melodic responses.",
+        "other": "Brass hits, whistles, handclaps, congas and restrained electronic effects."
+      },
+      "melody_harmony": "Original rhythmic hooks, chant-friendly choruses and energetic call-and-response opportunities.",
+      "vocal_delivery": "Original rhythmic hooks and chant-friendly refrains; call-and-response opportunities only when compatible with selected vocal settings.",
+      "arrangement": "Strong riddim introduction → rhythmic verse → chant-driven chorus → instrumental dancehall passage → second verse → drum-and-bass breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Confidence, celebration, dancing, friendship, success, romance and enjoyment.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois from the dancehall style. Keep words appropriate to the customer topic; do not automatically introduce explicit sexual content, violence or profanity. Do not force humor for a serious topic. Respect selected single-voice, duet and supported harmony settings without adding performers automatically. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Classic Jamaican dancehall with strong riddim foundations, sharp percussion, deep bass, rhythmic keyboard stabs and energetic call-and-response arrangements. Authentic classic dancehall energy with powerful bass and clear percussion. Keep heavy bass clean and prominent, kick punchy, snare sharp and Caribbean percussion distinct. Preserve authentic Jamaican dancehall riddims rather than generic Afrobeats, trap or EDM; do not force roots one-drop drums or organ into profiles that do not specify them. Avoid: Generic trap production, excessive synth layers and weak riddim identity.",
+      "variations": {
+        "introductions": [
+          "Open with an original classic kick/snare riddim and heavy repeated bass motif.",
+          "Open with alternate sharp synth stabs and crisp rimshot accents."
+        ],
+        "progressions": [
+          "Use original rhythmic organ/synth voicings over short electronic bass slides.",
+          "Use alternate bright keyboard riffs and punchy repetitive bass patterns."
+        ],
+        "arrangements": [
+          "Vary stop-start drum breaks and brass hits through the dancehall passage.",
+          "Develop a drum/bass breakdown and chant-friendly final chorus with new keyboard replies."
+        ],
+        "melody": [
+          "Create original rhythmic hooks and energetic chant-friendly refrains.",
+          "Create a contrasting bold chorus with responses compatible with selected vocal settings."
+        ],
+        "lyrical": [
+          "Explore the customer subject through original rhythmic confidence imagery.",
+          "Develop fresh success or celebration phrases only when suitable to the requested topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "riddim"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "stop-start"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Beenie Man"
+      ]
+    },
+    {
+      "id": "R5-04",
+      "name": "Caribbean Dance Explosion",
+      "description": "Explosive dancehall with heavy drums, deep sub-bass and dramatic dance breaks.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r5",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Explosive, energetic, playful and celebratory.",
+      "energy": "Explosive fast dancehall drive with controlled aggressive sub-bass, dramatic breaks and a final dance climax.",
+      "rhythm": "Fast, explosive Jamaican dancehall with powerful riddim movement and dynamic dance sections.",
+      "drums_percussion": "Heavy dancehall kick, sharp snare, rapid hi-hats, claps, rolling percussion, dramatic drum fills and stop-start rhythmic breaks.",
+      "bass": "Very thick electronic sub-bass with aggressive rhythmic pulses, short bass slides and strong low-frequency impact.",
+      "instruments": {
+        "keys": "Bright synth stabs, dramatic electronic riffs, rhythmic keyboard hits and energetic transition effects.",
+        "guitar": "Sparse muted guitar accents and occasional offbeat rhythmic textures.",
+        "other": "Whistles, brass hits, handclaps, congas, electronic percussion and energetic instrumental transitions."
+      },
+      "melody_harmony": "Original short rhythmic hooks, chant-friendly refrains and high-energy melodic responses.",
+      "vocal_delivery": "Original short rhythmic hooks, chant-friendly refrains and energetic melodic responses; selected voice stays independent.",
+      "arrangement": "Explosive drum-and-bass introduction → rhythmic verse → powerful chorus → extended dance break → second verse → dramatic percussion breakdown → final dance climax.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Dancing, celebration, confidence, friendship, enjoyment, success and party energy.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois from the dancehall style. Keep words appropriate to the customer topic; do not automatically introduce explicit sexual content, violence or profanity. Do not force humor for a serious topic. Respect selected single-voice, duet and supported harmony settings without adding performers automatically. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Explosive high-energy Jamaican dancehall featuring powerful drums, aggressive rhythmic bass, dramatic electronic hooks and exciting dance breaks. Maximum dancehall energy with clear bass, punchy drums and controlled high-frequency detail. Keep heavy bass clean and prominent, kick punchy, snare sharp and Caribbean percussion distinct. Preserve authentic Jamaican dancehall riddims rather than generic Afrobeats, trap or EDM; do not force roots one-drop drums or organ into profiles that do not specify them. Avoid: Uncontrolled distortion, muddy sub-bass and generic EDM arrangements that remove the Jamaican dancehall foundation.",
+      "variations": {
+        "introductions": [
+          "Open with original explosive drums and aggressive but clean sub-bass pulses.",
+          "Open on alternate dramatic electronic riffs and rolling percussion fills."
+        ],
+        "progressions": [
+          "Use original bright synth-stab harmony over thick rhythmic electronic sub-bass.",
+          "Use alternate keyboard hits and short bass slides with controlled low-frequency impact."
+        ],
+        "arrangements": [
+          "Vary extended dance-break riddims and stop-start percussion transitions.",
+          "Develop a dramatic percussion breakdown into a new final dance climax."
+        ],
+        "melody": [
+          "Create original short rhythmic hooks and high-energy melodic responses.",
+          "Create a contrasting chant-friendly refrain with dramatic instrumental transitions."
+        ],
+        "lyrical": [
+          "Develop the customer topic through original energetic celebratory images.",
+          "Develop fresh confidence or friendship words without automatically adding explicit content."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "riddim"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "whistle"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "stop-start"
+        ],
+        [
+          "climax"
+        ]
+      ],
+      "research_references": [
+        "Elephant Man"
+      ]
+    },
+    {
+      "id": "R5-05",
+      "name": "Ragga Lovers Party Groove",
+      "description": "Melodic reggae-dancehall crossover with warm bass and playful romantic rhythms.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r5",
+      "tempo": {
+        "min": 88,
+        "max": 106
+      },
+      "mood": "Romantic, playful, joyful and relaxed.",
+      "energy": "Relaxed joyful melodic ragga bounce with warm flowing bass and playful romantic phrasing.",
+      "rhythm": "Smooth ragga-dancehall crossover with a relaxed reggae bounce and playful melodic movement.",
+      "drums_percussion": "Bouncy dancehall kick, crisp snare, relaxed hi-hats, shakers, light claps and gentle Caribbean percussion.",
+      "bass": "Deep, warm electric or electronic bass with flowing reggae-dancehall patterns, melodic passing notes and a steady dance pulse.",
+      "instruments": {
+        "keys": "Bright organ bubbles, rhythmic piano stabs, warm electric piano and catchy melodic synth phrases.",
+        "guitar": "Clean offbeat reggae skank, rhythmic electric guitar and short melodic lead-guitar responses.",
+        "other": "Brass accents, congas, handclaps, shakers and gentle Caribbean instrumental textures."
+      },
+      "melody_harmony": "Original catchy romantic hooks, rhythmic verse phrases and memorable melodic choruses.",
+      "vocal_delivery": "Original rhythmic verse phrasing and playful melodic choruses; follow the selected vocal configuration, never automatically add a duet or multiple performers from the research reference.",
+      "arrangement": "Bright keyboard-and-bass introduction → playful verse → melodic chorus → instrumental reggae-dancehall groove → second verse → rhythmic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Romance, attraction, companionship, friendship, celebration, dancing and enjoyment.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois from the dancehall style. Keep words appropriate to the customer topic; do not automatically introduce explicit sexual content, violence or profanity. Do not force humor for a serious topic. Respect selected single-voice, duet and supported harmony settings without adding performers automatically. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Melodic Jamaican ragga and reggae-dancehall crossover combining warm bass, bouncing drums, bright keyboard hooks and playful romantic melodies. Warm, melodic ragga crossover with strong bass and authentic Caribbean dance rhythm. Keep heavy bass clean and prominent, kick punchy, snare sharp and Caribbean percussion distinct. Preserve authentic Jamaican dancehall riddims rather than generic Afrobeats, trap or EDM; do not force roots one-drop drums or organ into profiles that do not specify them. Avoid: Generic romantic Afropop, excessive electronic effects and arrangements without a recognizable reggae-dancehall foundation.",
+      "variations": {
+        "introductions": [
+          "Open with original bright organ/electric-piano hooks and flowing warm bass.",
+          "Open on alternate melodic synth phrases and a relaxed reggae-dancehall bounce."
+        ],
+        "progressions": [
+          "Use original warm piano/organ harmony over electric or electronic melodic bass.",
+          "Use alternate electric-piano voicings and expressive bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar skank accents and Caribbean percussion through the instrumental groove.",
+          "Develop a rhythmic bridge and melodic final chorus with alternate organ riffs."
+        ],
+        "melody": [
+          "Create original catchy romantic hooks and rhythmic verse phrases.",
+          "Create a contrasting joyful melodic refrain for the independently selected voice configuration."
+        ],
+        "lyrical": [
+          "Explore the chosen topic through original playful melodic storytelling.",
+          "Develop fresh companionship or friendship images only when appropriate; do not force a duet."
+        ]
+      },
+      "production_terms": [
+        [
+          "ragga"
+        ],
+        [
+          "dancehall"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "electronic bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Chaka Demus & Pliers"
       ]
     }
   ]
