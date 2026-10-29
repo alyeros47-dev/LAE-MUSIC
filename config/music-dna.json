@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s13-v1",
+  "revision": "music-dna-g1-g14-s1-s14-v1",
   "status": "approved",
   "departments": [
     {
@@ -185,6 +185,12 @@
       "group_id": "S13",
       "department_id": "secular-afrobeats",
       "name": "Senegalese Mbalax & Afro-Pop"
+    },
+    {
+      "id": "secular-s14",
+      "group_id": "S14",
+      "department_id": "secular-afrobeats",
+      "name": "East African Bongo Flava"
     }
   ],
   "styles": [
@@ -12124,6 +12130,467 @@
       ],
       "research_references": [
         "Coumba Gawlo"
+      ]
+    },
+    {
+      "id": "S14-01",
+      "name": "Dar es Salaam Dance Royalty",
+      "description": "Energetic Tanzanian Bongo Flava with powerful bass, bright guitars and lively dance rhythms.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s14",
+      "tempo": {
+        "min": 104,
+        "max": 126
+      },
+      "mood": "Confident, joyful, romantic and celebratory.",
+      "energy": "High-energy Tanzanian melodic dance-pop bounces with coastal guitar interplay, thick clean bass and lively percussion rather than a rigid electronic beat.",
+      "rhythm": "Contemporary Tanzanian Bongo Flava with strong dance momentum, African syncopation and melodic instrumental interplay.",
+      "drums_percussion": "Punchy kick, crisp snare, bright claps, rolling shakers, syncopated hi-hats, congas and lively percussion fills; the groove bounces rather than becoming rigid electronic dance.",
+      "bass": "Thick rounded electronic bass with melodic electric-bass accents, syncopated movement, short slides and strong kick interaction.",
+      "instruments": {
+        "keys": "Bright piano riffs, rhythmic synth plucks, warm electric piano, atmospheric pads and short melodic keyboard responses.",
+        "guitar": "Clean East African coastal guitar patterns, interlocking rhythmic picking, bright melodic lead phrases and occasional soukous-influenced accents.",
+        "other": "Congas, shakers, handclaps, restrained brass accents and African melodic percussion."
+      },
+      "melody_harmony": "Original catchy melodic hooks, expressive romantic phrasing, uplifting choruses and memorable instrumental responses.",
+      "vocal_delivery": "Confident expressive romantic melodies and joyful dance hooks; selected voice remains independent.",
+      "arrangement": "Immediate guitar-and-percussion introduction → melodic verse → rising pre-chorus → energetic chorus → instrumental dance groove → second verse → percussion-and-guitar break → final chorus.",
+      "lyrics": {
+        "structure": "Love, celebration, success, confidence, friendship, ambition and enjoyment.",
+        "vocabulary": "Use original meaningful secular East African Bongo expressions in the selected supported language or combination. Tanzanian origin and the style name never force Swahili or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Strong Tanzanian Bongo Flava dance-pop identity with deep clear bass, lively coastal guitar and polished percussion. Keep electronic bass rounded, electric-bass accents melodic, kick punchy and guitar interlocking; balance bright piano/synths, warm electric piano and congas. Avoid generic Nigerian Afrobeats loops, excessive EDM drops and weak guitar presence.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with original East African coastal guitar motifs and lively percussion.",
+          "Begin with alternate interlocking picking and rounded electronic/electric-bass accents."
+        ],
+        "progressions": [
+          "Use original bright Bongo harmony with syncopated thick electronic bass.",
+          "Use alternate warm electric-piano voicings and short melodic electric-bass slides."
+        ],
+        "arrangements": [
+          "Vary guitar motifs and bass grooves through the instrumental dance section.",
+          "Change piano riffs, percussion patterns and chorus contours before the final chorus."
+        ],
+        "melody": [
+          "Create an original catchy romantic hook and uplifting chorus contour.",
+          "Create a contrasting confident melody and memorable coastal guitar response."
+        ],
+        "lyrical": [
+          "Develop original love, friendship and celebration verses.",
+          "Develop ambition, success and enjoyment through fresh joyful refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "tanzanian"
+        ],
+        [
+          "bongo"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "electric bass",
+          "electric-bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "interlocking"
+        ]
+      ],
+      "research_references": [
+        "Diamond Platnumz"
+      ]
+    },
+    {
+      "id": "S14-02",
+      "name": "East African Street Fusion",
+      "description": "Bold Bongo street-pop with heavy drums, deep bass and energetic melodic hooks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s14",
+      "tempo": {
+        "min": 108,
+        "max": 130
+      },
+      "mood": "Bold, playful, ambitious and energetic.",
+      "energy": "Tanzanian street-oriented Bongo dance bounce combines thick bass pulses, energetic percussion and stop-start breaks with memorable melody.",
+      "rhythm": "Contemporary Tanzanian street-oriented Bongo Flava with a strong dance bounce and lively percussion.",
+      "drums_percussion": "Heavy dance kick, sharp snare, syncopated hi-hats, fast shakers, congas, claps and energetic rhythmic breaks.",
+      "bass": "Deep electronic bass with thick rhythmic pulses, punchy short notes, occasional slides and strong low-frequency pressure.",
+      "instruments": {
+        "keys": "Bright synth stabs, rhythmic piano, playful keyboard hooks and warm melodic pads.",
+        "guitar": "Clean rhythmic East African guitar, short lead responses and restrained coastal melodic accents.",
+        "other": "African percussion, brass stabs, handclaps and tasteful electronic effects."
+      },
+      "melody_harmony": "Original short melodic hooks, rhythmic refrains and exciting chorus transitions.",
+      "vocal_delivery": "Bold playful rhythmic phrasing and memorable energetic melodic refrains; selected voice remains independent.",
+      "arrangement": "Heavy bass-and-drum introduction → rhythmic verse → punchy chorus → instrumental dance break → second verse → stop-start percussion passage → final chorus.",
+      "lyrics": {
+        "structure": "Determination, success, street ambition, celebration, friendship, romance and enjoyment.",
+        "vocabulary": "Use original meaningful secular East African Bongo expressions in the selected supported language or combination. Tanzanian origin and the style name never force Swahili or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Powerful drums/bass with clear energetic Tanzanian Bongo Flava character. Keep electronic bass pulses deep, short notes punchy and slides controlled, kick heavy and guitar coastal; balance synth stabs, rhythmic piano, congas and fast shakers. Avoid distorted lows, generic trap beats and overly repetitive arrangements while developing fresh melodic refrains.",
+      "variations": {
+        "introductions": [
+          "Begin with original heavy Bongo drums and deep rhythmic bass pulses.",
+          "Begin with alternate short synth hooks and coastal guitar responses."
+        ],
+        "progressions": [
+          "Use original bold street-Bongo harmony with punchy electronic bass.",
+          "Use alternate rhythmic piano voicings and occasional controlled bass slides."
+        ],
+        "arrangements": [
+          "Vary drum breaks and guitar responses through the instrumental dance section.",
+          "Change bass motifs and chorus structure around the stop-start percussion passage."
+        ],
+        "melody": [
+          "Create an original short energetic hook and rhythmic refrain.",
+          "Create a contrasting playful melody with exciting chorus transitions."
+        ],
+        "lyrical": [
+          "Develop original determination and street-ambition verses.",
+          "Develop friendship, romance and enjoyment through fresh bold celebration."
+        ]
+      },
+      "production_terms": [
+        [
+          "tanzanian"
+        ],
+        [
+          "bongo"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "stop-start"
+        ]
+      ],
+      "research_references": [
+        "Harmonize"
+      ]
+    },
+    {
+      "id": "S14-03",
+      "name": "Coastal Bongo Romance",
+      "description": "Smooth romantic Bongo Flava with warm bass and flowing coastal guitars.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s14",
+      "tempo": {
+        "min": 96,
+        "max": 118
+      },
+      "mood": "Romantic, playful, warm and uplifting.",
+      "energy": "Relaxed danceable Tanzanian coastal guitar movement supports warm melodic bass and romantic choruses without heavy club aggression.",
+      "rhythm": "Smooth Tanzanian Bongo Flava with a romantic dance bounce and flowing coastal guitar movement.",
+      "drums_percussion": "Smooth Afropop kick, crisp rimshot or snare, gentle hi-hats, shakers, congas and restrained rhythmic fills.",
+      "bass": "Warm rounded bass with smooth melodic runs, gentle syncopation and a relaxed but danceable pulse.",
+      "instruments": {
+        "keys": "Bright electric piano, warm acoustic piano, melodic synth plucks and soft harmonic pads.",
+        "guitar": "Clean coastal African guitar, gentle rhythmic picking, expressive melodic fills and short interlocking phrases.",
+        "other": "Soft brass accents, hand percussion, subtle strings and bright African melodic textures."
+      },
+      "melody_harmony": "Original romantic melodies, expressive verse phrasing, warm choruses and memorable instrumental hooks.",
+      "vocal_delivery": "Warm playful romantic melodic phrasing and expressive choruses; selected voice remains independent.",
+      "arrangement": "Gentle guitar-and-piano introduction → romantic verse → melodic chorus → instrumental coastal guitar passage → second verse → emotional bridge → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Romance, commitment, companionship, friendship, affection, celebration and personal happiness.",
+        "vocabulary": "Use original meaningful secular East African Bongo expressions in the selected supported language or combination. Tanzanian origin and the style name never force Swahili or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm melodic East African romantic Bongo dance music with polished bass and expressive coastal guitar. Keep bass rounded, rhythm relaxed, electric/acoustic piano warm, picking interlocking and percussion smooth; balance subtle strings and soft brass. Avoid heavy club aggression, excessive electronic effects and generic Western R&B production.",
+      "variations": {
+        "introductions": [
+          "Begin with original gentle coastal guitar phrases and warm piano.",
+          "Begin with alternate interlocking picking and expressive melodic guitar fills."
+        ],
+        "progressions": [
+          "Use original romantic Bongo harmony with smooth rounded bass runs.",
+          "Use alternate bright electric-piano voicings and gentle rhythmic bass movement."
+        ],
+        "arrangements": [
+          "Vary coastal guitar phrases and percussion accents through the instrumental passage.",
+          "Change piano voicings and romantic chorus layers around the emotional bridge."
+        ],
+        "melody": [
+          "Create an original warm romantic chorus and expressive verse melody.",
+          "Create a contrasting playful hook with flowing coastal instrumental replies."
+        ],
+        "lyrical": [
+          "Develop original commitment, companionship and affection verses.",
+          "Develop friendship, celebration and personal happiness through fresh romantic phrasing."
+        ]
+      },
+      "production_terms": [
+        [
+          "tanzanian"
+        ],
+        [
+          "bongo"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "coastal"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Rayvanny"
+      ]
+    },
+    {
+      "id": "S14-04",
+      "name": "Zanzibar Velvet Bongo Soul",
+      "description": "Sophisticated East African Bongo soul with rich piano harmony and expressive guitars.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s14",
+      "tempo": {
+        "min": 88,
+        "max": 110
+      },
+      "mood": "Romantic, sophisticated, reflective and heartfelt.",
+      "energy": "Mature refined Bongo soul retains gentle East African rhythmic movement, natural clarity and emotionally developed romantic storytelling.",
+      "rhythm": "Smooth Tanzanian Bongo Flava with gentle East African rhythmic movement and soulful contemporary pop harmony.",
+      "drums_percussion": "Warm kick, restrained snare, smooth hi-hats, subtle congas, shakers and gentle percussion accents.",
+      "bass": "Deep melodic electric bass with flowing passing notes, smooth rhythmic movement and natural low-frequency warmth.",
+      "instruments": {
+        "keys": "Rich acoustic piano, warm Rhodes-style electric piano, soft organ textures and elegant harmonic pads.",
+        "guitar": "Clean East African melodic guitar, expressive lead responses, gentle fingerpicked patterns and subtle coastal rhythmic movement.",
+        "other": "Soft strings, restrained brass, acoustic percussion and atmospheric instrumental textures."
+      },
+      "melody_harmony": "Original expressive romantic melodies, emotionally developed verses, sophisticated melodic choruses and gentle harmonic movement.",
+      "vocal_delivery": "Mature heartfelt romantic phrasing and sophisticated expressive choruses; selected voice remains independent.",
+      "arrangement": "Elegant piano-and-guitar introduction → intimate verse → romantic chorus → instrumental guitar reflection → second verse → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Love, commitment, emotional honesty, relationships, family, gratitude and life experiences.",
+        "vocabulary": "Use original meaningful secular East African Bongo expressions in the selected supported language or combination. Tanzanian origin and the style name never force Swahili or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Mature sophisticated East African Tanzanian Bongo soul with warm melodic electric bass and natural instrumental clarity. Keep Rhodes/acoustic-piano harmony rich, organ soft, guitar fingerpicked and coastal, percussion gentle and strings restrained. Avoid aggressive street percussion, excessive synth layers and generic Western ballad arrangements.",
+      "variations": {
+        "introductions": [
+          "Begin with original elegant piano harmony and expressive East African guitar.",
+          "Begin with alternate gentle fingerpicking and warm Rhodes textures."
+        ],
+        "progressions": [
+          "Use original sophisticated Bongo-soul chords with flowing electric-bass passing notes.",
+          "Use alternate rich acoustic-piano/organ voicings and smooth melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary guitar phrases and keyboard textures through the instrumental reflection.",
+          "Change emotional bridge harmony and developed romantic chorus layers."
+        ],
+        "melody": [
+          "Create an original sophisticated romantic melody and emotionally developed verse.",
+          "Create a contrasting heartfelt chorus with gentle harmonic movement."
+        ],
+        "lyrical": [
+          "Develop original commitment, emotional honesty and relationship verses.",
+          "Develop family, gratitude and life experiences through fresh mature romantic imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "tanzanian"
+        ],
+        [
+          "bongo"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ]
+      ],
+      "research_references": [
+        "Alikiba"
+      ]
+    },
+    {
+      "id": "S14-05",
+      "name": "Swahili Golden Melody",
+      "description": "Bright melodic Bongo Flava with coastal influences and playful dance percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s14",
+      "tempo": {
+        "min": 100,
+        "max": 122
+      },
+      "mood": "Joyful, romantic, confident and expressive.",
+      "energy": "Bright contemporary Tanzanian coastal dance movement combines warm bouncy bass, expressive storytelling and subtle taarab-influenced ornament.",
+      "rhythm": "Contemporary Tanzanian Bongo Flava with lively coastal African influences and a warm melodic dance pulse.",
+      "drums_percussion": "Punchy but smooth kick, crisp snare, lively shakers, flowing congas, handclaps, syncopated hi-hats and tasteful percussion fills.",
+      "bass": "Deep bouncy electric or electronic bass with flowing melodic movement, warm lows and strong rhythmic support.",
+      "instruments": {
+        "keys": "Bright piano riffs, warm electric piano, melodic synth plucks, gentle organ and expressive chord pads.",
+        "guitar": "Clean East African coastal guitar, melodic picking patterns, bright lead phrases and rhythmic responses.",
+        "other": "Subtle taarab-influenced melodic ornaments, gentle strings, hand percussion and restrained traditional instrumental colors where appropriate."
+      },
+      "melody_harmony": "Original expressive melodic hooks, playful rhythmic phrasing, memorable romantic refrains and flowing melodic transitions.",
+      "vocal_delivery": "Joyful confident expressive storytelling and playful romantic refrains; customer-selected voice remains independent without assigning a gender or register.",
+      "arrangement": "Bright guitar-and-keyboard introduction → expressive verse → catchy chorus → instrumental coastal dance groove → second verse → melodic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Romance, confidence, relationships, celebration, friendship, family and emotional expression.",
+        "vocabulary": "Use original meaningful secular East African Bongo expressions in the selected supported language or combination. Tanzanian origin and the style name never force Swahili or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Melodically rich polished Tanzanian Bongo Flava with warm bass and lively East African coastal character. Keep guitar expressive, piano bright, organ gentle, synth plucks melodic and percussion playful; use subtle taarab-influenced ornaments without copying recognizable phrases. Respect selected voice/language. Avoid generic Afrobeats loops, overly synthetic arrangements and repetitive melodic phrases.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright coastal guitar picking and melodic keyboard replies.",
+          "Begin with alternate playful percussion and expressive piano riffs."
+        ],
+        "progressions": [
+          "Use original bright Bongo harmony with flowing bouncy bass.",
+          "Use alternate warm electric-piano/organ voicings and a new melodic bass motif."
+        ],
+        "arrangements": [
+          "Vary coastal guitar patterns and subtle melodic ornaments through the dance groove.",
+          "Change percussion breaks and chorus development around the melodic bridge."
+        ],
+        "melody": [
+          "Create an original expressive romantic hook with playful rhythmic phrasing.",
+          "Create a contrasting confident melody and flowing coastal instrumental response."
+        ],
+        "lyrical": [
+          "Develop original relationships, friendship and family verses.",
+          "Develop romance, confidence and celebration through fresh expressive refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "tanzanian"
+        ],
+        [
+          "bongo"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "coastal"
+        ],
+        [
+          "taarab"
+        ]
+      ],
+      "research_references": [
+        "Zuchu"
       ]
     }
   ]
