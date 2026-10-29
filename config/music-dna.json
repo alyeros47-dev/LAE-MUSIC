@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-v1",
+  "revision": "music-dna-g1-g2-g3-g4-v1",
   "status": "approved",
   "departments": [
     {
@@ -41,8 +41,13 @@
       "group_id": "G3",
       "department_id": "gospel",
       "name": "Contemporary Gospel Praise"
-    }
-  ],
+    },
+    {
+      "id": "gospel-g4",
+      "group_id": "G4",
+      "department_id": "gospel",
+      "name": "High-Energy Gospel Dance & Praise"
+    }],
   "styles": [
     {
       "id": "G1-01",
@@ -1009,6 +1014,445 @@
         ["harmon", "backing"]
       ],
       "research_references": ["Yadah"]
+    },
+    {
+      "id": "G4-01",
+      "name": "Victory Explosion",
+      "description": "Powerful African Gospel celebration with explosive live-band breaks, brass hooks and energetic choir responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g4",
+      "tempo": {
+        "min": 125,
+        "max": 145
+      },
+      "mood": "Triumphant, explosive, joyful and celebratory.",
+      "energy": "Explosive live-band momentum builds through dramatic instrumental breaks to a full-band climax.",
+      "rhythm": "Powerful contemporary African Gospel celebration with syncopated live-band drive and congregation-style responses.",
+      "drums_percussion": "Powerful live drum kit, driving kick, crisp snare, rolling tom fills, energetic cymbal crashes and rhythmic breakdowns.",
+      "bass": "Deep, punchy electric bass with syncopated movement, strong low-frequency presence and tight synchronization with the kick drum.",
+      "instruments": {
+        "keys": "Bright Gospel piano, rhythmic organ stabs and layered synthesizer textures.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass section, congas, talking drum, shakers and energetic choir harmonies."
+      },
+      "melody_harmony": "Original powerful celebratory melodies, memorable chorus hooks and energetic choir harmonies.",
+      "vocal_delivery": "Energetic lead phrases answered by a large choir and natural congregation responses; voice chosen independently.",
+      "arrangement": "Strong drum-and-brass introduction → energetic verse → explosive chorus → call-and-response section → instrumental dance break → final chorus with full-band climax.",
+      "lyrics": {
+        "structure": "Victory, thanksgiving, divine greatness, celebration and testimonies; strong memorable hooks with natural congregation-style responses.",
+        "vocabulary": "Clear original testimony and thanksgiving phrases with joyful communal responses."
+      },
+      "production_mix": "Keep kick and punchy bass locked, tom fills dramatic, brass hooks clear, guitar rhythmic and choir energetic; balance full-band layers without obscuring vocals.",
+      "variations": {
+        "introductions": [
+          "Begin with a new driving drum-and-brass hook.",
+          "Begin with a contrasting brass phrase answered by rolling toms."
+        ],
+        "progressions": [
+          "Use an original triumphant chorus progression with syncopated bass runs.",
+          "Use an alternate celebratory progression and different punchy bass movement."
+        ],
+        "arrangements": [
+          "Vary the call-and-response and dance-break structure before the full-band climax.",
+          "Change drum fills and brass exchanges through a longer instrumental dance break."
+        ],
+        "melody": [
+          "Create an original explosive chorus contour with a fresh brass answer.",
+          "Create a contrasting memorable hook with different choir responses."
+        ],
+        "lyrical": [
+          "Develop an original victory testimony and thanksgiving refrain.",
+          "Develop divine greatness and celebration with new congregation responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "talking drum"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Tim Godfrey"
+      ]
+    },
+    {
+      "id": "G4-02",
+      "name": "Praise Without Limits",
+      "description": "Fast Nigerian Afro-Gospel dance praise with talking drum, shekere, bouncy bass and lively keyboard responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g4",
+      "tempo": {
+        "min": 118,
+        "max": 140
+      },
+      "mood": "Playful, joyful, energetic and celebratory.",
+      "energy": "Fast joyful dance movement with lively percussion breaks and audience responses.",
+      "rhythm": "Fast rhythmic Nigerian Afro-Gospel praise with Yoruba-influenced percussion, catchy melodic phrases and joyful dance grooves; musical character never forces Yoruba lyrics.",
+      "drums_percussion": "Lively Afro-Gospel drum patterns with syncopated kick, snare accents and rolling fills.",
+      "bass": "Bouncy electric bass with rhythmic movement and short melodic runs.",
+      "instruments": {
+        "keys": "Bright piano, organ riffs and lively keyboard responses.",
+        "guitar": "Rhythmic guitar.",
+        "other": "Talking drum, congas, shekere, handclaps and bright brass accents."
+      },
+      "melody_harmony": "Original catchy melodic phrases, rhythmic choruses and lively audience-response harmonies.",
+      "vocal_delivery": "Playful rhythmic lead phrases and joyful audience responses; selected voice and language remain independent.",
+      "arrangement": "Percussion-led introduction → catchy verse → rhythmic chorus → short call-and-response section → instrumental dance groove → final chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, joyful praise, celebration, blessings and testimonies; simple memorable phrases with lively audience responses.",
+        "vocabulary": "Use the customer-selected language; Yoruba-influenced musical character does not force Yoruba lyrics."
+      },
+      "production_mix": "Keep talking drum and shekere articulate, bass bouncy, organ riffs responsive, guitar rhythmic and brass bright; balance rolling fills against clear lead and audience responses.",
+      "variations": {
+        "introductions": [
+          "Open with fresh talking-drum phrases and shekere.",
+          "Open with a contrasting conga and talking-drum exchange."
+        ],
+        "progressions": [
+          "Use an original joyful progression with short bouncy bass runs.",
+          "Use a contrasting rhythmic chorus progression and alternate bass groove."
+        ],
+        "arrangements": [
+          "Vary percussion breaks and keyboard responses before the dance groove.",
+          "Vary chorus structure and talking-drum exchanges around audience responses."
+        ],
+        "melody": [
+          "Create a new catchy chorus melody with lively keyboard answers.",
+          "Create a contrasting original short hook and organ response."
+        ],
+        "lyrical": [
+          "Develop simple original thanksgiving phrases and joyful responses.",
+          "Develop blessings and testimonies with a different memorable chorus structure."
+        ]
+      },
+      "production_terms": [
+        [
+          "drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "talking drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Mike Abdul"
+      ]
+    },
+    {
+      "id": "G4-03",
+      "name": "Fire of Thanksgiving",
+      "description": "Indigenous Nigerian Gospel celebration driven by live percussion, lively organ, warm bass motifs and communal responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g4",
+      "tempo": {
+        "min": 112,
+        "max": 138
+      },
+      "mood": "Passionate, grateful, joyful and spiritually uplifting.",
+      "energy": "Strong rhythmic momentum and communal celebration build to an energetic closing section.",
+      "rhythm": "Energetic indigenous Nigerian Gospel praise with strong live percussion and communal rhythmic momentum; English, Igbo and other selected languages retain the same instrumental identity.",
+      "drums_percussion": "Strong live drum kit, rolling toms, energetic snare patterns and emphatic cymbal accents.",
+      "bass": "Warm, prominent electric bass with repeated rhythmic motifs and melodic transitions.",
+      "instruments": {
+        "keys": "Lively organ, bright piano and rhythmic keyboard accompaniment.",
+        "guitar": "Rhythmic guitar.",
+        "other": "Congas, shakers, traditional hand percussion and group vocal responses."
+      },
+      "melody_harmony": "Original expressive praise melodies and repeated choruses with evolving communal harmonies.",
+      "vocal_delivery": "Passionate expressive verses and clear communal responses with evolving harmonies; voice selected independently.",
+      "arrangement": "Strong rhythmic introduction → expressive verse → repeated praise chorus with evolving harmonies → percussion-led instrumental passage → energetic closing section.",
+      "lyrics": {
+        "structure": "Gratitude, divine protection, testimony, God’s faithfulness and celebration; clear messages with natural communal responses.",
+        "vocabulary": "Original clear gratitude and testimony; indigenous rhythm does not automatically force Igbo or any other language."
+      },
+      "production_mix": "Keep live drums and traditional hand percussion forward, organ lively and bass warm; use melodic bass transitions and evolving group harmonies without masking clear messages.",
+      "variations": {
+        "introductions": [
+          "Open with fresh traditional hand-percussion phrases and rolling toms.",
+          "Open with a contrasting conga pattern answered by lively organ."
+        ],
+        "progressions": [
+          "Use a new grateful chorus progression over repeated warm bass motifs.",
+          "Use alternate evolving harmonies and melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary the percussion-led passage and organ patterns before the energetic ending.",
+          "Change bass runs and instrumental breaks while evolving repeated chorus harmonies."
+        ],
+        "melody": [
+          "Create original expressive verses and a communal melodic response.",
+          "Create a contrasting praise refrain with new organ responses."
+        ],
+        "lyrical": [
+          "Develop a new testimony of gratitude and divine protection.",
+          "Develop faithfulness and celebration with different clear communal responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "hand percussion"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "group",
+          "communal"
+        ]
+      ],
+      "research_references": [
+        "Chioma Jesus"
+      ]
+    },
+    {
+      "id": "G4-04",
+      "name": "Street Praise Carnival",
+      "description": "Street-influenced Afro-Gospel with punchy Afrobeat drums, heavy dance bass, synth hooks and crowd-response breaks.",
+      "department_id": "gospel",
+      "category_id": "gospel-g4",
+      "tempo": {
+        "min": 115,
+        "max": 138
+      },
+      "mood": "Exciting, youthful, celebratory and confident.",
+      "energy": "Energetic modern dance groove with strong crowd hooks and bass-driven instrumental sections.",
+      "rhythm": "Contemporary street-influenced Afro-Gospel with syncopated modern percussion, punchy dance rhythms and crowd-response hooks; preserve a clear Gospel identity.",
+      "drums_percussion": "Punchy Afrobeat-inspired kick patterns, crisp snares, energetic hi-hats and syncopated percussion.",
+      "bass": "Heavy rhythmic bass with a clear dance groove and occasional short melodic fills.",
+      "instruments": {
+        "keys": "Bright synthesizer hooks, rhythmic piano chords and contemporary electronic textures.",
+        "guitar": "Electric guitar riffs.",
+        "other": "Hand percussion, brass accents, claps and group-response harmonies."
+      },
+      "melody_harmony": "Original memorable crowd-response hooks, confident melodies and group harmonies within Gospel praise.",
+      "vocal_delivery": "Energetic contemporary lead with clear crowd-response hooks and group harmonies; voice selected independently.",
+      "arrangement": "Attention-grabbing rhythmic introduction → energetic verse → memorable chorus → call-and-response break → bass-driven instrumental dance section → final chorus.",
+      "lyrics": {
+        "structure": "Transformation, testimony, gratitude, positive change, hope and celebration; natural contemporary language without vulgarity.",
+        "vocabulary": "Maintain Gospel meaning and uplifting testimony without vulgarity or direct performer imitation."
+      },
+      "production_mix": "Keep bass heavy but controlled, Afrobeat kick punchy, hi-hats crisp, synth hooks bright and guitar riffs clear; modern street-pop textures must support Gospel lyrics and group responses.",
+      "variations": {
+        "introductions": [
+          "Open with a fresh syncopated kick and bright synth hook.",
+          "Open with a contrasting bass rhythm and guitar-riff response."
+        ],
+        "progressions": [
+          "Use an original confident Gospel chorus progression over heavy rhythmic bass.",
+          "Use alternate piano chords and a new bass groove with short fills."
+        ],
+        "arrangements": [
+          "Vary crowd responses and percussion breaks before the bass-driven dance section.",
+          "Change synth hooks and instrumental transitions around the response break."
+        ],
+        "melody": [
+          "Create a new memorable chorus hook with an original group response.",
+          "Create a contrasting energetic melodic phrase answered by bright synths."
+        ],
+        "lyrical": [
+          "Develop an original transformation testimony in natural contemporary words.",
+          "Develop positive change, hope and gratitude with new clean crowd responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "afrobeat"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "group",
+          "crowd"
+        ]
+      ],
+      "research_references": [
+        "Testimony Jaga"
+      ]
+    },
+    {
+      "id": "G4-05",
+      "name": "Glory Dance Anthem",
+      "description": "Melodic contemporary Gospel anthem with bright piano, layered organ, uplifting synths and driving live drums.",
+      "department_id": "gospel",
+      "category_id": "gospel-g4",
+      "tempo": {
+        "min": 108,
+        "max": 132
+      },
+      "mood": "Joyful, confident, uplifting and triumphant.",
+      "energy": "Powerful melodic celebration develops through instruments and an expressive bridge to a strong final chorus.",
+      "rhythm": "Contemporary Gospel praise combines powerful melodies, uplifting keyboard arrangements, energetic live drums and memorable celebratory choruses.",
+      "drums_percussion": "Driving live drums with a strong backbeat, lively fills and controlled cymbal accents.",
+      "bass": "Smooth but prominent electric bass with rhythmic movement and melodic support.",
+      "instruments": {
+        "keys": "Bright piano, layered Gospel organ, warm pads and uplifting synthesizer textures.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass accents, African percussion and rich backing harmonies."
+      },
+      "melody_harmony": "Original powerful melodies and memorable celebratory choruses with rich backing harmonies and meaningful melodic verses.",
+      "vocal_delivery": "Confident melodic verses, expressive bridge and powerful chorus supported by rich backing harmonies; voice selected independently.",
+      "arrangement": "Bright keyboard introduction → melodic verse → uplifting chorus → instrumental development → expressive bridge → powerful final chorus.",
+      "lyrics": {
+        "structure": "God’s greatness, thanksgiving, victory, faith, divine love and celebration; memorable choruses supported by meaningful verses.",
+        "vocabulary": "Original meaningful verses of faith and divine love support memorable thanksgiving and victory choruses."
+      },
+      "production_mix": "Balance driving backbeat and smooth prominent bass with bright piano, layered organ, warm pads and uplifting synths; control cymbals and brass so rich backing harmonies and lead melodies stay clear.",
+      "variations": {
+        "introductions": [
+          "Begin with a fresh bright piano hook and layered organ.",
+          "Begin with a contrasting keyboard hook over warm pads."
+        ],
+        "progressions": [
+          "Use an original triumphant chorus progression with melodic bass support.",
+          "Use a contrasting uplifting progression and new piano voicings."
+        ],
+        "arrangements": [
+          "Vary instrumental breaks and expressive bridge arrangement before the final chorus.",
+          "Develop a different bridge build and final chorus harmonies."
+        ],
+        "melody": [
+          "Create a new powerful chorus melody with an original piano response.",
+          "Create a contrasting uplifting melodic contour and bass phrase."
+        ],
+        "lyrical": [
+          "Develop meaningful verses of faith, thanksgiving and divine love.",
+          "Develop victory and God’s greatness with a new memorable chorus."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "backbeat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "backing",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Joe Praize"
+      ]
     }
   ]
 }
