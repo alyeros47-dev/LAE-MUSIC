@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-v1",
   "status": "approved",
   "departments": [
     {
@@ -125,6 +125,12 @@
       "group_id": "S3",
       "department_id": "secular-afrobeats",
       "name": "Street Pop & Street Anthems"
+    },
+    {
+      "id": "secular-s4",
+      "group_id": "S4",
+      "department_id": "secular-afrobeats",
+      "name": "Afro-Fusion & Powerful Grooves"
     }
   ],
   "styles": [
@@ -7430,6 +7436,466 @@
       ],
       "research_references": [
         "Small Doctor"
+      ]
+    },
+    {
+      "id": "S4-01",
+      "name": "African Giant Groove",
+      "description": "Powerful live Afro-fusion with brass, deep bass and syncopated percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s4",
+      "tempo": {
+        "min": 100,
+        "max": 118
+      },
+      "mood": "Confident, commanding, energetic and celebratory.",
+      "energy": "Confident live-band African dance movement and powerful rounded lows support an Afrobeat instrumental groove and brass-led break.",
+      "rhythm": "Midtempo Afro-fusion with strong live-band movement, syncopated African percussion and a confident dance pulse.",
+      "drums_percussion": "Strong live kick, crisp snare, syncopated hi-hats, congas, shekere, rhythmic hand percussion and expressive drum fills.",
+      "bass": "Deep rounded electric bass with melodic Afrobeat movement, syncopated grooves and strong rhythmic interaction with drums.",
+      "instruments": {
+        "keys": "Warm electric piano, rhythmic organ stabs, vintage synth textures and short melodic keyboard riffs.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass section, Afrobeat percussion, subtle strings and occasional melodic synth accents."
+      },
+      "melody_harmony": "Original rhythmic melodic phrases, memorable hooks and expressive melodic transitions.",
+      "vocal_delivery": "Confident commanding rhythmic melodic phrasing with expressive transitions; selected voice remains independent.",
+      "arrangement": "Brass-and-percussion introduction → rhythmic verse → powerful chorus → instrumental Afrobeat groove → second verse → brass-led break → final chorus.",
+      "lyrics": {
+        "structure": "Ambition, confidence, African pride, perseverance, success, enjoyment and personal growth.",
+        "vocabulary": "Use original meaningful secular Afro-fusion expressions in the selected supported language or combination. Do not force a language, lead gender or worship themes; never reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Rich live Afrobeat instrumentation combined with modern low-frequency power. Keep rounded electric bass interacting with strong live drums, brass rich, guitar rhythmic, electric piano warm and organ stabs clear; balance congas, shekere and hand percussion. Avoid thin bass, generic electronic Afropop loops and excessive synthetic instrumentation.",
+      "variations": {
+        "introductions": [
+          "Begin with an original brass riff and syncopated African percussion.",
+          "Begin with alternate live percussion accents answered by rich brass."
+        ],
+        "progressions": [
+          "Use original live Afrobeat chord movement with deep rounded electric bass.",
+          "Use alternate warm electric-piano voicings and syncopated melodic bass phrases."
+        ],
+        "arrangements": [
+          "Vary guitar interplay and percussion patterns through the Afrobeat instrumental groove.",
+          "Change brass riffs and instrumental breaks before the final chorus."
+        ],
+        "melody": [
+          "Create an original commanding rhythmic hook with expressive melodic transitions.",
+          "Create a contrasting memorable chorus phrase and fresh brass response."
+        ],
+        "lyrical": [
+          "Develop original African-pride and perseverance verses.",
+          "Develop ambition, success and personal growth through fresh confident celebration."
+        ]
+      },
+      "production_terms": [
+        [
+          "afrobeat"
+        ],
+        [
+          "live"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ]
+      ],
+      "research_references": [
+        "Burna Boy"
+      ]
+    },
+    {
+      "id": "S4-02",
+      "name": "Dancehall Fire Fusion",
+      "description": "Energetic Afro-dancehall with heavy bass and punchy drums.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s4",
+      "tempo": {
+        "min": 102,
+        "max": 124
+      },
+      "mood": "Bold, joyful, energetic and party-focused.",
+      "energy": "Heavy dancehall lows and lively Nigerian percussion drive bold dance momentum through an instrumental break and percussion build.",
+      "rhythm": "Afro-dancehall fusion with strong offbeat accents, heavy bass and lively Nigerian dance percussion.",
+      "drums_percussion": "Heavy dancehall-influenced kick, sharp snare, rhythmic hi-hats, syncopated Afro-percussion, shakers and energetic drum breaks.",
+      "bass": "Thick electronic and electric bass with a rolling dancehall groove, powerful sub-bass and rhythmic movement.",
+      "instruments": {
+        "keys": "Bright synth hooks, rhythmic organ stabs, dancehall keyboard plucks and warm chord textures.",
+        "guitar": "Offbeat reggae guitar.",
+        "other": "Congas, brass accents, electronic percussion and occasional tropical melodic instruments."
+      },
+      "melody_harmony": "Original catchy hooks, rhythmic phrases and memorable dance-oriented refrains.",
+      "vocal_delivery": "Bold joyful rhythmic lead and memorable dance refrains; selected voice remains independent.",
+      "arrangement": "Heavy bass-and-drum introduction → rhythmic verse → energetic chorus → dancehall instrumental break → second verse → percussion build → final chorus.",
+      "lyrics": {
+        "structure": "Celebration, enjoyment, success, resilience, confidence, friendship and nightlife.",
+        "vocabulary": "Use original meaningful secular Afro-fusion expressions in the selected supported language or combination. Do not force a language, lead gender or worship themes; never reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Heavy dancehall bass, strong drums and clear African rhythmic identity. Keep rolling sub-bass controlled, offbeat reggae guitar distinct, kick heavy, snare sharp and synth hooks bright; balance organ, shakers, congas and electronic percussion. Avoid slow romantic pacing and overly soft percussion while maintaining professional low-frequency clarity.",
+      "variations": {
+        "introductions": [
+          "Open with an original heavy dancehall bass-and-drum motif.",
+          "Open with alternate offbeat reggae guitar accents and punchy drums."
+        ],
+        "progressions": [
+          "Use original warm dancehall chords with rolling electronic/electric bass.",
+          "Use alternate rhythmic organ voicings and a different powerful sub-bass motif."
+        ],
+        "arrangements": [
+          "Vary offbeat guitar patterns and synth hooks through the dancehall break.",
+          "Change percussion breaks and chorus structure before the final build."
+        ],
+        "melody": [
+          "Create an original catchy dance-oriented hook with bold rhythmic phrasing.",
+          "Create a contrasting joyful refrain with memorable offbeat responses."
+        ],
+        "lyrical": [
+          "Develop original resilience and confidence verses with celebratory hooks.",
+          "Develop friendship, enjoyment and nightlife through fresh rhythmic phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "reggae"
+        ],
+        [
+          "offbeat"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "percussion"
+        ]
+      ],
+      "research_references": [
+        "Timaya"
+      ]
+    },
+    {
+      "id": "S4-03",
+      "name": "Island Roots Afro-Fusion",
+      "description": "Warm Afro-reggae with rolling bass, offbeat guitar and Caribbean rhythms.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s4",
+      "tempo": {
+        "min": 94,
+        "max": 116
+      },
+      "mood": "Warm, uplifting, confident and relaxed.",
+      "energy": "Relaxed Caribbean movement retains African percussion, warm rolling reggae bass and an uplifting midtempo dance pulse.",
+      "rhythm": "Midtempo Afro-reggae and dancehall fusion with relaxed Caribbean groove and African percussion movement.",
+      "drums_percussion": "Reggae-influenced kick and snare, dancehall rhythmic accents, flowing hi-hats, shakers, congas and subtle African percussion.",
+      "bass": "Deep warm reggae-style bass with rolling melodic patterns, sustained low notes and gentle rhythmic syncopation.",
+      "instruments": {
+        "keys": "Reggae organ bubbles, warm electric piano, soft synth pads and bright melodic plucks.",
+        "guitar": "Offbeat electric guitar and acoustic guitar.",
+        "other": "Tropical percussion, subtle brass and melodic instrumental responses."
+      },
+      "melody_harmony": "Original smooth melodies, rhythmic hooks and uplifting chorus structures.",
+      "vocal_delivery": "Warm relaxed melodic phrasing and confident uplifting hooks; selected voice remains independent.",
+      "arrangement": "Reggae guitar-and-organ introduction → melodic verse → uplifting chorus → instrumental reggae groove → second verse → rhythmic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Love, peace, unity, resilience, celebration, gratitude and personal growth.",
+        "vocabulary": "Use original meaningful secular Afro-fusion expressions in the selected supported language or combination. Do not force a language, lead gender or worship themes; never reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Preserve warm reggae bass and offbeat guitar identity while blending African percussion naturally. Keep organ bubbles audible, electric piano warm, sustained low notes clear, Caribbean rhythm relaxed and congas/shakers subtle; balance tropical accents and gentle brass. Avoid generic Afrobeats arrangements that remove the reggae influence.",
+      "variations": {
+        "introductions": [
+          "Begin with an original offbeat reggae guitar pattern and organ bubbles.",
+          "Begin with alternate warm organ responses over rolling reggae bass."
+        ],
+        "progressions": [
+          "Use original warm reggae harmony with sustained low bass notes.",
+          "Use alternate electric-piano voicings and gently syncopated melodic bass patterns."
+        ],
+        "arrangements": [
+          "Vary guitar accents and organ bubbles through the instrumental reggae groove.",
+          "Change percussion combinations and rhythmic bridge development."
+        ],
+        "melody": [
+          "Create an original smooth uplifting melody with Caribbean rhythmic phrasing.",
+          "Create a contrasting relaxed hook and warm melodic instrumental response."
+        ],
+        "lyrical": [
+          "Develop original peace, unity and resilience verses.",
+          "Develop love, gratitude and personal growth through fresh uplifting refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "reggae"
+        ],
+        [
+          "caribbean"
+        ],
+        [
+          "offbeat"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ bubbles"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Patoranking"
+      ]
+    },
+    {
+      "id": "S4-04",
+      "name": "Coastal Afro-Groove",
+      "description": "Bright, danceable Afro-fusion with highlife guitars and lively percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s4",
+      "tempo": {
+        "min": 106,
+        "max": 126
+      },
+      "mood": "Playful, confident, joyful and festive.",
+      "energy": "Bright coastal Nigerian dance momentum and playful melodic highlife bass support a lively instrumental groove and dance break.",
+      "rhythm": "Lively coastal Nigerian Afro-fusion with highlife guitar movement, Afro-pop percussion and strong dance momentum.",
+      "drums_percussion": "Punchy Afro-pop kick, crisp snare, syncopated hi-hats, congas, shakers, handclaps and lively rhythmic fills.",
+      "bass": "Bouncy electric bass with highlife-influenced melodic movement, repeating dance patterns and warm low-frequency impact.",
+      "instruments": {
+        "keys": "Bright piano riffs, rhythmic organ accents, playful synth plucks and warm keyboard pads.",
+        "guitar": "Clean interlocking highlife guitars.",
+        "other": "Brass accents, African percussion and short melodic instrumental hooks."
+      },
+      "melody_harmony": "Original catchy melodic hooks, playful rhythmic phrases and memorable choruses.",
+      "vocal_delivery": "Playful confident rhythmic phrasing and bright catchy choruses; selected voice remains independent.",
+      "arrangement": "Guitar-and-percussion introduction → rhythmic verse → catchy chorus → instrumental highlife groove → second verse → dance break → final chorus.",
+      "lyrics": {
+        "structure": "Enjoyment, romance, confidence, friendship, success and celebration.",
+        "vocabulary": "Use original meaningful secular Afro-fusion expressions in the selected supported language or combination. Do not force a language, lead gender or worship themes; never reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Bright danceable Afro-fusion with melodic bass and lively highlife guitar. Keep interlocking guitars clean, highlife bass bouncy, kick punchy, piano bright and percussion lively; balance brass and synth plucks with warm organ/pads. Avoid excessively dark electronic production and slow ballad arrangements.",
+      "variations": {
+        "introductions": [
+          "Begin with original interlocking highlife guitar patterns and lively percussion.",
+          "Begin with alternate guitar responses over playful melodic bass."
+        ],
+        "progressions": [
+          "Use original bright coastal fusion chords with highlife bass movement.",
+          "Use alternate rhythmic piano voicings and a different warm bouncy bass phrase."
+        ],
+        "arrangements": [
+          "Vary guitar patterns and bass runs through the instrumental highlife groove.",
+          "Change piano riffs and percussion breaks before the final dance chorus."
+        ],
+        "melody": [
+          "Create an original playful melodic hook with confident phrasing.",
+          "Create a contrasting festive chorus and short highlife guitar response."
+        ],
+        "lyrical": [
+          "Develop original friendship and enjoyment verses.",
+          "Develop romance, confidence and success through fresh celebratory hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "1da Banton"
+      ]
+    },
+    {
+      "id": "S4-05",
+      "name": "Midnight Afro-Spirit",
+      "description": "Atmospheric Afro-R&B fusion with deep bass and emotional melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s4",
+      "tempo": {
+        "min": 90,
+        "max": 110
+      },
+      "mood": "Introspective, emotional, mysterious and hopeful.",
+      "energy": "Restrained but powerful deep bass and spacious gentle syncopation sustain emotional midtempo fusion without generic party intensity.",
+      "rhythm": "Midtempo atmospheric Afro-fusion with gentle syncopation, deep bass and spacious rhythmic movement.",
+      "drums_percussion": "Soft but punchy electronic kick, crisp rimshot, restrained hi-hats, subtle Afro-percussion, shakers and occasional rhythmic breaks.",
+      "bass": "Deep atmospheric sub-bass with smooth gliding movement, controlled low-frequency pressure and hypnotic rhythmic pulses.",
+      "instruments": {
+        "keys": "Dark synth pads, warm electric piano, atmospheric plucks and spacious electronic textures.",
+        "guitar": "Processed electric guitar and ambient guitar phrases.",
+        "other": "Subtle strings and restrained African percussion."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, introspective phrasing and memorable atmospheric hooks.",
+      "vocal_delivery": "Emotionally expressive introspective phrasing and hopeful atmospheric hooks; selected voice remains independent.",
+      "arrangement": "Atmospheric synth-and-guitar introduction → emotional verse → melodic chorus → instrumental reflection → second verse → expressive bridge → final chorus.",
+      "lyrics": {
+        "structure": "Personal growth, emotional reflection, love, ambition, resilience, relationships and hope.",
+        "vocabulary": "Use original meaningful secular Afro-fusion expressions in the selected supported language or combination. Do not force a language, lead gender or worship themes; never reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Deep immersive Afro-fusion with emotional melodies and restrained but powerful bass. Keep atmospheric sub-bass glides smooth and low pressure controlled, kick soft but punchy, rimshot clear and percussion subtle; balance dark pads, warm electric piano, processed/ambient guitar and strings. Avoid explosive brass, excessive live percussion and generic party-music structures.",
+      "variations": {
+        "introductions": [
+          "Begin with original dark synth textures and atmospheric guitar phrases.",
+          "Begin with alternate warm electric-piano layers and smooth sub-bass glides."
+        ],
+        "progressions": [
+          "Use original mysterious harmony with hypnotic atmospheric sub-bass pulses.",
+          "Use alternate warm electric-piano voicings and smoothly gliding bass movement."
+        ],
+        "arrangements": [
+          "Vary synth textures and guitar effects through the instrumental reflection.",
+          "Change percussion patterns and emotional bridge development while preserving space."
+        ],
+        "melody": [
+          "Create an original introspective melodic hook with emotionally expressive phrasing.",
+          "Create a contrasting hopeful chorus contour and atmospheric melodic response."
+        ],
+        "lyrical": [
+          "Develop original emotional-reflection and relationship verses.",
+          "Develop ambition, resilience and personal growth through fresh hopeful imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-fusion"
+        ],
+        [
+          "electronic"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "glid"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Omah Lay"
       ]
     }
   ]
