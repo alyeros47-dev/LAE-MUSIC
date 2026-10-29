@@ -7,6 +7,16 @@ on:
         required: false
         type: boolean
         default: false
+      recovery_backup_branch:
+        description: "Optional previously created owned backup branch"
+        required: false
+        type: string
+        default: ""
+      recovery_backup_run:
+        description: "Original run ID for the optional saved backup"
+        required: false
+        type: string
+        default: ""
 permissions:
   contents: read
 jobs:
@@ -50,4 +60,6 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           LAE_EXISTING_RECOVERY_REHEARSAL: "1"
+          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
+          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
