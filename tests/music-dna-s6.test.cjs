@@ -42,7 +42,7 @@ test("S6 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s6"'));
   assert.throws(() => dna.prepare(brief("secular-s6"), actor));
   for (const [id, name] of cases) {
@@ -170,7 +170,7 @@ test("S6 has its own selector group and log-drum identity distinct from S1–S5"
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     names = [
       "Party Afrobeats & Dance Hits",
       "Smooth Afropop & Romantic",
@@ -180,7 +180,7 @@ test("S6 has its own selector group and log-drum identity distinct from S1–S5"
       "Amapiano & Afro-Dance",
     ],
     labels = names.map(
-      (name) => '<optgroup label="Secular and Afrobeats / ' + name + '">',
+      (name) => '<optgroup label="Afrobeats & African Music / ' + name + '">',
     );
   assert(labels.every((label) => html.includes(label)));
   for (let i = 1; i < labels.length; i++)

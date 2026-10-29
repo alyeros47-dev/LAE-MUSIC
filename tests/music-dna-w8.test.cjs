@@ -50,10 +50,10 @@ test("W8 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Western and International / Country & Acoustic Storytelling">',
+      '<optgroup label="Western & International Music / Country & Acoustic Storytelling">',
     ),
   );
   assert(!html.includes('<option value="western-w8"'));
@@ -262,9 +262,9 @@ test("W8 stays separate from W1–W7 and earlier departments with all prior opti
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Western and International / Country & Acoustic Storytelling">';
+      '<optgroup label="Western & International Music / Country & Acoustic Storytelling">';
   assert(html.includes(label));
   const segment = html.slice(
     html.indexOf(label),
@@ -333,7 +333,7 @@ test("Completed registry contains 43 groups and 215 individually selectable uniq
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     ),
-    html = ui.musicDNAControls(c, String);
+    html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert.deepEqual(
     [...html.matchAll(/<option value="([GSRW]\d+-\d{2})">/g)].map((m) => m[1]),
     ids,

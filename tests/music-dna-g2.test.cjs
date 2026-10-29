@@ -172,7 +172,7 @@ test("G2 headings remain nonselectable and unsupplied IDs cannot generate", asyn
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     ),
-    html = ui.musicDNAControls(c, String);
+    html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   for (const [id, name] of cases)
     assert(html.includes('<option value="' + id + '">' + name + "</option>"));
   assert(!html.includes('<option value="gospel-g2"'));

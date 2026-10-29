@@ -42,7 +42,7 @@ test("S1 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s1"'));
   assert.throws(() => dna.prepare(brief("secular-s1"), actor));
   for (const [id, name] of cases) {
@@ -159,12 +159,12 @@ test("S1 has a separate Secular/Afrobeats optgroup and never inherits Gospel pra
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Secular and Afrobeats / Party Afrobeats & Dance Hits">';
+      '<optgroup label="Afrobeats & African Music / Party Afrobeats & Dance Hits">';
   assert(html.includes(label));
   assert(
-    html.indexOf(label) > html.indexOf("Gospel Music / Indigenous Igbo Gospel"),
+    html.indexOf(label) > html.indexOf("Gospel & Christian Music / Indigenous Igbo Gospel"),
   );
   const segment = html.slice(
     html.indexOf(label),

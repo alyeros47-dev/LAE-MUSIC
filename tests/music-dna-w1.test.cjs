@@ -51,10 +51,10 @@ test("W1 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Western and International / Powerful Soul & R&B Ballads">',
+      '<optgroup label="Western & International Music / Powerful Soul & R&B Ballads">',
     ),
   );
   assert(!html.includes('<option value="western-w1"'));
@@ -256,9 +256,9 @@ test("W1 remains separate from Gospel/Secular/Reggae groups, all earlier styles 
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Western and International / Powerful Soul & R&B Ballads">';
+      '<optgroup label="Western & International Music / Powerful Soul & R&B Ballads">';
   assert(html.includes(label));
   const segment = html.slice(
     html.indexOf(label),

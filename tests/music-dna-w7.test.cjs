@@ -50,10 +50,10 @@ test("W7 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Western and International / Classic Funk & Dance Soul">',
+      '<optgroup label="Western & International Music / Classic Funk & Dance Soul">',
     ),
   );
   assert(!html.includes('<option value="western-w7"'));
@@ -262,9 +262,9 @@ test("W7 remains separate from W1–W6 and prior departments, preserving every e
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Western and International / Classic Funk & Dance Soul">';
+      '<optgroup label="Western & International Music / Classic Funk & Dance Soul">';
   assert(html.includes(label));
   const segment = html.slice(
     html.indexOf(label),

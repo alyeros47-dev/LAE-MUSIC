@@ -42,7 +42,7 @@ test("G6 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="gospel-g6"'));
   assert.throws(() => dna.prepare(brief("gospel-g6"), actor));
   for (const [id, name] of cases) {
@@ -201,8 +201,8 @@ test("Gospel completeness: G1–G14 each expose five styles, with G6 between G5 
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
-    position = (name) => html.indexOf('<optgroup label="Gospel Music / ' + name + '"');
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
+    position = (name) => html.indexOf('<optgroup label="Gospel & Christian Music / ' + name + '"');
   assert(position("Indigenous Yoruba Gospel") >= 0);
   assert(
     position("Indigenous Yoruba Gospel") < position("Indigenous Igbo Gospel"),

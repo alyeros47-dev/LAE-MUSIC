@@ -51,10 +51,10 @@ test("W3 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Western and International / Smooth Romantic Soul">',
+      '<optgroup label="Western & International Music / Smooth Romantic Soul">',
     ),
   );
   assert(!html.includes('<option value="western-w3"'));
@@ -250,9 +250,9 @@ test("W3 remains separate from W1–W2 and prior departments, preserving every e
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Western and International / Smooth Romantic Soul">';
+      '<optgroup label="Western & International Music / Smooth Romantic Soul">';
   assert(html.includes(label));
   const segment = html.slice(
     html.indexOf(label),

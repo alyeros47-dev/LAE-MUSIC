@@ -51,10 +51,10 @@ test("R3 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Reggae and Caribbean / Romantic Reggae & Lovers Rock">',
+      '<optgroup label="Reggae & Caribbean Music / Romantic Reggae & Lovers Rock">',
     ),
   );
   assert(!html.includes('<option value="reggae-r3"'));
@@ -242,9 +242,9 @@ test("R3 separate selector group and distinct musical fingerprints preserve R1/R
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Reggae and Caribbean / Romantic Reggae & Lovers Rock">';
+      '<optgroup label="Reggae & Caribbean Music / Romantic Reggae & Lovers Rock">';
   const segment = html.slice(
     html.indexOf(label),
     html.indexOf("</optgroup>", html.indexOf(label)),

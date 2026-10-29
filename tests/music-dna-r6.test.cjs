@@ -51,10 +51,10 @@ test("R6 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Reggae and Caribbean / Reggae Pop & Crossover">',
+      '<optgroup label="Reggae & Caribbean Music / Reggae Pop & Crossover">',
     ),
   );
   assert(!html.includes('<option value="reggae-r6"'));
@@ -252,8 +252,8 @@ test("R6 selection and musical fingerprints remain separate while every earlier 
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
-    label = '<optgroup label="Reggae and Caribbean / Reggae Pop & Crossover">';
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
+    label = '<optgroup label="Reggae & Caribbean Music / Reggae Pop & Crossover">';
   const segment = html.slice(
     html.indexOf(label),
     html.indexOf("</optgroup>", html.indexOf(label)),

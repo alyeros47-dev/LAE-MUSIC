@@ -42,7 +42,7 @@ test("S14 exposes only the exact five styles under a nonselectable heading and k
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s14"'));
   assert.throws(() => dna.prepare(brief("secular-s14"), actor));
   for (const [id, name] of cases) {
@@ -159,14 +159,14 @@ test("S14 is separate from previous groups and preserves core Tanzanian rather t
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Secular and Afrobeats / East African Bongo Flava">';
+      '<optgroup label="Afrobeats & African Music / East African Bongo Flava">';
   assert(html.includes(label));
   for (let n = 1; n <= 13; n++) {
     const previous = c.categories.find((x) => x.group_id === "S" + n),
       previousLabel =
-        '<optgroup label="Secular and Afrobeats / ' + previous.name + '">';
+        '<optgroup label="Afrobeats & African Music / ' + previous.name + '">';
     assert(html.includes(previousLabel));
     assert(html.indexOf(previousLabel) < html.indexOf(label));
   }
@@ -271,13 +271,13 @@ test("Secular registration completeness: S1–S14 have five unique selectable st
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     ),
-    html = ui.musicDNAControls(c, String);
+    html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   const visibleIds = [
     ...html.matchAll(/<option value="(S\d{1,2}-\d{2})">/g),
   ].map((x) => x[1]);
   assert.deepEqual(visibleIds, expectedIds);
   assert.equal(
-    (html.match(/<optgroup label="Secular and Afrobeats \/ /g) || []).length,
+    (html.match(/<optgroup label="Afrobeats & African Music \/ /g) || []).length,
     14,
   );
   for (const group of groups)

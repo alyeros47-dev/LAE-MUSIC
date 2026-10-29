@@ -42,7 +42,7 @@ test("S10 exposes only the exact five styles under a nonselectable heading and k
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s10"'));
   assert.throws(() => dna.prepare(brief("secular-s10"), actor));
   for (const [id, name] of cases) {
@@ -170,15 +170,15 @@ test("S10 has a separate Ghanaian selector group while preserving existing Niger
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     ghana =
-      '<optgroup label="Secular and Afrobeats / Ghanaian Afrobeats & Hiplife">';
+      '<optgroup label="Afrobeats & African Music / Ghanaian Afrobeats & Hiplife">';
   assert(html.includes(ghana));
   for (let n = 1; n <= 9; n++) {
     const previous = c.categories.find((x) => x.group_id === "S" + n);
     assert(previous);
     const label =
-      '<optgroup label="Secular and Afrobeats / ' + previous.name + '">';
+      '<optgroup label="Afrobeats & African Music / ' + previous.name + '">';
     assert(html.includes(label));
     assert(html.indexOf(label) < html.indexOf(ghana));
   }

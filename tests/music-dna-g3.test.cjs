@@ -44,7 +44,7 @@ test("G3 uses the exact five supplied names and nonselectable category with priv
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     ),
-    html = ui.musicDNAControls(c, String);
+    html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="gospel-g3"'));
   assert.throws(() =>
     dna.prepare({ ...brief("G3-01"), musicDnaStyle: "gospel-g3" }, actor),

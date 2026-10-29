@@ -95,11 +95,11 @@ test("public categories are headings only and private research names never reach
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, (s) =>
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, (s) =>
     String(s).replaceAll('"', "&quot;"),
   );
   assert(
-    html.includes('<optgroup label="Gospel Music / QA restrained category">'),
+    html.includes('<optgroup label="Gospel & Christian Music / QA restrained category">'),
   );
   assert(!html.includes('<option value="qa-prayer"'));
   assert(html.includes('<option value="qa-restrained"'));

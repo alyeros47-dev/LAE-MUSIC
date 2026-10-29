@@ -42,7 +42,7 @@ test("S13 exposes only the exact five styles under a nonselectable heading and k
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s13"'));
   assert.throws(() => dna.prepare(brief("secular-s13"), actor));
   for (const [id, name] of cases) {
@@ -164,14 +164,14 @@ test("S13 has its own selector group and Senegalese rhythm distinct from rumba, 
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Secular and Afrobeats / Senegalese Mbalax & Afro-Pop">';
+      '<optgroup label="Afrobeats & African Music / Senegalese Mbalax & Afro-Pop">';
   assert(html.includes(label));
   for (let n = 1; n <= 12; n++) {
     const previous = c.categories.find((x) => x.group_id === "S" + n),
       previousLabel =
-        '<optgroup label="Secular and Afrobeats / ' + previous.name + '">';
+        '<optgroup label="Afrobeats & African Music / ' + previous.name + '">';
     assert(html.includes(previousLabel));
     assert(html.indexOf(previousLabel) < html.indexOf(label));
   }

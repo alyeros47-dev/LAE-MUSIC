@@ -51,10 +51,10 @@ test("R2 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Reggae and Caribbean / African Roots Reggae">',
+      '<optgroup label="Reggae & Caribbean Music / African Roots Reggae">',
     ),
   );
   assert(!html.includes('<option value="reggae-r2"'));
@@ -225,8 +225,8 @@ test("R2 remains separate from R1 and earlier African groups in configuration an
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
-    label = '<optgroup label="Reggae and Caribbean / African Roots Reggae">';
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
+    label = '<optgroup label="Reggae & Caribbean Music / African Roots Reggae">';
   const segment = html.slice(
     html.indexOf(label),
     html.indexOf("</optgroup>", html.indexOf(label)),
