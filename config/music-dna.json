@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-v1",
   "status": "approved",
   "departments": [
     {
@@ -143,6 +143,12 @@
       "group_id": "S6",
       "department_id": "secular-afrobeats",
       "name": "Amapiano & Afro-Dance"
+    },
+    {
+      "id": "secular-s7",
+      "group_id": "S7",
+      "department_id": "secular-afrobeats",
+      "name": "Nigerian Highlife & Traditional Pop"
     }
   ],
   "styles": [
@@ -8846,6 +8852,466 @@
       ],
       "research_references": [
         "Tyler ICU"
+      ]
+    },
+    {
+      "id": "S7-01",
+      "name": "Eastern Highlife Celebration",
+      "description": "Modern Igbo Highlife with bright guitars, lively bass and festive percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s7",
+      "tempo": {
+        "min": 108,
+        "max": 132
+      },
+      "mood": "Joyful, romantic, festive and confident.",
+      "energy": "Modern Igbo Highlife dance movement combines bright melodic guitar, lively electric bass and festive traditional percussion.",
+      "rhythm": "Danceable Igbo Highlife with flowing guitar rhythms, lively bass movement and strong traditional percussion.",
+      "drums_percussion": "Strong live kick, crisp snare, rolling tom fills, congas, shakers, handclaps and lively traditional percussion.",
+      "bass": "Warm melodic electric bass with flowing Highlife runs, syncopated rhythmic movement and a powerful dance foundation.",
+      "instruments": {
+        "keys": "Bright piano chords, rhythmic organ stabs, melodic keyboard responses and warm synth pads.",
+        "guitar": "Interlocking clean electric guitars with bright Highlife lead melodies, rhythmic picking patterns and expressive melodic fills.",
+        "other": "Ogene, udu, ekwe, brass section, shekere and traditional hand percussion."
+      },
+      "melody_harmony": "Original uplifting melodic hooks, expressive phrases and celebratory choruses.",
+      "vocal_delivery": "Joyful confident melodic phrasing and festive choruses; selected voice remains independent.",
+      "arrangement": "Guitar-and-percussion introduction → melodic verse → festive chorus → lead-guitar instrumental passage → second verse → brass-and-percussion break → final chorus.",
+      "lyrics": {
+        "structure": "Love, celebration, marriage, family, success, gratitude, community and enjoyment.",
+        "vocabulary": "Use original meaningful secular Highlife expressions in the selected supported language or combination. Eastern Nigerian musical origins never force Igbo or any other language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Highlife guitar and melodic electric bass remain prominent. Keep interlocking lead/picking lines clear, warm bass flowing, live drums lively and ogene/udu/ekwe naturally integrated with shekere and brass. Avoid replacing live Highlife instrumentation with generic Afrobeats synth loops; retain modern dance clarity and warm low-frequency support.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright Highlife lead-guitar riffs and traditional percussion.",
+          "Begin with alternate interlocking guitar picking and lively melodic bass."
+        ],
+        "progressions": [
+          "Use original festive Highlife chords with flowing electric-bass runs.",
+          "Use alternate bright piano/organ voicings and syncopated melodic bass phrases."
+        ],
+        "arrangements": [
+          "Vary lead-guitar riffs through the instrumental passage.",
+          "Change brass phrases, traditional percussion and chorus development before the final chorus."
+        ],
+        "melody": [
+          "Create an original uplifting hook with expressive Highlife melodic phrasing.",
+          "Create a contrasting festive chorus and new instrumental guitar response."
+        ],
+        "lyrical": [
+          "Develop original love, marriage and family celebration verses.",
+          "Develop community, gratitude and success through fresh joyful refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "live"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Flavour"
+      ]
+    },
+    {
+      "id": "S7-02",
+      "name": "Brothers Heritage Highlife",
+      "description": "Traditional Eastern Highlife with interlocking guitars and warm live instrumentation.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s7",
+      "tempo": {
+        "min": 96,
+        "max": 120
+      },
+      "mood": "Warm, reflective, proud and celebratory.",
+      "energy": "Organic steady Eastern Highlife dance pulse supports folk-influenced storytelling and an extended layered-guitar opening.",
+      "rhythm": "Classic Eastern Nigerian Highlife with a steady dance pulse, layered guitars and organic percussion.",
+      "drums_percussion": "Natural live kick and snare, gentle tom fills, congas, shakers, ekwe accents and traditional hand percussion.",
+      "bass": "Deep rounded electric bass with expressive Highlife walking patterns, melodic passing notes and flowing rhythmic movement.",
+      "instruments": {
+        "keys": "Warm organ chords, restrained piano, soft electric piano and subtle harmonic accompaniment.",
+        "guitar": "Multiple clean guitars playing complementary interlocking Highlife patterns: one melodic lead and another intricate rhythmic picking part.",
+        "other": "Ogene, udu, ekwe, shekere and occasional traditional flute."
+      },
+      "melody_harmony": "Original folk-influenced melodic phrases, conversational storytelling and memorable communal refrains.",
+      "vocal_delivery": "Warm conversational storytelling and reflective communal refrains; selected voice remains independent.",
+      "arrangement": "Extended guitar introduction → storytelling verse → melodic refrain → instrumental guitar passage → second verse → traditional percussion interlude → final refrain.",
+      "lyrics": {
+        "structure": "Family, cultural heritage, community, wisdom, marriage, perseverance, gratitude and life lessons.",
+        "vocabulary": "Use original meaningful secular Highlife expressions in the selected supported language or combination. Eastern Nigerian musical origins never force Igbo or any other language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Preserve the warmth and natural character of a traditional live Eastern Highlife band. Keep complementary interlocking guitar lead/picking parts distinct, rounded electric-bass walking notes expressive, keyboards restrained and traditional percussion organic; integrate ogene, udu, ekwe and occasional flute. Avoid heavy EDM bass, aggressive trap drums and excessive electronic effects.",
+      "variations": {
+        "introductions": [
+          "Begin with original extended complementary Highlife guitar patterns.",
+          "Begin with alternate melodic lead and intricate rhythmic-picking exchanges."
+        ],
+        "progressions": [
+          "Use original warm traditional Highlife harmony with expressive walking bass.",
+          "Use alternate restrained organ/piano voicings and rounded melodic passing notes."
+        ],
+        "arrangements": [
+          "Vary interlocking guitar patterns through the instrumental passage.",
+          "Change traditional percussion, harmonic movement and final melodic refrain."
+        ],
+        "melody": [
+          "Create original folk-influenced melodic phrasing and a communal refrain.",
+          "Create a contrasting warm storytelling melody and guitar response."
+        ],
+        "lyrical": [
+          "Develop original family, heritage and community storytelling.",
+          "Develop wisdom, perseverance and life lessons through fresh reflective verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "live"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "walking"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "ekwe"
+        ]
+      ],
+      "research_references": [
+        "Umu Obiligbo"
+      ]
+    },
+    {
+      "id": "S7-03",
+      "name": "Eastern Urban Highlife",
+      "description": "Contemporary Afro-urban music blending Highlife guitar with powerful modern drums.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s7",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Confident, ambitious, energetic and uplifting.",
+      "energy": "Modern Afro-urban impact retains melodic Highlife guitar/bass movement and Eastern percussion under rhythmic storytelling.",
+      "rhythm": "Modern Afro-urban groove incorporating Highlife guitar movement and Eastern Nigerian percussion.",
+      "drums_percussion": "Punchy Afro-pop kick, sharp snare, syncopated hi-hats, congas, shakers, ogene accents and energetic drum fills.",
+      "bass": "Powerful electronic bass carefully layered with melodic electric bass, combining modern low-frequency impact with Highlife rhythmic movement.",
+      "instruments": {
+        "keys": "Bright piano riffs, rhythmic organ accents, modern synth plucks and atmospheric pads.",
+        "guitar": "Clean Highlife guitar riffs, short melodic lead phrases and rhythmic guitar responses.",
+        "other": "Ogene, ekwe, udu, brass accents and contemporary electronic percussion."
+      },
+      "melody_harmony": "Original rhythmic hooks and expressive melodic choruses; spoken or rap-like passages are optional only when appropriate to the song and customer direction.",
+      "vocal_delivery": "Expressive rhythmic storytelling and melodic choruses; follow customer vocal approach and selected voice. Do not automatically force rap vocals.",
+      "arrangement": "Highlife guitar-and-bass introduction → rhythmic verse → melodic chorus → instrumental guitar groove → second verse → percussion-driven bridge → final chorus.",
+      "lyrics": {
+        "structure": "Ambition, hard work, cultural pride, success, family, friendship, confidence and personal growth.",
+        "vocabulary": "Use original meaningful secular Highlife expressions in the selected supported language or combination. Eastern Nigerian musical origins never force Igbo or any other language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Blend modern urban production with authentic Highlife instrumentation. Keep electronic bass carefully balanced with melodic electric bass, clean Highlife guitar responses distinct and ogene/ekwe/udu rhythmic rather than decorative; retain bright piano, organ and synth accents. Follow customer vocal approach and voice settings without automatically forcing rap or a vocal register.",
+      "variations": {
+        "introductions": [
+          "Begin with original clean Highlife guitar riffs and layered electronic/electric bass.",
+          "Begin with alternate short lead-guitar phrases over a modern rhythmic bass groove."
+        ],
+        "progressions": [
+          "Use original bright urban Highlife harmony with carefully layered bass movement.",
+          "Use alternate piano/organ voicings and a different melodic electric-bass phrase."
+        ],
+        "arrangements": [
+          "Vary guitar motifs and rhythmic verse arrangement through the instrumental groove.",
+          "Change percussion accents and chorus structure before the final chorus."
+        ],
+        "melody": [
+          "Create an original rhythmic hook and expressive melodic chorus.",
+          "Create a contrasting uplifting melodic phrase; any spoken rhythmic passage remains optional and customer-directed."
+        ],
+        "lyrical": [
+          "Develop original hard-work and ambition verses with cultural pride.",
+          "Develop family, friendship and personal growth through fresh confident storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "udu"
+        ]
+      ],
+      "research_references": [
+        "Phyno"
+      ]
+    },
+    {
+      "id": "S7-04",
+      "name": "Vintage Palmwine Groove",
+      "description": "Organic, soulful Highlife with vintage guitars, live drums and warm bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s7",
+      "tempo": {
+        "min": 96,
+        "max": 118
+      },
+      "mood": "Nostalgic, warm, soulful and joyful.",
+      "energy": "Relaxed danceable vintage live-band interplay retains natural dynamics, analog warmth and soulful instrumental space.",
+      "rhythm": "Relaxed but danceable vintage Highlife with natural rhythmic movement and warm live-band interplay.",
+      "drums_percussion": "Natural live drum kit, warm kick, snare with subtle room character, gentle tom fills, shakers, congas and hand percussion.",
+      "bass": "Round expressive electric bass with melodic Highlife movement, smooth passing notes and natural live-band dynamics.",
+      "instruments": {
+        "keys": "Vintage electric piano, warm organ, soft acoustic piano and restrained analog-style synth textures.",
+        "guitar": "Bright clean electric guitar, rhythmic fingerpicking, expressive lead-guitar melodies and interlocking Highlife patterns.",
+        "other": "Congas, shekere, ogene, soft brass, traditional flute and organic percussion."
+      },
+      "melody_harmony": "Original soulful melodies, folk-influenced phrases and memorable instrumental responses.",
+      "vocal_delivery": "Warm soulful melodic phrasing and natural expressive storytelling; selected voice remains independent.",
+      "arrangement": "Extended guitar-and-percussion introduction → melodic verse → warm chorus → live-band instrumental section → second verse → guitar-led bridge → final chorus.",
+      "lyrics": {
+        "structure": "Love, family, heritage, friendship, everyday happiness, reflection and celebration.",
+        "vocabulary": "Use original meaningful secular Highlife expressions in the selected supported language or combination. Eastern Nigerian musical origins never force Igbo or any other language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm organic timeless Highlife with clear live instrumentation. Keep interlocking fingerpicked guitars bright, round electric bass expressive, drums naturally roomy, vintage electric piano warm and organ soft; balance traditional flute, shekere, ogene and gentle brass. Avoid excessive electronic drums, synthetic bass dominance and heavily processed club production.",
+      "variations": {
+        "introductions": [
+          "Begin with original extended interlocking guitar and organic percussion.",
+          "Begin with alternate rhythmic fingerpicking and expressive warm bass."
+        ],
+        "progressions": [
+          "Use original vintage Highlife harmony with smooth electric-bass passing notes.",
+          "Use alternate warm organ/electric-piano voicings and natural melodic bass movement."
+        ],
+        "arrangements": [
+          "Vary guitar interplay and live-drum fills through the live-band instrumental section.",
+          "Change bass runs, organ textures and guitar-led bridge solos."
+        ],
+        "melody": [
+          "Create an original soulful melody with folk-influenced phrasing.",
+          "Create a contrasting nostalgic chorus and warm instrumental response."
+        ],
+        "lyrical": [
+          "Develop original love, friendship and everyday happiness verses.",
+          "Develop family, heritage and reflection through fresh joyful storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "flute"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "The Cavemen"
+      ]
+    },
+    {
+      "id": "S7-05",
+      "name": "Igbo Cultural Dance Festival",
+      "description": "Energetic cultural Highlife with ogene, ekwe, lively guitar and powerful dance rhythms.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s7",
+      "tempo": {
+        "min": 112,
+        "max": 138
+      },
+      "mood": "Festive, proud, energetic and communal.",
+      "energy": "Fast communal cultural Highlife movement combines lively guitars, fast bass runs and powerful indigenous percussion into extended celebration.",
+      "rhythm": "Fast Igbo cultural Highlife with energetic traditional percussion, lively bass and communal dance movement.",
+      "drums_percussion": "Strong live kick, sharp snare, rolling toms, energetic congas, ekwe rhythms, ogene accents, shakers and traditional hand percussion.",
+      "bass": "Deep bouncy electric bass with fast melodic Highlife runs and strong dance momentum.",
+      "instruments": {
+        "keys": "Bright organ, rhythmic piano chords, melodic keyboard riffs and occasional brass-like synth accents.",
+        "guitar": "Fast interlocking Highlife guitar patterns, lively lead-guitar melodies and rhythmic guitar fills.",
+        "other": "Ogene, ekwe, udu, shekere, traditional flute, brass and handclaps."
+      },
+      "melody_harmony": "Original celebratory melodic phrases, memorable group-response hooks and expressive instrumental melodies.",
+      "vocal_delivery": "Festive communal melodic phrasing and energetic group-response hooks; selected voice remains independent.",
+      "arrangement": "Ogene-and-percussion introduction → lively guitar entry → celebratory verse → communal chorus → traditional instrumental dance break → second verse → extended final celebration.",
+      "lyrics": {
+        "structure": "Cultural pride, marriage celebrations, family, community achievements, gratitude, success and traditional festivities.",
+        "vocabulary": "Use original meaningful secular Highlife expressions in the selected supported language or combination. Eastern Nigerian musical origins never force Igbo or any other language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Strong traditional Igbo percussion and powerful live Highlife dance energy. Keep ogene/ekwe patterns central, udu naturally supportive, fast interlocking guitar and electric-bass runs clear, organ bright and flute/brass responses lively; balance handclaps and shekere. Avoid generic Afrobeats beats that remove cultural Highlife identity.",
+      "variations": {
+        "introductions": [
+          "Begin with original ogene patterns and powerful traditional percussion before lively guitar entry.",
+          "Begin with alternate ekwe rhythms and bright guitar responses."
+        ],
+        "progressions": [
+          "Use original festive Highlife chords with fast bouncy electric-bass runs.",
+          "Use alternate bright organ/piano voicings and strong melodic dance bass."
+        ],
+        "arrangements": [
+          "Vary ogene patterns and guitar riffs through the traditional instrumental dance break.",
+          "Change brass phrases, percussion breaks and communal chorus arrangement before extended celebration."
+        ],
+        "melody": [
+          "Create an original festive group-response hook and lively guitar answer.",
+          "Create a contrasting proud communal melody and expressive instrumental phrase."
+        ],
+        "lyrical": [
+          "Develop original family and marriage-celebration verses with cultural pride.",
+          "Develop community achievements, gratitude and success through fresh festive responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "live"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "flute"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Anyidons"
       ]
     }
   ]
