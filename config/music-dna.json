@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-v1",
   "status": "approved",
   "departments": [
     {
@@ -77,6 +77,12 @@
       "group_id": "G10",
       "department_id": "gospel",
       "name": "Ghanaian Deep Worship"
+    },
+    {
+      "id": "gospel-g11",
+      "group_id": "G11",
+      "department_id": "gospel",
+      "name": "South African Gospel & Choir"
     }
   ],
   "styles": [
@@ -3719,6 +3725,458 @@
       ],
       "research_references": [
         "Kweku Teye"
+      ]
+    },
+    {
+      "id": "G11-01",
+      "name": "Celebration Choir Explosion",
+      "description": "Energetic South African Gospel with powerful choir and live-band rhythms.",
+      "department_id": "gospel",
+      "category_id": "gospel-g11",
+      "tempo": {
+        "min": 112,
+        "max": 138
+      },
+      "mood": "Joyful, triumphant, communal and celebratory.",
+      "energy": "Strong dance movement and lively ensemble responses build through an instrumental break into a triumphant ending.",
+      "rhythm": "Energetic South African Gospel praise with strong dance movement, syncopated percussion and lively choir responses.",
+      "drums_percussion": "Powerful live drum kit, strong kick and snare, energetic tom fills, cymbal crashes, handclaps and rhythmic African percussion.",
+      "bass": "Deep bouncy electric bass with melodic movement, syncopated grooves and strong kick-drum synchronization.",
+      "instruments": {
+        "keys": "Bright Gospel piano, lively organ, rhythmic keyboard stabs and warm synthesizer layers.",
+        "guitar": "Electric guitar.",
+        "other": "Brass accents, congas, shakers, handclaps and large SATB-style choir harmonies across independent ensemble parts."
+      },
+      "melody_harmony": "Original powerful multi-part choir voicings, rhythmic congregational responses and clear harmony layers.",
+      "vocal_delivery": "Energetic communal lead with natural call-and-response and a full multi-part ensemble; selected lead voice remains independent.",
+      "arrangement": "Powerful choir-and-drum introduction → energetic verse → large choir chorus → call-and-response section → instrumental dance break → triumphant final chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, divine greatness, victory, unity, joyful worship and celebration.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or combination. South African musical identity never forces a language or unsupported translation. Do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve South African choir celebration rather than generic Afro-Gospel, Nigerian praise or Western worship. The choir must sound like a full ensemble with clear multi-part SATB-style harmony layers and strong live-band interaction; keep bouncy bass locked to kick, drums powerful and communal responses audible.",
+      "variations": {
+        "introductions": [
+          "Open with an original full-choir phrase answered by powerful drums.",
+          "Open with alternate layered choir voicings and syncopated drum accents."
+        ],
+        "progressions": [
+          "Use original triumphant ensemble chords with bouncy synchronized bass.",
+          "Use alternate bright piano voicings and a different melodic bass groove."
+        ],
+        "arrangements": [
+          "Vary choir voicings and drum fills through the instrumental dance break.",
+          "Change keyboard riffs and live-band exchanges before the triumphant final chorus."
+        ],
+        "melody": [
+          "Create a new communal chorus melody with clear multi-part answers.",
+          "Create a contrasting original praise hook and layered congregational response."
+        ],
+        "lyrical": [
+          "Develop original unity and thanksgiving phrases for communal celebration.",
+          "Develop divine greatness and victory through fresh joyful worship responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "south african"
+        ],
+        [
+          "choir"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "clap"
+        ]
+      ],
+      "research_references": [
+        "Joyous Celebration"
+      ]
+    },
+    {
+      "id": "G11-02",
+      "name": "Royal Worship Gathering",
+      "description": "Majestic live worship with rich harmonies and expressive piano.",
+      "department_id": "gospel",
+      "category_id": "gospel-g11",
+      "tempo": {
+        "min": 72,
+        "max": 98
+      },
+      "mood": "Reverent, majestic, heartfelt and spiritually uplifting.",
+      "energy": "Spacious live-worship dynamics progress naturally through a powerful bridge toward a majestic final chorus.",
+      "rhythm": "Moderate South African contemporary worship with live-band dynamics and strong congregational phrasing.",
+      "drums_percussion": "Controlled live drums, warm kick, expressive snare, restrained tom fills and gradual cymbal builds.",
+      "bass": "Warm melodic electric bass with sustained notes and expressive transitions.",
+      "instruments": {
+        "keys": "Grand piano, rich Gospel organ, atmospheric pads and layered worship harmonies.",
+        "guitar": "Electric guitar.",
+        "other": "Gentle strings, African percussion and powerful choir harmonies."
+      },
+      "melody_harmony": "Original expressive worship melodies, rich choir harmonies and strong congregational phrasing.",
+      "vocal_delivery": "Heartfelt reverent phrasing with powerful choir support and natural congregational responses; voice selected independently.",
+      "arrangement": "Piano introduction → reflective verse → choir-supported chorus → expanded second verse → instrumental worship passage → powerful bridge → majestic final chorus.",
+      "lyrics": {
+        "structure": "Adoration, divine faithfulness, surrender, hope, thanksgiving and spiritual renewal.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or combination. South African musical identity never forces a language or unsupported translation. Do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve spacious South African live-worship atmosphere with strong vocal harmonies and natural dynamic progression. Keep grand piano expressive, organ rich, bass warm and drums controlled; balance guitar, gentle strings, African percussion and choir entrances across the powerful bridge and majestic final chorus.",
+      "variations": {
+        "introductions": [
+          "Begin with an original expressive grand-piano introduction and warm bass.",
+          "Begin with alternate rich organ harmony and spacious piano responses."
+        ],
+        "progressions": [
+          "Use original majestic worship progressions with sustained melodic bass.",
+          "Use alternate rich piano voicings and expressive bass transitions."
+        ],
+        "arrangements": [
+          "Vary choir entrances and guitar responses through the worship passage.",
+          "Change bridge arrangement and instrumental development while preserving natural dynamics."
+        ],
+        "melody": [
+          "Create an original heartfelt chorus with strong choir support.",
+          "Create a contrasting reverent melody with spacious congregational phrasing."
+        ],
+        "lyrical": [
+          "Develop original adoration and faithfulness expressions.",
+          "Develop surrender, hope and renewal through fresh thanksgiving verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "south african"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Benjamin Dube"
+      ]
+    },
+    {
+      "id": "G11-03",
+      "name": "African Heritage Praise",
+      "description": "Traditional South African Gospel with lively percussion and communal singing.",
+      "department_id": "gospel",
+      "category_id": "gospel-g11",
+      "tempo": {
+        "min": 104,
+        "max": 130
+      },
+      "mood": "Joyful, grateful, hopeful and celebratory.",
+      "energy": "Flowing traditional dance movement and communal clapping lead to an uplifting final chorus.",
+      "rhythm": "South African traditional Gospel praise with flowing dance movement, communal clapping and strong choir responses.",
+      "drums_percussion": "Lively live drum kit, rhythmic handclaps, congas, shakers and traditional African percussion accents.",
+      "bass": "Warm prominent electric bass with rolling dance patterns and melodic fills.",
+      "instruments": {
+        "keys": "Bright organ, rhythmic piano and warm Gospel keyboard textures.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass accents, hand percussion and layered group harmonies."
+      },
+      "melody_harmony": "Original expressive melodic singing and natural communal choir responses over traditional rhythmic arrangements.",
+      "vocal_delivery": "Expressive melodic lead and strong communal group responses; selected voice remains independent.",
+      "arrangement": "Traditional rhythmic introduction → melodic verse → group-response chorus → percussion break → instrumental celebration → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Gratitude, perseverance, faith, divine protection, hope and communal thanksgiving.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or combination. South African musical identity never forces a language or unsupported translation. Do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve the traditional South African Gospel feel rather than converting it into generic electronic dance music. Keep communal clapping and traditional percussion lively, bass warm with rolling patterns, organ bright and guitar rhythmic; give layered group harmonies clear space around instrumental transitions.",
+      "variations": {
+        "introductions": [
+          "Begin with an original communal clapping pattern and traditional percussion.",
+          "Begin with alternate conga and shaker accents over rolling bass."
+        ],
+        "progressions": [
+          "Use original bright traditional praise chords with rolling bass patterns.",
+          "Use alternate rhythmic piano voicings and melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary clapping patterns and choir responses through the percussion break.",
+          "Change organ phrases and instrumental transitions before the uplifting ending."
+        ],
+        "melody": [
+          "Create a new expressive praise melody with communal choir answers.",
+          "Create a contrasting hopeful refrain and rhythmic group response."
+        ],
+        "lyrical": [
+          "Develop original perseverance and faith testimony with grateful responses.",
+          "Develop divine protection and hope through fresh communal thanksgiving."
+        ]
+      },
+      "production_terms": [
+        [
+          "south african"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "group",
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Rebecca Malope"
+      ]
+    },
+    {
+      "id": "G11-04",
+      "name": "Healing Presence Worship",
+      "description": "Gentle contemporary worship with soulful piano and warm choir.",
+      "department_id": "gospel",
+      "category_id": "gospel-g11",
+      "tempo": {
+        "min": 66,
+        "max": 90
+      },
+      "mood": "Peaceful, prayerful, hopeful and emotionally uplifting.",
+      "energy": "Gentle soulful dynamics develop gradually through an expressive bridge toward a choir-supported final chorus.",
+      "rhythm": "Slow-to-moderate South African contemporary worship groove with spacious phrasing and expressive harmonic movement.",
+      "drums_percussion": "Gentle live drums, soft kick, restrained snare, subtle cymbal swells and controlled dynamic builds.",
+      "bass": "Deep warm electric bass with sustained notes and smooth melodic transitions.",
+      "instruments": {
+        "keys": "Expressive grand piano, warm electric piano, atmospheric pads and rich organ harmonies.",
+        "guitar": "Ambient electric guitar.",
+        "other": "Soft strings, gentle percussion and layered Gospel choir."
+      },
+      "melody_harmony": "Original soulful melodies, rich harmonic movement and smooth piano arrangements with gradual emotional intensity.",
+      "vocal_delivery": "Prayerful soulful phrasing with peaceful expressive lead and layered choir; selected voice remains independent.",
+      "arrangement": "Gentle piano introduction → prayerful verse → emotional chorus → expanded instrumental development → expressive bridge → choir-supported final chorus.",
+      "lyrics": {
+        "structure": "Divine comfort, healing, hope, faith, restoration, gratitude and surrender.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or combination. South African musical identity never forces a language or unsupported translation. Do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve contemporary South African worship character, spacious phrasing and gradual emotional intensity. Keep drums gentle, deep bass warm, grand piano expressive and electric piano smooth; balance atmospheric pads, organ harmony, ambient guitar, soft strings and warm layered choir through controlled builds.",
+      "variations": {
+        "introductions": [
+          "Begin with an original gentle piano motif and warm sustained bass.",
+          "Begin with alternate warm electric-piano harmony and ambient guitar textures."
+        ],
+        "progressions": [
+          "Use original hopeful chord voicings with smooth melodic bass transitions.",
+          "Use alternate soulful harmonic development over deep sustained bass."
+        ],
+        "arrangements": [
+          "Vary string arrangements and choir entrances during expanded development.",
+          "Change piano layers and controlled bridge build before the choir-supported final chorus."
+        ],
+        "melody": [
+          "Create an original prayerful melodic contour with warm choir responses.",
+          "Create a contrasting peaceful refrain with expressive soulful phrasing."
+        ],
+        "lyrical": [
+          "Develop original comfort and restoration imagery with grateful prayer.",
+          "Develop hope, faith and surrender through fresh meaningful healing-themed verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "south african"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "ambient electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Dr Tumi"
+      ]
+    },
+    {
+      "id": "G11-05",
+      "name": "Spirit of Harmony",
+      "description": "Expressive Gospel soul with sophisticated harmonies and live instrumentation.",
+      "department_id": "gospel",
+      "category_id": "gospel-g11",
+      "tempo": {
+        "min": 74,
+        "max": 102
+      },
+      "mood": "Passionate, reverent, uplifting and emotionally expressive.",
+      "energy": "Natural Gospel-soul live-band movement supports an emotional bridge and powerful choir-led ending.",
+      "rhythm": "Contemporary South African Gospel soul with expressive melodic phrasing and natural live-band movement.",
+      "drums_percussion": "Smooth live Gospel drums, warm kick, crisp snare, expressive tom fills and controlled cymbal accents.",
+      "bass": "Melodic electric bass with flowing phrases, syncopated accents and warm low-frequency support.",
+      "instruments": {
+        "keys": "Rich grand piano, soulful electric piano, warm organ and atmospheric pads.",
+        "guitar": "Clean electric guitar.",
+        "other": "Subtle strings, light African percussion and layered choir harmonies."
+      },
+      "melody_harmony": "Original expressive melodies, sophisticated harmonies and powerful choir arrangements with soulful keyboard voicings.",
+      "vocal_delivery": "Passionate reverent melodic phrasing and emotionally expressive choir responses; selected voice remains independent.",
+      "arrangement": "Soulful keyboard introduction → expressive verse → rich choir chorus → second verse → instrumental worship interlude → emotional bridge → powerful final chorus.",
+      "lyrics": {
+        "structure": "Divine love, gratitude, surrender, hope, spiritual renewal and adoration.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or combination. South African musical identity never forces a language or unsupported translation. Do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve South African Gospel soul with rich vocal harmony and expressive musicality central. Keep piano rich, electric piano soulful, organ warm and bass flowing with syncopated accents; balance smooth drums, clean guitar, subtle strings and light African percussion around sophisticated layered choir harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with original soulful electric-piano voicings and rich grand piano.",
+          "Begin with alternate warm organ harmony and flowing melodic bass."
+        ],
+        "progressions": [
+          "Use original sophisticated Gospel-soul chords with syncopated bass accents.",
+          "Use alternate rich piano voicings and different flowing bass phrases."
+        ],
+        "arrangements": [
+          "Vary choir harmonies and instrumental transitions through the worship interlude.",
+          "Change bridge development and keyboard layers before the powerful final chorus."
+        ],
+        "melody": [
+          "Create an original expressive chorus with sophisticated choir responses.",
+          "Create a contrasting passionate melodic contour with soulful keyboard answers."
+        ],
+        "lyrical": [
+          "Develop original divine-love and adoration verses with grateful responses.",
+          "Develop surrender, hope and renewal through fresh expressive testimony."
+        ]
+      },
+      "production_terms": [
+        [
+          "south african"
+        ],
+        [
+          "live"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Ntokozo Mbambo"
       ]
     }
   ]
