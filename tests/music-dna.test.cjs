@@ -329,6 +329,7 @@ test("undocumented internal catalogue fields cannot enter a provider prompt or s
   duplicate.styles.push({
     ...structuredClone(duplicate.styles[0]),
     id: "qa-reordered",
+    tempo:{max:76,min:62},
     instruments: {
       other: duplicate.styles[0].instruments.other,
       guitar: duplicate.styles[0].instruments.guitar,
