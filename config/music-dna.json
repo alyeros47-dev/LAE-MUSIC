@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-s10-v1",
   "status": "approved",
   "departments": [
     {
@@ -161,6 +161,12 @@
       "group_id": "S9",
       "department_id": "secular-afrobeats",
       "name": "African Soul & Alternative R&B"
+    },
+    {
+      "id": "secular-s10",
+      "group_id": "S10",
+      "department_id": "secular-afrobeats",
+      "name": "Ghanaian Afrobeats & Hiplife"
     }
   ],
   "styles": [
@@ -10251,6 +10257,466 @@
       ],
       "research_references": [
         "Asa"
+      ]
+    },
+    {
+      "id": "S10-01",
+      "name": "Accra Golden Afropop",
+      "description": "Smooth Ghanaian Afropop with warm bass, Highlife guitar and romantic melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s10",
+      "tempo": {
+        "min": 98,
+        "max": 116
+      },
+      "mood": "Romantic, confident, warm and joyful.",
+      "energy": "Relaxed danceable Ghanaian Afropop bounce blends smooth romantic melody and flowing Highlife guitar with polished contemporary percussion.",
+      "rhythm": "Smooth Ghanaian Afropop with relaxed Highlife guitar movement and modern dance percussion.",
+      "drums_percussion": "Punchy Afropop kick, crisp snare, light claps, syncopated hi-hats, flowing shakers and gentle congas.",
+      "bass": "Deep rounded electronic or electric bass with smooth melodic movement and a relaxed danceable bounce.",
+      "instruments": {
+        "keys": "Warm electric piano, bright synth plucks, atmospheric pads and short melodic keyboard phrases.",
+        "guitar": "Clean Ghanaian Highlife-inspired guitar patterns, muted rhythmic picking and gentle lead-guitar responses.",
+        "other": "Shakers, congas, subtle brass accents and restrained traditional percussion."
+      },
+      "melody_harmony": "Original romantic melodic hooks, smooth verse phrasing and memorable uplifting choruses.",
+      "vocal_delivery": "Warm confident romantic melodic phrasing with smooth verses and uplifting choruses; selected voice remains independent.",
+      "arrangement": "Guitar-and-percussion introduction → melodic verse → romantic pre-chorus → catchy chorus → instrumental Highlife groove → second verse → expanded final chorus.",
+      "lyrics": {
+        "structure": "Love, attraction, companionship, celebration, success and enjoyment.",
+        "vocabulary": "Use original meaningful secular Ghanaian expressions in the selected supported language or combination. Ghanaian musical origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Polished Ghanaian Afropop with warm bass, flowing Highlife guitar and strong melodic appeal. Keep muted guitar picking clear, rounded bass smooth, electric piano warm and percussion refined. Avoid excessive brass, aggressive street drums and generic Nigerian party-beat arrangements without forbidding legitimate fusion.",
+      "variations": {
+        "introductions": [
+          "Begin with original Ghanaian Highlife guitar patterns and refined percussion.",
+          "Begin with alternate muted guitar picking and warm melodic bass."
+        ],
+        "progressions": [
+          "Use original warm Afropop harmony with relaxed rounded bass movement.",
+          "Use alternate electric-piano voicings and gently bouncing melodic bass phrases."
+        ],
+        "arrangements": [
+          "Vary guitar riffs and synth hooks through the instrumental Highlife groove.",
+          "Change percussion interplay and romantic chorus development before the expanded ending."
+        ],
+        "melody": [
+          "Create an original smooth romantic hook and uplifting chorus contour.",
+          "Create a contrasting warm verse melody and gentle lead-guitar response."
+        ],
+        "lyrical": [
+          "Develop original love, attraction and companionship verses.",
+          "Develop enjoyment, success and celebration through fresh romantic phrasing."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "guitar"
+        ]
+      ],
+      "research_references": [
+        "King Promise"
+      ]
+    },
+    {
+      "id": "S10-02",
+      "name": "Sweet Accra Dance",
+      "description": "Bright Ghanaian Afro-dance with bouncy bass and catchy hooks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s10",
+      "tempo": {
+        "min": 104,
+        "max": 122
+      },
+      "mood": "Playful, romantic, confident and celebratory.",
+      "energy": "Bright energetic Ghanaian dance bounce, precise bass/kick interaction and playful melodic hooks create immediate rhythmic momentum.",
+      "rhythm": "Energetic Ghanaian Afropop with a strong dance bounce, syncopated percussion and bright rhythmic movement.",
+      "drums_percussion": "Strong Afropop kick, crisp claps, lively hi-hats, rolling shakers, congas and tasteful rhythmic fills.",
+      "bass": "Thick bouncy electronic bass with short melodic phrases and precise kick synchronization.",
+      "instruments": {
+        "keys": "Bright piano riffs, playful synth plucks, rhythmic chord stabs and warm pads.",
+        "guitar": "Clean rhythmic guitar, short Highlife-inspired riffs and bright melodic responses.",
+        "other": "Handclaps, African percussion, subtle brass and tropical melodic accents."
+      },
+      "melody_harmony": "Original catchy hooks, playful romantic phrasing and memorable dance choruses.",
+      "vocal_delivery": "Playful confident melodic phrasing with catchy romantic dance hooks; selected voice remains independent.",
+      "arrangement": "Immediate percussion-and-keyboard introduction → playful verse → short pre-chorus → danceable chorus → instrumental groove → second verse → final chorus.",
+      "lyrics": {
+        "structure": "Romance, dancing, enjoyment, confidence, friendship and celebration.",
+        "vocabulary": "Use original meaningful secular Ghanaian expressions in the selected supported language or combination. Ghanaian musical origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Bright catchy Ghanaian Afro-dance with strong bass and polished rhythmic production. Keep electronic bass thick and kick-synchronized, piano bright, synth plucks playful, Highlife-inspired guitar concise and percussion lively. Avoid weak lows, excessive atmospheric introductions and slow ballad arrangements.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with original lively percussion and bright keyboard hooks.",
+          "Begin with alternate rhythmic piano riffs and short Highlife guitar responses."
+        ],
+        "progressions": [
+          "Use original playful Ghanaian Afropop chords with bouncy electronic bass.",
+          "Use alternate warm pad harmony and precise kick-synchronized bass motifs."
+        ],
+        "arrangements": [
+          "Vary piano hooks and guitar accents through the instrumental groove.",
+          "Change percussion breaks and dance-chorus structure before the final chorus."
+        ],
+        "melody": [
+          "Create an original catchy dance hook with playful romantic phrasing.",
+          "Create a contrasting confident chorus melody and bright instrumental response."
+        ],
+        "lyrical": [
+          "Develop original romance and dancing verses with playful confidence.",
+          "Develop friendship, enjoyment and celebration through fresh catchy refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "highlife"
+        ]
+      ],
+      "research_references": [
+        "KiDi"
+      ]
+    },
+    {
+      "id": "S10-03",
+      "name": "Ghana Highlife Pop Celebration",
+      "description": "Lively Highlife-pop with melodic guitars, warm bass and festive percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s10",
+      "tempo": {
+        "min": 106,
+        "max": 126
+      },
+      "mood": "Joyful, uplifting, romantic and festive.",
+      "energy": "Flowing Ghanaian Highlife guitar and lively electric bass sustain a celebratory modern pop dance pulse.",
+      "rhythm": "Ghanaian Highlife-pop with flowing guitar movement, lively percussion and a strong celebratory pulse.",
+      "drums_percussion": "Live-and-electronic Afro-pop drums, punchy kick, crisp snare, congas, shakers, handclaps and lively percussion fills.",
+      "bass": "Warm melodic electric bass with flowing Highlife-inspired runs and strong dance movement.",
+      "instruments": {
+        "keys": "Bright piano chords, rhythmic organ, melodic synth plucks and warm harmonic pads.",
+        "guitar": "Interlocking Ghanaian Highlife guitar patterns, bright lead-guitar phrases and lively rhythmic picking.",
+        "other": "Brass accents, traditional hand percussion, congas and shekere."
+      },
+      "melody_harmony": "Original uplifting melodies, memorable chorus hooks and expressive instrumental responses.",
+      "vocal_delivery": "Joyful expressive melodic phrasing and uplifting romantic choruses; selected voice remains independent.",
+      "arrangement": "Highlife guitar introduction → melodic verse → uplifting chorus → guitar-led instrumental section → second verse → percussion-and-brass break → final chorus.",
+      "lyrics": {
+        "structure": "Love, gratitude, success, family, celebration, hope and community.",
+        "vocabulary": "Use original meaningful secular Ghanaian expressions in the selected supported language or combination. Ghanaian musical origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Ghanaian Highlife guitar blended with modern pop production. Keep interlocking guitar patterns and warm melodic electric-bass runs prominent, piano bright, organ rhythmic and live/electronic drums clear; balance brass, congas, shekere and traditional hand percussion. Avoid replacing Highlife guitar with generic electronic Afrobeats loops.",
+      "variations": {
+        "introductions": [
+          "Begin with original interlocking Ghanaian Highlife guitar phrases.",
+          "Begin with alternate bright lead-guitar lines over flowing melodic bass."
+        ],
+        "progressions": [
+          "Use original uplifting Highlife-pop harmony with warm electric-bass runs.",
+          "Use alternate piano/organ voicings and a different lively bass phrase."
+        ],
+        "arrangements": [
+          "Vary guitar harmonies and keyboard riffs through the guitar-led section.",
+          "Change percussion patterns, brass phrases and chorus development before the final chorus."
+        ],
+        "melody": [
+          "Create an original uplifting melodic hook and expressive guitar answer.",
+          "Create a contrasting festive romantic chorus and lively rhythmic phrase."
+        ],
+        "lyrical": [
+          "Develop original family, gratitude and community celebration verses.",
+          "Develop love, success and hope through fresh joyful refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ]
+      ],
+      "research_references": [
+        "Kuami Eugene"
+      ]
+    },
+    {
+      "id": "S10-04",
+      "name": "Accra Hiplife Royalty",
+      "description": "Ghanaian Hiplife with powerful hip-hop drums and Highlife influences.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s10",
+      "tempo": {
+        "min": 92,
+        "max": 112
+      },
+      "mood": "Confident, ambitious, energetic and determined.",
+      "energy": "Powerful hip-hop rhythmic storytelling retains Ghanaian Highlife melodic movement, deep bass and traditional percussion accents.",
+      "rhythm": "Ghanaian Hiplife blending hip-hop grooves with Highlife melodic movement and African percussion.",
+      "drums_percussion": "Punchy hip-hop kick, sharp snare, syncopated hi-hats, Ghanaian percussion accents, shakers and rhythmic drum breaks.",
+      "bass": "Deep electronic bass with strong rhythmic impact, occasional melodic electric-bass runs and tight kick synchronization.",
+      "instruments": {
+        "keys": "Dark piano riffs, rhythmic organ stabs, warm electric piano and short synth motifs.",
+        "guitar": "Ghanaian Highlife guitar accents, rhythmic electric guitar and short melodic instrumental phrases.",
+        "other": "Ghanaian hand percussion, brass stabs, congas and subtle traditional rhythmic accents."
+      },
+      "melody_harmony": "Original rhythmic hooks, melodic choruses and optional rap-oriented rhythmic passages only when appropriate and customer-directed.",
+      "vocal_delivery": "Confident rhythmic storytelling and melodic choruses; respect customer-selected vocal approach and voice. Do not automatically force rap vocals.",
+      "arrangement": "Drum-and-piano introduction → rhythmic storytelling verse → melodic chorus → instrumental Highlife break → second verse → dynamic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Ambition, perseverance, success, cultural pride, social reflection, friendship and personal growth.",
+        "vocabulary": "Use original meaningful secular Ghanaian expressions in the selected supported language or combination. Ghanaian musical origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Ghanaian Hiplife with powerful electronic bass, clear hip-hop drums and recognizable Highlife influences. Keep occasional melodic electric-bass runs balanced, guitar accents distinct, piano dark, organ rhythmic and traditional percussion natural. Respect customer vocal approach; rap-oriented passages remain optional rather than forced.",
+      "variations": {
+        "introductions": [
+          "Begin with original punchy hip-hop drums and dark piano riffs.",
+          "Begin with alternate rhythmic organ stabs and short Highlife guitar accents."
+        ],
+        "progressions": [
+          "Use original Ghanaian Hiplife harmony with deep kick-synchronized electronic bass.",
+          "Use alternate warm electric-piano chords and occasional melodic electric-bass runs."
+        ],
+        "arrangements": [
+          "Vary drum grooves and guitar motifs through the instrumental Highlife break.",
+          "Change bass patterns and melodic hooks around the dynamic bridge; any rap-oriented passage remains customer-directed."
+        ],
+        "melody": [
+          "Create an original rhythmic hook with an expressive melodic chorus.",
+          "Create a contrasting confident storytelling phrase without automatically forcing rap."
+        ],
+        "lyrical": [
+          "Develop original ambition and cultural-pride verses with perseverance.",
+          "Develop social reflection, friendship and personal growth through fresh rhythmic storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "hiplife"
+        ],
+        [
+          "hip-hop"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Sarkodie"
+      ]
+    },
+    {
+      "id": "S10-05",
+      "name": "Ghana Dancehall Fire",
+      "description": "Energetic Afro-dancehall with heavy bass, reggae guitar and African percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s10",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Bold, energetic, uplifting and celebratory.",
+      "energy": "Strong Caribbean offbeat movement and lively African percussion drive heavy Ghanaian Afro-dancehall energy toward a powerful ending.",
+      "rhythm": "Ghanaian Afro-dancehall with strong Caribbean offbeat movement and lively African percussion.",
+      "drums_percussion": "Heavy dancehall-influenced kick, sharp snare, syncopated hi-hats, rolling shakers, congas and energetic rhythmic breaks.",
+      "bass": "Thick rolling electronic bass with deep sub-bass pressure, dancehall-inspired rhythmic movement and strong kick alignment.",
+      "instruments": {
+        "keys": "Bright synth hooks, reggae organ bubbles, rhythmic piano accents and warm electronic pads.",
+        "guitar": "Offbeat reggae guitar, clean rhythmic guitar and occasional Ghanaian Highlife melodic accents.",
+        "other": "African percussion, brass accents, tropical melodic instruments and subtle electronic effects."
+      },
+      "melody_harmony": "Original rhythmic hooks, uplifting melodic choruses and energetic call-and-response opportunities.",
+      "vocal_delivery": "Bold uplifting rhythmic phrasing and energetic melodic responses; selected voice remains independent.",
+      "arrangement": "Heavy bass-and-percussion introduction → rhythmic verse → energetic chorus → dancehall instrumental break → second verse → percussion build → powerful final chorus.",
+      "lyrics": {
+        "structure": "Celebration, resilience, unity, confidence, success, love and enjoyment.",
+        "vocabulary": "Use original meaningful secular Ghanaian expressions in the selected supported language or combination. Ghanaian musical origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Powerful Ghanaian Afro-dancehall with deep controlled bass and authentic Caribbean/African rhythmic fusion. Keep rolling sub-bass aligned with heavy kick, reggae organ bubbles audible, offbeat guitar distinct and percussion lively. Avoid generic Afrobeats production that removes dancehall and reggae character; balance bright synths, warm pads and tropical accents.",
+      "variations": {
+        "introductions": [
+          "Begin with original heavy rolling bass and lively Afro-dancehall percussion.",
+          "Begin with alternate offbeat reggae guitar patterns and bright synth hooks."
+        ],
+        "progressions": [
+          "Use original uplifting dancehall harmony with deep rolling sub-bass.",
+          "Use alternate reggae organ bubbles and a new kick-aligned bass groove."
+        ],
+        "arrangements": [
+          "Vary offbeat guitar and synth hooks through the dancehall instrumental break.",
+          "Change percussion breaks and energetic chorus structure before the powerful ending."
+        ],
+        "melody": [
+          "Create an original uplifting rhythmic hook with call-and-response.",
+          "Create a contrasting bold melodic chorus and energetic instrumental reply."
+        ],
+        "lyrical": [
+          "Develop original resilience and unity verses with confident celebration.",
+          "Develop love, success and enjoyment through fresh uplifting dancehall hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "dancehall"
+        ],
+        [
+          "reggae"
+        ],
+        [
+          "offbeat"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "organ bubbles"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Stonebwoy"
       ]
     }
   ]
