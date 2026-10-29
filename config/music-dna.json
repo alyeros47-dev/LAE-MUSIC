@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-v1",
   "status": "approved",
   "departments": [
     {
@@ -65,6 +65,12 @@
       "group_id": "G8",
       "department_id": "gospel",
       "name": "African Gospel Choir & Live Worship"
+    },
+    {
+      "id": "gospel-g9",
+      "group_id": "G9",
+      "department_id": "gospel",
+      "name": "Ghanaian Gospel Praise"
     }
   ],
   "styles": [
@@ -2799,6 +2805,466 @@
       ],
       "research_references": [
         "Moses Bliss"
+      ]
+    },
+    {
+      "id": "G9-01",
+      "name": "Covenant Celebration",
+      "description": "Uplifting Ghanaian Gospel with melodic highlife guitars and rich harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g9",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Joyful, grateful, hopeful and celebratory.",
+      "energy": "Flowing highlife-influenced live-band dance movement grows through richer harmonies into a celebratory final chorus.",
+      "rhythm": "Flowing Ghanaian Gospel praise with a highlife-influenced dance pulse and strong live-band movement.",
+      "drums_percussion": "Lively live drum kit, steady kick, crisp snare, flowing hi-hats, controlled tom fills and subtle Ghanaian hand percussion.",
+      "bass": "Warm melodic electric bass with highlife-influenced passing notes, rhythmic movement and smooth transitions.",
+      "instruments": {
+        "keys": "Bright Gospel piano, warm organ, sustained pads and rhythmic keyboard accents.",
+        "guitar": "Clean interlocking electric guitars.",
+        "other": "Congas, shakers, subtle brass accents and layered choir harmonies."
+      },
+      "melody_harmony": "Original expressive melodic praise with rich congregational harmonies and uplifting memorable choruses.",
+      "vocal_delivery": "Encouraging melodic phrasing and rich congregational responses; customer-selected voice is independent.",
+      "arrangement": "Bright instrumental introduction → melodic verse → uplifting chorus → second verse with richer harmonies → instrumental highlife passage → celebratory final chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, God’s faithfulness, divine promises, blessings, hope and celebration.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or language combination. Ghanaian musical identity does not automatically force Twi or another language; never invent translations in an unfamiliar language."
+      },
+      "production_mix": "Preserve Ghanaian highlife-influenced guitars and melodic bass passing notes; keep live drums lively but controlled, Ghanaian hand percussion subtle and choir harmonies rich. Balance bright piano, warm organ and pads around clear expressive vocals rather than generic Nigerian Afrobeats or Western Gospel treatment.",
+      "variations": {
+        "introductions": [
+          "Begin with an original bright keyboard introduction and interlocking highlife guitars.",
+          "Begin with a contrasting clean guitar exchange and melodic bass phrase."
+        ],
+        "progressions": [
+          "Use original uplifting highlife-influenced chords and smooth bass passing notes.",
+          "Use alternate warm organ voicings and a different melodic bass run."
+        ],
+        "arrangements": [
+          "Vary choir responses and guitar interplay through the instrumental highlife passage.",
+          "Change keyboard introductions and instrumental breaks before the celebratory final chorus."
+        ],
+        "melody": [
+          "Create a fresh uplifting chorus melody with congregational harmonies.",
+          "Create a contrasting joyful refrain answered by clean interlocking guitars."
+        ],
+        "lyrical": [
+          "Develop original thanksgiving and faithfulness verses with a hopeful chorus.",
+          "Develop promises and blessings through new celebratory testimony."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Diana Hamilton"
+      ]
+    },
+    {
+      "id": "G9-02",
+      "name": "Royal Praise Assembly",
+      "description": "Powerful live Gospel praise with energetic drums and choir responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g9",
+      "tempo": {
+        "min": 108,
+        "max": 132
+      },
+      "mood": "Triumphant, joyful, confident and spiritually uplifting.",
+      "energy": "Energetic Ghanaian live-band momentum develops through group responses and instrumental climaxes into a powerful final chorus.",
+      "rhythm": "Energetic Ghanaian Gospel praise with live-band momentum, African syncopation and powerful group responses.",
+      "drums_percussion": "Strong live kick and snare, energetic tom rolls, lively hi-hats, cymbal accents and dynamic Gospel drum fills.",
+      "bass": "Deep prominent electric bass with rhythmic movement, melodic runs and strong synchronization with the drums.",
+      "instruments": {
+        "keys": "Bright Gospel piano, rhythmic organ, layered pads and lively keyboard riffs.",
+        "guitar": "Electric guitar.",
+        "other": "Brass accents, congas, shakers and full choir harmonies."
+      },
+      "melody_harmony": "Original powerful choir harmonies and strong melodic congregational choruses with energetic responses.",
+      "vocal_delivery": "Confident energetic lead with powerful full-choir responses; selected voice remains independent.",
+      "arrangement": "Drum-and-keyboard introduction → energetic verse → strong choir chorus → call-and-response section → instrumental praise break → powerful final chorus.",
+      "lyrics": {
+        "structure": "Divine greatness, gratitude, victory, worship, thanksgiving and celebration.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or language combination. Ghanaian musical identity does not automatically force Twi or another language; never invent translations in an unfamiliar language."
+      },
+      "production_mix": "Preserve energetic Ghanaian live-Gospel syncopation and congregational response, not generic Nigerian Afrobeats or Western Gospel. Keep deep bass synchronized to live drums, organ rhythmic, pads layered, brass clear and full choir harmonies balanced through dynamic instrumental climaxes.",
+      "variations": {
+        "introductions": [
+          "Open with original live drums and rhythmic keyboard accents.",
+          "Open with alternate tom rolls and bright Gospel piano riffs."
+        ],
+        "progressions": [
+          "Use original triumphant Ghanaian Gospel chords with synchronized bass runs.",
+          "Use alternate organ voicings and different prominent rhythmic bass movement."
+        ],
+        "arrangements": [
+          "Vary choir arrangements and drum fills through the instrumental praise break.",
+          "Change bass grooves, organ riffs and instrumental climaxes before the final chorus."
+        ],
+        "melody": [
+          "Create a new strong choir chorus with original congregational responses.",
+          "Create a contrasting triumphant hook answered by full choir harmonies."
+        ],
+        "lyrical": [
+          "Develop original divine-greatness and thanksgiving praise responses.",
+          "Develop gratitude, victory and worship with new communal celebration verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Joe Mettle"
+      ]
+    },
+    {
+      "id": "G9-03",
+      "name": "Glory Rising Live",
+      "description": "Expansive contemporary Gospel with expressive melodies and dramatic instrumental builds.",
+      "department_id": "gospel",
+      "category_id": "gospel-g9",
+      "tempo": {
+        "min": 92,
+        "max": 118
+      },
+      "mood": "Majestic, passionate, uplifting and triumphant.",
+      "energy": "Gradual rhythmic intensity and harmonic development expand through a climactic bridge into a full-band final chorus.",
+      "rhythm": "Contemporary Ghanaian live Gospel groove with gradual intensity, rhythmic movement and strong harmonic development.",
+      "drums_percussion": "Strong but controlled live drums, dynamic kick and snare, expressive tom fills, cymbal swells and gradual rhythmic builds.",
+      "bass": "Warm deep electric bass with melodic movement, sustained foundational notes and powerful rhythmic transitions.",
+      "instruments": {
+        "keys": "Grand piano, rich Gospel organ, atmospheric pads and layered synthesizer textures.",
+        "guitar": "Expressive electric guitar.",
+        "other": "Cinematic strings, brass accents, African percussion and large choir harmonies."
+      },
+      "melody_harmony": "Original expressive Gospel melodies, rich harmonies and dramatic harmonic development across an expansive live-band arrangement.",
+      "vocal_delivery": "Passionate expressive melodic phrasing with large choir support; customer-selected voice remains independent.",
+      "arrangement": "Atmospheric keyboard introduction → expressive verse → powerful chorus → expanded second verse → instrumental worship passage → climactic bridge → full-band final chorus.",
+      "lyrics": {
+        "structure": "God’s greatness, spiritual renewal, thanksgiving, divine presence, hope and faith.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or language combination. Ghanaian musical identity does not automatically force Twi or another language; never invent translations in an unfamiliar language."
+      },
+      "production_mix": "Keep Ghanaian live-Gospel character and gradual intensity rather than generic Nigerian Afrobeats or Western Gospel. Balance grand piano, rich organ, pads and synth textures with expressive guitar, cinematic strings, brass, African percussion and large choir; control drums and deep bass through powerful rhythmic transitions.",
+      "variations": {
+        "introductions": [
+          "Begin with original atmospheric keyboard layers and grand piano.",
+          "Begin with alternate sustained organ harmony and expressive guitar responses."
+        ],
+        "progressions": [
+          "Use original expansive Gospel harmony with sustained deep bass foundations.",
+          "Use alternate rich progressions and powerful rhythmic bass transitions."
+        ],
+        "arrangements": [
+          "Vary instrumental builds and choir entrances through the worship passage.",
+          "Change guitar responses and bridge arrangement before the full-band final chorus."
+        ],
+        "melody": [
+          "Create a new majestic chorus melody with expansive choir support.",
+          "Create a contrasting passionate melodic contour developing into the climactic bridge."
+        ],
+        "lyrical": [
+          "Develop original greatness and renewal imagery with hopeful verses.",
+          "Develop divine presence, thanksgiving and faith through new expressive testimony."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "MOGmusic"
+      ]
+    },
+    {
+      "id": "G9-04",
+      "name": "Highlife Thanksgiving",
+      "description": "Joyful Ghanaian highlife Gospel with flowing guitars and bouncy bass.",
+      "department_id": "gospel",
+      "category_id": "gospel-g9",
+      "tempo": {
+        "min": 110,
+        "max": 136
+      },
+      "mood": "Festive, grateful, joyful and celebratory.",
+      "energy": "Steady flowing highlife dance pulse supports an instrumental dance passage and extended celebratory closing chorus.",
+      "rhythm": "Ghanaian highlife Gospel groove with flowing guitar patterns, syncopated percussion and a steady dance pulse.",
+      "drums_percussion": "Lively highlife-influenced drum patterns, steady kick, snare accents, congas, hand percussion, shakers and rhythmic fills.",
+      "bass": "Bouncy melodic highlife bass with repeated dance grooves, flowing passing notes and strong rhythmic movement.",
+      "instruments": {
+        "keys": "Bright organ, rhythmic piano chords and lively keyboard responses.",
+        "guitar": "Interlocking highlife electric guitars.",
+        "other": "Subtle brass, handclaps and group-response harmonies."
+      },
+      "melody_harmony": "Original memorable thanksgiving choruses with flowing highlife melodic lines and natural group responses.",
+      "vocal_delivery": "Joyful expressive thanksgiving phrases with catchy group-response choruses; voice selected independently.",
+      "arrangement": "Guitar-and-percussion introduction → thanksgiving verse → catchy chorus → instrumental highlife dance passage → second verse → extended celebratory closing chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, testimony, God’s goodness, blessings, divine protection and joyful praise.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or language combination. Ghanaian musical identity does not automatically force Twi or another language; never invent translations in an unfamiliar language."
+      },
+      "production_mix": "Preserve the Ghanaian highlife guitar-and-bass identity. Do not replace it with generic electronic Afrobeats. Keep interlocking guitars flowing, bass bouncy with passing notes, percussion syncopated, organ bright and group responses clear around subtle brass and handclaps.",
+      "variations": {
+        "introductions": [
+          "Begin with original interlocking highlife guitars and syncopated percussion.",
+          "Begin with alternate flowing guitar patterns and bouncy melodic bass."
+        ],
+        "progressions": [
+          "Use original bright highlife chords with repeated dance bass grooves.",
+          "Use alternate rhythmic piano voicings and flowing bass passing notes."
+        ],
+        "arrangements": [
+          "Vary percussion breaks and organ riffs through the highlife dance passage.",
+          "Change chorus-response arrangements before an extended celebratory ending."
+        ],
+        "melody": [
+          "Create a new catchy thanksgiving chorus with original guitar responses.",
+          "Create a contrasting festive melodic hook and flowing bass answer."
+        ],
+        "lyrical": [
+          "Develop original testimony of God’s goodness with joyful praise responses.",
+          "Develop blessings and divine protection through fresh thanksgiving verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "group"
+        ]
+      ],
+      "research_references": [
+        "Celestine Odonkor"
+      ]
+    },
+    {
+      "id": "G9-05",
+      "name": "Breakthrough Praise",
+      "description": "Fast, energetic Gospel celebration with strong drums, bass and choir.",
+      "department_id": "gospel",
+      "category_id": "gospel-g9",
+      "tempo": {
+        "min": 115,
+        "max": 140
+      },
+      "mood": "Powerful, joyful, confident and triumphant.",
+      "energy": "Fast syncopated dance momentum develops through choir responses and a drum-and-bass break into a triumphant final chorus.",
+      "rhythm": "Fast Ghanaian Gospel praise with strong dance momentum, syncopated percussion and energetic live-band arrangements.",
+      "drums_percussion": "Energetic live drum kit with driving kick, crisp snare, rolling toms, cymbal crashes and lively African percussion.",
+      "bass": "Deep punchy electric bass with strong rhythmic movement, repeated dance patterns and melodic fills.",
+      "instruments": {
+        "keys": "Bright Gospel piano, energetic organ riffs and contemporary keyboard textures.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass accents, congas, shakers, handclaps and layered choir harmonies."
+      },
+      "melody_harmony": "Original memorable praise choruses with strong rhythmic melodic phrases and layered choir responses.",
+      "vocal_delivery": "Energetic rhythmic lead and strong choir call-and-response; selected voice remains independent.",
+      "arrangement": "Powerful instrumental introduction → energetic verse → memorable praise chorus → choir call-and-response → drum-and-bass dance break → triumphant final chorus.",
+      "lyrics": {
+        "structure": "Victory, perseverance, gratitude, faith, testimony and celebration.",
+        "vocabulary": "Use original meaningful phrases in the selected supported language or language combination. Ghanaian musical identity does not automatically force Twi or another language; never invent translations in an unfamiliar language."
+      },
+      "production_mix": "Preserve fast Ghanaian live praise, rhythmic vocal clarity and African percussion rather than generic Nigerian Afrobeats or Western Gospel. Keep driving drums and deep punchy bass prominent, organ riffs energetic, guitar rhythmic and choir responses clear; shape the drum-and-bass dance break and triumphant ending.",
+      "variations": {
+        "introductions": [
+          "Open with original driving drums, bass and a bright keyboard hook.",
+          "Open with alternate rolling toms and energetic organ responses."
+        ],
+        "progressions": [
+          "Use original triumphant praise chords and repeated dance bass patterns.",
+          "Use alternate bright piano voicings and punchy melodic bass fills."
+        ],
+        "arrangements": [
+          "Vary drum rolls and choir responses before the drum-and-bass dance break.",
+          "Change bass grooves, keyboard hooks and instrumental transitions into the triumphant final chorus."
+        ],
+        "melody": [
+          "Create a new memorable rhythmic praise chorus with choir responses.",
+          "Create a contrasting energetic hook answered by rhythmic guitar."
+        ],
+        "lyrical": [
+          "Develop original victory and perseverance testimony with grateful responses.",
+          "Develop faith and celebration through fresh meaningful rhythmic phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Joyce Blessing"
       ]
     }
   ]
