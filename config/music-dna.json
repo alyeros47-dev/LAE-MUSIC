@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r2-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r3-v1",
   "status": "approved",
   "departments": [
     {
@@ -203,6 +203,12 @@
       "group_id": "R2",
       "department_id": "reggae-caribbean",
       "name": "African Roots Reggae"
+    },
+    {
+      "id": "reggae-r3",
+      "group_id": "R3",
+      "department_id": "reggae-caribbean",
+      "name": "Romantic Reggae & Lovers Rock"
     }
   ],
   "styles": [
@@ -13499,6 +13505,455 @@
       ],
       "research_references": [
         "Rocky Dawuni"
+      ]
+    },
+    {
+      "id": "R3-01",
+      "name": "Midnight Lovers Rock",
+      "description": "Intimate Jamaican lovers rock with deep bass, warm organ and tender romantic melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r3",
+      "tempo": {
+        "min": 68,
+        "max": 88
+      },
+      "mood": "Romantic, intimate, calm and reflective.",
+      "energy": "Slow spacious intimate lovers-rock warmth with tender understated melodic development.",
+      "rhythm": "Slow Jamaican lovers rock with spacious one-drop drums, smooth bass movement and gentle offbeat guitar.",
+      "drums_percussion": "Soft one-drop kick and snare/rimshot, relaxed hi-hats, subtle ghost notes, gentle tom fills and restrained percussion.",
+      "bass": "Deep, rounded electric bass with long sustained notes, smooth syncopated phrases, expressive passing tones and a relaxed rhythmic pulse.",
+      "instruments": {
+        "keys": "Warm Hammond-style organ bubbles, mellow electric piano, soft acoustic piano and gentle vintage keyboard textures.",
+        "guitar": "Clean offbeat reggae skank, muted rhythmic guitar and sparse romantic lead-guitar responses.",
+        "other": "Soft strings, restrained brass, shakers, congas and gentle instrumental harmonies."
+      },
+      "melody_harmony": "Original intimate romantic melodies, conversational verses, tender melodic hooks and understated choruses.",
+      "vocal_delivery": "Intimate conversational phrasing, tender original hooks and understated choruses; respect independently selected voice settings.",
+      "arrangement": "Soft organ-and-bass introduction → intimate verse → romantic chorus → gentle instrumental guitar passage → second verse → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Retain the romantic musical atmosphere without forcing a fixed romantic lyrical subject. Suggested themes, never mandatory: Love, devotion, longing, trust, reconciliation, affection and emotional honesty.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, religious, political or Rastafarian content from the selected style. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Smooth, intimate Jamaican lovers rock with deep rolling bass, relaxed one-drop drums, warm organ and sophisticated romantic melodies. Warm, intimate reggae with a prominent, silky bass foundation. Keep deep rounded bass prominent without overpowering smooth drums, offbeat skank guitar and warm organ. Preserve a recognizable reggae foundation with clear professional instrumental separation. Avoid: Aggressive dancehall drums, overly bright electronic effects and generic Western slow-jam production.",
+      "variations": {
+        "introductions": [
+          "Open on original soft organ bubbles and deep sustained bass.",
+          "Open with alternate mellow organ voicings and syncopated bass passing tones."
+        ],
+        "progressions": [
+          "Use an original intimate lovers-rock progression with mellow electric piano.",
+          "Use alternate gentle acoustic-piano voicings beneath long rounded bass notes."
+        ],
+        "arrangements": [
+          "Vary sparse guitar replies through the gentle instrumental passage.",
+          "Develop organ voicings and an emotional bridge into an understated final chorus."
+        ],
+        "melody": [
+          "Create original conversational verses and a tender understated hook.",
+          "Create a contrasting intimate melody with sparse romantic guitar responses."
+        ],
+        "lyrical": [
+          "Explore the chosen topic through fresh intimate reflective images.",
+          "Develop original trust or reconciliation imagery only when it suits the customer subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "sparse"
+        ]
+      ],
+      "research_references": [
+        "Gregory Isaacs"
+      ]
+    },
+    {
+      "id": "R3-02",
+      "name": "Golden Heart Reggae Soul",
+      "description": "Soulful romantic reggae with rich piano harmony and emotionally powerful melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r3",
+      "tempo": {
+        "min": 72,
+        "max": 94
+      },
+      "mood": "Heartfelt, passionate, romantic and uplifting.",
+      "energy": "Heartfelt passionate reggae-soul lift with rich harmonic development and a firm smooth one-drop pulse.",
+      "rhythm": "Smooth lovers rock with a strong reggae foundation and rich soul-inspired harmonic movement.",
+      "drums_percussion": "Warm one-drop drums, firm but smooth kick, crisp rimshot, flowing hi-hats, gentle tom fills and restrained hand percussion.",
+      "bass": "Thick melodic electric bass with expressive reggae runs, smooth passing notes and strong rhythmic interaction with the drums.",
+      "instruments": {
+        "keys": "Rich acoustic piano, warm Rhodes-style electric piano, Hammond-style organ bubbles and soulful chord voicings.",
+        "guitar": "Clean reggae skank, soulful melodic guitar phrases and restrained rhythmic picking.",
+        "other": "Soft brass, strings, congas, shakers and optional layered vocal harmonies when compatible with customer settings."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, powerful romantic refrains and rich harmonic development.",
+      "vocal_delivery": "Emotionally expressive soulful phrases and powerful original refrains; optional layered harmonies only when compatible with selected vocal settings.",
+      "arrangement": "Piano-and-organ introduction → soulful verse → emotional chorus → instrumental reggae-soul groove → second verse → expressive bridge → expanded final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Retain the romantic musical atmosphere without forcing a fixed romantic lyrical subject. Suggested themes, never mandatory: Deep love, commitment, heartbreak, reconciliation, loyalty, marriage and emotional resilience.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, religious, political or Rastafarian content from the selected style. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings. Gospel-influenced harmony describes chords and arrangement only, never automatically religious lyrics."
+      },
+      "production_mix": "Soulful Jamaican lovers rock combining rich reggae bass, expressive piano, warm organ, gospel-influenced soul harmony and emotionally powerful romantic arrangements. Rich romantic reggae-soul with powerful bass, expressive harmony and warm live instrumentation. Keep deep rounded bass prominent without overpowering smooth drums, offbeat skank guitar and warm organ. Preserve a recognizable reggae foundation with clear professional instrumental separation. Avoid: Turning the style into Western gospel, generic R&B or a slow ballad without reggae rhythm. Gospel-influenced harmony describes chords and arrangement only, never automatically religious lyrics.",
+      "variations": {
+        "introductions": [
+          "Open with original rich piano harmony and warm organ bubbles.",
+          "Open on alternate Rhodes voicings and expressive acoustic-piano responses."
+        ],
+        "progressions": [
+          "Use original soul-inspired chord movement over melodic reggae bass runs.",
+          "Use alternate rich piano/organ voicings with smooth electric-bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar responses through the reggae-soul instrumental groove.",
+          "Develop an expressive bridge and expanded final chorus without losing one-drop rhythm."
+        ],
+        "melody": [
+          "Create original emotionally expressive verses and powerful melodic refrains.",
+          "Create a contrasting heartfelt chorus with rich harmonic development."
+        ],
+        "lyrical": [
+          "Explore the customer topic with original emotional resilience imagery.",
+          "Develop fresh commitment or loyalty verses when requested; soul harmony never requires religious words."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "soul"
+        ]
+      ],
+      "research_references": [
+        "Beres Hammond"
+      ]
+    },
+    {
+      "id": "R3-03",
+      "name": "Sweet Island Romance",
+      "description": "Classic melodic reggae with flowing bass and uplifting romantic choruses.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r3",
+      "tempo": {
+        "min": 74,
+        "max": 98
+      },
+      "mood": "Romantic, joyful, warm and hopeful.",
+      "energy": "Relaxed joyful classic-reggae dance pulse with flowing melodic bass and uplifting phrasing.",
+      "rhythm": "Classic Jamaican melodic reggae with a relaxed dance pulse and flowing bass movement.",
+      "drums_percussion": "Natural one-drop drums, relaxed kick and snare, bright hi-hats, gentle tom fills and light Caribbean percussion.",
+      "bass": "Deep, melodic electric bass with flowing reggae patterns, expressive slides and warm sustained notes.",
+      "instruments": {
+        "keys": "Bright Hammond-style organ bubbles, warm piano chords, rhythmic keyboard accents and gentle harmonic textures.",
+        "guitar": "Clean reggae skank, short melodic lead-guitar phrases and warm rhythmic guitar layers.",
+        "other": "Brass accents, congas, shakers, tambourine and optional gentle backing harmonies."
+      },
+      "melody_harmony": "Original uplifting romantic melodies, memorable choruses and expressive melodic phrasing.",
+      "vocal_delivery": "Expressive uplifting original melodies and warm refrains; optional backing harmonies only if selected voice settings permit.",
+      "arrangement": "Guitar-and-organ introduction → melodic verse → uplifting romantic chorus → instrumental brass-and-guitar passage → second verse → warm bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Retain the romantic musical atmosphere without forcing a fixed romantic lyrical subject. Suggested themes, never mandatory: Romance, companionship, affection, hope, commitment, friendship and happiness.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, religious, political or Rastafarian content from the selected style. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Classic melodic Jamaican romantic reggae with flowing bass, warm guitar skank, bright organ and uplifting soulful melodies. Classic warm reggae with strong melodic identity and smooth romantic appeal. Keep deep rounded bass prominent without overpowering smooth drums, offbeat skank guitar and warm organ. Preserve a recognizable reggae foundation with clear professional instrumental separation. Avoid: Heavy electronic club drums, excessive synthesizers and generic tropical pop arrangements.",
+      "variations": {
+        "introductions": [
+          "Open with original warm reggae guitar and bright organ riffs.",
+          "Open on alternate guitar layers and flowing electric-bass slides."
+        ],
+        "progressions": [
+          "Use original warm classic-reggae chords and melodic sustained bass.",
+          "Use alternate bright organ/piano voicings and expressive bass passing runs."
+        ],
+        "arrangements": [
+          "Vary brass accents and guitar phrases through the instrumental passage.",
+          "Develop a warm bridge and uplifting final chorus with alternate organ riffs."
+        ],
+        "melody": [
+          "Create original uplifting romantic melodic contours and memorable refrains.",
+          "Create a contrasting hopeful chorus with expressive phrasing and guitar replies."
+        ],
+        "lyrical": [
+          "Explore the requested subject through fresh hopeful companionship imagery.",
+          "Develop original friendship or happiness expressions without forcing a fixed romantic story."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "slide"
+        ]
+      ],
+      "research_references": [
+        "Dennis Brown"
+      ]
+    },
+    {
+      "id": "R3-04",
+      "name": "Evergreen Island Love",
+      "description": "Mature lovers rock with elegant keyboards, warm guitars and heartfelt storytelling.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r3",
+      "tempo": {
+        "min": 70,
+        "max": 92
+      },
+      "mood": "Tender, peaceful, sincere and reflective.",
+      "energy": "Gentle steady mature lovers-rock warmth with elegant instrumental movement and natural dynamics.",
+      "rhythm": "Relaxed traditional lovers rock with steady bass, gentle one-drop drums and elegant instrumental movement.",
+      "drums_percussion": "Gentle one-drop drums, warm kick, crisp rimshot, soft hi-hats, restrained tom fills and subtle Caribbean hand percussion.",
+      "bass": "Rounded electric bass with smooth melodic runs, natural sustained notes and a relaxed, steady reggae pulse.",
+      "instruments": {
+        "keys": "Warm Hammond-style organ, expressive acoustic piano, mellow electric piano and gentle harmonic pads.",
+        "guitar": "Clean offbeat guitar skank, gentle melodic lead-guitar phrases and restrained acoustic guitar accents.",
+        "other": "Soft brass, strings, shakers, congas and warm instrumental harmonies."
+      },
+      "melody_harmony": "Original mature romantic melodies, thoughtful storytelling verses and warm, memorable choruses.",
+      "vocal_delivery": "Mature thoughtful melodic storytelling and sincere warm choruses; respect independently selected voice settings.",
+      "arrangement": "Gentle guitar-and-piano introduction → reflective verse → romantic chorus → instrumental organ-and-guitar passage → second verse → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Retain the romantic musical atmosphere without forcing a fixed romantic lyrical subject. Suggested themes, never mandatory: Lasting love, commitment, family, loyalty, trust, reconciliation and life experiences.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, religious, political or Rastafarian content from the selected style. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Mature, polished Jamaican lovers rock combining warm reggae bass, elegant keyboard arrangements, expressive guitars and thoughtful romantic storytelling. Warm, sophisticated reggae with natural live-band dynamics and rich bass. Keep deep rounded bass prominent without overpowering smooth drums, offbeat skank guitar and warm organ. Preserve a recognizable reggae foundation with clear professional instrumental separation. Avoid: Aggressive dancehall patterns, excessive electronic effects and unnecessarily dramatic pop production.",
+      "variations": {
+        "introductions": [
+          "Open with original gentle guitar melody and expressive acoustic piano.",
+          "Open on alternate restrained acoustic-guitar accents and mellow piano voicings."
+        ],
+        "progressions": [
+          "Use original elegant lovers-rock harmony with steady rounded bass.",
+          "Use alternate warm organ/electric-piano voicings and smooth melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary gentle guitar replies in the organ-and-guitar instrumental passage.",
+          "Develop keyboard voicings and thoughtful melodic storytelling through the emotional bridge."
+        ],
+        "melody": [
+          "Create original mature reflective verses and warm memorable choruses.",
+          "Create a contrasting tender refrain with sincere understated melodic development."
+        ],
+        "lyrical": [
+          "Explore the chosen subject through original thoughtful life-experience images.",
+          "Develop fresh lasting-love or family imagery only where requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Freddie McGregor"
+      ]
+    },
+    {
+      "id": "R3-05",
+      "name": "Caribbean Velvet Pop Reggae",
+      "description": "Smooth reggae-pop crossover with polished R&B harmony and catchy romantic hooks.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r3",
+      "tempo": {
+        "min": 82,
+        "max": 106
+      },
+      "mood": "Romantic, confident, smooth and uplifting.",
+      "energy": "Smooth danceable contemporary reggae-pop lift with clear offbeat rhythm and polished romantic hooks.",
+      "rhythm": "Smooth reggae-pop crossover with a recognizable reggae offbeat, melodic bass and contemporary romantic production.",
+      "drums_percussion": "Polished reggae-pop drums, warm kick, crisp snare, controlled hi-hats, subtle percussion fills and gentle Caribbean rhythmic accents.",
+      "bass": "Deep, smooth electric or electronic bass with melodic reggae movement, rounded sub-bass support and a steady danceable pulse.",
+      "instruments": {
+        "keys": "Bright electric piano, warm synthesizer pads, rhythmic organ bubbles and polished contemporary keyboard hooks.",
+        "guitar": "Clean reggae skank, smooth electric-guitar responses and restrained rhythmic guitar layers.",
+        "other": "Soft brass, gentle strings, shakers, congas and subtle contemporary electronic textures."
+      },
+      "melody_harmony": "Original catchy romantic hooks, expressive melodic choruses and accessible pop-oriented song structures.",
+      "vocal_delivery": "Smooth expressive original hooks and accessible melodic choruses; follow selected single voice, duet or supported harmony settings without forcing layers.",
+      "arrangement": "Polished keyboard-and-bass introduction → smooth verse → catchy chorus → instrumental reggae-pop groove → second verse → melodic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Retain the romantic musical atmosphere without forcing a fixed romantic lyrical subject. Suggested themes, never mandatory: Romance, attraction, companionship, confidence, happiness, commitment and emotional connection.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, religious, political or Rastafarian content from the selected style. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Smooth contemporary lovers rock and reggae-pop crossover combining deep reggae bass, polished R&B harmony, bright keyboards and accessible romantic melodies. Polished, commercially appealing reggae-pop with deep bass and smooth romantic character. Keep deep rounded bass prominent without overpowering smooth drums, offbeat skank guitar and warm organ. Preserve a recognizable reggae foundation with clear professional instrumental separation. Avoid: Generic Western R&B without reggae rhythm, excessive EDM production and thin electronic bass.",
+      "variations": {
+        "introductions": [
+          "Open with an original polished electric-piano hook and rounded bass.",
+          "Open on alternate contemporary keyboard hooks and smooth melodic reggae bass."
+        ],
+        "progressions": [
+          "Use original polished R&B-influenced voicings with clear reggae offbeat guitar.",
+          "Use alternate electric-piano/pad harmony over electric or electronic reggae bass with rounded sub support."
+        ],
+        "arrangements": [
+          "Vary guitar skank patterns and keyboard hooks through the reggae-pop groove.",
+          "Develop a melodic bridge and catchy final chorus while retaining the reggae offbeat."
+        ],
+        "melody": [
+          "Create an original accessible romantic hook and expressive pop-oriented chorus.",
+          "Create a contrasting confident refrain with smooth melodic guitar answers."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original smooth confident imagery.",
+          "Develop fresh emotional-connection or companionship words only if they fit the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "reggae"
+        ],
+        [
+          "offbeat"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "electronic bass"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "pad"
+        ]
+      ],
+      "research_references": [
+        "Maxi Priest"
       ]
     }
   ]
