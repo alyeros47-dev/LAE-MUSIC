@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-v1",
   "status": "approved",
   "departments": [
     {
@@ -119,6 +119,12 @@
       "group_id": "S2",
       "department_id": "secular-afrobeats",
       "name": "Smooth Afropop & Romantic"
+    },
+    {
+      "id": "secular-s3",
+      "group_id": "S3",
+      "department_id": "secular-afrobeats",
+      "name": "Street Pop & Street Anthems"
     }
   ],
   "styles": [
@@ -6958,6 +6964,472 @@
       ],
       "research_references": [
         "Lojay"
+      ]
+    },
+    {
+      "id": "S3-01",
+      "name": "Street Carnival Explosion",
+      "description": "Raw, high-energy street-pop with Fuji percussion and heavy dance bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s3",
+      "tempo": {
+        "min": 118,
+        "max": 142
+      },
+      "mood": "Explosive, playful, rebellious and celebratory.",
+      "energy": "Raw high-energy Fuji-influenced street-party momentum develops through percussion breakdowns and heavy bass/drum dance sections.",
+      "rhythm": "Fast Nigerian street-pop with Fuji-influenced percussion, syncopated dance rhythms and energetic crowd-response spaces.",
+      "drums_percussion": "Heavy kick, sharp snare, rolling toms, fast shakers, talking-drum accents, handclaps and energetic percussion breaks.",
+      "bass": "Deep distorted-edge electronic bass with strong low-frequency impact, repetitive dance patterns and tight kick synchronization.",
+      "instruments": {
+        "keys": "Bright street-pop synth hooks, rhythmic organ stabs, sharp electronic plucks and short keyboard riffs.",
+        "guitar": "Short rhythmic guitar accents.",
+        "other": "Talking drum, congas, shekere, brass stabs, whistles and lively crowd responses."
+      },
+      "melody_harmony": "Original short chant-like hooks, rhythmic phrases and memorable group responses; never reproduce signature chants.",
+      "vocal_delivery": "Energetic playful rhythmic lead and lively crowd-response phrasing; selected voice remains independent.",
+      "arrangement": "Explosive drum-and-percussion introduction → energetic verse → chant-driven chorus → percussion breakdown → second verse → heavy bass-and-drum dance section → final chorus.",
+      "lyrics": {
+        "structure": "Street celebration, hustle, determination, success, everyday struggles, confidence and enjoyment.",
+        "vocabulary": "Use original meaningful secular street-pop expressions in the selected supported language or combination. Do not force Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; never reproduce identifiable voices, lyrics, signature chants, hooks or recordings."
+      },
+      "production_mix": "Strong bass, energetic Fuji-influenced percussion and lively Nigerian street-party momentum. Keep distorted-edge bass controlled and kick-locked, drums heavy, organ stabs rhythmic, talking drum and shekere clear; leave crowd-response spaces. Avoid weak drums, slow romantic arrangements and uncontrolled distortion while retaining professionally balanced raw energy.",
+      "variations": {
+        "introductions": [
+          "Begin with original explosive drums and Fuji-influenced percussion accents.",
+          "Begin with alternate talking-drum responses over heavy kick-synchronized bass."
+        ],
+        "progressions": [
+          "Use original street-pop synth harmony with repetitive distorted-edge bass patterns.",
+          "Use alternate rhythmic organ stabs and a different heavy electronic bass motif."
+        ],
+        "arrangements": [
+          "Vary drum breaks and crowd responses through the percussion breakdown.",
+          "Change talking-drum phrases and synth hooks in the heavy bass-and-drum dance section."
+        ],
+        "melody": [
+          "Create an original short rhythmic chant hook with memorable group answers.",
+          "Create a contrasting playful street phrase and lively crowd-response structure."
+        ],
+        "lyrical": [
+          "Develop original hustle and everyday-struggle verses with confident celebration.",
+          "Develop determination, success and enjoyment through fresh rhythmic phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "whistle"
+        ]
+      ],
+      "research_references": [
+        "Portable"
+      ]
+    },
+    {
+      "id": "S3-02",
+      "name": "Street Melody of Hope",
+      "description": "Melodic Afro-street music with emotional storytelling and warm rhythmic grooves.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s3",
+      "tempo": {
+        "min": 100,
+        "max": 122
+      },
+      "mood": "Hopeful, reflective, determined and uplifting.",
+      "energy": "Relaxed midtempo street bounce retains a strong groove under emotional storytelling and an uplifting bridge.",
+      "rhythm": "Midtempo melodic Nigerian street-pop with a relaxed bounce, Afro-street percussion and emotional melodic movement.",
+      "drums_percussion": "Punchy Afro-street kick, crisp snare, syncopated hi-hats, light talking-drum accents, shakers and tasteful percussion fills.",
+      "bass": "Warm deep electronic bass with melodic movement, restrained low-frequency pressure and a steady rhythmic bounce.",
+      "instruments": {
+        "keys": "Emotional piano motifs, warm synth pads, bright melodic plucks and gentle organ textures.",
+        "guitar": "Clean electric guitar.",
+        "other": "Subtle talking drum, congas, shakers and restrained melodic accents."
+      },
+      "melody_harmony": "Original expressive hooks, memorable reflective refrains and conversational rhythmic phrasing.",
+      "vocal_delivery": "Emotionally expressive conversational storytelling and determined melodic refrains; selected voice remains independent.",
+      "arrangement": "Melodic piano introduction → storytelling verse → emotional chorus → instrumental groove → second verse → uplifting bridge → final chorus.",
+      "lyrics": {
+        "structure": "Life challenges, perseverance, hope, friendship, loyalty, personal growth and success.",
+        "vocabulary": "Use original meaningful secular street-pop expressions in the selected supported language or combination. Do not force Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; never reproduce identifiable voices, lyrics, signature chants, hooks or recordings."
+      },
+      "production_mix": "Preserve emotional Nigerian street-pop while maintaining a strong rhythmic groove. Keep electronic bass warm with restrained pressure, kick punchy, piano emotive, organ gentle and talking-drum accents light; balance clean guitar and shakers. Avoid turning every song into aggressive party music or a slow Western ballad.",
+      "variations": {
+        "introductions": [
+          "Begin with an original emotional piano motif and warm rhythmic bass.",
+          "Begin with alternate melodic piano phrases and subtle talking-drum accents."
+        ],
+        "progressions": [
+          "Use original reflective street-pop harmony with warm melodic electronic bass.",
+          "Use alternate gentle organ voicings and a different steady bass bounce."
+        ],
+        "arrangements": [
+          "Vary percussion interplay and guitar responses through the instrumental groove.",
+          "Change piano development and chorus layers before the uplifting bridge."
+        ],
+        "melody": [
+          "Create an original expressive refrain with conversational rhythmic phrasing.",
+          "Create a contrasting hopeful hook and emotionally clear melodic response."
+        ],
+        "lyrical": [
+          "Develop original life-challenge and perseverance storytelling.",
+          "Develop friendship, loyalty and personal growth through fresh hopeful verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "street-pop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shaker"
+        ]
+      ],
+      "research_references": [
+        "Mohbad"
+      ]
+    },
+    {
+      "id": "S3-03",
+      "name": "Zanku Dance Pressure",
+      "description": "Powerful street-dance music with heavy bass and energetic percussion breaks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s3",
+      "tempo": {
+        "min": 116,
+        "max": 140
+      },
+      "mood": "Playful, confident, explosive and celebratory.",
+      "energy": "High-energy stop-start street dance accents and powerful bass support exciting movement cues and explosive transitions.",
+      "rhythm": "Nigerian street dance groove with syncopated percussion, stop-start rhythmic accents and strong movement cues.",
+      "drums_percussion": "Heavy kick, sharp snare and claps, fast hi-hats, rolling street percussion, talking-drum fills and energetic rhythmic breaks.",
+      "bass": "Thick electronic bass with repetitive dance motifs, deep sub-bass and powerful kick synchronization.",
+      "instruments": {
+        "keys": "Bright synth stabs, rhythmic piano riffs, short electronic hooks and energetic organ accents.",
+        "guitar": "No fixed guitar part; prioritize percussion and concise rhythmic hooks.",
+        "other": "Talking drum, shekere, congas, brass stabs, whistles and handclaps."
+      },
+      "melody_harmony": "Original short rhythmic hooks, catchy chant structures and exciting group responses without identifiable signature chants.",
+      "vocal_delivery": "Playful confident rhythmic chants and energetic group responses; selected voice remains independent.",
+      "arrangement": "Immediate drum-and-bass introduction → energetic verse → chant chorus → instrumental dance break → second verse → percussion-heavy breakdown → explosive final chorus.",
+      "lyrics": {
+        "structure": "Dancing, celebration, hustle, confidence, success, friendship and street enjoyment.",
+        "vocabulary": "Use original meaningful secular street-pop expressions in the selected supported language or combination. Do not force Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; never reproduce identifiable voices, lyrics, signature chants, hooks or recordings."
+      },
+      "production_mix": "Powerful bass, strong Nigerian street dance rhythm and exciting instrumental transitions. Keep deep sub-bass kick-synchronized, percussion stop-start accents clear, talking-drum fills energetic and synth hooks concise. Avoid excessive melodic complexity that weakens the dance groove; balance heavy drums, shekere, congas, brass and whistles without masking responses.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with original heavy drums and deep electronic bass.",
+          "Begin with alternate talking-drum fills and a stop-start bass motif."
+        ],
+        "progressions": [
+          "Use original concise synth harmony over repeating deep sub-bass dance patterns.",
+          "Use alternate rhythmic piano stabs and a different kick-synchronized bass phrase."
+        ],
+        "arrangements": [
+          "Vary drum breaks and talking-drum phrases through the instrumental dance break.",
+          "Change chant arrangement and percussion accents in the heavy breakdown."
+        ],
+        "melody": [
+          "Create an original short rhythmic hook with exciting group answers.",
+          "Create a contrasting catchy chant structure and clear movement cues."
+        ],
+        "lyrical": [
+          "Develop original hustle and success verses with confident dancing hooks.",
+          "Develop friendship, celebration and street enjoyment through fresh rhythmic responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "street dance",
+          "street-dance"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "whistle"
+        ]
+      ],
+      "research_references": [
+        "Zlatan"
+      ]
+    },
+    {
+      "id": "S3-04",
+      "name": "Marlian Street Bounce",
+      "description": "Minimal, hypnotic street-pop with deep electronic bass and catchy rhythmic hooks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s3",
+      "tempo": {
+        "min": 108,
+        "max": 130
+      },
+      "mood": "Confident, playful, energetic and mischievous.",
+      "energy": "Minimal precise street production retains a strong hypnotic dance pocket with controlled variation rather than overcrowding.",
+      "rhythm": "Hypnotic Nigerian street-pop with repetitive bass movement, minimal instrumentation and a strong dance pulse.",
+      "drums_percussion": "Tight electronic kick, crisp snare, syncopated hi-hats, controlled claps, shakers and minimal street-percussion accents.",
+      "bass": "Deep pulsing electronic sub-bass with a hypnotic repeating groove, controlled bass slides and strong kick alignment.",
+      "instruments": {
+        "keys": "Minimal synth plucks, short rhythmic keyboard motifs, dark electronic textures and occasional piano stabs.",
+        "guitar": "Sparse guitar accents.",
+        "other": "Subtle talking drum, electronic percussion and restrained sound effects."
+      },
+      "melody_harmony": "Original simple rhythmic hooks with memorable repetition and controlled variation; no copied signature chants.",
+      "vocal_delivery": "Playful confident rhythmic phrasing and understated repetitive hooks with controlled variation; selected voice remains independent.",
+      "arrangement": "Minimal bass-and-drum introduction → rhythmic verse → repetitive dance chorus → instrumental groove → second verse → short breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Confidence, enjoyment, street fashion, nightlife, ambition, dancing and personal freedom.",
+        "vocabulary": "Use original meaningful secular street-pop expressions in the selected supported language or combination. Do not force Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; never reproduce identifiable voices, lyrics, signature chants, hooks or recordings."
+      },
+      "production_mix": "Minimal but powerful Nigerian street-pop low-frequency production with precise percussion and a strong pocket. Keep pulsing sub-bass aligned to tight electronic kick, slides controlled, synth motifs sparse and talking drum subtle. Avoid overcrowded orchestration, excessive brass and generic pop-ballad arrangements; introduce variation within hypnotic repetition.",
+      "variations": {
+        "introductions": [
+          "Begin with an original minimal electronic bass-and-drum groove.",
+          "Begin with alternate pulsing sub-bass and sparse dark synth plucks."
+        ],
+        "progressions": [
+          "Use original minimal dark keyboard harmony with controlled bass slides.",
+          "Use alternate short synth motifs and a new repeating kick-aligned bass pattern."
+        ],
+        "arrangements": [
+          "Vary percussion accents and synth textures through the instrumental groove.",
+          "Change short breaks and chorus patterns without crowding the minimal arrangement."
+        ],
+        "melody": [
+          "Create an original simple rhythmic hook with memorable controlled repetition.",
+          "Create a contrasting playful phrase over the hypnotic bass motif."
+        ],
+        "lyrical": [
+          "Develop original street-fashion and ambition verses with confident hooks.",
+          "Develop nightlife, dancing and personal freedom through fresh playful phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "street-pop"
+        ],
+        [
+          "electronic"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "slid"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "percussion"
+        ]
+      ],
+      "research_references": [
+        "Naira Marley"
+      ]
+    },
+    {
+      "id": "S3-05",
+      "name": "Agege Street Festival",
+      "description": "Fast Lagos street-party music with talking drums, brass and communal dance energy.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s3",
+      "tempo": {
+        "min": 122,
+        "max": 146
+      },
+      "mood": "Festive, energetic, joyful and communal.",
+      "energy": "Full Lagos street-carnival movement with strong communal dance rhythms and lively instrumental breaks.",
+      "rhythm": "Fast Lagos street-party groove with Fuji-influenced percussion, strong communal dance movement and lively rhythmic breaks.",
+      "drums_percussion": "Strong live-and-electronic drum combination, heavy kick, crisp snare, rolling toms, fast shakers, talking-drum patterns and rhythmic handclaps.",
+      "bass": "Deep bouncy bass with strong repetitive dance movement, melodic transitions and powerful low-frequency impact.",
+      "instruments": {
+        "keys": "Bright street-pop organ, rhythmic piano riffs, energetic synth stabs and short melodic keyboard phrases.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Talking drum, shekere, congas, brass section, whistles and communal responses."
+      },
+      "melody_harmony": "Original celebratory chants, short memorable hooks and energetic group-response patterns.",
+      "vocal_delivery": "Joyful communal lead phrases and celebratory crowd responses; selected voice remains independent.",
+      "arrangement": "Percussion-and-brass introduction → energetic verse → crowd-response chorus → talking-drum instrumental passage → second verse → street dance break → explosive final chorus.",
+      "lyrics": {
+        "structure": "Celebration, community, perseverance, success, street festivals, dancing and enjoyment.",
+        "vocabulary": "Use original meaningful secular street-pop expressions in the selected supported language or combination. Do not force Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; never reproduce identifiable voices, lyrics, signature chants, hooks or recordings."
+      },
+      "production_mix": "Full Lagos street-carnival energy with prominent Fuji-inspired percussion, strong bass and lively brass. Keep live/electronic drums clear, talking drums powerful, bass bouncy and organ bright; balance shekere, congas, whistles and guitar around communal responses. Avoid thin bass, weak percussion and overly polished arrangements that erase traditional street-party character.",
+      "variations": {
+        "introductions": [
+          "Begin with original percussion-and-brass phrases and powerful talking drums.",
+          "Begin with alternate Fuji-influenced rhythms and lively brass responses."
+        ],
+        "progressions": [
+          "Use original bright street-party harmony with deep bouncy bass patterns.",
+          "Use alternate rhythmic piano voicings and melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary talking-drum rhythms and brass phrases through the instrumental passage.",
+          "Change organ riffs, bass grooves and instrumental breaks before the explosive ending."
+        ],
+        "melody": [
+          "Create an original celebratory chant with energetic communal answers.",
+          "Create a contrasting short joyful hook and group-response pattern."
+        ],
+        "lyrical": [
+          "Develop original community and perseverance verses with street-festival celebration.",
+          "Develop success, dancing and enjoyment through fresh communal phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "whistle"
+        ]
+      ],
+      "research_references": [
+        "Small Doctor"
       ]
     }
   ]
