@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-v1",
   "status": "approved",
   "departments": [
     {
@@ -233,6 +233,12 @@
       "group_id": "R7",
       "department_id": "reggae-caribbean",
       "name": "Reggae Gospel"
+    },
+    {
+      "id": "western-w1",
+      "group_id": "W1",
+      "department_id": "western-international",
+      "name": "Powerful Soul & R&B Ballads"
     }
   ],
   "styles": [
@@ -15825,6 +15831,444 @@
       ],
       "research_references": [
         "Buchi"
+      ]
+    },
+    {
+      "id": "W1-01",
+      "name": "Majestic Soul Power Ballad",
+      "description": "Grand emotional soul with powerful piano, rich bass and dramatic choruses.",
+      "department_id": "western-international",
+      "category_id": "western-w1",
+      "tempo": {
+        "min": 64,
+        "max": 84
+      },
+      "mood": "Passionate, emotional, hopeful and triumphant.",
+      "energy": "Intimate sparse opening grows gradually into a triumphant soul climax with a gentle ending.",
+      "rhythm": "Slow-to-moderate contemporary soul ballad with spacious verses and a progressively stronger rhythmic foundation.",
+      "drums_percussion": "Begin with sparse percussion or no drums during the opening. Introduce a warm, deep kick and controlled snare as the song develops. Use natural live-drum dynamics and expressive tom fills. Add tasteful cymbal swells before major chorus entrances. Build drum intensity gradually rather than maintaining maximum energy throughout.",
+      "bass": "Warm electric bass with deep sustained notes, melodic passing tones and controlled low-frequency power. Bass should follow the harmonic movement closely and become more expressive during the larger choruses.",
+      "instruments": {
+        "keys": "Grand acoustic piano is the primary instrument. Use rich soul and gospel-influenced chord voicings, warm electric piano, restrained Hammond-style organ and occasional orchestral keyboard textures.",
+        "guitar": "Gentle clean electric guitar, soft acoustic strumming and expressive melodic guitar responses.",
+        "other": "Cinematic strings, restrained brass, subtle percussion, warm pads and optional backing harmonies where supported."
+      },
+      "melody_harmony": "Original expressive melodic lines, natural emotional rises, sustained chorus notes and carefully structured climactic phrases. Do not require extreme high notes or a particular vocal register. Adapt the melody to the customer's selected voice.",
+      "vocal_delivery": "Original expressive lines with natural emotional rises and sustained choruses; adapt register and melodic peaks to the selected voice without requiring extreme high notes.",
+      "arrangement": "Intimate piano introduction → reflective verse → rising pre-chorus → powerful chorus → second verse with fuller instrumentation → emotional bridge → climactic final chorus → gentle ending.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, perseverance, gratitude, personal strength, hope, reconciliation, devotion and emotional transformation.",
+        "vocabulary": "Use original expressions in the selected supported languages. Gospel-influenced harmony describes musical techniques and never automatically requires Christian lyrics. Respect selected single-singer, duet and supported harmony settings. Adapt range, ornamentation and intensity to selected voice capability without imposing a performer identity. Preserve customer-supplied phrases without inventing unfamiliar translations or accents. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Grand, emotionally powerful contemporary soul ballad with expressive piano, rich gospel-influenced chord movement, strong live drums, warm bass and dramatic orchestral development. The music should begin with emotional intimacy and grow naturally into a powerful, uplifting climax. **Tempo:** 64–84 BPM. **Built-in mood:** Passionate, emotional, hopeful and triumphant. Grand, polished soul ballad with clear piano, rich bass, wide strings and strong emotional dynamics. Maintain crystal-clear vocal/instrument separation and deep warm bass without muddying the kick. Use Western soul/R&B foundations, not reggae offbeats, guitar skank or Caribbean drum defaults. Avoid: Excessive vocal imitation, constant loudness, generic dance-pop drums, overcompressed arrangements and recognizable copyrighted melodies.",
+      "variations": {
+        "introductions": [
+          "Open with an original intimate solo grand-piano phrase.",
+          "Open on alternate expressive piano voicings with restrained sustained bass."
+        ],
+        "progressions": [
+          "Use original rich soul chords with warm organ and melodic bass passing notes.",
+          "Use alternate gospel-influenced piano progressions without requiring religious lyrics."
+        ],
+        "arrangements": [
+          "Build drums and cinematic strings gradually through fuller second-verse instrumentation.",
+          "Develop an emotional bridge and climactic final chorus before a gentle ending."
+        ],
+        "melody": [
+          "Create original emotional rises and sustained chorus phrases suited to the selected voice.",
+          "Create a contrasting hopeful refrain with a carefully developed melodic peak, never a forced extreme register."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original perseverance or emotional-transformation imagery.",
+          "Develop fresh love or gratitude expressions only where appropriate to the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "soul"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "gradual",
+          "gradually"
+        ],
+        [
+          "gentle ending"
+        ]
+      ],
+      "research_references": [
+        "Whitney Houston"
+      ]
+    },
+    {
+      "id": "W1-02",
+      "name": "Cinematic Heart Ballad",
+      "description": "Sweeping romantic ballad with emotional piano, orchestral strings and cinematic depth.",
+      "department_id": "western-international",
+      "category_id": "western-w1",
+      "tempo": {
+        "min": 60,
+        "max": 82
+      },
+      "mood": "Romantic, heartfelt, dramatic and inspiring.",
+      "energy": "Spacious graceful cinematic progression builds to orchestral scale and a resolved ending, not constant intensity.",
+      "rhythm": "Slow cinematic pop ballad with spacious verses, dramatic transitions and a powerful orchestral final section.",
+      "drums_percussion": "Minimal drums in the opening verse. Deep, soft kick and controlled snare during the first chorus. Cinematic tom fills and gentle cymbal swells during transitions. Fuller live drums during the final chorus. Maintain spacious rhythmic phrasing.",
+      "bass": "Deep, smooth electric bass with long sustained notes, subtle melodic movement and controlled low-frequency support. Bass must strengthen the orchestral harmony without overpowering the piano or strings.",
+      "instruments": {
+        "keys": "Emotional grand piano, soft electric piano, atmospheric keyboard pads and carefully layered harmonic textures.",
+        "guitar": "Gentle acoustic guitar, expressive clean electric guitar and occasional melodic lead-guitar passages.",
+        "other": "Full cinematic strings, cello, violin, restrained orchestral percussion, subtle brass and ambient textures."
+      },
+      "melody_harmony": "Original sweeping melodies, emotional long phrases, graceful melodic climbs and memorable choruses.",
+      "vocal_delivery": "Original sweeping long phrases and graceful climbs; respect selected voice capability without forced belting.",
+      "arrangement": "Solo piano introduction → intimate verse → emotional pre-chorus → sweeping chorus → second verse with strings → dramatic instrumental bridge → powerful final chorus → orchestral resolution.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Enduring love, separation, hope, remembrance, courage, family, devotion and emotional healing.",
+        "vocabulary": "Use original expressions in the selected supported languages. Gospel-influenced harmony describes musical techniques and never automatically requires Christian lyrics. Respect selected single-singer, duet and supported harmony settings. Adapt range, ornamentation and intensity to selected voice capability without imposing a performer identity. Preserve customer-supplied phrases without inventing unfamiliar translations or accents. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Sweeping cinematic pop-soul ballad combining emotional piano, orchestral strings, restrained drums, deep bass and dramatic melodic storytelling. This style should emphasize cinematic scale and graceful emotional progression rather than gospel-soul rhythmic intensity. **Tempo:** 60–82 BPM. **Built-in mood:** Romantic, heartfelt, dramatic and inspiring. Beautiful cinematic depth, clear piano, wide orchestral strings and balanced bass. Maintain crystal-clear vocal/instrument separation and deep warm bass without muddying the kick. Use Western soul/R&B foundations, not reggae offbeats, guitar skank or Caribbean drum defaults. Avoid: Turning every song into a wedding ballad, excessive percussion, forced vocal belting and imitation of existing film-ballad melodies.",
+      "variations": {
+        "introductions": [
+          "Open with an original intimate solo-piano phrase.",
+          "Open on alternate spacious grand-piano voicings before the strings enter."
+        ],
+        "progressions": [
+          "Use original graceful cinematic piano harmony with sustained bass support.",
+          "Use alternate string voicings and soft electric-piano/pad textures."
+        ],
+        "arrangements": [
+          "Vary cello/violin movement and orchestral transitions through the second verse.",
+          "Develop a dramatic instrumental bridge into a powerful final chorus and orchestral resolution."
+        ],
+        "melody": [
+          "Create original sweeping long phrases and graceful melodic climbs suited to the voice.",
+          "Create a contrasting heartfelt chorus without forced belting or recognizable film melodies."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original remembrance or courage imagery.",
+          "Develop fresh family or hope verses without forcing a wedding narrative."
+        ]
+      },
+      "production_terms": [
+        [
+          "cinematic"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "cello"
+        ],
+        [
+          "violin"
+        ],
+        [
+          "orchestral"
+        ]
+      ],
+      "research_references": [
+        "Celine Dion"
+      ]
+    },
+    {
+      "id": "W1-03",
+      "name": "Velvet R&B Vocal Symphony",
+      "description": "Sophisticated smooth R&B with lush keyboards, deep bass and expressive melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w1",
+      "tempo": {
+        "min": 66,
+        "max": 90
+      },
+      "mood": "Romantic, intimate, dreamy and emotionally expressive.",
+      "energy": "Relaxed silky R&B syncopation with harmonic richness and controlled expressive development.",
+      "rhythm": "Slow contemporary R&B ballad with relaxed syncopation, smooth bass movement and rich harmonic development.",
+      "drums_percussion": "Soft R&B kick and crisp snare. Gentle syncopated hi-hats. Restrained ghost notes. Subtle percussion fills. Occasional live-drum accents during emotional climaxes.",
+      "bass": "Deep, smooth electric or synth bass with rounded sustained notes, melodic passing tones and gentle syncopation. The bass should create a warm R&B foundation without muddying the vocal range.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, warm acoustic piano, lush seventh and ninth chord voicings, soft synthesizer pads and restrained organ textures.",
+        "guitar": "Clean R&B guitar, gentle fingerpicked accents and expressive melodic responses.",
+        "other": "Soft strings, warm pads, subtle percussion and optional layered harmonies when compatible with the customer's vocal settings."
+      },
+      "melody_harmony": "Original flowing melodic lines, tasteful ornamentation, expressive phrasing and emotionally satisfying choruses. Vocal embellishments must remain within the capability and character of the selected voice.",
+      "vocal_delivery": "Original flowing phrases and tasteful ornamentation within the capability and character of the selected voice; no mandatory whistle-register notes or excessive runs.",
+      "arrangement": "Electric-piano introduction → intimate verse → smooth pre-chorus → melodic chorus → second verse with richer harmony → instrumental R&B passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Romance, longing, commitment, heartbreak, reconciliation, vulnerability and emotional connection.",
+        "vocabulary": "Use original expressions in the selected supported languages. Gospel-influenced harmony describes musical techniques and never automatically requires Christian lyrics. Respect selected single-singer, duet and supported harmony settings. Adapt range, ornamentation and intensity to selected voice capability without imposing a performer identity. Preserve customer-supplied phrases without inventing unfamiliar translations or accents. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Sophisticated contemporary R&B ballad with rich extended harmonies, smooth bass, warm electric piano, polished drums and expressive melodic ornamentation. This style should emphasize harmonic sophistication and silky R&B groove rather than purely orchestral drama. **Tempo:** 66–90 BPM. **Built-in mood:** Romantic, intimate, dreamy and emotionally expressive. Silky, polished R&B with crystal-clear vocals, rich keyboard harmony and warm deep bass. Maintain crystal-clear vocal/instrument separation and deep warm bass without muddying the kick. Use Western soul/R&B foundations, not reggae offbeats, guitar skank or Caribbean drum defaults. Avoid: Mandatory whistle-register notes, excessive vocal runs, generic trap beats, hard EDM drops and recognizable melody imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original warm Rhodes voicings and smooth rounded bass.",
+          "Open on alternate rich electric-piano chords and gentle syncopated percussion."
+        ],
+        "progressions": [
+          "Use original seventh/ninth chord extensions with smooth R&B bass passing tones.",
+          "Use alternate warm piano/organ harmony and restrained synth pads."
+        ],
+        "arrangements": [
+          "Vary fingerpicked guitar fills and keyboard textures through the instrumental R&B passage.",
+          "Develop richer second-verse harmony and an emotional bridge into the final chorus."
+        ],
+        "melody": [
+          "Create original flowing melodies and tasteful ornamentation within selected-voice capability.",
+          "Create a contrasting intimate refrain without mandatory whistle notes or excessive runs."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original vulnerability or emotional-connection images.",
+          "Develop fresh reconciliation or longing verses only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "syncopat"
+        ]
+      ],
+      "research_references": [
+        "Mariah Carey"
+      ]
+    },
+    {
+      "id": "W1-04",
+      "name": "Gospel-Soul Powerhouse",
+      "description": "Powerful contemporary soul with Hammond organ, live drums and dramatic emotion.",
+      "department_id": "western-international",
+      "category_id": "western-w1",
+      "tempo": {
+        "min": 62,
+        "max": 86
+      },
+      "mood": "Determined, emotional, empowering and triumphant.",
+      "energy": "Strong empowering live-soul dynamics alternate restrained verses and powerful controlled choruses.",
+      "rhythm": "Powerful contemporary soul with live-band dynamics, strong rhythmic emphasis and gospel-influenced harmonic movement.",
+      "drums_percussion": "Deep live kick. Strong, controlled snare. Expressive tom fills. Natural cymbal swells. Dynamic changes between restrained verses and powerful choruses. Occasional half-time rhythmic emphasis.",
+      "bass": "Thick electric bass with sustained low notes, expressive melodic movement and strong rhythmic support during climactic sections.",
+      "instruments": {
+        "keys": "Powerful acoustic piano, Hammond organ, rich gospel-influenced chord voicings and warm electric piano.",
+        "guitar": "Soulful electric-guitar responses, gentle rhythmic guitar and occasional blues-influenced melodic phrases.",
+        "other": "Brass swells, cinematic strings, hand percussion and optional backing harmonies."
+      },
+      "melody_harmony": "Original emotionally commanding melodies, expressive chorus phrases and dramatic but controlled climaxes. The vocal arrangement must adapt to the customer's chosen voice and not force extreme belting.",
+      "vocal_delivery": "Original emotionally commanding phrases and controlled climaxes; adapt intensity to the selected voice without forcing extreme belting.",
+      "arrangement": "Sparse piano introduction → emotionally direct verse → rising pre-chorus → powerful chorus → second verse → organ-and-guitar instrumental passage → dramatic bridge → climactic final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Overcoming hardship, self-worth, perseverance, love, courage, forgiveness, personal transformation and hope.",
+        "vocabulary": "Use original expressions in the selected supported languages. Gospel-influenced harmony describes musical techniques and never automatically requires Christian lyrics. Respect selected single-singer, duet and supported harmony settings. Adapt range, ornamentation and intensity to selected voice capability without imposing a performer identity. Preserve customer-supplied phrases without inventing unfamiliar translations or accents. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Intense contemporary soul ballad combining gospel-influenced piano harmony, powerful live drums, deep electric bass, Hammond organ and dramatic emotional development. This is a secular-capable soul style informed by gospel musical techniques, not automatically a Christian gospel category. **Tempo:** 62–86 BPM. **Built-in mood:** Determined, emotional, empowering and triumphant. Powerful, emotionally rich soul with strong bass, live drums, expressive piano and clear dynamic contrast. Maintain crystal-clear vocal/instrument separation and deep warm bass without muddying the kick. Use Western soul/R&B foundations, not reggae offbeats, guitar skank or Caribbean drum defaults. Avoid: Automatically generating Christian lyrics, constant maximum-volume singing, excessive distortion and generic pop production.",
+      "variations": {
+        "introductions": [
+          "Open with original sparse powerful acoustic-piano voicings.",
+          "Open on alternate restrained piano chords before organ and live drums develop."
+        ],
+        "progressions": [
+          "Use original gospel-influenced soul chords with warm electric piano and deep bass.",
+          "Use alternate piano progressions and Hammond organ swells without imposing religious words."
+        ],
+        "arrangements": [
+          "Vary expressive tom fills and bass phrases between restrained verses and powerful choruses.",
+          "Develop an organ/guitar passage and dramatic bridge into a controlled final climax."
+        ],
+        "melody": [
+          "Create original emotionally commanding phrases adapted to selected voice intensity.",
+          "Create a contrasting empowering chorus with controlled dramatic development, never forced extreme belting."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original self-worth or courage storytelling.",
+          "Develop fresh forgiveness or hope imagery without automatically generating Christian lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "blues"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "half-time"
+        ]
+      ],
+      "research_references": [
+        "Jennifer Hudson"
+      ]
+    },
+    {
+      "id": "W1-05",
+      "name": "Midnight Deep Soul Ballad",
+      "description": "Intimate, mature R&B with warm low bass, soft drums and reflective melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w1",
+      "tempo": {
+        "min": 58,
+        "max": 82
+      },
+      "mood": "Intimate, reflective, romantic and bittersweet.",
+      "energy": "Restrained intimate deep-soul movement and spacious warm textures, prioritizing nuance over a huge climax.",
+      "rhythm": "Slow, intimate R&B ballad with restrained rhythmic movement, deep bass and spacious production.",
+      "drums_percussion": "Soft, deep R&B kick. Warm snare or rimshot. Sparse hi-hats. Subtle ghost notes. Gentle percussion textures. Minimal fills to preserve intimacy.",
+      "bass": "Very deep, rounded electric or synth bass with smooth sustained notes, restrained melodic movement and warm low-frequency depth. The bass should feel rich and immersive without overwhelming the mix.",
+      "instruments": {
+        "keys": "Dark Rhodes-style electric piano, soft acoustic piano, warm analog pads and subtle organ textures.",
+        "guitar": "Gentle clean electric guitar, muted R&B guitar phrases and occasional blues-influenced melodic responses.",
+        "other": "Soft strings, atmospheric pads, restrained percussion and gentle instrumental harmonies."
+      },
+      "melody_harmony": "Original emotionally nuanced melodies, conversational phrasing, smooth melodic contours and understated memorable choruses.",
+      "vocal_delivery": "Original nuanced conversational phrasing and understated memorable choruses; never force low-pitched vocals or a particular vocal range.",
+      "arrangement": "Atmospheric electric-piano introduction → intimate verse → restrained chorus → second verse → short guitar-and-keyboard instrumental passage → reflective bridge → final chorus → soft ending.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Deep love, longing, heartbreak, trust, forgiveness, vulnerability, reconciliation and mature relationships.",
+        "vocabulary": "Use original expressions in the selected supported languages. Gospel-influenced harmony describes musical techniques and never automatically requires Christian lyrics. Respect selected single-singer, duet and supported harmony settings. Adapt range, ornamentation and intensity to selected voice capability without imposing a performer identity. Preserve customer-supplied phrases without inventing unfamiliar translations or accents. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Dark, intimate contemporary R&B and deep soul ballad with warm low-register instrumentation, smooth bass, restrained drums, atmospheric keyboards and mature romantic storytelling. Unlike W1-01 and W1-04, this style should prioritize emotional restraint and intimacy rather than a huge vocal climax. **Tempo:** 58–82 BPM. **Built-in mood:** Intimate, reflective, romantic and bittersweet. Warm, intimate deep-soul production with rich bass, soft drums and beautiful harmonic space. Maintain crystal-clear vocal/instrument separation and deep warm bass without muddying the kick. Use Western soul/R&B foundations, not reggae offbeats, guitar skank or Caribbean drum defaults. Avoid: Forced low-pitched vocals, dramatic orchestral climaxes in every song, generic trap percussion and imitation of identifiable artist voices.",
+      "variations": {
+        "introductions": [
+          "Open with original atmospheric dark electric piano and warm pads.",
+          "Open on alternate intimate Rhodes voicings with restrained deep bass."
+        ],
+        "progressions": [
+          "Use original dark deep-soul chords and smoothly sustained electric or synth bass.",
+          "Use alternate soft piano/organ harmony with restrained bass passing phrases."
+        ],
+        "arrangements": [
+          "Vary muted R&B guitar replies through the short keyboard/guitar passage.",
+          "Develop a reflective bridge and understated final chorus into a soft ending rather than a huge climax."
+        ],
+        "melody": [
+          "Create original nuanced conversational melodies suited to the selected voice.",
+          "Create a contrasting understated refrain without forcing low-pitched vocals."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original mature reflective imagery.",
+          "Develop fresh trust or vulnerability expressions only where the customer topic supports them."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "restrained"
+        ],
+        [
+          "soft ending"
+        ]
+      ],
+      "research_references": [
+        "Toni Braxton"
       ]
     }
   ]
