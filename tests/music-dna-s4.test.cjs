@@ -42,7 +42,7 @@ test("S4 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s4"'));
   assert.throws(() => dna.prepare(brief("secular-s4"), actor));
   for (const [id, name] of cases) {
@@ -165,13 +165,13 @@ test("S1–S4 have separate selector groups and S4 retains its specified fusion 
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     labels = [
       "Party Afrobeats & Dance Hits",
       "Smooth Afropop & Romantic",
       "Street Pop & Street Anthems",
       "Afro-Fusion & Powerful Grooves",
-    ].map((name) => '<optgroup label="Secular and Afrobeats / ' + name + '">');
+    ].map((name) => '<optgroup label="Afrobeats & African Music / ' + name + '">');
   assert(labels.every((label) => html.includes(label)));
   for (let i = 1; i < labels.length; i++)
     assert(html.indexOf(labels[i - 1]) < html.indexOf(labels[i]));

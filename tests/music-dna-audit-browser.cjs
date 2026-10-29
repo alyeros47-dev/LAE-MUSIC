@@ -33,7 +33,7 @@ const escape = (s) =>
         `<label>${n}<select name="${n}"><option value="">Neutral</option></select></label>`,
     )
     .join("");
-  const pageHTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Isolated Music DNA audit</title><link rel="stylesheet" href="/web/ui.css"></head><body><main style="max-width:960px;margin:auto;padding:16px"><h1>Music DNA integration audit</h1><h2>Lyrics studio</h2><form id="brief">${musicDNAControls(catalog, escape)}<label>Voice<select name="voice">${catalog.voices.map((v) => `<option value="${v.id}">${escape(v.name)}</option>`).join("")}</select></label><label>Song topic<textarea name="idea">An original song about friendship and finding hope</textarea></label><label>Model<select name="lyricsModel"><option value="gpt-6.1-sol">GPT-6.1 Sol</option></select></label><label>Duration<select name="duration"><option>3 minutes</option></select></label>${legacy}<button>Generate mock lyrics</button></form><section><h2>Validated output</h2><label>Lyrics<textarea id="lyrics" readonly></textarea></label><label>Music style<textarea id="style" readonly></textarea></label><button id="music">Send mock music request</button><p id="result" role="status"></p></section></main><script type="module">
+  const pageHTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Isolated Music DNA audit</title><link rel="stylesheet" href="/web/ui.css"></head><body><main style="max-width:960px;margin:auto;padding:16px"><h1>Music DNA integration audit</h1><h2>Lyrics studio</h2><form id="brief">${musicDNAControls(catalog, escape)}<label>Song topic<textarea name="idea">An original song about friendship and finding hope</textarea></label><label>Model<select name="lyricsModel"><option value="gpt-6.1-sol">GPT-6.1 Sol</option></select></label><label>Duration<select name="duration"><option>3 minutes</option></select></label>${legacy}<button>Generate mock lyrics</button></form><section><h2>Validated output</h2><label>Lyrics<textarea id="lyrics" readonly></textarea></label><label>Music style<textarea id="style" readonly></textarea></label><button id="music">Send mock music request</button><p id="result" role="status"></p></section></main><script type="module">
  import {bindMusicDNA} from '/web/music-dna.js';import {lyricsRequest,musicRequest} from '/web/studio-engine.js';
  const c=await (await fetch('/catalog')).json(),f=document.querySelector('#brief');window.update=bindMusicDNA(f,JSON.parse(localStorage.getItem('draft')||'null'),c);window.lastResult=null;
  function brief(){const b=Object.fromEntries(new FormData(f));b.musicDnaLanguages=Array.from(f.elements.musicDnaLanguages.selectedOptions,o=>o.value);return b;}
@@ -132,16 +132,34 @@ const escape = (s) =>
       );
       await page.goto(origin);
       await page.waitForFunction(() => window.ready);
-      assert.equal(
-        await page.locator("[name=musicDnaStyle] optgroup").count(),
-        43,
-      );
-      assert.equal(
-        await page.locator("[name=musicDnaStyle] option").count(),
-        216,
-      );
+      assert.equal(await page.locator('[name=musicDnaDepartment] option').count(),5);
+      assert(await page.locator('[name=musicDnaGroup]').isDisabled());
+      assert(await page.locator('[name=musicDnaStyle]').isDisabled());
+      assert.equal(await page.locator('[name=musicDnaStyle] option').count(),1);
+      const selectStyle=async(id)=>{
+        const selected=catalog.styles.find(s=>s.id===id);
+        await page.locator('[name=musicDnaDepartment]').selectOption(selected.department_id);
+        assert.equal(await page.locator('[name=musicDnaGroup] option').count(),catalog.categories.filter(c=>c.department_id===selected.department_id).length+1);
+        await page.locator('[name=musicDnaGroup]').selectOption(selected.category_id);
+        assert.equal(await page.locator('[name=musicDnaStyle] option').count(),6);
+        await page.locator('[name=musicDnaStyle]').selectOption(id);
+      };
+      await page.locator('[name=musicDnaDepartment]').selectOption('gospel');
+      assert.equal(await page.locator('#brief').evaluate(f=>f.checkValidity()),false);
+      await page.locator('[name=musicDnaGroup]').selectOption(catalog.categories.find(c=>c.group_id==='G1').id);
+      assert.equal(await page.locator('#brief').evaluate(f=>f.checkValidity()),false);
+      await page.locator('[name=musicDnaStyle]').selectOption('G1-01');
+      assert.equal(await page.locator('#brief').evaluate(f=>f.checkValidity()),false);
+      await page.locator('[name=musicDnaMood]').selectOption('calm');
+      assert.equal(await page.locator('#brief').evaluate(f=>f.checkValidity()),true);
+      await page.getByRole('button',{name:'Also explore Reggae Gospel',exact:true}).click();
+      assert.equal(await page.locator('[name=musicDnaDepartment]').inputValue(),'reggae-caribbean');
+      assert.equal(await page.locator('[name=musicDnaGroup]').inputValue(),catalog.categories.find(c=>c.group_id==='R7').id);
+      assert.equal(await page.locator('[name=musicDnaStyle]').inputValue(),'');
+      assert.equal(await page.locator('[name=musicDnaStyle] option').count(),6);
       for (const s of catalog.styles) {
-        await page.locator("[name=musicDnaStyle]").selectOption(s.id);
+        await selectStyle(s.id);
+        await page.locator("[name=musicDnaMood]").selectOption("calm");
         assert(
           (await page.locator("#music-dna-status").textContent()).includes(
             s.description,
@@ -153,7 +171,7 @@ const escape = (s) =>
         assert(!Object.hasOwn(p, "mood"));
         assert.equal(await page.locator("[name=genre]").isDisabled(), true);
       }
-      await page.locator("[name=musicDnaStyle]").selectOption("");
+      await page.locator("[name=musicDnaDepartment]").selectOption("");
       assert.equal(await page.locator("[name=genre]").isDisabled(), false);
       assert.equal(
         await page.locator("[name=musicDnaLanguages]").isDisabled(),
@@ -165,7 +183,9 @@ const escape = (s) =>
         ["R7-05", "duet", ["en", "yo"]],
         ["W8-05", "custom", ["en", "fr"]],
       ]) {
-        await page.locator("[name=musicDnaStyle]").selectOption(id);
+        await selectStyle(id);
+        const mood=["calm","smooth","energetic","celebration"][["G2-04","S6-01","R7-05","W8-05"].indexOf(id)];
+        await page.locator("[name=musicDnaMood]").selectOption(mood);
         await page.locator("[name=voice]").selectOption(voice);
         await page.locator("[name=musicDnaLanguages]").selectOption(languages);
         await page
@@ -177,6 +197,7 @@ const escape = (s) =>
           await page.locator("[name=musicDnaStyle]").inputValue(),
           id,
         );
+        assert.equal(await page.locator("[name=musicDnaMood]").inputValue(),mood);
         // Voice/topic are ordinary form values; the actual app owns their persistence, while this component restores DNA/languages only.
         await page.locator("[name=voice]").selectOption(voice);
         assert.deepEqual(
@@ -194,6 +215,7 @@ const escape = (s) =>
         );
         const out = await page.evaluate(() => window.lastResult);
         assert.equal(out.music_dna.voice, voice);
+        assert.equal(out.music_dna.mood_control.id,mood);
         assert.deepEqual(out.music_dna.languages, languages);
         await page.evaluate(() => (window.musicResult = null));
         await page

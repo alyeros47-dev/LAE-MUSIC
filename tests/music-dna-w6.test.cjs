@@ -51,10 +51,10 @@ test("W6 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Western and International / Pop Ballads & Emotional Storytelling">',
+      '<optgroup label="Western & International Music / Pop Ballads & Emotional Storytelling">',
     ),
   );
   assert(!html.includes('<option value="western-w6"'));
@@ -262,9 +262,9 @@ test("W6 stays separate from W1–W5 and prior departments, preserving every ear
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Western and International / Pop Ballads & Emotional Storytelling">';
+      '<optgroup label="Western & International Music / Pop Ballads & Emotional Storytelling">';
   assert(html.includes(label));
   const segment = html.slice(
     html.indexOf(label),

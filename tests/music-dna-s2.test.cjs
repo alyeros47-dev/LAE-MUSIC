@@ -42,7 +42,7 @@ test("S2 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s2"'));
   assert.throws(() => dna.prepare(brief("secular-s2"), actor));
   for (const [id, name] of cases) {
@@ -158,10 +158,10 @@ test("S2 and S1 are separate selector groups with distinct dance intensity and p
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     s1 =
-      '<optgroup label="Secular and Afrobeats / Party Afrobeats & Dance Hits">',
-    s2 = '<optgroup label="Secular and Afrobeats / Smooth Afropop & Romantic">';
+      '<optgroup label="Afrobeats & African Music / Party Afrobeats & Dance Hits">',
+    s2 = '<optgroup label="Afrobeats & African Music / Smooth Afropop & Romantic">';
   assert(html.includes(s1));
   assert(html.includes(s2));
   assert(html.indexOf(s1) < html.indexOf(s2));

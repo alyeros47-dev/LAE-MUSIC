@@ -41,7 +41,7 @@ test("G8 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="gospel-g8"'));
   assert.throws(() => dna.prepare(brief("gospel-g8"), actor));
   for (const [id, name] of cases) {

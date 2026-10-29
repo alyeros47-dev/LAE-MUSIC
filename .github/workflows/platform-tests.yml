@@ -98,7 +98,7 @@ jobs:
           LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
         run: npm run test:dna
   existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/music-dna-foundation' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
+    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/studio-navigation-mood' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:

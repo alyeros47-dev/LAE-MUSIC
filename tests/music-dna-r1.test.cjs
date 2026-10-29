@@ -51,10 +51,10 @@ test("R1 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Reggae and Caribbean / Classic Roots Reggae">',
+      '<optgroup label="Reggae & Caribbean Music / Classic Roots Reggae">',
     ),
   );
   assert(!html.includes('<option value="reggae-r1"'));

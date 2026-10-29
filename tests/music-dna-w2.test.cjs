@@ -51,10 +51,10 @@ test("W2 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
     html.includes(
-      '<optgroup label="Western and International / Classic Contemporary R&B">',
+      '<optgroup label="Western & International Music / Classic Contemporary R&B">',
     ),
   );
   assert(!html.includes('<option value="western-w2"'));
@@ -245,9 +245,9 @@ test("W2 remains separate from W1 and previous departments, preserves earlier op
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     label =
-      '<optgroup label="Western and International / Classic Contemporary R&B">';
+      '<optgroup label="Western & International Music / Classic Contemporary R&B">';
   assert(html.includes(label));
   const segment = html.slice(
     html.indexOf(label),

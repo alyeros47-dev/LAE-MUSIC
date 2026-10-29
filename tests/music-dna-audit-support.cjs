@@ -6,9 +6,10 @@ const dna = require("../lib/music-dna");
 const { handler } = require("./lyrics-handler-fixture.cjs");
 function fixture(context) {
   const group = context.style_id.split("-")[0].toLowerCase();
-  return require("./music-dna-" + group + "-output.cjs")[group + "Output"](
-    context,
-  );
+  const out=require("./music-dna-" + group + "-output.cjs")[group + "Output"](context);
+  if(!context.mood_control)return out;
+  return {...out,dna_mood:context.mood_control.name,dna_energy:context.mood_control.energy,
+    style:`${context.tempo} BPM. ${context.mood_control.direction} Keep the characteristic groove, resolved ending and clean mix. `+(context.profile.production_terms||[]).map(terms=>terms[0]).join('; ')};
 }
 async function adapters() {
   const load = (p) =>

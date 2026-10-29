@@ -52,6 +52,8 @@ export function lyricsRequest(brief) {
     return {
       model: brief.lyricsModel,
       idea: brief.idea,
+      ...(brief.title?.trim() ? {title:brief.title.trim()} : {}),
+      ...(brief.musicDnaMood ? {musicDnaMood:brief.musicDnaMood} : {}),
       musicDnaStyle: brief.musicDnaStyle,
       musicDnaLanguages: brief.musicDnaLanguages || [],
       voice: brief.voice || "neutral",
@@ -67,6 +69,7 @@ export function lyricsRequest(brief) {
   return {
     ...(brief.lyricsModel ? { model: brief.lyricsModel } : {}),
     idea: brief.idea,
+    ...(brief.title?.trim() ? {title:brief.title.trim()} : {}),
     genre: brief.genre,
     language: brief.language,
     nativeLyrics: brief.nativeLyrics,

@@ -166,3 +166,5 @@ require('./music-dna-w6.test.cjs');
 require('./music-dna-w7.test.cjs');
 
 require('./music-dna-w8.test.cjs');
+
+require("./music-dna-mood.test.cjs");

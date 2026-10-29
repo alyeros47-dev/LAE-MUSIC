@@ -28,7 +28,7 @@ async function handler({
     load = require("node:module").createRequire(path.resolve("server.js"));
   const e = providedEngine || engine(),
     counts = { reserve: 0, complete: 0, refund: 0, post: 0 },
-    context = e.prepare(payload, requestActor);
+    context = response ? null : e.prepare(payload, requestActor);
   const selectedModel = payload.model || "gpt-6.1-sol";
   let request;
   const req = {
@@ -107,7 +107,8 @@ async function handler({
     AbortSignal,
     async () => {},
     (name) => (name === "./lib/music-dna" ? { ...dna, ...e } : load(name)),
-  );
+  ).catch(error => ({status:error.status||500,data:{error:error.message}})); // Same HTTP error boundary as server.js.
+
   return { result, counts, request, reserved };
 }
 

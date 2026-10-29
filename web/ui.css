@@ -2185,3 +2185,8 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .music-studio-panel textarea.lyrics{min-height:280px;line-height:1.8}
 
 .song-result-art{display:block;width:min(100%,240px);aspect-ratio:1;object-fit:cover;border-radius:18px;margin-bottom:16px;background:var(--panel,#181824)}
+
+/* Guided Music DNA navigation keeps each style list to its selected group. */
+.dna-navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.dna-navigation label,.music-dna-panel select{min-width:0;max-width:100%}
+@media(max-width:760px){.dna-navigation{grid-template-columns:minmax(0,1fr)}}

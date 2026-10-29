@@ -47,24 +47,18 @@ async function main() {
     await new Promise((r) => setTimeout(r, 3000));
   }
   check(ready, "integrated capabilities route");
-  const local = crypto
-    .createHash("sha256")
-    .update(fs.readFileSync("web/app.js"))
-    .digest("hex");
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    const r = await fetch(
-      origin + "/web/app.js?release=" + process.env.GITHUB_SHA,
-      { redirect: "error", signal: AbortSignal.timeout(30000) },
-    );
-    check(r.ok, "served application");
-    check(
-      crypto
-        .createHash("sha256")
-        .update(Buffer.from(await r.arrayBuffer()))
-        .digest("hex") === local,
-      "exact live application assets",
-    );
+    for (const file of ["web/app.js","web/music-dna.js","web/studio-engine.js","web/ui.css"]) {
+      const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+      const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA,
+        {redirect:"error",signal:AbortSignal.timeout(30000)});
+      check(r.ok,"served studio asset");
+      check(crypto.createHash("sha256").update(Buffer.from(await r.arrayBuffer())).digest("hex")===local,"exact live studio assets");
+    }
   }
+  const dnaCatalogue=await api("/api/platform/studio/dna/catalog");
+  check(dnaCatalogue.status===200&&JSON.stringify(dnaCatalogue.data)===JSON.stringify(require("../lib/music-dna").catalogue()),"exact public Music DNA catalogue and mood options");
+  check(dnaCatalogue.data.styles.length===215&&dnaCatalogue.data.categories.length===43&&dnaCatalogue.data.moods.length===4,"complete studio selection inventory");
   const artistBody = {
     name: "LAE Release QA Artist",
     country: "Nigeria",
@@ -246,6 +240,10 @@ async function main() {
     JSON.stringify({
       status: "live_release_verified",
       asset_origins_verified: 2,
+      studio_assets_per_origin_verified: 4,
+      music_dna_styles_verified: 215,
+      music_dna_groups_verified: 43,
+      customer_moods_verified: 4,
       artist_registration_logout_login: true,
       listener_registration_logout_login: true,
       free_lyrics_credits: 2,

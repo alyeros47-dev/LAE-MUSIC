@@ -42,7 +42,7 @@ test("S3 exposes only the exact five styles under a nonselectable heading and ke
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(!html.includes('<option value="secular-s3"'));
   assert.throws(() => dna.prepare(brief("secular-s3"), actor));
   for (const [id, name] of cases) {
@@ -172,12 +172,12 @@ test("S1, S2 and S3 remain separate selector groups with different rhythmic dire
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String),
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
     labels = [
       "Party Afrobeats & Dance Hits",
       "Smooth Afropop & Romantic",
       "Street Pop & Street Anthems",
-    ].map((name) => '<optgroup label="Secular and Afrobeats / ' + name + '">');
+    ].map((name) => '<optgroup label="Afrobeats & African Music / ' + name + '">');
   assert(labels.every((label) => html.includes(label)));
   assert(html.indexOf(labels[0]) < html.indexOf(labels[1]));
   assert(html.indexOf(labels[1]) < html.indexOf(labels[2]));

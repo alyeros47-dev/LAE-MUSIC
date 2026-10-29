@@ -51,9 +51,9 @@ test("R7 exact public labels/descriptions, nonselectable heading, and private re
     "data:text/javascript;base64," +
       fs.readFileSync("web/music-dna.js").toString("base64")
   );
-  const html = ui.musicDNAControls(c, String);
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert(
-    html.includes('<optgroup label="Reggae and Caribbean / Reggae Gospel">'),
+    html.includes('<optgroup label="Reggae & Caribbean Music / Reggae Gospel">'),
   );
   assert(!html.includes('<option value="reggae-r7"'));
   assert.throws(() => dna.prepare(brief(cat.id), actor));
@@ -242,8 +242,8 @@ test("R7 remains separate from secular reggae and Gospel groups, with all earlie
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     );
-  const html = ui.musicDNAControls(c, String),
-    label = '<optgroup label="Reggae and Caribbean / Reggae Gospel">';
+  const html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String),
+    label = '<optgroup label="Reggae & Caribbean Music / Reggae Gospel">';
   const segment = html.slice(
     html.indexOf(label),
     html.indexOf("</optgroup>", html.indexOf(label)),
@@ -302,13 +302,13 @@ test("Reggae registration completeness: R1–R7 contain 35 unique individually s
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     ),
-    html = ui.musicDNAControls(c, String);
+    html = require("./music-dna-ui-projection.cjs").allViews(ui, c, String);
   assert.deepEqual(
     [...html.matchAll(/<option value="(R\d+-\d{2})">/g)].map((m) => m[1]),
     ids,
   );
   assert.equal(
-    (html.match(/<optgroup label="Reggae and Caribbean \//g) || []).length,
+    (html.match(/<optgroup label="Reggae & Caribbean Music \//g) || []).length,
     7,
   );
   for (const cat of groups)

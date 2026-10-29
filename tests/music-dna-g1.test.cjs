@@ -77,7 +77,7 @@ test("G1 public names/descriptions are exact, research references stay internal 
       "data:text/javascript;base64," +
         fs.readFileSync("web/music-dna.js").toString("base64")
     ),
-    html = ui.musicDNAControls(c, (s) =>
+    html = require("./music-dna-ui-projection.cjs").allViews(ui, c, (s) =>
       String(s).replaceAll("&", "&amp;").replaceAll('"', "&quot;"),
     );
   assert.equal((html.match(/<optgroup /g) || []).length, c.categories.length);
