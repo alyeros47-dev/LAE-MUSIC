@@ -13,21 +13,29 @@ const body = {
   idea: "An original account of finding hope",
 };
 const actor = { artistId: 7, requestKey: "qa-music-dna-request-0001" };
-test("the unpublished 43-group inventory is preserved without fabricated customer styles", () => {
+test("the approved G1 subset preserves the full department inventory without inventing other research groups", () => {
   const c = dna.catalogue();
-  assert.equal(c.status, "awaiting_catalogue");
-  assert.equal(
-    c.departments.reduce((n, d) => n + d.research_groups, 0),
-    43,
-  );
+  assert.equal(c.status, "approved");
   assert.deepEqual(
     c.departments.map((d) => d.research_groups),
     [14, 14, 7, 8],
   );
-  assert.deepEqual(c.categories, []);
-  assert.deepEqual(c.styles, []);
+  assert.equal(c.coverage.expected_research_groups, 43);
+  assert.deepEqual(c.coverage.supplied_research_groups, ["G1"]);
+  assert.equal(c.styles.length, 5);
+  assert.equal(c.categories.length, 1);
   assert.throws(
     () => dna.prepare(body, actor),
+    (e) => e.status === 400,
+  );
+  const pending = fixture.catalogue();
+  pending.status = "awaiting_catalogue";
+  pending.styles = [];
+  pending.categories = [];
+  const e = dna.createEngine(pending);
+  assert.deepEqual(e.catalogue().styles, []);
+  assert.throws(
+    () => e.prepare(body, actor),
     (e) => e.status === 400,
   );
 });
@@ -86,7 +94,14 @@ test("public categories are headings only and private research names never reach
   );
   assert(!html.includes('<option value="qa-prayer"'));
   assert(html.includes('<option value="qa-restrained"'));
-  assert.equal(ui.musicDNAControls(dna.catalogue(), String), "");
+  const pending = fixture.catalogue();
+  pending.status = "awaiting_catalogue";
+  pending.styles = [];
+  pending.categories = [];
+  assert.equal(
+    ui.musicDNAControls(dna.createEngine(pending).catalogue(), String),
+    "",
+  );
 });
 test("profile mood and instruments are unaffected by voice, language, customer mood or conflicting legacy percussion", () => {
   const e = engine(),
@@ -163,92 +178,7 @@ test("mismatched style, mood, energy, tempo, language declaration and overlong p
     dna.fingerprint("hello world"),
   );
 });
-async function handler({
-  payload = body,
-  response,
-  prepareOnly = false,
-  transportError = false,
-} = {}) {
-  const src = fs.readFileSync("server.js", "utf8"),
-    start = src.indexOf("if(p==='/api/music/lyrics-generate'"),
-    end = src.indexOf("if(p===", start + 10);
-  const Fn = Object.getPrototypeOf(async function () {}).constructor,
-    load = require("node:module").createRequire(path.resolve("server.js"));
-  const e = engine(),
-    counts = { reserve: 0, complete: 0, refund: 0, post: 0 },
-    context = e.prepare(payload, actor);
-  let request;
-  const req = {
-      method: "POST",
-      headers: { "idempotency-key": actor.requestKey },
-    },
-    process = { env: { OPENAI_API_KEY: "qa-mocked-only" } };
-  const run = new Fn(
-    "req",
-    "res",
-    "p",
-    "validOrigin",
-    "process",
-    "body",
-    "authAdmin",
-    "me",
-    "pool",
-    "json",
-    "grantWelcomeCredits",
-    "credits",
-    "fetch",
-    "AbortSignal",
-    "ensureCoinTables",
-    "require",
-    src.slice(start, end),
-  );
-  let reserved;
-  const result = await run(
-    req,
-    {},
-    "/api/music/lyrics-generate",
-    () => true,
-    process,
-    async () => ({
-      ...payload,
-      model: "gpt-6.1-sol",
-      idea: body.idea,
-      mood: "Party dance",
-    }),
-    () => false,
-    async () => ({ id: 7 }),
-    {},
-    (_r, status, data) => ({ status, data }),
-    async () => {},
-    {
-      reserveLyrics: async (_pool, _id, _key, b) => {
-        counts.reserve++;
-        reserved = b;
-        return { reference: "qa-reservation" };
-      },
-      completeLyrics: async (_pool, _id, _ref, _key, out) => {
-        counts.complete++;
-        return out;
-      },
-      refundLyrics: async () => {
-        counts.refund++;
-      },
-    },
-    async (url, o) => {
-      if (o.method === "GET") return Response.json({ id: "gpt-6.1-sol" });
-      counts.post++;
-      request = JSON.parse(o.body);
-      if (transportError) throw Error("ambiguous transport");
-      return Response.json({
-        output_text: JSON.stringify(response || fixture.output(context)),
-      });
-    },
-    AbortSignal,
-    async () => {},
-    (name) => (name === "./lib/music-dna" ? { ...dna, ...e } : load(name)),
-  );
-  return { result, counts, request, reserved };
-}
+const { handler } = require("./lyrics-handler-fixture.cjs");
 test("the actual lyrics handler sends authoritative DNA through existing GPT flow and spends one existing reservation", async () => {
   const x = await handler();
   assert.equal(x.result.status, 200);
@@ -329,7 +259,7 @@ test("undocumented internal catalogue fields cannot enter a provider prompt or s
   duplicate.styles.push({
     ...structuredClone(duplicate.styles[0]),
     id: "qa-reordered",
-    tempo:{max:76,min:62},
+    tempo: { max: 76, min: 62 },
     instruments: {
       other: duplicate.styles[0].instruments.other,
       guitar: duplicate.styles[0].instruments.guitar,

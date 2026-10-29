@@ -39,8 +39,15 @@ export function bindMusicDNA(form, saved, catalogue) {
     ])
       if (form.elements[name]) form.elements[name].disabled = active;
     languages.disabled = !active;
+    const selected = catalogue.styles.find((x) => x.id === select.value);
     form.querySelector("#music-dna-status").textContent = active
-      ? "Style identity is fixed. Your topic shapes the lyrics; your voice and language choices stay independent."
+      ? [
+          selected?.name,
+          selected?.description,
+          "Your topic shapes the lyrics; voice and languages stay independent.",
+        ]
+          .filter(Boolean)
+          .join(" — ")
       : "Using the existing musical-style controls.";
   };
   select.addEventListener("change", () => {

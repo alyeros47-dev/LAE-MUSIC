@@ -7,12 +7,15 @@ Production is not deployed by this work.
 
 ## Catalogue approval boundary
 
-`config/music-dna.json` records only the owner's four approved departments and
+`config/music-dna.json` records the owner's four approved departments and expected
 43 research groups: Gospel 14, Secular/Afrobeats 14, Reggae/Caribbean 7,
-Western/International 8. **Categories and selectable DNA styles are empty** and
-status is `awaiting_catalogue`. The complete specifications have not been supplied.
-No new musical research groups or detailed customer presets were invented.
-The existing 66 gospel / 33 secular legacy presets remain available.
+Western/International 8. Instruction Package 2 supplies the first approved group:
+**G1 — Deep Worship & Spiritual Encounter**, containing exactly five selectable
+styles, G1-01 through G1-05. Registry status is `approved` for these supplied
+profiles, not a claim that all 43 research groups are complete. Public coverage
+metadata identifies G1 as the only supplied group. Unprovided groups and styles
+have not been invented. The existing 66 gospel / 33 secular legacy presets remain
+available. See [MUSIC-DNA-G1.md](MUSIC-DNA-G1.md) for the supplied profile mapping.
 Synthetic profiles in `tests/music-dna-fixture.cjs` are test fixtures only; they
 are not published in the application catalogue.
 
@@ -24,7 +27,7 @@ not proof of musical quality or permission to deploy.
 
 Every approved style requires:
 
-- Stable unique `id`, customer `name`, `department_id`, `category_id`.
+- Stable unique `id`, customer `name`, `department_id`, `category_id`; optional short `description` for the selector. Supplied G1 IDs retain their exact uppercase notation.
 - Integer `tempo.min`/`tempo.max` and a distinct rhythmic description.
 - `rhythm`, `drums_percussion`, `bass`, `instruments.keys`, `.guitar`, `.other`.
 - `melody_harmony`, gender-independent `vocal_delivery`, `arrangement`.
@@ -106,5 +109,7 @@ selection, persistence and the existing recording/lyrics/music flows.
 
 External model and audio responses in these tests are mocked. No paid generation,
 production write, R2 mutation, new API key or deployment is required for this batch.
-Musical quality/audio acceptance remains pending the approved catalogue and separately
-authorized, budgeted provider tests. The 43 detailed research groups are not completed.
+Musical quality/audio acceptance remains pending separately authorized, budgeted
+provider tests. G1's five supplied profiles are integrated; the other research
+groups remain pending their approved specifications. The 43-group catalogue is
+not represented as complete.

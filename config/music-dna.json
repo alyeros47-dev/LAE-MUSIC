@@ -1,8 +1,12 @@
 {
-  "revision": "music-dna-foundation-v1",
-  "status": "awaiting_catalogue",
+  "revision": "music-dna-g1-v1",
+  "status": "approved",
   "departments": [
-    { "id": "gospel", "name": "Gospel Music", "research_groups": 14 },
+    {
+      "id": "gospel",
+      "name": "Gospel Music",
+      "research_groups": 14
+    },
     {
       "id": "secular-afrobeats",
       "name": "Secular and Afrobeats",
@@ -19,6 +23,309 @@
       "research_groups": 8
     }
   ],
-  "categories": [],
-  "styles": []
+  "categories": [
+    {
+      "id": "gospel-g1",
+      "group_id": "G1",
+      "department_id": "gospel",
+      "name": "Deep Worship & Spiritual Encounter"
+    }
+  ],
+  "styles": [
+    {
+      "id": "G1-01",
+      "name": "Glory Trumpet Worship",
+      "description": "Trumpet-centered worship with warm piano, gentle live drums and a majestic congregational lift.",
+      "department_id": "gospel",
+      "category_id": "gospel-g1",
+      "tempo": {
+        "min": 68,
+        "max": 82
+      },
+      "mood": "Reverent, majestic, hopeful, spiritually uplifting.",
+      "energy": "Restrained opening; gradual expansion toward a powerful concluding chorus.",
+      "rhythm": "Gentle 4/4 worship groove with restrained percussion and natural rhythmic movement.",
+      "drums_percussion": "Gentle live drums with restrained percussion, natural movement and cymbal swells; leave room for the trumpet and words.",
+      "bass": "Smooth bass guitar supporting the worship groove without dominating the trumpet.",
+      "instruments": {
+        "keys": "Warm grand piano and sustained atmospheric pads.",
+        "guitar": "No featured guitar is specified; retain the trumpet-centered instrumental identity.",
+        "other": "Expressive trumpet melodies and a featured trumpet interlude, cymbal swells and layered choir harmonies."
+      },
+      "melody_harmony": "Original memorable chorus melody and trumpet phrases; vary chord progression and harmonic movement while keeping a reverent congregational character.",
+      "vocal_delivery": "Expressive, reverent and clearly articulated melodic phrases, with natural congregational responses and layered supporting harmonies; voice is selected separately.",
+      "arrangement": "Begin with a memorable trumpet or piano introduction. Lead enters over light instrumentation. Gradually expand drums, bass and harmonies. Include an expressive trumpet interlude and finish with a powerful concluding chorus.",
+      "lyrics": {
+        "structure": "Meaningful verses, a memorable chorus and natural congregational responses; gratitude, divine greatness, surrender and adoration.",
+        "vocabulary": "Original scripture-informed expressions with clear meaningful language. Do not reproduce existing songs or suggest invented quotations are scripture."
+      },
+      "production_mix": "Keep expressive trumpet clearly featured, warm piano and pads supportive, smooth bass controlled, live drums gentle and choir harmonies intelligible; retain natural swells and an uplifting final chorus.",
+      "variations": {
+        "introductions": [
+          "Open with an original expressive trumpet phrase over light piano.",
+          "Open with memorable warm piano, introducing a trumpet answer before the lead."
+        ],
+        "progressions": [
+          "Use a fresh worship chord progression supporting a clear congregational chorus.",
+          "Use an alternate gentle harmonic route with a hopeful resolution into the final chorus."
+        ],
+        "arrangements": [
+          "Place a trumpet interlude after the developing chorus before the concluding chorus.",
+          "Allow a shorter trumpet transition between sections and a longer expressive interlude before the conclusion."
+        ],
+        "melody": [
+          "Develop an original sustained trumpet phrase answered by a memorable chorus contour.",
+          "Develop an original shorter trumpet phrase with a contrasting original congregational chorus contour."
+        ],
+        "lyrical": [
+          "Lead with gratitude and divine greatness, moving toward adoration.",
+          "Lead with surrender and adoration, resolving in hopeful gratitude."
+        ]
+      },
+      "research_references": ["Nathaniel Bassey"],
+      "production_terms": [
+        ["trumpet"],
+        ["piano"],
+        ["bass"],
+        ["drum", "percussion"],
+        ["choir", "harmon"]
+      ]
+    },
+    {
+      "id": "G1-02",
+      "name": "Heavenly Fire Worship",
+      "description": "Reflective worship that builds through live drums, electric guitar and choir into a full-band climax.",
+      "department_id": "gospel",
+      "category_id": "gospel-g1",
+      "tempo": {
+        "min": 78,
+        "max": 105
+      },
+      "mood": "Intense, reverent, powerful and progressively uplifting.",
+      "energy": "Reflective beginning followed by controlled progressive intensity and a full-band worship climax.",
+      "rhythm": "Live worship rhythm with gradual intensity, controlled drum fills and powerful instrumental builds.",
+      "drums_percussion": "Strong live drums with controlled fills; build rhythm gradually rather than beginning at full intensity.",
+      "bass": "Deep bass guitar grounding the live-band worship build.",
+      "instruments": {
+        "keys": "Piano, layered keyboards and atmospheric pads.",
+        "guitar": "Expressive electric guitar supporting refrains, instrumental breaks and the growing worship arrangement.",
+        "other": "Choir harmonies supporting the worship refrain and full-band climax."
+      },
+      "melody_harmony": "Original strong worship refrain, developing harmonic progressions and clearly shaped melodic declarations; controlled purposeful repetition.",
+      "vocal_delivery": "Strong, reverent and purposeful declarations with clear refrains and congregational responses; vocal identity is selected independently.",
+      "arrangement": "Begin reflectively, introduce a strong worship refrain, then build rhythmic intensity through verses, chorus and instrumental sections. Finish with a full-band worship climax; vary when that climax begins.",
+      "lyrics": {
+        "structure": "Consecration, surrender, divine presence, spiritual awakening and declarations of faith, using purposeful repetition and congregational responses without excessive duplication.",
+        "vocabulary": "Meaningful original declarations and clear devotional language; avoid empty repeated lines and copies of existing worship songs."
+      },
+      "production_mix": "Balance expressive guitar, keyboards and deep bass around an intelligible lead and choir; preserve live drum impact, controlled fills and headroom for a progressive full-band climax.",
+      "variations": {
+        "introductions": [
+          "Begin reflectively with piano and atmospheric pads before the refrain.",
+          "Begin reflectively with spacious electric guitar and layered keys before the refrain."
+        ],
+        "progressions": [
+          "Use an original developing harmonic progression supporting repeated declarations.",
+          "Use a contrasting original harmonic progression that opens out toward the concluding climax."
+        ],
+        "arrangements": [
+          "Use a short controlled instrumental break before a later full-band climax.",
+          "Let a developing refrain lead into an earlier sustained build, reserving full-band impact for the conclusion."
+        ],
+        "melody": [
+          "Create an original strong refrain with measured responding phrases and controlled drum-fill answers.",
+          "Create an alternate original refrain contour with deliberate response gaps and varied controlled fills."
+        ],
+        "lyrical": [
+          "Develop consecration and surrender into declarations of faith.",
+          "Develop divine presence and spiritual awakening into clear congregational declarations."
+        ]
+      },
+      "research_references": ["Dunsin Oyekan"],
+      "production_terms": [
+        ["drum"],
+        ["electric guitar"],
+        ["piano", "keyboard", "keys"],
+        ["bass"],
+        ["climax", "build"]
+      ]
+    },
+    {
+      "id": "G1-03",
+      "name": "Broken Before You",
+      "description": "Intimate piano-led worship with warm strings, spacious phrasing and a restrained emotional rise.",
+      "department_id": "gospel",
+      "category_id": "gospel-g1",
+      "tempo": {
+        "min": 58,
+        "max": 76
+      },
+      "mood": "Deeply emotional, intimate, humble and reflective.",
+      "energy": "Intimate and restrained, rising emotionally through the bridge and final chorus without turning into dance music.",
+      "rhythm": "Slow worship ballad with spacious phrasing and minimal percussion.",
+      "drums_percussion": "Subtle minimal percussion leaving ample breathing room; do not introduce a dance groove.",
+      "bass": "Gentle bass supporting piano and strings without crowding reflective phrases.",
+      "instruments": {
+        "keys": "Emotional grand piano and atmospheric pads; vary piano voicings while preserving intimacy.",
+        "guitar": "No featured guitar is specified; keep grand piano and warm strings central.",
+        "other": "Warm strings and restrained supporting harmonies introduced subtly as the song develops."
+      },
+      "melody_harmony": "Original emotionally clear melodic contours with varied piano voicings, developing chorus melody and warm string support.",
+      "vocal_delivery": "Intimate, humble storytelling and heartfelt prayer with spacious, emotionally clear phrases and restrained supporting harmonies; voice remains independently selected.",
+      "arrangement": "Begin with gentle piano, keep the first verse intimate, and introduce subtle strings and harmonies as the song develops. Build toward an emotional bridge and final chorus without becoming a dance song.",
+      "lyrics": {
+        "structure": "Meaningful personal storytelling about surrender, dependence on God, forgiveness, healing, trust and heartfelt prayer; develop the chorus naturally.",
+        "vocabulary": "Emotionally clear original words and fitting lyrical imagery, favoring sincerity and meaningful storytelling over generic repeated phrases."
+      },
+      "production_mix": "Keep piano and lead intimate, strings warm and gradual, pads atmospheric, bass gentle and percussion minimal; allow an emotional bridge and final chorus without a dance-production shift.",
+      "variations": {
+        "introductions": [
+          "Begin with a gentle spacious grand-piano voicing and intimate lead entrance.",
+          "Begin with a gentle closer piano voicing, leaving quiet space before the first verse."
+        ],
+        "progressions": [
+          "Keep the slow worship-ballad harmony and vary open piano chord voicings.",
+          "Keep the intimate harmonic family and vary close piano chord voicings toward the final chorus."
+        ],
+        "arrangements": [
+          "Introduce subtle strings beneath the developing chorus, then rise through the bridge.",
+          "Keep strings very light until the bridge, then gently support the emotional final chorus."
+        ],
+        "melody": [
+          "Use an original gently rising chorus contour and restrained string response.",
+          "Use an original returning chorus contour with a different restrained string arrangement."
+        ],
+        "lyrical": [
+          "Tell a clear personal story of forgiveness and healing leading to trust.",
+          "Use original imagery of surrender and dependence on God, resolving in heartfelt prayer."
+        ]
+      },
+      "research_references": ["GUC"],
+      "production_terms": [
+        ["piano"],
+        ["string"],
+        ["bass"],
+        ["intimate", "reflective", "restrained"]
+      ]
+    },
+    {
+      "id": "G1-04",
+      "name": "Altar Encounter",
+      "description": "Spacious prayerful worship with atmospheric keys, ambient guitar and room between vocal phrases.",
+      "department_id": "gospel",
+      "category_id": "gospel-g1",
+      "tempo": {
+        "min": 55,
+        "max": 78
+      },
+      "mood": "Prayerful, contemplative, reverent and spiritually intense.",
+      "energy": "Spacious restraint with gradual prayerful intensity, concluding in reverent resolution.",
+      "rhythm": "Spacious worship rhythm with extended instrumental breathing room. Optional free-time introductory passages may precede the 55–78 BPM body; percussion supports prayer rather than dominating it.",
+      "drums_percussion": "Restrained supporting percussion; leave extended instrumental breathing room and do not impose a dominant dance pulse.",
+      "bass": "Deep warm bass supporting sustained chords and spacious phrases.",
+      "instruments": {
+        "keys": "Atmospheric pads, sustained keyboard chords and soft piano.",
+        "guitar": "Ambient guitar textures supporting the prayerful space.",
+        "other": "Instrumental space between vocal phrases and gentle atmospheric transitions; do not add an unrequested dominant ensemble."
+      },
+      "melody_harmony": "Original prayerful melody, short recurring refrain and gradually moving harmony with room for reflection.",
+      "vocal_delivery": "Prayerful, contemplative melodic phrasing with deliberate breathing room, clear devotional words and limited purposeful repetition; voice is a separate choice.",
+      "arrangement": "Begin atmospherically, optionally in free time. Develop a prayerful lead melody and a short recurring refrain, gradually increasing intensity. Leave instrumental space between phrases and conclude with a reverent resolution.",
+      "lyrics": {
+        "structure": "Original prayerful expressions of prayer, devotion, holiness, spiritual renewal, consecration and divine presence; short recurring refrain with purposeful limited repetition.",
+        "vocabulary": "Clear original devotional and prayerful language with meaningful pauses; avoid excessive duplication or identifiable borrowed expressions."
+      },
+      "production_mix": "Give pads, sustained keys, soft piano and ambient guitar space around a clear lead; keep bass warm and percussion restrained, with controlled gradual intensity and a reverent resolution.",
+      "variations": {
+        "introductions": [
+          "Begin with free-time atmospheric pads and soft piano, then settle into the selected tempo.",
+          "Begin with sustained keyboard chords and ambient guitar at a spacious restrained pulse."
+        ],
+        "progressions": [
+          "Use slow original harmonic movement beneath the prayerful phrases.",
+          "Use alternate original sustained harmonic movement that resolves reverently at the end."
+        ],
+        "arrangements": [
+          "Introduce the short recurring refrain early, leaving instrumental breathing room between returns.",
+          "Develop the prayerful melody before introducing the short refrain later, preserving space between phrases."
+        ],
+        "melody": [
+          "Use an original unhurried prayerful contour with sustained atmospheric answers.",
+          "Use a contrasting original prayerful contour with quieter ambient-guitar transitions."
+        ],
+        "lyrical": [
+          "Develop devotion and holiness into original prayerful expressions of consecration.",
+          "Develop spiritual renewal and divine presence through original contemplative prayer."
+        ]
+      },
+      "research_references": ["Victoria Orenze"],
+      "production_terms": [
+        ["pad", "keyboard"],
+        ["piano"],
+        ["ambient guitar", "guitar texture"],
+        ["space", "spacious", "breath"],
+        ["prayer", "reverent", "contemplative"]
+      ]
+    },
+    {
+      "id": "G1-05",
+      "name": "Intimate Acoustic Worship",
+      "description": "Gentle fingerpicked guitar worship with soft piano, delicate harmonies and a peaceful natural groove.",
+      "department_id": "gospel",
+      "category_id": "gospel-g1",
+      "tempo": {
+        "min": 62,
+        "max": 88
+      },
+      "mood": "Gentle, peaceful, heartfelt and reflective.",
+      "energy": "Gentle intimate acoustic movement, gradually supported by harmonies, bass and light percussion.",
+      "rhythm": "Natural acoustic worship groove with restrained percussion and expressive rhythmic movement.",
+      "drums_percussion": "Subtle shaker and light restrained percussion supporting the fingerpicked acoustic groove.",
+      "bass": "Warm bass introduced gently as the acoustic arrangement develops.",
+      "instruments": {
+        "keys": "Soft piano supporting the acoustic guitar and naturally flowing melody.",
+        "guitar": "Fingerpicked acoustic guitar remains the core introduction and instrumental character; include a short acoustic instrumental passage.",
+        "other": "Delicate background harmonies supporting the lead without overtaking the intimate arrangement."
+      },
+      "melody_harmony": "Naturally flowing original melody and meaningful chorus, with varied guitar picking patterns, chord voicings and melodic phrases.",
+      "vocal_delivery": "Intimate, gentle and heartfelt phrases with naturally flowing melodies and delicate supporting harmonies; the selected voice does not replace the acoustic identity.",
+      "arrangement": "Begin with acoustic guitar, introduce an intimate lead, and gradually add gentle harmonies, warm bass and light percussion. Include a short acoustic instrumental passage before the final chorus.",
+      "lyrics": {
+        "structure": "Personal devotion, gratitude, divine love, trust, spiritual comfort and quiet worship in meaningful verses and a naturally flowing chorus.",
+        "vocabulary": "Simple but meaningful original language, conveying personal devotion and spiritual comfort without generic filler."
+      },
+      "production_mix": "Keep fingerpicked guitar intimate and clear, piano soft, bass warm, shaker subtle and harmonies delicate; preserve natural acoustic movement and a gentle final chorus.",
+      "variations": {
+        "introductions": [
+          "Begin with a delicate original fingerpicked guitar pattern before the intimate lead.",
+          "Begin with a warmer original fingerpicked guitar introduction and gentle space for the lead."
+        ],
+        "progressions": [
+          "Use a fresh acoustic chord voicing route supporting the naturally flowing chorus.",
+          "Use alternate gentle guitar chord voicings and melodic phrasing within the same acoustic worship family."
+        ],
+        "arrangements": [
+          "Introduce delicate harmonies on the developing chorus, then place a short acoustic passage before the final chorus.",
+          "Add bass and light percussion gradually, keeping chorus harmonies sparse until the short acoustic passage and final chorus."
+        ],
+        "melody": [
+          "Use an original flowing chorus phrase over a delicate varied picking pattern.",
+          "Use a contrasting original chorus phrase over a warmer varied picking pattern."
+        ],
+        "lyrical": [
+          "Develop personal devotion and gratitude into quiet worship.",
+          "Develop divine love, trust and spiritual comfort in simple meaningful original words."
+        ]
+      },
+      "research_references": ["Kaestrings"],
+      "production_terms": [
+        ["acoustic guitar"],
+        ["fingerpick"],
+        ["piano"],
+        ["bass"],
+        ["shaker", "percussion"],
+        ["harmon", "backing"]
+      ]
+    }
+  ]
 }

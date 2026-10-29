@@ -80,3 +80,5 @@ require('./partner-policy.test.cjs');
 require('./partner-statements.test.cjs');
 
 require('./music-dna.test.cjs');
+
+require('./music-dna-g1.test.cjs');
