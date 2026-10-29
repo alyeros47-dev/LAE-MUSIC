@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w2-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w3-v1",
   "status": "approved",
   "departments": [
     {
@@ -245,6 +245,12 @@
       "group_id": "W2",
       "department_id": "western-international",
       "name": "Classic Contemporary R&B"
+    },
+    {
+      "id": "western-w3",
+      "group_id": "W3",
+      "department_id": "western-international",
+      "name": "Smooth Romantic Soul"
     }
   ],
   "styles": [
@@ -16726,6 +16732,453 @@
       ],
       "research_references": [
         "Ne-Yo"
+      ]
+    },
+    {
+      "id": "W3-01",
+      "name": "Golden Velvet Soul",
+      "description": "Luxurious classic soul with deep melodic bass, elegant piano and rich strings.",
+      "department_id": "western-international",
+      "category_id": "western-w3",
+      "tempo": {
+        "min": 68,
+        "max": 92
+      },
+      "mood": "Romantic, warm, elegant and heartfelt.",
+      "energy": "Warm elegant classic-soul live-band movement with expressive melodic bass and restrained luxurious development.",
+      "rhythm": "Smooth classic soul with relaxed live drums, melodic bass movement and rich harmonic accompaniment.",
+      "drums_percussion": "Use smooth live soul drums with a warm kick, controlled snare, relaxed hi-hats, gentle ghost notes and tasteful fills. Maintain natural dynamics and a subtle laid-back groove.",
+      "bass": "Deep, rounded electric bass with flowing melodic runs, tasteful passing notes, occasional slides and a smooth rhythmic pulse. Bass should sound rich and expressive without competing with the vocal melody.",
+      "instruments": {
+        "keys": "Grand acoustic piano, Rhodes-style electric piano, warm Hammond organ and sophisticated seventh, ninth and suspended chord voicings.",
+        "guitar": "Clean soul guitar, gentle rhythmic strumming, subtle funk-influenced accents and expressive melodic responses.",
+        "other": "Elegant strings, soft brass, shakers, restrained percussion and optional backing harmonies."
+      },
+      "melody_harmony": "Original expressive romantic melodies, graceful melodic climbs, memorable choruses and warm harmonic phrasing.",
+      "vocal_delivery": "Original expressive romantic melodies and graceful climbs adapted to selected voice capability; respect single-singer, duet and supported harmonies.",
+      "arrangement": "Elegant piano-and-bass introduction → romantic verse → warm chorus → second verse → strings-and-guitar instrumental passage → emotional bridge → expanded final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Lasting love, devotion, companionship, gratitude, reconciliation, commitment and mature relationships.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-influenced chords are musical harmony and never automatically require Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring a gender or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Luxurious classic romantic soul with rich piano harmony, deep melodic bass, warm live drums, elegant strings and sophisticated vocal-friendly arrangements. **Tempo:** 68–92 BPM. **Built-in mood:** Romantic, warm, elegant and heartfelt. Luxurious, warm classic soul with rich bass, elegant harmony and natural live-band depth. Keep deep warm melodic bass prominent without muddying kick or vocals; preserve authentic mature soul/pop-soul/neo-soul identity, natural live dynamics and crystal-clear separation rather than generic R&B loops or ordinary pop ballads. Avoid: Generic trap drums, excessive electronic effects, overdramatic orchestral climaxes and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original elegant grand-piano voicings and flowing melodic bass.",
+          "Open on alternate rich piano chords and expressive electric-bass passing notes."
+        ],
+        "progressions": [
+          "Use original seventh/ninth/suspended soul voicings with warm Rhodes and organ.",
+          "Use alternate piano progressions with smooth bass slides and graceful harmonic movement."
+        ],
+        "arrangements": [
+          "Vary strings and clean guitar responses through the instrumental passage.",
+          "Develop an emotional bridge and expanded final chorus without an excessive orchestral climax."
+        ],
+        "melody": [
+          "Create original graceful romantic melodies and warm memorable refrains.",
+          "Create a contrasting heartfelt chorus with expressive but voice-compatible melodic climbs."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original mature companionship images.",
+          "Develop fresh gratitude or reconciliation words only when appropriate to the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "grand piano",
+          "acoustic piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "suspended"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Luther Vandross"
+      ]
+    },
+    {
+      "id": "W3-02",
+      "name": "Timeless Heart Soul",
+      "description": "Warm romantic pop-soul with gentle guitar, smooth bass and memorable melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w3",
+      "tempo": {
+        "min": 72,
+        "max": 98
+      },
+      "mood": "Romantic, nostalgic, hopeful and uplifting.",
+      "energy": "Relaxed accessible romantic pop-soul motion with warm live accompaniment and naturally uplifting storytelling.",
+      "rhythm": "Classic pop-soul with relaxed rhythmic movement, accessible song structures and warm live-band accompaniment.",
+      "drums_percussion": "Use relaxed live drums with a soft kick, warm snare, steady hi-hats, subtle tom fills and gentle percussion accents.",
+      "bass": "Smooth electric bass with rounded low notes, simple melodic movement and tasteful passing tones.",
+      "instruments": {
+        "keys": "Warm acoustic piano, mellow electric piano, soft organ and restrained analog-style keyboard pads.",
+        "guitar": "Gentle acoustic strumming, clean electric-guitar fills and expressive melodic lead phrases.",
+        "other": "Soft strings, restrained brass, shakers, tambourine and gentle instrumental harmonies."
+      },
+      "melody_harmony": "Original memorable melodic hooks, conversational verses, heartfelt choruses and natural emotional development.",
+      "vocal_delivery": "Original memorable hooks, conversational verses and heartfelt choruses; follow selected vocal configuration.",
+      "arrangement": "Gentle piano-and-guitar introduction → storytelling verse → memorable chorus → second verse → instrumental guitar passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, family, friendship, nostalgia, commitment, gratitude, hope and life experiences.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-influenced chords are musical harmony and never automatically require Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring a gender or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Warm, accessible romantic pop-soul combining expressive piano, gentle acoustic guitar, smooth bass, natural drums and memorable storytelling melodies. **Tempo:** 72–98 BPM. **Built-in mood:** Romantic, nostalgic, hopeful and uplifting. Warm, timeless romantic soul with clear melody, rich bass and natural instrumentation. Keep deep warm melodic bass prominent without muddying kick or vocals; preserve authentic mature soul/pop-soul/neo-soul identity, natural live dynamics and crystal-clear separation rather than generic R&B loops or ordinary pop ballads. Avoid: Generic country-pop, excessive synthesizers and arrangements that become ordinary soft rock without soul character.",
+      "variations": {
+        "introductions": [
+          "Open with original gentle acoustic guitar and warm piano.",
+          "Open on alternate accessible piano patterns and clean melodic guitar replies."
+        ],
+        "progressions": [
+          "Use original warm pop-soul chords with rounded simple melodic bass.",
+          "Use alternate mellow electric-piano/organ voicings and restrained pads."
+        ],
+        "arrangements": [
+          "Vary guitar melodies and string textures through the instrumental passage.",
+          "Develop a storytelling second verse and emotional bridge with relaxed live drums."
+        ],
+        "melody": [
+          "Create original conversational verses and memorable heartfelt hooks.",
+          "Create a contrasting nostalgic refrain with natural emotional development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original friendship or life-experience images.",
+          "Develop fresh family or hope storytelling only when relevant to the selected subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "pop-soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "tambourine"
+        ]
+      ],
+      "research_references": [
+        "Lionel Richie"
+      ]
+    },
+    {
+      "id": "W3-03",
+      "name": "Piano Heart Soul",
+      "description": "Expressive piano-led contemporary soul with rich harmony and heartfelt emotion.",
+      "department_id": "western-international",
+      "category_id": "western-w3",
+      "tempo": {
+        "min": 66,
+        "max": 92
+      },
+      "mood": "Heartfelt, romantic, sincere and uplifting.",
+      "energy": "Relaxed heartfelt piano-soul development with sustained harmonic bass and a fuller second-verse rhythm section.",
+      "rhythm": "Contemporary piano soul with relaxed drums, expressive bass and rich harmonic development.",
+      "drums_percussion": "Use warm live or hybrid soul drums with a deep kick, controlled snare, gentle hi-hats, subtle ghost notes and expressive fills.",
+      "bass": "Deep electric bass with smooth melodic phrases, sustained notes, occasional passing tones and strong harmonic support.",
+      "instruments": {
+        "keys": "Grand acoustic piano is the central instrument. Use rich soul and gospel-influenced chord voicings, expressive piano fills, warm electric piano and restrained organ textures.",
+        "guitar": "Gentle acoustic guitar, clean electric-guitar responses and subtle rhythmic accompaniment.",
+        "other": "Warm strings, soft brass, gentle percussion and optional backing harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, intimate verses, memorable choruses and natural melodic rises.",
+      "vocal_delivery": "Original emotionally expressive intimate phrases and natural melodic rises within selected voice capability; follow selected vocal configuration.",
+      "arrangement": "Solo piano introduction → intimate verse → heartfelt chorus → second verse with fuller rhythm section → instrumental piano passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, marriage, commitment, gratitude, vulnerability, hope, family and personal growth.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-influenced chords are musical harmony and never automatically require Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring a gender or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Modern piano-led soul combining expressive acoustic piano, deep bass, gospel-influenced harmonic movement, warm drums and intimate contemporary songwriting. **Tempo:** 66–92 BPM. **Built-in mood:** Heartfelt, romantic, sincere and uplifting. Beautiful piano-centered soul with deep bass, clear vocals and natural emotional dynamics. Keep deep warm melodic bass prominent without muddying kick or vocals; preserve authentic mature soul/pop-soul/neo-soul identity, natural live dynamics and crystal-clear separation rather than generic R&B loops or ordinary pop ballads. Avoid: Automatically generating Christian lyrics because of gospel-influenced chords, excessive orchestral drama and forced vocal imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original expressive solo grand piano.",
+          "Open on alternate rich acoustic-piano voicings before the rhythm section develops."
+        ],
+        "progressions": [
+          "Use original soul/gospel-influenced piano extensions without imposing religious words.",
+          "Use alternate warm electric-piano/organ harmony with sustained melodic bass."
+        ],
+        "arrangements": [
+          "Vary expressive piano fills and clean guitar replies through the piano-led passage.",
+          "Develop fuller second-verse rhythm and a heartfelt bridge with natural emotional dynamics."
+        ],
+        "melody": [
+          "Create original intimate verses and emotionally expressive refrains.",
+          "Create a contrasting hopeful melody with natural rises adapted to selected voice capability."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original vulnerability or gratitude images.",
+          "Develop fresh family or personal-growth verses without automatically generating Christian lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "grand piano",
+          "acoustic piano"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "gospel"
+        ]
+      ],
+      "research_references": [
+        "John Legend"
+      ]
+    },
+    {
+      "id": "W3-04",
+      "name": "Silken R&B Romance",
+      "description": "Smooth intimate R&B-soul with warm keyboards, deep bass and elegant melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w3",
+      "tempo": {
+        "min": 70,
+        "max": 96
+      },
+      "mood": "Intimate, romantic, tender and reflective.",
+      "energy": "Restrained intimate R&B-soul movement with gentle syncopation and polished harmonic warmth.",
+      "rhythm": "Smooth romantic R&B-soul with relaxed drums, rich bass and polished harmonic movement.",
+      "drums_percussion": "Use soft R&B drums with a deep kick, crisp but gentle snare, relaxed hi-hats, subtle syncopation and restrained percussion fills.",
+      "bass": "Deep, smooth electric or synth bass with rounded sustained notes, tasteful melodic movement and gentle rhythmic accents.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, warm acoustic piano, soft synth pads and sophisticated seventh and ninth chord voicings.",
+        "guitar": "Clean electric-guitar fills, gentle fingerpicked phrases, muted rhythmic accents and expressive melodic responses.",
+        "other": "Soft strings, gentle percussion, warm pads and optional subtle backing harmonies."
+      },
+      "melody_harmony": "Original elegant romantic melodies, conversational verses, memorable choruses and understated emotional phrasing.",
+      "vocal_delivery": "Original elegant conversational melodies and understated emotional phrasing; respect selected vocal and harmony settings.",
+      "arrangement": "Warm electric-piano introduction → intimate verse → melodic chorus → second verse → guitar-and-keyboard instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, devotion, reconciliation, commitment, heartbreak, emotional honesty and companionship.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-influenced chords are musical harmony and never automatically require Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring a gender or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Smooth, understated romantic soul and R&B with warm electric piano, deep bass, clean guitar, restrained drums and sophisticated melodic songwriting. **Tempo:** 70–96 BPM. **Built-in mood:** Intimate, romantic, tender and reflective. Silky, polished romantic soul with deep bass, restrained instrumentation and beautiful melodic clarity. Keep deep warm melodic bass prominent without muddying kick or vocals; preserve authentic mature soul/pop-soul/neo-soul identity, natural live dynamics and crystal-clear separation rather than generic R&B loops or ordinary pop ballads. Avoid: Overproduced electronic drums, generic trap rhythms, excessive vocal ornamentation and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original warm Rhodes chords and smoothly sustained bass.",
+          "Open on alternate electric-piano voicings and gentle clean guitar fills."
+        ],
+        "progressions": [
+          "Use original seventh/ninth harmony with soft pads and rounded electric or synth bass.",
+          "Use alternate warm acoustic-piano progressions and tasteful melodic bass movement."
+        ],
+        "arrangements": [
+          "Vary fingerpicked guitar replies through the guitar/keyboard passage.",
+          "Develop an understated reflective bridge and final chorus with restrained drums."
+        ],
+        "melody": [
+          "Create original elegant conversational melodies and memorable intimate choruses.",
+          "Create a contrasting tender refrain with restrained emotional phrasing."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original emotional-honesty imagery.",
+          "Develop fresh devotion or reconciliation expressions only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "pad"
+        ]
+      ],
+      "research_references": [
+        "Babyface"
+      ]
+    },
+    {
+      "id": "W3-05",
+      "name": "Neo-Soul Midnight Groove",
+      "description": "Sophisticated neo-soul with laid-back drums, deep bass and lush electric piano.",
+      "department_id": "western-international",
+      "category_id": "western-w3",
+      "tempo": {
+        "min": 72,
+        "max": 98
+      },
+      "mood": "Intimate, dreamy, soulful and reflective.",
+      "energy": "Laid-back organic neo-soul motion with deep engaging bass, gentle swing and atmospheric harmonic space.",
+      "rhythm": "Laid-back neo-soul with deep bass, subtle funk syncopation, warm drums and rich harmonic space.",
+      "drums_percussion": "Use laid-back live soul drums with a warm kick, dry snare, subtle ghost notes, relaxed hi-hats and gentle rhythmic swing.",
+      "bass": "Deep, expressive electric bass with syncopated neo-soul grooves, melodic slides, occasional octave movement and rich sustained notes. Bass must remain prominent and rhythmically engaging.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, warm analog organ, lush extended jazz-soul chords and subtle atmospheric pads.",
+        "guitar": "Clean funk-influenced guitar, muted rhythmic strumming, gentle melodic phrases and occasional blues-influenced responses.",
+        "other": "Soft strings, subtle percussion, analog-style textures and optional gentle vocal harmonies."
+      },
+      "melody_harmony": "Original flowing melodic phrases, expressive intimate verses, restrained choruses and soulful harmonic development.",
+      "vocal_delivery": "Original flowing intimate phrases and restrained soulful choruses; never force high-register vocals or infer a performer identity from research references.",
+      "arrangement": "Atmospheric bass-and-Rhodes introduction → intimate verse → smooth chorus → second verse → extended neo-soul instrumental groove → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, intimacy, vulnerability, emotional connection, self-reflection, trust and personal growth.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-influenced chords are musical harmony and never automatically require Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring a gender or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Sophisticated neo-soul combining deep live bass, laid-back drums, lush electric piano, subtle funk guitar and atmospheric romantic arrangements. **Tempo:** 72–98 BPM. **Built-in mood:** Intimate, dreamy, soulful and reflective. Deep, warm neo-soul with rich bass, sophisticated harmony and organic live-band character. Keep deep warm melodic bass prominent without muddying kick or vocals; preserve authentic mature soul/pop-soul/neo-soul identity, natural live dynamics and crystal-clear separation rather than generic R&B loops or ordinary pop ballads. Avoid: Generic trap beats, excessive electronic effects, forced high-register vocals and arrangements that lose the neo-soul groove.",
+      "variations": {
+        "introductions": [
+          "Open with original atmospheric Rhodes and expressive live neo-soul bass.",
+          "Open on alternate electric-piano textures and syncopated melodic bass slides."
+        ],
+        "progressions": [
+          "Use original extended jazz-soul harmony with warm analog organ.",
+          "Use alternate lush Rhodes voicings over rich sustained bass and occasional octave movement."
+        ],
+        "arrangements": [
+          "Vary muted funk guitar and drum swing through the extended neo-soul groove.",
+          "Develop atmospheric textures and a reflective bridge into a restrained final chorus."
+        ],
+        "melody": [
+          "Create original flowing intimate phrases and understated soulful refrains.",
+          "Create a contrasting reflective melody without forcing high-register vocals."
+        ],
+        "lyrical": [
+          "Explore the customer subject through original self-reflection or vulnerability images.",
+          "Develop fresh trust or personal-growth verses only where appropriate to the topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "neo-soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "jazz"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "swing"
+        ],
+        [
+          "octave"
+        ],
+        [
+          "slide"
+        ]
+      ],
+      "research_references": [
+        "Maxwell"
       ]
     }
   ]
