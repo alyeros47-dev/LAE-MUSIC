@@ -188,101 +188,118 @@ module.exports = async (t, { pool }) => {
       assert(!JSON.stringify(res.data).includes("profile_snapshot"));
     },
   );
-  await t.test(
-    "all supplied G1 profiles retain owned immutable provenance and the existing upload-code/credit contract",
-    async () => {
-      const a = (
-        await pool.query(
-          "INSERT INTO creators(display_name,email,password_salt,password_hash,plan,membership_status) VALUES('G1 isolated QA',$1,'qa-salt','qa-hash','starter','pending_payment') RETURNING id",
-          ["g1-" + crypto.randomUUID() + "@test.invalid"],
-        )
-      ).rows[0];
-      await pool.query(
-        "INSERT INTO generation_wallets(creator_id,credits) VALUES($1,5)",
-        [a.id],
-      );
-      const profiles = dna.catalogue().styles;
-      assert.equal(profiles.length, 5);
-      for (const profile of profiles) {
-        const key = crypto.randomUUID(),
-          payload = {
-            musicDnaStyle: profile.id,
-            musicDnaLanguages: ["en", "yo"],
-            voice: "female",
-          },
-          context = dna.prepare(payload, { artistId: a.id, requestKey: key });
-        const reservation = await credits.reserveLyrics(
-          pool,
-          a.id,
-          key,
-          payload,
-        );
-        const candidate = require("./music-dna-g1-output.cjs").g1Output(
-          context,
-        );
-        candidate.title = profile.name;
-        candidate.lyrics =
-          "Original isolated G1 lyrics " +
-          profile.id +
-          " " +
-          crypto.randomUUID() +
-          " with a complete ending.";
-        dna.validateOutput(candidate, context);
-        const complete = await credits.completeLyrics(
-          pool,
-          a.id,
-          reservation.reference,
-          key,
-          {
-            title: candidate.title,
-            lyrics: candidate.lyrics,
-            style: candidate.style,
-            music_dna: context,
-          },
-          "gpt-6.1-sol",
-        );
-        assert(/^[A-F0-9]{36}$/.test(complete.uploadCode));
-        assert.equal(
-          (await credits.reserveLyrics(pool, a.id, key, payload)).replay
-            .uploadCode,
-          complete.uploadCode,
-        );
-        const row = (
+  for (const group of ["G1", "G2"]) {
+    await t.test(
+      group +
+        " profiles retain owned immutable provenance and the existing upload-code/credit contract",
+      async () => {
+        const a = (
           await pool.query(
-            "SELECT d.*,g.code_hash FROM music_dna_generations d JOIN generation_records g ON g.id=d.generation_id WHERE d.artist_id=$1 AND d.style_id=$2",
-            [a.id, profile.id],
+            "INSERT INTO creators(display_name,email,password_salt,password_hash,plan,membership_status) VALUES('G1 isolated QA',$1,'qa-salt','qa-hash','starter','pending_payment') RETURNING id",
+            ["g1-" + crypto.randomUUID() + "@test.invalid"],
           )
         ).rows[0];
-        assert.equal(row.catalogue_revision, "music-dna-g1-v1");
-        assert.equal(row.profile_snapshot.profile.id, profile.id);
-        assert.deepEqual(row.languages, ["en", "yo"]);
-        assert.equal(row.voice, "female");
+        await pool.query(
+          "INSERT INTO generation_wallets(creator_id,credits) VALUES($1,5)",
+          [a.id],
+        );
+        const profiles = dna
+          .catalogue()
+          .styles.filter((s) => s.id.startsWith(group + "-"));
+        assert.equal(profiles.length, 5);
+        for (const profile of profiles) {
+          const key = crypto.randomUUID(),
+            payload = {
+              musicDnaStyle: profile.id,
+              musicDnaLanguages: ["en", "yo"],
+              voice: "female",
+            },
+            context = dna.prepare(payload, { artistId: a.id, requestKey: key });
+          const reservation = await credits.reserveLyrics(
+            pool,
+            a.id,
+            key,
+            payload,
+          );
+          const candidate = (
+            group === "G1"
+              ? require("./music-dna-g1-output.cjs").g1Output
+              : require("./music-dna-g2-output.cjs").g2Output
+          )(context);
+          candidate.title = profile.name;
+          candidate.lyrics =
+            "Original isolated " +
+            group +
+            " lyrics " +
+            profile.id +
+            " " +
+            crypto.randomUUID() +
+            " with a complete ending.";
+          dna.validateOutput(candidate, context);
+          const complete = await credits.completeLyrics(
+            pool,
+            a.id,
+            reservation.reference,
+            key,
+            {
+              title: candidate.title,
+              lyrics: candidate.lyrics,
+              style: candidate.style,
+              music_dna: context,
+            },
+            "gpt-6.1-sol",
+          );
+          assert(/^[A-F0-9]{36}$/.test(complete.uploadCode));
+          assert.equal(
+            (await credits.reserveLyrics(pool, a.id, key, payload)).replay
+              .uploadCode,
+            complete.uploadCode,
+          );
+          const row = (
+            await pool.query(
+              "SELECT d.*,g.code_hash FROM music_dna_generations d JOIN generation_records g ON g.id=d.generation_id WHERE d.artist_id=$1 AND d.style_id=$2",
+              [a.id, profile.id],
+            )
+          ).rows[0];
+          assert.equal(
+            row.catalogue_revision,
+            require("../config/music-dna.json").revision,
+          );
+          assert.equal(row.profile_snapshot.profile.id, profile.id);
+          assert.deepEqual(row.languages, ["en", "yo"]);
+          assert.equal(row.voice, "female");
+          assert.equal(
+            row.code_hash,
+            crypto
+              .createHash("sha256")
+              .update(complete.uploadCode)
+              .digest("hex"),
+          );
+          assert(
+            !JSON.stringify(row.profile_snapshot).includes(
+              "research_references",
+            ),
+          );
+        }
         assert.equal(
-          row.code_hash,
-          crypto.createHash("sha256").update(complete.uploadCode).digest("hex"),
+          (
+            await pool.query(
+              "SELECT credits FROM generation_wallets WHERE creator_id=$1",
+              [a.id],
+            )
+          ).rows[0].credits,
+          0,
         );
-        assert(
-          !JSON.stringify(row.profile_snapshot).includes("research_references"),
+        assert.equal(
+          (
+            await pool.query(
+              "SELECT COUNT(*)::int AS n FROM generation_ledger WHERE creator_id=$1 AND reason='lyrics_generation'",
+              [a.id],
+            )
+          ).rows[0].n,
+          5,
         );
-      }
-      assert.equal(
-        (
-          await pool.query(
-            "SELECT credits FROM generation_wallets WHERE creator_id=$1",
-            [a.id],
-          )
-        ).rows[0].credits,
-        0,
-      );
-      assert.equal(
-        (
-          await pool.query(
-            "SELECT COUNT(*)::int AS n FROM generation_ledger WHERE creator_id=$1 AND reason='lyrics_generation'",
-            [a.id],
-          )
-        ).rows[0].n,
-        5,
-      );
-    },
-  );
+      },
+    );
+  }
 };

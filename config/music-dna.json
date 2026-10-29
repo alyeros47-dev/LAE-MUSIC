@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-v1",
+  "revision": "music-dna-g1-g2-v1",
   "status": "approved",
   "departments": [
     {
@@ -29,6 +29,12 @@
       "group_id": "G1",
       "department_id": "gospel",
       "name": "Deep Worship & Spiritual Encounter"
+    },
+    {
+      "id": "gospel-g2",
+      "group_id": "G2",
+      "department_id": "gospel",
+      "name": "Revival Prayer & Prophetic Chants"
     }
   ],
   "styles": [
@@ -326,6 +332,368 @@
         ["shaker", "percussion"],
         ["harmon", "backing"]
       ]
+    },
+    {
+      "id": "G2-01",
+      "name": "Upper Room Prayer",
+      "description": "Solemn prayer with sustained pads, soft piano and ambient drones, leaving silence between meaningful phrases.",
+      "department_id": "gospel",
+      "category_id": "gospel-g2",
+      "tempo": {
+        "min": 55,
+        "max": 72
+      },
+      "mood": "Deeply prayerful, solemn, contemplative and spiritually intense.",
+      "energy": "Slow restrained development through subtle harmony and responses, ending quietly and reverently.",
+      "rhythm": "Spacious, slow-moving prayer rhythm with instrumental silence and breathing room between vocal phrases. Optional free-time introductory passages may lead into the selected 55–72 BPM body.",
+      "drums_percussion": "Minimal percussion supporting prayer; preserve silence rather than imposing a dance pulse.",
+      "bass": "Gentle bass notes supporting the spacious atmosphere.",
+      "instruments": {
+        "keys": "Sustained atmospheric keyboard pads and soft piano.",
+        "guitar": "No featured guitar is specified; retain the pads, piano and ambient-drone identity.",
+        "other": "Low ambient drones and subtle strings with layered vocal responses."
+      },
+      "melody_harmony": "Original simple prayer melodies, subtle harmonic movement and a developing recurring refrain; vary spacing without losing solemnity.",
+      "vocal_delivery": "Simple prayerful melodic phrases with deliberate breathing room and layered responses. Controlled repetition must develop meaningfully; voice is independently selected.",
+      "arrangement": "Begin atmospherically, introduce a simple prayerful melody and recurring refrain, then develop intensity through subtle harmonic changes and layered responses. Conclude with a quiet reverent resolution.",
+      "lyrics": {
+        "structure": "Short meaningful phrases about consecration, holiness, surrender, spiritual hunger, personal devotion and prayer; carefully controlled repetition and original spiritual imagery.",
+        "vocabulary": "Original prayerful language and spiritual imagery. Develop repeated phrases naturally rather than looping a chant excessively."
+      },
+      "production_mix": "Keep pads sustained, piano soft, drones low, bass gentle, strings subtle and percussion minimal; make instrumental silence audible and preserve the quiet resolution.",
+      "variations": {
+        "introductions": [
+          "Begin with a free-time atmospheric pad and low drone before soft piano enters.",
+          "Begin with soft piano over sustained pads and a slow spacious pulse."
+        ],
+        "progressions": [
+          "Use subtle original harmonic movement beneath recurring prayer phrases.",
+          "Use an alternate restrained harmonic route with a quiet reverent resolution."
+        ],
+        "arrangements": [
+          "Introduce the refrain early, varying response layers and instrumental spacing.",
+          "Develop the prayer melody before introducing the refrain later with subtle responses."
+        ],
+        "melody": [
+          "Create an original short prayer melody with spacious answering phrases.",
+          "Create a different original prayer contour with longer instrumental breathing room."
+        ],
+        "lyrical": [
+          "Develop consecration and holiness through short meaningful prayer phrases.",
+          "Develop surrender and spiritual hunger through original personal-devotion imagery."
+        ]
+      },
+      "research_references": ["Theophilus Sunday"],
+      "production_terms": [
+        ["pad", "keyboard"],
+        ["piano"],
+        ["drone"],
+        ["bass"],
+        ["space", "spacious", "silence", "breath"]
+      ],
+      "production_exclusions": [
+        "nightclub",
+        "party-dance",
+        "club-ready",
+        "club beat",
+        "dancefloor",
+        "EDM drop"
+      ],
+      "lyric_rules": {
+        "max_consecutive_repeated_lines": 4,
+        "avoid_guaranteed_outcomes": false
+      }
+    },
+    {
+      "id": "G2-02",
+      "name": "Revival Fire Chant",
+      "description": "An evolving revival chant driven by rhythmic keyboards, deep bass, live drums and controlled tom builds.",
+      "department_id": "gospel",
+      "category_id": "gospel-g2",
+      "tempo": {
+        "min": 76,
+        "max": 105
+      },
+      "mood": "Urgent, passionate, spiritually intense and progressively powerful.",
+      "energy": "Controlled rising momentum and instrumental development toward a powerful musical resolution.",
+      "rhythm": "Repetitive but evolving revival rhythm with controlled percussion builds and strong musical momentum, never unrelated club or party-dance production.",
+      "drums_percussion": "Live drums, tom percussion and hand percussion; vary controlled fills and builds while supporting the chant.",
+      "bass": "Deep bass guitar introduced gradually to ground the revival momentum.",
+      "instruments": {
+        "keys": "Rhythmic keyboard patterns and atmospheric pads.",
+        "guitar": "No featured guitar is specified; keyboards, bass and percussion define this chant.",
+        "other": "Supporting vocal harmonies and call-and-response passages."
+      },
+      "melody_harmony": "Original memorable chant refrains with evolving rhythms, harmonic movement and purposeful refrain variations rather than static excessive loops.",
+      "vocal_delivery": "Urgent passionate chant phrasing and clear call-and-response, developing repeated words meaningfully; the chosen voice remains independent.",
+      "arrangement": "Begin with a short rhythmic introduction, establish a memorable chant refrain, then gradually introduce bass, percussion and harmonies. Increase intensity through instrumental development and responses. End with a powerful musical resolution.",
+      "lyrics": {
+        "structure": "Spiritual awakening, renewed devotion, prayer, perseverance, consecration and declarations of faith; memorable original refrains with meaningful variations.",
+        "vocabulary": "Purposeful original devotional words; retain meaning as chant rhythms vary and avoid excessive identical repetition."
+      },
+      "production_mix": "Balance rhythmic keys, deep bass, live drums and toms with clear chant words; preserve controlled percussion builds, harmonic support and a strong resolved ending.",
+      "variations": {
+        "introductions": [
+          "Open with a short rhythmic keyboard figure before the chant enters.",
+          "Open with a short restrained tom-and-keyboard figure before the chant refrain."
+        ],
+        "progressions": [
+          "Develop an original harmonic route under the evolving refrain.",
+          "Use a contrasting original harmonic route that strengthens the concluding resolution."
+        ],
+        "arrangements": [
+          "Develop call-and-response before a later controlled instrumental climax.",
+          "Build percussion and supporting harmonies earlier while reserving the strongest resolution for the end."
+        ],
+        "melody": [
+          "Vary an original compact chant rhythm with clear response gaps.",
+          "Use a different original chant-refrain rhythm with controlled tom-fill answers."
+        ],
+        "lyrical": [
+          "Develop spiritual awakening and renewed devotion through meaningful refrain variations.",
+          "Develop perseverance and consecration into original declarations of faith."
+        ]
+      },
+      "research_references": ["Lawrence Oyor"],
+      "production_terms": [
+        ["keyboard", "keys"],
+        ["bass"],
+        ["drum"],
+        ["tom"],
+        ["chant"],
+        ["build", "momentum"]
+      ],
+      "production_exclusions": [
+        "nightclub",
+        "party-dance",
+        "club-ready",
+        "club beat",
+        "dancefloor",
+        "EDM drop"
+      ],
+      "lyric_rules": {
+        "max_consecutive_repeated_lines": 4,
+        "avoid_guaranteed_outcomes": false
+      }
+    },
+    {
+      "id": "G2-03",
+      "name": "River of Worship",
+      "description": "Flowing melodic worship with expressive piano, electric-guitar textures and layered choir harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g2",
+      "tempo": {
+        "min": 68,
+        "max": 90
+      },
+      "mood": "Passionate, heartfelt, reverent and emotionally uplifting.",
+      "energy": "Natural dynamic development from a gentle introduction to a progressively stronger final section.",
+      "rhythm": "Flowing contemporary worship rhythm with natural dynamic development.",
+      "drums_percussion": "Live drums supporting the flowing rhythm and natural dynamic growth.",
+      "bass": "Melodic bass guitar supporting expressive worship verses and chorus.",
+      "instruments": {
+        "keys": "Expressive piano and warm keyboard pads.",
+        "guitar": "Electric guitar textures supporting the melodic worship arrangement.",
+        "other": "Soft strings and layered choir harmonies."
+      },
+      "melody_harmony": "Original strong melodic storytelling, memorable worship refrains, varied melodic contours and harmony patterns; chorus development remains heartfelt.",
+      "vocal_delivery": "Passionate heartfelt melodic phrases and expressive chorus delivery with layered supporting harmonies, without assigning gender or changing the selected voice.",
+      "arrangement": "Begin with a gentle piano or keyboard introduction, introduce a strong melodic worship verse, then expand into an expressive chorus with layered harmonies. Include an instrumental worship passage and a progressively stronger final section.",
+      "lyrics": {
+        "structure": "Divine love, spiritual renewal, gratitude, surrender, faith and the presence of God; meaningful melodic storytelling and memorable worship refrains.",
+        "vocabulary": "Original heartfelt worship language with thoughtful storytelling; keep refrains memorable and purposeful rather than excessively repeated."
+      },
+      "production_mix": "Keep piano expressive, pads warm, bass melodic, live drums naturally dynamic, guitar textured and strings soft; let clear layered choir harmonies support an emotionally uplifting final section.",
+      "variations": {
+        "introductions": [
+          "Begin gently with expressive piano before warm pads and the lead enter.",
+          "Begin gently with warm keyboard pads and a simple piano response before the verse."
+        ],
+        "progressions": [
+          "Use an original flowing harmonic route supporting melodic storytelling.",
+          "Use an alternate original harmony pattern that opens into an expressive chorus."
+        ],
+        "arrangements": [
+          "Expand chorus harmonies gradually before an instrumental worship passage and stronger final section.",
+          "Keep the first chorus spacious, then develop layered harmonies and a later instrumental passage."
+        ],
+        "melody": [
+          "Create an original flowing verse contour and a memorable rising worship refrain.",
+          "Create a contrasting original melodic contour and a returning expressive chorus refrain."
+        ],
+        "lyrical": [
+          "Tell a meaningful story of divine love and spiritual renewal.",
+          "Develop gratitude, surrender and faith into a heartfelt worship refrain."
+        ]
+      },
+      "research_references": ["Sunmisola Agbebi"],
+      "production_terms": [
+        ["piano"],
+        ["bass"],
+        ["drum"],
+        ["electric guitar"],
+        ["choir", "harmon"],
+        ["flow"]
+      ],
+      "production_exclusions": [
+        "nightclub",
+        "party-dance",
+        "club-ready",
+        "club beat",
+        "dancefloor",
+        "EDM drop"
+      ],
+      "lyric_rules": {
+        "max_consecutive_repeated_lines": 4,
+        "avoid_guaranteed_outcomes": false
+      }
+    },
+    {
+      "id": "G2-04",
+      "name": "Prophetic Declaration",
+      "description": "Original spoken declarations alternate with sung responses over deliberate piano, cinematic strings and restrained toms.",
+      "department_id": "gospel",
+      "category_id": "gospel-g2",
+      "tempo": {
+        "min": 65,
+        "max": 92
+      },
+      "mood": "Authoritative, solemn, hopeful and spiritually resolute.",
+      "energy": "Steady deliberate authority with space for declarations and a confident uplifting musical resolution.",
+      "rhythm": "Steady deliberate rhythmic foundation leaving room for spoken declarations and melodic responses.",
+      "drums_percussion": "Restrained tom drums and subtle cymbal swells support deliberate phrasing without becoming a club groove.",
+      "bass": "Low bass supporting the steady foundation.",
+      "instruments": {
+        "keys": "Deep atmospheric pads and rhythmic piano chords.",
+        "guitar": "No featured guitar is specified; retain atmospheric keys, strings and restrained toms.",
+        "other": "Cinematic strings, subtle cymbal swells and supporting choir textures."
+      },
+      "melody_harmony": "Original sung refrain melodies and harmonic movement alternate with short original spoken or lightly melodic declarations.",
+      "vocal_delivery": "Clear authoritative spoken or lightly melodic declarations alternating with brief sung responses; no recognizable sermons or recorded prayers, and no fixed vocal gender.",
+      "arrangement": "Begin atmospherically, introduce a spoken or lightly melodic declaration section, then develop a memorable sung refrain with harmonies. Alternate brief declarations and melodic passages, ending with a confident uplifting musical resolution.",
+      "lyrics": {
+        "structure": "Scripturally grounded declarations of faith, courage, hope, divine promises and perseverance. Use original spoken words and sung refrains; do not claim personal prophecy or guaranteed outcomes.",
+        "vocabulary": "Original faith-grounded language without recognizable sermon or recorded-prayer quotations. Do not fabricate scripture citations, unsupported personal prophecies, guaranteed healing, wealth or individual predictions."
+      },
+      "production_mix": "Preserve intelligibility and space around spoken declarations and melodic responses; balance low bass, rhythmic piano, cinematic strings, restrained toms, cymbal swells and supportive choir textures.",
+      "variations": {
+        "introductions": [
+          "Begin with deep atmospheric pads before a lightly melodic original declaration.",
+          "Begin with atmospheric strings and piano before a brief original spoken declaration."
+        ],
+        "progressions": [
+          "Use a steady original harmonic route beneath declarations and sung responses.",
+          "Use alternate original harmonic movement toward a hopeful sung resolution."
+        ],
+        "arrangements": [
+          "Place brief spoken declarations before each developing sung refrain.",
+          "Alternate a lightly melodic declaration section with sung passages and varied instrumental transitions."
+        ],
+        "melody": [
+          "Create an original sung refrain with measured spoken-response gaps.",
+          "Create a contrasting original refrain melody with deliberate rhythmic emphasis."
+        ],
+        "lyrical": [
+          "Develop original declarations of courage and hope grounded in faith, without personal predictions.",
+          "Develop original declarations of perseverance and divine faithfulness, without guaranteed outcomes."
+        ]
+      },
+      "research_references": [],
+      "production_terms": [
+        ["pad"],
+        ["piano"],
+        ["string"],
+        ["bass"],
+        ["tom"],
+        ["spoken", "declaration"],
+        ["sung", "refrain", "response"]
+      ],
+      "production_exclusions": [
+        "nightclub",
+        "party-dance",
+        "club-ready",
+        "club beat",
+        "dancefloor",
+        "EDM drop"
+      ],
+      "lyric_rules": {
+        "max_consecutive_repeated_lines": 4,
+        "avoid_guaranteed_outcomes": true
+      },
+      "internal_research_context": "Nigerian prophetic prayer and spoken-word worship traditions."
+    },
+    {
+      "id": "G2-05",
+      "name": "Sacred Prayer Symphony",
+      "description": "Majestic devotional worship with grand piano, cinematic strings, ambient guitar and a spacious orchestral interlude.",
+      "department_id": "gospel",
+      "category_id": "gospel-g2",
+      "tempo": {
+        "min": 58,
+        "max": 80
+      },
+      "mood": "Majestic, reverent, contemplative and emotionally expansive.",
+      "energy": "Gentle orchestral expansion toward an expressive final chorus, followed by a peaceful resolution.",
+      "rhythm": "Slow orchestral worship progression with gentle rhythmic pulses and spacious instrumental passages.",
+      "drums_percussion": "Restrained orchestral percussion supporting gentle pulses and contemplative space.",
+      "bass": "Warm bass supporting the gradual orchestral expansion.",
+      "instruments": {
+        "keys": "Grand piano and atmospheric pads.",
+        "guitar": "Ambient guitar supporting spacious devotional textures.",
+        "other": "Cinematic strings and layered vocal harmonies; include a cinematic instrumental interlude."
+      },
+      "melody_harmony": "Original gentle worship melodies, thoughtful harmonic progressions and developing string arrangements, growing toward an expressive final chorus.",
+      "vocal_delivery": "Gentle expressive melodic phrasing with layered supporting harmonies and clear thoughtful worship words; voice is selected independently.",
+      "arrangement": "Begin with piano and atmospheric strings, introduce a gentle worship melody, then gradually expand into a rich orchestral arrangement. Include a cinematic instrumental interlude, an emotionally expressive final chorus and a peaceful resolution.",
+      "lyrics": {
+        "structure": "God's greatness, divine faithfulness, surrender, spiritual comfort, gratitude and hope; thoughtful lyrical imagery and original worship language.",
+        "vocabulary": "Thoughtful original devotional imagery and meaningful worship language; do not reproduce existing melodies, lyrics or recordings."
+      },
+      "production_mix": "Keep grand piano clear, strings cinematic, pads atmospheric, bass warm, orchestral percussion restrained and ambient guitar spacious; let layered harmonies expand naturally into the final chorus and peaceful ending.",
+      "variations": {
+        "introductions": [
+          "Begin with grand piano and soft atmospheric strings before the gentle melody.",
+          "Begin with a different original piano-and-string introduction, leaving contemplative space."
+        ],
+        "progressions": [
+          "Use an original gentle orchestral chord progression toward the final chorus.",
+          "Use an alternate original chord progression with a peaceful final harmonic resolution."
+        ],
+        "arrangements": [
+          "Introduce the cinematic interlude after gradual orchestral expansion, then resolve through the final chorus.",
+          "Develop strings earlier and place a spacious instrumental interlude before the expressive final chorus."
+        ],
+        "melody": [
+          "Create an original gently rising worship melody with developing string answers.",
+          "Create a contrasting original worship contour with a different restrained string arrangement."
+        ],
+        "lyrical": [
+          "Reflect on God's greatness and divine faithfulness through original thoughtful imagery.",
+          "Develop surrender, spiritual comfort, gratitude and hope into an original devotional refrain."
+        ]
+      },
+      "research_references": [],
+      "production_terms": [
+        ["piano"],
+        ["string"],
+        ["bass"],
+        ["orchestral", "orchestra"],
+        ["ambient guitar"],
+        ["interlude"]
+      ],
+      "production_exclusions": [
+        "nightclub",
+        "party-dance",
+        "club-ready",
+        "club beat",
+        "dancefloor",
+        "EDM drop"
+      ],
+      "lyric_rules": {
+        "max_consecutive_repeated_lines": 4,
+        "avoid_guaranteed_outcomes": false
+      },
+      "internal_research_context": "Contemporary African prayer worship and cinematic devotional music."
     }
   ]
 }

@@ -13,7 +13,7 @@ const body = {
   idea: "An original account of finding hope",
 };
 const actor = { artistId: 7, requestKey: "qa-music-dna-request-0001" };
-test("the approved G1 subset preserves the full department inventory without inventing other research groups", () => {
+test("the approved G1/G2 subset preserves the full department inventory without inventing other research groups", () => {
   const c = dna.catalogue();
   assert.equal(c.status, "approved");
   assert.deepEqual(
@@ -21,9 +21,9 @@ test("the approved G1 subset preserves the full department inventory without inv
     [14, 14, 7, 8],
   );
   assert.equal(c.coverage.expected_research_groups, 43);
-  assert.deepEqual(c.coverage.supplied_research_groups, ["G1"]);
-  assert.equal(c.styles.length, 5);
-  assert.equal(c.categories.length, 1);
+  assert.deepEqual(c.coverage.supplied_research_groups, ["G1", "G2"]);
+  assert.equal(c.styles.length, 10);
+  assert.equal(c.categories.length, 2);
   assert.throws(
     () => dna.prepare(body, actor),
     (e) => e.status === 400,
