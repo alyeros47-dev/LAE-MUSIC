@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-v1",
   "status": "approved",
   "departments": [
     {
@@ -155,6 +155,12 @@
       "group_id": "S8",
       "department_id": "secular-afrobeats",
       "name": "Yoruba Fuji & Juju"
+    },
+    {
+      "id": "secular-s9",
+      "group_id": "S9",
+      "department_id": "secular-afrobeats",
+      "name": "African Soul & Alternative R&B"
     }
   ],
   "styles": [
@@ -9784,6 +9790,467 @@
       ],
       "research_references": [
         "Ebenezer Obey"
+      ]
+    },
+    {
+      "id": "S9-01",
+      "name": "Deep Ocean Afro-Soul",
+      "description": "Atmospheric alternative soul with deep bass, rich harmony and emotional melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s9",
+      "tempo": {
+        "min": 78,
+        "max": 102
+      },
+      "mood": "Introspective, powerful, mysterious and emotionally reflective.",
+      "energy": "Spacious alternative Afro-soul pulse and deep controlled lows support wide emotional melody without aggressive party intensity.",
+      "rhythm": "Spacious alternative Afro-soul with gentle African syncopation and a slow-to-moderate rhythmic pulse.",
+      "drums_percussion": "Deep restrained kick, crisp rimshot, sparse hi-hats, gentle shakers, subtle congas and carefully positioned rhythmic accents.",
+      "bass": "Deep rounded sub-bass with warm sustained notes, gentle melodic movement and occasional syncopated pulses.",
+      "instruments": {
+        "keys": "Rich Rhodes-style electric piano, dark atmospheric synth pads, soft piano motifs and layered harmonic textures.",
+        "guitar": "Sparse clean electric guitar, ambient guitar phrases and gentle melodic responses.",
+        "other": "Soft strings, subtle African hand percussion, atmospheric synth textures and restrained electronic effects."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, wide melodic movement, intimate verses and powerful but restrained choruses.",
+      "vocal_delivery": "Intimate expressive melodic phrasing with wide emotional movement and restrained powerful choruses; selected voice remains independent.",
+      "arrangement": "Atmospheric keyboard introduction → intimate verse → expanding pre-chorus → emotional chorus → instrumental reflection → second verse → expressive bridge → final chorus.",
+      "lyrics": {
+        "structure": "Self-discovery, emotional healing, relationships, resilience, independence, hope and personal growth.",
+        "vocabulary": "Use original meaningful secular African soul expressions in the selected supported language or combination. Musical identity never forces a language, lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Deep emotional African atmosphere, rich harmony, clear sub-bass and spacious professional production. Keep Rhodes harmony rich, dark pads restrained, guitar sparse, kick deep and rimshot clear; preserve subtle congas, shakers and African syncopation. Avoid overcrowded instrumentation, aggressive party drums and generic pop hooks; leave intimate melodic space.",
+      "variations": {
+        "introductions": [
+          "Begin with original rich Rhodes chords and dark atmospheric keyboard textures.",
+          "Begin with alternate soft piano motifs and sparse ambient-guitar responses."
+        ],
+        "progressions": [
+          "Use original layered Afro-soul harmony with warm sustained sub-bass.",
+          "Use alternate dark Rhodes voicings and gently syncopated bass pulses."
+        ],
+        "arrangements": [
+          "Vary guitar textures and rhythmic accents through the instrumental reflection.",
+          "Change harmonic expansion and expressive bridge development before the final chorus."
+        ],
+        "melody": [
+          "Create an original wide emotional melody with restrained powerful chorus phrasing.",
+          "Create a contrasting intimate verse contour and expressive melodic hook."
+        ],
+        "lyrical": [
+          "Develop original self-discovery and resilience verses.",
+          "Develop emotional healing, independence and hope through fresh reflective imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "african"
+        ]
+      ],
+      "research_references": [
+        "Tems"
+      ]
+    },
+    {
+      "id": "S9-02",
+      "name": "Starlight Afro-R&B",
+      "description": "Modern, confident Afro-R&B with bright percussion and catchy melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s9",
+      "tempo": {
+        "min": 96,
+        "max": 118
+      },
+      "mood": "Confident, playful, youthful and uplifting.",
+      "energy": "Lively controlled Afropop bounce and strong melodic appeal support bright modern Afro-R&B without slow ballad or EDM pacing.",
+      "rhythm": "Contemporary Afro-R&B with an energetic but controlled Afropop bounce.",
+      "drums_percussion": "Punchy Afro-pop kick, crisp clap, syncopated hi-hats, shakers, congas and lively rhythmic fills.",
+      "bass": "Deep bouncy electronic bass with smooth melodic movement and strong rhythmic interaction with drums.",
+      "instruments": {
+        "keys": "Bright synth plucks, warm electric piano, atmospheric pads and catchy melodic keyboard hooks.",
+        "guitar": "Clean rhythmic guitar, gentle muted picking and short melodic accents.",
+        "other": "African percussion, electronic textures, handclaps and restrained brass accents."
+      },
+      "melody_harmony": "Original catchy melodies, expressive rhythmic phrasing and memorable uplifting choruses.",
+      "vocal_delivery": "Confident playful rhythmic phrasing and expressive uplifting melodic hooks; selected voice remains independent.",
+      "arrangement": "Bright synth-and-percussion introduction → rhythmic verse → melodic pre-chorus → confident chorus → instrumental groove → second verse → dynamic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Confidence, independence, ambition, romance, friendship, enjoyment and personal empowerment.",
+        "vocabulary": "Use original meaningful secular African soul expressions in the selected supported language or combination. Musical identity never forces a language, lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Modern polished Afro-R&B with lively African rhythm and strong melodic appeal. Keep electronic bass deep and bouncy, kick punchy, clap crisp, synth plucks bright and electric piano warm; balance muted guitar picking, congas, shakers and restrained brass. Avoid excessively slow ballads, generic EDM drops and thin bass while retaining controlled Afropop bounce.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright synth hooks and lively Afropop percussion.",
+          "Begin with alternate muted guitar accents and catchy melodic keyboard phrases."
+        ],
+        "progressions": [
+          "Use original uplifting Afro-R&B harmony with smooth bouncy electronic bass.",
+          "Use alternate warm electric-piano chords and a different rhythmic bass motif."
+        ],
+        "arrangements": [
+          "Vary synth hooks and percussion patterns through the instrumental groove.",
+          "Change guitar accents and chorus melody layers around the dynamic bridge."
+        ],
+        "melody": [
+          "Create an original confident melodic hook with expressive rhythmic phrasing.",
+          "Create a contrasting playful verse contour and memorable uplifting chorus."
+        ],
+        "lyrical": [
+          "Develop original confidence and personal-empowerment verses.",
+          "Develop ambition, friendship and enjoyment through fresh youthful romantic phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-r&b"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "muted"
+        ]
+      ],
+      "research_references": [
+        "Ayra Starr"
+      ]
+    },
+    {
+      "id": "S9-03",
+      "name": "Honeyed African Soul",
+      "description": "Warm romantic Afro-soul with acoustic guitar, piano and gentle percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s9",
+      "tempo": {
+        "min": 84,
+        "max": 108
+      },
+      "mood": "Tender, romantic, hopeful and reflective.",
+      "energy": "Warm natural acoustic movement and gentle African dance pulse support intimate storytelling and expressive romantic refrains.",
+      "rhythm": "Smooth Nigerian Afro-soul with a gentle dance pulse and natural acoustic rhythmic movement.",
+      "drums_percussion": "Soft but clear kick, gentle snare or rimshot, flowing shakers, subtle congas and restrained African percussion.",
+      "bass": "Warm melodic electric bass with smooth rhythmic movement, gentle passing notes and natural low-frequency support.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, warm Rhodes-style electric piano, soft organ textures and gentle harmonic pads.",
+        "guitar": "Fingerpicked acoustic guitar, clean electric guitar responses and flowing rhythmic guitar patterns.",
+        "other": "Soft strings, gentle African hand percussion, subtle flute and warm instrumental harmonies."
+      },
+      "melody_harmony": "Original heartfelt melodies, conversational storytelling, memorable romantic refrains and expressive harmonic movement.",
+      "vocal_delivery": "Tender heartfelt melodic storytelling and conversational romantic phrasing; selected voice remains independent.",
+      "arrangement": "Acoustic guitar-and-piano introduction → storytelling verse → warm chorus → instrumental guitar passage → second verse → emotional bridge → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Love, relationships, family, personal growth, gratitude, emotional honesty and everyday life.",
+        "vocabulary": "Use original meaningful secular African soul expressions in the selected supported language or combination. Musical identity never forces a language, lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm intimate African soul with natural acoustic instrumentation. Keep fingerpicked acoustic guitar and expressive piano clear, electric bass warm, Rhodes harmony gentle, organ soft and percussion restrained; balance subtle flute and strings with natural rhythmic movement. Avoid heavy electronic bass overpowering guitar and piano.",
+      "variations": {
+        "introductions": [
+          "Begin with original fingerpicked acoustic-guitar patterns and expressive piano.",
+          "Begin with alternate warm Rhodes voicings and clean electric-guitar responses."
+        ],
+        "progressions": [
+          "Use original tender Afro-soul harmony with smooth melodic electric bass.",
+          "Use alternate expressive piano voicings and gentle passing bass notes."
+        ],
+        "arrangements": [
+          "Vary acoustic patterns and instrumental responses through the guitar passage.",
+          "Change piano development and emotional bridge harmony before the uplifting ending."
+        ],
+        "melody": [
+          "Create an original heartfelt romantic refrain with conversational storytelling.",
+          "Create a contrasting tender melody and expressive harmonic response."
+        ],
+        "lyrical": [
+          "Develop original family, relationships and emotional-honesty verses.",
+          "Develop gratitude, personal growth and everyday life through fresh intimate storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "flute"
+        ]
+      ],
+      "research_references": [
+        "Simi"
+      ]
+    },
+    {
+      "id": "S9-04",
+      "name": "African Rhythm Empress",
+      "description": "Energetic African pop-soul with powerful percussion and lively bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s9",
+      "tempo": {
+        "min": 104,
+        "max": 126
+      },
+      "mood": "Bold, joyful, confident and celebratory.",
+      "energy": "Strong African pop-soul percussion, lively bass and bright Highlife-inspired guitar drive bold expressive dance movement.",
+      "rhythm": "Energetic African pop-soul with strong percussion, melodic bass and lively dance movement.",
+      "drums_percussion": "Strong Afro-pop kick, crisp snare, rolling congas, shakers, handclaps, talking-drum accents and lively rhythmic fills.",
+      "bass": "Deep bouncy electric bass with melodic African dance patterns, syncopated movement and strong rhythmic momentum.",
+      "instruments": {
+        "keys": "Bright piano riffs, rhythmic organ stabs, melodic synth plucks and warm harmonic pads.",
+        "guitar": "Lively highlife-inspired guitar patterns, clean rhythmic electric guitar and expressive lead-guitar responses.",
+        "other": "Brass section, African hand percussion, shekere, congas and traditional melodic accents."
+      },
+      "melody_harmony": "Original powerful melodic hooks, expressive choruses and rhythmic call-and-response opportunities.",
+      "vocal_delivery": "Bold joyful expressive melodic phrasing and rhythmic group-response hooks; customer-selected voice remains independent without assigning a gender.",
+      "arrangement": "Percussion-and-guitar introduction → energetic verse → uplifting chorus → instrumental African dance groove → second verse → brass-and-percussion break → final chorus.",
+      "lyrics": {
+        "structure": "Confidence, cultural pride, celebration, love, independence, resilience and success.",
+        "vocabulary": "Use original meaningful secular African soul expressions in the selected supported language or combination. Musical identity never forces a language, lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Rich African rhythmic energy, strong melodic identity and professional dance production. Keep electric bass bouncy, percussion powerful, highlife-inspired electric guitar bright and piano/organ rhythmic; balance brass, shekere and talking-drum accents with expressive choruses. Never assign a default lead voice or vocal register from the style name or research reference.",
+      "variations": {
+        "introductions": [
+          "Begin with original powerful African percussion and lively highlife-inspired guitar.",
+          "Begin with alternate brass responses and bright melodic bass phrases."
+        ],
+        "progressions": [
+          "Use original confident African pop-soul harmony with bouncy electric bass.",
+          "Use alternate rhythmic piano/organ voicings and syncopated melodic bass grooves."
+        ],
+        "arrangements": [
+          "Vary guitar riffs and percussion combinations through the African dance groove.",
+          "Change brass phrases and expressive chorus arrangement before the final chorus."
+        ],
+        "melody": [
+          "Create an original powerful melodic hook and rhythmic call-and-response.",
+          "Create a contrasting bold chorus contour with expressive guitar answers."
+        ],
+        "lyrical": [
+          "Develop original confidence and cultural-pride verses.",
+          "Develop independence, resilience and success through fresh joyful celebration."
+        ]
+      },
+      "production_terms": [
+        [
+          "african"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ]
+      ],
+      "research_references": [
+        "Yemi Alade"
+      ]
+    },
+    {
+      "id": "S9-05",
+      "name": "Acoustic Soul Heritage",
+      "description": "Organic alternative soul with acoustic guitar, jazz harmony and reflective storytelling.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s9",
+      "tempo": {
+        "min": 76,
+        "max": 102
+      },
+      "mood": "Reflective, peaceful, thoughtful and hopeful.",
+      "energy": "Organic gentle African rhythmic movement and jazz-influenced live-band dynamics give mature storytelling natural space.",
+      "rhythm": "Organic African alternative soul with gentle rhythmic movement, jazz-influenced phrasing and natural live-band dynamics.",
+      "drums_percussion": "Natural acoustic drum kit, warm kick, gentle snare, brushed percussion where appropriate, subtle shakers and restrained congas.",
+      "bass": "Warm electric or upright-style bass with expressive melodic movement, natural dynamics and smooth rhythmic support.",
+      "instruments": {
+        "keys": "Acoustic piano, warm electric piano, restrained organ and jazz-influenced chord voicings.",
+        "guitar": "Fingerpicked acoustic guitar, clean electric guitar, gentle rhythmic strumming and expressive melodic fills.",
+        "other": "Soft strings, subtle flute, gentle African percussion and occasional organic brass accents."
+      },
+      "melody_harmony": "Original thoughtful melodies, expressive storytelling and memorable understated choruses.",
+      "vocal_delivery": "Thoughtful mature storytelling and understated expressive melodic phrasing; selected voice remains independent.",
+      "arrangement": "Acoustic guitar introduction → intimate storytelling verse → reflective chorus → instrumental acoustic passage → second verse → emotional bridge → gentle final chorus.",
+      "lyrics": {
+        "structure": "Life lessons, humanity, relationships, hope, personal growth, social reflection and everyday experiences.",
+        "vocabulary": "Use original meaningful secular African soul expressions in the selected supported language or combination. Musical identity never forces a language, lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm organic mature African soul with natural instrumentation and expressive jazz harmony. Keep acoustic fingerpicking clear, electric or upright-style bass warm and dynamic, piano/organ restrained and acoustic drums gentle with optional brushes; balance subtle flute, strings and organic brass. Avoid excessive electronic effects, aggressive club drums and generic commercial Afrobeats loops.",
+      "variations": {
+        "introductions": [
+          "Begin with original fingerpicked acoustic-guitar patterns and natural bass.",
+          "Begin with alternate gentle acoustic strumming and warm jazz piano voicings."
+        ],
+        "progressions": [
+          "Use original jazz-influenced African soul chords with expressive warm bass.",
+          "Use alternate restrained organ/electric-piano voicings and smooth melodic bass movement."
+        ],
+        "arrangements": [
+          "Vary acoustic guitar patterns and organic instrumental solos through the acoustic passage.",
+          "Change jazz voicings and reflective bridge development before the gentle ending."
+        ],
+        "melody": [
+          "Create an original thoughtful melody with expressive understated storytelling.",
+          "Create a contrasting hopeful chorus and gentle instrumental response."
+        ],
+        "lyrical": [
+          "Develop original humanity and social-reflection verses.",
+          "Develop life lessons, hope and everyday experiences through fresh mature storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "african"
+        ],
+        [
+          "jazz"
+        ],
+        [
+          "acoustic drum"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "flute"
+        ]
+      ],
+      "research_references": [
+        "Asa"
       ]
     }
   ]
