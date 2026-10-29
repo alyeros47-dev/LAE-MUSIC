@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-v1",
   "status": "approved",
   "departments": [
     {
@@ -149,6 +149,12 @@
       "group_id": "S7",
       "department_id": "secular-afrobeats",
       "name": "Nigerian Highlife & Traditional Pop"
+    },
+    {
+      "id": "secular-s8",
+      "group_id": "S8",
+      "department_id": "secular-afrobeats",
+      "name": "Yoruba Fuji & Juju"
     }
   ],
   "styles": [
@@ -9312,6 +9318,472 @@
       ],
       "research_references": [
         "Anyidons"
+      ]
+    },
+    {
+      "id": "S8-01",
+      "name": "Royal Fuji Celebration",
+      "description": "Grand Yoruba Fuji with powerful talking drums and layered ceremonial percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s8",
+      "tempo": {
+        "min": 108,
+        "max": 136
+      },
+      "mood": "Majestic, celebratory, confident and energetic.",
+      "energy": "Grand ceremonial Fuji dance movement develops through extended traditional percussion and evolving ensemble conversations.",
+      "rhythm": "Layered Yoruba Fuji percussion with evolving talking-drum phrases, complex syncopation and powerful communal dance movement.",
+      "drums_percussion": "Dominant talking-drum ensemble, sakara, omele, agogo, shekere, congas, handclaps and supporting kick-and-snare patterns.",
+      "bass": "Deep rounded electric bass with repetitive rhythmic movement, melodic passing notes and strong interaction with traditional percussion.",
+      "instruments": {
+        "keys": "Warm organ, bright rhythmic piano, restrained synth accents and supportive harmonic textures.",
+        "guitar": "Rhythmic guitar supporting the percussion-led arrangement.",
+        "other": "Traditional Yoruba percussion, occasional brass and ceremonial instrumental responses."
+      },
+      "melody_harmony": "Original ceremonial melodic phrases, expressive chant-like hooks and natural call-and-response structures.",
+      "vocal_delivery": "Majestic expressive ceremonial phrasing and natural group responses; selected voice remains independent.",
+      "arrangement": "Extended traditional percussion introduction → rhythmic verse → celebratory refrain → talking-drum solo → second verse → expanded percussion ensemble → final celebratory section.",
+      "lyrics": {
+        "structure": "Celebration, cultural pride, achievement, family, gratitude, wisdom and community.",
+        "vocabulary": "Use original meaningful secular Fuji or Juju expressions in the selected supported language or combination. Yoruba cultural identity never forces Yoruba or another language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature phrases or recordings."
+      },
+      "production_mix": "Percussion-led traditional Fuji: talking-drum ensemble, sakara, omele, agogo, shekere and congas lead musical development. Modern electric bass and warm organ/piano support rather than overpower it; keep guitar rhythmic and brass occasional. Vary drum conversations and extended ceremonial passages. Avoid generic Afrobeats loops, excessive synths and identical talking-drum patterns every generation.",
+      "variations": {
+        "introductions": [
+          "Begin with original extended talking-drum conversations and layered ceremonial percussion.",
+          "Begin with alternate sakara/omele patterns answered by agogo and shekere."
+        ],
+        "progressions": [
+          "Use original supportive organ/piano harmony with rounded electric-bass passing notes.",
+          "Use alternate restrained harmonic textures and repetitive bass movement interacting with percussion."
+        ],
+        "arrangements": [
+          "Vary talking-drum solo development and expanded percussion ensemble phrases.",
+          "Change sakara patterns, rhythmic breaks and ceremonial refrain development."
+        ],
+        "melody": [
+          "Create original ceremonial melodic phrases and chant-like responses.",
+          "Create a contrasting majestic refrain with expressive rhythmic group answers."
+        ],
+        "lyrical": [
+          "Develop original cultural-pride and achievement celebration verses.",
+          "Develop family, wisdom and community through fresh grateful ceremonial phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "percussion-led"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "sakara"
+        ],
+        [
+          "omele"
+        ],
+        [
+          "agogo"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "guitar"
+        ]
+      ],
+      "research_references": [
+        "K1 De Ultimate"
+      ]
+    },
+    {
+      "id": "S8-02",
+      "name": "Fuji Street Royalty",
+      "description": "Energetic modern Fuji with heavy dance bass and lively traditional drums.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s8",
+      "tempo": {
+        "min": 116,
+        "max": 142
+      },
+      "mood": "Energetic, playful, confident and festive.",
+      "energy": "Fast contemporary Fuji dance energy retains authentic traditional percussion and heavy bass through extended dance breaks.",
+      "rhythm": "Fast contemporary Fuji with energetic talking-drum rolls, street-dance movement and lively rhythmic breaks.",
+      "drums_percussion": "Powerful talking drums, sakara, omele, shekere, agogo, congas, sharp snare accents and strong kick support.",
+      "bass": "Thick bouncy electric or synthesized bass with repetitive dance motifs, deep low-frequency impact and tight percussion synchronization.",
+      "instruments": {
+        "keys": "Bright organ stabs, rhythmic piano riffs, short synth hooks and energetic melodic responses.",
+        "guitar": "Rhythmic guitar.",
+        "other": "Brass accents, handclaps and layered traditional percussion."
+      },
+      "melody_harmony": "Original catchy rhythmic hooks, energetic refrains and crowd-response opportunities.",
+      "vocal_delivery": "Playful confident rhythmic phrasing and energetic festive responses; selected voice remains independent.",
+      "arrangement": "Fast percussion introduction → rhythmic verse → festive refrain → heavy bass-and-talking-drum groove → second verse → extended Fuji dance break → final refrain.",
+      "lyrics": {
+        "structure": "Success, celebration, friendship, confidence, social gatherings, perseverance and enjoyment.",
+        "vocabulary": "Use original meaningful secular Fuji or Juju expressions in the selected supported language or combination. Yoruba cultural identity never forces Yoruba or another language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature phrases or recordings."
+      },
+      "production_mix": "Preserve authentic percussion-led Fuji while delivering powerful modern dance energy. Keep talking drums, sakara, omele, agogo, shekere and congas leading; synchronize heavy bouncy bass with percussion and let kick, organ, piano, guitar and brass support it. Avoid replacing traditional drums with electronic dance beats; maintain clear lows and lively traditional interplay.",
+      "variations": {
+        "introductions": [
+          "Begin with original fast traditional Fuji percussion and strong kick support.",
+          "Begin with alternate talking-drum rolls over a heavy synchronized bass motif."
+        ],
+        "progressions": [
+          "Use original bright organ harmony with thick bouncy dance bass.",
+          "Use alternate rhythmic piano stabs and a different deep repetitive bass groove."
+        ],
+        "arrangements": [
+          "Vary percussion combinations and bass phrases through the heavy talking-drum groove.",
+          "Change organ riffs and rhythmic breaks during the extended Fuji dance section."
+        ],
+        "melody": [
+          "Create an original catchy festive refrain with energetic crowd responses.",
+          "Create a contrasting playful rhythmic hook and lively instrumental answer."
+        ],
+        "lyrical": [
+          "Develop original success and friendship verses with confident celebration.",
+          "Develop perseverance, social gatherings and enjoyment through fresh rhythmic refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "sakara"
+        ],
+        [
+          "omele"
+        ],
+        [
+          "agogo"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "guitar"
+        ]
+      ],
+      "research_references": [
+        "Pasuma"
+      ]
+    },
+    {
+      "id": "S8-03",
+      "name": "Wisdom of the Talking Drum",
+      "description": "Storytelling-focused Fuji with intricate percussion and expressive melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s8",
+      "tempo": {
+        "min": 100,
+        "max": 130
+      },
+      "mood": "Reflective, wise, expressive and uplifting.",
+      "energy": "Conversational intricate percussion and warm melodic bass support extended narrative development and expressive refrains.",
+      "rhythm": "Complex Yoruba Fuji percussion with conversational talking-drum phrasing and evolving rhythmic arrangements.",
+      "drums_percussion": "Detailed talking-drum phrases, sakara, omele, agogo, shekere, congas and restrained supporting drum-kit accents.",
+      "bass": "Warm electric bass with flowing melodic patterns, gentle syncopation and natural live-band movement.",
+      "instruments": {
+        "keys": "Traditional organ textures, restrained piano chords and subtle melodic responses.",
+        "guitar": "Gentle rhythmic guitar.",
+        "other": "Traditional Yoruba percussion and occasional brass accents."
+      },
+      "melody_harmony": "Original narrative melodies, expressive refrains and natural spoken-rhythm or sung storytelling sections.",
+      "vocal_delivery": "Expressive narrative phrasing with natural sung or spoken-rhythm storytelling; selected voice remains independent.",
+      "arrangement": "Traditional percussion introduction → storytelling verse → melodic refrain → talking-drum instrumental conversation → second verse → extended rhythmic development → closing refrain.",
+      "lyrics": {
+        "structure": "Life lessons, wisdom, perseverance, family, social responsibility, gratitude and personal reflection.",
+        "vocabulary": "Use original meaningful secular Fuji or Juju expressions in the selected supported language or combination. Yoruba cultural identity never forces Yoruba or another language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature phrases or recordings."
+      },
+      "production_mix": "Authentic percussion-led Yoruba Fuji storytelling with expressive traditional instruments. Keep detailed talking-drum conversation, sakara, omele, agogo, shekere and congas musically evolving; support with warm melodic electric bass, restrained organ/piano and gentle guitar. Avoid generic party chants and overly simplified percussion loops; give narrative phrases and rhythmic development space.",
+      "variations": {
+        "introductions": [
+          "Begin with original conversational talking-drum phrases and traditional percussion.",
+          "Begin with alternate sakara/omele interplay and restrained organ textures."
+        ],
+        "progressions": [
+          "Use original restrained narrative harmony with warm flowing electric bass.",
+          "Use alternate subtle piano voicings and gently syncopated melodic bass."
+        ],
+        "arrangements": [
+          "Vary storytelling structure and talking-drum conversation through the instrumental passage.",
+          "Change percussion interplay and extended rhythmic development before the closing refrain."
+        ],
+        "melody": [
+          "Create original expressive narrative melodies with memorable refrains.",
+          "Create a contrasting thoughtful sung or spoken-rhythm phrase and percussion answer."
+        ],
+        "lyrical": [
+          "Develop original wisdom and life-lesson storytelling.",
+          "Develop family, social responsibility and perseverance through fresh reflective verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "sakara"
+        ],
+        [
+          "omele"
+        ],
+        [
+          "agogo"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "storytelling"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "guitar"
+        ]
+      ],
+      "research_references": [
+        "Saheed Osupa"
+      ]
+    },
+    {
+      "id": "S8-04",
+      "name": "Golden Juju Guitar Orchestra",
+      "description": "Classic Yoruba Juju with interlocking guitars, melodic bass and traditional percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s8",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Joyful, elegant, warm and celebratory.",
+      "energy": "Flowing relaxed but infectious Juju dance movement centers intricate clean guitars with warm melodic bass and natural percussion.",
+      "rhythm": "Flowing Yoruba Juju with interlocking guitar rhythms, steady percussion and relaxed but infectious dance movement.",
+      "drums_percussion": "Natural live kick and snare, talking drums, congas, shekere, agogo, hand percussion and gentle rhythmic fills.",
+      "bass": "Deep melodic electric bass with flowing Juju-style movement, expressive passing notes and a steady dance pulse.",
+      "instruments": {
+        "keys": "Warm organ chords, electric piano, restrained synth textures and subtle harmonic accompaniment.",
+        "guitar": "Multiple clean electric guitars playing interlocking rhythmic patterns, melodic lead phrases, bright picking sequences and expressive instrumental responses.",
+        "other": "Talking drums, shekere, congas, steel-guitar-like melodic textures and occasional brass."
+      },
+      "melody_harmony": "Original uplifting melodic hooks, elegant instrumental phrases and warm communal refrains.",
+      "vocal_delivery": "Warm elegant melodic phrasing and original communal refrains; selected voice remains independent.",
+      "arrangement": "Extended guitar introduction → melodic verse → celebratory chorus → interlocking guitar instrumental passage → second verse → talking-drum-and-guitar break → final chorus.",
+      "lyrics": {
+        "structure": "Love, family, celebration, cultural heritage, gratitude, community and peaceful enjoyment.",
+        "vocabulary": "Use original meaningful secular Fuji or Juju expressions in the selected supported language or combination. Yoruba cultural identity never forces Yoruba or another language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature phrases or recordings."
+      },
+      "production_mix": "Guitar-led classic Juju: clean interlocking electric guitars lead the musical identity with bright picking, melodic responses and steel-guitar-like textures. Support them with warm melodic electric bass, organ/electric piano and natural talking drums, shekere, congas and agogo. Avoid heavy electronic bass overpowering guitars or conversion into modern Afrobeats; preserve flowing live-band interplay.",
+      "variations": {
+        "introductions": [
+          "Begin with original extended interlocking electric-guitar picking patterns.",
+          "Begin with alternate melodic lead and rhythmic guitar responses."
+        ],
+        "progressions": [
+          "Use original warm Juju chords with flowing electric-bass passing notes.",
+          "Use alternate organ/electric-piano harmony and a different melodic bass run."
+        ],
+        "arrangements": [
+          "Vary guitar harmonies and instrumental solos through the interlocking guitar passage.",
+          "Change traditional percussion and talking-drum/guitar exchanges before the final chorus."
+        ],
+        "melody": [
+          "Create an original uplifting melodic hook and elegant instrumental phrase.",
+          "Create a contrasting warm communal refrain with expressive guitar responses."
+        ],
+        "lyrical": [
+          "Develop original love, family and cultural-heritage verses.",
+          "Develop community, gratitude and peaceful enjoyment through fresh celebratory refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "juju"
+        ],
+        [
+          "guitar-led"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "agogo"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "steel-guitar",
+          "steel guitar"
+        ]
+      ],
+      "research_references": [
+        "King Sunny Ade"
+      ]
+    },
+    {
+      "id": "S8-05",
+      "name": "Evergreen Juju Heritage",
+      "description": "Warm traditional Juju with expressive guitars, organ and reflective storytelling.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s8",
+      "tempo": {
+        "min": 92,
+        "max": 116
+      },
+      "mood": "Peaceful, reflective, grateful and uplifting.",
+      "energy": "Warm mature live-band Juju movement supports expressive guitar, gentle traditional percussion and reflective storytelling.",
+      "rhythm": "Moderate Yoruba Juju with smooth guitar movement, gentle traditional percussion and steady live-band rhythm.",
+      "drums_percussion": "Gentle live kick and snare, soft talking drums, shekere, congas, agogo and restrained traditional percussion.",
+      "bass": "Warm electric bass with expressive melodic movement, smooth passing notes and natural rhythmic support.",
+      "instruments": {
+        "keys": "Traditional organ, warm piano, electric piano and rich but restrained chord voicings.",
+        "guitar": "Clean rhythmic electric guitars, gentle lead-guitar melodies, interlocking picking patterns and expressive instrumental fills.",
+        "other": "Talking drum, shekere, congas, subtle brass and traditional percussion."
+      },
+      "melody_harmony": "Original reflective melodies, narrative phrasing and memorable communal refrains.",
+      "vocal_delivery": "Mature reflective storytelling and warm communal refrains; selected voice remains independent.",
+      "arrangement": "Gentle guitar-and-organ introduction → storytelling verse → warm refrain → instrumental guitar passage → second verse → reflective bridge → final refrain.",
+      "lyrics": {
+        "structure": "Wisdom, gratitude, family, relationships, community, perseverance, cultural heritage and life lessons.",
+        "vocabulary": "Use original meaningful secular Fuji or Juju expressions in the selected supported language or combination. Yoruba cultural identity never forces Yoruba or another language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature phrases or recordings."
+      },
+      "production_mix": "Guitar-led warm mature Yoruba Juju with authentic live-band character and expressive clean electric guitars. Keep interlocking picking gentle, melodic electric bass warm, organ/piano rich but restrained and talking drums soft with shekere, congas and agogo. Avoid aggressive club drums, excessive electronic effects and overcrowded synths; leave reflective storytelling clear.",
+      "variations": {
+        "introductions": [
+          "Begin with original gentle electric-guitar melodies and traditional organ.",
+          "Begin with alternate interlocking picking patterns and warm piano responses."
+        ],
+        "progressions": [
+          "Use original restrained Juju voicings with warm melodic electric bass.",
+          "Use alternate organ/electric-piano textures and smooth bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar voicings and traditional percussion through the instrumental guitar passage.",
+          "Change organ layers and reflective bridge development before the final refrain."
+        ],
+        "melody": [
+          "Create an original reflective melody with expressive narrative phrasing.",
+          "Create a contrasting warm communal refrain and gentle guitar answer."
+        ],
+        "lyrical": [
+          "Develop original wisdom, family and life-lesson storytelling.",
+          "Develop gratitude, relationships and cultural heritage through fresh uplifting verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "juju"
+        ],
+        [
+          "guitar-led"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "agogo"
+        ],
+        [
+          "reflective"
+        ]
+      ],
+      "research_references": [
+        "Ebenezer Obey"
       ]
     }
   ]
