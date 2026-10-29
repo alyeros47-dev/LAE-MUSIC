@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-v1",
   "status": "approved",
   "departments": [
     {
@@ -137,6 +137,12 @@
       "group_id": "S5",
       "department_id": "secular-afrobeats",
       "name": "Fuji-Influenced Street Afrobeats"
+    },
+    {
+      "id": "secular-s6",
+      "group_id": "S6",
+      "department_id": "secular-afrobeats",
+      "name": "Amapiano & Afro-Dance"
     }
   ],
   "styles": [
@@ -8367,6 +8373,479 @@
       ],
       "research_references": [
         "Qdot"
+      ]
+    },
+    {
+      "id": "S6-01",
+      "name": "Royal Piano Groove",
+      "description": "Soulful deep Amapiano with rich piano chords and rolling log-drum bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s6",
+      "tempo": {
+        "min": 110,
+        "max": 115
+      },
+      "mood": "Soulful, hypnotic, elegant and uplifting.",
+      "energy": "Relaxed deep-house pulse and sophisticated piano develop gradually into rolling log-drum reveals and a warm final dance section.",
+      "rhythm": "Deep rolling Amapiano groove with a relaxed house pulse and complex log-drum syncopation.",
+      "drums_percussion": "Deep four-on-the-floor kick, restrained claps, crisp shakers, syncopated rimshots, subtle congas and carefully layered percussion.",
+      "bass": "Warm tuned log-drum bass as a musical bass instrument: rolling melodic phrases, occasional pitch bends, syncopated low-frequency accents and deliberate spaces, clearly related to the kick.",
+      "instruments": {
+        "keys": "Rich jazz-influenced piano chords, expressive electric piano, deep-house chord progressions, soft pads and delicate melodic runs.",
+        "guitar": "Soft guitar accents.",
+        "other": "Subtle organ textures, atmospheric synths and gentle African percussion."
+      },
+      "melody_harmony": "Original soulful piano motifs, elegant chord movement and restrained melodic hooks with generous instrumental space.",
+      "vocal_delivery": "Soulful restrained melodic phrasing with generous instrumental space; selected voice remains independent.",
+      "arrangement": "Extended piano-and-shaker introduction → gradual kick entry → warm melodic section → first log-drum reveal → full instrumental groove → breakdown with piano variations → final dance section.",
+      "lyrics": {
+        "structure": "Love, peaceful enjoyment, celebration, friendship, hope and personal reflection; allow generous instrumental space.",
+        "vocabulary": "Use original meaningful secular Amapiano expressions in the selected supported language or combination. South African musical character never forces a language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks, recordings or sampled identities."
+      },
+      "production_mix": "Musically sophisticated authentic deep Amapiano with warm low frequencies. Keep tuned rolling log-drum bass pitched and kick-related, never generic sub-bass or an 808 substitute. Separate four-on-the-floor kick, shakers and expressive jazz/deep-house piano; preserve phrase spaces and occasional pitch bends. Avoid aggressive EDM drops, overcrowded brass, generic Afrobeats loops, muddy lows and excessive compression.",
+      "variations": {
+        "introductions": [
+          "Begin with original extended piano voicings and layered shakers before gradual kick entry.",
+          "Begin with alternate soulful electric-piano runs and carefully spaced shaker patterns."
+        ],
+        "progressions": [
+          "Use original jazz-influenced deep-house piano chords and rolling tuned log-drum phrases.",
+          "Use alternate elegant piano voicings with new pitched log-drum movement and deliberate spaces."
+        ],
+        "arrangements": [
+          "Vary the first log-drum reveal and piano breakdown before the final dance section.",
+          "Change harmonic development and log-drum phrases through the full instrumental groove."
+        ],
+        "melody": [
+          "Create original soulful piano motifs with restrained melodic hooks.",
+          "Create a contrasting elegant chord response and delicate melodic run."
+        ],
+        "lyrical": [
+          "Develop original love and peaceful-enjoyment phrases with generous instrumental space.",
+          "Develop friendship, hope and personal reflection through fresh restrained lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "amapiano"
+        ],
+        [
+          "tuned",
+          "pitched"
+        ],
+        [
+          "log-drum",
+          "log drum"
+        ],
+        [
+          "four-on-the-floor"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "jazz"
+        ],
+        [
+          "deep-house",
+          "deep house"
+        ],
+        [
+          "electric piano",
+          "electric-piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Kabza De Small"
+      ]
+    },
+    {
+      "id": "S6-02",
+      "name": "Midnight Amapiano Pressure",
+      "description": "Heavy club Amapiano with deep log drums and dark rhythmic textures.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s6",
+      "tempo": {
+        "min": 112,
+        "max": 118
+      },
+      "mood": "Confident, intense, hypnotic and celebratory.",
+      "energy": "Driving club-house momentum alternates sparse and dense pitched log-drum phrases with powerful clean pressure and energetic transitions.",
+      "rhythm": "Driving Amapiano club groove with strong log-drum pressure, rhythmic breaks and layered South African percussion.",
+      "drums_percussion": "Punchy four-on-the-floor kick, sharp claps, rolling shakers, syncopated hi-hats, rimshots and dynamic percussion fills.",
+      "bass": "Heavy resonant tuned log-drum bass as a musical bass instrument with rhythmic pitch movement, powerful low-frequency pulses and alternating sparse/dense phrases clearly related to kick.",
+      "instruments": {
+        "keys": "Dark piano chords, rhythmic organ stabs, deep synth pads, short melodic plucks and atmospheric transitions.",
+        "guitar": "Restrained rhythmic guitar.",
+        "other": "Electronic percussion, congas and short synth effects."
+      },
+      "melody_harmony": "Original minimal hooks, hypnotic piano motifs and short melodic responses that leave space for musical log-drum bass.",
+      "vocal_delivery": "Confident restrained rhythmic hooks with ample instrumental space; selected voice remains independent.",
+      "arrangement": "Dark atmospheric introduction → kick-and-shaker groove → log-drum build → full club section → percussion breakdown → second log-drum variation → energetic final dance section.",
+      "lyrics": {
+        "structure": "Nightlife, dancing, confidence, celebration, success and enjoyment.",
+        "vocabulary": "Use original meaningful secular Amapiano expressions in the selected supported language or combination. South African musical character never forces a language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks, recordings or sampled identities."
+      },
+      "production_mix": "Heavy club-ready Amapiano log drums with a clean powerful low-frequency mix. Tune log-drum pitches and retain sparse/dense melodic bass variation with kick relationship, never generic sub-bass/808 substitution. Keep dark piano, organ, synth pads, shakers and percussion separate. Avoid distorted bass masking kick, excessive vocals, generic EDM build-ups, muddy lows and excessive compression.",
+      "variations": {
+        "introductions": [
+          "Begin with original dark atmospheric piano textures before a kick-and-shaker groove.",
+          "Begin with alternate dark organ/pluck motifs and rolling shakers."
+        ],
+        "progressions": [
+          "Use original dark piano harmony with a new tuned log-drum pitch sequence.",
+          "Use alternate deep chord textures and contrasting sparse/dense pitched bass phrases."
+        ],
+        "arrangements": [
+          "Vary the log-drum build and percussion transitions into the full club section.",
+          "Change rhythmic breaks and second log-drum variation before the energetic final section."
+        ],
+        "melody": [
+          "Create original minimal hypnotic hooks with short piano responses.",
+          "Create a contrasting understated motif that leaves space for log-drum pressure."
+        ],
+        "lyrical": [
+          "Develop original nightlife and dancing phrases with restrained vocal density.",
+          "Develop confidence, success and enjoyment through fresh short celebratory lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "amapiano"
+        ],
+        [
+          "tuned",
+          "pitched"
+        ],
+        [
+          "log-drum",
+          "log drum"
+        ],
+        [
+          "four-on-the-floor"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "dark"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "sparse"
+        ],
+        [
+          "dense"
+        ]
+      ],
+      "research_references": [
+        "DJ Maphorisa"
+      ]
+    },
+    {
+      "id": "S6-03",
+      "name": "Township Dance Anthem",
+      "description": "Energetic township Amapiano with bright piano stabs and street-dance rhythms.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s6",
+      "tempo": {
+        "min": 112,
+        "max": 120
+      },
+      "mood": "Playful, energetic, confident and festive.",
+      "energy": "Pronounced township dance accents, rhythmic stops and bouncy log-drum exchanges drive energetic instrumental breaks and a final climax.",
+      "rhythm": "Energetic township Amapiano with pronounced dance accents, rhythmic stops and powerful log-drum movement.",
+      "drums_percussion": "Strong house kick, crisp claps, energetic shakers, syncopated rimshots, congas and exciting rhythmic breaks.",
+      "bass": "Bouncy tuned log-drum bass as a musical bass instrument with short repetitive pitched motifs, rolling bass fills and rhythmic percussion exchanges in a clear kick relationship.",
+      "instruments": {
+        "keys": "Bright piano stabs, catchy chord riffs, playful synth plucks and rhythmic organ accents.",
+        "guitar": "No fixed guitar part; prioritize piano, log drums and percussion.",
+        "other": "Whistles, handclaps, short brass accents, African percussion and instrumental call-and-response phrases."
+      },
+      "melody_harmony": "Original chant-friendly hooks, rhythmic melodic phrases and memorable group-response opportunities.",
+      "vocal_delivery": "Playful confident rhythmic chants and group responses with space for instrumental exchanges; selected voice remains independent.",
+      "arrangement": "Percussion-and-piano introduction → rhythmic verse → dance hook → log-drum instrumental break → second verse → township dance breakdown → final chorus and instrumental climax.",
+      "lyrics": {
+        "structure": "Dancing, friendship, street celebration, confidence, enjoyment and ambition.",
+        "vocabulary": "Use original meaningful secular Amapiano expressions in the selected supported language or combination. South African musical character never forces a language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks, recordings or sampled identities."
+      },
+      "production_mix": "Authentic township Amapiano dance energy with strong pitched log-drum/kick interplay, rhythmic stops and powerful movement. Keep piano stabs bright, shakers energetic, congas clear and whistles/brass concise. Do not turn this into Nigerian street-pop or replace tuned log drums with ordinary synth bass/808 kicks. Separate lows and percussion without muddy bass or excessive compression.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright piano stabs and energetic township percussion.",
+          "Begin with alternate shakers, rimshots and catchy piano riffs."
+        ],
+        "progressions": [
+          "Use original playful piano chords with short tuned log-drum motifs.",
+          "Use alternate bright organ accents and rolling pitched log-drum fills."
+        ],
+        "arrangements": [
+          "Vary dance breaks and percussion exchanges around the log-drum instrumental section.",
+          "Change chant structures and rhythmic stops before the final chorus and instrumental climax."
+        ],
+        "melody": [
+          "Create original short chant-friendly hooks and energetic group answers.",
+          "Create a contrasting playful melodic phrase and instrumental response."
+        ],
+        "lyrical": [
+          "Develop original friendship and street-celebration verses.",
+          "Develop dancing, confidence and ambition through fresh festive rhythmic hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "amapiano"
+        ],
+        [
+          "township"
+        ],
+        [
+          "tuned",
+          "pitched"
+        ],
+        [
+          "log-drum",
+          "log drum"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "whistle"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Focalistic"
+      ]
+    },
+    {
+      "id": "S6-04",
+      "name": "Sunrise Piano Celebration",
+      "description": "Melodic, uplifting Amapiano with warm harmonies and joyful grooves.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s6",
+      "tempo": {
+        "min": 110,
+        "max": 118
+      },
+      "mood": "Joyful, hopeful, warm and celebratory.",
+      "energy": "Relaxed infectious Amapiano dance pulse balances warm melodic development with playful pitched log-drum movement.",
+      "rhythm": "Melodic Amapiano with a relaxed but infectious dance pulse, flowing shakers and rhythmic log-drum movement.",
+      "drums_percussion": "Warm house kick, crisp claps, flowing shakers, gentle congas, syncopated rimshots and tasteful percussion fills.",
+      "bass": "Rounded tuned log-drum bass as a musical bass instrument with melodic pitched movement, warm low-frequency resonance and playful rhythmic variations related to the kick.",
+      "instruments": {
+        "keys": "Bright piano chords, soulful electric piano, warm organ textures, melodic synth plucks and uplifting pads.",
+        "guitar": "Clean guitar accents.",
+        "other": "Soft brass responses, hand percussion and layered instrumental harmonies."
+      },
+      "melody_harmony": "Original uplifting hooks, expressive melodic phrases and warm harmonic development.",
+      "vocal_delivery": "Joyful expressive melodic phrasing and warm uplifting hooks; selected voice and language remain independent.",
+      "arrangement": "Warm piano introduction → melodic verse → uplifting chorus → log-drum instrumental groove → second verse → melodic breakdown → expanded final chorus.",
+      "lyrics": {
+        "structure": "Love, celebration, gratitude, hope, friendship, success and enjoyment.",
+        "vocabulary": "Use original meaningful secular Amapiano expressions in the selected supported language or combination. South African musical character never forces a language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks, recordings or sampled identities."
+      },
+      "production_mix": "Balance joyful melody with authentic Amapiano dance grooves. Keep rounded tuned log-drum pitches musical and kick-related, never a generic synth-bass/808 substitute. Separate warm house kick, flowing shakers, bright piano, soulful electric piano, organ and pads; keep brass soft and guitar clean. Preserve low-frequency clarity without muddy bass, excessive compression or distortion.",
+      "variations": {
+        "introductions": [
+          "Begin with original warm piano voicings and flowing shakers.",
+          "Begin with alternate soulful electric-piano harmony and gentle percussion."
+        ],
+        "progressions": [
+          "Use original uplifting piano chords with rounded pitched log-drum phrases.",
+          "Use alternate warm organ voicings and playful tuned log-drum variations."
+        ],
+        "arrangements": [
+          "Vary melodic hooks and instrumental responses through the log-drum groove.",
+          "Change piano development and chorus arrangement before the expanded final chorus."
+        ],
+        "melody": [
+          "Create original uplifting melodic hooks and expressive warm phrases.",
+          "Create a contrasting joyful chorus contour with fresh harmonic movement."
+        ],
+        "lyrical": [
+          "Develop original love and friendship lyrics with hopeful celebration.",
+          "Develop gratitude, success and enjoyment through fresh warm verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "amapiano"
+        ],
+        [
+          "tuned",
+          "pitched"
+        ],
+        [
+          "log-drum",
+          "log drum"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric piano",
+          "electric-piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Young Stunna"
+      ]
+    },
+    {
+      "id": "S6-05",
+      "name": "Log Drum Dance Machine",
+      "description": "Powerful percussion-driven Amapiano with intricate log-drum sequences.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s6",
+      "tempo": {
+        "min": 113,
+        "max": 120
+      },
+      "mood": "Explosive, playful, hypnotic and energetic.",
+      "energy": "Leading log-drum bass creates rhythmic tension, stop-start movement and sudden silences before a final extended dance climax.",
+      "rhythm": "High-energy Amapiano with intricate log-drum interplay, rhythmic tension, stop-start movement and explosive dance sections.",
+      "drums_percussion": "Heavy four-on-the-floor kick, sharp claps, fast shakers, syncopated rimshots, rolling percussion and carefully timed rhythmic silences.",
+      "bass": "Dominant tuned log-drum bass is the leading musical instrument: rapid syncopated pitched patterns, bass rolls, short glides, rhythmic fills and powerful low-frequency accents with clear kick relationship.",
+      "instruments": {
+        "keys": "Minimal piano stabs, short synth plucks, rhythmic chord accents and atmospheric electronic textures.",
+        "guitar": "No fixed guitar part; leave space for leading log-drum rhythms.",
+        "other": "Percussive vocal textures without identifiable samples, whistles, congas, electronic effects and short instrumental responses."
+      },
+      "melody_harmony": "Original minimal melodic hooks leave sufficient space for intricate log-drum rhythms and evolving note sequences.",
+      "vocal_delivery": "Minimal playful rhythmic hooks with generous log-drum instrumental space and no identifiable sampled voices; selected voice remains independent.",
+      "arrangement": "Sparse percussion introduction → kick-and-shaker build → first log-drum pattern → full dance section → sudden rhythmic breakdown → new log-drum variation → final extended dance climax.",
+      "lyrics": {
+        "structure": "Dancing, celebration, confidence, nightlife, enjoyment and festive gatherings.",
+        "vocabulary": "Use original meaningful secular Amapiano expressions in the selected supported language or combination. South African musical character never forces a language or lead gender; do not reproduce identifiable voices, lyrics, melodies, signature hooks, recordings or sampled identities."
+      },
+      "production_mix": "The tuned log drum is the leading musical bass instrument. Make pitched note sequences, bass rolls, short glides and rhythmic silences unmistakable while keeping house kick, shakers and piano separate and lows clean. Never substitute generic sub-bass or ordinary 808 kicks. Vary patterns rather than constant identical loops; avoid muddy lows, overly busy melody, excessive compression and distorted bass.",
+      "variations": {
+        "introductions": [
+          "Begin with original sparse percussion and a carefully timed kick-and-shaker build.",
+          "Begin with alternate restrained percussion before a new leading log-drum reveal."
+        ],
+        "progressions": [
+          "Use original minimal piano harmony with a fresh tuned log-drum note sequence.",
+          "Use alternate rhythmic chord accents and rapid pitched log-drum rolls with short glides."
+        ],
+        "arrangements": [
+          "Vary rhythmic breaks and percussion combinations through a sudden breakdown.",
+          "Introduce a new log-drum pattern and instrumental transition before the extended dance climax."
+        ],
+        "melody": [
+          "Create an original minimal hook that leaves space for leading bass rhythms.",
+          "Create a contrasting short melodic response around log-drum fills and silences."
+        ],
+        "lyrical": [
+          "Develop original dancing and celebration phrases with generous instrumental space.",
+          "Develop confidence, nightlife and festive enjoyment through fresh concise hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "amapiano"
+        ],
+        [
+          "tuned",
+          "pitched"
+        ],
+        [
+          "log-drum",
+          "log drum"
+        ],
+        [
+          "leading"
+        ],
+        [
+          "four-on-the-floor"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "glid"
+        ],
+        [
+          "silen"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "whistle"
+        ]
+      ],
+      "research_references": [
+        "Tyler ICU"
       ]
     }
   ]
