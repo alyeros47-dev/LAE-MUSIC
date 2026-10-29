@@ -93,7 +93,7 @@ credential values or production user records.
 - `node --test tests/studio-workflow.test.cjs tests/sonic-idempotency.test.cjs tests/studio-profiles.test.cjs tests/lyrics-models.test.cjs tests/lyrics-library.test.cjs`: 17 passed.
 - `node scripts/test-sonic-handler.cjs`: 31 mocked HTTP/quota/reservation/provider/refund checks passed.
 - `node --test tests/dna-ci-scope.test.cjs`: eight routing checks passed.
-- `LAE_DB_TESTS=true DATABASE_URL=<disposable loopback lae_music_ci URL> node --test tests/music-dna-audit-postgres.cjs`: CI-only PostgreSQL evidence. Local PostgreSQL is not installed; no remote/live URL is used. The existing guard rejects remote hosts, other database names and URL options/fragments.
+- `LAE_DB_TESTS=true DATABASE_URL=<disposable loopback lae_music_ci URL> node --test tests/music-dna-audit-postgres.cjs`: **Passed in dedicated GitHub CI** using PostgreSQL 16. Local PostgreSQL is not installed; no remote/live URL is used. The existing guard rejects remote hosts, other database names and URL options/fragments.
 
 The representative departments use G2-04, S6-01, R7-05 and W8-05, with independent
 female/male/duet/custom configurations and supported language combinations. The
@@ -136,3 +136,22 @@ No production merge, Render deployment, paid generation, live storage mutation,
 production migration or commercial-policy change is authorized or performed here.
 The requested deployment-approval announcement is withheld until remaining required
 verification is supported by evidence.
+
+## Final CI evidence
+
+The complete dedicated audit passed on published code commit
+`70a8dd461d6e4598d5b3f2dc5a3cd083f186b1bc`, whose tree equals local audit commit
+`c09a18f`:
+
+- [Complete Music DNA audit run](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40876338034): library/shared tests, all-style handler audit, relevant studio/Sonic regressions, disposable PostgreSQL and Chromium desktop/mobile steps all succeeded.
+- [Existing scoped/shared CI](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40876337930): passed. Unrelated platform/financial/browser release jobs were skipped; no production-release job ran.
+- [Downloadable audit artifact](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40876338034/artifacts/12898950307): `music-dna-integration-audit`, including machine-readable reports, logs and screenshots.
+
+The CI job/step conclusions and artifact presence were verified through GitHub API.
+Local equivalent JSON/browser reports were reviewed. This environment could not fetch
+the hosted artifact archive (download returned Forbidden); its contents were not
+independently downloaded for a second review here. Database execution was verified
+by the successful CI step, not claimed as a local database run.
+
+This documentation update changes no tested application, profile or audit code.
+The release decision remains **VERIFICATION INCOMPLETE** for the reasons above.
