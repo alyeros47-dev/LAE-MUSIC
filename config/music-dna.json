@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w6-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w7-v1",
   "status": "approved",
   "departments": [
     {
@@ -269,6 +269,12 @@
       "group_id": "W6",
       "department_id": "western-international",
       "name": "Pop Ballads & Emotional Storytelling"
+    },
+    {
+      "id": "western-w7",
+      "group_id": "W7",
+      "department_id": "western-international",
+      "name": "Classic Funk & Dance Soul"
     }
   ],
   "styles": [
@@ -18546,6 +18552,472 @@
       ],
       "research_references": [
         "James Arthur"
+      ]
+    },
+    {
+      "id": "W7-01",
+      "name": "Moonlight Funk Machine",
+      "description": "Precision-driven dance funk combining powerful bass, tight drums, sharp rhythm guitar, bright synths and dramatic pop-soul arrangements.",
+      "department_id": "western-international",
+      "category_id": "western-w7",
+      "tempo": {
+        "min": 108,
+        "max": 126
+      },
+      "mood": "Energetic, stylish, confident and celebratory.",
+      "energy": "Precise energetic dance-funk movement with controlled bass note lengths and dramatic rhythmic stops.",
+      "rhythm": "Tight dance funk with strong syncopation, precise bass-drum interaction and energetic rhythmic breaks.",
+      "drums_percussion": "Deep, punchy kick with tight rhythmic placement. Crisp snare and controlled handclaps. Precise hi-hat subdivisions. Short, syncopated percussion fills. Occasional tom accents and dramatic stops. Strong groove consistency with subtle human dynamics.",
+      "bass": "Deep, highly rhythmic electric or synth bass with syncopated sixteenth-note motifs, octave jumps, short slides and tightly controlled note lengths. Bass and kick must form a powerful, danceable rhythmic foundation.",
+      "instruments": {
+        "keys": "Bright analog-style synthesizers, rhythmic electric piano, short synth stabs, warm pads and memorable original keyboard motifs.",
+        "guitar": "Clean, sharply muted funk guitar with sixteenth-note rhythmic patterns, clipped chord stabs and short melodic responses.",
+        "other": "Brass accents, handclaps, shakers, subtle disco strings and tasteful electronic percussion."
+      },
+      "melody_harmony": "Original catchy melodic hooks, rhythmic verses, memorable choruses and dynamic instrumental responses.",
+      "vocal_delivery": "Original catchy hooks and rhythmic verses with dynamic melodic development; respect selected vocal configuration.",
+      "arrangement": "Immediate bass-and-drum introduction → rhythmic verse → rising pre-chorus → energetic chorus → instrumental funk breakdown → second verse → dramatic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Celebration, confidence, romance, friendship, personal ambition, unity and enjoyment.",
+        "vocabulary": "Use original meaningful expressions in selected supported languages without forced regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, range or performer identity from a style label or private reference. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Precision-driven dance funk combining powerful bass, tight drums, sharp rhythm guitar, bright synths and dramatic pop-soul arrangements. **Tempo:** 108–126 BPM. **Built-in mood:** Energetic, stylish, confident and celebratory. Powerful, precise dance funk with heavy clean bass, sharp drums and clear instrumental separation. Keep heavy clean funky bass prominent without muddying kick or vocals; preserve profile-specific rhythmic guitar, keyboards, brass and clear separation rather than generic EDM, disco loops or repeated static funk backing. Avoid: Generic EDM drops, uncontrolled electronic distortion, repetitive drum loops and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open immediately with an original precise kick/bass funk motif.",
+          "Open on alternate syncopated bass sixteenths and dramatic drum stops."
+        ],
+        "progressions": [
+          "Use original bright analog-synth/electric-piano harmony over controlled bass notes.",
+          "Use alternate short synth stabs and octave-jumping electric or synth bass."
+        ],
+        "arrangements": [
+          "Vary clipped guitar stabs, brass accents and percussion through the funk breakdown.",
+          "Develop a dramatic bridge and final chorus with new keyboard replies."
+        ],
+        "melody": [
+          "Create original catchy hooks and tight rhythmic verses.",
+          "Create a contrasting confident chorus with dynamic instrumental responses."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original unity or ambition imagery.",
+          "Develop fresh friendship or celebration words only where appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "funk"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "octave"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "muted"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "stop"
+        ]
+      ],
+      "research_references": [
+        "Michael Jackson"
+      ]
+    },
+    {
+      "id": "W7-02",
+      "name": "Purple Electric Funk",
+      "description": "Bold Minneapolis-inspired electric funk combining deep synth bass, sharp drum-machine grooves, expressive electric guitar, bright synthesizers and adventurous pop-funk arrangements.",
+      "department_id": "western-international",
+      "category_id": "western-w7",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Bold, playful, energetic and expressive.",
+      "energy": "Bold playful Minneapolis electro-funk drive with drum-machine precision and expressive guitar energy.",
+      "rhythm": "Minneapolis-style electro-funk with sharp syncopation, drum-machine precision and expressive guitar-driven energy.",
+      "drums_percussion": "Tight drum-machine-inspired kick. Sharp snare and claps. Crisp hi-hats. Syncopated percussion accents. Short electronic drum fills. Dramatic rhythmic stops.",
+      "bass": "Deep electric or synth bass with repetitive funk motifs, octave movement, syncopated phrasing and occasional expressive slides.",
+      "instruments": {
+        "keys": "Bright analog synthesizers, rhythmic synth stabs, electric piano, funky clavinet accents and atmospheric keyboard layers.",
+        "guitar": "Expressive electric guitar is a central feature. Use sharp funk strumming, muted rhythmic patterns, short blues-rock phrases and occasional controlled overdriven guitar passages.",
+        "other": "Electronic percussion, brass accents, handclaps and subtle atmospheric effects."
+      },
+      "melody_harmony": "Original playful melodic hooks, rhythmic verses, memorable choruses and bold instrumental transitions.",
+      "vocal_delivery": "Original playful melodic hooks and bold expressive refrains; selected voice remains independent of guitar intensity.",
+      "arrangement": "Sharp synth-and-guitar introduction → rhythmic verse → catchy chorus → extended electric-funk instrumental passage → second verse → guitar-led breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Confidence, romance, celebration, individuality, freedom, creativity and personal expression.",
+        "vocabulary": "Use original meaningful expressions in selected supported languages without forced regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, range or performer identity from a style label or private reference. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Bold Minneapolis-inspired electric funk combining deep synth bass, sharp drum-machine grooves, expressive electric guitar, bright synthesizers and adventurous pop-funk arrangements. **Tempo:** 100–124 BPM. **Built-in mood:** Bold, playful, energetic and expressive. Bold electric funk with heavy bass, sharp drums, expressive guitar and vibrant synthesizers. Keep heavy clean funky bass prominent without muddying kick or vocals; preserve profile-specific rhythmic guitar, keyboards, brass and clear separation rather than generic EDM, disco loops or repeated static funk backing. Avoid: Uncontrolled distortion, generic EDM, thin bass and imitation of identifiable guitar riffs.",
+      "variations": {
+        "introductions": [
+          "Open with original sharp synth hooks and expressive funk guitar.",
+          "Open on alternate drum-machine accents and bright synth/guitar motifs."
+        ],
+        "progressions": [
+          "Use original Minneapolis-inspired synth/clavinet voicings over repeated funk bass.",
+          "Use alternate electric-piano chords with octave-moving electric or synth bass."
+        ],
+        "arrangements": [
+          "Vary blues-rock guitar riffs and controlled overdriven phrases through the extended passage.",
+          "Develop a guitar-led breakdown and final chorus with fresh rhythmic stops."
+        ],
+        "melody": [
+          "Create original playful hooks and boldly rhythmic verses.",
+          "Create a contrasting expressive refrain with adventurous instrumental transitions."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original creativity or individuality images.",
+          "Develop fresh freedom or confidence verses only when relevant to the subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "minneapolis"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "drum-machine",
+          "drum machine"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "clavinet"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "blues-rock"
+        ],
+        [
+          "overdriv"
+        ]
+      ],
+      "research_references": [
+        "Prince"
+      ]
+    },
+    {
+      "id": "W7-03",
+      "name": "Golden Retro Funk Party",
+      "description": "Modern retro-funk and dance soul combining live drums, thick bass guitar, bright brass, funky rhythm guitar and polished contemporary production.",
+      "department_id": "western-international",
+      "category_id": "western-w7",
+      "tempo": {
+        "min": 104,
+        "max": 126
+      },
+      "mood": "Joyful, playful, confident and celebratory.",
+      "energy": "Joyful polished live-band retro-funk motion with active bass, bright brass and energetic breaks.",
+      "rhythm": "Live-band retro funk with strong bass-drum interaction, bright brass and energetic dance movement.",
+      "drums_percussion": "Punchy live kick. Crisp snare. Tight hi-hats. Rhythmic handclaps. Tasteful tom fills. Energetic percussion breaks.",
+      "bass": "Thick, warm electric bass with active funk grooves, syncopated rhythmic movement, octave jumps and expressive passing tones.",
+      "instruments": {
+        "keys": "Bright piano, Rhodes-style electric piano, Hammond organ, clavinet and short analog synth accents.",
+        "guitar": "Clean funky rhythm guitar with muted sixteenth-note strumming, sharp chord stabs and playful melodic riffs.",
+        "other": "Trumpet, trombone, saxophone, handclaps, tambourine, shakers and occasional disco strings."
+      },
+      "melody_harmony": "Original catchy hooks, playful verses, memorable choruses and lively call-and-response opportunities.",
+      "vocal_delivery": "Original catchy hooks and lively responses only when compatible with selected single-singer, duet and harmony settings.",
+      "arrangement": "Brass-and-bass introduction → rhythmic verse → energetic chorus → instrumental brass-and-guitar groove → second verse → funk breakdown → final celebration chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Celebration, romance, confidence, friendship, dancing, happiness and enjoyment.",
+        "vocabulary": "Use original meaningful expressions in selected supported languages without forced regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, range or performer identity from a style label or private reference. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Modern retro-funk and dance soul combining live drums, thick bass guitar, bright brass, funky rhythm guitar and polished contemporary production. **Tempo:** 104–126 BPM. **Built-in mood:** Joyful, playful, confident and celebratory. Polished retro funk with powerful live bass, punchy drums, bright brass and crystal-clear instrumentation. Keep heavy clean funky bass prominent without muddying kick or vocals; preserve profile-specific rhythmic guitar, keyboards, brass and clear separation rather than generic EDM, disco loops or repeated static funk backing. Avoid: Generic electronic dance-pop, excessive synth layering, weak brass arrangements and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original bright brass riffs and active live bass.",
+          "Open on alternate trumpet/trombone/saxophone responses and syncopated bass runs."
+        ],
+        "progressions": [
+          "Use original bright piano/Rhodes/organ harmony with clavinet accents.",
+          "Use alternate short analog-synth colors over octave-jumping electric bass."
+        ],
+        "arrangements": [
+          "Vary muted sixteenth-note guitar and brass phrases through the live groove.",
+          "Develop a fresh funk breakdown and final chorus with energetic live tom fills."
+        ],
+        "melody": [
+          "Create original catchy hooks and playful melodic verses.",
+          "Create a contrasting joyful refrain with responses compatible with selected voice settings."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original friendship or happiness images.",
+          "Develop fresh dance or celebration words only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "funk"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "clavinet"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "trumpet"
+        ],
+        [
+          "trombone"
+        ],
+        [
+          "saxophone",
+          "sax"
+        ]
+      ],
+      "research_references": [
+        "Bruno Mars"
+      ]
+    },
+    {
+      "id": "W7-04",
+      "name": "Celestial Disco Soul Orchestra",
+      "description": "Rich orchestral disco-soul combining melodic bass guitar, energetic drums, layered brass, disco strings, rhythmic guitar and sophisticated soul harmonies.",
+      "department_id": "western-international",
+      "category_id": "western-w7",
+      "tempo": {
+        "min": 112,
+        "max": 130
+      },
+      "mood": "Joyful, uplifting, celebratory and majestic.",
+      "energy": "Majestic uplifting orchestral disco-soul movement with flowing melodic bass, layered horns and strings.",
+      "rhythm": "Orchestral disco-soul with strong funk bass, bright brass, energetic live drums and rich harmonic movement.",
+      "drums_percussion": "Strong live kick. Crisp snare. Steady hi-hats. Disco-inspired rhythmic movement. Energetic tom fills. Tasteful percussion accents.",
+      "bass": "Deep, highly melodic electric bass with flowing funk phrases, octave jumps, syncopated movement and expressive passing tones.",
+      "instruments": {
+        "keys": "Bright electric piano, grand piano, Hammond organ, analog synth textures and rich harmonic arrangements.",
+        "guitar": "Clean funk guitar with sharp rhythmic strumming, muted sixteenth-note patterns and short melodic responses.",
+        "other": "Full brass section, disco strings, congas, shakers, tambourine and layered instrumental harmonies."
+      },
+      "melody_harmony": "Original uplifting melodies, memorable choruses, rich harmonic development and energetic instrumental hooks.",
+      "vocal_delivery": "Original uplifting melodies and rich memorable choruses; follow selected voice capability and harmony settings.",
+      "arrangement": "Brass-and-strings introduction → rhythmic verse → uplifting chorus → extended instrumental disco-soul passage → second verse → orchestral bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, unity, celebration, friendship, hope, happiness, community and positive life experiences.",
+        "vocabulary": "Use original meaningful expressions in selected supported languages without forced regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, range or performer identity from a style label or private reference. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Rich orchestral disco-soul combining melodic bass guitar, energetic drums, layered brass, disco strings, rhythmic guitar and sophisticated soul harmonies. **Tempo:** 112–130 BPM. **Built-in mood:** Joyful, uplifting, celebratory and majestic. Rich, majestic disco-soul with deep melodic bass, powerful brass and beautiful orchestral arrangements. Keep heavy clean funky bass prominent without muddying kick or vocals; preserve profile-specific rhythmic guitar, keyboards, brass and clear separation rather than generic EDM, disco loops or repeated static funk backing. Avoid: Generic EDM, thin bass, excessive electronic effects and recognizable disco-soul song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original full brass and disco strings.",
+          "Open on alternate layered horn voicings and expressive string phrases."
+        ],
+        "progressions": [
+          "Use original rich electric/grand-piano harmony with warm Hammond organ.",
+          "Use alternate analog-synth colors and sophisticated chords over flowing melodic bass."
+        ],
+        "arrangements": [
+          "Vary disco-string patterns and sixteenth-note funk guitar through the extended passage.",
+          "Develop an orchestral bridge and final chorus with alternate brass voicings and bass runs."
+        ],
+        "melody": [
+          "Create original uplifting melodies and harmonically rich refrains.",
+          "Create a contrasting majestic chorus with energetic instrumental hooks."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original hope or community imagery.",
+          "Develop fresh unity or positive life-experience verses only where appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "disco-soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "string"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Earth, Wind & Fire"
+      ]
+    },
+    {
+      "id": "W7-05",
+      "name": "Celebration Funk Orchestra",
+      "description": "High-energy classic funk and party soul combining thick bass guitar, powerful live drums, bright brass riffs, rhythmic guitar and joyful dance arrangements.",
+      "department_id": "western-international",
+      "category_id": "western-w7",
+      "tempo": {
+        "min": 106,
+        "max": 128
+      },
+      "mood": "Celebratory, energetic, joyful and uplifting.",
+      "energy": "High-energy classic party-funk movement with punchy repeating bass motifs, tight live drums and joyful brass.",
+      "rhythm": "Classic party funk with strong bass grooves, tight live drums, bright brass and infectious dance rhythms.",
+      "drums_percussion": "Strong live kick. Crisp snare. Tight hi-hats. Energetic handclaps. Syncopated percussion fills. Dynamic drum breaks.",
+      "bass": "Thick, punchy electric bass with repetitive dance-friendly funk motifs, octave movement, rhythmic slides and strong kick-bass interaction.",
+      "instruments": {
+        "keys": "Bright piano, Hammond organ, electric piano, clavinet accents and short synthesizer hooks.",
+        "guitar": "Sharp muted funk guitar, rhythmic chord stabs, sixteenth-note strumming and short melodic riffs.",
+        "other": "Trumpet, trombone, saxophone, congas, tambourine, handclaps and energetic brass arrangements."
+      },
+      "melody_harmony": "Original joyful melodic hooks, simple memorable choruses, rhythmic verses and lively call-and-response passages.",
+      "vocal_delivery": "Original joyful hooks and simple memorable choruses; call-and-response passages only when compatible with selected vocal settings.",
+      "arrangement": "Immediate brass-and-bass introduction → energetic verse → celebration chorus → instrumental funk passage → second verse → percussion breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Celebration, friendship, community, love, happiness, dancing, achievement and togetherness.",
+        "vocabulary": "Use original meaningful expressions in selected supported languages without forced regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, range or performer identity from a style label or private reference. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "High-energy classic funk and party soul combining thick bass guitar, powerful live drums, bright brass riffs, rhythmic guitar and joyful dance arrangements. **Tempo:** 106–128 BPM. **Built-in mood:** Celebratory, energetic, joyful and uplifting. Powerful live-band party funk with heavy clean bass, bright brass, punchy drums and energetic arrangements. Keep heavy clean funky bass prominent without muddying kick or vocals; preserve profile-specific rhythmic guitar, keyboards, brass and clear separation rather than generic EDM, disco loops or repeated static funk backing. Avoid: Generic disco loops, excessive electronic effects, weak bass and imitation of recognizable celebration anthems.",
+      "variations": {
+        "introductions": [
+          "Open immediately with original party-funk brass and thick bass motifs.",
+          "Open on alternate dance-friendly bass patterns and bright horn riffs."
+        ],
+        "progressions": [
+          "Use original bright piano/organ harmony with clavinet accents.",
+          "Use alternate electric-piano/synth hooks over punchy octave-moving electric bass."
+        ],
+        "arrangements": [
+          "Vary sharp guitar stabs and horn riffs through the instrumental passage.",
+          "Develop dynamic drum breaks and a percussion breakdown into the final chorus."
+        ],
+        "melody": [
+          "Create original joyful hooks and simple memorable refrains.",
+          "Create a contrasting energetic chorus with responses compatible with selected voice settings."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original togetherness or achievement images.",
+          "Develop fresh community or friendship expressions without copying celebration anthems."
+        ]
+      },
+      "production_terms": [
+        [
+          "funk"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "clavinet"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "trumpet"
+        ],
+        [
+          "trombone"
+        ],
+        [
+          "saxophone",
+          "sax"
+        ]
+      ],
+      "research_references": [
+        "Kool & The Gang"
       ]
     }
   ]
