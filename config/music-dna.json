@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r2-v1",
   "status": "approved",
   "departments": [
     {
@@ -197,6 +197,12 @@
       "group_id": "R1",
       "department_id": "reggae-caribbean",
       "name": "Classic Roots Reggae"
+    },
+    {
+      "id": "reggae-r2",
+      "group_id": "R2",
+      "department_id": "reggae-caribbean",
+      "name": "African Roots Reggae"
     }
   ],
   "styles": [
@@ -13036,6 +13042,463 @@
       ],
       "research_references": [
         "Bunny Wailer"
+      ]
+    },
+    {
+      "id": "R2-01",
+      "name": "African Freedom Reggae",
+      "description": "Emotional South African roots reggae with deep rolling bass and powerful melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r2",
+      "tempo": {
+        "min": 72,
+        "max": 94
+      },
+      "mood": "Hopeful, determined, emotional and uplifting.",
+      "energy": "Strong melodic live-band lift with reflective verses, powerful choruses and rolling South African bass.",
+      "rhythm": "Steady South African roots reggae with a strong melodic bass foundation and smooth live-band movement.",
+      "drums_percussion": "Strong one-drop reggae groove, deep kick, crisp snare or rimshot on beat three, relaxed hi-hats, natural tom fills and restrained African percussion accents.",
+      "bass": "Deep, rounded electric bass with melodic rolling phrases, sustained notes, expressive passing tones and clear rhythmic interaction with the kick.",
+      "instruments": {
+        "keys": "Warm Hammond-style organ bubbles, bright acoustic piano chords, smooth electric piano and gentle harmonic pads.",
+        "guitar": "Clean offbeat reggae skank, expressive melodic electric-guitar responses and occasional South African pop-influenced guitar phrases.",
+        "other": "Gentle brass, shakers, congas, warm backing harmonies where permitted and subtle African percussion."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, thoughtful storytelling verses and memorable uplifting choruses.",
+      "vocal_delivery": "Emotionally expressive storytelling and memorable uplifting refrains; follow the selected voice and permit backing layers only when its settings allow.",
+      "arrangement": "Rolling bass-and-drum introduction → reflective verse → powerful chorus → guitar-and-organ instrumental passage → second verse → melodic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Freedom, unity, family, social justice, perseverance, love, hope and human dignity.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force a regional language, political, religious or Rastafarian content because an African roots style was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Melodic South African roots reggae with deep rolling bass, strong live drums, warm keyboards, expressive guitar and emotionally powerful song arrangements. Rich, full-bodied African reggae with powerful bass and clear emotional storytelling. Keep deep clean electric bass prominent without overpowering the other instruments; preserve one-drop or appropriate steppers foundations, live-band warmth and clear separation. Integrate regional character naturally, not as random instrumental decoration. Avoid: Generic pop-reggae, excessive synthesizers, weak bass and imitation of recognizable songs.",
+      "variations": {
+        "introductions": [
+          "Open with an original rolling melodic bass phrase and strong South African one-drop drums.",
+          "Open with alternate sustained bass notes and expressive guitar replies before the reflective verse."
+        ],
+        "progressions": [
+          "Use original warm Hammond/piano voicings over melodic rolling electric bass.",
+          "Use alternate smooth electric-piano chords with expressive bass passing tones."
+        ],
+        "arrangements": [
+          "Vary organ patterns and South African pop-influenced guitar replies in the instrumental passage.",
+          "Develop the melodic bridge and powerful chorus with alternate bass runs."
+        ],
+        "melody": [
+          "Create original emotionally expressive storytelling verses and uplifting chorus contours.",
+          "Create a contrasting hopeful melody with expressive guitar responses."
+        ],
+        "lyrical": [
+          "Develop the customer topic through original family or resilience imagery.",
+          "Develop fresh human-dignity and love images only where they suit the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "south african"
+        ],
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ]
+      ],
+      "research_references": [
+        "Lucky Dube"
+      ]
+    },
+    {
+      "id": "R2-02",
+      "name": "West African Reggae Fire",
+      "description": "Energetic West African reggae with bright guitar, strong bass and lively percussion.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r2",
+      "tempo": {
+        "min": 76,
+        "max": 100
+      },
+      "mood": "Bold, hopeful, energetic and unifying.",
+      "energy": "Energetic unifying live-band motion with bright Ivorian-influenced guitar and lively West African percussion.",
+      "rhythm": "Energetic roots reggae with West African percussion and melodic movement.",
+      "drums_percussion": "Firm one-drop or moderate steppers reggae drums, punchy kick, crisp snare, steady hi-hats, congas, shakers and rhythmic West African percussion accents.",
+      "bass": "Thick, rolling electric bass with syncopated movement, strong low-register notes and expressive melodic phrases.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, rhythmic piano stabs, bright electric piano and restrained atmospheric keyboard textures.",
+        "guitar": "Sharp reggae skank, bright West African melodic guitar, short lead-guitar phrases and rhythmic instrumental responses.",
+        "other": "Brass section, djembe accents, congas, shakers and subtle West African melodic percussion."
+      },
+      "melody_harmony": "Original memorable melodic hooks, declarative choruses and rhythmic call-and-response opportunities.",
+      "vocal_delivery": "Bold original melodic hooks, declarative choruses and optional rhythmic responses compatible with the selected voice.",
+      "arrangement": "Percussion-and-bass introduction → melodic verse → strong chorus → brass-and-guitar instrumental groove → second verse → drum-and-bass break → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Unity, peace, social reflection, cultural pride, resilience, friendship and community.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force a regional language, political, religious or Rastafarian content because an African roots style was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Powerful West African roots reggae combining Jamaican reggae foundations, Ivorian melodic influences, strong percussion, melodic bass and bright live-band arrangements. Strong African reggae identity with rich bass, bright guitar and lively percussion. Keep deep clean electric bass prominent without overpowering the other instruments; preserve one-drop or appropriate steppers foundations, live-band warmth and clear separation. Integrate regional character naturally, not as random instrumental decoration. Avoid: Generic dancehall loops, excessive electronic production and unrelated traditional instruments.",
+      "variations": {
+        "introductions": [
+          "Open with original West African percussion and syncopated rolling bass.",
+          "Open with alternate conga/shaker accents and strong low-register bass notes."
+        ],
+        "progressions": [
+          "Use original bright organ/piano harmony with expressive electric-bass phrases.",
+          "Use alternate rhythmic piano stabs and warm electric-piano voicings."
+        ],
+        "arrangements": [
+          "Vary brass phrases and bright Ivorian-influenced guitar motifs through the instrumental groove.",
+          "Develop West African percussion exchanges and a drum-and-bass break into the final chorus."
+        ],
+        "melody": [
+          "Create an original memorable hook and declarative chorus.",
+          "Create a contrasting rhythmic refrain with optional selected-voice-compatible call and response."
+        ],
+        "lyrical": [
+          "Develop the selected topic through original community and friendship images.",
+          "Develop fresh resilience and cultural-pride storytelling without imposing beliefs or politics."
+        ]
+      },
+      "production_terms": [
+        [
+          "west african"
+        ],
+        [
+          "ivorian"
+        ],
+        [
+          "one-drop",
+          "steppers"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "djembe"
+        ]
+      ],
+      "research_references": [
+        "Alpha Blondy"
+      ]
+    },
+    {
+      "id": "R2-03",
+      "name": "African Conscious Roots",
+      "description": "Deep, serious roots reggae with hypnotic bass and purposeful African rhythms.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r2",
+      "tempo": {
+        "min": 70,
+        "max": 92
+      },
+      "mood": "Determined, reflective, serious and empowering.",
+      "energy": "Weighty controlled rhythmic intensity with deliberate hypnotic bass and measured West African percussion.",
+      "rhythm": "Weighty African roots reggae with steady drum-and-bass repetition and controlled rhythmic intensity.",
+      "drums_percussion": "Heavy one-drop or restrained steppers groove, firm kick, sharp rimshot, controlled hi-hats, deep tom accents and measured African percussion.",
+      "bass": "Very deep electric bass with hypnotic repeating motifs, long low notes, subtle syncopation and deliberate rhythmic pressure.",
+      "instruments": {
+        "keys": "Dark Hammond-style organ, sparse rhythmic piano, warm electric piano and restrained atmospheric textures.",
+        "guitar": "Tight offbeat skank, minimal melodic lead guitar and occasional blues-influenced responses.",
+        "other": "Djembe, congas, subtle balafon accents, restrained brass and natural hand percussion."
+      },
+      "melody_harmony": "Original assertive melodic phrases, thoughtful verses and memorable declarative refrains.",
+      "vocal_delivery": "Assertive thoughtful storytelling and purposeful declarative refrains; customer topic determines the message, not the conscious-style label.",
+      "arrangement": "Heavy bass-and-percussion introduction → storytelling verse → declarative chorus → instrumental roots passage → second verse → restrained percussion breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Justice, accountability, freedom, education, peace, unity, social responsibility and perseverance.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force a regional language, political, religious or Rastafarian content because an African roots style was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Deep, serious West African conscious reggae with heavy bass, firm drums, restrained guitars, bubbling organ and purposeful traditional percussion. Deep, powerful conscious reggae with clear drums and authentic West African rhythmic character. Keep deep clean electric bass prominent without overpowering the other instruments; preserve one-drop or appropriate steppers foundations, live-band warmth and clear separation. Integrate regional character naturally, not as random instrumental decoration. Avoid: Cheerful party arrangements, generic EDM effects and excessive instrumental clutter.",
+      "variations": {
+        "introductions": [
+          "Open with an original heavy sustained bass motif and measured West African percussion.",
+          "Open with alternate low bass repetitions and purposeful hand-percussion exchanges."
+        ],
+        "progressions": [
+          "Use original sparse dark-organ chords with deliberate hypnotic bass pressure.",
+          "Use alternate restrained piano voicings and subtle syncopation of long low bass notes."
+        ],
+        "arrangements": [
+          "Vary guitar accents and organ patterns across the instrumental roots passage.",
+          "Develop measured percussion conversations and a restrained breakdown into a declarative refrain."
+        ],
+        "melody": [
+          "Create original assertive phrases and thoughtful storytelling verses.",
+          "Create a contrasting serious refrain with evolving, purposeful melodic development."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original reflective imagery without forced politics or religion.",
+          "Develop fresh education or perseverance images only if they fit the customer topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "west african"
+        ],
+        [
+          "one-drop",
+          "steppers"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "djembe"
+        ],
+        [
+          "balafon"
+        ]
+      ],
+      "research_references": [
+        "Tiken Jah Fakoly"
+      ]
+    },
+    {
+      "id": "R2-04",
+      "name": "Nigerian Reggae Thunder",
+      "description": "Soulful Nigerian reggae with heavy bass, expressive guitar and live percussion.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r2",
+      "tempo": {
+        "min": 72,
+        "max": 98
+      },
+      "mood": "Passionate, hopeful, reflective and uplifting.",
+      "energy": "Passionate soulful live-band drive with Nigerian rhythmic accents and expressive blues-rock guitar.",
+      "rhythm": "Jamaican roots reggae foundations blended with Nigerian rhythmic accents and soulful blues-rock guitar expression.",
+      "drums_percussion": "Deep one-drop kick, strong snare or rimshot, relaxed hi-hats, expressive tom fills and restrained Nigerian percussion.",
+      "bass": "Thick, warm electric bass with rolling reggae patterns, melodic slides, expressive passing notes and strong low-frequency presence.",
+      "instruments": {
+        "keys": "Warm organ bubbles, expressive acoustic piano, electric piano and occasional blues-influenced keyboard phrases.",
+        "guitar": "Clean reggae skank, expressive blues-influenced lead guitar, melodic bends and short instrumental solos.",
+        "other": "Talking-drum accents, congas, shakers, subtle brass and warm live percussion."
+      },
+      "melody_harmony": "Original powerful melodic lines, emotional storytelling and memorable uplifting choruses.",
+      "vocal_delivery": "Powerful soulful melodic lines and emotional storytelling with original uplifting choruses; respect selected voice settings.",
+      "arrangement": "Expressive guitar-and-bass introduction → soulful verse → strong chorus → blues-influenced guitar solo → second verse → percussion-and-organ breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Hope, love, hardship, perseverance, unity, community, personal growth and resilience.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force a regional language, political, religious or Rastafarian content because an African roots style was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Soulful Nigerian roots reggae blending heavy reggae bass, expressive electric guitar, blues-influenced melodies, Nigerian percussion and powerful live-band arrangements. Rich Nigerian roots reggae with powerful live instrumentation and expressive lead guitar. Keep deep clean electric bass prominent without overpowering the other instruments; preserve one-drop or appropriate steppers foundations, live-band warmth and clear separation. Integrate regional character naturally, not as random instrumental decoration. Avoid: Generic Nigerian Afrobeats drums, excessive electronic effects and weak reggae rhythm.",
+      "variations": {
+        "introductions": [
+          "Open with original expressive blues guitar bends and rolling Nigerian reggae bass.",
+          "Open with alternate melodic bass slides and soulful lead-guitar replies."
+        ],
+        "progressions": [
+          "Use original soulful organ/acoustic-piano harmony with expressive bass passing tones.",
+          "Use alternate blues-influenced keyboard phrases and thick warm electric-bass runs."
+        ],
+        "arrangements": [
+          "Vary original blues guitar solos and restrained talking-drum accents between verses.",
+          "Develop Nigerian percussion and organ textures through the breakdown before the final chorus."
+        ],
+        "melody": [
+          "Create original powerful soulful lines and an uplifting chorus.",
+          "Create a contrasting emotional storytelling melody and brief expressive guitar solo."
+        ],
+        "lyrical": [
+          "Develop the customer topic through original hardship and resilience imagery.",
+          "Develop fresh love, community or personal-growth verses without imposed beliefs."
+        ]
+      },
+      "production_terms": [
+        [
+          "nigerian"
+        ],
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "blues"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ]
+      ],
+      "research_references": [
+        "Majek Fashek"
+      ]
+    },
+    {
+      "id": "R2-05",
+      "name": "African Sunrise Reggae",
+      "description": "Uplifting Ghanaian roots reggae with Highlife guitar and warm African percussion.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r2",
+      "tempo": {
+        "min": 78,
+        "max": 104
+      },
+      "mood": "Hopeful, joyful, peaceful and inspiring.",
+      "energy": "Relaxed uplifting reggae pulse with Ghanaian Highlife guitar interplay and warm lively percussion.",
+      "rhythm": "Relaxed roots reggae with Ghanaian Highlife guitar interplay and uplifting West African percussion.",
+      "drums_percussion": "Warm one-drop reggae drums, crisp rimshot, relaxed hi-hats, flowing shakers, congas and lively Ghanaian percussion accents.",
+      "bass": "Deep, rounded electric bass with melodic reggae movement, gentle syncopation and occasional Highlife-inspired passing notes.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, bright piano chords, warm electric piano and gentle atmospheric pads.",
+        "guitar": "Clean reggae skank blended with bright Ghanaian Highlife guitar patterns, rhythmic picking and expressive melodic lead phrases.",
+        "other": "Djembe, shekere, congas, subtle brass, balafon accents and optional layered vocal harmonies."
+      },
+      "melody_harmony": "Original joyful melodies, uplifting refrains and memorable communal choruses.",
+      "vocal_delivery": "Joyful original melodic refrains and uplifting communal phrasing; layered harmonies only when selected vocal settings permit, never forced for a single voice.",
+      "arrangement": "African guitar-and-percussion introduction → melodic verse → uplifting chorus → Highlife-reggae instrumental passage → second verse → percussion bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Unity, peace, community, cultural pride, love, hope, environmental care and personal growth.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force a regional language, political, religious or Rastafarian content because an African roots style was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Contemporary Ghanaian and pan-African roots reggae combining warm reggae bass, Ghanaian Highlife guitar, African percussion, soulful harmony and uplifting global-reggae production. Warm, polished African roots reggae with a clear Ghanaian musical identity. Keep deep clean electric bass prominent without overpowering the other instruments; preserve one-drop or appropriate steppers foundations, live-band warmth and clear separation. Integrate regional character naturally, not as random instrumental decoration. Avoid: Generic tropical pop, overproduced electronic drums and arrangements that lose the reggae foundation.",
+      "variations": {
+        "introductions": [
+          "Open with original Ghanaian Highlife guitar picking and warm African percussion.",
+          "Open with alternate interlocking Highlife phrases and relaxed reggae bass movement."
+        ],
+        "progressions": [
+          "Use original bright organ/piano harmony with gentle Highlife-inspired bass passing notes.",
+          "Use alternate warm electric-piano voicings and subtly syncopated melodic reggae bass."
+        ],
+        "arrangements": [
+          "Vary Highlife guitar patterns and organ riffs across the Highlife-reggae passage.",
+          "Develop djembe/shekere/percussion combinations through the bridge into the final chorus."
+        ],
+        "melody": [
+          "Create original joyful melodies and uplifting communal refrains.",
+          "Create a contrasting inspiring chorus with melodic Ghanaian guitar responses."
+        ],
+        "lyrical": [
+          "Develop the chosen topic through original hope and community imagery.",
+          "Develop fresh personal-growth or environmental-care images only if requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "one-drop"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "djembe"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "balafon"
+        ]
+      ],
+      "research_references": [
+        "Rocky Dawuni"
       ]
     }
   ]
