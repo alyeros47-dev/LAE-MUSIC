@@ -17,7 +17,7 @@ test('style request keeps families exclusive and forwards every existing creativ
  const {lyricsRequest}=await adapter;
  const b={lyricsModel:'gpt-6.1-sol',idea:'An original homecoming song',musicFamily:'secular',musicProfile:'sec-nigeria-2',genre:'Afrobeats',language:'English',nativeLanguage:'Yoruba',nativeLyrics:'Exact supplied phrase',extraLanguage:'French',mood:'Hopeful and inspiring',voice:'Deep expressive male lead',duration:'4 minutes',beat:'yoruba-talking'};
  const secular=lyricsRequest(b);assert.equal(secular.secularProfile,'sec-nigeria-2');assert.equal(secular.gospelProfile,'');
- for(const key of ['idea','genre','language','nativeLanguage','nativeLyrics','extraLanguage','mood','voice','duration','beat'])assert.equal(secular[key],b[key]);
+ for(const key of ['idea','genre','language','nativeLanguage','nativeLyrics','extraLanguage','voice','duration','beat'])assert.equal(secular[key],b[key]);
  const gospel=lyricsRequest({...b,musicFamily:'gospel',musicProfile:'afro-gospel-1'});assert.equal(gospel.gospelProfile,'afro-gospel-1');assert.equal(gospel.secularProfile,'');assert.equal(gospel.model,'gpt-6.1-sol');
 });
 // Exercise the unchanged real lyrics handler with a mocked upstream, no paid calls.
@@ -36,7 +36,7 @@ test('Organic Afro-Fusion selector reaches existing OpenAI system instructions, 
  const {upstream,reserved}=await providerRequest(b);const instructions=(upstream.body.messages||upstream.body.input)[0].content;
  assert(instructions.includes(registry('secularProfiles')['sec-nigeria-2'].guide));assert(instructions.includes('talking'));assert(!instructions.includes('Selected African gospel style profile:'));
  assert.equal(upstream.body.model,'gpt-6.1-sol');assert.equal(reserved.secularProfile,'sec-nigeria-2');assert.equal(reserved.gospelProfile,'');
- const user=JSON.parse((upstream.body.messages||upstream.body.input)[1].content);assert.equal(user.mood,'Romantic');assert.equal(user.duration,'4 minutes');
+ const user=JSON.parse((upstream.body.messages||upstream.body.input)[1].content);assert.equal(user.mood,'');assert(!Object.hasOwn(reserved,'music_dna'));assert.equal(user.duration,'4 minutes');
 });
 test('gospel fusion retains its original detailed prompt without secular contamination',async()=>{
  const {lyricsRequest}=await adapter;const {upstream,reserved}=await providerRequest(lyricsRequest({lyricsModel:'gpt-6.1-sol',idea:'A joyful original praise song',musicFamily:'gospel',musicProfile:'afro-gospel-1',genre:'Afro-Gospel',language:'English'}));

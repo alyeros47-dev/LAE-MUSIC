@@ -46,6 +46,20 @@ export function musicRequest(brief, voiceProfile) {
 
 // Keep the original request contract and select exactly one musical profile.
 export function lyricsRequest(brief) {
+  if (brief.musicDnaStyle) {
+    if (!["gpt-6.1-sol", "gpt-6-astra"].includes(brief.lyricsModel))
+      throw Error("Choose GPT-6.1 Sol or GPT-6 Astra.");
+    return {
+      model: brief.lyricsModel,
+      idea: brief.idea,
+      musicDnaStyle: brief.musicDnaStyle,
+      musicDnaLanguages: brief.musicDnaLanguages || [],
+      voice: brief.voice || "neutral",
+      duration: brief.duration,
+      nativeLyrics: brief.nativeLyrics,
+      nativeLanguage: brief.nativeLanguage,
+    };
+  }
   const gospel = brief.musicFamily === "gospel";
   const secular = brief.musicFamily === "secular";
   if (!["gpt-6.1-sol", "gpt-6-astra"].includes(brief.lyricsModel))
@@ -58,7 +72,6 @@ export function lyricsRequest(brief) {
     nativeLyrics: brief.nativeLyrics,
     nativeLanguage: brief.nativeLanguage || brief.language,
     extraLanguage: brief.extraLanguage || "",
-    mood: brief.mood,
     voice: brief.voice,
     duration: brief.duration,
     beat: brief.beat || "none",

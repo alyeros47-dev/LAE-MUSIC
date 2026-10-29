@@ -1,11 +1,27 @@
 name: Read existing LAE-MUSIC integration requirements
 on:
   workflow_dispatch:
+    inputs:
+      isolated_recovery:
+        description: "Create an expiring private backup and rehearse migration/restore; never modify production"
+        required: false
+        type: boolean
+        default: false
+      recovery_backup_branch:
+        description: "Optional previously created owned backup branch"
+        required: false
+        type: string
+        default: ""
+      recovery_backup_run:
+        description: "Original run ID for the optional saved backup"
+        required: false
+        type: string
+        default: ""
 permissions:
   contents: read
 jobs:
   inspect:
-    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    if: ${{ !inputs.isolated_recovery && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/music-dna-foundation') }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -21,3 +37,29 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: node scripts/audit-existing-service.cjs
+
+  recovery:
+    if: inputs.isolated_recovery && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/music-dna-foundation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: lae-existing-database-recovery
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - name: Verify isolated recovery guards
+        run: node --test tests/neon-recovery-rehearsal.test.cjs tests/neon-recovery.test.cjs
+      - name: Restore and rehearse migrations only in a private disposable database
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          LAE_EXISTING_RECOVERY_REHEARSAL: "1"
+          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
+          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
+        run: node scripts/rehearse-existing-recovery.cjs

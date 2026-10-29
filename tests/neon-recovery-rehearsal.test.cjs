@@ -327,3 +327,33 @@ test("private dump transport requires a read-only trust mount and full TLS verif
     !DUMP_TLS_ARGS.some((x) => /no-verify|sslmode=disable|PGPASSWORD=/.test(x)),
   );
 });
+
+test("private migration preserves old history exactly and permits only the reported new versions", () => {
+  const { migrationHistoryPreserved: preserved } = require('../lib/private-recovery-copy');
+  const old = [{version:'022-existing.sql',checksum:'original-checksum'}];
+  const added = {version:'023-new.sql',checksum:'new-checksum'};
+  assert(preserved(old, [...old,added], ['023-new.sql']));
+  assert(preserved(old, old, []));
+  assert(!preserved(old, [{...old[0],checksum:'changed'},added], ['023-new.sql']));
+  assert(!preserved(old, [added], ['023-new.sql']));
+  assert(!preserved(old, [...old,added,{version:'024-unexpected.sql',checksum:'bad'}], ['023-new.sql']));
+  assert(!preserved(old, [...old,added,added], ['023-new.sql']));
+  assert(!preserved(old, [...old,added], ['023-new.sql','023-new.sql']));
+  assert(!preserved(old, old, ['022-existing.sql']));
+});
+test("post-migration fingerprints filter only new migration entries, preserving every business row", async () => {
+  const queries=[];
+  const columns=[{table_name:'creators',column_name:'id'}, {table_name:'platform_migrations',column_name:'version'}, {table_name:'platform_migrations',column_name:'checksum'}];
+  const pool={connect:async()=>({
+    query:async(sql,params)=>{queries.push({sql,params});return {rows:sql.includes('pg_total_relation_size')?[{bytes:'100'}]:sql.includes('AS checksum FROM')?[{rows:1,checksum:'fixture'}]:[]};},
+    release(){}
+  })};
+  const result=await fingerprint(pool,columns,['022-existing.sql']);
+  assert.equal(result.data.length,2);
+  const business=queries.find(q=>q.sql.includes('AS checksum FROM')&&q.sql.includes('public."creators"'));
+  assert(!business.sql.includes('WHERE'));assert.deepEqual(business.params,[]);
+  const history=queries.find(q=>q.sql.includes('AS checksum FROM')&&q.sql.includes('public."platform_migrations"'));
+  assert(history.sql.includes('WHERE version=ANY($1::text[])'));
+  assert.deepEqual(history.params,[['022-existing.sql']]);
+  await assert.rejects(fingerprint(pool,columns,['duplicate','duplicate']),/Invalid recovery migration/);
+});
