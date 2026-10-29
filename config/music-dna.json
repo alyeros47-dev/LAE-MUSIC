@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-v1",
   "status": "approved",
   "departments": [
     {
@@ -53,6 +53,12 @@
       "group_id": "G5",
       "department_id": "gospel",
       "name": "Indigenous Yoruba Gospel"
+    },
+    {
+      "id": "gospel-g7",
+      "group_id": "G7",
+      "department_id": "gospel",
+      "name": "Gospel Soul & Inspirational Ballads"
     }
   ],
   "styles": [
@@ -1903,6 +1909,448 @@
       ],
       "research_references": [
         "Sola Kosoko"
+      ]
+    },
+    {
+      "id": "G7-01",
+      "name": "Everlasting Promise",
+      "description": "Inspirational Gospel ballad with uplifting piano and choir.",
+      "department_id": "gospel",
+      "category_id": "gospel-g7",
+      "tempo": {
+        "min": 70,
+        "max": 94
+      },
+      "mood": "Hopeful, reassuring, reverent and uplifting.",
+      "energy": "Gradually expanding live-band dynamics develop into an uplifting bridge and full-band final chorus.",
+      "rhythm": "Steady flowing contemporary Gospel ballad, primarily 4/4.",
+      "drums_percussion": "Gentle live drum groove with restrained kick, clear snare, soft cymbal swells and expressive transition fills.",
+      "bass": "Warm melodic electric bass with sustained foundational notes and smooth passing phrases.",
+      "instruments": {
+        "keys": "Expressive grand piano, warm organ, sustained pads and uplifting keyboard harmonies.",
+        "guitar": "Clean electric guitar and subtle acoustic guitar.",
+        "other": "Soft strings and layered Gospel choir."
+      },
+      "melody_harmony": "Original memorable worship melodies, warm harmonies and clear uplifting choruses supported by meaningful melodic verses.",
+      "vocal_delivery": "Reassuring expressive melodic phrasing with layered choir support and natural verse clarity; voice selected independently.",
+      "arrangement": "Piano introduction → meaningful verse → memorable chorus → expanded second verse → uplifting bridge → full-band final chorus.",
+      "lyrics": {
+        "structure": "Divine faithfulness, hope, trust, promises, gratitude and encouragement; clear memorable choruses supported by meaningful verses.",
+        "vocabulary": "Use original meaningful expressions and imagery in the customer-selected language or language combination; musical identity never forces a language."
+      },
+      "production_mix": "Let expressive grand piano lead warm organ and sustained pads. Keep bass smooth, drums gentle, cymbal transitions soft and guitar responses clear; expand strings and choir gradually into a balanced full-band final chorus.",
+      "variations": {
+        "introductions": [
+          "Open with an original expressive piano motif and warm organ.",
+          "Open with a contrasting piano motif answered by clean electric guitar."
+        ],
+        "progressions": [
+          "Use original uplifting Gospel chord voicings with smooth bass passing phrases.",
+          "Use alternate warm keyboard voicings and a different bridge progression."
+        ],
+        "arrangements": [
+          "Vary choir entrances and guitar responses through the expanded second verse.",
+          "Delay choir layers until the bridge and change the final full-band development."
+        ],
+        "melody": [
+          "Create a memorable original chorus melody with a fresh piano response.",
+          "Create a contrasting reassuring melodic contour and guitar answer."
+        ],
+        "lyrical": [
+          "Develop original faithfulness and hope verses supporting a clear refrain.",
+          "Develop trust, gratitude and encouragement with a different memorable chorus."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Sinach"
+      ]
+    },
+    {
+      "id": "G7-02",
+      "name": "Soulful Testimony",
+      "description": "Emotional African soul with heartfelt storytelling.",
+      "department_id": "gospel",
+      "category_id": "gospel-g7",
+      "tempo": {
+        "min": 64,
+        "max": 88
+      },
+      "mood": "Heartfelt, reflective, inspiring and emotionally powerful.",
+      "energy": "Relaxed soul dynamics allow breathing room before an emotionally powerful bridge and final chorus.",
+      "rhythm": "Slow-to-moderate African soul ballad with a relaxed groove and natural vocal breathing room.",
+      "drums_percussion": "Organic soul drum kit, soft snare, gentle kick, restrained hi-hats and natural dynamic fills.",
+      "bass": "Deep warm electric bass with smooth expressive movement and occasional melodic transitions.",
+      "instruments": {
+        "keys": "Soulful grand piano, electric piano textures and gentle organ support.",
+        "guitar": "Acoustic guitar and subtle electric guitar.",
+        "other": "Warm strings and restrained backing harmonies."
+      },
+      "melody_harmony": "Original expressive soul melodies and warm harmonies developing around believable emotional storytelling.",
+      "vocal_delivery": "Heartfelt narrative verses with expressive melodic development and natural breathing room; voice selected independently.",
+      "arrangement": "Piano or acoustic introduction → storytelling verse → emotional chorus → second verse → instrumental interlude → powerful bridge → final chorus.",
+      "lyrics": {
+        "structure": "Gratitude, perseverance, family, hope, life lessons, faith and personal testimony; prioritize original believable storytelling.",
+        "vocabulary": "Use original meaningful expressions and imagery in the customer-selected language or language combination; musical identity never forces a language."
+      },
+      "production_mix": "Keep organic soul drums relaxed, bass deep and warm, grand piano expressive and organ gentle. Balance acoustic guitar, subtle electric guitar and warm strings around narrative vocals; use restrained backing harmonies and natural dynamic fills.",
+      "variations": {
+        "introductions": [
+          "Begin with an original soulful grand-piano introduction.",
+          "Begin with a contrasting acoustic-guitar introduction and gentle piano response."
+        ],
+        "progressions": [
+          "Use original warm soul chord voicings and smooth bass phrasing.",
+          "Use alternate electric-piano voicings and expressive bass transitions."
+        ],
+        "arrangements": [
+          "Vary string entrances around the second verse and instrumental interlude.",
+          "Change narrative development and reserve the strongest strings for the powerful bridge."
+        ],
+        "melody": [
+          "Create original emotional melodic development with relaxed phrasing.",
+          "Create a contrasting heartfelt chorus contour with natural breathing room."
+        ],
+        "lyrical": [
+          "Tell an original believable story of family, gratitude and perseverance.",
+          "Develop life lessons, faith and hope through a different personal testimony."
+        ]
+      },
+      "production_terms": [
+        [
+          "soul"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "backing",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Timi Dakolo"
+      ]
+    },
+    {
+      "id": "G7-03",
+      "name": "Mercy at Dawn",
+      "description": "Tender Gospel soul with intimate piano and warm harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g7",
+      "tempo": {
+        "min": 60,
+        "max": 82
+      },
+      "mood": "Tender, prayerful, grateful and spiritually comforting.",
+      "energy": "Intimate understated development expands harmonically before a gentle bridge and heartfelt closing refrain.",
+      "rhythm": "Gentle soulful worship rhythm with spacious phrasing and understated percussion.",
+      "drums_percussion": "Soft live drums, brushed or restrained snare, gentle cymbal textures and minimal fills.",
+      "bass": "Smooth warm electric bass with sustained notes and subtle melodic responses.",
+      "instruments": {
+        "keys": "Expressive piano, mellow electric piano, atmospheric pads and gentle organ.",
+        "guitar": "Ambient guitar.",
+        "other": "Soft strings, delicate percussion and layered backing harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive melodies with rich harmonic movement and intimate layered harmonies.",
+      "vocal_delivery": "Sincere prayerful expressions with spacious emotionally expressive phrasing; selected voice remains independent.",
+      "arrangement": "Intimate piano introduction → reflective verse → emotional chorus → expanded harmonic section → gentle bridge → heartfelt closing refrain.",
+      "lyrics": {
+        "structure": "Mercy, forgiveness, healing, surrender, spiritual comfort and gratitude; sincere original prayerful expressions.",
+        "vocabulary": "Use original meaningful expressions and imagery in the customer-selected language or language combination; musical identity never forces a language."
+      },
+      "production_mix": "Keep live drums soft, snare brushed or restrained, fills minimal and bass smooth. Let mellow electric piano, expressive piano, pads, gentle organ, ambient guitar and soft strings expand subtly around intimate backing harmonies.",
+      "variations": {
+        "introductions": [
+          "Open with an original intimate piano introduction and soft sustained bass.",
+          "Open with alternate mellow electric-piano voicings and ambient guitar textures."
+        ],
+        "progressions": [
+          "Use original rich harmonic voicings with sustained warm bass.",
+          "Use alternate gentle harmonic movement and subtle melodic bass responses."
+        ],
+        "arrangements": [
+          "Expand harmonic layers gradually before a gentle bridge.",
+          "Change instrumental textures and bridge development while preserving intimate space."
+        ],
+        "melody": [
+          "Create original tender prayerful phrasing and a heartfelt closing refrain.",
+          "Create a contrasting soulful melodic contour with restrained backing responses."
+        ],
+        "lyrical": [
+          "Develop sincere original expressions of mercy, forgiveness and gratitude.",
+          "Develop healing, surrender and spiritual comfort through new prayerful imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "ambient guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "backing",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Efe Nathan"
+      ]
+    },
+    {
+      "id": "G7-04",
+      "name": "Grace in Harmony",
+      "description": "Smooth Gospel R&B with rich chords and flowing bass.",
+      "department_id": "gospel",
+      "category_id": "gospel-g7",
+      "tempo": {
+        "min": 78,
+        "max": 104
+      },
+      "mood": "Warm, hopeful, confident and uplifting.",
+      "energy": "Relaxed but engaging midtempo pocket with flowing bass and expressive bridge development.",
+      "rhythm": "Midtempo Gospel R&B with a relaxed but engaging rhythmic pocket.",
+      "drums_percussion": "Smooth contemporary R&B groove, controlled kick and snare, subtle syncopated hi-hats and occasional live-drum fills.",
+      "bass": "Rounded electric bass with melodic movement, syncopated accents and a strong connection to the kick drum.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, rich extended chords, warm synthesizer pads and rhythmic piano accents.",
+        "guitar": "Clean electric guitar and acoustic guitar textures.",
+        "other": "Subtle strings and layered soulful harmonies."
+      },
+      "melody_harmony": "Original smooth melodic arrangements, sophisticated extended chords and memorable conversational Gospel hooks.",
+      "vocal_delivery": "Conversational meaningful phrasing with smooth melodic hooks and soulful harmonies; voice selected independently.",
+      "arrangement": "Electric piano introduction → melodic verse → smooth chorus → second verse → instrumental groove → expressive bridge → final chorus.",
+      "lyrics": {
+        "structure": "Grace, divine love, gratitude, hope, personal transformation and encouragement; conversational meaningful lyrics with memorable melodic hooks.",
+        "vocabulary": "Use original meaningful expressions and imagery in the customer-selected language or language combination; musical identity never forces a language."
+      },
+      "production_mix": "Keep the contemporary R&B pocket relaxed, kick and rounded bass connected, hi-hats subtly syncopated and snare controlled. Balance Rhodes-style extended chords, warm synth pads, clean electric guitar, acoustic textures, subtle strings and layered soulful harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with an original Rhodes-style electric-piano riff and rounded bass.",
+          "Begin with alternate rich electric-piano chords and clean guitar responses."
+        ],
+        "progressions": [
+          "Use an original Gospel R&B progression with extended chords and syncopated bass.",
+          "Use alternate rich chord movement and a different flowing bass groove."
+        ],
+        "arrangements": [
+          "Vary keyboard riffs and guitar responses through the instrumental groove.",
+          "Change bridge development and chorus layers while keeping the relaxed pocket."
+        ],
+        "melody": [
+          "Create a new smooth chorus melody with a conversational hook.",
+          "Create a contrasting uplifting melodic contour answered by clean guitar."
+        ],
+        "lyrical": [
+          "Develop original conversational grace and divine-love testimony.",
+          "Develop transformation, hope and encouragement with fresh meaningful hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Nosa"
+      ]
+    },
+    {
+      "id": "G7-05",
+      "name": "Quiet Light",
+      "description": "Atmospheric inspirational ballad with cinematic instrumentation.",
+      "department_id": "gospel",
+      "category_id": "gospel-g7",
+      "tempo": {
+        "min": 56,
+        "max": 80
+      },
+      "mood": "Peaceful, contemplative, hopeful and emotionally intimate.",
+      "energy": "Sparse atmospheric dynamics expand cinematically into an emotional bridge and resolve peacefully.",
+      "rhythm": "Spacious atmospheric ballad with flexible melodic phrasing and minimal rhythmic pressure.",
+      "drums_percussion": "Minimal percussion, soft kick pulses, delicate cymbal swells and occasional restrained tom accents.",
+      "bass": "Deep gentle sustained bass with sparse melodic movement.",
+      "instruments": {
+        "keys": "Soft grand piano, atmospheric synthesizer pads, ambient keyboard textures and delicate harmonic layers.",
+        "guitar": "Acoustic guitar and ambient electric guitar.",
+        "other": "Cinematic strings and airy backing harmonies."
+      },
+      "melody_harmony": "Original reflective melodies, delicate harmonic layers and airy harmonies in a spacious cinematic arrangement.",
+      "vocal_delivery": "Intimate reflective melodic phrasing with vivid understandable imagery and ample space; voice selected independently.",
+      "arrangement": "Atmospheric introduction → intimate verse → reflective chorus → cinematic instrumental passage → emotionally expanding bridge → peaceful final refrain.",
+      "lyrics": {
+        "structure": "Hope, restoration, divine presence, purpose, comfort, spiritual renewal and gratitude; vivid but understandable original imagery.",
+        "vocabulary": "Use original meaningful expressions and imagery in the customer-selected language or language combination; musical identity never forces a language."
+      },
+      "production_mix": "Keep percussion minimal, kick soft, toms restrained and bass deep but gentle. Leave space around soft grand piano, atmospheric synth pads, ambient keys, acoustic and ambient electric guitars, cinematic strings and airy backing harmonies; resolve the bridge peacefully.",
+      "variations": {
+        "introductions": [
+          "Begin with original ambient pads and a delicate acoustic motif.",
+          "Begin with a contrasting soft grand-piano motif and spacious ambient guitar."
+        ],
+        "progressions": [
+          "Use original contemplative harmonic movement with sparse sustained bass.",
+          "Use alternate delicate chords and gentle bass movement beneath cinematic strings."
+        ],
+        "arrangements": [
+          "Vary string arrangements and spacing through the cinematic instrumental passage.",
+          "Change ambient textures and instrumental gaps around the expanding bridge."
+        ],
+        "melody": [
+          "Create original reflective melodic phrases with spacious airy responses.",
+          "Create a contrasting intimate chorus contour and peaceful final refrain."
+        ],
+        "lyrical": [
+          "Develop original vivid imagery of hope, restoration and purpose.",
+          "Develop divine presence, comfort and renewal with understandable new images."
+        ]
+      },
+      "production_terms": [
+        [
+          "percussion"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "airy",
+          "backing"
+        ]
+      ],
+      "research_references": [
+        "TY Bello"
       ]
     }
   ]
