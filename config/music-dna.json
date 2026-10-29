@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-v1",
   "status": "approved",
   "departments": [
     {
@@ -131,6 +131,12 @@
       "group_id": "S4",
       "department_id": "secular-afrobeats",
       "name": "Afro-Fusion & Powerful Grooves"
+    },
+    {
+      "id": "secular-s5",
+      "group_id": "S5",
+      "department_id": "secular-afrobeats",
+      "name": "Fuji-Influenced Street Afrobeats"
     }
   ],
   "styles": [
@@ -7896,6 +7902,471 @@
       ],
       "research_references": [
         "Omah Lay"
+      ]
+    },
+    {
+      "id": "S5-01",
+      "name": "Fuji Street Orchestra",
+      "description": "Powerful modern Fuji-Afrobeats with heavy bass, bright piano and layered percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s5",
+      "tempo": {
+        "min": 112,
+        "max": 132
+      },
+      "mood": "Triumphant, energetic, confident and celebratory.",
+      "energy": "Dense energetic Fuji percussion and kick-synchronized lows drive rapid interplay, layered responses and dramatic dance development.",
+      "rhythm": "Contemporary Fuji-Afrobeats with strong syncopation, rapid percussion interplay and a driving dance pulse.",
+      "drums_percussion": "Heavy electronic kick, sharp snare, rolling Fuji-inspired percussion, talking drums, shekere, congas, handclaps and energetic rhythmic breaks.",
+      "bass": "Thick punchy sub-bass with repetitive dance patterns, syncopated bass movement and powerful kick synchronization.",
+      "instruments": {
+        "keys": "Bright piano riffs, rhythmic organ stabs, short synth hooks and atmospheric transitions.",
+        "guitar": "Rhythmic guitar.",
+        "other": "Talking drum, shekere, sakara-inspired percussion textures, brass accents and layered crowd-response harmonies."
+      },
+      "melody_harmony": "Original chant-friendly melodic phrases, strong chorus hooks and rhythmic group-response opportunities.",
+      "vocal_delivery": "Triumphant energetic melodic phrasing with layered group responses; selected voice remains independent.",
+      "arrangement": "Percussion-and-piano introduction → rhythmic verse → powerful chorus → Fuji percussion break → second verse → full instrumental dance section → final chorus.",
+      "lyrics": {
+        "structure": "Success, ambition, celebration, gratitude, confidence, perseverance and street enjoyment.",
+        "vocabulary": "Use original meaningful secular Fuji-street expressions in the selected supported language or combination. Yoruba instrumental character never forces Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Dense energetic Fuji percussion with powerful bass and bright piano; maintain mix clarity. Keep electronic kick and punchy sub-bass tightly synchronized, talking drums conversational, shekere articulate and sakara-inspired textures distinct; balance organ, brass and layered crowd harmonies through evolving dance sections without erasing Fuji identity.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright piano motifs and layered Fuji percussion.",
+          "Begin with alternate talking-drum exchanges and rhythmic piano responses."
+        ],
+        "progressions": [
+          "Use original confident Fuji-Afrobeats harmony with thick syncopated sub-bass.",
+          "Use alternate bright piano voicings and a different kick-synchronized dance bass motif."
+        ],
+        "arrangements": [
+          "Vary Fuji percussion patterns and chorus structures through the percussion break.",
+          "Change piano hooks and layered group responses in the full instrumental dance section."
+        ],
+        "melody": [
+          "Create an original strong chant-friendly hook with rhythmic group answers.",
+          "Create a contrasting triumphant chorus phrase and fresh instrumental response."
+        ],
+        "lyrical": [
+          "Develop original ambition and perseverance verses with grateful celebration.",
+          "Develop success, confidence and street enjoyment through fresh rhythmic hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "sakara"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Asake"
+      ]
+    },
+    {
+      "id": "S5-02",
+      "name": "Street Prayer Melody",
+      "description": "Emotional street Afrobeats with Fuji percussion and reflective melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s5",
+      "tempo": {
+        "min": 98,
+        "max": 118
+      },
+      "mood": "Reflective, determined, hopeful and emotionally intense.",
+      "energy": "Grounded steady Afro-street rhythm balances emotional storytelling with restrained traditional percussion and an uplifting bridge.",
+      "rhythm": "Midtempo Fuji-influenced street Afrobeats with emotional melodic phrasing and a grounded rhythmic pulse.",
+      "drums_percussion": "Punchy Afro-street kick, crisp snare, restrained Fuji percussion, talking-drum accents, shakers and subtle rhythmic fills.",
+      "bass": "Deep warm electronic bass with melodic movement and a steady rhythmic bounce.",
+      "instruments": {
+        "keys": "Emotional piano motifs, warm organ, atmospheric pads and restrained melodic synth textures.",
+        "guitar": "Clean guitar.",
+        "other": "Talking drum, gentle shekere, subtle traditional percussion and soft group responses."
+      },
+      "melody_harmony": "Original expressive melodies, memorable refrains and natural storytelling phrasing.",
+      "vocal_delivery": "Reflective expressive storytelling and hopeful emotionally intense refrains; selected voice remains independent.",
+      "arrangement": "Reflective piano introduction → storytelling verse → emotional chorus → instrumental Fuji passage → second verse → uplifting bridge → final chorus.",
+      "lyrics": {
+        "structure": "Life struggles, ambition, gratitude, resilience, family, hope and personal progress.",
+        "vocabulary": "Use original meaningful secular Fuji-street expressions in the selected supported language or combination. Yoruba instrumental character never forces Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Balance emotional storytelling with authentic Fuji percussion and a steady Afro-street groove. Keep bass deep and warm, kick punchy, piano expressive, organ warm and pads restrained; make talking-drum accents, gentle shekere and soft group responses support the narrative instead of turning it into generic street-pop or a worship arrangement.",
+      "variations": {
+        "introductions": [
+          "Begin with an original reflective piano motif and restrained Fuji accents.",
+          "Begin with alternate piano phrases and gentle talking-drum responses."
+        ],
+        "progressions": [
+          "Use original hopeful street-Afrobeats harmony with warm melodic electronic bass.",
+          "Use alternate warm organ voicings and a grounded rhythmic bass bounce."
+        ],
+        "arrangements": [
+          "Vary talking-drum phrases and percussion patterns through the instrumental Fuji passage.",
+          "Change piano motifs and chorus layers before the uplifting bridge."
+        ],
+        "melody": [
+          "Create an original emotionally clear refrain with natural storytelling phrasing.",
+          "Create a contrasting determined melody and soft group response."
+        ],
+        "lyrical": [
+          "Develop original life-struggle and resilience storytelling.",
+          "Develop family, ambition and personal progress through fresh hopeful verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "group"
+        ]
+      ],
+      "research_references": [
+        "Seyi Vibez"
+      ]
+    },
+    {
+      "id": "S5-03",
+      "name": "Street Soul Rebellion",
+      "description": "Melodic street-pop fusion with expressive hooks and lively African rhythms.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s5",
+      "tempo": {
+        "min": 104,
+        "max": 124
+      },
+      "mood": "Confident, emotional, energetic and hopeful.",
+      "energy": "Lively melodic street dance movement balances expressive emotional hooks with powerful Fuji-influenced rhythm.",
+      "rhythm": "Melodic street Afrobeats with Fuji-influenced percussion and a lively dance pulse.",
+      "drums_percussion": "Strong Afro-pop kick, crisp snare, rolling hi-hats, talking-drum accents, congas, shakers and energetic percussion fills.",
+      "bass": "Warm punchy electronic bass with rhythmic movement, melodic runs and strong dance momentum.",
+      "instruments": {
+        "keys": "Bright piano chords, atmospheric pads, short synth riffs and melodic keyboard responses.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Talking drum, shekere, hand percussion and restrained brass accents."
+      },
+      "melody_harmony": "Original expressive hooks, rhythmic storytelling phrases and memorable choruses.",
+      "vocal_delivery": "Confident emotional melodic hooks and expressive rhythmic storytelling; selected voice remains independent.",
+      "arrangement": "Rhythmic piano-and-percussion introduction → expressive verse → catchy chorus → instrumental groove → second verse → dynamic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Perseverance, friendship, personal freedom, ambition, success and emotional reflection.",
+        "vocabulary": "Use original meaningful secular Fuji-street expressions in the selected supported language or combination. Yoruba instrumental character never forces Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Maintain a balance between emotional melody and powerful Fuji-influenced street rhythm. Keep bass warm and punchy, kick strong, piano bright, guitar rhythmic and synth riffs concise; retain talking-drum accents, shekere and conga interplay while restraining brass so expressive storytelling remains clear.",
+      "variations": {
+        "introductions": [
+          "Begin with original rhythmic piano chords and lively Fuji percussion.",
+          "Begin with alternate talking-drum accents and bright melodic keyboard responses."
+        ],
+        "progressions": [
+          "Use original energetic street-fusion harmony with warm punchy electronic bass.",
+          "Use alternate bright piano voicings and a different melodic dance bass groove."
+        ],
+        "arrangements": [
+          "Vary guitar accents and talking-drum patterns through the instrumental groove.",
+          "Change melodic hook layers and percussion breaks around the dynamic bridge."
+        ],
+        "melody": [
+          "Create an original expressive hook with rhythmic storytelling phrasing.",
+          "Create a contrasting hopeful chorus and memorable melodic response."
+        ],
+        "lyrical": [
+          "Develop original perseverance and personal-freedom verses.",
+          "Develop friendship, ambition and emotional reflection through fresh expressive hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Bella Shmurda"
+      ]
+    },
+    {
+      "id": "S5-04",
+      "name": "Heritage Street Testimony",
+      "description": "Soulful Yoruba-influenced Afropop with highlife guitar and traditional percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s5",
+      "tempo": {
+        "min": 92,
+        "max": 114
+      },
+      "mood": "Reflective, grateful, hopeful and uplifting.",
+      "energy": "Gentle highlife movement and Fuji rhythmic textures support mature soulful storytelling and an emotional uplifting ending.",
+      "rhythm": "Moderate Yoruba-influenced Afro-soul with Fuji percussion and gentle highlife movement.",
+      "drums_percussion": "Warm Afrobeat kick, controlled snare, gentle Fuji percussion, talking-drum accents, shakers and restrained rhythmic fills.",
+      "bass": "Melodic electric bass with flowing highlife-influenced movement and warm low-frequency support.",
+      "instruments": {
+        "keys": "Expressive piano, traditional organ textures, warm electric piano and subtle atmospheric pads.",
+        "guitar": "Clean highlife guitar.",
+        "other": "Talking drum, shekere, soft strings and traditional percussion."
+      },
+      "melody_harmony": "Original heartfelt melodies, expressive narrative phrasing and memorable reflective choruses.",
+      "vocal_delivery": "Mature heartfelt storytelling with expressive narrative melodic phrasing; selected voice remains independent.",
+      "arrangement": "Guitar-and-piano introduction → storytelling verse → melodic chorus → traditional percussion passage → second verse → emotional bridge → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Gratitude, life lessons, family, perseverance, hope, blessings and personal testimony.",
+        "vocabulary": "Use original meaningful secular Fuji-street expressions in the selected supported language or combination. Yoruba instrumental character never forces Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Preserve traditional Yoruba musical character with soulful mature instrumentation. Keep highlife guitar clean, melodic electric bass flowing and warm, piano expressive, organ traditional and electric piano warm; give gentle Fuji percussion, talking drum, shekere and soft strings natural space around mature storytelling without imposing a lyric language.",
+      "variations": {
+        "introductions": [
+          "Begin with an original clean highlife guitar introduction and expressive piano.",
+          "Begin with alternate guitar phrases and traditional organ responses."
+        ],
+        "progressions": [
+          "Use original soulful harmony with flowing highlife electric bass.",
+          "Use alternate warm electric-piano voicings and melodic bass passing phrases."
+        ],
+        "arrangements": [
+          "Vary traditional percussion and piano layers through the instrumental passage.",
+          "Change guitar introductions and harmonic development around the emotional bridge."
+        ],
+        "melody": [
+          "Create an original heartfelt reflective chorus with narrative phrasing.",
+          "Create a contrasting hopeful melody and soulful instrumental answer."
+        ],
+        "lyrical": [
+          "Develop original life lessons and family testimony with gratitude.",
+          "Develop perseverance, blessings and hope through fresh mature storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Barry Jhay"
+      ]
+    },
+    {
+      "id": "S5-05",
+      "name": "Fuji Dance Carnival",
+      "description": "Fast Fuji-street dance music with powerful talking drums and heavy bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s5",
+      "tempo": {
+        "min": 118,
+        "max": 144
+      },
+      "mood": "Playful, festive, energetic and celebratory.",
+      "energy": "Prominent rapid Fuji percussion and deep bouncy bass drive energetic dance movement toward an instrumental climax.",
+      "rhythm": "Fast Fuji-street dance groove with strong Yoruba percussion interplay and energetic dance movement.",
+      "drums_percussion": "Heavy kick, sharp snare, rapid Fuji percussion, talking-drum rolls, shekere, congas, handclaps and dynamic rhythmic breaks.",
+      "bass": "Deep bouncy electronic bass with repetitive dance motifs and strong kick synchronization.",
+      "instruments": {
+        "keys": "Bright street-pop organ, rhythmic piano riffs, short synth hooks and energetic keyboard stabs.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Talking drum, sakara-inspired percussion, brass accents, whistles and shekere."
+      },
+      "melody_harmony": "Original catchy chants, short melodic hooks and energetic call-and-response patterns.",
+      "vocal_delivery": "Playful festive original chant phrasing and energetic group responses; selected voice remains independent.",
+      "arrangement": "Talking-drum introduction → energetic verse → chant chorus → Fuji percussion dance break → second verse → instrumental climax → final chorus.",
+      "lyrics": {
+        "structure": "Celebration, dancing, confidence, success, street festivals, friendship and enjoyment.",
+        "vocabulary": "Use original meaningful secular Fuji-street expressions in the selected supported language or combination. Yoruba instrumental character never forces Yoruba, Nigerian Pidgin or another language, a lead gender or worship themes; do not reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Prominent Fuji percussion, heavy kick-synchronized bass and energetic street-dance momentum. Keep talking-drum rolls and sakara-inspired textures clear, shekere rapid, organ bright and guitar rhythmic; balance brass, whistles and handclaps. Avoid weak percussion, slow romantic arrangements and generic electronic beats that erase Fuji identity.",
+      "variations": {
+        "introductions": [
+          "Begin with an original powerful talking-drum introduction.",
+          "Begin with alternate talking-drum rolls and rapid sakara-inspired percussion."
+        ],
+        "progressions": [
+          "Use original festive street-organ harmony with deep bouncy electronic bass.",
+          "Use alternate rhythmic piano stabs and a different kick-synchronized dance motif."
+        ],
+        "arrangements": [
+          "Vary Fuji percussion breaks and keyboard hooks before the instrumental climax.",
+          "Change talking-drum patterns and chorus-response structures through the dance break."
+        ],
+        "melody": [
+          "Create an original catchy chant with energetic call-and-response.",
+          "Create a contrasting short festive hook and lively group answer."
+        ],
+        "lyrical": [
+          "Develop original street-festival and dancing verses with playful celebration.",
+          "Develop friendship, success and enjoyment through fresh rhythmic chants."
+        ]
+      },
+      "production_terms": [
+        [
+          "fuji"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "talking drum",
+          "talking-drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "sakara"
+        ],
+        [
+          "whistle"
+        ]
+      ],
+      "research_references": [
+        "Qdot"
       ]
     }
   ]

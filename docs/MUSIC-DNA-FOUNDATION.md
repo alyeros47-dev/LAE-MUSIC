@@ -13,14 +13,15 @@ Western/International 8. Instruction Packages 2–16 supply all fourteen Gospel 
 **G1–G14**, with five selectable styles each: **70 supplied profiles**. G6 is inserted
 between G5 and G7 in category and style order. Registry status is `approved` for these
 supplied profiles; it does not certify audio quality or completion of the other departments.
-Instruction Packages 17–20 additionally supply **S1 — Party Afrobeats & Dance Hits**,
-**S2 — Smooth Afropop & Romantic**, **S3 — Street Pop & Street Anthems** and
-**S4 — Afro-Fusion & Powerful Grooves** under the separate Secular and Afrobeats
-department, adding twenty profiles for **90 total**. The other 25 planned research groups
+Instruction Packages 17–21 additionally supply **S1 — Party Afrobeats & Dance Hits**,
+**S2 — Smooth Afropop & Romantic**, **S3 — Street Pop & Street Anthems**,
+**S4 — Afro-Fusion & Powerful Grooves** and **S5 — Fuji-Influenced Street Afrobeats**
+under the separate Secular and Afrobeats department, adding twenty-five profiles for
+**95 total**. The other 24 planned research groups
 remain pending their approved specifications.
 See [Gospel registration completeness](MUSIC-DNA-GOSPEL-COMPLETENESS.md).
 The existing 66 gospel / 33 secular legacy presets remain available. See
-[MUSIC-DNA-G1.md](MUSIC-DNA-G1.md), [MUSIC-DNA-G2.md](MUSIC-DNA-G2.md), [MUSIC-DNA-G3.md](MUSIC-DNA-G3.md), [MUSIC-DNA-G4.md](MUSIC-DNA-G4.md), [MUSIC-DNA-G5.md](MUSIC-DNA-G5.md), [MUSIC-DNA-G7.md](MUSIC-DNA-G7.md) [MUSIC-DNA-G8.md](MUSIC-DNA-G8.md) [MUSIC-DNA-G9.md](MUSIC-DNA-G9.md) [MUSIC-DNA-G10.md](MUSIC-DNA-G10.md) [MUSIC-DNA-G11.md](MUSIC-DNA-G11.md) [MUSIC-DNA-G12.md](MUSIC-DNA-G12.md) [MUSIC-DNA-G13.md](MUSIC-DNA-G13.md) [MUSIC-DNA-G14.md](MUSIC-DNA-G14.md) [MUSIC-DNA-S1.md](MUSIC-DNA-S1.md) [MUSIC-DNA-S2.md](MUSIC-DNA-S2.md) [MUSIC-DNA-S3.md](MUSIC-DNA-S3.md) and [MUSIC-DNA-S4.md](MUSIC-DNA-S4.md).
+[MUSIC-DNA-G1.md](MUSIC-DNA-G1.md), [MUSIC-DNA-G2.md](MUSIC-DNA-G2.md), [MUSIC-DNA-G3.md](MUSIC-DNA-G3.md), [MUSIC-DNA-G4.md](MUSIC-DNA-G4.md), [MUSIC-DNA-G5.md](MUSIC-DNA-G5.md), [MUSIC-DNA-G7.md](MUSIC-DNA-G7.md) [MUSIC-DNA-G8.md](MUSIC-DNA-G8.md) [MUSIC-DNA-G9.md](MUSIC-DNA-G9.md) [MUSIC-DNA-G10.md](MUSIC-DNA-G10.md) [MUSIC-DNA-G11.md](MUSIC-DNA-G11.md) [MUSIC-DNA-G12.md](MUSIC-DNA-G12.md) [MUSIC-DNA-G13.md](MUSIC-DNA-G13.md) [MUSIC-DNA-G14.md](MUSIC-DNA-G14.md) [MUSIC-DNA-S1.md](MUSIC-DNA-S1.md) [MUSIC-DNA-S2.md](MUSIC-DNA-S2.md) [MUSIC-DNA-S3.md](MUSIC-DNA-S3.md) [MUSIC-DNA-S4.md](MUSIC-DNA-S4.md) and [MUSIC-DNA-S5.md](MUSIC-DNA-S5.md).
 Synthetic profiles in `tests/music-dna-fixture.cjs` are test fixtures only; they
 are not published in the application catalogue.
 
@@ -115,6 +116,6 @@ selection, persistence and the existing recording/lyrics/music flows.
 External model and audio responses in these tests are mocked. No paid generation,
 production write, R2 mutation, new API key or deployment is required for this batch.
 Musical quality/audio acceptance remains pending separately authorized, budgeted
-provider tests. The seventy Gospel and twenty S1–S4 profiles are integrated; the other research
+provider tests. The seventy Gospel and twenty-five S1–S5 profiles are integrated; the other research
 groups remain pending their approved specifications. The 43-group catalogue is
 not represented as complete.
