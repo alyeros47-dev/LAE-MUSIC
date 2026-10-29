@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-g12-v1",
   "status": "approved",
   "departments": [
     {
@@ -83,6 +83,12 @@
       "group_id": "G11",
       "department_id": "gospel",
       "name": "South African Gospel & Choir"
+    },
+    {
+      "id": "gospel-g12",
+      "group_id": "G12",
+      "department_id": "gospel",
+      "name": "Western Contemporary Worship"
     }
   ],
   "styles": [
@@ -4177,6 +4183,457 @@
       ],
       "research_references": [
         "Ntokozo Mbambo"
+      ]
+    },
+    {
+      "id": "G12-01",
+      "name": "Majestic Grace Worship",
+      "description": "Soulful Gospel worship with powerful piano, organ and choir harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g12",
+      "tempo": {
+        "min": 66,
+        "max": 90
+      },
+      "mood": "Reverent, powerful, heartfelt and uplifting.",
+      "energy": "Gradual soulful live-band development leads to a powerful but controlled majestic choir climax.",
+      "rhythm": "Slow-to-moderate Western Gospel worship ballad with soulful phrasing and a gradual dynamic build.",
+      "drums_percussion": "Controlled live Gospel drums, warm kick, expressive snare, subtle cymbal swells and gradually intensifying fills.",
+      "bass": "Deep warm electric bass with melodic passing notes and smooth harmonic support.",
+      "instruments": {
+        "keys": "Grand piano, rich Hammond-style organ, warm electric piano and sustained pads.",
+        "guitar": "Clean electric guitar and acoustic guitar.",
+        "other": "Cinematic strings and layered Gospel choir harmonies."
+      },
+      "melody_harmony": "Original soulful melodic phrasing, rich piano harmonies and majestic layered choir development.",
+      "vocal_delivery": "Expressive soulful lead and layered choir harmonies with controlled powerful phrasing; selected voice remains independent.",
+      "arrangement": "Expressive piano introduction → intimate verse → powerful chorus → expanded second verse → instrumental development → emotional bridge → majestic choir-supported final chorus.",
+      "lyrics": {
+        "structure": "Grace, divine faithfulness, surrender, gratitude, redemption, hope and adoration.",
+        "vocabulary": "Use original meaningful worship expressions in the selected supported language or combination. Western instrumentation never forces English or any other language; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve Western Gospel worship with warm rich harmonies, expressive instrumentation and a powerful but controlled climax. Keep grand piano expressive, Hammond-style organ rich, electric piano warm and bass smoothly supportive; balance strings and guitars beneath clear layered choir without adding unrelated African praise percussion.",
+      "variations": {
+        "introductions": [
+          "Begin with original expressive grand-piano voicings and warm organ.",
+          "Begin with alternate piano motifs and rich Hammond-style organ responses."
+        ],
+        "progressions": [
+          "Use original soulful Gospel chord voicings with smooth bass passing notes.",
+          "Use alternate warm electric-piano harmony and different melodic bass support."
+        ],
+        "arrangements": [
+          "Vary choir entrances and cinematic string arrangements through instrumental development.",
+          "Change organ responses and emotional bridge development before the majestic choir climax."
+        ],
+        "melody": [
+          "Create an original powerful chorus contour with soulful phrasing.",
+          "Create a contrasting heartfelt melody and expressive choir response."
+        ],
+        "lyrical": [
+          "Develop original grace and redemption verses with grateful adoration.",
+          "Develop faithfulness, surrender and hope through fresh meaningful testimony."
+        ]
+      },
+      "production_terms": [
+        [
+          "western"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "CeCe Winans"
+      ]
+    },
+    {
+      "id": "G12-02",
+      "name": "Covenant Acoustic Worship",
+      "description": "Gentle congregational worship with acoustic guitar and peaceful melodies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g12",
+      "tempo": {
+        "min": 68,
+        "max": 94
+      },
+      "mood": "Peaceful, grateful, hopeful and reverent.",
+      "energy": "Gentle accessible congregational dynamics develop naturally toward an uplifting final chorus.",
+      "rhythm": "Moderate Western acoustic worship groove with steady 4/4 movement and natural melodic phrasing.",
+      "drums_percussion": "Gentle live drums, soft kick, restrained snare, light hi-hats and subtle cymbal accents.",
+      "bass": "Smooth electric bass with simple melodic movement and warm foundational notes.",
+      "instruments": {
+        "keys": "Soft piano, warm organ and sustained keyboard pads.",
+        "guitar": "Acoustic guitar and clean electric guitar.",
+        "other": "Gentle strings and restrained congregational harmonies."
+      },
+      "melody_harmony": "Original memorable peaceful congregational melodies with simple clear melodic structures.",
+      "vocal_delivery": "Natural clear congregational phrasing with restrained backing harmonies; selected voice remains independent.",
+      "arrangement": "Acoustic guitar introduction → reflective verse → memorable chorus → second verse → gentle instrumental interlude → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, trust, divine promises, surrender, worship and God’s faithfulness.",
+        "vocabulary": "Use original meaningful worship expressions in the selected supported language or combination. Western instrumentation never forces English or any other language; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve simple warm accessible Western congregational worship with clear melodies. Keep acoustic guitar patterns gentle, piano soft, organ warm, bass smooth and drums restrained; balance clean electric guitar, gentle strings and congregational harmonies without unrelated African praise instrumentation.",
+      "variations": {
+        "introductions": [
+          "Open with an original gentle acoustic-guitar pattern and warm bass.",
+          "Open with an alternate acoustic introduction and soft piano responses."
+        ],
+        "progressions": [
+          "Use original simple congregational chords with warm bass foundations.",
+          "Use alternate peaceful harmonic movement and gentle piano voicings."
+        ],
+        "arrangements": [
+          "Vary acoustic patterns and piano arrangement through the gentle interlude.",
+          "Change the instrumental introduction and final chorus layers without crowding the melody."
+        ],
+        "melody": [
+          "Create a fresh memorable peaceful chorus melody.",
+          "Create a contrasting hopeful congregational refrain with natural phrasing."
+        ],
+        "lyrical": [
+          "Develop original thanksgiving and trust verses with a clear refrain.",
+          "Develop promises, surrender and faithfulness through fresh accessible lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "western"
+        ],
+        [
+          "4/4"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "congregational"
+        ]
+      ],
+      "research_references": [
+        "Don Moen"
+      ]
+    },
+    {
+      "id": "G12-03",
+      "name": "Eternal Symphony Worship",
+      "description": "Cinematic worship with grand piano, orchestral strings and emotional melodies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g12",
+      "tempo": {
+        "min": 62,
+        "max": 88
+      },
+      "mood": "Majestic, reflective, hopeful and emotionally uplifting.",
+      "energy": "Spacious phrasing and gradual orchestral development expand naturally into an emotional bridge and expansive ending.",
+      "rhythm": "Slow-to-moderate Western contemporary worship ballad with spacious phrasing and gradual orchestral development.",
+      "drums_percussion": "Gentle live drums, restrained kick and snare, cinematic tom accents and controlled cymbal swells.",
+      "bass": "Warm electric bass with sustained notes and subtle melodic transitions.",
+      "instruments": {
+        "keys": "Grand piano, atmospheric synthesizer pads and rich orchestral keyboard textures.",
+        "guitar": "Ambient electric guitar and acoustic guitar.",
+        "other": "Cinematic orchestral strings and layered worship harmonies."
+      },
+      "melody_harmony": "Original emotional melodies and expressive piano motifs within expansive cinematic harmonic arrangements.",
+      "vocal_delivery": "Reflective expressive melodic phrasing with layered worship harmonies; selected voice remains independent.",
+      "arrangement": "Piano-and-strings introduction → reflective verse → melodic chorus → orchestral instrumental passage → emotional bridge → expansive final chorus.",
+      "lyrics": {
+        "structure": "Divine greatness, hope, eternity, faith, spiritual reflection and gratitude.",
+        "vocabulary": "Use original meaningful worship expressions in the selected supported language or combination. Western instrumentation never forces English or any other language; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve cinematic Western worship with depth, natural dynamics and expressive orchestral instrumentation. Let grand piano and strings lead gradual orchestral development; keep bass sustained, drums restrained, toms cinematic, pads atmospheric and guitars ambient without importing African praise patterns.",
+      "variations": {
+        "introductions": [
+          "Begin with an original piano-and-strings introduction.",
+          "Begin with alternate expressive piano motifs answered by orchestral strings."
+        ],
+        "progressions": [
+          "Use original reflective orchestral chords with sustained bass.",
+          "Use alternate hopeful progressions and subtle melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary string arrangements and orchestral transitions through the instrumental passage.",
+          "Change piano development and emotional bridge layers before the expansive ending."
+        ],
+        "melody": [
+          "Create an original emotional chorus melody with expressive piano responses.",
+          "Create a contrasting majestic melodic contour supported by layered harmonies."
+        ],
+        "lyrical": [
+          "Develop original eternity and divine-greatness imagery with reflective verses.",
+          "Develop hope, faith and gratitude through fresh meaningful expressions."
+        ]
+      },
+      "production_terms": [
+        [
+          "western"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "orchestral"
+        ],
+        [
+          "string"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Michael W. Smith"
+      ]
+    },
+    {
+      "id": "G12-04",
+      "name": "Open Heaven Anthem",
+      "description": "Modern worship-rock with rhythmic guitars and uplifting choruses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g12",
+      "tempo": {
+        "min": 90,
+        "max": 118
+      },
+      "mood": "Uplifting, confident, joyful and worshipful.",
+      "energy": "Steady midtempo worship-rock chorus momentum builds through a strong bridge into a final congregational chorus.",
+      "rhythm": "Midtempo Western contemporary worship-rock with a steady 4/4 pulse and strong chorus momentum.",
+      "drums_percussion": "Steady live kick and snare, rhythmic hi-hats, controlled tom fills and energetic cymbal builds.",
+      "bass": "Driving electric bass with steady rhythmic movement and strong kick synchronization.",
+      "instruments": {
+        "keys": "Bright piano, atmospheric pads and subtle synthesizer textures.",
+        "guitar": "Rhythmic acoustic guitar, melodic electric guitar and ambient guitar layers.",
+        "other": "Congregational backing harmonies."
+      },
+      "melody_harmony": "Original clear memorable group-singing choruses with melodic electric-guitar hooks and strong rhythmic momentum.",
+      "vocal_delivery": "Confident clear congregational melodic phrasing with group backing harmonies; voice selected independently.",
+      "arrangement": "Acoustic guitar introduction → melodic verse → uplifting chorus → second verse → instrumental build → strong bridge → final congregational chorus.",
+      "lyrics": {
+        "structure": "Divine greatness, praise, hope, faith, gratitude and God’s enduring love.",
+        "vocabulary": "Use original meaningful worship expressions in the selected supported language or combination. Western instrumentation never forces English or any other language; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve modern Western worship-rock with clear memorable congregational melodies and energetic balanced live-band production. Keep rhythmic acoustic strumming steady, electric-guitar hooks melodic, bass locked to kick, drums controlled and ambient layers subtle; develop cymbals and bridge without unrelated African percussion.",
+      "variations": {
+        "introductions": [
+          "Begin with an original rhythmic acoustic-guitar strumming pattern.",
+          "Begin with alternate acoustic strumming answered by melodic electric guitar."
+        ],
+        "progressions": [
+          "Use original confident worship-rock chords with synchronized driving bass.",
+          "Use alternate uplifting piano voicings and steady rhythmic bass movement."
+        ],
+        "arrangements": [
+          "Vary drum builds and guitar layers through the instrumental build.",
+          "Change bridge arrangement and final congregational chorus development."
+        ],
+        "melody": [
+          "Create an original uplifting group-singing hook and melodic guitar response.",
+          "Create a contrasting joyful chorus contour with strong momentum."
+        ],
+        "lyrical": [
+          "Develop original divine-greatness and praise verses with clear memorable hooks.",
+          "Develop enduring love, hope and faith through fresh congregational lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "western"
+        ],
+        [
+          "worship-rock"
+        ],
+        [
+          "4/4"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "congregational"
+        ]
+      ],
+      "research_references": [
+        "Chris Tomlin"
+      ]
+    },
+    {
+      "id": "G12-05",
+      "name": "Sanctuary of Praise",
+      "description": "Expansive contemporary worship with rich keyboards and powerful congregational singing.",
+      "department_id": "gospel",
+      "category_id": "gospel-g12",
+      "tempo": {
+        "min": 72,
+        "max": 100
+      },
+      "mood": "Reverent, passionate, majestic and spiritually uplifting.",
+      "energy": "Progressive instrumental development and natural emotional dynamics grow toward a majestic live-band final chorus.",
+      "rhythm": "Moderate Western contemporary worship with expressive melodic phrasing and progressive instrumental development.",
+      "drums_percussion": "Controlled live drums with warm kick, expressive snare, tom fills and gradually expanding cymbal patterns.",
+      "bass": "Deep melodic electric bass with smooth harmonic movement and dynamic rhythmic support.",
+      "instruments": {
+        "keys": "Grand piano, warm organ, atmospheric pads and layered synthesizer textures.",
+        "guitar": "Electric guitar and acoustic guitar.",
+        "other": "Subtle strings and rich congregational choir harmonies."
+      },
+      "melody_harmony": "Original expressive melodies, rich keyboard harmonies and powerful congregational choruses.",
+      "vocal_delivery": "Passionate reverent lead phrasing and rich congregational choir support; selected voice remains independent.",
+      "arrangement": "Piano introduction → reflective verse → powerful chorus → second verse → instrumental worship passage → climactic bridge → majestic final chorus.",
+      "lyrics": {
+        "structure": "Adoration, holiness, surrender, divine greatness, spiritual devotion and gratitude.",
+        "vocabulary": "Use original meaningful worship expressions in the selected supported language or combination. Western instrumentation never forces English or any other language; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve rich Western congregational worship, natural emotional development and a powerful live-band atmosphere. Keep grand piano and organ warm, pads layered, bass melodic and drums controlled; balance guitars, subtle strings and rich choir arrangements through progressive builds without imposing unrelated African praise grooves.",
+      "variations": {
+        "introductions": [
+          "Begin with original grand-piano progressions and warm organ.",
+          "Begin with alternate piano voicings and melodic guitar textures."
+        ],
+        "progressions": [
+          "Use original majestic worship harmony with smooth melodic bass movement.",
+          "Use alternate rich keyboard progressions and dynamic bass support."
+        ],
+        "arrangements": [
+          "Vary choir arrangements and instrumental builds through the worship passage.",
+          "Change guitar textures and climactic bridge development before the majestic final chorus."
+        ],
+        "melody": [
+          "Create an original powerful congregational chorus with expressive phrasing.",
+          "Create a contrasting reverent melody and rich choir response."
+        ],
+        "lyrical": [
+          "Develop original adoration and holiness verses with grateful devotion.",
+          "Develop surrender and divine greatness through fresh meaningful worship imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "western"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Darlene Zschech"
       ]
     }
   ]
