@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r3-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r4-v1",
   "status": "approved",
   "departments": [
     {
@@ -209,6 +209,12 @@
       "group_id": "R3",
       "department_id": "reggae-caribbean",
       "name": "Romantic Reggae & Lovers Rock"
+    },
+    {
+      "id": "reggae-r4",
+      "group_id": "R4",
+      "department_id": "reggae-caribbean",
+      "name": "Contemporary Conscious Reggae"
     }
   ],
   "styles": [
@@ -13954,6 +13960,471 @@
       ],
       "research_references": [
         "Maxi Priest"
+      ]
+    },
+    {
+      "id": "R4-01",
+      "name": "New Generation Roots Revival",
+      "description": "Modern roots reggae with warm bass, live guitars and uplifting melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r4",
+      "tempo": {
+        "min": 76,
+        "max": 100
+      },
+      "mood": "Hopeful, joyful, reflective and uplifting.",
+      "energy": "Relaxed lively modern one-drop with uplifting live-band warmth and flowing melodic bass.",
+      "rhythm": "Contemporary roots reggae with a relaxed one-drop foundation, lively bass movement and natural live-band dynamics.",
+      "drums_percussion": "Warm one-drop reggae drums, punchy kick, crisp rimshot, relaxed hi-hats, natural tom fills and gentle percussion layers.",
+      "bass": "Deep, rounded electric bass with flowing melodic reggae patterns, expressive passing notes and strong rhythmic interaction with the drums.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, warm Rhodes-style electric piano, bright acoustic piano chords and subtle atmospheric pads.",
+        "guitar": "Clean offbeat reggae skank, rhythmic electric guitar, bright melodic lead phrases and restrained acoustic accents.",
+        "other": "Congas, shakers, soft brass, tambourine and subtle Caribbean percussion."
+      },
+      "melody_harmony": "Original uplifting melodies, expressive verses, memorable choruses and warm harmonic development.",
+      "vocal_delivery": "Expressive original verses and uplifting warm choruses; follow independently selected voice settings.",
+      "arrangement": "Guitar-and-organ introduction → melodic verse → uplifting chorus → instrumental roots passage → second verse → short dub-influenced breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Personal growth, hope, unity, community, perseverance, peace and cultural identity.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, political, religious or Rastafarian content because a conscious-reggae style was selected. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Modern Jamaican roots reggae combining warm live-band instrumentation, melodic bass, bright guitar skank, soulful keyboard harmony and uplifting contemporary production. Warm, polished modern roots reggae with strong bass and authentic live instrumentation. Keep deep powerful bass prominent without overpowering clean punchy drums, reggae skank guitar and warm organ. Modern influences complement rather than replace the central reggae foundation; maintain professional instrumental separation. Avoid: Generic tropical pop, excessive electronic effects and imitation of recognizable reggae melodies.",
+      "variations": {
+        "introductions": [
+          "Open with original bright skank guitar and warm organ bubbles.",
+          "Open with alternate melodic guitar phrases and restrained acoustic accents."
+        ],
+        "progressions": [
+          "Use original warm Rhodes/piano harmony over flowing melodic electric bass.",
+          "Use alternate acoustic-piano voicings and expressive bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar replies and organ patterns through the instrumental roots passage.",
+          "Develop percussion details through a short dub breakdown into an uplifting final chorus."
+        ],
+        "melody": [
+          "Create original expressive verses and uplifting memorable choruses.",
+          "Create a contrasting joyful refrain with warm harmonic development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original personal-growth imagery.",
+          "Develop fresh hope or community images only where appropriate to the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "dub"
+        ]
+      ],
+      "research_references": [
+        "Chronixx"
+      ]
+    },
+    {
+      "id": "R4-02",
+      "name": "Modern Dub Roots Fusion",
+      "description": "Atmospheric reggae with deep sub-bass, dub textures and contemporary production.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r4",
+      "tempo": {
+        "min": 72,
+        "max": 96
+      },
+      "mood": "Cool, confident, thoughtful and introspective.",
+      "energy": "Spacious restrained modern dub pressure with subtle hip-hop accents and introspective motion.",
+      "rhythm": "Modern roots reggae with spacious dub production, subtle hip-hop influence and controlled rhythmic movement.",
+      "drums_percussion": "Tight one-drop or half-time reggae groove, deep kick, sharp rimshot, controlled hi-hats, sparse percussion and subtle hip-hop drum accents.",
+      "bass": "Thick sub-bass blended with warm electric bass, hypnotic repeating motifs, occasional slides and deep rhythmic pressure.",
+      "instruments": {
+        "keys": "Dark electric piano, vintage organ bubbles, atmospheric synth pads and short rhythmic keyboard phrases.",
+        "guitar": "Minimal offbeat reggae skank, muted electric guitar and sparse melodic lead-guitar accents.",
+        "other": "Dub echoes, restrained brass, congas, shakers and tasteful analog-style effects."
+      },
+      "melody_harmony": "Original understated melodic hooks, conversational verses, memorable refrains and atmospheric instrumental responses.",
+      "vocal_delivery": "Understated original hooks, conversational verses and introspective phrasing; respect selected voice settings.",
+      "arrangement": "Atmospheric bass-and-keyboard introduction → reflective verse → restrained chorus → dub instrumental passage → second verse → bass-and-drum breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Identity, ambition, community, social reflection, perseverance, relationships and personal growth.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, political, religious or Rastafarian content because a conscious-reggae style was selected. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Contemporary Jamaican reggae blending roots rhythms, dub atmosphere, hip-hop-influenced production, deep bass and restrained electronic textures. Deep, spacious reggae with modern low-frequency clarity and tasteful dub atmosphere. Keep deep powerful bass prominent without overpowering clean punchy drums, reggae skank guitar and warm organ. Modern influences complement rather than replace the central reggae foundation; maintain professional instrumental separation. Avoid: Excessive trap hi-hats, generic hip-hop beats and effects that overpower the musical arrangement.",
+      "variations": {
+        "introductions": [
+          "Open with original atmospheric bass and dark electric-piano phrases.",
+          "Open with alternate spacious synth textures and controlled repeating sub/electric-bass motifs."
+        ],
+        "progressions": [
+          "Use original sparse organ/electric-piano voicings over hypnotic low bass.",
+          "Use alternate dark keyboard harmony with occasional bass slides."
+        ],
+        "arrangements": [
+          "Vary restrained dub echoes and sparse guitar accents through the dub passage.",
+          "Develop keyboard textures and a bass/drum breakdown into a restrained final chorus."
+        ],
+        "melody": [
+          "Create original understated hooks and conversational reflective verses.",
+          "Create a contrasting introspective refrain with atmospheric instrumental responses."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original thoughtful identity or relationship images.",
+          "Develop fresh ambition or perseverance verses without imposing political or religious messages."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop",
+          "half-time"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "dub"
+        ],
+        [
+          "hip-hop"
+        ]
+      ],
+      "research_references": [
+        "Protoje"
+      ]
+    },
+    {
+      "id": "R4-03",
+      "name": "Conscious Reggae Fire",
+      "description": "Powerful modern reggae with punchy drums and confident rhythmic hooks.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r4",
+      "tempo": {
+        "min": 78,
+        "max": 104
+      },
+      "mood": "Determined, confident, empowering and energetic.",
+      "energy": "Firm empowering roots drive with punchy drums and assertive rhythmic phrasing.",
+      "rhythm": "Powerful contemporary roots reggae with hip-hop-influenced rhythmic phrasing and a firm drum-and-bass foundation.",
+      "drums_percussion": "Strong one-drop or steppers-inspired reggae groove, heavy kick, crisp snare, controlled hi-hats, tom accents and energetic percussion fills.",
+      "bass": "Deep, powerful electric bass with repetitive low-register motifs, syncopated movement and occasional melodic runs.",
+      "instruments": {
+        "keys": "Strong Hammond-style organ bubbles, rhythmic piano stabs, dark electric piano and restrained synth textures.",
+        "guitar": "Sharp offbeat skank, rhythmic electric guitar and occasional expressive lead-guitar phrases.",
+        "other": "Brass stabs, congas, shakers, dub effects and subtle hip-hop production textures."
+      },
+      "melody_harmony": "Original commanding melodic hooks, assertive verses and memorable declarative choruses.",
+      "vocal_delivery": "Commanding original hooks and assertive rhythmic phrasing with subtle hip-hop influence; lyrical themes follow the customer.",
+      "arrangement": "Heavy bass-and-drum introduction → rhythmic verse → powerful chorus → instrumental brass-and-guitar passage → second verse → drum-and-bass breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Justice, accountability, education, unity, self-determination, perseverance and social responsibility.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, political, religious or Rastafarian content because a conscious-reggae style was selected. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Powerful modern conscious reggae combining heavy roots bass, punchy drums, rhythmic vocal phrasing, hip-hop influences and energetic instrumental arrangements. Strong modern reggae with commanding bass, punchy drums and clear rhythmic expression. Keep deep powerful bass prominent without overpowering clean punchy drums, reggae skank guitar and warm organ. Modern influences complement rather than replace the central reggae foundation; maintain professional instrumental separation. Avoid: Generic trap production, uncontrolled distortion and forced political lyrics when the customer chooses another topic.",
+      "variations": {
+        "introductions": [
+          "Open with original heavy electric bass and punchy roots drums.",
+          "Open with alternate syncopated low-register bass motifs and purposeful drum accents."
+        ],
+        "progressions": [
+          "Use original strong organ/piano voicings and dark electric-piano harmony.",
+          "Use alternate restrained synth colors over repetitive bass motifs and occasional melodic runs."
+        ],
+        "arrangements": [
+          "Vary brass stabs and sharp guitar replies through the instrumental passage.",
+          "Develop drum accents and a drum/bass breakdown into a declarative final chorus."
+        ],
+        "melody": [
+          "Create original commanding hooks and assertive rhythmic verses.",
+          "Create a contrasting empowering refrain with clear hip-hop-influenced phrasing over reggae."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original self-determination imagery.",
+          "Develop fresh education or perseverance images only when relevant, never forced politics."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop",
+          "steppers"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "hip-hop"
+        ]
+      ],
+      "research_references": [
+        "Kabaka Pyramid"
+      ]
+    },
+    {
+      "id": "R4-04",
+      "name": "Urban Roots Revolution",
+      "description": "Intense reggae fusion with heavy bass, dancehall energy and dramatic arrangements.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r4",
+      "tempo": {
+        "min": 82,
+        "max": 108
+      },
+      "mood": "Bold, intense, determined and triumphant.",
+      "energy": "Intense triumphant roots-based fusion with controlled dancehall energy and dramatic transitions.",
+      "rhythm": "Modern reggae fusion with roots foundations, dancehall energy and hip-hop-influenced rhythmic movement.",
+      "drums_percussion": "Heavy reggae kick, sharp snare, one-drop or steppers-influenced foundations, syncopated dancehall accents, rolling toms and strong percussion breaks.",
+      "bass": "Very deep electric and sub-bass combination with aggressive rhythmic movement, strong low-frequency pressure and expressive bass slides.",
+      "instruments": {
+        "keys": "Dark organ bubbles, rhythmic piano, cinematic synth textures and dramatic keyboard stabs.",
+        "guitar": "Tight reggae skank, muted rhythmic electric guitar and expressive lead-guitar accents.",
+        "other": "Nyabinghi-influenced percussion, congas, brass stabs, dub effects and restrained cinematic textures."
+      },
+      "melody_harmony": "Original intense melodic hooks, rhythmic verses, dramatic choruses and powerful instrumental transitions.",
+      "vocal_delivery": "Intense original rhythmic verses and dramatic melodic choruses; selected voice remains independent of instrumental energy.",
+      "arrangement": "Dramatic bass-and-percussion introduction → rhythmic verse → powerful chorus → instrumental reggae-dancehall groove → second verse → heavy drum-and-bass breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Resilience, identity, courage, ambition, unity, justice, community and personal determination.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, political, religious or Rastafarian content because a conscious-reggae style was selected. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Powerful reggae fusion combining deep roots bass, dancehall-influenced rhythmic energy, hip-hop production, live percussion and dramatic instrumental arrangements. Powerful modern reggae with deep bass, dramatic energy and professional instrumental separation. Keep deep powerful bass prominent without overpowering clean punchy drums, reggae skank guitar and warm organ. Modern influences complement rather than replace the central reggae foundation; maintain professional instrumental separation. Avoid: Generic EDM drops, excessive trap production and loss of the authentic reggae groove.",
+      "variations": {
+        "introductions": [
+          "Open with original dramatic bass and Nyabinghi-influenced percussion.",
+          "Open with alternate deep sub/electric-bass slides and strong percussion breaks."
+        ],
+        "progressions": [
+          "Use original dark organ/piano voicings with restrained cinematic synth stabs.",
+          "Use alternate dramatic keyboard motifs over rhythmically aggressive but controlled bass."
+        ],
+        "arrangements": [
+          "Vary syncopated dancehall accents and guitar skank in the reggae-fusion groove.",
+          "Develop percussion breaks and a heavy drum/bass breakdown without losing roots rhythm."
+        ],
+        "melody": [
+          "Create original intense hooks, rhythmic verses and dramatic choruses.",
+          "Create a contrasting triumphant refrain with powerful instrumental transitions."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original courage and resilience images.",
+          "Develop fresh ambition or community verses without imposing political or religious themes."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop",
+          "steppers"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "electric and sub-bass"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "nyabinghi"
+        ],
+        [
+          "dancehall"
+        ],
+        [
+          "cinematic"
+        ]
+      ],
+      "research_references": [
+        "Damian Marley"
+      ]
+    },
+    {
+      "id": "R4-05",
+      "name": "Soulful Reggae Uplift",
+      "description": "Smooth contemporary reggae with rich piano harmony and heartfelt melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r4",
+      "tempo": {
+        "min": 74,
+        "max": 98
+      },
+      "mood": "Hopeful, heartfelt, peaceful and uplifting.",
+      "energy": "Smooth heartfelt live-band lift with warm one-drop pulse and soulful harmonic development.",
+      "rhythm": "Smooth contemporary roots reggae with a warm live-band pulse and soulful harmonic movement.",
+      "drums_percussion": "Warm one-drop reggae drums, smooth kick, crisp rimshot, relaxed hi-hats, natural tom fills and gentle hand percussion.",
+      "bass": "Deep melodic electric bass with flowing reggae movement, expressive passing notes and warm sustained tones.",
+      "instruments": {
+        "keys": "Rich acoustic piano, warm Rhodes-style electric piano, Hammond-style organ bubbles and gentle harmonic pads.",
+        "guitar": "Clean offbeat reggae skank, expressive melodic lead guitar and gentle acoustic guitar accents.",
+        "other": "Soft brass, strings, congas, shakers and optional layered vocal harmonies when compatible with customer settings."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, uplifting choruses and thoughtful melodic development.",
+      "vocal_delivery": "Emotionally expressive original melodies and heartfelt refrains; layered harmonies only when compatible with selected settings, never forced for a single voice.",
+      "arrangement": "Piano-and-guitar introduction → heartfelt verse → uplifting chorus → instrumental reggae-soul passage → second verse → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic with original complete verses and refrains. Suggested themes, never mandatory: Love, unity, hope, peace, relationships, personal growth, resilience and community.",
+        "vocabulary": "Use original expressions in the selected supported language or combination. Never force Jamaican Patois, political, religious or Rastafarian content because a conscious-reggae style was selected. Respect single-voice, duet and supported harmony choices; never force backing layers for a single voice. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Smooth contemporary conscious reggae combining soulful melodies, rich harmony, warm bass, expressive guitars and uplifting live-band arrangements. Warm, polished modern reggae with soulful harmony and clear bass. Keep deep powerful bass prominent without overpowering clean punchy drums, reggae skank guitar and warm organ. Modern influences complement rather than replace the central reggae foundation; maintain professional instrumental separation. Avoid: Generic Western R&B without reggae rhythm, excessive electronic effects and overly aggressive dancehall drums.",
+      "variations": {
+        "introductions": [
+          "Open with original expressive piano and melodic guitar phrases.",
+          "Open with alternate acoustic-guitar accents and rich Rhodes voicings."
+        ],
+        "progressions": [
+          "Use original soulful acoustic-piano/organ harmony over flowing melodic bass.",
+          "Use alternate warm electric-piano voicings with sustained bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar melodies and organ phrases through the reggae-soul passage.",
+          "Develop an emotional bridge and heartfelt final chorus with gentle live dynamics."
+        ],
+        "melody": [
+          "Create original emotionally expressive verses and uplifting choruses.",
+          "Create a contrasting peaceful refrain with thoughtful melodic development."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original heartfelt everyday-life images.",
+          "Develop fresh hope or relationship expressions only when appropriate to the customer topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Tarrus Riley"
       ]
     }
   ]
