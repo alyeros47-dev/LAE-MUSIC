@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r6-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-v1",
   "status": "approved",
   "departments": [
     {
@@ -227,6 +227,12 @@
       "group_id": "R6",
       "department_id": "reggae-caribbean",
       "name": "Reggae Pop & Crossover"
+    },
+    {
+      "id": "reggae-r7",
+      "group_id": "R7",
+      "department_id": "reggae-caribbean",
+      "name": "Reggae Gospel"
     }
   ],
   "styles": [
@@ -15352,6 +15358,473 @@
       ],
       "research_references": [
         "Musical Youth"
+      ]
+    },
+    {
+      "id": "R7-01",
+      "name": "Kingdom Roots Worship",
+      "description": "Live-band Jamaican gospel reggae with deep bass, one-drop drums and uplifting worship.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r7",
+      "tempo": {
+        "min": 72,
+        "max": 96
+      },
+      "mood": "Reverent, hopeful, joyful and spiritually uplifting.",
+      "energy": "Relaxed steady reverent live-band worship pulse with uplifting roots-reggae warmth.",
+      "rhythm": "Classic roots reggae one-drop with natural live-band movement and a relaxed but steady worship pulse.",
+      "drums_percussion": "Use a natural Jamaican one-drop foundation. Deep kick and rimshot/snare emphasis on beat three. Relaxed closed hi-hat or ride-cymbal subdivisions. Occasional open hi-hat lifts at phrase endings. Tasteful tom fills before choruses. Gentle congas, shakers and tambourine. Natural live-drum dynamics rather than rigid electronic repetition.",
+      "bass": "Deep, warm electric bass is the foundation. Use rounded sustained notes, syncopated melodic movement, occasional passing tones and subtle bass runs between chord changes. The bass must be prominent and musical without masking the kick or vocals.",
+      "instruments": {
+        "keys": "Warm Hammond-style organ bubbles, soft piano chords, vintage electric piano and occasional gentle string pads. Organ should answer the offbeat guitar rhythm without overcrowding it.",
+        "guitar": "Clean, clipped offbeat reggae skank, muted rhythmic strumming and short melodic lead-guitar responses.",
+        "other": "Congas, shakers, tambourine, soft brass accents and optional backing harmonies when compatible with the customer's vocal configuration."
+      },
+      "melody_harmony": "Original worship melodies with clear phrasing, memorable choruses, natural repetition and congregational singalong potential.",
+      "vocal_delivery": "Original clearly phrased worship melodies and congregational singalong potential; backing harmonies only when compatible with selected vocal settings.",
+      "arrangement": "Bass-and-organ introduction → reflective worship verse → uplifting chorus → second verse → fuller chorus → instrumental reggae passage → worship bridge → final chorus.",
+      "lyrics": {
+        "structure": "Respect the customer song topic while retaining Christian gospel character, using original complete verses and refrains. Lyrical guidance: Thanksgiving, God's faithfulness, grace, salvation, hope, divine protection, praise, prayer and Christian encouragement. Use meaningful biblical language naturally. Avoid empty repetition and unrelated religious phrases.",
+        "vocabulary": "Use meaningful original Christian language appropriate to the selected topic, without empty repetition or guaranteed individual outcomes. Never force Jamaican Patois, Nigerian Pidgin or a regional accent; respect selected supported languages and preserve customer-supplied phrases without inventing unfamiliar translations. Respect single-singer, duet and supported harmony settings without adding performers automatically. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Authentic Jamaican gospel roots reggae with strong one-drop drums, deep melodic bass, warm organ bubbles, clean guitar skank and uplifting Christian worship arrangements. This style should feel like a live reggae worship band, not ordinary contemporary worship music with a reggae drum loop added. **Tempo:** 72–96 BPM. **Built-in mood:** Reverent, hopeful, joyful and spiritually uplifting. Organic, warm Jamaican gospel roots reggae with strong bass, clear vocals and live-band authenticity. Keep deep clean bass prominent without masking kick or vocals, and preserve authentic reggae/dancehall rhythm, offbeat guitar, appropriate organ and vocal-friendly instrumental separation. Avoid: Generic pop worship drums, weak bass, excessive synth pads, imitation of existing reggae worship songs and overproduced EDM effects.",
+      "variations": {
+        "introductions": [
+          "Open with original warm bass phrases and answering Hammond organ.",
+          "Open with alternate sustained bass notes and gentle organ bubbles."
+        ],
+        "progressions": [
+          "Use original warm worship-reggae piano/organ voicings and melodic bass.",
+          "Use alternate electric-piano chords with syncopated bass passing tones."
+        ],
+        "arrangements": [
+          "Vary guitar accents and organ replies through the live reggae passage.",
+          "Develop a worship bridge and fuller final chorus with tasteful tom fills."
+        ],
+        "melody": [
+          "Create original clearly phrased worship melodies and memorable refrains.",
+          "Create a contrasting congregational singalong melody with meaningful repetition."
+        ],
+        "lyrical": [
+          "Develop the customer topic with original meaningful biblical thanksgiving imagery.",
+          "Develop fresh Christian encouragement or grace expressions appropriate to the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "tambourine"
+        ]
+      ],
+      "research_references": [
+        "Christafari"
+      ]
+    },
+    {
+      "id": "R7-02",
+      "name": "Gospel Dancehall Victory",
+      "description": "Energetic Caribbean gospel dancehall with heavy bass and joyful praise rhythms.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r7",
+      "tempo": {
+        "min": 94,
+        "max": 116
+      },
+      "mood": "Victorious, celebratory, confident and energetic.",
+      "energy": "High-energy joyful gospel dancehall bounce with syncopated bass and dynamic rhythmic breaks.",
+      "rhythm": "Energetic gospel dancehall with a distinctive Caribbean bounce, syncopated bass and exciting rhythmic breaks.",
+      "drums_percussion": "Use authentic Jamaican dancehall riddim foundations. Punchy electronic or hybrid kick. Sharp snare, clap and rimshot accents. Syncopated hi-hats and shakers. Short percussion rolls. Dynamic drum breaks before choruses. Tasteful dancehall rhythmic variations. Do not replace the dancehall rhythm with generic Afrobeats or trap drums.",
+      "bass": "Very deep, clean electronic sub-bass blended with warm electric-bass character where appropriate. Use short rhythmic bass notes, strong syncopation, occasional slides and tight kick-bass coordination.",
+      "instruments": {
+        "keys": "Bright synth plucks, rhythmic organ stabs, piano accents and memorable original keyboard hooks.",
+        "guitar": "Sparse clean reggae skank, muted rhythmic accents and short instrumental responses.",
+        "other": "Handclaps, congas, brass stabs, tambourine, shakers and restrained electronic transition effects."
+      },
+      "melody_harmony": "Original chant-friendly praise hooks, rhythmic verses, energetic choruses and memorable call-and-response passages.",
+      "vocal_delivery": "Original rhythmic singing, melodic delivery or spoken-style passages only when compatible with the requested performance; never force a rapid deejay persona.",
+      "arrangement": "Immediate bass-and-drum introduction → rhythmic praise verse → explosive chorus → second verse → dancehall instrumental break → praise bridge → final celebration chorus.",
+      "lyrics": {
+        "structure": "Respect the customer song topic while retaining Christian gospel character, using original complete verses and refrains. Lyrical guidance: Victory through faith, thanksgiving, overcoming difficulties, God's goodness, joy, celebration and Christian encouragement.",
+        "vocabulary": "Use meaningful original Christian language appropriate to the selected topic, without empty repetition or guaranteed individual outcomes. Never force Jamaican Patois, Nigerian Pidgin or a regional accent; respect selected supported languages and preserve customer-supplied phrases without inventing unfamiliar translations. Respect single-singer, duet and supported harmony settings without adding performers automatically. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Energetic Jamaican gospel dancehall with powerful bass, sharp rhythmic drums, bright keyboard hooks and joyful praise arrangements. This is a danceable gospel style, distinctly different from the slower roots worship profile. **Tempo:** 94–116 BPM. **Built-in mood:** Victorious, celebratory, confident and energetic. High-energy, dancefloor-ready gospel dancehall with heavy bass, clear drums and polished Caribbean production. Keep deep clean bass prominent without masking kick or vocals, and preserve authentic reggae/dancehall rhythm, offbeat guitar, appropriate organ and vocal-friendly instrumental separation. Avoid: Generic EDM drops, aggressive distortion, inappropriate party lyrics, copied dancehall hooks and excessive trap-style percussion.",
+      "variations": {
+        "introductions": [
+          "Open immediately with an original syncopated dancehall kick and short clean sub-bass.",
+          "Open with alternate sharp drum accents and a bright synth hook."
+        ],
+        "progressions": [
+          "Use original bright synth/organ-stab harmony over coordinated short bass notes.",
+          "Use alternate piano accents and controlled bass slides locked to the kick."
+        ],
+        "arrangements": [
+          "Vary riddim patterns and percussion breaks through the gospel dancehall passage.",
+          "Develop a praise bridge and final celebration chorus with alternate keyboard replies."
+        ],
+        "melody": [
+          "Create original chant-friendly praise hooks and energetic choruses.",
+          "Create a contrasting rhythmic or melodic refrain compatible with selected performance settings."
+        ],
+        "lyrical": [
+          "Develop the customer topic through original thanksgiving and Christian encouragement.",
+          "Develop fresh victory-through-faith imagery without guaranteed individual outcomes."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pluck"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Papa San"
+      ]
+    },
+    {
+      "id": "R7-03",
+      "name": "Street Testimony Reggae",
+      "description": "Powerful reggae-dancehall fusion with rhythmic storytelling and Christian testimony.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r7",
+      "tempo": {
+        "min": 88,
+        "max": 108
+      },
+      "mood": "Bold, determined, hopeful and triumphant.",
+      "energy": "Bold direct testimony-driven hybrid groove with organic roots bass and occasional one-drop contrast.",
+      "rhythm": "Strong reggae-dancehall crossover with roots-influenced bass and clear rhythmic storytelling space.",
+      "drums_percussion": "Use a firm reggae-dancehall hybrid groove. Heavy kick with syncopated placement. Sharp snare and rimshot. Controlled hi-hats. Rhythmic percussion breaks. Short tom and snare fills. Occasional one-drop sections to create contrast.",
+      "bass": "Deep, punchy electric bass with repetitive low-register motifs, syncopated movement and expressive fills. Keep the bass more organic and roots-oriented than the primarily electronic club bass of R7-02.",
+      "instruments": {
+        "keys": "Hammond organ bubbles, rhythmic piano stabs, bright electric piano and restrained synth accents.",
+        "guitar": "Tight offbeat reggae skank, muted guitar responses and occasional blues-influenced lead-guitar phrases.",
+        "other": "Brass accents, congas, shakers, tambourine and tasteful dub-style effects."
+      },
+      "melody_harmony": "Original commanding refrains, memorable testimony choruses and rhythmic verse patterns.",
+      "vocal_delivery": "Original commanding testimony refrains and clear rhythmic storytelling; respect selected voice without imitating a particular deejay persona.",
+      "arrangement": "Heavy bass-and-drum introduction → storytelling verse → declarative chorus → second testimony verse → roots-reggae instrumental passage → breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Respect the customer song topic while retaining Christian gospel character, using original complete verses and refrains. Lyrical guidance: Personal transformation, forgiveness, redemption, deliverance, perseverance, faith, hope and overcoming life's challenges. Use clear storytelling with a recognizable beginning, struggle, turning point and encouraging conclusion when the topic supports it.",
+        "vocabulary": "Use meaningful original Christian language appropriate to the selected topic, without empty repetition or guaranteed individual outcomes. Never force Jamaican Patois, Nigerian Pidgin or a regional accent; respect selected supported languages and preserve customer-supplied phrases without inventing unfamiliar translations. Respect single-singer, duet and supported harmony settings without adding performers automatically. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Powerful gospel reggae combining classic dancehall rhythmic phrasing, roots reggae bass, energetic percussion and narrative Christian testimony. This style should sound confident, direct and rhythmically engaging without becoming identical to R7-02. **Tempo:** 88–108 BPM. **Built-in mood:** Bold, determined, hopeful and triumphant. Strong reggae groove, deep bass, rhythmic clarity and compelling Christian storytelling. Keep deep clean bass prominent without masking kick or vocals, and preserve authentic reggae/dancehall rhythm, offbeat guitar, appropriate organ and vocal-friendly instrumental separation. Avoid: Forced imitation of a particular deejay voice, excessively aggressive trap production, generic motivational lyrics without gospel substance and repetitive arrangements.",
+      "variations": {
+        "introductions": [
+          "Open with original organic roots bass motifs and firm hybrid reggae drums.",
+          "Open with alternate syncopated bass fills and tight muted guitar responses."
+        ],
+        "progressions": [
+          "Use original Hammond/piano voicings and bright electric piano over low bass motifs.",
+          "Use alternate restrained synth colors and rhythmic piano stabs with expressive bass fills."
+        ],
+        "arrangements": [
+          "Vary testimony verse rhythms and guitar replies through the roots-reggae passage.",
+          "Develop occasional one-drop contrast and a fresh breakdown before the final chorus."
+        ],
+        "melody": [
+          "Create original commanding refrains and memorable testimony choruses.",
+          "Create a contrasting rhythmic verse pattern with clear narrative space."
+        ],
+        "lyrical": [
+          "Develop a beginning, struggle, turning point and encouraging Christian conclusion when the topic supports it.",
+          "Develop fresh redemption or perseverance storytelling appropriate to the customer subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "dancehall"
+        ],
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "blues"
+        ],
+        [
+          "testimony"
+        ]
+      ],
+      "research_references": [
+        "Stitchie"
+      ]
+    },
+    {
+      "id": "R7-04",
+      "name": "Heavenly Reggae Soul",
+      "description": "Soulful gospel lovers rock with warm piano, deep bass and heartfelt worship.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r7",
+      "tempo": {
+        "min": 68,
+        "max": 92
+      },
+      "mood": "Peaceful, heartfelt, comforting and spiritually uplifting.",
+      "energy": "Gentle comforting soulful gospel-reggae warmth with clear one-drop pulse and rich harmony.",
+      "rhythm": "Slow-to-midtempo soulful gospel reggae with lovers rock warmth and a clear one-drop pulse.",
+      "drums_percussion": "Use a soft one-drop reggae foundation. Warm kick. Gentle rimshot or snare. Relaxed hi-hats. Light tom fills. Subtle congas and shakers. Natural live-band dynamics.",
+      "bass": "Deep, smooth electric bass with flowing melodic reggae phrases, long sustained notes, expressive passing tones and gentle slides. The bass should feel warm and comforting rather than aggressive.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, Rhodes-style electric piano, Hammond organ bubbles and soft harmonic pads. Use gospel-influenced chord extensions where musically appropriate.",
+        "guitar": "Gentle offbeat skank, soft acoustic guitar accents and expressive melodic lead-guitar responses.",
+        "other": "Soft strings, restrained brass, congas, shakers and optional layered vocal harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, thoughtful verses, rich choruses and gentle melodic development.",
+      "vocal_delivery": "Original emotionally expressive worship melodies and heartfelt refrains; any customer-selected voice is supported independently of the research reference, with harmonies only when selected settings permit.",
+      "arrangement": "Piano-and-organ introduction → reflective verse → heartfelt chorus → second verse → instrumental guitar passage → emotional worship bridge → final chorus.",
+      "lyrics": {
+        "structure": "Respect the customer song topic while retaining Christian gospel character, using original complete verses and refrains. Lyrical guidance: God's love, comfort, healing, prayer, gratitude, restoration, mercy, hope and trust. Prioritize meaningful emotional storytelling and natural worship language.",
+        "vocabulary": "Use meaningful original Christian language appropriate to the selected topic, without empty repetition or guaranteed individual outcomes. Never force Jamaican Patois, Nigerian Pidgin or a regional accent; respect selected supported languages and preserve customer-supplied phrases without inventing unfamiliar translations. Respect single-singer, duet and supported harmony settings without adding performers automatically. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Soulful Jamaican gospel reggae combining lovers rock warmth, rich piano harmony, deep melodic bass and heartfelt worship melodies. This style is designed for emotional Christian worship, encouragement and reflective praise. **Tempo:** 68–92 BPM. **Built-in mood:** Peaceful, heartfelt, comforting and spiritually uplifting. Warm, soulful gospel reggae with rich harmony, deep bass and crystal-clear vocal space. Keep deep clean bass prominent without masking kick or vocals, and preserve authentic reggae/dancehall rhythm, offbeat guitar, appropriate organ and vocal-friendly instrumental separation. Avoid: Generic Western gospel ballads without reggae rhythm, excessive electronic effects, harsh drums and automatically forcing a female vocal.",
+      "variations": {
+        "introductions": [
+          "Open with original expressive piano and warm organ bubbles.",
+          "Open with alternate Rhodes voicings and gentle piano/organ responses."
+        ],
+        "progressions": [
+          "Use original soulful gospel chord extensions over flowing warm bass.",
+          "Use alternate acoustic-piano/organ voicings with gentle bass slides."
+        ],
+        "arrangements": [
+          "Vary melodic guitar replies through the intimate instrumental passage.",
+          "Develop an emotional worship bridge and heartfelt final chorus with natural dynamics."
+        ],
+        "melody": [
+          "Create original comforting verses and emotionally expressive worship melodies.",
+          "Create a contrasting rich chorus with thoughtful gentle melodic development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original meaningful Christian comfort and hope imagery.",
+          "Develop fresh gratitude or trust expressions without promising individual healing outcomes."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Carlene Davis"
+      ]
+    },
+    {
+      "id": "R7-05",
+      "name": "African Gospel Reggae Fire",
+      "description": "Nigerian gospel reggae with powerful bass, African percussion and uplifting praise.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r7",
+      "tempo": {
+        "min": 76,
+        "max": 102
+      },
+      "mood": "Joyful, bold, hopeful and spiritually empowering.",
+      "energy": "Bold joyful Nigerian gospel-reggae drive with rolling warm bass and authentic African rhythmic identity.",
+      "rhythm": "Authentic Jamaican reggae foundations enriched with Nigerian percussion and melodic movement.",
+      "drums_percussion": "Use a strong reggae one-drop or moderate steppers-inspired foundation. Deep kick. Firm snare or rimshot. Steady hi-hats. Expressive tom fills. Nigerian percussion accents. Tasteful hand-drum patterns and shakers.",
+      "bass": "Very deep, warm electric bass with rolling reggae patterns, melodic slides, strong syncopation and occasional African-influenced rhythmic phrasing. The bass must remain clearly audible throughout the arrangement.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, bright piano chords, warm electric piano and subtle African gospel keyboard textures.",
+        "guitar": "Clean reggae offbeat skank, expressive melodic lead guitar and occasional Nigerian Highlife-inspired guitar phrases.",
+        "other": "Talking-drum accents, congas, shekere, tambourine, restrained brass and African hand percussion."
+      },
+      "melody_harmony": "Original uplifting African gospel melodies, strong refrains, rhythmic storytelling and memorable praise choruses.",
+      "vocal_delivery": "Original uplifting African gospel refrains and rhythmic testimony storytelling; selected voice remains independent of instrumental identity.",
+      "arrangement": "African percussion-and-bass introduction → storytelling verse → strong praise chorus → second verse → guitar-and-organ instrumental groove → testimony bridge → final celebration chorus.",
+      "lyrics": {
+        "structure": "Respect the customer song topic while retaining Christian gospel character, using original complete verses and refrains. Lyrical guidance: Thanksgiving, God's faithfulness, divine protection, prayer, testimony, salvation, victory, healing, encouragement and Christian hope. Where appropriate, lyrics may reflect African Christian experiences without automatically using any particular regional language.",
+        "vocabulary": "Use meaningful original Christian language appropriate to the selected topic, without empty repetition or guaranteed individual outcomes. Never force Jamaican Patois, Nigerian Pidgin or a regional accent; respect selected supported languages and preserve customer-supplied phrases without inventing unfamiliar translations. Respect single-singer, duet and supported harmony settings without adding performers automatically. Never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Distinctive Nigerian gospel roots reggae blending deep Jamaican reggae bass, Nigerian rhythmic percussion, expressive guitar, warm organ and powerful African gospel storytelling. This must sound like authentic African gospel reggae, not ordinary Nigerian Afrobeats with a reggae guitar added. **Tempo:** 76–102 BPM. **Built-in mood:** Joyful, bold, hopeful and spiritually empowering. Powerful Nigerian gospel reggae with heavy, clean bass, authentic reggae rhythm and recognizable African musical identity. Keep deep clean bass prominent without masking kick or vocals, and preserve authentic reggae/dancehall rhythm, offbeat guitar, appropriate organ and vocal-friendly instrumental separation. Avoid: Generic Afrobeats drum loops, excessive Amapiano log drums, thin bass, imitation of recognizable songs and forced Nigerian Pidgin.",
+      "variations": {
+        "introductions": [
+          "Open with original Nigerian percussion patterns and rolling reggae bass.",
+          "Open with alternate talking-drum accents and melodic bass slides."
+        ],
+        "progressions": [
+          "Use original bright piano/organ harmony over syncopated African-influenced bass phrasing.",
+          "Use alternate warm electric-piano chords with expressive reggae bass runs."
+        ],
+        "arrangements": [
+          "Vary Nigerian Highlife-influenced guitar replies through the organ/guitar groove.",
+          "Develop a testimony bridge and final praise chorus with alternate percussion exchanges."
+        ],
+        "melody": [
+          "Create original uplifting African gospel melodies and strong refrains.",
+          "Create a contrasting rhythmic storytelling melody with memorable praise hooks."
+        ],
+        "lyrical": [
+          "Develop the requested subject through original African Christian thanksgiving or testimony imagery.",
+          "Develop fresh encouragement and Christian hope without forcing regional language or guaranteed outcomes."
+        ]
+      },
+      "production_terms": [
+        [
+          "nigerian"
+        ],
+        [
+          "one-drop",
+          "steppers"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "talking-drum",
+          "talking drum"
+        ],
+        [
+          "shekere"
+        ]
+      ],
+      "research_references": [
+        "Buchi"
       ]
     }
   ]
