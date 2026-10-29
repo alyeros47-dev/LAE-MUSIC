@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r5-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r6-v1",
   "status": "approved",
   "departments": [
     {
@@ -221,6 +221,12 @@
       "group_id": "R5",
       "department_id": "reggae-caribbean",
       "name": "Dancehall & Party Reggae"
+    },
+    {
+      "id": "reggae-r6",
+      "group_id": "R6",
+      "department_id": "reggae-caribbean",
+      "name": "Reggae Pop & Crossover"
     }
   ],
   "styles": [
@@ -14891,6 +14897,461 @@
       ],
       "research_references": [
         "Chaka Demus & Pliers"
+      ]
+    },
+    {
+      "id": "R6-01",
+      "name": "British Velvet Reggae Pop",
+      "description": "Smooth romantic reggae-pop with deep bass, warm keyboards and gentle guitar.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r6",
+      "tempo": {
+        "min": 74,
+        "max": 96
+      },
+      "mood": "Romantic, nostalgic, relaxed and uplifting.",
+      "energy": "Relaxed nostalgic British reggae-pop warmth with gentle one-drop and flowing melodic bass.",
+      "rhythm": "Relaxed reggae-pop with a steady one-drop foundation, flowing bass and accessible pop phrasing.",
+      "drums_percussion": "Soft but punchy one-drop reggae drums, warm kick, crisp rimshot, restrained hi-hats, gentle tom fills and subtle shaker patterns.",
+      "bass": "Deep, rounded electric bass with flowing melodic phrases, sustained low notes, gentle syncopation and occasional expressive slides. Bass should remain warm and prominent.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, warm electric piano, bright piano accents and soft vintage synthesizer textures.",
+        "guitar": "Clean offbeat reggae skank, muted rhythmic guitar and restrained melodic lead-guitar responses.",
+        "other": "Soft saxophone, trumpet, congas, shakers and subtle string textures."
+      },
+      "melody_harmony": "Original smooth melodic verses, memorable romantic choruses, gentle harmonic movement and natural instrumental responses.",
+      "vocal_delivery": "Original smooth verses and memorable warm refrains with gentle melodic movement; follow selected vocal settings.",
+      "arrangement": "Warm organ-and-bass introduction → melodic verse → memorable chorus → saxophone or guitar instrumental passage → second verse → gentle bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Built-in themes are suggestions, never compulsory: Love, companionship, nostalgia, relationships, happiness, reconciliation and everyday experiences.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois or a regional accent from the crossover style. Respect selected single-singer, duet and supported harmony settings without adding performers automatically. Do not force childish lyrics unless requested or infer performer age from the style name. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Smooth British reggae-pop with deep melodic bass, gentle one-drop drums, warm keyboards, bright guitar skank and polished romantic arrangements. Smooth, full-bodied bass, clean live-band sound, warm stereo depth and polished romantic reggae production. Keep deep clean reggae bass prominent without muddying the kick; preserve authentic offbeat guitar and appropriate Caribbean drum foundations with clear instrumental separation. Crossover influences complement rather than replace the reggae identity. Avoid: Generic Western soft rock, thin electronic bass, aggressive dancehall drums and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original warm organ voicings and deep melodic bass.",
+          "Open on alternate sustained bass phrases and gentle organ bubbles."
+        ],
+        "progressions": [
+          "Use original smooth British reggae-pop chords and warm electric piano.",
+          "Use alternate gentle piano/organ harmony with expressive bass slides."
+        ],
+        "arrangements": [
+          "Vary restrained saxophone or guitar phrases through the instrumental passage.",
+          "Develop horn voicings and a gentle bridge into a memorable final chorus."
+        ],
+        "melody": [
+          "Create original smooth melodic verses and warm memorable refrains.",
+          "Create a contrasting nostalgic melody with gentle harmonic movement."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original everyday reflective images.",
+          "Develop fresh companionship or reconciliation imagery only where requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "saxophone",
+          "sax"
+        ],
+        [
+          "trumpet"
+        ]
+      ],
+      "research_references": [
+        "UB40"
+      ]
+    },
+    {
+      "id": "R6-02",
+      "name": "Island Celebration Reggae",
+      "description": "Upbeat Jamaican party reggae with bouncing bass, lively brass and catchy melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r6",
+      "tempo": {
+        "min": 90,
+        "max": 112
+      },
+      "mood": "Joyful, playful, celebratory and energetic.",
+      "energy": "Lively celebratory Jamaican reggae-pop bounce with springy bass and bright brass.",
+      "rhythm": "Danceable Jamaican reggae-pop with a lively Caribbean bounce, bright offbeats and energetic bass movement.",
+      "drums_percussion": "Bouncy reggae-pop kick, crisp snare, syncopated hi-hats, lively percussion fills, claps and occasional dancehall-influenced rhythmic accents.",
+      "bass": "Thick, springy electric bass with repetitive dance-friendly motifs, melodic passing notes and a strong relationship with the kick.",
+      "instruments": {
+        "keys": "Bright Hammond-style organ, rhythmic piano stabs, lively electric piano and short synth accents.",
+        "guitar": "Sharp offbeat reggae skank, rhythmic muted guitar and short melodic guitar responses.",
+        "other": "Trumpet, trombone, saxophone, congas, tambourine, shakers and occasional handclaps."
+      },
+      "melody_harmony": "Original catchy melodic hooks, singalong-friendly choruses and playful call-and-response opportunities.",
+      "vocal_delivery": "Original catchy singalong-friendly hooks and playful responses only when compatible with selected vocal settings.",
+      "arrangement": "Immediate bass-and-brass introduction → playful verse → energetic chorus → instrumental brass-and-guitar passage → second verse → percussion breakdown → final celebration chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Built-in themes are suggestions, never compulsory: Celebration, friendship, romance, dancing, happiness, community, travel and good times.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois or a regional accent from the crossover style. Respect selected single-singer, duet and supported harmony settings without adding performers automatically. Do not force childish lyrics unless requested or infer performer age from the style name. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Upbeat Jamaican party reggae combining bouncing bass, lively drums, rhythmic guitar, bright brass and memorable celebration-oriented melodies. Bright, energetic party reggae with punchy drums, deep bass and clean brass arrangements. Keep deep clean reggae bass prominent without muddying the kick; preserve authentic offbeat guitar and appropriate Caribbean drum foundations with clear instrumental separation. Crossover influences complement rather than replace the reggae identity. Avoid: Generic EDM drops, excessively aggressive dancehall patterns and monotonous four-on-the-floor club beats.",
+      "variations": {
+        "introductions": [
+          "Open with original springy bass and bright live brass.",
+          "Open with alternate bass/brass riffs and lively Caribbean percussion."
+        ],
+        "progressions": [
+          "Use original bright organ/piano voicings over repetitive dance-friendly bass.",
+          "Use alternate lively electric-piano chords and melodic bass passing notes."
+        ],
+        "arrangements": [
+          "Vary brass riffs and offbeat guitar through the instrumental passage.",
+          "Develop percussion breaks and a final energetic chorus with alternate horn replies."
+        ],
+        "melody": [
+          "Create original catchy hooks and singalong-friendly choruses.",
+          "Create a contrasting playful refrain with responses compatible with selected vocal settings."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original joyful images.",
+          "Develop fresh travel or friendship verses only when appropriate to the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "reggae"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "trumpet"
+        ],
+        [
+          "trombone"
+        ],
+        [
+          "saxophone",
+          "sax"
+        ]
+      ],
+      "research_references": [
+        "Inner Circle"
+      ]
+    },
+    {
+      "id": "R6-03",
+      "name": "Caribbean Reggae Funk Orchestra",
+      "description": "Sophisticated reggae-funk with melodic bass, rhythmic guitars and rich soul harmony.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r6",
+      "tempo": {
+        "min": 88,
+        "max": 110
+      },
+      "mood": "Soulful, confident, joyful and uplifting.",
+      "energy": "Confident soulful live-band reggae-funk motion with precise rhythmic counterpoint and melodic bass.",
+      "rhythm": "Reggae offbeat foundation combined with funk syncopation and soulful live-band dynamics. The bass and drums should move together while guitar and keyboards create rhythmic counterpoint.",
+      "drums_percussion": "Live reggae-funk drum groove with a strong kick, crisp snare, syncopated hi-hats, tasteful ghost notes and dynamic tom fills.",
+      "bass": "Deep, highly melodic electric bass combining reggae low-end weight with syncopated funk movement, occasional octave jumps, short slides and rhythmic fills.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, Hammond organ, funky clavinet accents, warm acoustic piano and occasional analog synthesizer textures.",
+        "guitar": "Clean reggae skank blended with syncopated funk strumming, muted sixteenth-note guitar patterns and expressive lead-guitar phrases.",
+        "other": "Brass section, congas, shakers, strings and tasteful instrumental harmony layers."
+      },
+      "melody_harmony": "Original soulful melodies, harmonically rich choruses, expressive instrumental hooks and uplifting melodic development.",
+      "vocal_delivery": "Original expressive soulful melodies and harmonically rich refrains; respect selected single-singer, duet and supported harmony settings.",
+      "arrangement": "Funky bass-and-guitar introduction → soulful verse → rich chorus → instrumental keyboard-and-guitar groove → second verse → extended reggae-funk breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Built-in themes are suggestions, never compulsory: Love, unity, friendship, optimism, celebration, personal growth and meaningful life experiences.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois or a regional accent from the crossover style. Respect selected single-singer, duet and supported harmony settings without adding performers automatically. Do not force childish lyrics unless requested or infer performer age from the style name. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Sophisticated reggae-funk and soul crossover combining deep reggae bass, syncopated funk guitar, rich keyboards, live percussion and expressive melodic arrangements. High-quality live-band reggae-funk with deep bass, precise rhythmic interaction and crystal-clear instrumental separation. Keep deep clean reggae bass prominent without muddying the kick; preserve authentic offbeat guitar and appropriate Caribbean drum foundations with clear instrumental separation. Crossover influences complement rather than replace the reggae identity. Avoid: Generic disco, excessive electronic dance production and losing the reggae offbeat beneath the funk arrangement.",
+      "variations": {
+        "introductions": [
+          "Open with original melodic funk bass and muted sixteenth-note guitar.",
+          "Open on alternate syncopated bass fills and clean reggae/funk guitar counterpoint."
+        ],
+        "progressions": [
+          "Use original rich Rhodes/organ chords with tasteful extensions and deep melodic bass.",
+          "Use alternate clavinet accents and warm piano voicings over octave-jumping bass."
+        ],
+        "arrangements": [
+          "Vary brass voicings and keyboard/guitar solos through the instrumental groove.",
+          "Develop an extended reggae-funk breakdown while preserving bass/drum interaction and reggae offbeats."
+        ],
+        "melody": [
+          "Create original soulful melodies and harmonically rich choruses.",
+          "Create a contrasting uplifting refrain with expressive instrumental hooks."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original meaningful life-experience images.",
+          "Develop fresh unity or optimism imagery only where the customer topic supports it."
+        ]
+      },
+      "production_terms": [
+        [
+          "reggae"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "clavinet"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "octave"
+        ]
+      ],
+      "research_references": [
+        "Third World"
+      ]
+    },
+    {
+      "id": "R6-04",
+      "name": "Electric Caribbean Freedom",
+      "description": "Powerful reggae-rock and electro-pop with punchy drums and bright synth hooks.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r6",
+      "tempo": {
+        "min": 96,
+        "max": 120
+      },
+      "mood": "Bold, uplifting, energetic and triumphant.",
+      "energy": "Bold triumphant Caribbean crossover drive with rhythmic rock guitar and energetic electronic textures.",
+      "rhythm": "Reggae-pop with Caribbean rhythmic foundations, rock-influenced drive and energetic electronic textures.",
+      "drums_percussion": "Strong reggae-pop kick, punchy snare, tight hi-hats, rhythmic claps, occasional rock-influenced drum fills and restrained electronic percussion.",
+      "bass": "Thick electric bass with strong repeated motifs, syncopated reggae movement, occasional octave jumps and subtle electronic sub-bass reinforcement.",
+      "instruments": {
+        "keys": "Bright analog-style synthesizers, rhythmic organ accents, electric piano, short keyboard hooks and atmospheric synth layers.",
+        "guitar": "Sharp offbeat reggae skank, rhythmic rock guitar, clean electric-guitar riffs and occasional expressive lead phrases.",
+        "other": "Electronic percussion, congas, brass stabs, handclaps and tasteful transition effects."
+      },
+      "melody_harmony": "Original bold melodic hooks, energetic verses, strong singalong choruses and dramatic instrumental transitions.",
+      "vocal_delivery": "Original bold melodic hooks, energetic verses and strong singalong choruses; selected voice remains independent of instrumental intensity.",
+      "arrangement": "Electric-guitar-and-synth introduction → rhythmic verse → powerful chorus → instrumental reggae-rock passage → second verse → bass-and-drum breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Built-in themes are suggestions, never compulsory: Freedom, confidence, perseverance, unity, celebration, ambition, hope and relationships.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois or a regional accent from the crossover style. Respect selected single-singer, duet and supported harmony settings without adding performers automatically. Do not force childish lyrics unless requested or infer performer age from the style name. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Caribbean reggae-rock and electro-pop fusion featuring powerful bass, punchy drums, rhythmic electric guitar, bright synthesizers and bold crossover arrangements. Powerful, polished Caribbean crossover with deep bass, bright synths and punchy drums. Keep deep clean reggae bass prominent without muddying the kick; preserve authentic offbeat guitar and appropriate Caribbean drum foundations with clear instrumental separation. Crossover influences complement rather than replace the reggae identity. Avoid: Generic arena rock, uncontrolled distortion, excessive EDM drops and weak reggae rhythmic identity.",
+      "variations": {
+        "introductions": [
+          "Open with original rhythmic rock-guitar riffs and bright analog synth hooks.",
+          "Open on alternate sharp skank accents and energetic synth phrases."
+        ],
+        "progressions": [
+          "Use original bold synth/organ harmony over repeated syncopated electric bass.",
+          "Use alternate electric-piano chords with octave-jumping bass and subtle sub reinforcement."
+        ],
+        "arrangements": [
+          "Vary guitar motifs and synth riffs through the reggae-rock passage.",
+          "Develop rock-influenced drum fills and a bass/drum breakdown into the final chorus."
+        ],
+        "melody": [
+          "Create original bold hooks and strong singalong refrains.",
+          "Create a contrasting energetic melody with dramatic instrumental transitions."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original confident imagery.",
+          "Develop fresh perseverance or relationship verses without imposing political messages."
+        ]
+      },
+      "production_terms": [
+        [
+          "reggae"
+        ],
+        [
+          "rock"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "octave"
+        ]
+      ],
+      "research_references": [
+        "Eddy Grant"
+      ]
+    },
+    {
+      "id": "R6-05",
+      "name": "Sunshine Youth Reggae",
+      "description": "Cheerful pop-reggae with playful organ, bouncing bass and joyful melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r6",
+      "tempo": {
+        "min": 88,
+        "max": 108
+      },
+      "mood": "Cheerful, innocent, playful and uplifting.",
+      "energy": "Light cheerful pop-reggae bounce with playful keyboards and warm accessible melodies; musical energy never determines performer age or voice identity.",
+      "rhythm": "Light, cheerful reggae-pop with a clear offbeat guitar rhythm and bouncing bass foundation.",
+      "drums_percussion": "Light, bouncy one-drop reggae drums, warm kick, crisp snare, relaxed hi-hats, handclaps and gentle percussion fills.",
+      "bass": "Deep but playful electric bass with repetitive melodic patterns, smooth passing notes and a buoyant rhythmic bounce.",
+      "instruments": {
+        "keys": "Bright Hammond-style organ bubbles, playful electric piano, simple melodic keyboard hooks and warm chord accompaniment.",
+        "guitar": "Clean offbeat reggae skank, bright muted guitar accents and short melodic lead-guitar phrases.",
+        "other": "Tambourine, shakers, handclaps, soft brass and optional ensemble harmonies when compatible with customer settings."
+      },
+      "melody_harmony": "Original simple, catchy melodic hooks, playful verses, memorable singalong choruses and warm melodic responses.",
+      "vocal_delivery": "Original simple catchy phrases and warm melodic responses; follow selected voice configuration without forcing child vocals, a youthful voice, a group performance or a particular gender.",
+      "arrangement": "Bright guitar-and-organ introduction → playful verse → catchy chorus → instrumental reggae-pop passage → second verse → short percussion break → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Built-in themes are suggestions, never compulsory: Friendship, happiness, family, positive experiences, celebration, togetherness, encouragement and everyday life.",
+        "vocabulary": "Use original expressions in the selected supported languages. Never force Jamaican Patois or a regional accent from the crossover style. Respect selected single-singer, duet and supported harmony settings without adding performers automatically. Do not force childish lyrics unless requested or infer performer age from the style name. Preserve customer-supplied phrases without inventing unfamiliar translations. Never reproduce identifiable voices, melodies, signature hooks, lyrics or recordings."
+      },
+      "production_mix": "Bright, youthful British-Jamaican pop-reggae with bouncing bass, simple catchy melodies, playful organ, clean guitar skank and joyful ensemble arrangements. Bright, accessible reggae-pop with warm bass, clean instrumentation and joyful musical energy. Keep deep clean reggae bass prominent without muddying the kick; preserve authentic offbeat guitar and appropriate Caribbean drum foundations with clear instrumental separation. Crossover influences complement rather than replace the reggae identity. Avoid: Childish lyrics unless requested, generic bubblegum pop without reggae rhythm, excessive electronic effects and imitation of recognizable songs.",
+      "variations": {
+        "introductions": [
+          "Open with original bright guitar accents and playful organ bubbles.",
+          "Open on alternate simple keyboard hooks and buoyant melodic bass."
+        ],
+        "progressions": [
+          "Use original warm organ/electric-piano chords over repetitive melodic reggae bass.",
+          "Use alternate gentle piano harmony and smooth bass passing notes."
+        ],
+        "arrangements": [
+          "Vary muted guitar replies and handclaps through the reggae-pop passage.",
+          "Develop a short percussion break and joyful final chorus with alternate keyboard hooks."
+        ],
+        "melody": [
+          "Create original simple catchy melodies and warm instrumental responses.",
+          "Create a contrasting cheerful refrain for the independently selected voice configuration."
+        ],
+        "lyrical": [
+          "Explore the chosen subject through original encouraging everyday-life imagery.",
+          "Develop fresh togetherness or friendship verses without childish wording unless requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "tambourine"
+        ],
+        [
+          "handclap",
+          "hand clap"
+        ]
+      ],
+      "research_references": [
+        "Musical Youth"
       ]
     }
   ]
