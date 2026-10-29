@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-v1",
   "status": "approved",
   "departments": [
     {
@@ -113,6 +113,12 @@
       "group_id": "S1",
       "department_id": "secular-afrobeats",
       "name": "Party Afrobeats & Dance Hits"
+    },
+    {
+      "id": "secular-s2",
+      "group_id": "S2",
+      "department_id": "secular-afrobeats",
+      "name": "Smooth Afropop & Romantic"
     }
   ],
   "styles": [
@@ -6491,6 +6497,467 @@
       ],
       "research_references": [
         "Tekno"
+      ]
+    },
+    {
+      "id": "S2-01",
+      "name": "Midnight Afro-Silk",
+      "description": "Smooth, relaxed Afropop with warm bass, gentle percussion and flowing guitars.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s2",
+      "tempo": {
+        "min": 94,
+        "max": 112
+      },
+      "mood": "Romantic, relaxed, confident and intimate.",
+      "energy": "Relaxed smooth syncopation retains a steady danceable pulse and warm bass movement without explosive party intensity.",
+      "rhythm": "Relaxed Afropop groove with smooth rhythmic movement, subtle syncopation and a steady danceable pulse.",
+      "drums_percussion": "Soft but punchy kick, crisp rimshot or snare, delicate hi-hats, flowing shakers, subtle congas and syncopated percussion.",
+      "bass": "Deep rounded sub-bass combined with warm melodic electric bass; flowing movement, controlled low-frequency pressure and gentle syncopation.",
+      "instruments": {
+        "keys": "Warm Rhodes-style electric piano, soft synthesizer pads, mellow plucks and atmospheric chord textures.",
+        "guitar": "Clean electric guitar and muted guitar plucks.",
+        "other": "Gentle percussion and subtle melodic synth accents."
+      },
+      "melody_harmony": "Original flowing melodic phrases, smooth transitions, restrained hooks and conversational rhythmic phrasing.",
+      "vocal_delivery": "Relaxed intimate conversational melodic phrasing with smooth transitions; selected voice remains independent.",
+      "arrangement": "Atmospheric guitar-and-percussion introduction → smooth verse → melodic pre-chorus → warm romantic chorus → instrumental groove → second verse → relaxed final chorus.",
+      "lyrics": {
+        "structure": "Romance, attraction, affection, emotional connection, companionship and peaceful enjoyment.",
+        "vocabulary": "Use original meaningful secular romantic expressions in the selected supported language or combination. Musical identity never forces a language, worship themes or lead gender; do not reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Warm polished Afropop with smooth low frequencies and spacious instrumentation. Keep rounded sub-bass and melodic electric bass flowing under soft punchy kick, Rhodes voicings warm, guitars clean and percussion delicate. Avoid aggressive brass, explosive party drums and overcrowded arrangements while preserving the African danceable pulse.",
+      "variations": {
+        "introductions": [
+          "Begin with an original atmospheric guitar pattern and gentle percussion.",
+          "Begin with alternate muted guitar plucks and warm Rhodes textures."
+        ],
+        "progressions": [
+          "Use original mellow Rhodes chords with flowing rounded sub-bass and melodic bass.",
+          "Use alternate atmospheric chord voicings and gently syncopated bass motifs."
+        ],
+        "arrangements": [
+          "Vary guitar patterns and percussion interplay through the instrumental groove.",
+          "Change Rhodes layers and smooth transitions before the relaxed final chorus."
+        ],
+        "melody": [
+          "Create an original restrained romantic hook with flowing conversational phrasing.",
+          "Create a contrasting intimate melody with smooth verse-to-chorus movement."
+        ],
+        "lyrical": [
+          "Develop original attraction and affection verses with intimate phrasing.",
+          "Develop companionship, emotional connection and peaceful enjoyment through fresh romantic imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "afropop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "muted"
+        ],
+        [
+          "percussion"
+        ]
+      ],
+      "research_references": [
+        "Wizkid"
+      ]
+    },
+    {
+      "id": "S2-02",
+      "name": "Sweetheart Afro-Melody",
+      "description": "Bright romantic Afropop with playful guitar hooks and catchy melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s2",
+      "tempo": {
+        "min": 98,
+        "max": 116
+      },
+      "mood": "Sweet, hopeful, playful and romantic.",
+      "energy": "Light danceable relaxed bounce supports bright catchy hooks and an uplifting romantic final chorus.",
+      "rhythm": "Light danceable Afropop with a relaxed bounce and catchy rhythmic phrasing.",
+      "drums_percussion": "Tight Afro-pop kick, crisp clap, rhythmic hi-hats, shakers, light congas and tasteful percussion fills.",
+      "bass": "Warm bouncy electric or synthesized bass with simple melodic movement and clear rhythmic definition.",
+      "instruments": {
+        "keys": "Bright piano chords, playful synth plucks, warm pads and short melodic keyboard responses.",
+        "guitar": "Clean rhythmic guitar and acoustic guitar accents.",
+        "other": "Soft marimba-like plucks and light African percussion."
+      },
+      "melody_harmony": "Original memorable romantic melodies, bright chorus hooks and smooth verse-to-chorus transitions.",
+      "vocal_delivery": "Playful sweet melodic phrasing with memorable romantic hooks; selected voice remains independent.",
+      "arrangement": "Guitar-and-piano introduction → melodic verse → short pre-chorus → catchy romantic chorus → instrumental hook → second verse → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Love, admiration, affection, romantic promises, happiness and companionship.",
+        "vocabulary": "Use original meaningful secular romantic expressions in the selected supported language or combination. Musical identity never forces a language, worship themes or lead gender; do not reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Sweet catchy commercially polished romantic Afropop with present bouncy bass and light African dance rhythm. Keep piano bright, synth plucks playful, guitars clean and marimba-like accents soft; balance light congas and shakers. Avoid heavy trap drums, aggressive distortion and excessively slow ballad pacing.",
+      "variations": {
+        "introductions": [
+          "Begin with an original playful guitar hook and bright piano.",
+          "Begin with alternate guitar-and-piano responses over a light bass bounce."
+        ],
+        "progressions": [
+          "Use original bright romantic chords and simple melodic bass movement.",
+          "Use alternate warm pad harmony and a different bouncy bass phrase."
+        ],
+        "arrangements": [
+          "Vary guitar hooks and percussion combinations through the instrumental hook.",
+          "Change piano phrases and chorus construction before the uplifting ending."
+        ],
+        "melody": [
+          "Create a new catchy romantic chorus with smooth melodic transitions.",
+          "Create a contrasting playful hook and short keyboard response."
+        ],
+        "lyrical": [
+          "Develop original admiration and affectionate promises with a hopeful refrain.",
+          "Develop happiness and companionship through fresh sweet romantic verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "afropop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "marimba"
+        ],
+        [
+          "percussion"
+        ]
+      ],
+      "research_references": [
+        "Joeboy"
+      ]
+    },
+    {
+      "id": "S2-03",
+      "name": "Velvet Afro-Romance",
+      "description": "Dreamy Afro-R&B with fingerpicked guitar, soft drums and intimate textures.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s2",
+      "tempo": {
+        "min": 88,
+        "max": 106
+      },
+      "mood": "Intimate, dreamy, tender and emotionally reflective.",
+      "energy": "Soft African pulse and relaxed spacious syncopation retain gentle rhythmic life beneath intimate atmospheric production.",
+      "rhythm": "Minimal romantic Afro-R&B with a soft African pulse, relaxed syncopation and spacious rhythmic phrasing.",
+      "drums_percussion": "Soft electronic kick, delicate rimshot, restrained hi-hats, subtle shakers and minimal Afro-percussion accents.",
+      "bass": "Deep smooth sub-bass with sustained notes, gentle rhythmic pulses and controlled low-frequency warmth.",
+      "instruments": {
+        "keys": "Atmospheric pads, mellow electric piano, soft synth plucks and spacious chord textures.",
+        "guitar": "Clean fingerpicked electric guitar and acoustic guitar.",
+        "other": "Gentle ambient textures and subtle melodic effects."
+      },
+      "melody_harmony": "Original gentle melodic hooks, intimate phrasing, expressive chord movement and emotionally engaging choruses.",
+      "vocal_delivery": "Tender intimate melodic phrasing with emotionally reflective hooks; selected voice remains independent.",
+      "arrangement": "Soft guitar introduction → intimate verse → dreamy chorus → instrumental reflection → second verse → emotional bridge → delicate final chorus.",
+      "lyrics": {
+        "structure": "Love, longing, affection, vulnerability, emotional closeness and romantic reflection.",
+        "vocabulary": "Use original meaningful secular romantic expressions in the selected supported language or combination. Musical identity never forces a language, worship themes or lead gender; do not reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Intimate atmospheric Afro-R&B with clean fingerpicked guitar, warm sustained sub-bass and a soft African pulse. Keep electronic kick soft, rimshot delicate, shakers subtle, electric piano mellow and pads spacious. Avoid heavy brass, loud dance breaks, excessive percussion and aggressive club production; preserve gentle rhythmic pulses rather than lifeless ballad pacing.",
+      "variations": {
+        "introductions": [
+          "Begin with an original soft fingerpicked electric-guitar pattern.",
+          "Begin with alternate acoustic-guitar phrases and gentle ambient textures."
+        ],
+        "progressions": [
+          "Use original dreamy chord movement over sustained warm sub-bass.",
+          "Use alternate mellow electric-piano voicings and gentle rhythmic bass pulses."
+        ],
+        "arrangements": [
+          "Vary ambient textures and guitar picking through the instrumental reflection.",
+          "Change harmonic development and space before the delicate final chorus."
+        ],
+        "melody": [
+          "Create an original tender chorus contour and intimate hook.",
+          "Create a contrasting emotionally reflective melody with expressive chord movement."
+        ],
+        "lyrical": [
+          "Develop original longing and vulnerability verses with tender reflection.",
+          "Develop affection and emotional closeness through fresh intimate imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-r&b"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "fingerpicked"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ]
+      ],
+      "research_references": [
+        "CKay"
+      ]
+    },
+    {
+      "id": "S2-04",
+      "name": "Golden Heart Afro-Soul",
+      "description": "Soulful romantic Afropop with rich electric piano and expressive melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s2",
+      "tempo": {
+        "min": 92,
+        "max": 110
+      },
+      "mood": "Passionate, heartfelt, hopeful and romantic.",
+      "energy": "Gentle African dance movement and natural live-band dynamics sustain soulful romantic expression.",
+      "rhythm": "Smooth Afro-soul with gentle dance movement, soulful phrasing and natural live-band dynamics.",
+      "drums_percussion": "Warm kick, crisp snare, flowing hi-hats, gentle congas, shakers and subtle syncopated percussion.",
+      "bass": "Melodic electric bass with warm sustained tones, expressive passing notes and smooth rhythmic movement.",
+      "instruments": {
+        "keys": "Rich electric piano, warm Gospel-influenced chord voicings, atmospheric pads and melodic piano responses.",
+        "guitar": "Expressive clean electric guitar and acoustic guitar.",
+        "other": "Subtle strings and gentle instrumental harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, rich harmonic development and memorable romantic choruses.",
+      "vocal_delivery": "Passionate heartfelt melodic phrasing with soulful expression; customer-selected voice remains independent without a fixed vocal register.",
+      "arrangement": "Warm electric-piano introduction → soulful verse → melodic pre-chorus → expressive chorus → guitar-led instrumental passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Deep affection, romantic commitment, emotional honesty, longing, devotion and companionship.",
+        "vocabulary": "Use original meaningful secular romantic expressions in the selected supported language or combination. Musical identity never forces a language, worship themes or lead gender; do not reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Warm soulful African romantic music with expressive live instrumentation and gentle rhythmic movement. Keep melodic electric bass warm with expressive passing notes, electric-piano harmony rich, guitars expressive, strings subtle and congas/shakers gentle. Gospel-influenced chord voicings are harmonic color only, not a change to secular romantic lyrics or a lead voice/register assignment.",
+      "variations": {
+        "introductions": [
+          "Begin with original warm electric-piano voicings and melodic bass.",
+          "Begin with alternate rich keyboard harmony and expressive clean-guitar responses."
+        ],
+        "progressions": [
+          "Use original soulful romantic chords with warm sustained bass and expressive passing notes.",
+          "Use alternate electric-piano voicings and smooth melodic bass movement."
+        ],
+        "arrangements": [
+          "Vary guitar responses and instrumental transitions through the guitar-led passage.",
+          "Change harmonic development and emotional bridge layers before the final chorus."
+        ],
+        "melody": [
+          "Create an original heartfelt romantic chorus and soulful melodic phrasing.",
+          "Create a contrasting expressive hook with rich harmonic movement."
+        ],
+        "lyrical": [
+          "Develop original romantic commitment and emotional honesty verses.",
+          "Develop longing, affection and companionship through fresh heartfelt imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "electric piano",
+          "electric-piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Oxlade"
+      ]
+    },
+    {
+      "id": "S2-05",
+      "name": "After-Dark Afro-R&B",
+      "description": "Atmospheric romantic grooves with hypnotic bass and modern electronic textures.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s2",
+      "tempo": {
+        "min": 96,
+        "max": 114
+      },
+      "mood": "Romantic, mysterious, confident and intimate.",
+      "energy": "Restrained infectious late-night dance pulse and hypnotic bass sustain spacious modern Afro-R&B movement.",
+      "rhythm": "Modern Afro-R&B with hypnotic syncopation, spacious production and a steady late-night dance pulse.",
+      "drums_percussion": "Tight electronic kick, sharp rimshot, syncopated hi-hats, controlled Afro-percussion, subtle claps and rhythmic breaks.",
+      "bass": "Deep electronic sub-bass with a hypnotic repeating groove, occasional gliding transitions and strong kick synchronization.",
+      "instruments": {
+        "keys": "Dark atmospheric synth pads, muted electronic plucks, Rhodes-style chords and minimal melodic synth hooks.",
+        "guitar": "Processed clean guitar.",
+        "other": "Soft electronic textures, subtle congas and restrained rhythmic effects."
+      },
+      "melody_harmony": "Original distinctive motifs, rhythmic romantic phrasing and memorable understated hooks.",
+      "vocal_delivery": "Confident intimate rhythmic phrasing and understated romantic hooks; selected voice remains independent.",
+      "arrangement": "Atmospheric synth-and-bass introduction → restrained verse → hypnotic chorus → instrumental groove → second verse → dynamic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Attraction, romance, emotional tension, intimacy, relationships and nightlife.",
+        "vocabulary": "Use original meaningful secular romantic expressions in the selected supported language or combination. Musical identity never forces a language, worship themes or lead gender; do not reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Sophisticated late-night Afro-R&B with deep hypnotic sub-bass and restrained infectious percussion. Keep electronic kick synchronized, glides occasional, rimshot sharp and hi-hats syncopated; balance dark synth pads, muted plucks, Rhodes harmony, processed guitar and subtle congas. Avoid generic party brass, excessive live drums and overly bright pop arrangements.",
+      "variations": {
+        "introductions": [
+          "Begin with original dark synth textures and a hypnotic sub-bass motif.",
+          "Begin with alternate muted electronic plucks and restrained Afro-percussion."
+        ],
+        "progressions": [
+          "Use original mysterious Rhodes-style chords with repeating electronic sub-bass.",
+          "Use alternate dark pad harmony and occasional controlled bass glides."
+        ],
+        "arrangements": [
+          "Vary guitar effects and percussion accents through the instrumental groove.",
+          "Change synth textures and chorus development around the dynamic bridge."
+        ],
+        "melody": [
+          "Create an original understated romantic hook with rhythmic phrasing.",
+          "Create a contrasting intimate motif answered by minimal melodic synths."
+        ],
+        "lyrical": [
+          "Develop original attraction and relationship tension with intimate phrasing.",
+          "Develop romance and nightlife through fresh confident understated imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-r&b"
+        ],
+        [
+          "electronic"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "glid"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Lojay"
       ]
     }
   ]
