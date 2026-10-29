@@ -1,6 +1,14 @@
 # LAE-MUSIC deployment-readiness decision — 29 October 2026
 
-**NOT READY FOR DEPLOYMENT.** PR #10's Music DNA work and W7 correction have passing
+**NOT READY FOR DEPLOYMENT.**
+
+**Subsequent limited-release progress:** the controlled backup/restore and migration
+rehearsal has now passed on an isolated copy, preserving 141 tables and 470 rows.
+See [the limited-release report](MUSIC-DNA-LIMITED-RELEASE.md) for the actual run,
+backup expiry, owner acceptance evidence and remaining release-procedure work.
+The historical inspection below predates that recovery repair. Full commercial
+launch remains unverified; production has not been migrated or deployed.
+ PR #10's Music DNA work and W7 correction have passing
 automated evidence, but the complete platform's release prerequisites are not all
 complete. No merge, Render deployment, paid generation, production migration,
 production setting change or production data mutation was performed.
