@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-v1",
   "status": "approved",
   "departments": [
     {
@@ -191,6 +191,12 @@
       "group_id": "S14",
       "department_id": "secular-afrobeats",
       "name": "East African Bongo Flava"
+    },
+    {
+      "id": "reggae-r1",
+      "group_id": "R1",
+      "department_id": "reggae-caribbean",
+      "name": "Classic Roots Reggae"
     }
   ],
   "styles": [
@@ -12591,6 +12597,445 @@
       ],
       "research_references": [
         "Zuchu"
+      ]
+    },
+    {
+      "id": "R1-01",
+      "name": "Island Freedom Roots",
+      "description": "Warm Jamaican roots reggae with rolling bass, one-drop drums and uplifting melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r1",
+      "tempo": {
+        "min": 72,
+        "max": 94
+      },
+      "mood": "Hopeful, peaceful, uplifting and unifying.",
+      "energy": "Relaxed live-band pulse with uplifting melodic lift and rounded rolling bass.",
+      "rhythm": "Relaxed Jamaican one-drop roots reggae with steady offbeat guitar and flowing bass.",
+      "drums_percussion": "Authentic one-drop reggae drum pattern, with kick and snare/rimshot emphasizing beat three, relaxed hi-hats, gentle ghost notes, restrained tom fills and natural live-kit dynamics.",
+      "bass": "Deep, warm electric bass with rounded sustained notes, syncopated melodic movement, occasional passing tones and a strong relationship with the one-drop groove.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, warm acoustic piano chords, rhythmic piano accents and restrained vintage keyboard textures.",
+        "guitar": "Clean offbeat reggae skank guitar, muted rhythmic strumming and short melodic lead-guitar responses.",
+        "other": "Congas, shakers, tambourine, gentle brass accents and occasional warm backing-harmony textures."
+      },
+      "melody_harmony": "Original uplifting melodies, conversational verses, memorable communal choruses and natural call-and-response opportunities.",
+      "vocal_delivery": "Conversational verses, uplifting original communal refrains and optional natural responses; follow the selected voice settings.",
+      "arrangement": "Bass-and-drum introduction → melodic verse → uplifting chorus → guitar-and-organ instrumental passage → second verse → short dub-influenced breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Peace, unity, freedom, hope, love, resilience, community and social reflection.",
+        "vocabulary": "Use original clear expressions in the selected supported languages. Never force Jamaican Patois, Rastafarian beliefs, religious themes or political messages because roots reggae was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Do not reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Warm, melodic Jamaican roots reggae combining rolling bass, one-drop drums, rhythmic guitar skank, bubbling organ and uplifting live-band arrangements. Warm, organic roots reggae with a full, rounded bass sound and natural instrumental balance. Keep electric bass clearly audible without overpowering drums, guitar and organ; preserve natural live-band dynamics. Avoid: Fast dancehall drums, excessive electronic synthesizers, imitation of famous reggae melodies and generic pop arrangements.",
+      "variations": {
+        "introductions": [
+          "Open on an original rolling bass phrase and relaxed one-drop drums.",
+          "Open on alternate bass passing tones with short guitar replies before the verse."
+        ],
+        "progressions": [
+          "Use an original warm roots progression with rounded sustained bass.",
+          "Use alternate acoustic-piano voicings with syncopated melodic passing tones."
+        ],
+        "arrangements": [
+          "Vary organ bubbles and guitar accents through the instrumental passage.",
+          "Develop percussion details and a short dub breakdown into the communal final chorus."
+        ],
+        "melody": [
+          "Create an original uplifting communal refrain and conversational verse.",
+          "Create a contrasting hopeful melody with natural answering phrases."
+        ],
+        "lyrical": [
+          "Develop fresh topic-led images of resilience and community.",
+          "Develop the selected topic through original hope, peace or love imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Bob Marley"
+      ]
+    },
+    {
+      "id": "R1-02",
+      "name": "Rebel Roots Declaration",
+      "description": "Powerful roots reggae with commanding bass, sharp guitar and bold rhythms.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r1",
+      "tempo": {
+        "min": 70,
+        "max": 92
+      },
+      "mood": "Defiant, determined, serious and empowering.",
+      "energy": "Weighty deliberate live-band drive with assertive bass and purposeful drum fills.",
+      "rhythm": "Firm roots reggae with a weighty bass-and-drum foundation and strong rhythmic guitar accents.",
+      "drums_percussion": "Heavy one-drop or restrained steppers-inspired reggae groove, firm kick, sharp snare, controlled hi-hats, tom accents and purposeful drum fills.",
+      "bass": "Thick, powerful electric bass with repetitive low-register motifs, occasional melodic runs and a driving, deliberate pulse.",
+      "instruments": {
+        "keys": "Deep Hammond-style organ, rhythmic piano stabs, warm electric piano and restrained vintage keyboard textures.",
+        "guitar": "Sharp offbeat skank, blues-influenced lead-guitar phrases, expressive bends and short instrumental responses.",
+        "other": "Brass stabs, congas, shakers and restrained dub-style effects."
+      },
+      "melody_harmony": "Original commanding melodic phrases, assertive verses and memorable declarative choruses.",
+      "vocal_delivery": "Commanding declarative phrases and assertive original choruses; follow selected voice settings without imitating a performer.",
+      "arrangement": "Heavy bass-and-guitar introduction → forceful verse → declarative chorus → lead-guitar passage → second verse → drum-and-bass breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Justice, dignity, freedom, truth, perseverance, courage and social responsibility.",
+        "vocabulary": "Use original clear expressions in the selected supported languages. Never force Jamaican Patois, Rastafarian beliefs, religious themes or political messages because roots reggae was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Do not reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Strong, militant Jamaican roots reggae with commanding bass, firm drums, sharp guitar skank, expressive lead guitar and bold instrumental arrangements. Powerful, direct roots reggae with commanding low frequencies and clear instrumental separation. Keep electric bass clearly audible without overpowering drums, guitar and organ; preserve natural live-band dynamics. Avoid: Lightweight tropical pop, overly cheerful dance arrangements and unnecessarily aggressive distortion.",
+      "variations": {
+        "introductions": [
+          "Open with an original heavy bass motif and sharp skank guitar.",
+          "Open with alternate deliberate bass pulses and purposeful drum accents."
+        ],
+        "progressions": [
+          "Use an original firm roots progression with low-register bass motifs.",
+          "Use alternate piano stabs and warm electric-piano voicings below melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary brass stabs and expressive lead-guitar responses between verses.",
+          "Develop drum accents through a drum-and-bass breakdown into a declarative final chorus."
+        ],
+        "melody": [
+          "Create original commanding verse phrases and an assertive refrain.",
+          "Create a contrasting declarative chorus with short blues-influenced guitar responses."
+        ],
+        "lyrical": [
+          "Develop the chosen topic through fresh courage and perseverance imagery.",
+          "Develop original dignity and truth images only where they fit the requested subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop",
+          "steppers"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "blues"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Peter Tosh"
+      ]
+    },
+    {
+      "id": "R1-03",
+      "name": "Ancient Drum Roots",
+      "description": "Deep meditative reggae with hypnotic bass and traditional hand percussion.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r1",
+      "tempo": {
+        "min": 66,
+        "max": 86
+      },
+      "mood": "Reflective, spiritual in atmosphere, solemn and resilient.",
+      "energy": "Slow spacious hypnotic motion with evolving hand percussion and restrained chant phrasing.",
+      "rhythm": "Slow, meditative roots reggae with strong drum-and-bass repetition and spacious instrumental movement.",
+      "drums_percussion": "Slow, heavy one-drop drums, deep kick, restrained rimshot, spacious hi-hats, rolling toms and Nyabinghi-influenced hand-percussion layers.",
+      "bass": "Very deep, rounded electric bass with hypnotic repeating patterns, long sustained notes and subtle rhythmic variations.",
+      "instruments": {
+        "keys": "Dark Hammond-style organ bubbles, sparse piano chords, warm vintage keyboard tones and atmospheric harmonic textures.",
+        "guitar": "Minimal offbeat skank guitar, restrained rhythmic picking and occasional atmospheric lead-guitar phrases.",
+        "other": "Nyabinghi-style hand drums, congas, shakers, subtle horns and natural percussion textures."
+      },
+      "melody_harmony": "Original chant-like melodic structures, restrained melodic development and thoughtful repeating refrains.",
+      "vocal_delivery": "Restrained thoughtful chant-like phrases with meaningful development; contemplative atmosphere never dictates beliefs.",
+      "arrangement": "Hand-percussion introduction → bass-and-drum groove → reflective verse → meditative chorus → extended instrumental roots passage → second verse → percussion breakdown → final refrain.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Heritage, identity, history, community, perseverance, wisdom and cultural reflection.",
+        "vocabulary": "Use original clear expressions in the selected supported languages. Never force Jamaican Patois, Rastafarian beliefs, religious themes or political messages because roots reggae was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Do not reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Deep, meditative Jamaican roots reggae emphasizing hypnotic bass, traditional percussion, spacious arrangements and strong cultural storytelling. Deep, hypnotic roots reggae with natural percussion, warm analog character and spacious bass. Keep electric bass clearly audible without overpowering drums, guitar and organ; preserve natural live-band dynamics. Avoid: Fast dance rhythms, overly bright pop synths and crowded instrumental arrangements.",
+      "variations": {
+        "introductions": [
+          "Open with an original Nyabinghi-influenced hand-percussion conversation.",
+          "Open with alternate hand-drum patterns before the hypnotic bass-and-drum entrance."
+        ],
+        "progressions": [
+          "Use an original sparse dark-organ progression over sustained repeating bass.",
+          "Use alternate sparse piano harmony and subtle variations of the deep bass ostinato."
+        ],
+        "arrangements": [
+          "Vary organ patterns and subtle horns across the extended instrumental roots passage.",
+          "Develop hand-percussion exchanges and a spacious breakdown before the final refrain."
+        ],
+        "melody": [
+          "Create an original thoughtful chant-like refrain with restrained development.",
+          "Create a contrasting meditative contour and subtly evolving melodic repetitions."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original reflective storytelling without imposed beliefs.",
+          "Develop fresh wisdom or heritage imagery only when it fits the customer topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "nyabinghi"
+        ],
+        [
+          "hand percussion",
+          "hand-percussion",
+          "hand drum",
+          "hand-drum"
+        ]
+      ],
+      "research_references": [
+        "Burning Spear"
+      ]
+    },
+    {
+      "id": "R1-04",
+      "name": "Harmony of the People",
+      "description": "Traditional roots reggae with rich harmonies, warm organ and steady bass.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r1",
+      "tempo": {
+        "min": 72,
+        "max": 96
+      },
+      "mood": "Hopeful, reflective, communal and uplifting.",
+      "energy": "Relaxed communal live-band warmth with optional voice-compatible harmonic layers.",
+      "rhythm": "Traditional roots reggae with relaxed one-drop drums, warm bass and steady offbeat accompaniment.",
+      "drums_percussion": "Natural one-drop kick and snare, gentle hi-hats, light percussion fills, restrained toms and subtle hand percussion.",
+      "bass": "Warm melodic electric bass with flowing reggae patterns, expressive passing notes and a consistent rhythmic foundation.",
+      "instruments": {
+        "keys": "Hammond-style organ bubbles, rhythmic acoustic piano chords and warm vintage electric piano.",
+        "guitar": "Clean offbeat guitar skank, gentle melodic fills and restrained rhythmic guitar layers.",
+        "other": "Congas, shakers, tambourine, soft brass and optional layered backing harmonies."
+      },
+      "melody_harmony": "Original melodic refrains, communal call-and-response opportunities and layered harmonic arrangements when the customer's vocal settings permit.",
+      "vocal_delivery": "Storytelling verses and communal melodic refrains; layered backing harmonies only when the selected vocal settings permit, never force harmonies for a single-voice performance.",
+      "arrangement": "Guitar-and-organ introduction → storytelling verse → harmony-rich chorus → instrumental roots passage → second verse → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Unity, community, friendship, resilience, truth, hope, cultural heritage and everyday life.",
+        "vocabulary": "Use original clear expressions in the selected supported languages. Never force Jamaican Patois, Rastafarian beliefs, religious themes or political messages because roots reggae was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Do not reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Traditional Jamaican vocal-harmony roots reggae combining rolling bass, steady one-drop drums, warm organ and rich ensemble-style melodic arrangements. Rich, organic roots reggae with clear vocal arrangements and warm live instrumentation. Keep electric bass clearly audible without overpowering drums, guitar and organ; preserve natural live-band dynamics. Avoid: Excessive electronic effects, aggressive dancehall percussion and forced vocal harmonies when the customer requests a single-voice performance.",
+      "variations": {
+        "introductions": [
+          "Open with original clean offbeat guitar and warm organ bubbles.",
+          "Open with alternate rhythmic piano accents and melodic bass passing notes."
+        ],
+        "progressions": [
+          "Use an original warm roots progression with flowing melodic electric bass.",
+          "Use alternate vintage electric-piano voicings and expressive bass passing tones."
+        ],
+        "arrangements": [
+          "Vary guitar replies and light percussion in the instrumental roots passage.",
+          "Develop a reflective bridge and final chorus; add backing layers only if vocal settings permit."
+        ],
+        "melody": [
+          "Create an original communal refrain with selected-voice-compatible responses.",
+          "Create a contrasting storytelling melody and harmonic voicings without forcing ensemble vocals."
+        ],
+        "lyrical": [
+          "Develop original everyday-life and friendship images around the selected topic.",
+          "Develop fresh resilience and community storytelling without imposing political or religious themes."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "bubble",
+          "bubbling"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Culture"
+      ]
+    },
+    {
+      "id": "R1-05",
+      "name": "Kingston Mystic Groove",
+      "description": "Soulful Jamaican roots reggae with relaxed drums and expressive melodies.",
+      "department_id": "reggae-caribbean",
+      "category_id": "reggae-r1",
+      "tempo": {
+        "min": 70,
+        "max": 94
+      },
+      "mood": "Peaceful, thoughtful, soulful and uplifting.",
+      "energy": "Laid-back soulful live-band warmth with smooth melodic movement and gentle percussion.",
+      "rhythm": "Relaxed roots reggae with smooth bass movement, gentle percussion and soulful instrumental phrasing.",
+      "drums_percussion": "Relaxed one-drop drums, warm kick, gentle snare/rimshot, flowing hi-hats, light tom fills and natural live-kit dynamics.",
+      "bass": "Deep, rounded electric bass with expressive melodic movement, occasional slides, warm sustained notes and a smooth reggae pulse.",
+      "instruments": {
+        "keys": "Warm Hammond-style organ, acoustic piano, vintage electric piano and gentle harmonic pads.",
+        "guitar": "Clean offbeat skank, soft rhythmic guitar accents and expressive melodic lead-guitar responses.",
+        "other": "Congas, shakers, soft brass, tambourine and restrained dub-style effects."
+      },
+      "melody_harmony": "Original expressive melodies, thoughtful verses, warm choruses and restrained melodic ornamentation.",
+      "vocal_delivery": "Thoughtful soulful phrases, warm original choruses and restrained ornamentation; follow the selected voice settings.",
+      "arrangement": "Gentle organ-and-guitar introduction → soulful verse → uplifting chorus → instrumental bass-and-guitar groove → second verse → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Follow the customer song topic and requested lyrical direction with original complete verses and refrains. Suggested themes, never mandatory: Peace, love, personal growth, wisdom, family, friendship, hope and everyday experiences.",
+        "vocabulary": "Use original clear expressions in the selected supported languages. Never force Jamaican Patois, Rastafarian beliefs, religious themes or political messages because roots reggae was selected. Preserve customer-supplied phrases without inventing unfamiliar translations. Do not reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Soulful Jamaican roots reggae combining warm melodic bass, laid-back drums, expressive organ, rhythmic guitar and gentle Caribbean percussion. Warm, soulful Jamaican roots reggae with rich bass and natural live-band clarity. Keep electric bass clearly audible without overpowering drums, guitar and organ; preserve natural live-band dynamics. Avoid: Generic romantic R&B, electronic dancehall loops and overly synthetic arrangements.",
+      "variations": {
+        "introductions": [
+          "Open with original gentle organ phrases and clean offbeat guitar.",
+          "Open with alternate soft guitar accents and expressive melodic bass slides."
+        ],
+        "progressions": [
+          "Use an original soulful roots progression with warm sustained electric bass.",
+          "Use alternate acoustic/electric-piano voicings beneath smooth melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary organ phrases and guitar melodies through the instrumental bass-and-guitar groove.",
+          "Develop light percussion and a reflective bridge into a warm final chorus."
+        ],
+        "melody": [
+          "Create an original thoughtful verse and expressive uplifting refrain.",
+          "Create a contrasting soulful melody with restrained ornament and gentle guitar answers."
+        ],
+        "lyrical": [
+          "Develop fresh personal-growth and family imagery around the requested topic.",
+          "Develop original peace, love or everyday experiences only where they suit the customer direction."
+        ]
+      },
+      "production_terms": [
+        [
+          "one-drop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "skank"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "dub"
+        ]
+      ],
+      "research_references": [
+        "Bunny Wailer"
       ]
     }
   ]

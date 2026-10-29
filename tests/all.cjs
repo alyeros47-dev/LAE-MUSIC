@@ -136,3 +136,5 @@ require('./music-dna-s12.test.cjs');
 require('./music-dna-s13.test.cjs');
 
 require('./music-dna-s14.test.cjs');
+
+require('./music-dna-r1.test.cjs');
