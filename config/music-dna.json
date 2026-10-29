@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-s10-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-s10-s11-v1",
   "status": "approved",
   "departments": [
     {
@@ -167,6 +167,12 @@
       "group_id": "S10",
       "department_id": "secular-afrobeats",
       "name": "Ghanaian Afrobeats & Hiplife"
+    },
+    {
+      "id": "secular-s11",
+      "group_id": "S11",
+      "department_id": "secular-afrobeats",
+      "name": "Ghanaian Highlife"
     }
   ],
   "styles": [
@@ -10717,6 +10723,466 @@
       ],
       "research_references": [
         "Stonebwoy"
+      ]
+    },
+    {
+      "id": "S11-01",
+      "name": "Golden Highlife Celebration",
+      "description": "Classic Ghanaian dance Highlife with bright guitars and melodic bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s11",
+      "tempo": {
+        "min": 104,
+        "max": 128
+      },
+      "mood": "Joyful, romantic, confident and celebratory.",
+      "energy": "Lively classic Ghanaian dance Highlife builds through bright guitar development and a flowing instrumental dance break.",
+      "rhythm": "Lively Ghanaian dance Highlife with flowing guitar movement, melodic bass and strong live-band percussion.",
+      "drums_percussion": "Strong live kick, crisp snare, flowing hi-hats, congas, shakers, handclaps and tasteful tom fills.",
+      "bass": "Warm melodic electric bass with flowing Highlife runs, expressive passing notes and a steady danceable bounce.",
+      "instruments": {
+        "keys": "Bright organ chords, rhythmic piano, warm synth textures and melodic keyboard responses.",
+        "guitar": "Interlocking clean electric guitars, bright Highlife lead riffs, rhythmic picking and expressive instrumental fills.",
+        "other": "Brass accents, Ghanaian hand percussion, shekere and occasional traditional flute."
+      },
+      "melody_harmony": "Original memorable melodic hooks, expressive romantic phrasing and celebratory choruses.",
+      "vocal_delivery": "Joyful confident melodic phrasing and expressive romantic choruses; selected voice remains independent.",
+      "arrangement": "Bright guitar introduction → melodic verse → catchy chorus → extended lead-guitar passage → second verse → instrumental dance break → final chorus.",
+      "lyrics": {
+        "structure": "Love, marriage, family, celebration, friendship, life lessons and enjoyment.",
+        "vocabulary": "Use original meaningful secular Ghanaian Highlife expressions in the selected supported language or combination. Ghanaian origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Ghanaian Highlife dance energy with prominent interlocking electric guitars and warm melodic electric bass. Keep lead riffs bright, live drums lively, organ/piano rhythmic and traditional hand percussion natural; balance shekere, brass and occasional flute. Avoid generic electronic Afrobeats loops and excessive synthetic bass.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright interlocking Highlife lead-guitar melodies.",
+          "Begin with alternate rhythmic picking and flowing melodic electric bass."
+        ],
+        "progressions": [
+          "Use original joyful Ghanaian Highlife chords with warm bass passing notes.",
+          "Use alternate bright organ/piano voicings and a different danceable bass run."
+        ],
+        "arrangements": [
+          "Vary lead-guitar development through the extended instrumental passage.",
+          "Change keyboard riffs, percussion patterns and chorus structure around the dance break."
+        ],
+        "melody": [
+          "Create an original memorable romantic hook and celebratory chorus.",
+          "Create a contrasting joyful melody and expressive guitar response."
+        ],
+        "lyrical": [
+          "Develop original love, marriage and family verses with celebration.",
+          "Develop friendship, life lessons and enjoyment through fresh romantic phrasing."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "live"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Daddy Lumba"
+      ]
+    },
+    {
+      "id": "S11-02",
+      "name": "Reggae Highlife Romance",
+      "description": "Smooth Highlife-reggae fusion with soulful melodies and warm bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s11",
+      "tempo": {
+        "min": 88,
+        "max": 110
+      },
+      "mood": "Romantic, soulful, peaceful and reflective.",
+      "energy": "Relaxed Highlife-reggae pulse supports soulful romantic melody, flowing offbeat guitars and a warm expressive bridge.",
+      "rhythm": "Relaxed Ghanaian Highlife-reggae fusion with smooth offbeat accents, flowing guitar patterns and gentle African percussion.",
+      "drums_percussion": "Warm live kick, restrained snare, reggae-influenced rhythmic accents, flowing shakers, gentle congas and subtle percussion fills.",
+      "bass": "Deep rounded electric bass with reggae-influenced rolling movement and melodic Highlife passing notes.",
+      "instruments": {
+        "keys": "Warm electric piano, reggae organ bubbles, rich piano chords and atmospheric pads.",
+        "guitar": "Clean Highlife lead guitar, gentle offbeat reggae guitar, melodic electric-guitar phrases and expressive instrumental responses.",
+        "other": "Soft brass, subtle African percussion, gentle strings and warm instrumental harmonies."
+      },
+      "melody_harmony": "Original romantic melodies, soulful phrasing and emotionally expressive choruses.",
+      "vocal_delivery": "Peaceful soulful romantic phrasing and emotionally expressive choruses; selected voice remains independent.",
+      "arrangement": "Guitar-and-organ introduction → romantic verse → smooth chorus → instrumental reggae-Highlife groove → second verse → soulful bridge → final chorus.",
+      "lyrics": {
+        "structure": "Love, devotion, relationships, family, peace, companionship and emotional reflection.",
+        "vocabulary": "Use original meaningful secular Ghanaian Highlife expressions in the selected supported language or combination. Ghanaian origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm Ghanaian Highlife with smooth reggae influence and rich melodic instruments. Keep rolling melodic electric bass deep, offbeat reggae guitar gentle, Highlife lead phrases clear and organ bubbles warm; balance electric piano, pads, strings, congas and soft brass. Avoid heavy dancehall aggression, excessive electronic effects and generic Western R&B arrangements.",
+      "variations": {
+        "introductions": [
+          "Begin with original Highlife guitar phrases and warm reggae organ bubbles.",
+          "Begin with alternate gentle offbeat guitar accents and rounded rolling bass."
+        ],
+        "progressions": [
+          "Use original soulful Highlife-reggae harmony with melodic electric-bass passing notes.",
+          "Use alternate warm electric-piano voicings and smooth reggae-influenced bass movement."
+        ],
+        "arrangements": [
+          "Vary reggae guitar accents and Highlife lead riffs through the instrumental groove.",
+          "Change organ textures and soulful bridge development before the final chorus."
+        ],
+        "melody": [
+          "Create an original romantic melody with soulful rhythmic phrasing.",
+          "Create a contrasting peaceful chorus contour and expressive guitar answer."
+        ],
+        "lyrical": [
+          "Develop original companionship and emotional-reflection verses.",
+          "Develop love, family and peace through fresh soulful romantic phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "reggae"
+        ],
+        [
+          "offbeat"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "organ bubbles"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ]
+      ],
+      "research_references": [
+        "Kojo Antwi"
+      ]
+    },
+    {
+      "id": "S11-03",
+      "name": "Heritage Highlife Groove",
+      "description": "Contemporary Ghanaian Highlife with lively guitars and modern production.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s11",
+      "tempo": {
+        "min": 102,
+        "max": 122
+      },
+      "mood": "Warm, romantic, joyful and uplifting.",
+      "energy": "Accessible contemporary Highlife dance movement retains traditional guitar rhythms and clean modern production.",
+      "rhythm": "Contemporary Ghanaian Highlife with strong guitar movement, lively percussion and accessible dance rhythms.",
+      "drums_percussion": "Punchy live-and-electronic kick, crisp snare, congas, shakers, handclaps and lively Highlife percussion.",
+      "bass": "Rounded melodic electric bass with flowing Highlife patterns and a steady rhythmic bounce.",
+      "instruments": {
+        "keys": "Bright piano chords, warm organ, melodic keyboard plucks and restrained synth textures.",
+        "guitar": "Interlocking Ghanaian Highlife guitars, clean rhythmic picking, bright lead melodies and short instrumental responses.",
+        "other": "Ghanaian hand percussion, brass accents, shekere and occasional acoustic guitar."
+      },
+      "melody_harmony": "Original uplifting melodic hooks, memorable romantic choruses and expressive instrumental phrases.",
+      "vocal_delivery": "Warm joyful melodic phrasing with uplifting romantic hooks; selected voice remains independent.",
+      "arrangement": "Highlife guitar introduction → melodic verse → catchy chorus → instrumental guitar groove → second verse → percussion-led bridge → final chorus.",
+      "lyrics": {
+        "structure": "Love, gratitude, marriage, family, success, friendship and celebration.",
+        "vocabulary": "Use original meaningful secular Ghanaian Highlife expressions in the selected supported language or combination. Ghanaian origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Ghanaian Highlife instruments with clean modern production quality. Keep interlocking guitar and rounded melodic electric bass central, piano bright, organ warm and electronic support restrained; balance congas, shakers, shekere, brass and traditional hand percussion. Avoid replacing Highlife guitars with generic Afropop synths.",
+      "variations": {
+        "introductions": [
+          "Begin with original interlocking Ghanaian Highlife guitar harmonies.",
+          "Begin with alternate bright lead phrases over a steady rounded bass bounce."
+        ],
+        "progressions": [
+          "Use original warm contemporary Highlife chords and flowing melodic electric bass.",
+          "Use alternate bright piano/organ voicings and a different rhythmic bass groove."
+        ],
+        "arrangements": [
+          "Vary guitar harmonies and piano riffs through the instrumental groove.",
+          "Change percussion breaks and romantic chorus development around the percussion-led bridge."
+        ],
+        "melody": [
+          "Create an original uplifting hook with expressive instrumental responses.",
+          "Create a contrasting memorable romantic chorus and bright guitar phrase."
+        ],
+        "lyrical": [
+          "Develop original marriage, family and gratitude verses.",
+          "Develop friendship, success and celebration through fresh uplifting lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Bisa Kdei"
+      ]
+    },
+    {
+      "id": "S11-04",
+      "name": "Evergreen Ghanaian Heritage",
+      "description": "Traditional live-band Highlife with reflective storytelling.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s11",
+      "tempo": {
+        "min": 94,
+        "max": 116
+      },
+      "mood": "Reflective, grateful, peaceful and uplifting.",
+      "energy": "Warm mature traditional live-band dynamics support melodic walking bass, flowing guitars and reflective storytelling.",
+      "rhythm": "Moderate traditional Ghanaian Highlife with flowing guitar patterns and a relaxed dance pulse.",
+      "drums_percussion": "Natural live kick and snare, gentle congas, shakers, hand percussion and restrained tom fills.",
+      "bass": "Warm electric bass with melodic walking patterns, expressive passing notes and natural live-band dynamics.",
+      "instruments": {
+        "keys": "Traditional organ, acoustic piano, warm electric piano and restrained harmonic pads.",
+        "guitar": "Clean rhythmic Highlife guitars, gentle lead-guitar melodies, interlocking picking patterns and expressive instrumental fills.",
+        "other": "Ghanaian traditional percussion, soft brass, shekere and occasional traditional flute."
+      },
+      "melody_harmony": "Original reflective melodies, narrative phrasing and memorable communal refrains.",
+      "vocal_delivery": "Mature reflective narrative phrasing and warm communal refrains; selected voice remains independent.",
+      "arrangement": "Gentle guitar introduction → storytelling verse → warm chorus → instrumental Highlife passage → second verse → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Life lessons, gratitude, family, relationships, perseverance, cultural heritage and community.",
+        "vocabulary": "Use original meaningful secular Ghanaian Highlife expressions in the selected supported language or combination. Ghanaian origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm mature Ghanaian Highlife with authentic live instruments. Keep walking electric bass expressive, guitar picking interlocking, organ traditional, acoustic/electric piano warm and percussion gentle; leave space for narrative phrases, occasional flute and soft brass. Avoid aggressive club drums, heavy electronic bass and excessive synthetic effects.",
+      "variations": {
+        "introductions": [
+          "Begin with original gentle interlocking Highlife guitar voicings.",
+          "Begin with alternate lead melodies and traditional organ responses."
+        ],
+        "progressions": [
+          "Use original reflective Highlife harmony with melodic walking electric bass.",
+          "Use alternate warm acoustic/electric-piano chords and expressive bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar voicings and traditional percussion through the Highlife passage.",
+          "Change organ textures and narrative development around the reflective bridge."
+        ],
+        "melody": [
+          "Create an original reflective melody with expressive narrative phrasing.",
+          "Create a contrasting uplifting communal refrain and gentle guitar response."
+        ],
+        "lyrical": [
+          "Develop original life lessons, family and cultural-heritage storytelling.",
+          "Develop perseverance, relationships and gratitude through fresh peaceful verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "live"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "walking"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "flute"
+        ]
+      ],
+      "research_references": [
+        "Kofi Nti"
+      ]
+    },
+    {
+      "id": "S11-05",
+      "name": "Velvet Highlife Love",
+      "description": "Romantic Ghanaian Highlife with expressive guitars and rich piano harmony.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s11",
+      "tempo": {
+        "min": 88,
+        "max": 108
+      },
+      "mood": "Tender, romantic, heartfelt and peaceful.",
+      "energy": "Sophisticated gentle Highlife dance movement and expressive live-band dynamics support heartfelt romance and a warm final chorus.",
+      "rhythm": "Smooth romantic Ghanaian Highlife with gentle dance movement and expressive live-band dynamics.",
+      "drums_percussion": "Soft live kick, gentle snare or rimshot, flowing shakers, subtle congas and restrained hand percussion.",
+      "bass": "Warm melodic electric bass with smooth passing notes, gentle rhythmic movement and natural low-frequency support.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, rich electric piano, warm organ textures and soft harmonic pads.",
+        "guitar": "Clean romantic Highlife guitar, fingerpicked acoustic guitar, expressive lead-guitar melodies and gentle rhythmic picking.",
+        "other": "Soft strings, gentle brass, traditional percussion and subtle instrumental harmonies."
+      },
+      "melody_harmony": "Original heartfelt melodies, romantic phrasing, expressive harmonic movement and memorable choruses.",
+      "vocal_delivery": "Tender heartfelt romantic melodic phrasing and peaceful expressive choruses; selected voice remains independent.",
+      "arrangement": "Soft guitar-and-piano introduction → romantic verse → emotional chorus → instrumental guitar passage → second verse → expressive bridge → warm final chorus.",
+      "lyrics": {
+        "structure": "Love, commitment, marriage, emotional honesty, companionship, family and affection.",
+        "vocabulary": "Use original meaningful secular Ghanaian Highlife expressions in the selected supported language or combination. Ghanaian origin never forces Twi, Ghanaian Pidgin or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Sophisticated romantic Ghanaian Highlife with rich harmony and warm live instrumentation. Keep electric bass melodic and gentle, acoustic guitar fingerpicked, Highlife lead lines expressive, piano rich and organ warm; balance flowing shakers, subtle congas, strings and soft brass. Avoid aggressive electronic drums, heavy club bass and overly synthetic production.",
+      "variations": {
+        "introductions": [
+          "Begin with original soft Highlife guitar phrases and expressive piano.",
+          "Begin with alternate fingerpicked acoustic guitar and warm electric-piano harmony."
+        ],
+        "progressions": [
+          "Use original romantic Highlife chords with smooth electric-bass passing notes.",
+          "Use alternate rich piano voicings and gentle melodic bass movement."
+        ],
+        "arrangements": [
+          "Vary romantic guitar phrases and harmonic development through the instrumental passage.",
+          "Change piano layers and expressive bridge arrangement before the warm final chorus."
+        ],
+        "melody": [
+          "Create an original heartfelt romantic melody and memorable chorus.",
+          "Create a contrasting tender verse contour and expressive guitar reply."
+        ],
+        "lyrical": [
+          "Develop original commitment, marriage and companionship verses.",
+          "Develop emotional honesty, affection and family through fresh heartfelt imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ]
+      ],
+      "research_references": [
+        "Kwabena Kwabena"
       ]
     }
   ]
