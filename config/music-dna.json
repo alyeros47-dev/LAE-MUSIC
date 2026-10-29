@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w2-v1",
   "status": "approved",
   "departments": [
     {
@@ -239,6 +239,12 @@
       "group_id": "W1",
       "department_id": "western-international",
       "name": "Powerful Soul & R&B Ballads"
+    },
+    {
+      "id": "western-w2",
+      "group_id": "W2",
+      "department_id": "western-international",
+      "name": "Classic Contemporary R&B"
     }
   ],
   "styles": [
@@ -16269,6 +16275,457 @@
       ],
       "research_references": [
         "Toni Braxton"
+      ]
+    },
+    {
+      "id": "W2-01",
+      "name": "Midnight R&B Slow Jam",
+      "description": "Intimate slow R&B with deep bass, warm electric piano and romantic melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w2",
+      "tempo": {
+        "min": 64,
+        "max": 84
+      },
+      "mood": "Romantic, intimate, warm and reflective.",
+      "energy": "Spacious laid-back slow-jam warmth with relaxed swing and intimate restrained melodic development.",
+      "rhythm": "Slow 1990s-style R&B groove with relaxed swing, spacious drums and smooth bass movement.",
+      "drums_percussion": "Use a laid-back R&B backbeat with a soft, deep kick, crisp snare or rimshot, restrained hi-hats, gentle ghost notes and occasional tasteful percussion fills. Maintain spacious rhythmic phrasing.",
+      "bass": "Deep, rounded electric or synth bass with sustained low notes, smooth melodic movement and gentle syncopation. Bass must create a warm foundation without overpowering the piano or vocals.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, rich seventh and ninth chords, warm acoustic piano, subtle organ and soft analog pads.",
+        "guitar": "Clean electric-guitar fills, gentle fingerpicked phrases and occasional blues-influenced melodic responses.",
+        "other": "Soft strings, subtle percussion, warm synth textures and optional backing harmonies."
+      },
+      "melody_harmony": "Original intimate melodic phrases, conversational verses, emotionally expressive choruses and restrained melodic ornamentation.",
+      "vocal_delivery": "Original intimate conversational phrases and emotionally expressive choruses with restrained ornamentation; respect selected vocal configuration.",
+      "arrangement": "Warm electric-piano introduction → intimate verse → melodic chorus → second verse → guitar-and-keyboard instrumental passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, devotion, longing, reconciliation, trust, commitment and emotional connection.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Respect selected single-singer, duet and supported harmony settings without imposing a gender or performer identity. Do not automatically introduce explicit sexual content. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Slow, intimate contemporary R&B with deep bass, warm electric piano, restrained drums, romantic guitar and rich soul-influenced harmonies. **Tempo:** 64–84 BPM. **Built-in mood:** Romantic, intimate, warm and reflective. Warm, luxurious slow-jam R&B with deep bass and clean, intimate instrumentation. Keep deep clean bass prominent without muddying kick or vocal frequencies; preserve authentic contemporary R&B harmony, clear vocal separation and profile-specific rhythmic dynamics rather than generic trap, EDM or pop. Avoid: Explicit sexual content by default, excessive trap drums, generic pop production and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original warm Rhodes voicings and sustained bass.",
+          "Open on alternate electric-piano chords and spacious soft percussion."
+        ],
+        "progressions": [
+          "Use original seventh/ninth harmony with smooth melodic bass.",
+          "Use alternate warm piano/organ chords and gentle bass syncopation."
+        ],
+        "arrangements": [
+          "Vary clean fingerpicked guitar fills through the keyboard/guitar passage.",
+          "Develop relaxed drum swing and an emotional bridge into an intimate final chorus."
+        ],
+        "melody": [
+          "Create original conversational verses and emotionally expressive refrains.",
+          "Create a contrasting intimate melody with restrained ornamentation."
+        ],
+        "lyrical": [
+          "Explore the customer subject through original trust or devotion imagery.",
+          "Develop fresh reconciliation or longing verses without default explicit content."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "rimshot",
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "swing"
+        ]
+      ],
+      "research_references": [
+        "R. Kelly"
+      ]
+    },
+    {
+      "id": "W2-02",
+      "name": "Urban R&B Dance Groove",
+      "description": "Energetic contemporary R&B with punchy drums, funky guitar and catchy hooks.",
+      "department_id": "western-international",
+      "category_id": "western-w2",
+      "tempo": {
+        "min": 92,
+        "max": 116
+      },
+      "mood": "Confident, energetic, playful and romantic.",
+      "energy": "Confident energetic dance-R&B motion with syncopated bass and precise funk-guitar accents.",
+      "rhythm": "Dance-oriented contemporary R&B with a strong backbeat, syncopated bass and smooth pop-influenced transitions.",
+      "drums_percussion": "Punchy kick, crisp snare, syncopated hi-hats, claps, rhythmic percussion fills and controlled electronic drum accents. Use a strong R&B groove rather than generic EDM four-on-the-floor drums.",
+      "bass": "Deep, punchy electric or synth bass with rhythmic syncopation, short melodic phrases, occasional slides and precise kick-bass interaction.",
+      "instruments": {
+        "keys": "Bright synth plucks, rhythmic electric piano, warm chord pads and catchy keyboard hooks.",
+        "guitar": "Clean funk-influenced rhythm guitar, muted sixteenth-note strumming and short melodic responses.",
+        "other": "Handclaps, subtle brass, electronic percussion, shakers and tasteful transition effects."
+      },
+      "melody_harmony": "Original catchy melodic hooks, expressive verses, memorable choruses and energetic rhythmic phrasing.",
+      "vocal_delivery": "Original catchy hooks and energetic rhythmic phrasing; respect selected voice and supported harmony settings.",
+      "arrangement": "Immediate drum-and-bass introduction → rhythmic verse → rising pre-chorus → catchy chorus → instrumental dance groove → second verse → bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Romance, confidence, attraction, celebration, relationships, personal growth and enjoyment.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Respect selected single-singer, duet and supported harmony settings without imposing a gender or performer identity. Do not automatically introduce explicit sexual content. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Polished contemporary R&B combining danceable drums, deep electronic bass, rhythmic keyboards, funky guitar and memorable melodic hooks. **Tempo:** 92–116 BPM. **Built-in mood:** Confident, energetic, playful and romantic. Polished, danceable R&B with powerful bass, sharp drums and excellent instrumental separation. Keep deep clean bass prominent without muddying kick or vocal frequencies; preserve authentic contemporary R&B harmony, clear vocal separation and profile-specific rhythmic dynamics rather than generic trap, EDM or pop. Avoid: Generic EDM drops, excessive trap hi-hats and arrangements without a recognizable R&B foundation.",
+      "variations": {
+        "introductions": [
+          "Open immediately with an original punchy R&B drum/bass groove.",
+          "Open on alternate rhythmic bass phrases and bright keyboard hooks."
+        ],
+        "progressions": [
+          "Use original synth-pluck/electric-piano harmony with precise bass syncopation.",
+          "Use alternate warm pads and short bass slides locked to the kick."
+        ],
+        "arrangements": [
+          "Vary muted sixteenth-note funk guitar and percussion through the dance groove.",
+          "Develop a rising pre-chorus and energetic final chorus with new keyboard replies."
+        ],
+        "melody": [
+          "Create original catchy hooks and expressive rhythmic verses.",
+          "Create a contrasting confident refrain with smooth pop-influenced transitions."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original confidence or personal-growth images.",
+          "Develop fresh relationship or celebration words only if appropriate to the topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pluck"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "clap"
+        ]
+      ],
+      "research_references": [
+        "Usher"
+      ]
+    },
+    {
+      "id": "W2-03",
+      "name": "Velvet Heart R&B",
+      "description": "Smooth mature romantic R&B with warm bass and soulful piano.",
+      "department_id": "western-international",
+      "category_id": "western-w2",
+      "tempo": {
+        "min": 68,
+        "max": 90
+      },
+      "mood": "Romantic, tender, sincere and reflective.",
+      "energy": "Tender sincere slow-to-midtempo R&B warmth with flowing bass and restrained emotional development.",
+      "rhythm": "Slow-to-midtempo romantic R&B with smooth bass movement and relaxed drum phrasing.",
+      "drums_percussion": "Soft R&B kick, warm snare, restrained hi-hats, subtle ghost notes and gentle percussion fills.",
+      "bass": "Deep, smooth electric bass with flowing melodic phrases, warm sustained notes and tasteful passing tones.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, expressive acoustic piano, warm seventh and ninth chord voicings and subtle organ textures.",
+        "guitar": "Gentle clean electric guitar, soft rhythmic picking and soulful melodic responses.",
+        "other": "Soft strings, subtle percussion, warm pads and optional gentle backing harmonies."
+      },
+      "melody_harmony": "Original tender melodic lines, conversational verses, warm choruses and restrained emotional development.",
+      "vocal_delivery": "Original tender conversational verses and warm sincere refrains; follow selected single-singer, duet and harmony settings.",
+      "arrangement": "Soft piano-and-guitar introduction → romantic verse → heartfelt chorus → second verse → gentle instrumental passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, loyalty, commitment, reconciliation, trust, marriage, companionship and emotional honesty.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Respect selected single-singer, duet and supported harmony settings without imposing a gender or performer identity. Do not automatically introduce explicit sexual content. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Smooth, mature romantic R&B with warm electric piano, deep bass, gentle drums, expressive guitar and emotionally rich melodies. **Tempo:** 68–90 BPM. **Built-in mood:** Romantic, tender, sincere and reflective. Warm, mature romantic R&B with deep bass, expressive piano and clear emotional storytelling. Keep deep clean bass prominent without muddying kick or vocal frequencies; preserve authentic contemporary R&B harmony, clear vocal separation and profile-specific rhythmic dynamics rather than generic trap, EDM or pop. Avoid: Excessive electronic effects, aggressive dance drums and generic slow-pop arrangements.",
+      "variations": {
+        "introductions": [
+          "Open with original soft piano and gentle electric guitar.",
+          "Open on alternate expressive piano phrases and flowing warm bass."
+        ],
+        "progressions": [
+          "Use original Rhodes/acoustic-piano seventh/ninth voicings with sustained melodic bass.",
+          "Use alternate subtle organ harmony and tasteful bass passing tones."
+        ],
+        "arrangements": [
+          "Vary soulful guitar replies through the gentle instrumental passage.",
+          "Develop tender melodic storytelling and an emotional bridge with restrained drums."
+        ],
+        "melody": [
+          "Create original tender verses and warm conversational refrains.",
+          "Create a contrasting sincere melody with restrained emotional development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original loyalty or companionship images.",
+          "Develop fresh emotional-honesty or trust storytelling only where requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Joe"
+      ]
+    },
+    {
+      "id": "W2-04",
+      "name": "Piano Soul Romance",
+      "description": "Elegant piano-led R&B with rich harmonies and heartfelt melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w2",
+      "tempo": {
+        "min": 62,
+        "max": 86
+      },
+      "mood": "Heartfelt, romantic, elegant and reflective.",
+      "energy": "Elegant relaxed piano-led soul movement with sophisticated harmony and intimate live/hybrid drums.",
+      "rhythm": "Elegant piano-driven R&B with relaxed drums, warm bass and sophisticated harmonic movement.",
+      "drums_percussion": "Gentle live or hybrid R&B drums, warm kick, crisp but restrained snare, soft hi-hats, subtle tom fills and spacious rhythmic phrasing.",
+      "bass": "Warm electric bass with smooth melodic movement, expressive passing tones and controlled low-frequency support.",
+      "instruments": {
+        "keys": "Grand acoustic piano is the primary instrument. Use rich jazz- and soul-influenced chord extensions, tasteful harmonic substitutions, gentle electric piano and restrained organ.",
+        "guitar": "Soft acoustic guitar, clean electric-guitar responses and occasional fingerpicked accompaniment.",
+        "other": "Subtle strings, gentle percussion and optional backing harmonies when compatible with customer settings."
+      },
+      "melody_harmony": "Original expressive melodies, smooth melodic climbs, natural phrasing and emotionally satisfying choruses.",
+      "vocal_delivery": "Original natural phrases and smooth melodic climbs within selected voice capability; never force vocal acrobatics.",
+      "arrangement": "Solo piano introduction → intimate verse → melodic chorus → second verse with fuller instrumentation → piano-led instrumental passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Devotion, lasting love, family, companionship, forgiveness, hope and emotional commitment.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Respect selected single-singer, duet and supported harmony settings without imposing a gender or performer identity. Do not automatically introduce explicit sexual content. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Sophisticated piano-led contemporary R&B combining expressive acoustic piano, rich soul harmonies, smooth bass, gentle drums and intimate melodic storytelling. **Tempo:** 62–86 BPM. **Built-in mood:** Heartfelt, romantic, elegant and reflective. Beautiful piano-centered R&B with rich harmony, deep bass and intimate studio clarity. Keep deep clean bass prominent without muddying kick or vocal frequencies; preserve authentic contemporary R&B harmony, clear vocal separation and profile-specific rhythmic dynamics rather than generic trap, EDM or pop. Avoid: Excessive orchestral drama, generic pop-ballad production and forced vocal acrobatics.",
+      "variations": {
+        "introductions": [
+          "Open with original intimate solo grand piano.",
+          "Open on alternate elegant acoustic-piano voicings before gentle drums enter."
+        ],
+        "progressions": [
+          "Use original jazz/soul chord extensions and tasteful harmonic substitutions.",
+          "Use alternate acoustic-piano progressions with expressive electric-bass passing notes."
+        ],
+        "arrangements": [
+          "Vary clean guitar responses and fingerpicked accompaniment through the piano-led passage.",
+          "Develop fuller second-verse instrumentation and an intimate emotional bridge."
+        ],
+        "melody": [
+          "Create original graceful melodic climbs suited to selected voice capability.",
+          "Create a contrasting heartfelt chorus without forced vocal acrobatics."
+        ],
+        "lyrical": [
+          "Explore the requested topic through original family or hope images.",
+          "Develop fresh forgiveness or devotion phrases without imposing a fixed romantic story."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "grand piano",
+          "acoustic piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "jazz"
+        ],
+        [
+          "substitution"
+        ],
+        [
+          "soul"
+        ]
+      ],
+      "research_references": [
+        "Brian McKnight"
+      ]
+    },
+    {
+      "id": "W2-05",
+      "name": "Modern Gentleman R&B",
+      "description": "Stylish midtempo pop-R&B with polished drums, deep bass and memorable hooks.",
+      "department_id": "western-international",
+      "category_id": "western-w2",
+      "tempo": {
+        "min": 88,
+        "max": 112
+      },
+      "mood": "Confident, romantic, stylish and uplifting.",
+      "energy": "Stylish uplifting midtempo pop-R&B backbeat with polished electronic drums and rhythmic melodic bass.",
+      "rhythm": "Midtempo pop-R&B with a smooth backbeat, danceable bass and clean rhythmic movement.",
+      "drums_percussion": "Tight R&B kick, crisp snare, rhythmic claps, controlled hi-hats, subtle syncopated percussion and polished electronic drum textures.",
+      "bass": "Deep, smooth synth or electric bass with rhythmic melodic movement, occasional octave jumps and precise kick-bass coordination.",
+      "instruments": {
+        "keys": "Bright rhythmic piano, warm electric piano, clean synth plucks, soft pads and memorable keyboard motifs.",
+        "guitar": "Clean rhythmic electric guitar, muted funk-influenced strumming and short melodic responses.",
+        "other": "Handclaps, subtle strings, brass accents, shakers and restrained electronic textures."
+      },
+      "melody_harmony": "Original catchy melodic hooks, polished verse-to-chorus transitions and memorable romantic choruses.",
+      "vocal_delivery": "Original polished hooks and memorable smooth refrains; selected voice remains independent of style name or research references.",
+      "arrangement": "Rhythmic piano-and-bass introduction → smooth verse → melodic pre-chorus → catchy chorus → second verse → instrumental R&B groove → bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Romance, confidence, relationships, commitment, self-improvement, celebration and emotional maturity.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Respect selected single-singer, duet and supported harmony settings without imposing a gender or performer identity. Do not automatically introduce explicit sexual content. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Polished midtempo contemporary R&B combining smooth electronic drums, deep melodic bass, rhythmic piano, bright synth hooks and sophisticated pop-R&B songwriting. **Tempo:** 88–112 BPM. **Built-in mood:** Confident, romantic, stylish and uplifting. Stylish commercial R&B with deep bass, crisp drums, polished keyboards and memorable original melodies. Keep deep clean bass prominent without muddying kick or vocal frequencies; preserve authentic contemporary R&B harmony, clear vocal separation and profile-specific rhythmic dynamics rather than generic trap, EDM or pop. Avoid: Generic EDM, excessive trap percussion, thin bass and imitation of identifiable pop-R&B hits.",
+      "variations": {
+        "introductions": [
+          "Open with original rhythmic piano and coordinated melodic bass.",
+          "Open on alternate bright keyboard motifs and polished electronic drums."
+        ],
+        "progressions": [
+          "Use original warm electric-piano/synth-pluck chords over rhythmic bass.",
+          "Use alternate piano/pad progressions with occasional bass octave jumps."
+        ],
+        "arrangements": [
+          "Vary muted funk guitar and drum accents through the instrumental R&B groove.",
+          "Develop a melodic pre-chorus and polished final chorus with alternate keyboard hooks."
+        ],
+        "melody": [
+          "Create original catchy melodic hooks and smooth verse-to-chorus transitions.",
+          "Create a contrasting stylish refrain with memorable rhythmic phrasing."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original self-improvement or emotional-maturity images.",
+          "Develop fresh commitment or confidence verses only when appropriate to the topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pluck"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "octave"
+        ],
+        [
+          "clap"
+        ]
+      ],
+      "research_references": [
+        "Ne-Yo"
       ]
     }
   ]
