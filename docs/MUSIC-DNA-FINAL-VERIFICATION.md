@@ -3,30 +3,31 @@
 **Decision: VERIFICATION INCOMPLETE. Do not merge or deploy on this evidence.**
 
 This follow-up preserves the completed 43-group/215-style audit. It does not rerun
-its 666 tests or 9,675 voice/language cases. No profile, application engine,
-commercial rule, production setting or production record was changed.
+its 666 tests or 9,675 voice/language cases. The follow-up changes only five public W7 descriptions and their exact-copy test.
+Complete Music DNA instructions, application engines, commercial rules, production
+settings and production records remain unchanged.
 
 ## Results
 
 | Check | Status | Evidence and limit |
 | --- | --- | --- |
-| W7 interface acceptance | FAIL | Existing labels, five descriptions, grouping and private-reference protections pass the focused UI contract. Final approved short-copy comparison is blocked by an incomplete source upload, not a demonstrated runtime failure. |
+| W7 interface acceptance | PASS | All five public descriptions match the owner’s 29 October approval exactly. Focused W7 UI, loading and mocked generation checks pass; full profile instructions are unchanged. |
 | Music provider integration | NOT VERIFIED | Focused request/response, ownership, quota, error and download tests pass; actual production credentials pass a non-billable provider request. A real create/completed-task/media journey was not exercised. |
 | Real generated audio playback | NOT VERIFIED | No new paid generation, account-owned completed audio download or audible playback was attempted. Mock media tests are not real playback evidence. |
 | Production configuration | FAIL | Live read-only inspection succeeds, but the Music DNA provenance table is absent, payment secrets checked below are absent, and recovery/restore verification is incomplete. R2 credential presence does not verify storage permissions or media delivery. |
 
 ## W7 source and interface
 
-The supplied W7 instruction upload ends at `Moonlight Funk Machine — Precision-driven`
-in the short interface-description list. Its five full Musical identity paragraphs
-are complete. The current public descriptions reuse those paragraphs verbatim.
-Names, descriptions, nonselectable category heading and suppression of internal
-research references pass the targeted test. No confirmed difference from complete
-approved text was found; inventing replacement short copy would not resolve approval.
+The owner supplied the five final customer-facing descriptions on 29 October 2026.
+They now replace the temporary Musical identity paragraph descriptions verbatim.
+The exact approved copy is recorded in [the W7 specification](MUSIC-DNA-W7.md).
 
-The owner has been asked whether to approve the existing supplied identity paragraphs
-as interface copy or provide the missing final short descriptions. Until resolved,
-short-copy acceptance remains failed/pending. No other W7 profile fields were changed.
+The focused test asserts all five labels/descriptions, the nonselectable category
+heading and suppression of private research references. A structural comparison
+against the preceding catalogue confirms that only W7-01 through W7-05's
+`description` fields changed. All complete style instructions, other profile fields,
+215-style inventory and category/department data remain unchanged. The prior W7
+copy blocker is resolved.
 
 ## Provider inspection
 
@@ -113,7 +114,8 @@ whether repository secrets exist.
 
 | Command | Result |
 | --- | --- |
-| `node --test --test-name-pattern='W7 exact public' tests/music-dna-w7.test.cjs` | 1 passed, zero failed |
+| `npm run test:dna -- --groups W7` (after approved copy) | Catalogue validation passed; 16 W7 tests and 8 CI-routing tests passed, zero failed |
+| `node --test --test-name-pattern='W7 exact public' tests/music-dna-w7.test.cjs` (before correction) | 1 passed, zero failed against temporary copy |
 | `node --test tests/sonic-idempotency.test.cjs tests/studio-output.test.cjs tests/media-release.test.cjs tests/preflight.test.cjs` | 17 passed, zero failed |
 | `node --test --test-name-pattern='existing-service audit\|production audit\|existing-provider checks' tests/production-integration.test.cjs` | 3 passed, zero failed; repeated once after the workflow guard edit |
 | `node scripts/test-sonic-handler.cjs` | 31 mocked HTTP/quota/reservation/provider/refund checks passed; no live DB/provider |
@@ -132,9 +134,18 @@ not passing evidence. Relevant read-only script tests were executed directly.
   on `codex/music-dna-foundation` as well as its original development branch. It
   remains manual, repository/branch guarded, contents-read-only, without deployment
   steps. The script, live target, provider behavior and credentials are unchanged.
+- `config/music-dna.json`: the five approved public W7 descriptions only.
+- `tests/music-dna-w7.test.cjs`: exact approved description assertions.
+- `docs/MUSIC-DNA-W7.md`: approved interface copy and focused verification.
+- `docs/MUSIC-DNA-INTEGRATION-AUDIT.md`: link the historical copy blocker to its resolution.
 - `docs/MUSIC-DNA-FINAL-VERIFICATION.md`: this focused evidence and limitations.
 
-Before readiness can be certified: resolve W7 interface-copy approval; verify a real
+The workflow change was published in the preceding verification batch. This W7
+correction does not modify the workflow, provider integration or database code.
+Production findings above refer to the linked read-only inspection; a description-only
+change does not resolve those external prerequisites or require repeating the live audit.
+
+Before readiness can be certified: verify a real
 completed generation/audio journey (prefer an existing owned task without new paid
 creation); establish recovery evidence and a reviewed migration 023 rollout; rerun
 read-only schema checks after authorized migration; verify storage/media delivery

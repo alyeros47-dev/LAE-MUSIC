@@ -40,11 +40,11 @@ test("W7 exact public labels/descriptions, nonselectable heading, and private re
     cases.map(([id, name]) => [id, name]),
   );
   const descriptions = [
-    "Precision-driven dance funk combining powerful bass, tight drums, sharp rhythm guitar, bright synths and dramatic pop-soul arrangements.",
-    "Bold Minneapolis-inspired electric funk combining deep synth bass, sharp drum-machine grooves, expressive electric guitar, bright synthesizers and adventurous pop-funk arrangements.",
-    "Modern retro-funk and dance soul combining live drums, thick bass guitar, bright brass, funky rhythm guitar and polished contemporary production.",
-    "Rich orchestral disco-soul combining melodic bass guitar, energetic drums, layered brass, disco strings, rhythmic guitar and sophisticated soul harmonies.",
-    "High-energy classic funk and party soul combining thick bass guitar, powerful live drums, bright brass riffs, rhythmic guitar and joyful dance arrangements.",
+    "Precision-driven dance funk with heavy bass, sharp guitar and energetic drums.",
+    "Bold electric funk with synth bass, expressive guitar and vibrant keyboards.",
+    "Modern retro-funk with thick live bass, bright brass and joyful dance rhythms.",
+    "Rich orchestral disco-soul with melodic bass, brass, strings and uplifting melodies.",
+    "High-energy classic party funk with powerful bass, live drums and bright brass riffs.",
   ];
   const ui = await import(
     "data:text/javascript;base64," +

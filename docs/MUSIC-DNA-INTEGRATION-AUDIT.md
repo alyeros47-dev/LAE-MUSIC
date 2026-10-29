@@ -1,6 +1,12 @@
 # Final Music DNA integration audit — Package 46
 
 **Decision: VERIFICATION INCOMPLETE. Do not merge or deploy from this report.**
+
+Follow-up: W7's interface-copy gap below was resolved by the owner's exact short
+descriptions on 29 October 2026. See [focused final verification](MUSIC-DNA-FINAL-VERIFICATION.md)
+for current W7 acceptance and the subsequent read-only production/provider findings.
+The original audit evidence and limitations below are retained as historical results.
+
 Automated configuration and mocked application verification is distinguished below
 from live-provider, production-database and audible acceptance. No production data,
 storage, credentials, Render configuration, commercial rules or account code changed.
