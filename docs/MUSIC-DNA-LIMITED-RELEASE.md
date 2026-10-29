@@ -38,10 +38,9 @@ does not certify unrelated features.
   023 is additive but its successful application is required for the new provenance
   writes. A failed startup can make the service unavailable; a code rollback alone
   is not a database recovery plan.
-- The previous release helper is pinned to PR #6, an old production base and an old
-  backup identity. Do not reuse it unchanged to deploy PR #10 or relax its checks
-  merely to bypass those mismatches. A reviewed current-candidate release procedure
-  is still required.
+- The previous release helper was pinned to PR #6, an old production base and an
+  old backup identity. It has now been repinned to PR #10 and the verified backup
+  below without relaxing its merge, exact-tree, CI or environment guards.
 - The registered manual audit workflow now has a separate `isolated_recovery` input.
   Default false preserves the read-only inspection. True runs only guarded private
   recovery on the Music DNA development branch, sharing the existing recovery
@@ -107,9 +106,24 @@ passed on code `569e450da6ae3f60f8a79bdc2346eafd96062afa`:
   immediately before any approved release; an old copy does not cover later writes.
 
 Recovery/migration rehearsal is now resolved for this snapshot. It does not mean
-migration 023 is already applied on production. The remaining limited-release gate
-is a current PR #10 release procedure pinned to the tested candidate, current live
-base and verified backup, with applicable release checks. The older PR #6 release
-helper must still refuse to perform this deployment unchanged. No merge/deployment
+migration 023 is already applied on production. The release helper is now pinned to PR #10, the current live baseline and this
+verified backup. The remaining limited-release gate is successful final-candidate
+release CI; the helper continues to refuse preparation/deployment without it. No merge/deployment
 was requested by this verification job. Full commercial launch remains blocked on
 its separate financial/offline/operational requirements.
+
+## Current release guards
+
+`lib/production-release.js`, `scripts/release-existing-service.cjs` and the existing
+manual release job now identify PR #10 / `codex/music-dna-foundation`, production
+base `4e749296bc7a51239684fabffdf00e2c984d113c` and the verified owned backup.
+The required application, PostgreSQL, isolated persistence and Firefox/WebKit jobs
+remain mandatory for the exact candidate. A merged commit must match its tested
+candidate tree and actual PR #10 merge. Live payments must remain disabled and
+unrelated environment changes are forbidden. No prepare/deploy phase was run.
+
+19 focused release/recovery tests pass. Added negative cases prove the old/expired
+backup, changed production baseline and unmerged PR are rejected before mutation.
+Because the release helper and workflow changed, the final release-candidate CI
+must run on the new code before a controlled rollout can be approved. This final
+integration gate is separate from the completed catalogue/voice-language audit.

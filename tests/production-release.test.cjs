@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "4339f6ec38ab88fd0afa6ca6b55b63056aa246ee";
+  base = "4e749296bc7a51239684fabffdf00e2c984d113c";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -22,6 +22,10 @@ function fixture(
     badTree = false,
     existing = false,
     tamper = false,
+    expiredBackup = false,
+    oldBackup = false,
+    movedBase = false,
+    unmergedPR = false,
   } = {},
 ) {
   const calls = [];
@@ -109,11 +113,11 @@ function fixture(
       else if (p.includes("/branches/"))
         data = {
           branch: {
-            id: "br-gentle-mud-b4iztfzt",
+            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-rapid-brook-b4o7ybnx",
             project_id: PROJECT,
             parent_id: SOURCE,
-            name: "lae-release-40645913021-backup",
-            expires_at: "2100-01-01T00:00:00Z",
+            name: "lae-release-40891503538-backup",
+            expires_at: expiredBackup ? "2000-01-01T00:00:00Z" : "2100-01-01T00:00:00Z",
           },
         };
       else
@@ -121,16 +125,16 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/6"))
+      if (p.endsWith("/pulls/10"))
         data = {
-          merged: true,
+          merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/premium-platform-release"))
+      else if (p.endsWith("/git/ref/heads/codex/music-dna-foundation"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
-        data = { object: { sha: mode === "deploy" ? commit : base } };
+        data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };
       else if (p.includes("/git/commits/"))
         data = {
           tree: { sha: badTree && p.endsWith(commit) ? "d".repeat(40) : tree },
@@ -239,4 +243,12 @@ test("release settings retain approved media hosts and reject unexpected live-mo
       neonKey: "fixture",
     }),
   );
+});
+
+test("PR 10 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
+  for (const [mode, options] of [["plan", {oldBackup:true}], ["plan", {expiredBackup:true}], ["plan", {movedBase:true}], ["deploy", {unmergedPR:true}]]) {
+    const f=fixture(mode, options);
+    await assert.rejects(f.run());
+    assert(f.calls.every(call=>call.method==="GET"));
+  }
 });
