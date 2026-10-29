@@ -1,0 +1,69 @@
+name: Music DNA final integration audit
+on:
+  pull_request:
+    paths:
+      - "config/music-dna.json"
+      - "lib/music-dna.js"
+      - "lib/credits.js"
+      - "lib/studio-limits.js"
+      - "server.js"
+      - "musicapi-sonic.js"
+      - "migrations/023-music-dna-provenance.sql"
+      - "web/music-dna.js"
+      - "web/studio-engine.js"
+      - "web/studio-workflow.js"
+      - "tests/music-dna*"
+      - "scripts/audit-music-dna.cjs"
+      - ".github/workflows/music-dna-audit.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  music-dna-library-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: isolated-dna-ci
+          POSTGRES_DB: lae_music_ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Complete library and shared engine tests
+        run: node --test tests/music-dna*.test.cjs > artifacts/music-dna-complete-tests.txt 2>&1
+      - name: All styles, prompt handoff and representative mocked provider workflows
+        run: node scripts/audit-music-dna.cjs
+      - name: Relevant studio regression checks
+        run: |
+          node --test tests/studio-workflow.test.cjs tests/sonic-idempotency.test.cjs tests/studio-profiles.test.cjs tests/lyrics-models.test.cjs tests/lyrics-library.test.cjs > artifacts/music-dna-studio-regression.txt 2>&1
+          node scripts/test-sonic-handler.cjs > artifacts/music-dna-sonic-regression.txt 2>&1
+      - name: Disposable PostgreSQL migration and credit/provenance safety
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:isolated-dna-ci@127.0.0.1:5432/lae_music_ci
+        run: node --test tests/music-dna-audit-postgres.cjs > artifacts/music-dna-postgres-audit.txt 2>&1
+      - run: npx playwright install --with-deps chromium
+      - name: Desktop and mobile real component/handler journeys
+        run: node tests/music-dna-audit-browser.cjs
+      - name: Save audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: music-dna-integration-audit
+          path: |
+            artifacts/music-dna-*.json
+            artifacts/music-dna-*.txt
+            artifacts/music-dna-audit-*.png

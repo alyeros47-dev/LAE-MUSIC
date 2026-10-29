@@ -152,7 +152,7 @@ test("S1 has a separate Secular/Afrobeats optgroup and never inherits Gospel pra
   assert.equal(group.department_id, "secular-afrobeats");
   assert.equal(c.styles.filter((x) => x.department_id === "gospel").length, 70);
   assert.equal(
-    c.styles.filter((x) => x.department_id === "secular-afrobeats").length,
+    c.styles.filter((x) => x.category_id === group.id).length,
     5,
   );
   const ui = await import(

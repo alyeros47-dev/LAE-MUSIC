@@ -149,3 +149,26 @@ test("manual workflow dispatch preserves the explicit full-integration path", ()
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+// The final audit is isolated to the Music DNA boundary, retaining full routing for unrelated files.
+test("final DNA audit tools request shared checks without rerunning unrelated finance/platform suites", () => {
+  const p = pair();
+  for (const file of [
+    "scripts/audit-music-dna.cjs",
+    "tests/music-dna-audit-support.cjs",
+    "tests/music-dna-audit-browser.cjs",
+    "tests/music-dna-audit-postgres.cjs",
+  ]) {
+    const x = classify({
+      files: [file, ".github/workflows/music-dna-audit.yml"],
+      before: p.before,
+      after: p.before,
+    });
+    assert.equal(x.mode, "shared");
+    assert.deepEqual(x.groups, ["G1"]);
+  }
+  assert.equal(
+    classify({ files: ["scripts/not-a-dna-audit.cjs"], ...p }).mode,
+    "full",
+  );
+});

@@ -15,6 +15,10 @@ const stable = (v) =>
   );
 const same = (a, b) => stable(a) === stable(b);
 const SHARED = new Set([
+  "scripts/audit-music-dna.cjs",
+  "tests/music-dna-audit-support.cjs",
+  "tests/music-dna-audit-browser.cjs",
+  "tests/music-dna-audit-postgres.cjs",
   "lib/music-dna.js",
   "web/music-dna.js",
   "web/studio-engine.js",
@@ -25,6 +29,7 @@ const SHARED = new Set([
   "tests/music-dna-smoke.test.cjs",
 ]);
 const SUPPORT = new Set([
+  ".github/workflows/music-dna-audit.yml",
   ".github/workflows/platform-tests.yml",
   "scripts/dna-ci-scope.cjs",
   "scripts/test-music-dna.cjs",
