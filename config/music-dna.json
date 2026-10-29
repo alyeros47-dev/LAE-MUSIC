@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-g12-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-g12-g13-v1",
   "status": "approved",
   "departments": [
     {
@@ -89,6 +89,12 @@
       "group_id": "G12",
       "department_id": "gospel",
       "name": "Western Contemporary Worship"
+    },
+    {
+      "id": "gospel-g13",
+      "group_id": "G13",
+      "department_id": "gospel",
+      "name": "Western Gospel Choir & Praise"
     }
   ],
   "styles": [
@@ -4634,6 +4640,466 @@
       ],
       "research_references": [
         "Darlene Zschech"
+      ]
+    },
+    {
+      "id": "G13-01",
+      "name": "Urban Gospel Celebration",
+      "description": "Contemporary Gospel R&B with powerful choir and modern rhythms.",
+      "department_id": "gospel",
+      "category_id": "gospel-g13",
+      "tempo": {
+        "min": 100,
+        "max": 126
+      },
+      "mood": "Joyful, uplifting, confident and celebratory.",
+      "energy": "Energetic syncopated Gospel R&B interaction grows through responses and an instrumental groove into an expanded final chorus.",
+      "rhythm": "Contemporary Black American Gospel R&B groove with syncopated rhythmic movement and energetic choir responses.",
+      "drums_percussion": "Punchy kick, crisp snare, syncopated hi-hats, Gospel drum fills and modern rhythmic accents.",
+      "bass": "Deep electric bass with funk-influenced syncopation, melodic runs and strong kick synchronization.",
+      "instruments": {
+        "keys": "Bright Gospel piano, Hammond-style organ, Rhodes-style electric piano and modern synthesizer textures.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass accents, handclaps and large Gospel choir with rich SATB harmonies."
+      },
+      "melody_harmony": "Original rich SATB choir harmonies, rhythmic call-and-response, strong unison phrases and dynamic harmonic development.",
+      "vocal_delivery": "Confident rhythmic lead with natural choir responses and strong unison phrases; selected lead voice remains independent.",
+      "arrangement": "Choir-and-keyboard introduction → rhythmic verse → powerful choir chorus → call-and-response section → instrumental groove → expanded final chorus.",
+      "lyrics": {
+        "structure": "Hope, gratitude, victory, divine love, perseverance and celebration.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Musical tradition never forces English or a lead gender; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve contemporary Black American urban Gospel with strong choir presence, modern rhythmic clarity and powerful live atmosphere. Balance punchy drums, syncopated funk bass, Hammond and Rhodes keyboards, brass and handclaps around clear SATB harmony layers, unison phrases and dynamic choir responses.",
+      "variations": {
+        "introductions": [
+          "Begin with original choir voicings answered by bright keyboards.",
+          "Begin with alternate rhythmic unison choir phrases and a Hammond response."
+        ],
+        "progressions": [
+          "Use original Gospel R&B chord voicings with deep syncopated funk bass.",
+          "Use alternate Rhodes voicings and a different synchronized melodic bass groove."
+        ],
+        "arrangements": [
+          "Vary keyboard riffs and brass accents through the instrumental groove.",
+          "Change choir response patterns and harmonic development before the expanded final chorus."
+        ],
+        "melody": [
+          "Create an original joyful choir hook with rhythmic responses.",
+          "Create a contrasting confident melody and strong original unison phrase."
+        ],
+        "lyrical": [
+          "Develop original hope and perseverance verses with a celebratory refrain.",
+          "Develop divine love, gratitude and victory through fresh choir responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Kirk Franklin"
+      ]
+    },
+    {
+      "id": "G13-02",
+      "name": "Praise Fire Orchestra",
+      "description": "Explosive Gospel funk with strong drums, bass and brass.",
+      "department_id": "gospel",
+      "category_id": "gospel-g13",
+      "tempo": {
+        "min": 124,
+        "max": 150
+      },
+      "mood": "Explosive, triumphant, energetic and celebratory.",
+      "energy": "Complex high-energy Gospel funk interplay builds through breakdowns and instrumental praise to a dramatic choir climax.",
+      "rhythm": "High-energy contemporary Black American Gospel funk with complex rhythmic interplay and dramatic instrumental transitions.",
+      "drums_percussion": "Powerful live drum kit, rapid tom fills, syncopated kick patterns, sharp snare accents, energetic cymbal crashes and rhythmic breakdowns.",
+      "bass": "Heavy punchy electric bass with fast syncopated runs, funk-inspired movement and tight drum synchronization.",
+      "instruments": {
+        "keys": "Aggressive Gospel piano, rhythmic Hammond organ, bright synthesizer stabs and energetic keyboard riffs.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass section, handclaps, percussion and powerful Gospel choir."
+      },
+      "melody_harmony": "Original energetic multi-part choir harmonies, fast call-and-response, rhythmic unison phrases and dramatic vocal accents.",
+      "vocal_delivery": "Energetic rhythmic lead and fast multi-part choir responses with dramatic accents; selected voice remains independent.",
+      "arrangement": "Explosive drum-and-brass introduction → energetic verse → powerful chorus → rhythmic breakdown → instrumental praise explosion → final choir climax.",
+      "lyrics": {
+        "structure": "Victory, freedom, gratitude, celebration, faith and divine greatness.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Musical tradition never forces English or a lead gender; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Keep strong live drums, prominent fast funk bass, powerful brass and energetic choir arrangements central to Black American Gospel praise. Preserve rapid tom fills, rhythmic breakdowns and bright Hammond/synth stabs. Avoid slow worship pacing; keep fast choir responses and dramatic accents clear in the live-band mix.",
+      "variations": {
+        "introductions": [
+          "Open with an original explosive drum-and-brass exchange.",
+          "Open with alternate rapid tom fills answered by a new brass hook."
+        ],
+        "progressions": [
+          "Use original triumphant Gospel-funk chords with fast syncopated bass runs.",
+          "Use alternate aggressive piano voicings and tight drum-synchronized bass movement."
+        ],
+        "arrangements": [
+          "Vary drum breaks and brass hooks through the rhythmic breakdown.",
+          "Change choir responses and dramatic instrumental transitions into the final climax."
+        ],
+        "melody": [
+          "Create an original powerful hook with fast multi-part responses.",
+          "Create a contrasting energetic unison phrase and dramatic choir accent."
+        ],
+        "lyrical": [
+          "Develop original freedom and victory lyrics with a celebratory chorus.",
+          "Develop gratitude, faith and divine greatness through fresh rhythmic phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "funk"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Tye Tribbett"
+      ]
+    },
+    {
+      "id": "G13-03",
+      "name": "Soulful Kingdom Groove",
+      "description": "Smooth Gospel soul with melodic bass and rich harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g13",
+      "tempo": {
+        "min": 84,
+        "max": 110
+      },
+      "mood": "Warm, joyful, hopeful and spiritually uplifting.",
+      "energy": "Relaxed but engaging Gospel soul pocket supports a bass-led instrumental groove and expressive bridge.",
+      "rhythm": "Midtempo Black American Gospel soul and R&B with a relaxed but engaging rhythmic pocket.",
+      "drums_percussion": "Smooth Gospel drum groove with warm kick, crisp snare, controlled hi-hats and tasteful fills.",
+      "bass": "Prominent melodic electric bass with flowing funk-influenced phrases, syncopated movement and expressive transitions.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, Hammond organ, rich Gospel piano and warm synthesizer pads.",
+        "guitar": "Clean electric guitar.",
+        "other": "Subtle brass, hand percussion and layered Gospel harmonies."
+      },
+      "melody_harmony": "Original smooth multi-part choir harmonies, rich chord movement, melodic responses and expressive group singing.",
+      "vocal_delivery": "Warm expressive lead phrases and smooth multi-part group responses; selected voice remains independent.",
+      "arrangement": "Electric piano introduction → melodic verse → rich choir chorus → second verse → bass-led instrumental groove → expressive bridge → final chorus.",
+      "lyrics": {
+        "structure": "Divine love, grace, gratitude, hope, encouragement and faithfulness.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Musical tradition never forces English or a lead gender; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve warm soulful Black American Gospel production with a strong melodic bass identity. Keep flowing funk bass prominent, the R&B pocket relaxed, Rhodes and Hammond voicings rich, guitar clean and percussion tasteful; support smooth multi-part choir harmonies and expressive melodic responses.",
+      "variations": {
+        "introductions": [
+          "Begin with original Rhodes-style electric-piano voicings and melodic bass.",
+          "Begin with alternate warm keyboard harmony and clean guitar responses."
+        ],
+        "progressions": [
+          "Use original rich Gospel-soul chords with flowing funk bass phrases.",
+          "Use alternate Hammond/Rhodes voicings and expressive syncopated bass transitions."
+        ],
+        "arrangements": [
+          "Vary bass phrasing and choir harmonies through the bass-led instrumental groove.",
+          "Change guitar responses and bridge development while retaining the relaxed pocket."
+        ],
+        "melody": [
+          "Create an original smooth choir melody with expressive group responses.",
+          "Create a contrasting hopeful hook and flowing melodic bass answer."
+        ],
+        "lyrical": [
+          "Develop original grace and divine-love verses with grateful responses.",
+          "Develop encouragement, hope and faithfulness through fresh meaningful lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Fred Hammond"
+      ]
+    },
+    {
+      "id": "G13-04",
+      "name": "Cathedral Choir Victory",
+      "description": "Traditional church Gospel with Hammond organ and powerful choir.",
+      "department_id": "gospel",
+      "category_id": "gospel-g13",
+      "tempo": {
+        "min": 104,
+        "max": 132
+      },
+      "mood": "Triumphant, communal, joyful and spiritually powerful.",
+      "energy": "Strong church-band momentum and evolving choir harmony build through a traditional vamp to a dramatic final climax.",
+      "rhythm": "Traditional Black American Gospel praise with strong church-band momentum and energetic choir interaction.",
+      "drums_percussion": "Strong live Gospel drum kit, driving kick, expressive snare, energetic tom fills and powerful cymbal accents.",
+      "bass": "Deep electric bass with walking-style Gospel transitions, rhythmic movement and strong harmonic support.",
+      "instruments": {
+        "keys": "Prominent Hammond organ, bright Gospel piano and traditional church keyboard textures.",
+        "guitar": "Electric guitar.",
+        "other": "Brass accents, handclaps and full Gospel choir."
+      },
+      "melody_harmony": "Original powerful SATB choir harmonies, congregational responses, repeated refrains with evolving harmony and dramatic dynamic builds.",
+      "vocal_delivery": "Powerful choir-led phrasing, congregational responses and evolving repeated refrains; selected lead voice remains independent.",
+      "arrangement": "Hammond-organ introduction → choir-led verse → strong congregational chorus → call-and-response → traditional Gospel vamp → dramatic final choir climax.",
+      "lyrics": {
+        "structure": "Victory, faith, perseverance, thanksgiving, encouragement and divine greatness.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Musical tradition never forces English or a lead gender; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve authentic Black American church choir sound with powerful Hammond organ, live drums and full ensemble participation. Keep walking-style bass transitions clear, SATB harmony layered and repeated refrains evolving; develop the traditional Gospel vamp and dramatic dynamics without flattening the choir into a generic worship backing track.",
+      "variations": {
+        "introductions": [
+          "Begin with an original prominent Hammond-organ riff.",
+          "Begin with an alternate church-organ phrase answered by full choir harmony."
+        ],
+        "progressions": [
+          "Use original traditional Gospel chords with walking-style bass transitions.",
+          "Use alternate bright piano voicings and deep harmonic bass support."
+        ],
+        "arrangements": [
+          "Vary choir harmonies and Gospel vamp development before the final climax.",
+          "Change organ riffs and instrumental breaks while evolving repeated refrains."
+        ],
+        "melody": [
+          "Create an original triumphant congregational chorus with SATB responses.",
+          "Create a contrasting communal refrain that develops through changing harmony."
+        ],
+        "lyrical": [
+          "Develop original faith and perseverance verses with encouraging responses.",
+          "Develop victory, thanksgiving and divine greatness through fresh communal refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "black american"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "walking"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "satb"
+        ],
+        [
+          "vamp"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Hezekiah Walker"
+      ]
+    },
+    {
+      "id": "G13-05",
+      "name": "Global Praise Fusion",
+      "description": "Multicultural Gospel praise with funk bass and Latin percussion.",
+      "department_id": "gospel",
+      "category_id": "gospel-g13",
+      "tempo": {
+        "min": 108,
+        "max": 136
+      },
+      "mood": "Joyful, energetic, inclusive and uplifting.",
+      "energy": "Energetic multicultural live-band dance movement develops through a fusion break and group responses into a powerful final chorus.",
+      "rhythm": "Contemporary multicultural Gospel fusion with funk, Latin percussion and modern worship-rock elements.",
+      "drums_percussion": "Driving live drums, syncopated kick, crisp snare, Latin-influenced percussion accents and energetic cymbal fills.",
+      "bass": "Deep rhythmic electric bass with funk-inspired movement and strong dance momentum.",
+      "instruments": {
+        "keys": "Bright piano, Hammond-style organ, rhythmic synthesizer textures and warm pads.",
+        "guitar": "Electric guitar and acoustic guitar.",
+        "other": "Congas, timbales, brass accents and layered Gospel choir."
+      },
+      "melody_harmony": "Original multilayered Gospel choir harmonies, energetic group responses and strong congregational choruses.",
+      "vocal_delivery": "Joyful inclusive lead phrasing with energetic group responses and congregational choruses; selected voice remains independent.",
+      "arrangement": "Rhythmic guitar-and-percussion introduction → energetic verse → uplifting chorus → instrumental fusion break → call-and-response section → powerful final chorus.",
+      "lyrics": {
+        "structure": "Unity, divine love, celebration, thanksgiving, hope and God’s greatness.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Musical tradition never forces English or a lead gender; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve rich multicultural Gospel instrumentation and energetic live-band arrangements. Keep Latin conga/timbale accents distinct, funk bass deep, guitars energetic, Hammond/piano bright and synth pads warm; balance multilayered Gospel harmonies and strong group responses through the fusion break.",
+      "variations": {
+        "introductions": [
+          "Begin with original rhythmic guitar and Latin percussion patterns.",
+          "Begin with alternate conga/timbale accents and a fresh electric-guitar riff."
+        ],
+        "progressions": [
+          "Use original uplifting Gospel-fusion chords with deep funk bass.",
+          "Use alternate bright keyboard harmony and a different rhythmic bass groove."
+        ],
+        "arrangements": [
+          "Vary percussion patterns and guitar riffs through the instrumental fusion break.",
+          "Change choir arrangements and instrumental transitions before the powerful final chorus."
+        ],
+        "melody": [
+          "Create an original inclusive congregational hook with energetic choir answers.",
+          "Create a contrasting joyful melody and multicultural rhythmic response."
+        ],
+        "lyrical": [
+          "Develop original unity and divine-love verses with celebratory responses.",
+          "Develop thanksgiving, hope and divine greatness through fresh inclusive lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "latin"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "timbale"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Israel Houghton"
       ]
     }
   ]
