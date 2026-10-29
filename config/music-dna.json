@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-g12-g13-g14-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-v1",
   "status": "approved",
   "departments": [
     {
@@ -53,6 +53,12 @@
       "group_id": "G5",
       "department_id": "gospel",
       "name": "Indigenous Yoruba Gospel"
+    },
+    {
+      "id": "gospel-g6",
+      "group_id": "G6",
+      "department_id": "gospel",
+      "name": "Indigenous Igbo Gospel"
     },
     {
       "id": "gospel-g7",
@@ -1951,6 +1957,466 @@
       ],
       "research_references": [
         "Sola Kosoko"
+      ]
+    },
+    {
+      "id": "G6-01",
+      "name": "Igbo Thanksgiving Highlife",
+      "description": "Joyful Gospel highlife with melodic guitars, bass and traditional percussion.",
+      "department_id": "gospel",
+      "category_id": "gospel-g6",
+      "tempo": {
+        "min": 108,
+        "max": 134
+      },
+      "mood": "Grateful, joyful, uplifting and celebratory.",
+      "energy": "Steady lively highlife dance movement expands through instrumental interplay and choir responses into an extended celebratory ending.",
+      "rhythm": "Traditional Igbo highlife Gospel groove with flowing guitar patterns, lively percussion and steady dance movement.",
+      "drums_percussion": "Lively live drum kit, steady kick, crisp snare, flowing tom fills, rhythmic hi-hats and traditional percussion accents.",
+      "bass": "Deep bouncy highlife electric bass with melodic passing notes, repeating dance grooves and strong rhythmic movement.",
+      "instruments": {
+        "keys": "Bright organ, rhythmic piano chords, warm keyboard pads and melodic Gospel keyboard responses.",
+        "guitar": "Interlocking highlife electric guitars.",
+        "other": "Ogene metal gong, ekwe wooden slit drum, udu clay drum, shakers, handclaps and expressive congregational responses."
+      },
+      "melody_harmony": "Original expressive highlife melodies and memorable congregational choruses with natural choir responses.",
+      "vocal_delivery": "Joyful expressive melodic lead and natural congregational responses; selected voice remains independent.",
+      "arrangement": "Guitar-and-percussion introduction → thanksgiving verse → memorable chorus → instrumental highlife passage → choir response → extended celebratory final chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, God’s goodness, blessings, divine protection, testimony and gratitude.",
+        "vocabulary": "Use original meaningful expressions in the selected supported language or combination. Igbo musical identity never forces Igbo lyrics; respect English, Nigerian Pidgin, Igbo and supported bilingual choices without reproducing identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Keep melodic interlocking guitars and highlife bass prominent in authentic southeastern Nigerian Gospel. Let ogene, ekwe and udu support the rhythm naturally with shakers and handclaps; keep organ bright and choir responses clear rather than substituting generic Afrobeats, Western worship or Yoruba praise.",
+      "variations": {
+        "introductions": [
+          "Begin with original highlife guitar interplay and naturally balanced traditional percussion.",
+          "Begin with alternate melodic guitar phrases and bouncy bass passing notes."
+        ],
+        "progressions": [
+          "Use original bright Gospel-highlife chords and repeating dance bass grooves.",
+          "Use alternate rhythmic piano voicings and melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary percussion breaks and choir-response arrangements through the highlife passage.",
+          "Change organ riffs and guitar exchanges before the extended celebratory final chorus."
+        ],
+        "melody": [
+          "Create an original memorable thanksgiving chorus with expressive responses.",
+          "Create a contrasting joyful highlife melody answered by interlocking guitars."
+        ],
+        "lyrical": [
+          "Develop original thanksgiving and goodness testimony with grateful responses.",
+          "Develop blessings and divine protection through fresh meaningful celebratory verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "igbo"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "clap"
+        ]
+      ],
+      "research_references": [
+        "Chinyere Udoma"
+      ]
+    },
+    {
+      "id": "G6-02",
+      "name": "Heritage Gospel Procession",
+      "description": "Traditional Igbo praise with ogene, ekwe and communal responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g6",
+      "tempo": {
+        "min": 100,
+        "max": 126
+      },
+      "mood": "Reverent, grateful, communal and celebratory.",
+      "energy": "Measured grounded highlife movement and repeating indigenous percussion cycles support narrative verses and communal thanksgiving.",
+      "rhythm": "Indigenous Igbo Gospel with traditional rhythmic phrasing, repeating percussion cycles and measured highlife movement.",
+      "drums_percussion": "Steady live drums with traditional African rhythmic accents, controlled snare patterns, rolling toms and hand percussion.",
+      "bass": "Warm electric bass with repetitive highlife movement, melodic transitions and a grounded dance pulse.",
+      "instruments": {
+        "keys": "Traditional Gospel organ, rhythmic piano and restrained keyboard accompaniment.",
+        "guitar": "Clean highlife guitar.",
+        "other": "Ogene, ekwe, udu, shakers and communal choir harmonies."
+      },
+      "melody_harmony": "Original expressive melodic storytelling and communal call-and-response with traditional measured phrasing.",
+      "vocal_delivery": "Expressive narrative lead and communal group-response refrains; selected voice remains independent.",
+      "arrangement": "Traditional percussion introduction → narrative verse → group-response refrain → instrumental passage → second narrative verse → communal thanksgiving finale.",
+      "lyrics": {
+        "structure": "Divine faithfulness, family blessings, gratitude, moral encouragement, testimony and spiritual reflection.",
+        "vocabulary": "Use original meaningful expressions in the selected supported language or combination. Igbo musical identity never forces Igbo lyrics; respect English, Nigerian Pidgin, Igbo and supported bilingual choices without reproducing identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Traditional Igbo rhythmic identity must remain central. Keep repeating ogene, ekwe and udu cycles grounded, highlife bass warm, guitar clean and keyboards restrained around expressive storytelling and communal responses. Avoid excessive electronic dance production or substitution with Yoruba praise, Western worship or generic Afrobeats.",
+      "variations": {
+        "introductions": [
+          "Open with an original combination of ogene, ekwe and udu cycles.",
+          "Open with alternate measured traditional percussion and restrained organ."
+        ],
+        "progressions": [
+          "Use original traditional Gospel harmony with repetitive warm highlife bass.",
+          "Use alternate rhythmic piano voicings and grounded melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary narrative structures and communal refrain patterns through the instrumental passage.",
+          "Change guitar responses and traditional percussion combinations before the thanksgiving finale."
+        ],
+        "melody": [
+          "Create an original expressive storytelling melody and group-response refrain.",
+          "Create a contrasting measured narrative contour with communal choir answers."
+        ],
+        "lyrical": [
+          "Develop original faithfulness and family-blessing narratives with grateful responses.",
+          "Develop moral encouragement and spiritual reflection through fresh testimony."
+        ]
+      },
+      "production_terms": [
+        [
+          "igbo"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Prince Gozie Okeke"
+      ]
+    },
+    {
+      "id": "G6-03",
+      "name": "Fire of Igbo Praise",
+      "description": "Explosive live Gospel praise with powerful drums, bass and energetic percussion.",
+      "department_id": "gospel",
+      "category_id": "gospel-g6",
+      "tempo": {
+        "min": 118,
+        "max": 145
+      },
+      "mood": "Triumphant, passionate, joyful and spiritually intense.",
+      "energy": "Fast strong dance momentum and explosive live-band interaction drive an energetic instrumental break and triumphant ending.",
+      "rhythm": "Fast Igbo Gospel praise with traditional percussion patterns, energetic live-band movement and strong dance momentum.",
+      "drums_percussion": "Powerful live drum kit, heavy kick, sharp snare, energetic tom rolls, cymbal crashes and fast rhythmic transitions.",
+      "bass": "Deep punchy electric bass with energetic highlife runs, syncopated movement and strong kick synchronization.",
+      "instruments": {
+        "keys": "Bright Gospel piano, energetic organ riffs, rhythmic keyboard accents and warm harmonic pads.",
+        "guitar": "Electric highlife guitar.",
+        "other": "Ogene, ekwe, congas, shakers, brass accents and powerful choir responses."
+      },
+      "melody_harmony": "Original passionate energetic praise melodies and powerful congregational choir responses.",
+      "vocal_delivery": "Passionate rhythmic lead and powerful congregational call-and-response; selected voice remains independent.",
+      "arrangement": "Explosive drum-and-percussion introduction → energetic praise verse → powerful chorus → call-and-response → instrumental dance break → triumphant final chorus.",
+      "lyrics": {
+        "structure": "Victory, divine intervention, thanksgiving, spiritual strength, testimony and celebration.",
+        "vocabulary": "Use original meaningful expressions in the selected supported language or combination. Igbo musical identity never forces Igbo lyrics; respect English, Nigerian Pidgin, Igbo and supported bilingual choices without reproducing identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve exciting fast Igbo live-band praise with prominent bass and drums. Keep ogene and ekwe patterns energetic, tom rolls powerful, highlife guitar rhythmic and organ bright; balance brass, congas, shakers and choir responses. No slow-motion musical pacing or weak percussion; do not substitute generic Afrobeats or another regional praise identity.",
+      "variations": {
+        "introductions": [
+          "Begin with original explosive drums and energetic ogene patterns.",
+          "Begin with alternate tom rolls and ekwe accents over punchy highlife bass."
+        ],
+        "progressions": [
+          "Use original triumphant praise chords with energetic highlife bass runs.",
+          "Use alternate bright piano harmony and tightly synchronized bass movement."
+        ],
+        "arrangements": [
+          "Vary organ riffs and choir responses through the instrumental dance break.",
+          "Change drum rolls, bass runs and ogene patterns in the instrumental breakdown."
+        ],
+        "melody": [
+          "Create an original powerful chorus with passionate choir answers.",
+          "Create a contrasting triumphant melodic hook and energetic congregational response."
+        ],
+        "lyrical": [
+          "Develop original victory and spiritual-strength testimony.",
+          "Develop thanksgiving and divine intervention through fresh celebratory verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "igbo"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Amaka Okwuoha",
+        "Chioma Jesus"
+      ]
+    },
+    {
+      "id": "G6-04",
+      "name": "Eastern Gospel Highlife Revival",
+      "description": "Classic Igbo Gospel highlife with flowing guitars and bright organ.",
+      "department_id": "gospel",
+      "category_id": "gospel-g6",
+      "tempo": {
+        "min": 106,
+        "max": 132
+      },
+      "mood": "Joyful, hopeful, nostalgic and celebratory.",
+      "energy": "Classic steady highlife dance movement supports extended guitar-and-bass interplay and a celebratory closing refrain.",
+      "rhythm": "Classic Igbo Gospel highlife with rolling bass, layered guitar patterns and steady African dance movement.",
+      "drums_percussion": "Traditional highlife drum patterns, steady kick, rhythmic snare, flowing hi-hats and tasteful tom fills.",
+      "bass": "Melodic highlife bass guitar with repeating dance patterns, walking transitions and rhythmic passing notes.",
+      "instruments": {
+        "keys": "Bright electric organ, rhythmic piano and traditional Gospel keyboard fills.",
+        "guitar": "Interlocking lead and rhythm electric guitars.",
+        "other": "Ogene, ekwe, udu, shakers and group-response harmonies."
+      },
+      "melody_harmony": "Original flowing classic highlife guitar melodies, layered responses and catchy storytelling choruses.",
+      "vocal_delivery": "Expressive classic Gospel storytelling and catchy group-response refrains; selected voice remains independent.",
+      "arrangement": "Melodic guitar introduction → storytelling verse → catchy Gospel chorus → extended guitar-and-bass instrumental passage → second verse → celebratory closing refrain.",
+      "lyrics": {
+        "structure": "Thanksgiving, God’s faithfulness, perseverance, divine protection, blessings and community encouragement.",
+        "vocabulary": "Use original meaningful expressions in the selected supported language or combination. Igbo musical identity never forces Igbo lyrics; respect English, Nigerian Pidgin, Igbo and supported bilingual choices without reproducing identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve classic southeastern Nigerian highlife guitar sound and rhythmic bass movement. Keep interlocking lead/rhythm guitars flowing, bass walking transitions clear, organ bright and ogene, ekwe, udu and shakers naturally supportive. Avoid replacing the live-band character with modern electronic Afrobeats or generic Western/Yoruba praise arrangements.",
+      "variations": {
+        "introductions": [
+          "Begin with an original melodic highlife lead-guitar phrase and rhythm-guitar response.",
+          "Begin with alternate layered guitar patterns over rolling bass."
+        ],
+        "progressions": [
+          "Use original classic highlife chord movement with walking bass transitions.",
+          "Use alternate bright organ voicings and rhythmic bass passing notes."
+        ],
+        "arrangements": [
+          "Vary lead-guitar melodies and bass runs through an extended instrumental passage.",
+          "Change organ fills and chorus-response structure before the celebratory closing refrain."
+        ],
+        "melody": [
+          "Create an original catchy Gospel chorus with classic highlife melodic phrasing.",
+          "Create a contrasting nostalgic melody answered by interlocking guitars."
+        ],
+        "lyrical": [
+          "Develop original faithfulness and perseverance storytelling with thanksgiving.",
+          "Develop protection, blessings and community encouragement through fresh verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "igbo"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "walking"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "ekwe"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "group",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Paul Nwokocha"
+      ]
+    },
+    {
+      "id": "G6-05",
+      "name": "Sacred Eastern Testimony",
+      "description": "Reflective traditional Gospel with gentle highlife and heartfelt storytelling.",
+      "department_id": "gospel",
+      "category_id": "gospel-g6",
+      "tempo": {
+        "min": 78,
+        "max": 108
+      },
+      "mood": "Reflective, hopeful, grateful and spiritually uplifting.",
+      "energy": "Gentle highlife movement and spacious mature storytelling develop naturally toward an uplifting final chorus.",
+      "rhythm": "Moderate traditional Igbo Gospel with gentle highlife influence, spacious melodic phrasing and natural rhythmic movement.",
+      "drums_percussion": "Gentle live drums, warm kick, controlled snare, restrained tom fills and subtle traditional percussion.",
+      "bass": "Warm melodic electric bass with flowing highlife phrases and understated rhythmic movement.",
+      "instruments": {
+        "keys": "Soft Gospel organ, expressive piano and warm sustained keyboard harmonies.",
+        "guitar": "Clean highlife electric guitar and acoustic guitar.",
+        "other": "Light ogene accents, udu, shakers and soft group harmonies."
+      },
+      "melody_harmony": "Original reflective melodic storytelling and expressive communal harmonies with gentle highlife phrasing.",
+      "vocal_delivery": "Mature heartfelt testimony phrasing and soft communal responses; selected voice remains independent.",
+      "arrangement": "Gentle guitar-and-organ introduction → reflective testimony verse → melodic refrain → instrumental reflection → second verse → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Life lessons, divine guidance, gratitude, perseverance, faith, hope and personal testimony.",
+        "vocabulary": "Use original meaningful expressions in the selected supported language or combination. Igbo musical identity never forces Igbo lyrics; respect English, Nigerian Pidgin, Igbo and supported bilingual choices without reproducing identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve mature traditional Igbo Gospel storytelling with warm natural instrumentation. Keep highlife bass understated, live drums gentle, organ soft and guitars clean; use light ogene accents, udu and shakers subtly beneath soft group harmonies rather than the strong percussion intensity of fast praise.",
+      "variations": {
+        "introductions": [
+          "Begin with an original gentle guitar-and-organ introduction.",
+          "Begin with alternate acoustic-guitar textures and soft organ harmony."
+        ],
+        "progressions": [
+          "Use original reflective traditional Gospel harmony with flowing highlife bass.",
+          "Use alternate warm piano voicings and understated melodic bass phrases."
+        ],
+        "arrangements": [
+          "Vary narrative structure and guitar introductions around the instrumental reflection.",
+          "Change organ harmonies and instrumental transitions before the uplifting final chorus."
+        ],
+        "melody": [
+          "Create an original heartfelt testimony melody with spacious phrasing.",
+          "Create a contrasting hopeful refrain and soft communal harmony response."
+        ],
+        "lyrical": [
+          "Develop original life lessons and divine-guidance testimony.",
+          "Develop perseverance, gratitude and faith through fresh mature storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "igbo"
+        ],
+        [
+          "highlife"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "ogene"
+        ],
+        [
+          "udu"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "group",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Patty Obasi"
       ]
     },
     {
