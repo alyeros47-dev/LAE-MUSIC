@@ -1,0 +1,24 @@
+{
+  "revision": "music-dna-foundation-v1",
+  "status": "awaiting_catalogue",
+  "departments": [
+    { "id": "gospel", "name": "Gospel Music", "research_groups": 14 },
+    {
+      "id": "secular-afrobeats",
+      "name": "Secular and Afrobeats",
+      "research_groups": 14
+    },
+    {
+      "id": "reggae-caribbean",
+      "name": "Reggae and Caribbean",
+      "research_groups": 7
+    },
+    {
+      "id": "western-international",
+      "name": "Western and International",
+      "research_groups": 8
+    }
+  ],
+  "categories": [],
+  "styles": []
+}

@@ -412,6 +412,12 @@ export function bindStudioWorkflow({
     const ready = result.status === "ready";
     voiceProfile.status = result.status;
     voiceProfile.hasVoice = ready;
+    const customOption = lyricsForm.elements.voice?.querySelector(
+      'option[value="custom"]',
+    );
+    if (customOption) customOption.disabled = !ready;
+    if (!ready && lyricsForm.elements.voice?.value === "custom")
+      lyricsForm.elements.voice.value = "";
     refreshSave();
     musicForm.elements.useVoice.disabled = !ready;
     if (!ready) musicForm.elements.useVoice.checked = false;

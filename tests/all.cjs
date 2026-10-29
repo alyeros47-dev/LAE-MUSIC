@@ -78,3 +78,5 @@ require('./partner-accounting.test.cjs');
 require('./partner-policy.test.cjs');
 
 require('./partner-statements.test.cjs');
+
+require('./music-dna.test.cjs');
