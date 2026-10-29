@@ -123,3 +123,25 @@ the main site. Owner approval is required before any production merge/deployment
 The previous release pins refer to PR #10; do not reuse those pins unchanged for this
 new PR. Existing unrelated financial/offline release limitations are not certified
 or activated by this UI work.
+
+## Subsequent owner-authorized deployment preparation
+
+The owner subsequently instructed deployment of PR #11. Release guards are repinned
+from PR #10 to PR #11 / `codex/studio-navigation-mood`, against deployed production
+base `d8c41d0ca789ea633d01935465621ef95870dd8d`. No CI/merge-tree/environment/payment
+safeguard is removed. Seven release guard tests pass; full exact-candidate CI is
+required again before the approved merge.
+
+[Fresh recovery rehearsal 40963275791](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/40963275791)
+passed against the latest production-data snapshot: 142 tables and 599 rows
+preserved; all 23 existing migrations replayed without change, legacy initialization
+verified, private recovery database removed, production untouched. Owned backup
+`br-frosty-brook-b4kmnzhw` expires November 5, 2026 at 2:06 p.m. Pacific Standard Time.
+Recheck its binding/expiry immediately before deployment. This code change needs no
+new schema migration.
+
+The live-verification script now also checks four exact studio assets on both
+existing site origins and the public catalogue's 215 styles / 43 groups / four moods.
+These are read-only checks; no paid lyrics or music request is introduced. Existing
+registration/login, complimentary allowance and original audio Range checks remain.
+The actual merge/deployment outcome will be recorded on PR #11 after execution.
