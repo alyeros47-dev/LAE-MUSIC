@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w4-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w5-v1",
   "status": "approved",
   "departments": [
     {
@@ -257,6 +257,12 @@
       "group_id": "W4",
       "department_id": "western-international",
       "name": "Modern R&B & Alternative Soul"
+    },
+    {
+      "id": "western-w5",
+      "group_id": "W5",
+      "department_id": "western-international",
+      "name": "Western Pop & Dance"
     }
   ],
   "styles": [
@@ -17639,6 +17645,460 @@
       ],
       "research_references": [
         "Giveon"
+      ]
+    },
+    {
+      "id": "W5-01",
+      "name": "Royal Pop Rhythm",
+      "description": "Powerful pop-R&B with punchy drums, deep bass and funky rhythmic arrangements.",
+      "department_id": "western-international",
+      "category_id": "western-w5",
+      "tempo": {
+        "min": 100,
+        "max": 124
+      },
+      "mood": "Confident, empowering, celebratory and energetic.",
+      "energy": "Confident empowering energetic pop-R&B drive with funk rhythms and dramatic dynamic development.",
+      "rhythm": "Energetic pop-R&B with strong rhythmic emphasis, funk influence and polished dance production.",
+      "drums_percussion": "Strong, punchy kick. Crisp snare and claps. Syncopated hi-hats. Rhythmic percussion breaks. Occasional marching-style snare accents. Dramatic drum fills before choruses.",
+      "bass": "Deep electric or synth bass with strong rhythmic movement, syncopated patterns, occasional octave jumps and tight kick-bass interaction.",
+      "instruments": {
+        "keys": "Bright rhythmic piano, powerful synth stabs, warm electric piano and short original keyboard hooks.",
+        "guitar": "Funky muted electric-guitar strumming, sharp rhythmic accents and occasional blues-influenced melodic responses.",
+        "other": "Brass stabs, handclaps, shakers, percussion and tasteful electronic transition effects."
+      },
+      "melody_harmony": "Original confident melodic hooks, rhythmic verses, memorable choruses and dynamic melodic development.",
+      "vocal_delivery": "Original confident hooks, rhythmic verses and dynamically developed choruses; follow selected vocal settings.",
+      "arrangement": "Powerful drum-and-bass introduction → rhythmic verse → rising pre-chorus → explosive chorus → instrumental dance passage → second verse → dramatic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Confidence, celebration, self-worth, love, ambition, independence and personal empowerment.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing Jamaican or other regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, pitch or performer identity from private references. Adapt range and ornamentation to selected voice capability. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Powerful contemporary pop and R&B dance fusion combining punchy drums, deep bass, rhythmic brass, funk-influenced guitar and dramatic melodic arrangements. **Tempo:** 100–124 BPM. **Built-in mood:** Confident, empowering, celebratory and energetic. Powerful, polished pop-R&B with deep bass, sharp drums and dynamic arrangements. Keep powerful clean bass prominent without muddying kick or vocals; preserve precise profile-specific pop-R&B, Caribbean-pop, disco or electro-pop identity and clear commercial mixing rather than generic festival EDM or trap. Avoid: Generic EDM drops, thin bass, excessive trap percussion and recognizable artist imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original powerful drums and syncopated bass.",
+          "Open on alternate punchy kick patterns and rhythmic bass octave jumps."
+        ],
+        "progressions": [
+          "Use original rhythmic piano/synth-stab harmony with warm electric piano.",
+          "Use alternate keyboard hooks over tightly coordinated electric or synth bass."
+        ],
+        "arrangements": [
+          "Vary brass accents, funk guitar rhythms and marching-style snare breaks.",
+          "Develop a dramatic bridge and final chorus with fresh percussion transitions."
+        ],
+        "melody": [
+          "Create original confident hooks and rhythmic verses.",
+          "Create a contrasting empowering refrain with dynamic melodic development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original self-worth or ambition imagery.",
+          "Develop fresh independence or celebration expressions only where appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "pop"
+        ],
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "march"
+        ]
+      ],
+      "research_references": [
+        "Beyoncé"
+      ]
+    },
+    {
+      "id": "W5-02",
+      "name": "Caribbean Pop Fire",
+      "description": "Vibrant Caribbean-influenced dance-pop with tropical percussion and heavy bass.",
+      "department_id": "western-international",
+      "category_id": "western-w5",
+      "tempo": {
+        "min": 98,
+        "max": 124
+      },
+      "mood": "Playful, confident, vibrant and energetic.",
+      "energy": "Vibrant playful Caribbean-influenced dance-pop motion with syncopated bass and tropical percussion.",
+      "rhythm": "Dance-pop with Caribbean rhythmic influence, modern electronic production and a strong commercial groove.",
+      "drums_percussion": "Punchy electronic kick. Sharp snare and claps. Syncopated hi-hats. Caribbean-influenced percussion accents. Occasional dancehall-style rhythmic breaks. Controlled electronic fills.",
+      "bass": "Deep, punchy synth bass with syncopated Caribbean movement, occasional slides and strong kick-bass coordination.",
+      "instruments": {
+        "keys": "Bright synth plucks, warm pads, rhythmic keyboard stabs and catchy electronic hooks.",
+        "guitar": "Clean rhythmic guitar, subtle offbeat Caribbean accents and short melodic responses.",
+        "other": "Congas, shakers, handclaps, tropical percussion and restrained electronic effects."
+      },
+      "melody_harmony": "Original catchy melodic hooks, playful verses, memorable choruses and rhythmic pop phrasing.",
+      "vocal_delivery": "Original catchy pop hooks and playful rhythmic phrasing; never force a Jamaican or regional accent.",
+      "arrangement": "Immediate bass-and-percussion introduction → rhythmic verse → catchy chorus → instrumental tropical-pop groove → second verse → bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, celebration, confidence, relationships, enjoyment, independence and personal growth.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing Jamaican or other regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, pitch or performer identity from private references. Adapt range and ornamentation to selected voice capability. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Modern Caribbean-influenced dance-pop combining deep bass, rhythmic electronic drums, tropical percussion, bright synths and memorable pop melodies. **Tempo:** 98–124 BPM. **Built-in mood:** Playful, confident, vibrant and energetic. Bright, energetic Caribbean-influenced pop with deep bass and polished dance production. Keep powerful clean bass prominent without muddying kick or vocals; preserve precise profile-specific pop-R&B, Caribbean-pop, disco or electro-pop identity and clear commercial mixing rather than generic festival EDM or trap. Avoid: Automatically forcing Jamaican accents, generic dancehall imitation, excessive EDM drops and recognizable song reproduction.",
+      "variations": {
+        "introductions": [
+          "Open with original Caribbean percussion and deep syncopated synth bass.",
+          "Open on alternate tropical accents and a punchy electronic bass motif."
+        ],
+        "progressions": [
+          "Use original bright synth-pluck harmony with warm pads.",
+          "Use alternate rhythmic keyboard stabs and controlled bass slides."
+        ],
+        "arrangements": [
+          "Vary conga/shaker patterns and subtle offbeat guitar through the tropical-pop groove.",
+          "Develop restrained dancehall-influenced breaks and a fresh final chorus without copying a riddim."
+        ],
+        "melody": [
+          "Create original playful verses and catchy pop refrains.",
+          "Create a contrasting vibrant hook with rhythmic Caribbean-influenced phrasing, never a forced accent."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original confident personal-growth images.",
+          "Develop fresh relationship or enjoyment words only when appropriate to the topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "caribbean"
+        ],
+        [
+          "pop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "synth bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pluck"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "offbeat"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ]
+      ],
+      "research_references": [
+        "Rihanna"
+      ]
+    },
+    {
+      "id": "W5-03",
+      "name": "Neon Disco Revival",
+      "description": "Modern disco-pop with funky bass, bright synths and energetic dance grooves.",
+      "department_id": "western-international",
+      "category_id": "western-w5",
+      "tempo": {
+        "min": 112,
+        "max": 128
+      },
+      "mood": "Joyful, stylish, confident and danceable.",
+      "energy": "Joyful stylish modern disco drive with steady four-on-the-floor pulse and actively melodic funk bass.",
+      "rhythm": "Modern disco-pop with a steady dance pulse, funky bass, bright synths and energetic rhythmic movement.",
+      "drums_percussion": "Strong four-on-the-floor kick. Crisp snare and claps. Steady hi-hats. Open hi-hat accents. Disco-inspired percussion fills. Energetic drum transitions.",
+      "bass": "Deep, funky electric bass with active melodic movement, octave jumps, syncopated disco grooves and strong rhythmic interaction with the kick.",
+      "instruments": {
+        "keys": "Bright analog-style synthesizers, rhythmic electric piano, disco string textures and catchy synth hooks.",
+        "guitar": "Clean funk guitar with muted sixteenth-note strumming, sharp rhythmic accents and short melodic riffs.",
+        "other": "Disco strings, handclaps, tambourine, brass accents and subtle electronic effects."
+      },
+      "melody_harmony": "Original catchy pop melodies, strong chorus hooks, rhythmic verses and memorable melodic transitions.",
+      "vocal_delivery": "Original catchy melodies and strong rhythmic pop choruses; respect selected single-singer, duet and harmony settings.",
+      "arrangement": "Funky bass-and-synth introduction → rhythmic verse → rising pre-chorus → energetic chorus → instrumental disco groove → second verse → dance breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Confidence, romance, celebration, independence, nightlife, friendship and enjoyment.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing Jamaican or other regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, pitch or performer identity from private references. Adapt range and ornamentation to selected voice capability. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Modern disco-pop combining groovy electric bass, four-on-the-floor dance drums, funky rhythm guitar, bright synths and polished retro-inspired arrangements. **Tempo:** 112–128 BPM. **Built-in mood:** Joyful, stylish, confident and danceable. Polished modern disco-pop with prominent funky bass, crisp drums and bright dance arrangements. Keep powerful clean bass prominent without muddying kick or vocals; preserve precise profile-specific pop-R&B, Caribbean-pop, disco or electro-pop identity and clear commercial mixing rather than generic festival EDM or trap. Avoid: Generic EDM without disco identity, repetitive bass loops, excessive trap percussion and imitation of recognizable disco-pop hits.",
+      "variations": {
+        "introductions": [
+          "Open with original funky electric bass and bright analog synth hooks.",
+          "Open on alternate syncopated disco bass octave jumps and synth riffs."
+        ],
+        "progressions": [
+          "Use original disco-pop electric-piano harmony with bright synths.",
+          "Use alternate disco-string voicings over actively developing melodic bass."
+        ],
+        "arrangements": [
+          "Vary muted sixteenth-note funk guitar and disco strings through the groove.",
+          "Develop an energetic dance breakdown and final chorus with alternate percussion fills."
+        ],
+        "melody": [
+          "Create original catchy pop hooks and rhythmic verses.",
+          "Create a contrasting stylish chorus with memorable melodic transitions."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original joyful confidence imagery.",
+          "Develop fresh friendship or independence expressions only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "disco"
+        ],
+        [
+          "four-on-the-floor"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "octave"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "funk"
+        ],
+        [
+          "sixteenth",
+          "16th"
+        ],
+        [
+          "string"
+        ],
+        [
+          "tambourine"
+        ]
+      ],
+      "research_references": [
+        "Dua Lipa"
+      ]
+    },
+    {
+      "id": "W5-04",
+      "name": "Electric Pop Spectacle",
+      "description": "Bold theatrical electro-pop with powerful drums, heavy synth bass and dramatic hooks.",
+      "department_id": "western-international",
+      "category_id": "western-w5",
+      "tempo": {
+        "min": 116,
+        "max": 132
+      },
+      "mood": "Dramatic, fearless, energetic and celebratory.",
+      "energy": "Fearless theatrical high-energy electro-pop pulse with controlled build-ups and dramatic electronic transitions.",
+      "rhythm": "High-energy electro-pop with a strong dance pulse, dramatic synth arrangements and powerful rhythmic transitions.",
+      "drums_percussion": "Powerful electronic kick. Sharp snare and claps. Driving hi-hats. Rhythmic electronic percussion. Dramatic drum fills. Controlled build-ups and breakdowns.",
+      "bass": "Heavy, clean synth bass with strong repeated motifs, rhythmic pulses, occasional octave movement and powerful low-frequency impact.",
+      "instruments": {
+        "keys": "Bold synthesizer leads, bright arpeggios, dramatic synth stabs, atmospheric pads and memorable electronic hooks.",
+        "guitar": "Occasional distorted electric-guitar accents, clean rhythmic guitar and short dramatic guitar phrases.",
+        "other": "Electronic percussion, synth effects, brass-like synthesizers and cinematic transition textures."
+      },
+      "melody_harmony": "Original bold melodic hooks, expressive verses, dramatic choruses and energetic melodic development.",
+      "vocal_delivery": "Original bold hooks, expressive verses and dramatic choruses adapted to the selected voice; no performer imitation.",
+      "arrangement": "Dramatic synth introduction → rhythmic verse → rising pre-chorus → explosive chorus → instrumental electro-pop passage → second verse → dramatic breakdown → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Self-expression, confidence, love, freedom, celebration, individuality and personal transformation.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing Jamaican or other regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, pitch or performer identity from private references. Adapt range and ornamentation to selected voice capability. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Bold theatrical electro-pop combining powerful electronic drums, heavy synth bass, dramatic keyboard hooks and high-energy pop arrangements. **Tempo:** 116–132 BPM. **Built-in mood:** Dramatic, fearless, energetic and celebratory. Bold, theatrical electro-pop with heavy clean bass, powerful drums and polished electronic arrangements. Keep powerful clean bass prominent without muddying kick or vocals; preserve precise profile-specific pop-R&B, Caribbean-pop, disco or electro-pop identity and clear commercial mixing rather than generic festival EDM or trap. Avoid: Uncontrolled distortion, generic festival EDM, muddy bass and recognizable melody imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original dramatic synth leads and bright arpeggios.",
+          "Open on alternate theatrical electronic hooks over repeated clean synth-bass motifs."
+        ],
+        "progressions": [
+          "Use original bold synth-stab harmony with atmospheric pads.",
+          "Use alternate brass-like synth voicings and rhythmic bass octave movement."
+        ],
+        "arrangements": [
+          "Vary controlled build-ups, guitar accents and dramatic drum breaks.",
+          "Develop an original electro-pop passage and breakdown into an explosive final chorus."
+        ],
+        "melody": [
+          "Create original bold hooks and expressive dramatic choruses.",
+          "Create a contrasting fearless refrain with energetic melodic development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original self-expression or transformation images.",
+          "Develop fresh freedom or confidence verses only where appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "electro-pop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "synth bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "arpeggio"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "brass-like"
+        ],
+        [
+          "build-up",
+          "buildup"
+        ],
+        [
+          "breakdown"
+        ]
+      ],
+      "research_references": [
+        "Lady Gaga"
+      ]
+    },
+    {
+      "id": "W5-05",
+      "name": "Starlight Pop R&B",
+      "description": "Smooth melodic pop-R&B with polished electronic drums, deep bass and bright keyboards.",
+      "department_id": "western-international",
+      "category_id": "western-w5",
+      "tempo": {
+        "min": 94,
+        "max": 118
+      },
+      "mood": "Romantic, playful, dreamy and uplifting.",
+      "energy": "Smooth dreamy uplifting melodic pop-R&B motion with polished electronic drums and gentle rhythmic dynamics.",
+      "rhythm": "Modern pop-R&B with smooth electronic drums, deep bass, bright melodies and polished rhythmic arrangements.",
+      "drums_percussion": "Tight electronic kick. Crisp snare and claps. Controlled syncopated hi-hats. Subtle R&B percussion fills. Gentle electronic transitions. Smooth rhythmic dynamics.",
+      "bass": "Deep, smooth synth or electric bass with rounded low notes, melodic movement, gentle slides and tight rhythmic coordination.",
+      "instruments": {
+        "keys": "Bright electric piano, soft analog pads, clean synth plucks, warm chord textures and catchy keyboard hooks.",
+        "guitar": "Gentle clean electric guitar, muted rhythmic accents and short melodic responses.",
+        "other": "Soft strings, shakers, handclaps, subtle electronic effects and optional backing harmonies."
+      },
+      "melody_harmony": "Original catchy melodic hooks, smooth verses, expressive choruses and tasteful melodic ornamentation. Adapt vocal range and ornamentation to the customer's selected voice.",
+      "vocal_delivery": "Original smooth melodic verses and expressive refrains with tasteful ornamentation; adapt range to selected voice capability without mandatory high pitch or excessive runs.",
+      "arrangement": "Atmospheric keyboard introduction → melodic verse → rising pre-chorus → catchy chorus → second verse → instrumental pop-R&B passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, relationships, confidence, happiness, self-growth, reconciliation and emotional connection.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing Jamaican or other regional accents or unfamiliar translations. Respect single-singer, duet and supported harmony settings without inferring gender, pitch or performer identity from private references. Adapt range and ornamentation to selected voice capability. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Modern melodic pop-R&B combining smooth bass, polished electronic drums, bright keyboards, atmospheric synths and sophisticated melodic arrangements. **Tempo:** 94–118 BPM. **Built-in mood:** Romantic, playful, dreamy and uplifting. Bright, polished pop-R&B with deep bass, smooth electronic drums and clear melodic arrangements. Keep powerful clean bass prominent without muddying kick or vocals; preserve precise profile-specific pop-R&B, Caribbean-pop, disco or electro-pop identity and clear commercial mixing rather than generic festival EDM or trap. Avoid: Mandatory high-pitched vocals, excessive vocal runs, generic trap beats and recognizable artist imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original atmospheric electric-piano and synth-pluck hooks.",
+          "Open on alternate warm keyboard textures and smooth melodic bass."
+        ],
+        "progressions": [
+          "Use original bright electric-piano/pad harmony over rounded electric or synth bass.",
+          "Use alternate warm chord voicings and gentle bass slides."
+        ],
+        "arrangements": [
+          "Vary muted clean guitar and electronic drum patterns through the pop-R&B passage.",
+          "Develop an emotional bridge and final chorus with smooth rhythmic transitions."
+        ],
+        "melody": [
+          "Create original catchy melodies and tasteful ornamentation adapted to selected voice capability.",
+          "Create a contrasting dreamy refrain without mandatory high pitch or excessive runs."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original self-growth or happiness imagery.",
+          "Develop fresh emotional-connection or reconciliation words only when appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "pop"
+        ],
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pluck"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "Ariana Grande"
       ]
     }
   ]
