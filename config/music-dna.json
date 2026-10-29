@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-g12-g13-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-g11-g12-g13-g14-v1",
   "status": "approved",
   "departments": [
     {
@@ -95,6 +95,12 @@
       "group_id": "G13",
       "department_id": "gospel",
       "name": "Western Gospel Choir & Praise"
+    },
+    {
+      "id": "gospel-g14",
+      "group_id": "G14",
+      "department_id": "gospel",
+      "name": "Francophone African Gospel"
     }
   ],
   "styles": [
@@ -5100,6 +5106,463 @@
       ],
       "research_references": [
         "Israel Houghton"
+      ]
+    },
+    {
+      "id": "G14-01",
+      "name": "Heavenly River Worship",
+      "description": "Soulful Congolese worship with expressive piano and rich choir harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g14",
+      "tempo": {
+        "min": 66,
+        "max": 92
+      },
+      "mood": "Reverent, heartfelt, prayerful and spiritually uplifting.",
+      "energy": "Warm soulful live instrumentation expands naturally toward a powerful choir-supported final chorus.",
+      "rhythm": "Slow-to-moderate Congolese Gospel worship with natural African rhythmic movement and spacious melodic phrasing.",
+      "drums_percussion": "Gentle live drum kit, warm kick, restrained snare, subtle tom fills, soft cymbal swells and delicate African percussion.",
+      "bass": "Deep melodic electric bass with smooth passing notes, warm sustained tones and expressive transitions.",
+      "instruments": {
+        "keys": "Grand piano, warm organ, atmospheric pads and rich Gospel chord progressions.",
+        "guitar": "Clean electric guitar with subtle Congolese melodic guitar phrases.",
+        "other": "Cinematic strings, shakers and layered choir harmonies."
+      },
+      "melody_harmony": "Original soulful worship melodies, rich Gospel chord movement and expressive layered choir harmonies.",
+      "vocal_delivery": "Heartfelt prayerful melodic phrasing and expressive choir responses; selected voice remains independent.",
+      "arrangement": "Atmospheric piano introduction → reflective verse → emotional chorus → expanded second verse → instrumental worship passage → powerful choir-supported final chorus.",
+      "lyrics": {
+        "structure": "Divine presence, surrender, mercy, spiritual renewal, gratitude and hope.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Francophone identity never forces French, Lingala or any other language; never invent unsupported translations or reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve soulful Congolese worship character with warm live instrumentation and expressive choir arrangements. Keep piano rich, organ warm, bass passing notes smooth and drums gentle; balance subtle Congolese guitar phrases, cinematic strings, delicate African percussion and shakers beneath clear choir layers.",
+      "variations": {
+        "introductions": [
+          "Begin with an original atmospheric piano introduction and warm organ.",
+          "Begin with alternate piano voicings and subtle Congolese guitar responses."
+        ],
+        "progressions": [
+          "Use original rich Gospel chords with smooth melodic bass passing notes.",
+          "Use alternate warm harmonic movement and expressive bass transitions."
+        ],
+        "arrangements": [
+          "Vary choir harmonies and guitar responses through the worship passage.",
+          "Change instrumental transitions and choir development before the powerful final chorus."
+        ],
+        "melody": [
+          "Create an original heartfelt melody answered by layered choir harmonies.",
+          "Create a contrasting soulful chorus contour with expressive piano responses."
+        ],
+        "lyrical": [
+          "Develop original divine-presence and surrender imagery with grateful prayer.",
+          "Develop mercy, renewal and hope through fresh heartfelt worship verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "congolese"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Dena Mwana"
+      ]
+    },
+    {
+      "id": "G14-02",
+      "name": "Congo Glory Celebration",
+      "description": "Energetic Congolese Gospel with flowing guitars and powerful bass.",
+      "department_id": "gospel",
+      "category_id": "gospel-g14",
+      "tempo": {
+        "min": 104,
+        "max": 132
+      },
+      "mood": "Triumphant, joyful, passionate and celebratory.",
+      "energy": "Vibrant Congolese dance momentum and flowing guitar interplay drive energetic live-band celebration.",
+      "rhythm": "Energetic Congolese Gospel praise with flowing guitar interplay, syncopated bass and vibrant African dance rhythms.",
+      "drums_percussion": "Energetic live drum kit, driving kick, crisp snare, expressive tom rolls, cymbal crashes, congas and African percussion.",
+      "bass": "Deep bouncy electric bass with melodic Congolese movement, syncopated dance patterns and strong rhythmic momentum.",
+      "instruments": {
+        "keys": "Bright Gospel piano, lively organ, rhythmic synthesizer accents and warm keyboard layers.",
+        "guitar": "Interlocking Congolese electric guitars with original soukous-influenced melodic phrases.",
+        "other": "Brass accents, shakers and powerful choir harmonies."
+      },
+      "melody_harmony": "Original energetic Gospel melodies, flowing soukous-influenced guitar lines and powerful choir-response harmonies.",
+      "vocal_delivery": "Passionate joyful lead and powerful choir call-and-response; selected voice remains independent.",
+      "arrangement": "Drum-and-guitar introduction → energetic verse → powerful choir chorus → instrumental guitar passage → call-and-response section → celebratory final chorus.",
+      "lyrics": {
+        "structure": "Victory, gratitude, divine greatness, thanksgiving, faith and celebration.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Francophone identity never forces French, Lingala or any other language; never invent unsupported translations or reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve strong Congolese guitar-and-bass identity and exciting live-band energy rather than generic Nigerian Afrobeats or Western worship. Keep interlocking soukous-influenced guitars flowing, bass bouncy, drums energetic and organ lively; balance brass, congas and shakers around powerful choir responses.",
+      "variations": {
+        "introductions": [
+          "Open with original drums and interlocking Congolese guitar phrases.",
+          "Open with alternate soukous-influenced guitar runs and syncopated bass."
+        ],
+        "progressions": [
+          "Use original joyful Gospel harmony with bouncy Congolese bass movement.",
+          "Use alternate lively keyboard voicings and melodic dance bass patterns."
+        ],
+        "arrangements": [
+          "Vary guitar runs and drum fills through the instrumental guitar passage.",
+          "Change choir responses and instrumental dance breaks before the celebratory ending."
+        ],
+        "melody": [
+          "Create an original triumphant chorus with energetic choir responses.",
+          "Create a contrasting joyful melody answered by flowing guitar lines."
+        ],
+        "lyrical": [
+          "Develop original victory and thanksgiving verses with celebratory responses.",
+          "Develop gratitude, faith and divine greatness through fresh communal praise."
+        ]
+      },
+      "production_terms": [
+        [
+          "congolese"
+        ],
+        [
+          "soukous"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Deborah Lukalu"
+      ]
+    },
+    {
+      "id": "G14-03",
+      "name": "Kingdom Afro-Gospel Pulse",
+      "description": "Modern Ivorian urban Gospel with vibrant rhythms and contemporary synths.",
+      "department_id": "gospel",
+      "category_id": "gospel-g14",
+      "tempo": {
+        "min": 102,
+        "max": 128
+      },
+      "mood": "Confident, joyful, youthful and uplifting.",
+      "energy": "Strong syncopated Ivorian urban dance momentum supports a catchy Gospel chorus and energetic final chorus.",
+      "rhythm": "Contemporary Ivorian Afro-Gospel with syncopated urban rhythms and strong dance momentum.",
+      "drums_percussion": "Punchy kick, crisp snare, syncopated hi-hats, Afro-urban percussion, rhythmic claps and controlled electronic accents.",
+      "bass": "Deep electronic and electric bass textures with rhythmic Afro-Gospel movement and strong low-frequency impact.",
+      "instruments": {
+        "keys": "Bright synthesizer hooks, rhythmic keyboard stabs, warm pads and contemporary piano accents.",
+        "guitar": "Clean electric guitar.",
+        "other": "African percussion, brass accents and modern layered backing harmonies."
+      },
+      "melody_harmony": "Original energetic Gospel melodies and catchy contemporary hooks with modern layered backing harmonies.",
+      "vocal_delivery": "Confident youthful melodic phrasing and energetic layered responses; selected voice remains independent.",
+      "arrangement": "Rhythmic synth-and-drum introduction → melodic verse → catchy Gospel chorus → instrumental groove → second verse → energetic final chorus.",
+      "lyrics": {
+        "structure": "Faith, gratitude, purpose, encouragement, divine protection and joyful testimony.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Francophone identity never forces French, Lingala or any other language; never invent unsupported translations or reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve modern Ivorian urban Gospel with clear powerful electronic/electric bass and energetic rhythmic production. Keep Afrobeat-influenced syncopation specific to the approved Ivorian groove, synth hooks bright, electronic accents controlled and Gospel melodies clear; do not substitute generic Nigerian Afrobeats or Western worship.",
+      "variations": {
+        "introductions": [
+          "Begin with original rhythmic synth hooks and punchy drum accents.",
+          "Begin with alternate bright synthesizer stabs and syncopated bass textures."
+        ],
+        "progressions": [
+          "Use original uplifting urban Gospel chords with strong rhythmic bass.",
+          "Use alternate warm pad harmony and a different electronic/electric bass groove."
+        ],
+        "arrangements": [
+          "Vary drum patterns and guitar accents through the instrumental groove.",
+          "Change synth hooks and chorus arrangement before the energetic final chorus."
+        ],
+        "melody": [
+          "Create an original catchy Gospel hook with confident melodic phrasing.",
+          "Create a contrasting youthful chorus contour and layered backing response."
+        ],
+        "lyrical": [
+          "Develop original faith and purpose verses with joyful testimony.",
+          "Develop encouragement, protection and gratitude through fresh uplifting phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "ivorian"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "electronic"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "KS Bloom"
+      ]
+    },
+    {
+      "id": "G14-04",
+      "name": "Graceful African Soul",
+      "description": "Smooth Francophone Gospel soul with R&B textures and gentle Afro-pop rhythms.",
+      "department_id": "gospel",
+      "category_id": "gospel-g14",
+      "tempo": {
+        "min": 76,
+        "max": 104
+      },
+      "mood": "Tender, hopeful, reflective and spiritually uplifting.",
+      "energy": "Smooth emotionally engaging Afro-soul movement supports intimate verses and an expressive uplifting bridge.",
+      "rhythm": "Midtempo Francophone Afro-soul Gospel with gentle syncopation, smooth R&B phrasing and contemporary African melodic character.",
+      "drums_percussion": "Smooth contemporary drum groove, warm kick, crisp snare, delicate hi-hats, subtle shakers and restrained African percussion.",
+      "bass": "Warm melodic bass with smooth rhythmic movement and occasional expressive runs.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, atmospheric pads, warm grand piano and subtle synthesizer textures.",
+        "guitar": "Clean electric guitar and gentle acoustic guitar.",
+        "other": "Soft strings and layered soulful harmonies."
+      },
+      "melody_harmony": "Original expressive soul melodies, gentle Afro-pop contours and layered soulful harmonies with smooth R&B phrasing.",
+      "vocal_delivery": "Tender intimate phrasing and emotionally engaging soulful responses; selected voice remains independent.",
+      "arrangement": "Soft keyboard introduction → intimate verse → melodic chorus → second verse → instrumental reflection → expressive bridge → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Divine love, hope, healing, gratitude, personal testimony and spiritual comfort.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Francophone identity never forces French, Lingala or any other language; never invent unsupported translations or reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve smooth emotionally engaging Francophone African Gospel soul without excessive dance percussion. Keep Rhodes voicings warm, bass melodic, hi-hats delicate, shakers subtle and Afro-pop syncopation gentle; balance atmospheric pads, warm grand piano, clean/acoustic guitars and soft strings beneath soulful harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with original soft Rhodes-style electric-piano voicings.",
+          "Begin with alternate warm grand-piano harmony and gentle guitar textures."
+        ],
+        "progressions": [
+          "Use original smooth R&B-influenced chords with melodic bass movement.",
+          "Use alternate atmospheric harmonic development and expressive bass runs."
+        ],
+        "arrangements": [
+          "Vary guitar textures and bass grooves through the instrumental reflection.",
+          "Change electric-piano layers and bridge harmony before the uplifting final chorus."
+        ],
+        "melody": [
+          "Create an original tender chorus melody with gentle Afro-soul phrasing.",
+          "Create a contrasting hopeful melodic contour and layered soulful response."
+        ],
+        "lyrical": [
+          "Develop original divine-love and comfort imagery in intimate testimony.",
+          "Develop hope, healing and gratitude through fresh emotionally clear verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b"
+        ],
+        [
+          "drum"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Morijah"
+      ]
+    },
+    {
+      "id": "G14-05",
+      "name": "Sacred Congo Encounter",
+      "description": "Deep Congolese prayer worship with atmospheric keyboards and emotional harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g14",
+      "tempo": {
+        "min": 60,
+        "max": 86
+      },
+      "mood": "Deeply prayerful, reverent, passionate and spiritually intense.",
+      "energy": "Spacious restrained prayer grows through gradual emotional intensity into a powerful but controlled final chorus.",
+      "rhythm": "Slow Congolese prayer worship with spacious melodic phrasing and gradual emotional intensity.",
+      "drums_percussion": "Minimal introductory percussion, soft live kick, restrained snare, expressive tom swells and gradual cymbal development.",
+      "bass": "Deep sustained electric bass with gentle melodic transitions and warm harmonic support.",
+      "instruments": {
+        "keys": "Atmospheric pads, expressive grand piano, warm organ and rich sustained chords.",
+        "guitar": "Ambient electric guitar with subtle Congolese melodic guitar phrases.",
+        "other": "Cinematic strings, gentle African percussion and layered worship/choir harmonies."
+      },
+      "melody_harmony": "Original prayerful melodies, rich choir harmonies and recurring refrains developing through warm sustained harmony.",
+      "vocal_delivery": "Deeply prayerful expressive refrains with passionate reverent choir support; selected voice remains independent.",
+      "arrangement": "Atmospheric introduction → prayerful verse → recurring worship refrain → instrumental development → emotional bridge → powerful but controlled final chorus.",
+      "lyrics": {
+        "structure": "Surrender, divine presence, spiritual renewal, mercy, faith, restoration and intimate prayer.",
+        "vocabulary": "Use original meaningful Gospel expressions in the selected supported language or combination. Francophone identity never forces French, Lingala or any other language; never invent unsupported translations or reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Preserve deep Congolese worship atmosphere with expressive melodies, warm keyboards and rich choir harmonies. Keep introductory percussion minimal, bass sustained, grand piano expressive and organ warm; develop ambient Congolese guitar phrases, cinematic strings and choir entrances gradually toward controlled intensity.",
+      "variations": {
+        "introductions": [
+          "Begin with original atmospheric pads and subtle Congolese guitar phrases.",
+          "Begin with alternate sustained organ chords and expressive grand piano."
+        ],
+        "progressions": [
+          "Use original prayerful sustained harmony with warm deep bass.",
+          "Use alternate reverent chord development and gentle melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary choir entrances and instrumental builds through the emotional bridge.",
+          "Change guitar responses and refrain development while controlling the final chorus intensity."
+        ],
+        "melody": [
+          "Create an original recurring prayer refrain with spacious expressive phrasing.",
+          "Create a contrasting passionate melodic contour with reverent choir responses."
+        ],
+        "lyrical": [
+          "Develop original surrender and intimate prayer with renewal imagery.",
+          "Develop mercy, restoration and faith through fresh meaningful devotional refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "congolese"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Rosny Kayiba"
       ]
     }
   ]
