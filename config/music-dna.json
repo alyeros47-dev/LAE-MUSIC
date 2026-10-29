@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w5-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w6-v1",
   "status": "approved",
   "departments": [
     {
@@ -263,6 +263,12 @@
       "group_id": "W5",
       "department_id": "western-international",
       "name": "Western Pop & Dance"
+    },
+    {
+      "id": "western-w6",
+      "group_id": "W6",
+      "department_id": "western-international",
+      "name": "Pop Ballads & Emotional Storytelling"
     }
   ],
   "styles": [
@@ -18099,6 +18105,447 @@
       ],
       "research_references": [
         "Ariana Grande"
+      ]
+    },
+    {
+      "id": "W6-01",
+      "name": "Grand Piano Heartbreak",
+      "description": "Powerful emotional piano ballad with deep bass, cinematic strings and dramatic choruses.",
+      "department_id": "western-international",
+      "category_id": "western-w6",
+      "tempo": {
+        "min": 60,
+        "max": 82
+      },
+      "mood": "Heartfelt, nostalgic, dramatic and reflective.",
+      "energy": "Spacious reflective piano-ballad opening grows gradually toward a powerful orchestral final chorus and gentle piano ending.",
+      "rhythm": "Slow contemporary pop ballad with spacious verses and gradual emotional development.",
+      "drums_percussion": "Begin with minimal percussion or piano alone. Introduce a deep, soft kick and controlled snare as the song develops. Use gentle tom fills and cymbal swells. Build gradually toward the final chorus. Maintain natural live-drum dynamics.",
+      "bass": "Deep, warm electric bass with sustained notes, subtle melodic movement and strong harmonic support. Bass should become fuller during climactic sections without overpowering the piano.",
+      "instruments": {
+        "keys": "Grand acoustic piano is the primary instrument. Use expressive chord voicings, emotional piano fills and subtle harmonic movement.",
+        "guitar": "Gentle acoustic guitar, restrained clean electric-guitar responses and occasional atmospheric guitar textures.",
+        "other": "Cinematic strings, cello, soft orchestral percussion and subtle ambient pads."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, conversational verses, memorable choruses and natural melodic climbs.",
+      "vocal_delivery": "Original emotionally expressive conversational verses and natural melodic climbs; adapt intensity to selected voice without constant maximum-volume delivery.",
+      "arrangement": "Solo piano introduction → intimate storytelling verse → emotional chorus → second verse with fuller instrumentation → dramatic bridge → powerful final chorus → gentle piano ending.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Heartbreak, regret, forgiveness, lost love, personal growth, nostalgia, reconciliation and emotional healing.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Style labels describe musical atmosphere, not a required lyrical subject or religious message. Respect single-singer, duet and supported harmony settings without inferring gender, range, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Powerful contemporary piano ballad combining emotional storytelling, expressive acoustic piano, warm bass, restrained drums and dramatic orchestral development. **Tempo:** 60–82 BPM. **Built-in mood:** Heartfelt, nostalgic, dramatic and reflective. Grand emotional piano ballad with deep bass, expressive strings and clear dynamic contrast. Keep deep warm bass prominent without muddying kick or vocals; preserve profile-specific piano/acoustic-guitar identity, natural drum dynamics, emotional progression and clear professional separation. Avoid: Generic dance-pop drums, excessive electronic effects, constant maximum-volume singing and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with an original intimate solo grand-piano motif.",
+          "Open on alternate expressive piano voicings with no opening percussion."
+        ],
+        "progressions": [
+          "Use original emotional piano progressions over sustained warm electric bass.",
+          "Use alternate subtle piano harmony with restrained bass passing notes."
+        ],
+        "arrangements": [
+          "Vary cinematic string voicings through a fuller second verse.",
+          "Develop a dramatic bridge and powerful final chorus into a gentle piano ending."
+        ],
+        "melody": [
+          "Create original conversational verses and natural melodic climbs.",
+          "Create a contrasting memorable emotional refrain adapted to selected voice capability."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original reflective personal-growth imagery.",
+          "Develop fresh forgiveness or nostalgia images only where appropriate to the subject."
+        ]
+      },
+      "production_terms": [
+        [
+          "ballad"
+        ],
+        [
+          "grand piano",
+          "acoustic piano"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "cello"
+        ],
+        [
+          "gradual",
+          "gradually"
+        ],
+        [
+          "piano ending"
+        ]
+      ],
+      "research_references": [
+        "Adele"
+      ]
+    },
+    {
+      "id": "W6-02",
+      "name": "Broken Heart Anthem",
+      "description": "Emotionally direct pop ballad with expressive piano, warm bass and powerful live drums.",
+      "department_id": "western-international",
+      "category_id": "western-w6",
+      "tempo": {
+        "min": 64,
+        "max": 88
+      },
+      "mood": "Vulnerable, sincere, melancholic and hopeful.",
+      "energy": "Simple sincere vulnerable pop-ballad motion with naturally building live drums and direct emotional choruses.",
+      "rhythm": "Slow-to-moderate contemporary pop ballad with simple harmonic movement and a powerful emotional chorus.",
+      "drums_percussion": "Sparse kick and snare in early verses. Gradually introduce fuller live drums. Use strong snare accents during choruses. Add expressive tom fills. Build rhythmic intensity naturally toward the final chorus.",
+      "bass": "Warm electric bass with simple sustained notes, occasional melodic passing tones and strong support for the chord progression.",
+      "instruments": {
+        "keys": "Emotional acoustic piano, warm electric piano and restrained atmospheric pads.",
+        "guitar": "Gentle acoustic guitar, subtle clean electric guitar and occasional melodic responses.",
+        "other": "Soft strings, ambient textures and restrained orchestral percussion."
+      },
+      "melody_harmony": "Original direct melodic lines, conversational verses, memorable emotional choruses and natural dynamic growth.",
+      "vocal_delivery": "Original direct sincere melodies and naturally growing choruses; never force a particular rasp or performer identity.",
+      "arrangement": "Sparse piano introduction → intimate verse → emotional pre-chorus → powerful chorus → second verse → dramatic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Heartbreak, longing, emotional struggle, forgiveness, regret, hope and personal recovery.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Style labels describe musical atmosphere, not a required lyrical subject or religious message. Respect single-singer, duet and supported harmony settings without inferring gender, range, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Emotionally direct contemporary pop ballad combining simple expressive piano, deep bass, powerful live drums and dramatic chorus development. **Tempo:** 64–88 BPM. **Built-in mood:** Vulnerable, sincere, melancholic and hopeful. Emotionally direct pop ballad with strong piano, deep bass and natural live-drum intensity. Keep deep warm bass prominent without muddying kick or vocals; preserve profile-specific piano/acoustic-guitar identity, natural drum dynamics, emotional progression and clear professional separation. Avoid: Overcomplicated arrangements, excessive electronic production, forced vocal rasp and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with an original sparse expressive piano motif.",
+          "Open on alternate simple piano chords and restrained early kick/snare."
+        ],
+        "progressions": [
+          "Use original simple acoustic-piano harmony with sustained electric bass support.",
+          "Use alternate warm electric-piano voicings and occasional bass passing tones."
+        ],
+        "arrangements": [
+          "Vary natural drum builds and strong chorus snare accents.",
+          "Develop emotional transitions and a dramatic bridge into a fuller final chorus without clutter."
+        ],
+        "melody": [
+          "Create original direct melodic lines and conversational verses.",
+          "Create a contrasting vulnerable refrain without forced rasp or performer imitation."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original recovery or hope imagery.",
+          "Develop fresh emotional-struggle or forgiveness verses only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "ballad"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "build",
+          "building"
+        ],
+        [
+          "simple"
+        ]
+      ],
+      "research_references": [
+        "Lewis Capaldi"
+      ]
+    },
+    {
+      "id": "W6-03",
+      "name": "Heavenly Pop Soul Ballad",
+      "description": "Elegant pop-soul with rich piano harmony, smooth bass and heartfelt melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w6",
+      "tempo": {
+        "min": 62,
+        "max": 88
+      },
+      "mood": "Tender, reflective, romantic and emotionally expressive.",
+      "energy": "Tender graceful pop-soul movement with smooth restrained bass and spacious gentle drums.",
+      "rhythm": "Slow contemporary pop-soul with smooth rhythmic movement and rich emotional harmony.",
+      "drums_percussion": "Soft, deep kick. Controlled snare or rimshot. Gentle hi-hats. Subtle percussion fills. Occasional cinematic drum accents. Spacious rhythmic phrasing.",
+      "bass": "Deep, smooth electric or synth bass with rounded sustained notes and restrained melodic movement.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, warm Rhodes-style electric piano, soft organ and rich soul-influenced chord voicings.",
+        "guitar": "Gentle acoustic guitar, clean electric-guitar fills and restrained melodic responses.",
+        "other": "Soft strings, cello, atmospheric pads and optional backing harmonies."
+      },
+      "melody_harmony": "Original flowing melodic lines, intimate verses, expressive choruses and graceful melodic development. Adapt vocal range to the customer's selected voice.",
+      "vocal_delivery": "Original flowing intimate phrases and graceful expressive choruses within selected voice capability; never force a high register.",
+      "arrangement": "Soft piano introduction → reflective verse → emotional chorus → second verse → instrumental strings-and-piano passage → heartfelt bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, vulnerability, heartbreak, acceptance, forgiveness, hope and emotional honesty.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Style labels describe musical atmosphere, not a required lyrical subject or religious message. Respect single-singer, duet and supported harmony settings without inferring gender, range, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Elegant contemporary pop-soul ballad combining expressive piano, rich harmonic textures, deep bass, gentle drums and emotionally vulnerable melodies. **Tempo:** 62–88 BPM. **Built-in mood:** Tender, reflective, romantic and emotionally expressive. Elegant pop-soul with warm bass, beautiful piano and clear emotional depth. Keep deep warm bass prominent without muddying kick or vocals; preserve profile-specific piano/acoustic-guitar identity, natural drum dynamics, emotional progression and clear professional separation. Avoid: Forced high-register vocals, generic electronic dance drums and imitation of identifiable melodies.",
+      "variations": {
+        "introductions": [
+          "Open with an original soft expressive acoustic-piano phrase.",
+          "Open on alternate gentle piano voicings and warm harmonic textures."
+        ],
+        "progressions": [
+          "Use original soul-influenced piano/Rhodes harmony over rounded electric or synth bass.",
+          "Use alternate soft organ voicings and restrained bass movement."
+        ],
+        "arrangements": [
+          "Vary cello/string textures through the instrumental piano passage.",
+          "Develop a heartfelt bridge and final chorus with spacious gentle drums."
+        ],
+        "melody": [
+          "Create original flowing intimate melodies within selected voice range.",
+          "Create a contrasting tender chorus with graceful natural development, never forced high register."
+        ],
+        "lyrical": [
+          "Explore the customer subject through original acceptance or emotional-honesty images.",
+          "Develop fresh vulnerability or hope words without imposing a religious narrative."
+        ]
+      },
+      "production_terms": [
+        [
+          "pop-soul"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "cello"
+        ]
+      ],
+      "research_references": [
+        "Sam Smith"
+      ]
+    },
+    {
+      "id": "W6-04",
+      "name": "Acoustic Storyteller Pop",
+      "description": "Warm acoustic pop with rhythmic guitar, melodic bass and relatable storytelling.",
+      "department_id": "western-international",
+      "category_id": "western-w6",
+      "tempo": {
+        "min": 76,
+        "max": 108
+      },
+      "mood": "Warm, sincere, romantic and uplifting.",
+      "energy": "Warm uplifting acoustic-pop pulse centered on rhythmic guitar and light natural percussion.",
+      "rhythm": "Acoustic pop with rhythmic guitar foundations, warm bass and light contemporary percussion.",
+      "drums_percussion": "Light kick. Gentle snare or clap. Soft hi-hats. Acoustic percussion. Tasteful handclaps. Natural rhythmic fills.",
+      "bass": "Warm electric or acoustic bass with melodic movement, smooth passing notes and strong rhythmic support.",
+      "instruments": {
+        "keys": "Gentle acoustic piano, warm electric piano and restrained atmospheric pads.",
+        "guitar": "Acoustic guitar is the central instrument. Use rhythmic strumming, fingerpicking, muted percussive guitar techniques and original melodic guitar hooks.",
+        "other": "Shakers, tambourine, subtle strings, hand percussion and occasional clean electric-guitar accents."
+      },
+      "melody_harmony": "Original catchy conversational melodies, relatable verses, memorable choruses and natural singalong phrasing.",
+      "vocal_delivery": "Original conversational storytelling melodies and natural singalong phrasing; respect selected single-singer, duet and supported harmonies.",
+      "arrangement": "Acoustic guitar introduction → storytelling verse → melodic chorus → second verse → guitar instrumental passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, friendship, family, personal experiences, nostalgia, relationships, hope and everyday life.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Style labels describe musical atmosphere, not a required lyrical subject or religious message. Respect single-singer, duet and supported harmony settings without inferring gender, range, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Warm acoustic pop combining rhythmic guitar, deep melodic bass, light percussion, expressive piano and relatable storytelling. **Tempo:** 76–108 BPM. **Built-in mood:** Warm, sincere, romantic and uplifting. Warm acoustic pop with clear guitar, deep bass, natural drums and intimate storytelling. Keep deep warm bass prominent without muddying kick or vocals; preserve profile-specific piano/acoustic-guitar identity, natural drum dynamics, emotional progression and clear professional separation. Avoid: Generic country music, excessive electronic production, weak acoustic guitar identity and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original rhythmic acoustic-guitar strumming.",
+          "Open on alternate fingerpicked motifs and muted percussive guitar."
+        ],
+        "progressions": [
+          "Use original warm acoustic-pop piano chords with melodic electric or acoustic bass.",
+          "Use alternate gentle electric-piano/pad harmony and smooth bass passing notes."
+        ],
+        "arrangements": [
+          "Vary guitar hooks and light shaker/tambourine textures through the instrumental passage.",
+          "Develop an emotional bridge and singalong final chorus with natural light percussion."
+        ],
+        "melody": [
+          "Create original conversational verses and relatable melodic hooks.",
+          "Create a contrasting warm refrain with natural singalong phrasing."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original everyday-life storytelling.",
+          "Develop fresh friendship, family or nostalgia images only when relevant."
+        ]
+      },
+      "production_terms": [
+        [
+          "acoustic pop"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "percussive"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "clap"
+        ],
+        [
+          "electric bass",
+          "acoustic bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "tambourine"
+        ]
+      ],
+      "research_references": [
+        "Ed Sheeran"
+      ]
+    },
+    {
+      "id": "W6-05",
+      "name": "Soulful Redemption Ballad",
+      "description": "Emotional acoustic pop-soul with powerful drums, expressive guitar and uplifting choruses.",
+      "department_id": "western-international",
+      "category_id": "western-w6",
+      "tempo": {
+        "min": 66,
+        "max": 92
+      },
+      "mood": "Passionate, vulnerable, hopeful and triumphant.",
+      "energy": "Passionate hopeful acoustic pop-rock/soul build with balanced live-drum intensity and controlled melodic climaxes.",
+      "rhythm": "Contemporary pop-rock soul ballad with acoustic foundations, emotional live-drum builds and powerful melodic choruses.",
+      "drums_percussion": "Warm live kick. Strong controlled snare. Gentle hi-hats. Expressive tom fills. Gradual rhythmic build. Powerful but balanced final chorus drums.",
+      "bass": "Deep electric bass with sustained low notes, melodic passing tones and strong support during emotional climaxes.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, warm electric piano and restrained atmospheric pads.",
+        "guitar": "Gentle acoustic guitar, expressive clean electric-guitar responses and occasional restrained overdriven guitar textures.",
+        "other": "Soft strings, subtle orchestral percussion, atmospheric textures and optional backing harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive verses, memorable choruses, natural melodic climbs and dramatic but controlled climaxes.",
+      "vocal_delivery": "Original expressive verses and dramatic but controlled choruses; never force raspy delivery or a recognizable performer identity.",
+      "arrangement": "Acoustic guitar-and-piano introduction → intimate verse → rising pre-chorus → powerful chorus → second verse → instrumental guitar passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, forgiveness, personal struggles, redemption, emotional recovery, loyalty, hope and perseverance.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Style labels describe musical atmosphere, not a required lyrical subject or religious message. Respect single-singer, duet and supported harmony settings without inferring gender, range, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Emotional contemporary pop-rock and soul ballad combining expressive acoustic guitar, warm piano, deep bass, powerful live drums and heartfelt storytelling. **Tempo:** 66–92 BPM. **Built-in mood:** Passionate, vulnerable, hopeful and triumphant. Powerful acoustic pop-soul with deep bass, emotional piano and natural live-band intensity. Keep deep warm bass prominent without muddying kick or vocals; preserve profile-specific piano/acoustic-guitar identity, natural drum dynamics, emotional progression and clear professional separation. Avoid: Forced raspy vocals, generic arena rock, excessive distortion and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with an original acoustic-guitar motif and expressive piano.",
+          "Open on alternate gentle guitar phrases and warm piano progressions."
+        ],
+        "progressions": [
+          "Use original acoustic pop-rock/soul harmony over sustained electric bass.",
+          "Use alternate electric-piano/pad voicings and melodic bass passing tones."
+        ],
+        "arrangements": [
+          "Vary restrained electric-guitar responses through the instrumental passage.",
+          "Develop live-drum fills and an emotional bridge into a powerful balanced final chorus."
+        ],
+        "melody": [
+          "Create original expressive verses and memorable melodic choruses.",
+          "Create a contrasting hopeful refrain with controlled climaxes, never forced rasp."
+        ],
+        "lyrical": [
+          "Explore the selected topic through original perseverance or recovery imagery.",
+          "Develop fresh loyalty or forgiveness expressions only where appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "pop-rock"
+        ],
+        [
+          "soul"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "overdriv"
+        ],
+        [
+          "build",
+          "building"
+        ],
+        [
+          "string"
+        ]
+      ],
+      "research_references": [
+        "James Arthur"
       ]
     }
   ]
