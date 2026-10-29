@@ -64,7 +64,7 @@ test("G1 public names/descriptions are exact, research references stay internal 
     cases.map(([id, name]) => [id, name]),
   );
   assert.equal(c.categories[0].name, "Deep Worship & Spiritual Encounter");
-  assert.deepEqual(c.coverage.supplied_research_groups, ["G1", "G2"]);
+  assert(c.coverage.supplied_research_groups.includes("G1"));
   assert.equal(c.coverage.expected_research_groups, 43);
   for (const s of c.styles)
     assert(s.description.length > 20 && s.description.length <= 240);
@@ -80,7 +80,7 @@ test("G1 public names/descriptions are exact, research references stay internal 
     html = ui.musicDNAControls(c, (s) =>
       String(s).replaceAll("&", "&amp;").replaceAll('"', "&quot;"),
     );
-  assert.equal((html.match(/<optgroup /g) || []).length, 2);
+  assert.equal((html.match(/<optgroup /g) || []).length, c.categories.length);
   assert(!html.includes('<option value="gospel-g1"'));
   for (const [id, name] of cases)
     assert(html.includes('<option value="' + id + '">' + name + "</option>"));

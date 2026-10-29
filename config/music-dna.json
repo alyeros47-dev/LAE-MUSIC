@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-v1",
+  "revision": "music-dna-g1-g2-g3-v1",
   "status": "approved",
   "departments": [
     {
@@ -35,6 +35,12 @@
       "group_id": "G2",
       "department_id": "gospel",
       "name": "Revival Prayer & Prophetic Chants"
+    },
+    {
+      "id": "gospel-g3",
+      "group_id": "G3",
+      "department_id": "gospel",
+      "name": "Contemporary Gospel Praise"
     }
   ],
   "styles": [
@@ -694,6 +700,315 @@
         "avoid_guaranteed_outcomes": false
       },
       "internal_research_context": "Contemporary African prayer worship and cinematic devotional music."
+    },
+    {
+      "id": "G3-01",
+      "name": "Overflowing Praise",
+      "description": "Joyful contemporary Gospel praise with bright keys, melodic bass, live drums and uplifting vocal responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g3",
+      "tempo": {
+        "min": 96,
+        "max": 118
+      },
+      "mood": "Joyful, grateful, uplifting and celebratory.",
+      "energy": "Natural rhythmic forward movement, growing backing harmonies and a stronger final chorus.",
+      "rhythm": "Flowing contemporary Nigerian Gospel groove combining live-band rhythm and subtle African percussion; melodic bass moves beneath vocal phrases and drums advance naturally without excessive aggression.",
+      "drums_percussion": "Live drum kit with energetic but controlled fills, light African percussion and shakers.",
+      "bass": "Warm melodic bass guitar moving expressively beneath vocal phrases.",
+      "instruments": {
+        "keys": "Bright piano and contemporary Gospel keyboards.",
+        "guitar": "Rhythmic electric guitar supporting verses, choruses and instrumental breaks.",
+        "other": "Layered Gospel backing vocals and natural call-and-response where appropriate."
+      },
+      "melody_harmony": "Original expressive melodies and memorable uplifting choruses with melodic bass movement and developing chorus harmony.",
+      "vocal_delivery": "Expressive clear melodic singing with natural call-and-response and layered supporting harmonies; voice is selected independently.",
+      "arrangement": "Begin with a bright keyboard or guitar introduction, introduce a melodic verse, then a memorable uplifting chorus. Build the second verse with instrumental movement and backing harmonies. Include a short instrumental interlude before a stronger final chorus.",
+      "lyrics": {
+        "structure": "Meaningful verses and a memorable chorus about thanksgiving, answered prayers, God's goodness, testimony, divine faithfulness and celebration; use natural musical call-and-response.",
+        "vocabulary": "Meaningful original testimony and thanksgiving language; avoid copying identifiable songs, recordings or stock performer phrases."
+      },
+      "production_mix": "Keep bright keys and rhythmic guitar clear, bass warm and melodic, drums energetic but not aggressive, African percussion light and Gospel backing responses intelligible; build naturally to the final chorus.",
+      "variations": {
+        "introductions": [
+          "Open with a bright original piano and keyboard figure.",
+          "Open with rhythmic electric guitar answered by bright keys."
+        ],
+        "progressions": [
+          "Use an original uplifting chorus progression supporting melodic bass movement.",
+          "Use an alternate original chorus progression with warm melodic bass responses."
+        ],
+        "arrangements": [
+          "Develop second-verse harmonies before a short instrumental break and stronger final chorus.",
+          "Vary the instrumental break and response entrances while retaining the verse-chorus rise."
+        ],
+        "melody": [
+          "Create an original expressive chorus contour with varied melodic bass answers.",
+          "Create a contrasting original chorus contour with a different natural response pattern."
+        ],
+        "lyrical": [
+          "Build original thanksgiving verses around answered prayers and God's goodness.",
+          "Develop an original testimony of divine faithfulness into a joyful chorus."
+        ]
+      },
+      "production_terms": [
+        ["piano", "keyboard"],
+        ["bass"],
+        ["drum"],
+        ["electric guitar"],
+        ["percussion", "shaker"],
+        ["gospel", "harmon"]
+      ],
+      "research_references": ["Mercy Chinwo"]
+    },
+    {
+      "id": "G3-02",
+      "name": "Graceful Victory",
+      "description": "Hopeful melodic Gospel with warm piano, expressive guitar responses, rich harmonies and a developing bridge.",
+      "department_id": "gospel",
+      "category_id": "gospel-g3",
+      "tempo": {
+        "min": 82,
+        "max": 108
+      },
+      "mood": "Hopeful, confident, grateful and spiritually uplifting.",
+      "energy": "Balanced steady development through expressive verses and chorus into a bridge and powerful final chorus.",
+      "rhythm": "Steady contemporary Gospel groove with expressive drum fills, melodic bass movement and balanced instrumental dynamics.",
+      "drums_percussion": "Controlled live drums and expressive fills; introduce supporting percussion gradually.",
+      "bass": "Smooth bass guitar with melodic movement beneath the song.",
+      "instruments": {
+        "keys": "Warm grand piano and rich keyboard pads.",
+        "guitar": "Melodic electric guitar with expressive responses.",
+        "other": "Soft strings and layered background harmonies."
+      },
+      "melody_harmony": "Original strong melodic choruses, varied chord voicings, emotionally expressive phrases and developing bridge harmony.",
+      "vocal_delivery": "Emotionally expressive melodic singing and clear faith declarations with rich supporting harmonies; do not assign gender.",
+      "arrangement": "Begin with expressive piano or guitar, develop a meaningful first verse and strong melodic chorus, then introduce harmonies, percussion and instrumental layers gradually. Include an expressive bridge and a powerful final chorus.",
+      "lyrics": {
+        "structure": "Communicate a clear message about victory through faith, God's grace, divine love, encouragement, restoration and thanksgiving rather than excessive repetition.",
+        "vocabulary": "Original encouraging Gospel language with a clear message, meaningful verses and purposeful refrain development."
+      },
+      "production_mix": "Balance warm piano, rich pads, expressive electric guitar, smooth bass, controlled drums, soft strings and layered harmonies; preserve space for emotional phrasing and a strong bridge-to-chorus lift.",
+      "variations": {
+        "introductions": [
+          "Begin with an expressive warm grand-piano phrase.",
+          "Begin with an original melodic guitar response over warm keys."
+        ],
+        "progressions": [
+          "Use varied warm chord voicings supporting a confident melodic chorus.",
+          "Use alternate original voicings that develop naturally toward the bridge."
+        ],
+        "arrangements": [
+          "Develop background harmonies gradually before an expressive bridge and powerful chorus.",
+          "Keep early harmonies light, then vary bridge development and the final backing arrangement."
+        ],
+        "melody": [
+          "Create original melodic phrases with answering electric-guitar lines.",
+          "Use contrasting original melodic phrases and a different guitar-response contour."
+        ],
+        "lyrical": [
+          "Develop a clear original message of God's grace and restoration.",
+          "Develop victory through faith and thanksgiving through meaningful original verses."
+        ]
+      },
+      "production_terms": [
+        ["piano"],
+        ["pad", "keyboard"],
+        ["electric guitar"],
+        ["bass"],
+        ["drum"],
+        ["string"],
+        ["harmon", "backing"]
+      ],
+      "research_references": ["Judikay"]
+    },
+    {
+      "id": "G3-03",
+      "name": "Kingdom Celebration",
+      "description": "Energetic Afro-Gospel pop with bright synth hooks, deep rhythmic bass and a strong danceable chorus.",
+      "department_id": "gospel",
+      "category_id": "gospel-g3",
+      "tempo": {
+        "min": 112,
+        "max": 132
+      },
+      "mood": "Energetic, triumphant, joyful and celebratory.",
+      "energy": "Vibrant rhythmic verses, a strong danceable chorus and an instrumental dance passage before the memorable conclusion.",
+      "rhythm": "Lively modern Afro-Gospel pop groove with syncopated percussion, strong kick-drum movement, rhythmic bass and memorable instrumental hooks; remain recognizably Gospel pop rather than unrelated nightclub production.",
+      "drums_percussion": "Punchy electronic and live drum combinations, strong kick movement and Afro-pop percussion with varied fills.",
+      "bass": "Deep rhythmic bass supporting syncopation and danceable Gospel-pop hooks.",
+      "instruments": {
+        "keys": "Bright synthesizer keyboards and vibrant contemporary electronic textures.",
+        "guitar": "Rhythmic electric guitar contributing energetic original phrases.",
+        "other": "Energetic Gospel backing harmonies and contemporary electronic textures."
+      },
+      "melody_harmony": "Original bright synth hooks, short memorable melodic hooks and developing danceable chorus melodies supported by meaningful verses.",
+      "vocal_delivery": "Clear rhythmic verse phrasing, bright melodic chorus delivery and energetic Gospel responses; apply the chosen voice separately.",
+      "arrangement": "Begin with an attention-grabbing instrumental hook, introduce a rhythmic verse with clear melodic phrasing, then a strong danceable chorus. Include an instrumental dance passage and a memorable final chorus.",
+      "lyrics": {
+        "structure": "Celebration, victory, freedom, gratitude, joy, divine blessings and confident faith; short memorable original hooks supported by meaningful verses.",
+        "vocabulary": "Original joyful Gospel-pop words, clear meaningful verses and memorable hooks; do not substitute unrelated nightclub themes or identifiable performer material."
+      },
+      "production_mix": "Keep synth hooks bright, bass deep and rhythmic, kick and percussion punchy, guitar rhythmic and Gospel backing harmonies clear; preserve vibrant electronic/live balance and the Gospel-pop identity.",
+      "variations": {
+        "introductions": [
+          "Open with an original bright synthesizer hook and syncopated percussion.",
+          "Open with a contrasting original synth-and-rhythmic-guitar hook over the bass pattern."
+        ],
+        "progressions": [
+          "Use an original uplifting Gospel-pop progression supporting a danceable chorus.",
+          "Use an alternate original chorus progression with fresh rhythmic bass movement."
+        ],
+        "arrangements": [
+          "Develop a rhythmic verse into a strong chorus, then an instrumental dance passage before the final chorus.",
+          "Vary drum-fill entrances and guitar responses before a contrasting dance passage and final chorus."
+        ],
+        "melody": [
+          "Create an original bright synth hook and a memorable danceable chorus melody.",
+          "Create a contrasting original synth hook with fresh rhythmic guitar phrases and chorus melody."
+        ],
+        "lyrical": [
+          "Develop victory, freedom and gratitude through original short hooks and meaningful verses.",
+          "Develop joy, divine blessings and confident faith into an original celebratory chorus."
+        ]
+      },
+      "production_terms": [
+        ["synth"],
+        ["bass"],
+        ["drum"],
+        ["afro", "syncopat"],
+        ["electric guitar"],
+        ["dance", "danceable"]
+      ],
+      "research_references": ["Ada Ehi"],
+      "production_exclusions": [
+        "nightclub",
+        "club-ready",
+        "unrelated club production"
+      ]
+    },
+    {
+      "id": "G3-04",
+      "name": "Heart of Gratitude",
+      "description": "Heartfelt Gospel ballad with expressive piano, warm orchestral strings and a gradual choir-supported emotional build.",
+      "department_id": "gospel",
+      "category_id": "gospel-g3",
+      "tempo": {
+        "min": 70,
+        "max": 92
+      },
+      "mood": "Heartfelt, thankful, reverent and emotionally uplifting.",
+      "energy": "Spacious emotional storytelling grows through strings, fuller instrumentation and an expressive bridge before the final chorus.",
+      "rhythm": "Slow-to-moderate contemporary Gospel ballad with spacious phrasing, expressive drum transitions and natural dynamic movement.",
+      "drums_percussion": "Gentle live drums with expressive transitions supporting the slow-to-moderate ballad.",
+      "bass": "Smooth bass guitar supporting the emotional progression.",
+      "instruments": {
+        "keys": "Expressive grand piano and atmospheric keyboard pads.",
+        "guitar": "Subtle electric guitar textures supporting the ballad.",
+        "other": "Warm orchestral strings and rich Gospel choir harmonies."
+      },
+      "melody_harmony": "Original soulful melodies, expressive harmonies and developing chorus contours with a gradual emotional rise.",
+      "vocal_delivery": "Sincere soulful storytelling and expressive melodic phrasing with rich supporting choir harmonies; the selected voice remains independent.",
+      "arrangement": "Begin with gentle piano and an emotionally meaningful verse. Expand into a melodic chorus with warm harmonies, gradually adding strings and fuller instrumentation. Develop an expressive bridge before the concluding chorus.",
+      "lyrics": {
+        "structure": "Sincere meaningful storytelling about gratitude, divine faithfulness, personal testimony, mercy, hope and God's enduring love, with clear emotional progression.",
+        "vocabulary": "Natural original testimony and thankful language with coherent emotional development rather than generic repetition."
+      },
+      "production_mix": "Keep piano expressive, strings warm, pads atmospheric, bass smooth, live drums gentle and electric guitar subtle; let rich choir harmonies develop without masking the storytelling.",
+      "variations": {
+        "introductions": [
+          "Begin with gentle open piano voicings before the meaningful verse.",
+          "Begin with gentle close piano voicings and a different expressive introduction."
+        ],
+        "progressions": [
+          "Use original heartfelt harmonic movement through the verse and chorus.",
+          "Use alternate original piano voicings and harmonic movement toward the bridge."
+        ],
+        "arrangements": [
+          "Introduce warm strings gradually, then develop an expressive bridge before the final chorus.",
+          "Vary string entrances and bridge structure while preserving the gradual emotional rise."
+        ],
+        "melody": [
+          "Create an original soulful chorus melody with developing choir harmonies.",
+          "Create a contrasting original chorus contour supported by a different warm string arrangement."
+        ],
+        "lyrical": [
+          "Tell an original personal testimony of mercy, hope and gratitude.",
+          "Develop a sincere original story of divine faithfulness and God's enduring love."
+        ]
+      },
+      "production_terms": [
+        ["piano"],
+        ["string"],
+        ["pad", "keyboard"],
+        ["bass"],
+        ["drum"],
+        ["guitar"],
+        ["choir", "harmon"],
+        ["ballad", "spacious"]
+      ],
+      "research_references": ["Onos Ariyo"]
+    },
+    {
+      "id": "G3-05",
+      "name": "Radiant Hope",
+      "description": "Peaceful, encouraging Gospel with warm piano, acoustic guitar textures and gentle African percussion.",
+      "department_id": "gospel",
+      "category_id": "gospel-g3",
+      "tempo": {
+        "min": 78,
+        "max": 102
+      },
+      "mood": "Peaceful, hopeful, encouraging and spiritually refreshing.",
+      "energy": "Gentle engaging movement develops through subtle layers and harmonies into a reassuring final chorus.",
+      "rhythm": "Gentle but engaging contemporary African Gospel rhythm with flowing bass movement and restrained percussion.",
+      "drums_percussion": "Light live drums and gentle African percussion supporting restrained rhythmic movement.",
+      "bass": "Melodic bass guitar with a flowing supportive character.",
+      "instruments": {
+        "keys": "Soft contemporary keyboards and warm piano.",
+        "guitar": "Acoustic guitar textures supporting the gentle Afro-contemporary rhythm.",
+        "other": "Soft layered backing harmonies and subtle instrumental layers."
+      },
+      "melody_harmony": "Original expressive worship melodies and uplifting choruses with natural meaningful melodic development.",
+      "vocal_delivery": "Clear natural encouraging melodic phrasing and soft supporting harmonies; voice is chosen independently.",
+      "arrangement": "Begin with a warm instrumental introduction and clear melodic verse. Build toward an uplifting chorus through subtle instrumental layers and harmonies. Include a short instrumental passage before a reassuring final chorus.",
+      "lyrics": {
+        "structure": "Hope, divine comfort, healing, trust, faithfulness, encouragement and God's love in natural meaningful and emotionally clear lyrics.",
+        "vocabulary": "Original emotionally clear words of comfort and encouragement; do not force Pidgin or any other language unless selected."
+      },
+      "production_mix": "Keep keyboards soft, piano warm, bass melodic, drums light, African percussion gentle and acoustic guitar textured; let soft backing harmonies support a spiritually refreshing, reassuring finish.",
+      "variations": {
+        "introductions": [
+          "Begin with warm piano and soft contemporary keyboards.",
+          "Begin with gentle acoustic-guitar textures answered by warm piano."
+        ],
+        "progressions": [
+          "Use an original hopeful chorus progression with flowing melodic bass.",
+          "Use an alternate original uplifting progression with a different warm piano pattern."
+        ],
+        "arrangements": [
+          "Add subtle layers and harmonies before a short instrumental passage and reassuring final chorus.",
+          "Keep early layers sparse, then vary the instrumental passage and final chorus harmonies."
+        ],
+        "melody": [
+          "Create an original encouraging chorus melody over gentle guitar textures.",
+          "Create a contrasting original uplifting chorus contour with different bass and piano responses."
+        ],
+        "lyrical": [
+          "Develop original words of hope, comfort, healing and trust.",
+          "Develop encouragement, faithfulness and God's love in natural emotionally clear verses."
+        ]
+      },
+      "production_terms": [
+        ["piano"],
+        ["keyboard", "keys"],
+        ["bass"],
+        ["drum"],
+        ["percussion", "shaker"],
+        ["acoustic guitar"],
+        ["harmon", "backing"]
+      ],
+      "research_references": ["Yadah"]
     }
   ]
 }

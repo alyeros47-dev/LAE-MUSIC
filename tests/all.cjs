@@ -84,3 +84,5 @@ require('./music-dna.test.cjs');
 require('./music-dna-g1.test.cjs');
 
 require('./music-dna-g2.test.cjs');
+
+require('./music-dna-g3.test.cjs');

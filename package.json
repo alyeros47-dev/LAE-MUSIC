@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node scripts/check-music-dna.cjs && node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs",
+    "test:dna": "node scripts/test-music-dna.cjs",
     "test:browser": "node scripts/test-browsers.cjs",
     "test:browser:all": "LAE_TEST_BROWSERS=chromium,firefox,webkit node scripts/test-browsers.cjs",
     "test:http": "LAE_NETWORK_TESTS=1 node tests/http.test.cjs",

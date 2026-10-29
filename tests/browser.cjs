@@ -236,7 +236,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
   lyricsBalance=1;await page.reload();await page.getByLabel('Music DNA style',{exact:true}).waitFor();
   for(const style of g1Catalog.styles.filter(s=>s.id.startsWith('G2-'))){await page.getByLabel('Music DNA style',{exact:true}).selectOption(style.id);assert((await page.locator('#music-dna-status').textContent()).includes(style.description));}
   assert.equal(await page.locator('[name="musicDnaStyle"] option[value="gospel-g2"]').count(),0);
-  assert.equal(await page.locator('[name="musicDnaStyle"] optgroup').count(),2);
+  assert.equal(await page.locator('[name="musicDnaStyle"] optgroup').count(),g1Catalog.categories.length);
   await page.getByLabel('Music DNA style',{exact:true}).selectOption('G2-04');await page.getByLabel('Lead vocals',{exact:true}).selectOption('female');await page.getByLabel('Music DNA languages',{exact:true}).selectOption(['en','ha']);
   await page.getByLabel('Your idea',{exact:true}).fill('An original prayer about hope, courage and perseverance.');await page.getByLabel('Lyrics model',{exact:true}).selectOption('gpt-6.1-sol');await page.reload();
   assert.equal(await page.getByLabel('Music DNA style',{exact:true}).inputValue(),'G2-04');assert.equal(await page.getByLabel('Lead vocals',{exact:true}).inputValue(),'female');assert.deepEqual(await page.getByLabel('Music DNA languages',{exact:true}).evaluate(s=>Array.from(s.selectedOptions,o=>o.value)),['en','ha']);assert.equal(await page.getByLabel('Mood',{exact:true}).count(),0);
