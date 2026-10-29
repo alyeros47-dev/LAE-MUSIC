@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-g9-g10-v1",
   "status": "approved",
   "departments": [
     {
@@ -71,6 +71,12 @@
       "group_id": "G9",
       "department_id": "gospel",
       "name": "Ghanaian Gospel Praise"
+    },
+    {
+      "id": "gospel-g10",
+      "group_id": "G10",
+      "department_id": "gospel",
+      "name": "Ghanaian Deep Worship"
     }
   ],
   "styles": [
@@ -3265,6 +3271,454 @@
       ],
       "research_references": [
         "Joyce Blessing"
+      ]
+    },
+    {
+      "id": "G10-01",
+      "name": "Intimate Mercy Worship",
+      "description": "Soulful Ghanaian worship with emotional piano and warm harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g10",
+      "tempo": {
+        "min": 62,
+        "max": 82
+      },
+      "mood": "Tender, prayerful, grateful and deeply reflective.",
+      "energy": "Intimate soulful dynamics develop gradually toward a heartfelt final chorus without losing reflective space.",
+      "rhythm": "Slow contemporary Ghanaian worship ballad with spacious phrasing and natural rhythmic movement.",
+      "drums_percussion": "Gentle live drums, soft kick, restrained snare, delicate cymbal swells and minimal rhythmic fills.",
+      "bass": "Warm rounded electric bass with sustained foundational notes and smooth melodic transitions.",
+      "instruments": {
+        "keys": "Expressive grand piano, mellow electric piano, atmospheric pads and soft organ.",
+        "guitar": "Ambient electric guitar and subtle acoustic guitar.",
+        "other": "Gentle strings and intimate backing harmonies."
+      },
+      "melody_harmony": "Original intimate piano melodies, soulful expressive lead contours and warm harmonies with gradual emotional development.",
+      "vocal_delivery": "Tender prayerful melodic phrasing and intimate backing responses; selected voice remains independent.",
+      "arrangement": "Gentle piano introduction → reflective verse → emotional chorus → expanded second verse → intimate instrumental passage → heartfelt final chorus.",
+      "lyrics": {
+        "structure": "Mercy, gratitude, surrender, spiritual renewal, divine love and personal devotion.",
+        "vocabulary": "Use original meaningful devotional expressions in the selected supported language or combination. Ghanaian musical identity does not force Twi or any other language; never invent unsupported translations or imitate identifiable performers."
+      },
+      "production_mix": "Preserve soulful contemporary Ghanaian worship character. Keep grand piano intimate, electric piano mellow, organ soft, bass rounded and drums gentle; balance ambient and acoustic guitars, gentle strings and warm backing harmonies through gradual emotional development.",
+      "variations": {
+        "introductions": [
+          "Begin with an original gentle grand-piano introduction and soft organ.",
+          "Begin with alternate mellow electric-piano voicings and ambient guitar textures."
+        ],
+        "progressions": [
+          "Use original warm soulful chords with sustained rounded bass foundations.",
+          "Use alternate reflective harmonic movement and smooth melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary guitar textures and harmonic layers in the intimate instrumental passage.",
+          "Change second-verse expansion and final chorus development while retaining reflective space."
+        ],
+        "melody": [
+          "Create an original tender chorus contour with intimate piano responses.",
+          "Create a contrasting prayerful melody and warm backing answers."
+        ],
+        "lyrical": [
+          "Develop original mercy and gratitude expressions in reflective verses.",
+          "Develop surrender, spiritual renewal and divine love through fresh devotional imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "backing",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Perez Musik"
+      ]
+    },
+    {
+      "id": "G10-02",
+      "name": "Heritage Devotion",
+      "description": "Reflective highlife-inspired devotion with gentle guitars and melodic bass.",
+      "department_id": "gospel",
+      "category_id": "gospel-g10",
+      "tempo": {
+        "min": 76,
+        "max": 100
+      },
+      "mood": "Reflective, grateful, peaceful and hopeful.",
+      "energy": "Moderate restrained dance movement and gentle highlife interplay support thoughtful devotion and a peaceful ending.",
+      "rhythm": "Moderate Ghanaian highlife-inspired devotional groove with flowing guitar interplay and restrained dance movement.",
+      "drums_percussion": "Gentle live drum kit, soft highlife percussion, light congas, shakers and restrained snare patterns.",
+      "bass": "Warm melodic highlife bass with flowing passing notes and subtle rhythmic movement.",
+      "instruments": {
+        "keys": "Soft organ, warm piano and gentle keyboard accompaniment.",
+        "guitar": "Clean interlocking electric guitars and acoustic guitar.",
+        "other": "Subtle traditional percussion and soft group harmonies."
+      },
+      "melody_harmony": "Original thoughtful melodic storytelling and gentle highlife guitar interplay with soft communal harmonies.",
+      "vocal_delivery": "Thoughtful reflective storytelling and gentle melodic refrains; voice is selected independently.",
+      "arrangement": "Guitar-led introduction → thoughtful verse → melodic refrain → instrumental highlife passage → second verse → peaceful final chorus.",
+      "lyrics": {
+        "structure": "Gratitude, divine guidance, hope, wisdom, spiritual reflection and personal testimony.",
+        "vocabulary": "Use original meaningful devotional expressions in the selected supported language or combination. Ghanaian musical identity does not force Twi or any other language; never invent unsupported translations or imitate identifiable performers."
+      },
+      "production_mix": "Preserve the gentle Ghanaian highlife identity without turning the song into fast celebratory praise. Keep interlocking guitars flowing, bass warm with passing notes, organ soft, piano warm, congas light and percussion restrained around thoughtful storytelling and soft group harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with an original gentle interlocking guitar pattern and melodic bass.",
+          "Begin with an alternate acoustic-guitar phrase and soft organ response."
+        ],
+        "progressions": [
+          "Use original gentle highlife chords with flowing bass passing notes.",
+          "Use alternate warm piano voicings and subtle rhythmic bass movement."
+        ],
+        "arrangements": [
+          "Vary guitar patterns and instrumental transitions through the highlife passage.",
+          "Change keyboard accompaniment and second-verse layers before a peaceful final chorus."
+        ],
+        "melody": [
+          "Create an original thoughtful refrain with gentle melodic phrasing.",
+          "Create a contrasting hopeful melody answered by flowing guitars."
+        ],
+        "lyrical": [
+          "Develop original gratitude and divine-guidance storytelling.",
+          "Develop wisdom, hope and personal testimony through fresh spiritual reflection."
+        ]
+      },
+      "production_terms": [
+        [
+          "highlife"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "group",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Kofi Nti"
+      ]
+    },
+    {
+      "id": "G10-03",
+      "name": "Altar of Thanksgiving",
+      "description": "Heartfelt worship with rich choir harmonies and expressive live instrumentation.",
+      "department_id": "gospel",
+      "category_id": "gospel-g10",
+      "tempo": {
+        "min": 70,
+        "max": 94
+      },
+      "mood": "Grateful, heartfelt, reverent and uplifting.",
+      "energy": "Gradual Ghanaian live-band development expands choir harmonies toward an uplifting final chorus.",
+      "rhythm": "Moderate Ghanaian Gospel worship groove with natural live-band movement.",
+      "drums_percussion": "Controlled live drums, warm kick, soft snare, gentle tom transitions and expressive cymbal swells.",
+      "bass": "Deep melodic electric bass with sustained notes and flowing transitions.",
+      "instruments": {
+        "keys": "Grand piano, warm organ, atmospheric pads and expressive Gospel chord progressions.",
+        "guitar": "Clean electric guitar.",
+        "other": "Subtle strings, gentle African percussion and layered Gospel choir."
+      },
+      "melody_harmony": "Original expressive lead melodies and rich choir harmonies developing around testimony and melodic worship choruses.",
+      "vocal_delivery": "Heartfelt expressive testimony phrases supported by expanding choir harmonies; selected voice remains independent.",
+      "arrangement": "Piano introduction → testimony verse → melodic worship chorus → expanded choir harmonies → instrumental reflection → uplifting final chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, divine faithfulness, mercy, testimony, hope and gratitude.",
+        "vocabulary": "Use original meaningful devotional expressions in the selected supported language or combination. Ghanaian musical identity does not force Twi or any other language; never invent unsupported translations or imitate identifiable performers."
+      },
+      "production_mix": "Preserve emotional Ghanaian worship with natural live-band movement. Keep grand piano expressive, organ warm, pads atmospheric and drums controlled; support deep melodic bass and clean guitar with subtle strings, gentle African percussion and gradually expanded choir harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with an original grand-piano motif and warm organ.",
+          "Begin with alternate expressive piano voicings and sustained deep bass."
+        ],
+        "progressions": [
+          "Use original expressive Gospel chords with flowing bass transitions.",
+          "Use alternate warm harmonic movement and a different melodic bass run."
+        ],
+        "arrangements": [
+          "Vary choir entrances through the instrumental reflection.",
+          "Change piano motifs and chorus structure while gradually expanding choir harmonies."
+        ],
+        "melody": [
+          "Create a new heartfelt worship chorus with expressive choir responses.",
+          "Create a contrasting testimony melody and uplifting final refrain."
+        ],
+        "lyrical": [
+          "Develop original thanksgiving and faithfulness testimony.",
+          "Develop mercy, hope and gratitude through fresh heartfelt verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Piesie Esther"
+      ]
+    },
+    {
+      "id": "G10-04",
+      "name": "Prayer of Restoration",
+      "description": "Deep prayer worship with atmospheric keyboards and gradual musical intensity.",
+      "department_id": "gospel",
+      "category_id": "gospel-g10",
+      "tempo": {
+        "min": 58,
+        "max": 80
+      },
+      "mood": "Prayerful, solemn, hopeful and spiritually intense.",
+      "energy": "Minimal introductory rhythm gradually develops into a powerful but controlled final chorus.",
+      "rhythm": "Slow Ghanaian devotional worship rhythm with spacious phrasing and gradual instrumental intensity.",
+      "drums_percussion": "Minimal introductory percussion, soft live drums, restrained toms, gentle cymbal swells and gradual dynamic development.",
+      "bass": "Deep warm electric bass with sustained notes and carefully controlled rhythmic movement.",
+      "instruments": {
+        "keys": "Atmospheric pads, expressive piano, warm organ and sustained harmonic textures.",
+        "guitar": "Ambient electric guitar.",
+        "other": "Soft strings, subtle hand percussion and layered prayerful harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive melodies and powerful spiritual refrains with gradual harmonic development.",
+      "vocal_delivery": "Sincere prayerful melodic refrains and expressive solemn phrasing; selected voice remains independent.",
+      "arrangement": "Atmospheric introduction → prayerful verse → recurring worship refrain → instrumental development → emotional bridge → powerful but controlled final chorus.",
+      "lyrics": {
+        "structure": "Prayer, spiritual renewal, divine mercy, restoration, perseverance, surrender and hope.",
+        "vocabulary": "Use original meaningful devotional expressions in the selected supported language or combination. Ghanaian musical identity does not force Twi or any other language; never invent unsupported translations or imitate identifiable performers."
+      },
+      "production_mix": "Preserve deep Ghanaian prayer worship, spacious phrasing and controlled intensity rather than fast praise. Keep introductory percussion minimal, toms restrained, bass sustained and warm; gradually develop pads, piano, organ, ambient guitar, soft strings and prayerful harmonies into a controlled final chorus.",
+      "variations": {
+        "introductions": [
+          "Begin with original atmospheric pads and minimal hand percussion.",
+          "Begin with alternate sustained organ textures and ambient guitar."
+        ],
+        "progressions": [
+          "Use original solemn harmonic development with sustained deep bass.",
+          "Use alternate hopeful chord movement and carefully controlled bass transitions."
+        ],
+        "arrangements": [
+          "Vary instrumental transitions through the emotional bridge.",
+          "Change atmospheric textures and refrain development while controlling the final intensity."
+        ],
+        "melody": [
+          "Create an original recurring prayer refrain with expressive melodic contours.",
+          "Create a contrasting solemn verse melody that grows toward a hopeful final chorus."
+        ],
+        "lyrical": [
+          "Develop original restoration and mercy prayers with meaningful renewal imagery.",
+          "Develop perseverance, surrender and hope through fresh sincere refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Ohemaa Mercy"
+      ]
+    },
+    {
+      "id": "G10-05",
+      "name": "Presence and Peace",
+      "description": "Gentle contemporary worship with acoustic textures and peaceful melodies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g10",
+      "tempo": {
+        "min": 64,
+        "max": 86
+      },
+      "mood": "Peaceful, intimate, hopeful and spiritually refreshing.",
+      "energy": "Gentle acoustic movement expands intimate harmonies and resolves in a peaceful closing refrain.",
+      "rhythm": "Gentle contemporary Ghanaian worship groove with spacious melodic phrasing and a natural acoustic feel.",
+      "drums_percussion": "Gentle live percussion, restrained kick, soft snare, subtle shakers and minimal fills.",
+      "bass": "Warm melodic bass with smooth phrasing and understated rhythmic support.",
+      "instruments": {
+        "keys": "Soft grand piano, atmospheric pads, warm electric piano and gentle organ textures.",
+        "guitar": "Acoustic guitar and ambient electric guitar.",
+        "other": "Subtle strings and intimate background harmonies."
+      },
+      "melody_harmony": "Original soulful peaceful melodies with expressive live harmonies and intimate acoustic textures.",
+      "vocal_delivery": "Intimate soulful phrasing and peaceful melodic choruses with expressive harmonies; voice selected independently.",
+      "arrangement": "Acoustic or piano introduction → intimate verse → melodic worship chorus → instrumental reflection → expanded harmonies → peaceful closing refrain.",
+      "lyrics": {
+        "structure": "Divine presence, trust, peace, gratitude, spiritual comfort and hope.",
+        "vocabulary": "Use original meaningful devotional expressions in the selected supported language or combination. Ghanaian musical identity does not force Twi or any other language; never invent unsupported translations or imitate identifiable performers."
+      },
+      "production_mix": "Preserve intimate acoustic Ghanaian worship and natural breathing room. Keep percussion gentle, shakers subtle, bass understated, grand piano soft and electric piano warm; balance acoustic picking, ambient electric guitar, restrained pads, subtle strings and intimate background harmonies toward a peaceful ending.",
+      "variations": {
+        "introductions": [
+          "Begin with an original gentle acoustic-picking pattern and soft piano.",
+          "Begin with alternate warm piano voicings and ambient electric-guitar textures."
+        ],
+        "progressions": [
+          "Use original peaceful harmonic movement with smooth understated bass.",
+          "Use alternate warm electric-piano chords and gentle melodic bass phrasing."
+        ],
+        "arrangements": [
+          "Vary ambient textures and acoustic patterns through the instrumental reflection.",
+          "Change chorus arrangement and expanded harmonies before the peaceful closing refrain."
+        ],
+        "melody": [
+          "Create an original peaceful melody with intimate background responses.",
+          "Create a contrasting soulful worship contour with spacious phrasing."
+        ],
+        "lyrical": [
+          "Develop original divine-presence and trust imagery with peaceful verses.",
+          "Develop spiritual comfort, gratitude and hope through fresh meaningful refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "ghanaian"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "background",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Kweku Teye"
       ]
     }
   ]
