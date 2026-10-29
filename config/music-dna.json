@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-s10-s11-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-s10-s11-s12-v1",
   "status": "approved",
   "departments": [
     {
@@ -173,6 +173,12 @@
       "group_id": "S11",
       "department_id": "secular-afrobeats",
       "name": "Ghanaian Highlife"
+    },
+    {
+      "id": "secular-s12",
+      "group_id": "S12",
+      "department_id": "secular-afrobeats",
+      "name": "Francophone African Dance"
     }
   ],
   "styles": [
@@ -11183,6 +11189,475 @@
       ],
       "research_references": [
         "Kwabena Kwabena"
+      ]
+    },
+    {
+      "id": "S12-01",
+      "name": "Congo Royal Rumba",
+      "description": "Elegant Congolese rumba with interlocking guitars, melodic bass and energetic soukous breaks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s12",
+      "tempo": {
+        "min": 96,
+        "max": 118
+      },
+      "mood": "Romantic, elegant, joyful and celebratory.",
+      "energy": "Elegant guitar-led rumba can develop into energetic soukous/ndombolo sebene dance movement while retaining melodic bass and percussion clarity.",
+      "rhythm": "Flowing Congolese rumba with development into a highly danceable soukous/ndombolo instrumental section. Rumba base is 96–118 BPM; optional dance sections may reach 120–136 BPM only where section-tempo changes are supported.",
+      "drums_percussion": "Warm live kick, crisp snare, rolling toms, congas, shakers, cowbell and energetic percussion fills.",
+      "bass": "Deep melodic electric bass with flowing Congolese lines, syncopated movement, expressive runs and powerful rhythmic interaction with drums.",
+      "instruments": {
+        "keys": "Bright piano chords, warm organ, melodic synth textures and lively keyboard responses.",
+        "guitar": "Multiple clean electric guitars with interlocking Congolese rumba patterns, melodic lead lines and fast soukous-style sebene phrases.",
+        "other": "Brass accents, congas, traditional percussion and occasional soft strings."
+      },
+      "melody_harmony": "Original romantic melodies, expressive refrains and joyful melodic hooks.",
+      "vocal_delivery": "Elegant expressive romantic phrasing and joyful refrains; selected voice remains independent.",
+      "arrangement": "Elegant guitar introduction → romantic verse → melodic chorus → instrumental guitar transition → energetic sebene dance section → second verse → extended final dance groove. Optional faster dance sections are 120–136 BPM where supported; otherwise keep the chosen rumba base and increase rhythmic density.",
+      "lyrics": {
+        "structure": "Love, romance, celebration, friendship, family, success and enjoyment.",
+        "vocabulary": "Use original meaningful secular African dance expressions in the selected supported language or combination. This group never forces French, Lingala or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Congolese interlocking guitars and melodic electric bass dominate. Keep rumba base 96–118 BPM; optional sebene sections may reach 120–136 only if section-tempo changes are supported, otherwise build dance intensity at base tempo. Keep live kick, congas, cowbell and rolling fills clear. Avoid generic Afrobeats loops and excessive synths that erase Congolese character; protect strong clean lows.",
+      "variations": {
+        "introductions": [
+          "Begin with original elegant interlocking Congolese rumba guitar patterns.",
+          "Begin with alternate melodic lead-guitar phrases and flowing electric bass."
+        ],
+        "progressions": [
+          "Use original romantic rumba harmony with expressive melodic electric-bass runs.",
+          "Use alternate warm organ/piano voicings and syncopated Congolese bass movement."
+        ],
+        "arrangements": [
+          "Vary guitar interplay and sebene phrases through the instrumental dance section.",
+          "Change percussion fills and extended final groove; any optional 120–136 BPM shift remains conditional on provider support."
+        ],
+        "melody": [
+          "Create an original romantic melody and joyful expressive refrain.",
+          "Create a contrasting elegant hook answered by fast original sebene guitar phrases."
+        ],
+        "lyrical": [
+          "Develop original romance and friendship verses with celebratory refrains.",
+          "Develop family, success and enjoyment through fresh expressive lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "congolese"
+        ],
+        [
+          "rumba"
+        ],
+        [
+          "soukous"
+        ],
+        [
+          "sebene"
+        ],
+        [
+          "interlocking"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "cowbell"
+        ]
+      ],
+      "research_references": [
+        "Fally Ipupa"
+      ]
+    },
+    {
+      "id": "S12-02",
+      "name": "Central African Dance Fusion",
+      "description": "Modern East/Central African crossover with lively guitars, deep bass and catchy melodies.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s12",
+      "tempo": {
+        "min": 104,
+        "max": 126
+      },
+      "mood": "Romantic, playful, confident and celebratory.",
+      "energy": "Bright contemporary East/Central African crossover dance energy blends lively melodic guitars and strong layered bass with syncopated percussion.",
+      "rhythm": "Contemporary African dance-pop with East/Central African melodic movement and lively syncopated percussion; explicitly cross-regional fusion rather than a Francophone-origin claim.",
+      "drums_percussion": "Punchy African pop kick, crisp snare, flowing shakers, congas, syncopated hi-hats and energetic percussion fills.",
+      "bass": "Deep rounded electronic bass layered with melodic electric-bass movement for a strong dance pulse.",
+      "instruments": {
+        "keys": "Bright piano riffs, playful synth hooks, rhythmic organ stabs and warm chord pads.",
+        "guitar": "Clean East/Central African melodic guitar, rhythmic picking and short soukous-influenced guitar phrases.",
+        "other": "African hand percussion, brass accents, marimba-like plucks and rhythmic guitar responses."
+      },
+      "melody_harmony": "Original catchy melodic hooks, expressive romantic choruses and rhythmic instrumental responses.",
+      "vocal_delivery": "Playful confident romantic melodic phrasing with rhythmic instrumental replies; selected voice remains independent.",
+      "arrangement": "Guitar-and-percussion introduction → melodic verse → catchy chorus → instrumental dance groove → second verse → energetic percussion break → final chorus.",
+      "lyrics": {
+        "structure": "Love, celebration, confidence, friendship, success and enjoyment.",
+        "vocabulary": "Use original meaningful secular African dance expressions in the selected supported language or combination. This group never forces French, Lingala or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Bright East/Central African crossover dance-pop with powerful bass and lively melodic guitar. Keep electronic/electric bass balanced, African percussion energetic, piano/synths bright and marimba-like accents concise. Present this as cross-regional fusion, not traditional Congolese rumba or authentic Ivorian coupé-décalé; do not assign a Francophone origin to the research tradition.",
+      "variations": {
+        "introductions": [
+          "Begin with original East/Central African guitar motifs and lively percussion.",
+          "Begin with alternate melodic guitar phrases over layered electronic/electric bass."
+        ],
+        "progressions": [
+          "Use original bright crossover dance-pop chords with rounded bass movement.",
+          "Use alternate rhythmic piano/organ voicings and a new strong bass pattern."
+        ],
+        "arrangements": [
+          "Vary guitar motifs and piano riffs through the instrumental dance groove.",
+          "Change percussion breaks and melodic hook layers before the final chorus."
+        ],
+        "melody": [
+          "Create an original catchy romantic chorus and rhythmic guitar response.",
+          "Create a contrasting playful melodic hook with East/Central African phrasing."
+        ],
+        "lyrical": [
+          "Develop original love, friendship and celebration verses.",
+          "Develop success, confidence and enjoyment through fresh playful refrains."
+        ]
+      },
+      "production_terms": [
+        [
+          "east/central",
+          "east-central"
+        ],
+        [
+          "crossover"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "marimba"
+        ],
+        [
+          "percussion"
+        ]
+      ],
+      "research_references": [
+        "Diamond Platnumz"
+      ]
+    },
+    {
+      "id": "S12-03",
+      "name": "Abidjan Coupé-Décalé Celebration",
+      "description": "Polished Ivorian dance music with heavy bass and bright electronic hooks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s12",
+      "tempo": {
+        "min": 118,
+        "max": 138
+      },
+      "mood": "Joyful, confident, energetic and festive.",
+      "energy": "Fast polished Ivorian club momentum combines heavy dance bass, bright electronic hooks and strong rhythmic breaks.",
+      "rhythm": "Fast Ivorian coupé-décalé with powerful dance momentum, syncopated percussion and strong rhythmic breaks.",
+      "drums_percussion": "Heavy four-on-the-floor or syncopated dance kick, sharp snare, claps, rapid hi-hats, congas, shakers and energetic rhythmic fills.",
+      "bass": "Thick electronic bass with repetitive dance motifs, strong sub-bass pressure and punchy rhythmic movement.",
+      "instruments": {
+        "keys": "Bright synth stabs, catchy electronic keyboard riffs, rhythmic piano accents and short melodic hooks.",
+        "guitar": "Sparse rhythmic electric guitar, short melodic responses and occasional African guitar accents.",
+        "other": "Whistles, brass stabs, handclaps, electronic percussion and energetic sound transitions."
+      },
+      "melody_harmony": "Original short melodic hooks, energetic refrains and lively call-and-response patterns.",
+      "vocal_delivery": "Joyful confident rhythmic phrasing and lively original responses; selected voice remains independent.",
+      "arrangement": "Immediate kick-and-percussion introduction → energetic verse → explosive chorus → instrumental dance break → second verse → percussion-driven climax → final chorus.",
+      "lyrics": {
+        "structure": "Celebration, dancing, success, enjoyment, confidence, friendship and nightlife.",
+        "vocabulary": "Use original meaningful secular African dance expressions in the selected supported language or combination. This group never forces French, Lingala or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Heavy electronic bass, punchy kick and polished Abidjan coupé-décalé club energy. Keep sub-bass pressure controlled, drums clear, synth stabs bright, piano rhythmic and guitar sparse; balance rapid hats, congas, shakers, whistles and brass through strong breaks. Avoid slow romantic arrangements and weak lows without losing Ivorian rhythmic identity.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with original heavy kick and syncopated Ivorian percussion.",
+          "Begin with alternate bright synth stabs and punchy electronic bass motifs."
+        ],
+        "progressions": [
+          "Use original festive coupé-décalé harmony with strong electronic sub-bass.",
+          "Use alternate rhythmic piano stabs and repetitive dance bass movement."
+        ],
+        "arrangements": [
+          "Vary synth hooks and percussion breaks through the instrumental dance section.",
+          "Change dance transitions and chorus structures before the percussion-driven climax."
+        ],
+        "melody": [
+          "Create an original short energetic hook and lively call-and-response.",
+          "Create a contrasting confident refrain with bright electronic melodic movement."
+        ],
+        "lyrical": [
+          "Develop original dancing and friendship verses with festive enjoyment.",
+          "Develop success, confidence and nightlife through fresh celebratory hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "ivorian",
+          "abidjan"
+        ],
+        [
+          "coupé-décalé",
+          "coupe-decale",
+          "coupe decale"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "whistle"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Serge Beynaud"
+      ]
+    },
+    {
+      "id": "S12-04",
+      "name": "Abidjan Street Dance Explosion",
+      "description": "High-energy coupé-décalé with aggressive percussion and powerful dance breaks.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s12",
+      "tempo": {
+        "min": 124,
+        "max": 148
+      },
+      "mood": "Explosive, playful, rebellious and celebratory.",
+      "energy": "High-intensity Ivorian street percussion, aggressive clean bass and dramatic stop-start movement drive explosive dance sections.",
+      "rhythm": "Fast street-oriented Ivorian coupé-décalé with intense percussion, rhythmic surprises and explosive dance sections.",
+      "drums_percussion": "Very punchy kick, sharp snare, rapid claps, rolling percussion, fast shakers, syncopated electronic drums and dramatic rhythmic stops.",
+      "bass": "Heavy electronic sub-bass with aggressive rhythmic patterns, short bass slides and strong kick synchronization.",
+      "instruments": {
+        "keys": "Sharp synth stabs, high-energy electronic riffs, rhythmic keyboard hits and dramatic transition effects.",
+        "guitar": "Minimal rhythmic guitar accents only where they strengthen the dance groove.",
+        "other": "Whistles, handclaps, electronic percussion, brass hits and crowd-response textures."
+      },
+      "melody_harmony": "Original chant-friendly hooks, short rhythmic phrases and energetic group-response opportunities.",
+      "vocal_delivery": "Explosive playful rhythmic hooks and energetic crowd responses; selected voice remains independent.",
+      "arrangement": "Explosive percussion introduction → rhythmic verse → chant-driven chorus → heavy instrumental dance break → second verse → stop-start percussion breakdown → final dance climax.",
+      "lyrics": {
+        "structure": "Dancing, street celebration, confidence, success, friendship, enjoyment and personal determination.",
+        "vocabulary": "Use original meaningful secular African dance expressions in the selected supported language or combination. This group never forces French, Lingala or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Maximum Abidjan street coupé-décalé energy with audio clarity: keep heavy sub-bass kick-synchronized, slides short, synth hits sharp and percussion stops deliberate. Guitar is minimal; give whistles, brass and crowd responses rhythmic space. Avoid uncontrolled distortion, muddy bass and generic EDM drops that erase coupé-décalé character.",
+      "variations": {
+        "introductions": [
+          "Begin with original explosive Ivorian street percussion and dramatic rhythmic stops.",
+          "Begin with alternate sharp synth hits and heavy kick-synchronized bass patterns."
+        ],
+        "progressions": [
+          "Use original minimal high-energy keyboard harmony with aggressive clean sub-bass.",
+          "Use alternate short synth motifs and controlled bass slides."
+        ],
+        "arrangements": [
+          "Vary drum breaks and percussion combinations through the heavy dance section.",
+          "Change rhythmic chorus structures and stop-start breakdown before the final climax."
+        ],
+        "melody": [
+          "Create an original short chant-friendly hook with energetic group replies.",
+          "Create a contrasting playful rhythmic phrase and exciting crowd-response pattern."
+        ],
+        "lyrical": [
+          "Develop original determination and street-celebration verses.",
+          "Develop confidence, friendship and enjoyment through fresh energetic hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "ivorian",
+          "abidjan"
+        ],
+        [
+          "coupé-décalé",
+          "coupe-decale",
+          "coupe decale"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "slid"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "whistle"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "stop-start"
+        ]
+      ],
+      "research_references": [
+        "DJ Arafat"
+      ]
+    },
+    {
+      "id": "S12-05",
+      "name": "Ivory Coast Victory Groove",
+      "description": "Uplifting Ivorian Afro-dance with melodic guitars and celebratory rhythms.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s12",
+      "tempo": {
+        "min": 110,
+        "max": 132
+      },
+      "mood": "Hopeful, triumphant, joyful and celebratory.",
+      "energy": "Uplifting Ivorian dance pulse combines melodic coupé-décalé influence, bouncy bass and expressive celebratory guitar responses.",
+      "rhythm": "Uplifting Ivorian Afro-dance with melodic percussion movement and strong coupé-décalé influences.",
+      "drums_percussion": "Punchy African dance kick, crisp snare, flowing shakers, congas, handclaps, rhythmic tom fills and lively percussion breaks.",
+      "bass": "Deep bouncy electric or electronic bass with melodic movement, strong low-frequency impact and an uplifting dance pulse.",
+      "instruments": {
+        "keys": "Bright piano riffs, warm organ chords, melodic synth hooks and uplifting harmonic pads.",
+        "guitar": "Clean African rhythmic guitar, melodic lead responses and occasional soukous-influenced phrases.",
+        "other": "Brass accents, shekere, congas, handclaps and layered instrumental responses."
+      },
+      "melody_harmony": "Original triumphant melodic hooks, expressive refrains and memorable celebratory choruses.",
+      "vocal_delivery": "Hopeful expressive melodic phrasing and triumphant celebratory hooks; selected voice remains independent.",
+      "arrangement": "Piano-and-percussion introduction → storytelling verse → uplifting chorus → instrumental dance groove → second verse → brass-and-percussion break → final celebratory chorus.",
+      "lyrics": {
+        "structure": "Perseverance, success, gratitude, hope, friendship, community and celebration.",
+        "vocabulary": "Use original meaningful secular African dance expressions in the selected supported language or combination. This group never forces French, Lingala or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Powerful Ivorian African dance grooves with uplifting melody and clean modern production. Keep bouncy bass strong, guitar melodic, piano bright, organ warm and coupé-décalé percussion lively; balance synth hooks, pads, brass, shekere and congas. Avoid excessively dark arrangements and weak percussion while preserving triumphant melodic identity.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright piano hooks and lively Ivorian percussion.",
+          "Begin with alternate melodic guitar phrases and uplifting bass movement."
+        ],
+        "progressions": [
+          "Use original hopeful Afro-dance harmony with strong melodic bass.",
+          "Use alternate warm organ/piano voicings and a new bouncy dance pattern."
+        ],
+        "arrangements": [
+          "Vary guitar phrases and percussion breaks through the instrumental dance groove.",
+          "Change brass responses and melodic chorus layers before the final celebration."
+        ],
+        "melody": [
+          "Create an original triumphant hook and expressive celebratory refrain.",
+          "Create a contrasting hopeful melody with clean African guitar replies."
+        ],
+        "lyrical": [
+          "Develop original perseverance and community-success verses.",
+          "Develop gratitude, friendship and hope through fresh celebratory lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "ivorian"
+        ],
+        [
+          "coupé-décalé",
+          "coupe-decale",
+          "coupe decale"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Kerozen"
       ]
     }
   ]
