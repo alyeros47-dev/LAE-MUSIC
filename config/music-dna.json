@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w7-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w8-v1",
   "status": "approved",
   "departments": [
     {
@@ -275,6 +275,12 @@
       "group_id": "W7",
       "department_id": "western-international",
       "name": "Classic Funk & Dance Soul"
+    },
+    {
+      "id": "western-w8",
+      "group_id": "W8",
+      "department_id": "western-international",
+      "name": "Country & Acoustic Storytelling"
     }
   ],
   "styles": [
@@ -19018,6 +19024,464 @@
       ],
       "research_references": [
         "Kool & The Gang"
+      ]
+    },
+    {
+      "id": "W8-01",
+      "name": "Appalachian Golden Country",
+      "description": "Traditional country with bright acoustic guitar, fiddle, mandolin and warm storytelling.",
+      "department_id": "western-international",
+      "category_id": "western-w8",
+      "tempo": {
+        "min": 84,
+        "max": 116
+      },
+      "mood": "Warm, nostalgic, heartfelt and uplifting.",
+      "energy": "Warm uplifting traditional-country acoustic bounce with natural dynamics and steady root-fifth bass.",
+      "rhythm": "Traditional country and Appalachian folk-country with natural acoustic movement and a gentle rhythmic bounce.",
+      "drums_percussion": "Light acoustic kick. Gentle snare or brushed snare. Simple country backbeat. Subtle hi-hats. Occasional train-beat patterns. Natural percussion dynamics.",
+      "bass": "Warm upright or electric bass with simple root-fifth country movement, tasteful passing tones and a steady rhythmic pulse. Keep the bass full and audible without turning it into an electronic sub-bass groove.",
+      "instruments": {
+        "keys": "Warm acoustic piano, restrained upright-style piano accents and occasional soft organ.",
+        "guitar": "Bright steel-string acoustic guitar with alternating bass-note picking, gentle strumming, fingerpicking and traditional country rhythmic patterns.",
+        "other": "Fiddle, mandolin, banjo, dobro, pedal steel guitar and subtle hand percussion."
+      },
+      "melody_harmony": "Original clear country melodies, memorable choruses, expressive storytelling verses and natural melodic phrasing.",
+      "vocal_delivery": "Original clear country melodies and expressive storytelling with natural phrasing; never force a regional accent or performer identity.",
+      "arrangement": "Acoustic guitar-and-fiddle introduction → storytelling verse → warm chorus → second verse → fiddle or mandolin instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete storytelling verses and refrains. Suggested themes, never compulsory: Family, love, faith when requested, rural life, personal memories, friendship, resilience, gratitude and everyday experiences.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Faith themes apply only when requested. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Traditional Appalachian and Nashville country with bright acoustic guitar, warm upright bass, expressive fiddle, mandolin, gentle banjo and emotionally engaging storytelling. **Tempo:** 84–116 BPM. **Built-in mood:** Warm, nostalgic, heartfelt and uplifting. Warm traditional country with authentic acoustic instruments, natural bass and clear storytelling. Preserve genuine profile-specific country/acoustic instruments, natural full bass without muddying kick or vocals, expressive live dynamics and clear guitar articulation rather than generic Western pop over electronic drums. Avoid: Generic pop drums, excessive electronic effects, forced regional accents and recognizable country-song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original bright acoustic guitar and expressive fiddle.",
+          "Open on alternate alternating bass-note guitar picking and warm fiddle replies."
+        ],
+        "progressions": [
+          "Use original traditional country chords with upright or electric root-fifth bass.",
+          "Use alternate warm acoustic-piano voicings and tasteful bass passing tones."
+        ],
+        "arrangements": [
+          "Vary fiddle/mandolin phrases through the instrumental passage.",
+          "Develop fingerpicked patterns and a reflective bridge with natural train-beat accents when appropriate."
+        ],
+        "melody": [
+          "Create original clear country melodies and memorable storytelling refrains.",
+          "Create a contrasting warm chorus with natural voice-compatible phrasing, never a forced accent."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original personal-memory or rural-life images.",
+          "Develop fresh family or gratitude imagery, with faith themes only if requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "country"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "upright bass",
+          "electric bass"
+        ],
+        [
+          "root-fifth",
+          "root fifth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "fiddle"
+        ],
+        [
+          "mandolin"
+        ],
+        [
+          "banjo"
+        ],
+        [
+          "pedal steel"
+        ]
+      ],
+      "research_references": [
+        "Dolly Parton"
+      ]
+    },
+    {
+      "id": "W8-02",
+      "name": "Nashville Storyteller Country",
+      "description": "Classic country-pop with expressive piano, pedal steel and mature life stories.",
+      "department_id": "western-international",
+      "category_id": "western-w8",
+      "tempo": {
+        "min": 72,
+        "max": 102
+      },
+      "mood": "Reflective, nostalgic, sincere and comforting.",
+      "energy": "Relaxed comforting Nashville country-pop movement with warm live accompaniment and spacious storytelling.",
+      "rhythm": "Classic Nashville country-pop with relaxed drums, warm bass and clear storytelling space.",
+      "drums_percussion": "Warm acoustic kick. Soft snare. Gentle hi-hats. Occasional brushed drum patterns. Tasteful tom fills. Natural live-drum dynamics.",
+      "bass": "Deep, rounded electric bass with steady country movement, simple melodic passing tones and warm sustained notes.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, warm electric piano and restrained organ textures.",
+        "guitar": "Gentle acoustic strumming, fingerpicked guitar, clean electric-guitar fills and expressive pedal steel responses.",
+        "other": "Pedal steel guitar, fiddle, soft strings, harmonica and subtle percussion."
+      },
+      "melody_harmony": "Original conversational melodies, memorable choruses, natural phrasing and emotional development.",
+      "vocal_delivery": "Original conversational melodies and sincere emotional development; follow selected voice and supported harmony settings.",
+      "arrangement": "Gentle acoustic guitar introduction → storytelling verse → heartfelt chorus → second verse → pedal steel instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete storytelling verses and refrains. Suggested themes, never compulsory: Life lessons, love, family, friendship, choices, responsibility, regret, forgiveness and personal wisdom.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Faith themes apply only when requested. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Classic Nashville country-pop storytelling combining warm acoustic guitar, deep bass, expressive piano, pedal steel and smooth live-band arrangements. **Tempo:** 72–102 BPM. **Built-in mood:** Reflective, nostalgic, sincere and comforting. Mature Nashville storytelling with deep warm bass, beautiful acoustic instrumentation and natural studio clarity. Preserve genuine profile-specific country/acoustic instruments, natural full bass without muddying kick or vocals, expressive live dynamics and clear guitar articulation rather than generic Western pop over electronic drums. Avoid: Generic soft rock, excessive orchestral production, electronic dance drums and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original gentle acoustic strumming.",
+          "Open on alternate fingerpicked guitar phrases and warm bass."
+        ],
+        "progressions": [
+          "Use original Nashville acoustic-piano harmony over sustained electric bass.",
+          "Use alternate warm electric-piano/organ voicings and simple bass passing notes."
+        ],
+        "arrangements": [
+          "Vary pedal-steel responses through the instrumental passage.",
+          "Develop a reflective bridge with tasteful tom fills and natural live dynamics."
+        ],
+        "melody": [
+          "Create original conversational storytelling melodies and heartfelt refrains.",
+          "Create a contrasting sincere chorus with natural emotional development."
+        ],
+        "lyrical": [
+          "Explore the selected subject through original choices or life-lesson storytelling.",
+          "Develop fresh forgiveness or personal-wisdom images only where relevant to the topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "nashville"
+        ],
+        [
+          "country"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "pedal steel"
+        ],
+        [
+          "fiddle"
+        ],
+        [
+          "harmonica"
+        ]
+      ],
+      "research_references": [
+        "Kenny Rogers"
+      ]
+    },
+    {
+      "id": "W8-03",
+      "name": "Southern Blues Country Fire",
+      "description": "Powerful country-blues with thick bass, soulful electric guitar and live drums.",
+      "department_id": "western-international",
+      "category_id": "western-w8",
+      "tempo": {
+        "min": 76,
+        "max": 108
+      },
+      "mood": "Bold, soulful, passionate and determined.",
+      "energy": "Bold passionate Southern country-blues drive with thick live bass and expressive guitar dynamics.",
+      "rhythm": "Southern country-blues with strong live-band grooves, deep bass and expressive guitar-driven dynamics.",
+      "drums_percussion": "Deep live kick. Strong snare. Relaxed hi-hats. Blues-influenced shuffle or straight country-rock groove. Expressive tom fills. Powerful but natural drum dynamics.",
+      "bass": "Thick, warm electric bass with blues-influenced movement, occasional walking phrases, melodic slides and strong interaction with the kick.",
+      "instruments": {
+        "keys": "Warm Hammond organ, blues-influenced acoustic piano, Rhodes-style electric piano and restrained atmospheric textures.",
+        "guitar": "Expressive blues electric guitar, warm overdriven lead phrases, acoustic rhythm guitar, tasteful bends and slide-guitar accents.",
+        "other": "Harmonica, pedal steel, subtle brass, tambourine and restrained Southern percussion."
+      },
+      "melody_harmony": "Original soulful country melodies, emotionally strong verses, memorable choruses and blues-influenced melodic development.",
+      "vocal_delivery": "Original soulful country phrases and strong refrains; never force vocal rasp or an identifiable performer voice.",
+      "arrangement": "Blues guitar-and-bass introduction → storytelling verse → powerful chorus → second verse → expressive guitar instrumental passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete storytelling verses and refrains. Suggested themes, never compulsory: Resilience, redemption, love, struggle, personal transformation, loyalty, hope and overcoming difficulties.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Faith themes apply only when requested. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Powerful Southern country-blues combining gritty electric guitar, deep bass, strong live drums, acoustic rhythm guitar and soulful blues-influenced harmony. **Tempo:** 76–108 BPM. **Built-in mood:** Bold, soulful, passionate and determined. Powerful Southern country-blues with thick bass, expressive guitar, warm organ and authentic live drums. Preserve genuine profile-specific country/acoustic instruments, natural full bass without muddying kick or vocals, expressive live dynamics and clear guitar articulation rather than generic Western pop over electronic drums. Avoid: Forced vocal rasp, uncontrolled distortion, generic arena rock and recognizable guitar-riff imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original expressive blues guitar and thick live bass.",
+          "Open on alternate restrained overdriven lead phrases and melodic bass slides."
+        ],
+        "progressions": [
+          "Use original Southern blues-country harmony with warm Hammond/Rhodes.",
+          "Use alternate blues piano chords and occasional walking electric-bass phrases."
+        ],
+        "arrangements": [
+          "Vary guitar bends and slide accents through the instrumental passage.",
+          "Develop expressive live-drum fills and an emotional bridge with a shuffle or straight country-rock groove."
+        ],
+        "melody": [
+          "Create original soulful country melodies and memorable strong choruses.",
+          "Create a contrasting determined refrain without forced rasp or identifiable guitar riffs."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original resilience or transformation imagery.",
+          "Develop fresh loyalty or hope verses only when appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "southern"
+        ],
+        [
+          "country-blues"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "hammond"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "overdriv"
+        ],
+        [
+          "slide"
+        ],
+        [
+          "harmonica"
+        ],
+        [
+          "shuffle",
+          "country-rock"
+        ]
+      ],
+      "research_references": [
+        "Chris Stapleton"
+      ]
+    },
+    {
+      "id": "W8-04",
+      "name": "Modern Country Power Anthem",
+      "description": "Contemporary country-rock with strong drums, deep bass and uplifting choruses.",
+      "department_id": "western-international",
+      "category_id": "western-w8",
+      "tempo": {
+        "min": 88,
+        "max": 118
+      },
+      "mood": "Empowering, emotional, hopeful and triumphant.",
+      "energy": "Empowering hopeful modern country-rock movement with powerful live drums and energetic chorus development.",
+      "rhythm": "Modern country-rock with acoustic foundations, powerful live drums and energetic chorus development.",
+      "drums_percussion": "Strong live kick. Punchy snare. Steady hi-hats. Expressive tom fills. Dynamic cymbal accents. Powerful chorus drum arrangements.",
+      "bass": "Deep electric bass with steady rhythmic movement, melodic passing tones and strong support during climactic choruses.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, warm electric piano, subtle organ and restrained atmospheric pads.",
+        "guitar": "Bright acoustic strumming, clean electric-guitar fills, controlled country-rock lead guitar and tasteful pedal steel accents.",
+        "other": "Fiddle, pedal steel, cinematic strings, tambourine and subtle orchestral percussion."
+      },
+      "melody_harmony": "Original expressive country-pop melodies, strong choruses, natural melodic climbs and emotionally satisfying climaxes.",
+      "vocal_delivery": "Original expressive country-pop melodies and natural climbs within selected voice capability; never force a high register.",
+      "arrangement": "Acoustic guitar introduction → emotional verse → rising pre-chorus → powerful chorus → second verse → electric-guitar instrumental passage → dramatic bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete storytelling verses and refrains. Suggested themes, never compulsory: Perseverance, love, family, courage, self-worth, forgiveness, hope and personal transformation.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Faith themes apply only when requested. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Contemporary Nashville country-rock combining acoustic guitar, powerful live drums, deep electric bass, expressive electric guitar, fiddle and cinematic melodic arrangements. **Tempo:** 88–118 BPM. **Built-in mood:** Empowering, emotional, hopeful and triumphant. Polished modern country-rock with deep bass, strong live drums, expressive guitar and clear emotional dynamics. Preserve genuine profile-specific country/acoustic instruments, natural full bass without muddying kick or vocals, expressive live dynamics and clear guitar articulation rather than generic Western pop over electronic drums. Avoid: Generic Western pop without country identity, excessive EDM production, forced high-register vocals and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original bright acoustic guitar strumming.",
+          "Open on alternate acoustic motifs with tasteful pedal-steel replies."
+        ],
+        "progressions": [
+          "Use original contemporary country-rock piano chords and deep electric bass.",
+          "Use alternate warm electric-piano/pad harmony with melodic bass passing tones."
+        ],
+        "arrangements": [
+          "Vary fiddle phrases and controlled electric-guitar leads through the instrumental passage.",
+          "Develop dynamic cymbal/drum fills and a dramatic bridge into a powerful final chorus."
+        ],
+        "melody": [
+          "Create original expressive country-pop hooks and strong refrains.",
+          "Create a contrasting empowering melody adapted to selected voice range."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original courage or perseverance imagery.",
+          "Develop fresh family or self-worth expressions only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "country-rock"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fiddle"
+        ],
+        [
+          "pedal steel"
+        ],
+        [
+          "string"
+        ],
+        [
+          "cymbal"
+        ]
+      ],
+      "research_references": [
+        "Carrie Underwood"
+      ]
+    },
+    {
+      "id": "W8-05",
+      "name": "Fireside Acoustic Folk",
+      "description": "Intimate acoustic folk-country with fingerpicked guitar, warm bass and personal storytelling.",
+      "department_id": "western-international",
+      "category_id": "western-w8",
+      "tempo": {
+        "min": 64,
+        "max": 96
+      },
+      "mood": "Peaceful, reflective, intimate and hopeful.",
+      "energy": "Peaceful intimate acoustic folk-country motion with sparse percussion and organic instrumental interaction.",
+      "rhythm": "Organic acoustic folk-country with gentle rhythmic movement, spacious arrangements and natural instrumental interaction.",
+      "drums_percussion": "Very light acoustic kick. Soft brushed snare. Gentle shaker. Occasional hand percussion. Sparse rhythmic accents. Natural acoustic dynamics.",
+      "bass": "Warm upright or acoustic bass with simple melodic movement, sustained notes and gentle rhythmic support.",
+      "instruments": {
+        "keys": "Soft acoustic piano, restrained electric piano and minimal atmospheric textures.",
+        "guitar": "Fingerpicked steel-string acoustic guitar is the central instrument. Use alternating bass-note patterns, delicate arpeggios, gentle strumming and original melodic guitar phrases.",
+        "other": "Mandolin, fiddle, harmonica, subtle cello, hand percussion and occasional acoustic instrumental textures."
+      },
+      "melody_harmony": "Original conversational melodies, intimate verses, warm choruses and emotionally honest phrasing.",
+      "vocal_delivery": "Original intimate conversational phrases and emotionally honest warm choruses; respect selected single-singer, duet and supported harmonies.",
+      "arrangement": "Solo fingerpicked guitar introduction → intimate storytelling verse → gentle chorus → second verse → acoustic instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete storytelling verses and refrains. Suggested themes, never compulsory: Life experiences, family, friendship, personal memories, nature, love, gratitude, hope and everyday struggles.",
+        "vocabulary": "Use original meaningful storytelling in selected supported languages without forced regional accents or unfamiliar translations. Faith themes apply only when requested. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, rasp or performer identity. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics, guitar riffs or recordings."
+      },
+      "production_mix": "Intimate acoustic folk-country combining fingerpicked guitar, warm acoustic bass, gentle percussion, subtle piano and natural storytelling melodies. This style should feel organic, personal and emotionally sincere. **Tempo:** 64–96 BPM. **Built-in mood:** Peaceful, reflective, intimate and hopeful. Warm, organic acoustic folk-country with clear guitar, natural bass and intimate studio sound. Preserve genuine profile-specific country/acoustic instruments, natural full bass without muddying kick or vocals, expressive live dynamics and clear guitar articulation rather than generic Western pop over electronic drums. Avoid: Excessive electronic production, generic pop-ballad drums, overly dense orchestration and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original solo fingerpicked steel-string acoustic guitar.",
+          "Open on alternate delicate arpeggios and alternating bass-note guitar patterns."
+        ],
+        "progressions": [
+          "Use original gentle folk-country chords with upright or acoustic bass.",
+          "Use alternate soft acoustic-piano voicings and restrained acoustic bass phrases."
+        ],
+        "arrangements": [
+          "Vary mandolin melodies and subtle piano accents through the acoustic passage.",
+          "Develop a reflective bridge and intimate final chorus with sparse hand percussion."
+        ],
+        "melody": [
+          "Create original conversational verses and warm emotionally honest refrains.",
+          "Create a contrasting peaceful melody without forcing an accent or performer identity."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original everyday-life or personal-memory images.",
+          "Develop fresh nature or gratitude verses only when appropriate to the customer topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "folk-country"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "brushed snare"
+        ],
+        [
+          "upright bass",
+          "acoustic bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "fingerpick"
+        ],
+        [
+          "arpeggio"
+        ],
+        [
+          "mandolin"
+        ],
+        [
+          "fiddle"
+        ],
+        [
+          "harmonica"
+        ],
+        [
+          "cello"
+        ]
+      ],
+      "research_references": [
+        "Contemporary acoustic folk-country and singer-songwriter traditions"
       ]
     }
   ]

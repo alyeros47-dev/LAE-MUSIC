@@ -12,7 +12,7 @@ Production is not deployed by this work.
 Western/International 8. Instruction Packages 2–16 supply all fourteen Gospel groups,
 **G1–G14**, with five selectable styles each: **70 supplied profiles**. G6 is inserted
 between G5 and G7 in category and style order. Registry status is `approved` for these
-supplied profiles; it does not certify audio quality or completion of the other departments.
+supplied profiles; it does not certify audio quality or final integration acceptance.
 Instruction Packages 17–30 additionally supply **S1 — Party Afrobeats & Dance Hits**,
 **S2 — Smooth Afropop & Romantic**, **S3 — Street Pop & Street Anthems**,
 **S4 — Afro-Fusion & Powerful Grooves**, **S5 — Fuji-Influenced Street Afrobeats**
@@ -37,13 +37,14 @@ Instruction Package 42 adds five **W5 — Western Pop & Dance** profiles.
 Instruction Package 43 adds five **W6 — Pop Ballads & Emotional Storytelling** profiles.
 Instruction Package 44 supplies five **W7 — Classic Funk & Dance Soul** profiles
 (the file ends during interface copy; see the W7 report): **210 total**.
-The remaining one Western/International research group
-remain pending their approved specifications.
+Instruction Package 45 adds five **W8 — Country & Acoustic Storytelling** profiles:
+**215 registered styles across all 43 groups**. W7 final short interface copy remains
+pending because its upload was truncated; full integration/audio acceptance is separate.
 See [Gospel registration completeness](MUSIC-DNA-GOSPEL-COMPLETENESS.md) and
 [Secular registration completeness](MUSIC-DNA-SECULAR-COMPLETENESS.md), plus
 [Reggae registration completeness](MUSIC-DNA-REGGAE-COMPLETENESS.md).
 The existing 66 gospel / 33 secular legacy presets remain available. See
-[MUSIC-DNA-G1.md](MUSIC-DNA-G1.md), [MUSIC-DNA-G2.md](MUSIC-DNA-G2.md), [MUSIC-DNA-G3.md](MUSIC-DNA-G3.md), [MUSIC-DNA-G4.md](MUSIC-DNA-G4.md), [MUSIC-DNA-G5.md](MUSIC-DNA-G5.md), [MUSIC-DNA-G7.md](MUSIC-DNA-G7.md) [MUSIC-DNA-G8.md](MUSIC-DNA-G8.md) [MUSIC-DNA-G9.md](MUSIC-DNA-G9.md) [MUSIC-DNA-G10.md](MUSIC-DNA-G10.md) [MUSIC-DNA-G11.md](MUSIC-DNA-G11.md) [MUSIC-DNA-G12.md](MUSIC-DNA-G12.md) [MUSIC-DNA-G13.md](MUSIC-DNA-G13.md) [MUSIC-DNA-G14.md](MUSIC-DNA-G14.md) [MUSIC-DNA-S1.md](MUSIC-DNA-S1.md) [MUSIC-DNA-S2.md](MUSIC-DNA-S2.md) [MUSIC-DNA-S3.md](MUSIC-DNA-S3.md) [MUSIC-DNA-S4.md](MUSIC-DNA-S4.md) [MUSIC-DNA-S5.md](MUSIC-DNA-S5.md) [MUSIC-DNA-S6.md](MUSIC-DNA-S6.md) [MUSIC-DNA-S7.md](MUSIC-DNA-S7.md) [MUSIC-DNA-S8.md](MUSIC-DNA-S8.md) [MUSIC-DNA-S9.md](MUSIC-DNA-S9.md) [MUSIC-DNA-S10.md](MUSIC-DNA-S10.md) [MUSIC-DNA-S11.md](MUSIC-DNA-S11.md) [MUSIC-DNA-S12.md](MUSIC-DNA-S12.md) [MUSIC-DNA-S13.md](MUSIC-DNA-S13.md) and [MUSIC-DNA-S14.md](MUSIC-DNA-S14.md) and [MUSIC-DNA-R1.md](MUSIC-DNA-R1.md) and [MUSIC-DNA-R2.md](MUSIC-DNA-R2.md) and [MUSIC-DNA-R3.md](MUSIC-DNA-R3.md) and [MUSIC-DNA-R4.md](MUSIC-DNA-R4.md) and [MUSIC-DNA-R5.md](MUSIC-DNA-R5.md) and [MUSIC-DNA-R6.md](MUSIC-DNA-R6.md) and [MUSIC-DNA-R7.md](MUSIC-DNA-R7.md) and [MUSIC-DNA-W1.md](MUSIC-DNA-W1.md) and [MUSIC-DNA-W2.md](MUSIC-DNA-W2.md) and [MUSIC-DNA-W3.md](MUSIC-DNA-W3.md) and [MUSIC-DNA-W4.md](MUSIC-DNA-W4.md) and [MUSIC-DNA-W5.md](MUSIC-DNA-W5.md) and [MUSIC-DNA-W6.md](MUSIC-DNA-W6.md) and [MUSIC-DNA-W7.md](MUSIC-DNA-W7.md).
+[MUSIC-DNA-G1.md](MUSIC-DNA-G1.md), [MUSIC-DNA-G2.md](MUSIC-DNA-G2.md), [MUSIC-DNA-G3.md](MUSIC-DNA-G3.md), [MUSIC-DNA-G4.md](MUSIC-DNA-G4.md), [MUSIC-DNA-G5.md](MUSIC-DNA-G5.md), [MUSIC-DNA-G7.md](MUSIC-DNA-G7.md) [MUSIC-DNA-G8.md](MUSIC-DNA-G8.md) [MUSIC-DNA-G9.md](MUSIC-DNA-G9.md) [MUSIC-DNA-G10.md](MUSIC-DNA-G10.md) [MUSIC-DNA-G11.md](MUSIC-DNA-G11.md) [MUSIC-DNA-G12.md](MUSIC-DNA-G12.md) [MUSIC-DNA-G13.md](MUSIC-DNA-G13.md) [MUSIC-DNA-G14.md](MUSIC-DNA-G14.md) [MUSIC-DNA-S1.md](MUSIC-DNA-S1.md) [MUSIC-DNA-S2.md](MUSIC-DNA-S2.md) [MUSIC-DNA-S3.md](MUSIC-DNA-S3.md) [MUSIC-DNA-S4.md](MUSIC-DNA-S4.md) [MUSIC-DNA-S5.md](MUSIC-DNA-S5.md) [MUSIC-DNA-S6.md](MUSIC-DNA-S6.md) [MUSIC-DNA-S7.md](MUSIC-DNA-S7.md) [MUSIC-DNA-S8.md](MUSIC-DNA-S8.md) [MUSIC-DNA-S9.md](MUSIC-DNA-S9.md) [MUSIC-DNA-S10.md](MUSIC-DNA-S10.md) [MUSIC-DNA-S11.md](MUSIC-DNA-S11.md) [MUSIC-DNA-S12.md](MUSIC-DNA-S12.md) [MUSIC-DNA-S13.md](MUSIC-DNA-S13.md) and [MUSIC-DNA-S14.md](MUSIC-DNA-S14.md) and [MUSIC-DNA-R1.md](MUSIC-DNA-R1.md) and [MUSIC-DNA-R2.md](MUSIC-DNA-R2.md) and [MUSIC-DNA-R3.md](MUSIC-DNA-R3.md) and [MUSIC-DNA-R4.md](MUSIC-DNA-R4.md) and [MUSIC-DNA-R5.md](MUSIC-DNA-R5.md) and [MUSIC-DNA-R6.md](MUSIC-DNA-R6.md) and [MUSIC-DNA-R7.md](MUSIC-DNA-R7.md) and [MUSIC-DNA-W1.md](MUSIC-DNA-W1.md) and [MUSIC-DNA-W2.md](MUSIC-DNA-W2.md) and [MUSIC-DNA-W3.md](MUSIC-DNA-W3.md) and [MUSIC-DNA-W4.md](MUSIC-DNA-W4.md) and [MUSIC-DNA-W5.md](MUSIC-DNA-W5.md) and [MUSIC-DNA-W6.md](MUSIC-DNA-W6.md) and [MUSIC-DNA-W7.md](MUSIC-DNA-W7.md) and [MUSIC-DNA-W8.md](MUSIC-DNA-W8.md).
 Synthetic profiles in `tests/music-dna-fixture.cjs` are test fixtures only; they
 are not published in the application catalogue.
 
@@ -138,6 +139,7 @@ selection, persistence and the existing recording/lyrics/music flows.
 External model and audio responses in these tests are mocked. No paid generation,
 production write, R2 mutation, new API key or deployment is required for this batch.
 Musical quality/audio acceptance remains pending separately authorized, budgeted
-provider tests. The seventy Gospel, seventy S1–S14 and thirty-five R1–R7 and thirty-five W1–W7 profiles are integrated; the other research
-groups remain pending their approved specifications. The 43-group catalogue is
-not represented as complete.
+provider tests. The seventy Gospel, seventy S1–S14 and thirty-five R1–R7 and forty W1–W8 profiles are registered. All 43 groups and 215 styles are present
+in the registry/selector, as documented in [catalogue registration completeness](MUSIC-DNA-CATALOGUE-COMPLETENESS.md).
+W7 final interface copy, a separate comprehensive Music DNA integration audit and
+real audio/provider acceptance remain pending. Registration does not certify release readiness.
