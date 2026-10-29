@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w3-v1",
+  "revision": "music-dna-g1-g14-s1-s14-r1-r7-w1-w4-v1",
   "status": "approved",
   "departments": [
     {
@@ -251,6 +251,12 @@
       "group_id": "W3",
       "department_id": "western-international",
       "name": "Smooth Romantic Soul"
+    },
+    {
+      "id": "western-w4",
+      "group_id": "W4",
+      "department_id": "western-international",
+      "name": "Modern R&B & Alternative Soul"
     }
   ],
   "styles": [
@@ -17179,6 +17185,460 @@
       ],
       "research_references": [
         "Maxwell"
+      ]
+    },
+    {
+      "id": "W4-01",
+      "name": "Electric Midnight Soul",
+      "description": "Guitar-driven modern R&B with expressive electric guitar, warm Rhodes and deep bass.",
+      "department_id": "western-international",
+      "category_id": "western-w4",
+      "tempo": {
+        "min": 68,
+        "max": 92
+      },
+      "mood": "Intimate, soulful, reflective and emotionally expressive.",
+      "energy": "Laid-back organic modern R&B movement with guitar-led expression and warm atmospheric space.",
+      "rhythm": "Laid-back modern R&B with organic soul movement, relaxed drums and guitar-led melodic expression.",
+      "drums_percussion": "Deep, warm R&B kick. Tight snare or rimshot. Relaxed hi-hats with subtle syncopation. Light ghost notes. Occasional live-drum fills. Gentle percussion textures.",
+      "bass": "Deep electric or synth bass with rounded sustained notes, tasteful melodic slides, smooth syncopation and warm low-frequency depth.",
+      "instruments": {
+        "keys": "Rhodes-style electric piano, warm analog pads, subtle organ and sophisticated seventh and ninth chord voicings.",
+        "guitar": "Expressive clean electric guitar is a signature instrument. Use blues-influenced melodic phrases, soft rhythmic guitar, gentle bends, tasteful slides and emotional instrumental responses.",
+        "other": "Soft strings, subtle percussion, atmospheric pads and optional backing harmonies."
+      },
+      "melody_harmony": "Original intimate melodic phrases, smooth emotional development, restrained ornamentation and memorable choruses.",
+      "vocal_delivery": "Original intimate phrases and smooth emotional development with restrained ornamentation; follow selected vocal settings.",
+      "arrangement": "Atmospheric guitar introduction → intimate verse → smooth chorus → second verse → expressive guitar instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, vulnerability, self-reflection, heartbreak, trust, emotional honesty and personal growth.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-derived harmony is a musical technique and never automatically requires Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, range, breathiness or performer identity from a style label. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Modern guitar-driven R&B and alternative soul combining expressive electric guitar, warm Rhodes piano, deep bass, restrained drums and atmospheric soul arrangements. **Tempo:** 68–92 BPM. **Built-in mood:** Intimate, soulful, reflective and emotionally expressive. Warm, intimate guitar-driven R&B with deep bass, expressive guitar and beautiful harmonic space. Keep deep clean bass/sub-bass prominent without muddying kick or vocals; preserve precise profile-specific modern R&B or organic alternative-soul identity, atmospheric detail and crystal-clear separation rather than generic slow trap or EDM. Avoid: Generic trap beats, excessive guitar distortion, overproduced EDM effects and recognizable artist imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original atmospheric clean electric-guitar phrases.",
+          "Open on alternate expressive guitar bends and warm Rhodes responses."
+        ],
+        "progressions": [
+          "Use original sophisticated seventh/ninth voicings over rounded electric or synth bass.",
+          "Use alternate Rhodes/organ harmony with smooth bass syncopation and melodic slides."
+        ],
+        "arrangements": [
+          "Vary blues-influenced guitar leads through the instrumental passage.",
+          "Develop a reflective bridge with restrained drums and atmospheric textures."
+        ],
+        "melody": [
+          "Create original intimate melodic phrases and smooth emotional development.",
+          "Create a contrasting soulful refrain with restrained voice-compatible ornamentation."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original self-reflection or emotional-honesty imagery.",
+          "Develop fresh vulnerability or personal-growth expressions only where appropriate."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "blues"
+        ],
+        [
+          "bend"
+        ]
+      ],
+      "research_references": [
+        "H.E.R"
+      ]
+    },
+    {
+      "id": "W4-02",
+      "name": "Dreamscape Alternative R&B",
+      "description": "Atmospheric alternative R&B with deep sub-bass, textured synths and unconventional melodies.",
+      "department_id": "western-international",
+      "category_id": "western-w4",
+      "tempo": {
+        "min": 66,
+        "max": 94
+      },
+      "mood": "Dreamy, introspective, vulnerable and unconventional.",
+      "energy": "Sparse dreamy alternative-R&B motion with creative silence and slightly off-center phrasing.",
+      "rhythm": "Minimal alternative R&B with relaxed or slightly off-center rhythmic phrasing, deep sub-bass and spacious drum arrangements.",
+      "drums_percussion": "Sparse modern R&B kick. Dry snare or rimshot. Syncopated hi-hats. Subtle percussion glitches. Occasional half-time rhythmic emphasis. Creative silence and rhythmic space.",
+      "bass": "Deep, smooth sub-bass with minimal melodic movement, occasional slides, restrained syncopation and warm low-frequency sustain.",
+      "instruments": {
+        "keys": "Atmospheric synthesizer pads, detuned electric piano, soft analog textures and unconventional extended chord voicings.",
+        "guitar": "Sparse clean electric guitar, ambient guitar textures, gentle plucked phrases and occasional processed guitar effects.",
+        "other": "Ambient textures, subtle electronic percussion, reversed instrumental effects and restrained atmospheric layers."
+      },
+      "melody_harmony": "Original conversational melodic lines, unexpected melodic turns, intimate verses and expressive but understated choruses.",
+      "vocal_delivery": "Original conversational lines, unexpected melodic turns and understated expressive refrains; respect selected vocal configuration.",
+      "arrangement": "Atmospheric introduction → introspective verse → understated chorus → second verse → experimental instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Self-discovery, relationships, emotional uncertainty, personal boundaries, healing, independence and vulnerability.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-derived harmony is a musical technique and never automatically requires Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, range, breathiness or performer identity from a style label. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Atmospheric alternative R&B combining unconventional melodic phrasing, deep sub-bass, textured synths, minimal drums and emotionally introspective songwriting. **Tempo:** 66–94 BPM. **Built-in mood:** Dreamy, introspective, vulnerable and unconventional. Modern, spacious alternative R&B with deep sub-bass, atmospheric detail and intimate vocal clarity. Keep deep clean bass/sub-bass prominent without muddying kick or vocals; preserve precise profile-specific modern R&B or organic alternative-soul identity, atmospheric detail and crystal-clear separation rather than generic slow trap or EDM. Avoid: Generic trap loops, excessive vocal effects, chaotic arrangements and imitation of recognizable songs.",
+      "variations": {
+        "introductions": [
+          "Open with original atmospheric synth textures and sparse sub-bass.",
+          "Open on alternate detuned electric-piano chords with deliberate rhythmic silence."
+        ],
+        "progressions": [
+          "Use original unconventional extended voicings over sustained minimal sub-bass.",
+          "Use alternate soft analog harmony and restrained bass slides."
+        ],
+        "arrangements": [
+          "Vary sparse drum placement and ambient guitar through the experimental passage.",
+          "Develop reversed instrumental textures and a reflective bridge without chaotic layering."
+        ],
+        "melody": [
+          "Create original conversational phrases with unexpected but coherent melodic turns.",
+          "Create a contrasting introspective refrain with understated expressive development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original personal-boundary or self-discovery imagery.",
+          "Develop fresh healing or independence verses only when relevant to the selected topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "detuned"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "half-time"
+        ],
+        [
+          "revers"
+        ]
+      ],
+      "research_references": [
+        "SZA"
+      ]
+    },
+    {
+      "id": "W4-03",
+      "name": "Velvet Bedroom R&B",
+      "description": "Intimate minimalist R&B with warm keyboards, soft guitar and deep bass.",
+      "department_id": "western-international",
+      "category_id": "western-w4",
+      "tempo": {
+        "min": 60,
+        "max": 86
+      },
+      "mood": "Intimate, reflective, romantic and bittersweet.",
+      "energy": "Slow minimal intimate R&B motion with restrained layers and gentle emotional development.",
+      "rhythm": "Slow, intimate R&B with spacious drums, warm sub-bass and minimal instrumental layering.",
+      "drums_percussion": "Soft, deep kick. Warm snare or rimshot. Sparse hi-hats. Gentle percussion accents. Occasional subtle rhythmic rolls. Minimal drum fills.",
+      "bass": "Very deep, rounded sub-bass or electric bass with long sustained notes, subtle melodic movement and restrained rhythmic syncopation.",
+      "instruments": {
+        "keys": "Warm Rhodes-style electric piano, soft acoustic piano, atmospheric pads and mellow seventh and ninth chord progressions.",
+        "guitar": "Gentle clean electric guitar, soft fingerpicked phrases and restrained melodic responses.",
+        "other": "Subtle strings, soft ambient textures, gentle percussion and optional backing harmonies."
+      },
+      "melody_harmony": "Original conversational melodies, intimate phrasing, gentle emotional rises and understated memorable choruses.",
+      "vocal_delivery": "Original conversational melodies and gentle emotional rises; never force breathiness or a performer identity.",
+      "arrangement": "Soft guitar-and-Rhodes introduction → intimate verse → restrained chorus → second verse → short instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, trust, heartbreak, reconciliation, emotional boundaries, commitment and personal vulnerability.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-derived harmony is a musical technique and never automatically requires Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, range, breathiness or performer identity from a style label. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Minimalist intimate contemporary R&B combining warm electric piano, deep sub-bass, soft guitar, restrained drums and emotionally direct romantic storytelling. **Tempo:** 60–86 BPM. **Built-in mood:** Intimate, reflective, romantic and bittersweet. Warm, intimate modern R&B with rich bass, soft instruments and clear emotional storytelling. Keep deep clean bass/sub-bass prominent without muddying kick or vocals; preserve precise profile-specific modern R&B or organic alternative-soul identity, atmospheric detail and crystal-clear separation rather than generic slow trap or EDM. Avoid: Excessive trap percussion, aggressive club production, forced vocal breathiness and overly dramatic orchestration.",
+      "variations": {
+        "introductions": [
+          "Open with original soft guitar and warm Rhodes.",
+          "Open on alternate gentle fingerpicking and mellow electric-piano voicings."
+        ],
+        "progressions": [
+          "Use original mellow seventh/ninth progressions with sustained sub-bass or electric bass.",
+          "Use alternate soft acoustic-piano/pad harmony and restrained bass notes."
+        ],
+        "arrangements": [
+          "Vary soft guitar responses through the short instrumental passage.",
+          "Develop atmospheric layers and a reflective bridge while retaining minimal drums."
+        ],
+        "melody": [
+          "Create original intimate conversational melodies and gentle emotional rises.",
+          "Create a contrasting bittersweet refrain without forcing breathy delivery."
+        ],
+        "lyrical": [
+          "Explore the requested subject through original emotional-boundary imagery.",
+          "Develop fresh trust or commitment words only where appropriate to the customer topic."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "sub-bass",
+          "sub bass",
+          "electric bass"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "seventh",
+          "7th"
+        ],
+        [
+          "ninth",
+          "9th"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "fingerpick"
+        ]
+      ],
+      "research_references": [
+        "Summer Walker"
+      ]
+    },
+    {
+      "id": "W4-04",
+      "name": "Golden Alternative Soul",
+      "description": "Organic alternative soul with expressive piano, jazz-influenced harmony and gentle guitar.",
+      "department_id": "western-international",
+      "category_id": "western-w4",
+      "tempo": {
+        "min": 62,
+        "max": 88
+      },
+      "mood": "Tender, contemplative, warm and hopeful.",
+      "energy": "Relaxed organic soul movement with natural live drums, jazz harmony and warm expressive instruments.",
+      "rhythm": "Organic alternative soul with relaxed live drums, jazz-influenced harmony and natural instrumental movement.",
+      "drums_percussion": "Gentle live soul drums. Warm kick. Soft snare. Relaxed hi-hats. Subtle ghost notes. Natural dynamic changes.",
+      "bass": "Deep, warm electric bass with smooth melodic movement, sustained notes and tasteful passing tones.",
+      "instruments": {
+        "keys": "Expressive acoustic piano, Rhodes-style electric piano, rich jazz-soul chord extensions and restrained organ textures.",
+        "guitar": "Gentle acoustic guitar, clean electric-guitar phrases, subtle fingerpicking and expressive melodic responses.",
+        "other": "Soft strings, subtle brass, gentle percussion and optional layered harmonies."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, gentle melodic climbs, thoughtful verses and warm memorable choruses.",
+      "vocal_delivery": "Original emotionally expressive phrases and gentle melodic climbs adapted to selected voice capability.",
+      "arrangement": "Piano-and-guitar introduction → reflective verse → warm chorus → second verse with fuller instrumentation → instrumental guitar passage → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Love, vulnerability, hope, personal growth, forgiveness, gratitude and meaningful relationships.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-derived harmony is a musical technique and never automatically requires Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, range, breathiness or performer identity from a style label. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Organic alternative soul combining expressive piano, jazz-influenced harmony, gentle guitar, deep electric bass and warm gospel-influenced musical textures. This style may use gospel-derived harmonic techniques but must not automatically generate Christian lyrics. **Tempo:** 62–88 BPM. **Built-in mood:** Tender, contemplative, warm and hopeful. Warm organic alternative soul with expressive piano, deep bass and rich harmonic depth. Keep deep clean bass/sub-bass prominent without muddying kick or vocals; preserve precise profile-specific modern R&B or organic alternative-soul identity, atmospheric detail and crystal-clear separation rather than generic slow trap or EDM. Avoid: Automatically generating gospel lyrics, excessive electronic production, generic trap beats and recognizable melody imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original expressive piano and gentle guitar voicings.",
+          "Open on alternate acoustic-piano phrases and subtle fingerpicked guitar."
+        ],
+        "progressions": [
+          "Use original jazz-soul extensions with restrained organ and warm electric bass.",
+          "Use alternate gospel-derived musical harmony without imposing Christian words."
+        ],
+        "arrangements": [
+          "Vary natural drum dynamics and melodic bass through the guitar passage.",
+          "Develop fuller second-verse instrumentation and a warm emotional bridge."
+        ],
+        "melody": [
+          "Create original gentle melodic climbs adapted to selected voice capability.",
+          "Create a contrasting tender refrain with thoughtful natural development."
+        ],
+        "lyrical": [
+          "Explore the customer topic through original meaningful relationship or hope imagery.",
+          "Develop fresh gratitude or forgiveness verses without automatically generating gospel lyrics."
+        ]
+      },
+      "production_terms": [
+        [
+          "soul"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "acoustic piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "jazz"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "fingerpick"
+        ]
+      ],
+      "research_references": [
+        "Daniel Caesar"
+      ]
+    },
+    {
+      "id": "W4-05",
+      "name": "Deep Baritone Soul",
+      "description": "Dark cinematic R&B with warm piano, deep bass and emotional strings.",
+      "department_id": "western-international",
+      "category_id": "western-w4",
+      "tempo": {
+        "min": 58,
+        "max": 82
+      },
+      "mood": "Melancholic, intimate, dramatic and reflective.",
+      "energy": "Slow dark cinematic R&B movement with rhythmic space and controlled emotional intensity; the label never selects voice pitch or range.",
+      "rhythm": "Slow cinematic R&B with spacious drums, deep bass and dramatic harmonic movement.",
+      "drums_percussion": "Deep, restrained kick. Dry snare or rimshot. Sparse hi-hats. Subtle percussion accents. Occasional cinematic tom fills. Strong use of rhythmic space.",
+      "bass": "Deep, rounded electric or synth bass with long sustained notes, restrained melodic movement and warm sub-bass reinforcement.",
+      "instruments": {
+        "keys": "Dark acoustic piano, warm Rhodes-style electric piano, atmospheric analog pads and subtle organ textures.",
+        "guitar": "Sparse clean electric guitar, gentle melodic responses and occasional blues-influenced phrases.",
+        "other": "Cinematic strings, cello, soft brass, ambient textures and restrained percussion."
+      },
+      "melody_harmony": "Original emotionally intense melodies, restrained verses, expressive choruses and natural melodic development.",
+      "vocal_delivery": "Original emotionally intense melodies, restrained verses and expressive choruses; the style label never overrides selected voice gender, pitch or range.",
+      "arrangement": "Dark piano-and-strings introduction → intimate verse → emotional chorus → second verse → cinematic instrumental passage → reflective bridge → final chorus.",
+      "lyrics": {
+        "structure": "Treat the customer song topic as authoritative, with original complete verses and refrains. Suggested themes, never compulsory: Heartbreak, longing, regret, trust, reconciliation, emotional honesty and personal reflection.",
+        "vocabulary": "Use original expressions in selected supported languages without forcing a regional accent or unfamiliar translations. Gospel-derived harmony is a musical technique and never automatically requires Christian lyrics. Respect single-singer, duet and supported harmony settings without inferring gender, pitch, range, breathiness or performer identity from a style label. Preserve customer-supplied phrases and never reproduce identifiable voices, melodies, hooks, lyrics or recordings."
+      },
+      "production_mix": "Dark, cinematic contemporary R&B combining deep bass, restrained drums, warm piano, atmospheric strings and emotionally intense storytelling. The musical DNA must not force a baritone voice. The customer chooses the vocal character independently. **Tempo:** 58–82 BPM. **Built-in mood:** Melancholic, intimate, dramatic and reflective. Dark, cinematic modern R&B with deep bass, rich strings and crystal-clear vocal space. Keep deep clean bass/sub-bass prominent without muddying kick or vocals; preserve precise profile-specific modern R&B or organic alternative-soul identity, atmospheric detail and crystal-clear separation rather than generic slow trap or EDM. Avoid: Hardcoded baritone vocals, excessive orchestral drama, generic trap percussion and recognizable song imitation.",
+      "variations": {
+        "introductions": [
+          "Open with original dark piano and atmospheric strings.",
+          "Open on alternate cello/string voicings and restrained warm Rhodes."
+        ],
+        "progressions": [
+          "Use original dark acoustic-piano harmony with sustained electric or synth bass.",
+          "Use alternate organ/pad textures and subtle warm sub-bass reinforcement."
+        ],
+        "arrangements": [
+          "Vary cinematic string voicings and sparse guitar through the instrumental passage.",
+          "Develop a reflective bridge and emotional final chorus without excessive orchestral drama."
+        ],
+        "melody": [
+          "Create original emotionally intense melodies within selected voice capability.",
+          "Create a contrasting restrained verse and expressive chorus without forcing pitch or register."
+        ],
+        "lyrical": [
+          "Explore the selected topic through original reflective emotional-honesty images.",
+          "Develop fresh longing or reconciliation storytelling only when requested."
+        ]
+      },
+      "production_terms": [
+        [
+          "r&b",
+          "rnb"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare",
+          "rimshot"
+        ],
+        [
+          "electric bass",
+          "synth bass"
+        ],
+        [
+          "sub-bass",
+          "sub bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "rhodes"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "cello"
+        ],
+        [
+          "cinematic"
+        ]
+      ],
+      "research_references": [
+        "Giveon"
       ]
     }
   ]
