@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g7-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g7-g8-v1",
   "status": "approved",
   "departments": [
     {
@@ -59,6 +59,12 @@
       "group_id": "G7",
       "department_id": "gospel",
       "name": "Gospel Soul & Inspirational Ballads"
+    },
+    {
+      "id": "gospel-g8",
+      "group_id": "G8",
+      "department_id": "gospel",
+      "name": "African Gospel Choir & Live Worship"
     }
   ],
   "styles": [
@@ -2351,6 +2357,448 @@
       ],
       "research_references": [
         "TY Bello"
+      ]
+    },
+    {
+      "id": "G8-01",
+      "name": "Heaven's Celebration",
+      "description": "Bright Gospel pop-rock with electric guitars and joyful melodies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g8",
+      "tempo": {
+        "min": 108,
+        "max": 132
+      },
+      "mood": "Joyful, hopeful, celebratory and uplifting.",
+      "energy": "Balanced energetic live-band movement with expressive guitar development and a powerful final chorus.",
+      "rhythm": "Contemporary African Gospel pop-rock with a steady danceable 4/4 pulse.",
+      "drums_percussion": "Energetic live drum kit, punchy kick, crisp snare, steady hi-hats, bright cymbals and controlled drum fills.",
+      "bass": "Warm driving electric bass with melodic movement and strong kick-drum synchronization.",
+      "instruments": {
+        "keys": "Bright piano, warm synthesizer pads, lively organ and contemporary electronic textures.",
+        "guitar": "Prominent melodic electric guitar leads and rhythmic guitar.",
+        "other": "Subtle brass accents and layered Gospel harmonies."
+      },
+      "melody_harmony": "Original uplifting melodies and memorable encouraging choruses with layered Gospel harmonies.",
+      "vocal_delivery": "Clear encouraging melodic lead with layered Gospel harmonies; voice is selected independently.",
+      "arrangement": "Bright guitar or keyboard introduction → melodic verse → uplifting chorus → second verse → expressive guitar instrumental → powerful final chorus.",
+      "lyrics": {
+        "structure": "Divine love, joy, thanksgiving, victory, grace and celebration; memorable choruses and original encouraging messages.",
+        "vocabulary": "Use original meaningful phrases and imagery in the customer-selected language or language combination; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Clean polished contemporary Gospel sound with prominent guitar, clear vocals and balanced live-band energy. Keep bass synchronized to kick, keyboards bright, fills controlled and layered harmonies audible.",
+      "variations": {
+        "introductions": [
+          "Open with a fresh melodic electric-guitar lead and rhythmic guitar.",
+          "Open with an alternate bright keyboard hook answered by guitar."
+        ],
+        "progressions": [
+          "Use original uplifting pop-rock chords with driving melodic bass.",
+          "Use alternate bright keyboard voicings and a different synchronized bass pattern."
+        ],
+        "arrangements": [
+          "Vary guitar riffs and instrumental transitions before the final chorus.",
+          "Change keyboard hooks and the expressive guitar instrumental development."
+        ],
+        "melody": [
+          "Create a new joyful chorus melody with an original guitar answer.",
+          "Create a contrasting uplifting chorus contour and keyboard hook."
+        ],
+        "lyrical": [
+          "Develop original divine-love and grace verses with an encouraging refrain.",
+          "Develop thanksgiving and victory through new joyful celebratory phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "pop-rock"
+        ],
+        [
+          "4/4"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Frank Edwards"
+      ]
+    },
+    {
+      "id": "G8-02",
+      "name": "Triumphant Praise Assembly",
+      "description": "Powerful live-band praise with strong drums, bass and choir.",
+      "department_id": "gospel",
+      "category_id": "gospel-g8",
+      "tempo": {
+        "min": 115,
+        "max": 138
+      },
+      "mood": "Triumphant, confident, joyful and celebratory.",
+      "energy": "Strong rhythmic momentum develops through choir responses and instrumental climaxes into an explosive final chorus.",
+      "rhythm": "Driving African Gospel praise with syncopated percussion and strong rhythmic momentum.",
+      "drums_percussion": "Strong live kick and snare, energetic tom rolls, cymbal crashes and dynamic Gospel drum fills.",
+      "bass": "Deep punchy electric bass with rhythmic runs, syncopated accents and strong low-frequency presence.",
+      "instruments": {
+        "keys": "Bright Gospel piano, rhythmic organ stabs and layered synthesizer textures.",
+        "guitar": "Electric guitar.",
+        "other": "Brass section, congas, shakers and powerful group harmonies."
+      },
+      "melody_harmony": "Original large congregational choruses, powerful group harmonies and energetic melodic praise responses.",
+      "vocal_delivery": "Confident energetic lead phrases with large choir-supported choruses and communal responses; voice selected independently.",
+      "arrangement": "Drum-and-keyboard introduction → energetic verse → large choir-supported chorus → call-and-response section → instrumental praise break → explosive final chorus.",
+      "lyrics": {
+        "structure": "Victory, thanksgiving, God’s greatness, divine faithfulness and celebration.",
+        "vocabulary": "Use original meaningful phrases and imagery in the customer-selected language or language combination; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Full live-band sound with strong drums and bass, rich harmonies and exciting instrumental transitions. Keep brass hooks bright, organ stabs rhythmic and choir responses clear above controlled low-frequency power.",
+      "variations": {
+        "introductions": [
+          "Open with original drum-and-keyboard exchanges and bright piano.",
+          "Open with a contrasting tom-roll pattern and rhythmic organ stabs."
+        ],
+        "progressions": [
+          "Use original triumphant praise chords with punchy syncopated bass.",
+          "Use alternate rich keyboard voicings and different rhythmic bass runs."
+        ],
+        "arrangements": [
+          "Vary brass hooks and choir responses through the instrumental praise break.",
+          "Change drum breaks and instrumental climaxes before the explosive final chorus."
+        ],
+        "melody": [
+          "Create a new large congregational chorus with fresh group harmonies.",
+          "Create a contrasting triumphant hook answered by choir and brass."
+        ],
+        "lyrical": [
+          "Develop original victory and thanksgiving testimony for communal praise.",
+          "Develop divine greatness and faithfulness through new celebratory responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Eben"
+      ]
+    },
+    {
+      "id": "G8-03",
+      "name": "Throne Room Harmony",
+      "description": "Majestic worship with grand piano, strings and rich harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g8",
+      "tempo": {
+        "min": 65,
+        "max": 88
+      },
+      "mood": "Reverent, majestic, heartfelt and spiritually uplifting.",
+      "energy": "Spacious cinematic worship gradually builds emotionally toward a full choir-supported final chorus.",
+      "rhythm": "Slow-to-moderate worship ballad with spacious phrasing and a gradual emotional build.",
+      "drums_percussion": "Gentle live drums with restrained kick, soft snare, cymbal swells and gradual dynamic development.",
+      "bass": "Warm smooth bass guitar with sustained foundational notes and expressive passing tones.",
+      "instruments": {
+        "keys": "Grand piano, atmospheric pads, gentle organ and rich harmonic layers.",
+        "guitar": "Ambient electric guitar and subtle acoustic guitar.",
+        "other": "Cinematic strings and layered Gospel choir."
+      },
+      "melody_harmony": "Original expressive majestic worship melodies, rich harmonic layers and powerful choir harmonies.",
+      "vocal_delivery": "Heartfelt reverent phrasing and expressive melodies supported by layered choir; selected voice remains independent.",
+      "arrangement": "Gentle piano introduction → reflective verse → majestic chorus → expanded second verse → instrumental worship passage → expressive bridge → full choir-supported final chorus.",
+      "lyrics": {
+        "structure": "Adoration, divine greatness, holiness, surrender, gratitude and worship.",
+        "vocabulary": "Use original meaningful phrases and imagery in the customer-selected language or language combination; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Spacious cinematic worship with clear vocal placement and a rich but controlled instrumental build. Keep grand piano expressive, bass smooth, drums gentle, strings warm and choir entrances balanced around ambient guitars.",
+      "variations": {
+        "introductions": [
+          "Begin with an original gentle grand-piano motif and atmospheric pads.",
+          "Begin with alternate piano voicings and warm cinematic string responses."
+        ],
+        "progressions": [
+          "Use original majestic harmonic movement with smooth sustained bass.",
+          "Use alternate reverent chord voicings and expressive bass passing tones."
+        ],
+        "arrangements": [
+          "Vary string arrangements and choir entrances through the instrumental worship passage.",
+          "Change the bridge build and full-choir final chorus development."
+        ],
+        "melody": [
+          "Create an original heartfelt worship contour with majestic choir responses.",
+          "Create a contrasting expressive melody answered by grand piano."
+        ],
+        "lyrical": [
+          "Develop original adoration and holiness expressions with meaningful verses.",
+          "Develop surrender, gratitude and divine greatness through fresh worship imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "grand piano"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Steve Crown"
+      ]
+    },
+    {
+      "id": "G8-04",
+      "name": "Sacred Encounter Live",
+      "description": "Intense live worship with atmospheric keyboards and gradual instrumental builds.",
+      "department_id": "gospel",
+      "category_id": "gospel-g8",
+      "tempo": {
+        "min": 68,
+        "max": 92
+      },
+      "mood": "Prayerful, passionate, reverent and spiritually intense.",
+      "energy": "Deliberate dynamic changes grow from restraint to a full-band worship climax and peaceful resolution.",
+      "rhythm": "Gradually developing contemporary worship groove with deliberate dynamic changes.",
+      "drums_percussion": "Restrained live drums during introductory sections gradually develop into stronger kick, snare, tom and cymbal patterns.",
+      "bass": "Deep warm electric bass with sustained notes, gradual rhythmic movement and expressive transitions.",
+      "instruments": {
+        "keys": "Atmospheric pads, expressive piano, layered organ and rich sustained chords.",
+        "guitar": "Ambient electric guitar.",
+        "other": "Subtle strings, live percussion and layered worship harmonies; gradually expanding choir arrangements."
+      },
+      "melody_harmony": "Original strong melodic refrains and expressive instrumental development with gradually expanding worship harmonies.",
+      "vocal_delivery": "Passionate prayerful phrasing and memorable refrains with expanding choir support; selected voice remains independent.",
+      "arrangement": "Atmospheric introduction → prayerful verse → memorable worship refrain → instrumental development → emotionally intense bridge → full-band worship climax → peaceful resolution.",
+      "lyrics": {
+        "structure": "Surrender, divine presence, spiritual hunger, consecration, hope and adoration.",
+        "vocabulary": "Use original meaningful phrases and imagery in the customer-selected language or language combination; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Authentic live worship atmosphere with natural instrumental movement and controlled intensity. Develop drums and bass gradually under pads, expressive piano, organ and ambient guitar; expand choir and strings toward the climax, then resolve peacefully.",
+      "variations": {
+        "introductions": [
+          "Begin with original atmospheric pads and a restrained piano introduction.",
+          "Begin with alternate sustained organ chords and ambient guitar textures."
+        ],
+        "progressions": [
+          "Use original sustained worship harmony with deep warm bass.",
+          "Use alternate rich harmonic progressions and gradual bass movement."
+        ],
+        "arrangements": [
+          "Vary the instrumental build and dynamic transitions into the full-band climax.",
+          "Change refrain development and choir entrances before a peaceful resolution."
+        ],
+        "melody": [
+          "Create an original memorable worship refrain with prayerful phrasing.",
+          "Create a contrasting passionate melodic contour developing into the intense bridge."
+        ],
+        "lyrical": [
+          "Develop original surrender and consecration imagery in a prayerful verse.",
+          "Develop spiritual hunger, hope and adoration with a fresh meaningful refrain."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "tom"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "string"
+        ],
+        [
+          "percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Prospa Ochimana"
+      ]
+    },
+    {
+      "id": "G8-05",
+      "name": "Joyful Grace Choir",
+      "description": "Melodic African Gospel with uplifting rhythms and warm choir harmonies.",
+      "department_id": "gospel",
+      "category_id": "gospel-g8",
+      "tempo": {
+        "min": 96,
+        "max": 122
+      },
+      "mood": "Joyful, grateful, hopeful and encouraging.",
+      "energy": "Flowing midtempo danceable movement expands harmonies and develops an uplifting bridge into a joyful final chorus.",
+      "rhythm": "Midtempo African Gospel pop with a flowing danceable rhythmic pocket.",
+      "drums_percussion": "Smooth contemporary Gospel drum groove, warm kick, crisp snare, rhythmic hi-hats and lively fills.",
+      "bass": "Melodic electric bass with a flowing groove, syncopated phrases and natural rhythmic movement.",
+      "instruments": {
+        "keys": "Bright piano, warm organ, contemporary pads and uplifting keyboard textures.",
+        "guitar": "Rhythmic electric guitar and acoustic guitar.",
+        "other": "Subtle African percussion and rich choir harmonies."
+      },
+      "melody_harmony": "Original expressive melodies, uplifting memorable choruses and warm rich choir harmonies.",
+      "vocal_delivery": "Encouraging clear melodic phrases supported by polished warm choir responses; voice selected independently.",
+      "arrangement": "Bright instrumental introduction → melodic verse → memorable chorus → second verse with expanded harmonies → instrumental interlude → uplifting bridge → joyful final chorus.",
+      "lyrics": {
+        "structure": "Divine love, gratitude, encouragement, blessings, hope and testimony.",
+        "vocabulary": "Use original meaningful phrases and imagery in the customer-selected language or language combination; do not reproduce identifiable lyrics, melodies, recordings or vocal identities."
+      },
+      "production_mix": "Warm accessible contemporary Gospel sound with expressive melodies and polished choir arrangements. Keep flowing bass syncopated, drums smooth, piano bright, organ warm and African percussion subtle beneath clear electric/acoustic guitar phrases.",
+      "variations": {
+        "introductions": [
+          "Open with an original bright piano hook and flowing bass.",
+          "Open with a contrasting rhythmic guitar phrase and warm organ."
+        ],
+        "progressions": [
+          "Use original uplifting Gospel-pop chords with syncopated melodic bass.",
+          "Use alternate warm keyboard voicings and a different flowing bass groove."
+        ],
+        "arrangements": [
+          "Vary choir responses and guitar phrases through the instrumental interlude.",
+          "Expand second-verse harmonies differently and change final chorus arrangement."
+        ],
+        "melody": [
+          "Create a new encouraging chorus melody with warm choir responses.",
+          "Create a contrasting joyful melodic contour and original piano hook."
+        ],
+        "lyrical": [
+          "Develop original divine-love and gratitude testimony with an encouraging chorus.",
+          "Develop blessings and hope through fresh meaningful communal responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "african percussion"
+        ],
+        [
+          "choir"
+        ]
+      ],
+      "research_references": [
+        "Moses Bliss"
       ]
     }
   ]
