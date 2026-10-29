@@ -309,3 +309,31 @@ test("the frontend DNA request excludes stale mood and percussion fields but ret
     !fs.readFileSync("music-prompt-studio.html", "utf8").includes('id="mood"'),
   );
 });
+
+test("undocumented internal catalogue fields cannot enter a provider prompt or stored profile snapshot", () => {
+  const c = fixture.catalogue();
+  c.styles[0].internal_notes = "PRIVATE_EDITORIAL_NOTE";
+  c.styles[0].instruments.internal_reference = "PRIVATE_INSTRUMENT_NOTE";
+  c.styles[0].variations.internal_reference = "PRIVATE_VARIATION_NOTE";
+  const e = dna.createEngine(c),
+    context = e.prepare(body, actor),
+    serialized = e.instructions(context);
+  for (const value of [
+    "PRIVATE_EDITORIAL_NOTE",
+    "PRIVATE_INSTRUMENT_NOTE",
+    "PRIVATE_VARIATION_NOTE",
+    "INTERNAL_QA_RESEARCH_NAME",
+  ])
+    assert(!serialized.includes(value));
+  const duplicate = fixture.catalogue();
+  duplicate.styles.push({
+    ...structuredClone(duplicate.styles[0]),
+    id: "qa-reordered",
+    instruments: {
+      other: duplicate.styles[0].instruments.other,
+      guitar: duplicate.styles[0].instruments.guitar,
+      keys: duplicate.styles[0].instruments.keys,
+    },
+  });
+  assert.throws(() => dna.createEngine(duplicate), /Duplicate Music DNA core/);
+});
