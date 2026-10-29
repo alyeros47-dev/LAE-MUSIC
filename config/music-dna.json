@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-v1",
   "status": "approved",
   "departments": [
     {
@@ -47,7 +47,14 @@
       "group_id": "G4",
       "department_id": "gospel",
       "name": "High-Energy Gospel Dance & Praise"
-    }],
+    },
+    {
+      "id": "gospel-g5",
+      "group_id": "G5",
+      "department_id": "gospel",
+      "name": "Indigenous Yoruba Gospel"
+    }
+  ],
   "styles": [
     {
       "id": "G1-01",
@@ -1452,6 +1459,450 @@
       ],
       "research_references": [
         "Joe Praize"
+      ]
+    },
+    {
+      "id": "G5-01",
+      "name": "Heritage Worship",
+      "description": "Reflective Yoruba-inspired worship with soft talking drums, flowing melodic bass and poetic spiritual storytelling.",
+      "department_id": "gospel",
+      "category_id": "gospel-g5",
+      "tempo": {
+        "min": 72,
+        "max": 96
+      },
+      "mood": "Reverent, heartfelt, reflective and spiritually uplifting.",
+      "energy": "Moderate reflective movement with expressive phrasing and a spiritually uplifting final chorus.",
+      "rhythm": "Moderate Yoruba Gospel rhythm with expressive phrasing and carefully balanced percussion.",
+      "drums_percussion": "Gentle live drum kit, soft talking-drum phrases, restrained congas and traditional hand percussion.",
+      "bass": "Warm melodic electric bass with flowing phrases supporting the vocal melody.",
+      "instruments": {
+        "keys": "Soft piano, warm organ, sustained keyboard pads and traditional Gospel chord movements.",
+        "guitar": "Acoustic guitar.",
+        "other": "Talking drum, shekere, subtle strings and layered response harmonies."
+      },
+      "melody_harmony": "Original traditional melodic phrasing, poetic storytelling melodies and layered response harmonies over Gospel chord movement.",
+      "vocal_delivery": "Heartfelt expressive storytelling, melodic worship phrases and layered responses; selected voice remains independent.",
+      "arrangement": "Traditional instrumental introduction → storytelling verse → melodic worship chorus → call-and-response section → reflective instrumental interlude → final chorus.",
+      "lyrics": {
+        "structure": "Divine faithfulness, gratitude, wisdom, spiritual reflection, prayer and personal testimony; meaningful storytelling, poetic imagery and original expressions.",
+        "vocabulary": "Use meaningful original imagery and natural responses in the selected language; Yoruba-inspired instrumentation does not force Yoruba lyrics or any other language."
+      },
+      "production_mix": "Balance soft talking drums and restrained congas with flowing bass, soft piano, warm organ and acoustic guitar; let subtle strings and response harmonies support reflective storytelling.",
+      "variations": {
+        "introductions": [
+          "Open with soft talking-drum responses and warm organ.",
+          "Open with a contrasting acoustic-guitar phrase and soft piano."
+        ],
+        "progressions": [
+          "Use original reflective Gospel chords with flowing bass phrases.",
+          "Use alternate warm keyboard voicings and a different melodic bass response."
+        ],
+        "arrangements": [
+          "Vary talking-drum responses around a reflective instrumental interlude.",
+          "Change instrumental transitions and layer response harmonies before the final chorus."
+        ],
+        "melody": [
+          "Create original traditional melodic phrasing with fresh keyboard answers.",
+          "Create a contrasting expressive chorus contour and flowing bass phrase."
+        ],
+        "lyrical": [
+          "Develop poetic original testimony about divine faithfulness and gratitude.",
+          "Develop prayer, wisdom and spiritual reflection through fresh storytelling imagery."
+        ]
+      },
+      "production_terms": [
+        [
+          "live drum"
+        ],
+        [
+          "talking drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "string"
+        ],
+        [
+          "response",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Tope Alabi"
+      ]
+    },
+    {
+      "id": "G5-02",
+      "name": "Yoruba Praise Procession",
+      "description": "Communal percussion-led praise with strong talking drum, bouncy bass, bright organ and lively group responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g5",
+      "tempo": {
+        "min": 112,
+        "max": 138
+      },
+      "mood": "Joyful, communal, celebratory and uplifting.",
+      "energy": "Lively syncopated communal dance pulse with percussion breaks and an energetic closing chorus.",
+      "rhythm": "Percussion-led Yoruba praise groove with lively syncopation and a strong communal dance pulse.",
+      "drums_percussion": "Strong talking drum, congas, hand drums, shekere, live kick and snare, and rhythmic percussion fills.",
+      "bass": "Bouncy electric bass with repeated dance patterns and short melodic runs.",
+      "instruments": {
+        "keys": "Bright organ, lively piano chords and rhythmic keyboard accents.",
+        "guitar": "Electric guitar.",
+        "other": "Handclaps, traditional percussion and group vocal harmonies."
+      },
+      "melody_harmony": "Original rhythmic singing, memorable praise refrains with meaningful variation and communal group harmonies.",
+      "vocal_delivery": "Lively rhythmic lead and group responses with clear communal phrasing; voice is selected independently.",
+      "arrangement": "Talking-drum introduction → group-response verse → memorable praise chorus → percussion break → instrumental dance passage → energetic closing chorus.",
+      "lyrics": {
+        "structure": "Thanksgiving, celebration, God’s goodness, communal praise and testimony; memorable refrains with meaningful variation.",
+        "vocabulary": "Use meaningful original imagery and natural responses in the selected language; Yoruba-inspired instrumentation does not force Yoruba lyrics or any other language."
+      },
+      "production_mix": "Keep talking drum, hand drums and shekere forward, bass bouncy, organ bright and guitar supportive; balance percussion fills with clear communal responses and handclaps.",
+      "variations": {
+        "introductions": [
+          "Begin with a new talking-drum conversation over shekere.",
+          "Begin with an alternate talking-drum and hand-drum exchange."
+        ],
+        "progressions": [
+          "Use original bright organ chords with a repeated bouncy bass groove.",
+          "Use alternate lively piano chords and short melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary percussion combinations and the instrumental dance-break arrangement.",
+          "Change group responses and organ riffs before the energetic closing chorus."
+        ],
+        "melody": [
+          "Create a new memorable rhythmic refrain with group responses.",
+          "Create a contrasting communal melody with different keyboard accents."
+        ],
+        "lyrical": [
+          "Develop original communal thanksgiving and testimony refrains.",
+          "Develop God’s goodness and celebration through meaningfully varied responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "talking drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "hand drum"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "group"
+        ]
+      ],
+      "research_references": [
+        "BBO"
+      ]
+    },
+    {
+      "id": "G5-03",
+      "name": "Gospel Juju Celebration",
+      "description": "Live Gospel Juju with interlocking electric guitars, conversational talking drums and rolling melodic bass.",
+      "department_id": "gospel",
+      "category_id": "gospel-g5",
+      "tempo": {
+        "min": 108,
+        "max": 136
+      },
+      "mood": "Festive, joyful, grateful and highly danceable.",
+      "energy": "Consistent flowing dance momentum through an extended live-band instrumental Juju groove.",
+      "rhythm": "Flowing Juju dance groove with interlocking guitar and percussion patterns; maintain consistent rhythmic momentum.",
+      "drums_percussion": "Lively live drum kit with Juju-influenced percussion, talking-drum conversation, congas, shekere and rolling drum fills.",
+      "bass": "Prominent melodic electric bass with rolling patterns, syncopated movement and expressive fills.",
+      "instruments": {
+        "keys": "Bright organ, rhythmic piano and lively keyboard riffs.",
+        "guitar": "Prominent interlocking electric guitars.",
+        "other": "Talking drum, brass accents, hand percussion and layered group vocals."
+      },
+      "melody_harmony": "Original flowing Juju melodies, interlocking guitar counterlines and layered audience-response harmonies.",
+      "vocal_delivery": "Engaging storytelling and natural audience responses over steady live-band momentum; selected voice remains independent.",
+      "arrangement": "Guitar-and-percussion introduction → lively praise verse → call-and-response chorus → extended instrumental Juju groove → additional verse → celebratory final chorus.",
+      "lyrics": {
+        "structure": "Testimonies, thanksgiving, blessings, perseverance, joy and God’s faithfulness; engaging storytelling with natural audience responses.",
+        "vocabulary": "Use meaningful original imagery and natural responses in the selected language; Yoruba-inspired instrumentation does not force Yoruba lyrics or any other language."
+      },
+      "production_mix": "Keep interlocking guitars, talking drums and melodic bass prominent throughout the live Juju arrangement. Avoid replacing the live Juju identity with generic electronic Afrobeats; preserve rolling bass, conversational percussion and extended instrumental interplay.",
+      "variations": {
+        "introductions": [
+          "Open with fresh interlocking electric-guitar patterns and talking drum.",
+          "Open with contrasting guitar interplay and conga phrases."
+        ],
+        "progressions": [
+          "Use original lively Juju chord movement with rolling syncopated bass.",
+          "Use alternate rhythmic piano voicings and expressive melodic bass runs."
+        ],
+        "arrangements": [
+          "Vary the extended instrumental groove with new guitar and talking-drum exchanges.",
+          "Change keyboard riffs and instrumental-break structure while preserving live-band momentum."
+        ],
+        "melody": [
+          "Create original flowing praise melodies answered by interlocking guitars.",
+          "Create a contrasting call-and-response melody with different bass fills."
+        ],
+        "lyrical": [
+          "Develop original perseverance and thanksgiving testimony with audience responses.",
+          "Develop blessings, joy and faithfulness through fresh engaging storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "juju"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "talking drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "group"
+        ]
+      ],
+      "research_references": [
+        "Yinka Ayefele"
+      ]
+    },
+    {
+      "id": "G5-04",
+      "name": "Wisdom and Grace",
+      "description": "Reflective Yoruba-inspired Gospel soul with acoustic guitar, expressive piano, gentle percussion and mature storytelling.",
+      "department_id": "gospel",
+      "category_id": "gospel-g5",
+      "tempo": {
+        "min": 68,
+        "max": 92
+      },
+      "mood": "Peaceful, thoughtful, heartfelt and spiritually reflective.",
+      "energy": "Gentle acoustic movement with flexible phrasing and natural instrumental breathing room.",
+      "rhythm": "Gentle African acoustic groove with flexible phrasing and natural instrumental breathing room.",
+      "drums_percussion": "Gentle live percussion, soft hand drums, subtle shakers and restrained drum-kit accompaniment.",
+      "bass": "Warm understated bass guitar with melodic movement and natural acoustic character.",
+      "instruments": {
+        "keys": "Expressive piano, gentle organ textures and restrained atmospheric pads.",
+        "guitar": "Acoustic guitar.",
+        "other": "Subtle traditional percussion, soft strings and intimate background harmonies."
+      },
+      "melody_harmony": "Original thoughtful African melodic phrasing, gentle harmonic movement and intimate Gospel soul refrains.",
+      "vocal_delivery": "Intimate thoughtful storytelling and heartfelt melodic refrains with natural breathing room; voice selected independently.",
+      "arrangement": "Acoustic introduction → thoughtful storytelling verse → melodic refrain → instrumental reflection → second verse → emotionally meaningful closing chorus.",
+      "lyrics": {
+        "structure": "Wisdom, gratitude, spiritual growth, life lessons, divine guidance, hope and trust; mature original imagery and meaningful storytelling.",
+        "vocabulary": "Use meaningful original imagery and natural responses in the selected language; Yoruba-inspired instrumentation does not force Yoruba lyrics or any other language."
+      },
+      "production_mix": "Preserve natural acoustic character, understated melodic bass and soft hand drums; leave breathing room around expressive piano, gentle organ, acoustic guitar, restrained pads, soft strings and intimate background harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with an original acoustic-guitar pattern and gentle piano.",
+          "Begin with a contrasting expressive piano phrase and soft acoustic guitar."
+        ],
+        "progressions": [
+          "Use original reflective soul chords with understated melodic bass.",
+          "Use alternate gentle harmonic movement and different piano voicings."
+        ],
+        "arrangements": [
+          "Vary acoustic patterns and the instrumental reflection before a meaningful closing chorus.",
+          "Change piano arrangement and leave new spaces around the second storytelling verse."
+        ],
+        "melody": [
+          "Create original flexible African melodic phrasing with intimate harmonies.",
+          "Create a contrasting heartfelt refrain with a different acoustic-guitar response."
+        ],
+        "lyrical": [
+          "Develop original mature imagery about wisdom and spiritual growth.",
+          "Develop life lessons, divine guidance, hope and trust through fresh meaningful storytelling."
+        ]
+      },
+      "production_terms": [
+        [
+          "acoustic guitar"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "hand drum"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "string"
+        ],
+        [
+          "background",
+          "harmon"
+        ]
+      ],
+      "research_references": [
+        "Shola Allyson"
+      ]
+    },
+    {
+      "id": "G5-05",
+      "name": "Heritage Praise Revival",
+      "description": "Traditional Yoruba-inspired celebration with communal percussion, a steady dance bass pulse and expressive praise responses.",
+      "department_id": "gospel",
+      "category_id": "gospel-g5",
+      "tempo": {
+        "min": 105,
+        "max": 132
+      },
+      "mood": "Joyful, grateful, spirited and celebratory.",
+      "energy": "Spirited live-band celebration with syncopated percussion, steady bass and energetic call-and-response.",
+      "rhythm": "Traditional Yoruba praise groove with syncopated percussion, steady bass movement and energetic call-and-response.",
+      "drums_percussion": "Talking drum, hand percussion, congas, shekere and energetic live drum-kit patterns.",
+      "bass": "Rhythmic electric bass with a strong dance pulse, melodic transitions and repeated groove patterns.",
+      "instruments": {
+        "keys": "Bright organ, lively piano and rhythmic keyboard accompaniment.",
+        "guitar": "Electric guitar.",
+        "other": "Brass accents, traditional percussion and layered group-response harmonies."
+      },
+      "melody_harmony": "Original expressive praise melodies, lively melodic hooks and layered group-response harmonies.",
+      "vocal_delivery": "Expressive rhythmic praise singing with energetic communal responses; selected voice remains independent.",
+      "arrangement": "Percussion introduction → rhythmic praise verse → group-response chorus → instrumental celebration → second verse → strong final chorus.",
+      "lyrics": {
+        "structure": "Gratitude, celebration, testimony, divine protection, communal praise and God’s goodness.",
+        "vocabulary": "Use meaningful original imagery and natural responses in the selected language; Yoruba-inspired instrumentation does not force Yoruba lyrics or any other language."
+      },
+      "production_mix": "Keep talking-drum conversations, congas and shekere articulate over a steady rhythmic bass pulse; support expressive praise with bright organ, lively piano, electric guitar, brass accents and layered group-response harmonies.",
+      "variations": {
+        "introductions": [
+          "Begin with fresh talking-drum conversations and congas.",
+          "Begin with an alternate shekere and hand-percussion exchange."
+        ],
+        "progressions": [
+          "Use original bright praise chords with a repeated steady bass groove.",
+          "Use alternate organ voicings and new melodic bass transitions."
+        ],
+        "arrangements": [
+          "Vary drum conversations and keyboard riffs during the instrumental celebration.",
+          "Change instrumental transitions and group responses before the strong final chorus."
+        ],
+        "melody": [
+          "Create original lively praise hooks with layered group answers.",
+          "Create a contrasting expressive melodic phrase and keyboard response."
+        ],
+        "lyrical": [
+          "Develop original gratitude and divine-protection testimony with communal praise.",
+          "Develop God’s goodness and celebration with new meaningful group responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "talking drum"
+        ],
+        [
+          "hand percussion"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shekere"
+        ],
+        [
+          "live drum"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "group"
+        ]
+      ],
+      "research_references": [
+        "Sola Kosoko"
       ]
     }
   ]
