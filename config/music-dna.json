@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-v1",
+  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-v1",
   "status": "approved",
   "departments": [
     {
@@ -107,6 +107,12 @@
       "group_id": "G14",
       "department_id": "gospel",
       "name": "Francophone African Gospel"
+    },
+    {
+      "id": "secular-s1",
+      "group_id": "S1",
+      "department_id": "secular-afrobeats",
+      "name": "Party Afrobeats & Dance Hits"
     }
   ],
   "styles": [
@@ -6029,6 +6035,462 @@
       ],
       "research_references": [
         "Rosny Kayiba"
+      ]
+    },
+    {
+      "id": "S1-01",
+      "name": "Lagos Celebration Anthem",
+      "description": "High-energy Nigerian Afropop with lively brass, bright hooks and powerful dance drums.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s1",
+      "tempo": {
+        "min": 108,
+        "max": 124
+      },
+      "mood": "Joyful, confident, festive and energetic.",
+      "energy": "Driving high-energy dance-floor momentum builds through a short pre-chorus, explosive party chorus and layered final chorus.",
+      "rhythm": "Driving Nigerian Afropop with syncopated percussion, lively rhythmic accents and strong dance-floor momentum.",
+      "drums_percussion": "Punchy Afro-pop kick, sharp snare and clap layers, syncopated hi-hats, energetic percussion fills and occasional tom accents.",
+      "bass": "Deep rounded sub-bass layered with melodic electric or synthesized bass; lock tightly with the kick while moving between rhythmic phrases.",
+      "instruments": {
+        "keys": "Bright piano riffs, catchy synth melodies, rhythmic keyboard stabs and warm chord pads.",
+        "guitar": "Rhythmic electric guitar.",
+        "other": "Brass stabs, congas, shakers, handclaps and occasional melodic plucks."
+      },
+      "melody_harmony": "Original short memorable melodic phrases, uplifting chorus hooks and lively responses; avoid identifiable signature hooks.",
+      "vocal_delivery": "Confident festive rhythmic phrasing and lively call-and-response; selected voice remains independent.",
+      "arrangement": "Percussion-and-hook introduction → rhythmic verse → short pre-chorus → explosive party chorus → second verse → instrumental dance break → repeated final chorus with new instrumental layers.",
+      "lyrics": {
+        "structure": "Celebration, enjoyment, success, friendship, romance, confidence and good times.",
+        "vocabulary": "Use original meaningful secular party lyrics in the selected supported language or combination. Do not force a language, Gospel themes or a lead gender, and never reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Bright energetic radio-ready Nigerian Afropop with powerful controlled bass. Keep rounded sub-bass and melodic bass tightly locked to punchy kick, protect clean low-frequency headroom and articulate syncopated percussion; balance bright piano, synth hooks, brass, guitar and responses. Develop new layers and rhythmic movement instead of static repetitive loops.",
+      "variations": {
+        "introductions": [
+          "Begin with an original brass hook and punchy percussion.",
+          "Begin with an alternate bright piano riff and festive percussion response."
+        ],
+        "progressions": [
+          "Use original joyful Afropop chords with rounded sub-bass and melodic bass movement.",
+          "Use alternate warm chord-pad voicings and a different kick-locked bass phrase."
+        ],
+        "arrangements": [
+          "Vary percussion fills and brass responses through the instrumental dance break.",
+          "Change chorus structure and introduce new instrumental layers in the final chorus."
+        ],
+        "melody": [
+          "Create an original short festive hook and lively melodic response.",
+          "Create a contrasting uplifting chorus contour and fresh synth phrase."
+        ],
+        "lyrical": [
+          "Develop original friendship and success verses with celebratory hooks.",
+          "Develop romance, confidence and good times through fresh playful phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "afropop"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ]
+      ],
+      "research_references": [
+        "Davido"
+      ]
+    },
+    {
+      "id": "S1-02",
+      "name": "Bouncing Party Groove",
+      "description": "Bass-heavy Afrobeats with infectious rhythmic piano and playful percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s1",
+      "tempo": {
+        "min": 104,
+        "max": 120
+      },
+      "mood": "Playful, confident, joyful and infectious.",
+      "energy": "Immediate physical bass bounce and tight drums stay strong through instrumental-only passages and an expanded dance chorus.",
+      "rhythm": "Bass-driven Nigerian dance groove with strong syncopation, a steady physical bounce and controlled rhythmic repetition.",
+      "drums_percussion": "Heavy tight kick, crisp snare, bouncing percussion, rolling shakers, syncopated hi-hats and carefully placed rhythmic breaks.",
+      "bass": "Thick vibrating low-frequency bass with a distinctive bouncing motif; powerful sub-bass, punchy mid-bass definition and rhythmic movement synchronized with kick.",
+      "instruments": {
+        "keys": "Bright rhythmic piano, short repeating keyboard hooks, playful synth plucks and percussive chord stabs.",
+        "guitar": "Rhythmic guitar.",
+        "other": "Congas, woodblock accents, hand percussion, brass punctuations and short melodic synth phrases."
+      },
+      "melody_harmony": "Original playful memorable hooks with rhythmic phrasing and natural call-and-response opportunities.",
+      "vocal_delivery": "Playful confident rhythmic phrasing with natural responses; selected voice remains independent.",
+      "arrangement": "Immediate bass-and-percussion introduction → catchy verse → short pre-chorus → powerful dance chorus → instrumental groove break → second verse → expanded final chorus.",
+      "lyrics": {
+        "structure": "Enjoyment, celebration, playful romance, confidence, dancing and everyday happiness.",
+        "vocabulary": "Use original meaningful secular party lyrics in the selected supported language or combination. Do not force a language, Gospel themes or a lead gender, and never reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Bass and drums must be felt immediately and stay strong during instrumental-only passages. Keep thick bouncing sub-bass controlled, mid-bass punch defined and heavy kick synchronized; articulate rhythmic piano, playful percussion and woodblock. Avoid weak kick, thin bass, excessive atmospheric pads and slow empty arrangements; vary motifs and breaks within the recognizable bounce.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with an original bouncing bass motif and tight percussion.",
+          "Begin with an alternate kick-synchronized bass pattern and playful piano hook."
+        ],
+        "progressions": [
+          "Use original rhythmic chord stabs with a distinctive bouncing sub/mid-bass motif.",
+          "Use alternate bright piano harmony and a new heavy bass phrase."
+        ],
+        "arrangements": [
+          "Vary percussion interplay and drum breaks through the instrumental groove.",
+          "Change chorus melody layers and maintain immediate bass impact into the expanded final chorus."
+        ],
+        "melody": [
+          "Create an original playful call-and-response hook over the bass bounce.",
+          "Create a contrasting memorable rhythmic melody and short synth phrase."
+        ],
+        "lyrical": [
+          "Develop original playful romance and everyday happiness verses.",
+          "Develop enjoyment, dancing and confidence through fresh memorable responses."
+        ]
+      },
+      "production_terms": [
+        [
+          "afrobeats",
+          "nigerian"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "mid-bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "woodblock"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Kizz Daniel"
+      ]
+    },
+    {
+      "id": "S1-03",
+      "name": "Futuristic Afro-Rave",
+      "description": "Modern electronic Afro-rave with hypnotic synths and deep pulsing bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s1",
+      "tempo": {
+        "min": 106,
+        "max": 126
+      },
+      "mood": "Adventurous, energetic, youthful and hypnotic.",
+      "energy": "Atmospheric but rhythmically active electronic production builds through a rising pre-chorus to a dynamic dance ending.",
+      "rhythm": "Modern Afro-rave with hypnotic groove repetition, rhythmic surprises and strong dance momentum.",
+      "drums_percussion": "Tight electronic kick, sharp snare and clap layers, rolling hi-hats, syncopated African percussion and unexpected rhythmic accents.",
+      "bass": "Deep electronic sub-bass with pulsing rhythmic patterns, controlled distortion where appropriate and a strong relationship with kick.",
+      "instruments": {
+        "keys": "Futuristic synth leads, atmospheric electronic textures, bright plucks, arpeggiated synth motifs and rhythmic stabs.",
+        "guitar": "Processed guitar accents.",
+        "other": "Digital percussion, subtle vocal-texture effects and electronic transitions."
+      },
+      "melody_harmony": "Original distinctive motifs, short catchy phrases and atmospheric melodic contrasts without identifiable signature hooks.",
+      "vocal_delivery": "Adventurous hypnotic melodic phrasing and youthful energetic hooks; voice selected independently.",
+      "arrangement": "Electronic rhythmic introduction → hypnotic verse → rising pre-chorus → energetic hook → synth-and-bass instrumental section → second verse → dynamic final chorus.",
+      "lyrics": {
+        "structure": "Confidence, adventure, romance, ambition, freedom, nightlife and youthful celebration.",
+        "vocabulary": "Use original meaningful secular party lyrics in the selected supported language or combination. Do not force a language, Gospel themes or a lead gender, and never reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Modern polished Afro-rave with clean electronic textures and powerful controlled low-frequency impact. Keep pulsing sub-bass kick-connected, synth timbres futuristic and arpeggios rhythmically active; use controlled distortion only where appropriate and vary transitions. Avoid generic Afropop piano loops, excessive brass and traditional highlife arrangements.",
+      "variations": {
+        "introductions": [
+          "Open with original futuristic electronic rhythmic textures and pulsing bass.",
+          "Open with alternate arpeggiated synth motifs and unexpected percussion accents."
+        ],
+        "progressions": [
+          "Use original atmospheric electronic harmony over pulsing kick-connected sub-bass.",
+          "Use alternate futuristic synth voicings and a different rhythmic electronic bass pattern."
+        ],
+        "arrangements": [
+          "Vary synth timbres and rhythmic surprises through the synth-and-bass section.",
+          "Change electronic transitions and hook construction before the dynamic final chorus."
+        ],
+        "melody": [
+          "Create an original distinctive short Afro-rave motif with atmospheric contrast.",
+          "Create a contrasting adventurous hook and hypnotic melodic phrase."
+        ],
+        "lyrical": [
+          "Develop original adventure, ambition and freedom verses.",
+          "Develop romance, nightlife and youthful celebration through fresh confident phrases."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-rave"
+        ],
+        [
+          "electronic"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "puls"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "arpeggi"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "percussion"
+        ]
+      ],
+      "research_references": [
+        "Rema"
+      ]
+    },
+    {
+      "id": "S1-04",
+      "name": "Golden Afro-Dance Celebration",
+      "description": "Smooth Afro-R&B dance fusion with warm harmonies and stylish percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s1",
+      "tempo": {
+        "min": 102,
+        "max": 120
+      },
+      "mood": "Confident, stylish, joyful and celebratory.",
+      "energy": "Refined smooth Afro-R&B pocket retains strong bass, rhythmic bounce and enough percussion to keep the track moving.",
+      "rhythm": "Smooth but danceable Afro-R&B and Afropop fusion with strong percussion movement and a refined rhythmic pocket.",
+      "drums_percussion": "Warm punchy kick, crisp clap and snare, smooth hi-hats, syncopated percussion and tasteful rhythmic fills.",
+      "bass": "Rounded melodic electric or synth bass with a warm groove, rhythmic bounce and clean low-frequency support.",
+      "instruments": {
+        "keys": "Rich electric-piano chords, bright melodic synths, rhythmic piano accents and tasteful atmospheric layers.",
+        "guitar": "Clean rhythmic guitar.",
+        "other": "Congas, shakers, soft brass accents and layered instrumental responses."
+      },
+      "melody_harmony": "Original expressive melodies, smooth verse phrasing and memorable uplifting choruses.",
+      "vocal_delivery": "Stylish confident expressive lead with smooth melodic phrasing; respect every customer-selected voice without an automatic gender assignment.",
+      "arrangement": "Elegant keyboard-and-percussion introduction → melodic verse → rhythmic pre-chorus → danceable chorus → instrumental groove → second verse → expanded final chorus.",
+      "lyrics": {
+        "structure": "Romance, confidence, personal success, celebration, independence and enjoyment.",
+        "vocabulary": "Use original meaningful secular party lyrics in the selected supported language or combination. Do not force a language, Gospel themes or a lead gender, and never reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Sophisticated Afropop dance production with smooth Afro-R&B harmony and enough bass and percussion to keep moving. Keep rounded melodic bass warm and clean, kick punchy, electric-piano chords rich, guitar rhythmic and synth hooks bright; balance congas, shakers and soft brass with elegant layered responses rather than an empty ballad.",
+      "variations": {
+        "introductions": [
+          "Begin with original rich electric-piano voicings and stylish percussion.",
+          "Begin with alternate melodic synth phrases and clean rhythmic guitar."
+        ],
+        "progressions": [
+          "Use original warm Afro-R&B chord movement with rounded melodic bass.",
+          "Use alternate electric-piano voicings and a different clean rhythmic bass bounce."
+        ],
+        "arrangements": [
+          "Vary guitar rhythms and percussion combinations through the instrumental groove.",
+          "Change melodic hook layers and expand the final dance chorus without losing the refined pocket."
+        ],
+        "melody": [
+          "Create an original expressive smooth verse melody and uplifting chorus.",
+          "Create a contrasting stylish melodic hook with layered instrumental answers."
+        ],
+        "lyrical": [
+          "Develop original romance and independence verses with confident phrasing.",
+          "Develop personal success, enjoyment and celebration through fresh meaningful hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-r&b"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "hi-hat"
+        ],
+        [
+          "bass"
+        ],
+        [
+          "electric piano",
+          "electric-piano"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "brass"
+        ]
+      ],
+      "research_references": [
+        "Tiwa Savage"
+      ]
+    },
+    {
+      "id": "S1-05",
+      "name": "Tropical Afro-Dance Machine",
+      "description": "Hypnotic bass-driven Afro-dance with punchy synths and tropical percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s1",
+      "tempo": {
+        "min": 108,
+        "max": 126
+      },
+      "mood": "Playful, energetic, confident and party-focused.",
+      "energy": "Immediate heavy clean bass and precise infectious percussion sustain hypnotic dance momentum through instrumental grooves and breakdowns.",
+      "rhythm": "Hypnotic Nigerian Afro-dance groove with strong bass movement, precise percussion and an immediately danceable pulse.",
+      "drums_percussion": "Tight punchy kick, sharp snare, layered claps, lively shakers, syncopated percussion and short rhythmic breaks.",
+      "bass": "Heavy electronic bass with a repeating dance motif, strong sub-bass pressure, controlled mid-bass punch and precise kick synchronization.",
+      "instruments": {
+        "keys": "Bright synth plucks, rhythmic electronic keyboard riffs, short melodic loops and punchy synth stabs.",
+        "guitar": "Rhythmic guitar accents.",
+        "other": "Tropical percussion, congas, marimba-like plucks and occasional brass hits."
+      },
+      "melody_harmony": "Original simple memorable hooks, rhythmic phrasing and repeated instrumental motifs with variation.",
+      "vocal_delivery": "Playful energetic rhythmic lead and hook-driven confident phrasing; selected voice remains independent.",
+      "arrangement": "Immediate percussion-and-bass introduction → catchy verse → hook-driven chorus → instrumental dance groove → second verse → rhythmic breakdown → powerful final chorus.",
+      "lyrics": {
+        "structure": "Dancing, nightlife, enjoyment, romance, celebration, confidence and good times.",
+        "vocabulary": "Use original meaningful secular party lyrics in the selected supported language or combination. Do not force a language, Gospel themes or a lead gender, and never reproduce identifiable recordings, lyrics, melodies, signature hooks or vocal identities."
+      },
+      "production_mix": "Heavy clean bass and infectious precise percussion drive the entire Nigerian Afro-dance track. Keep sub-bass pressure controlled, mid-bass punch defined and kick synchronization precise; use punchy synth plucks, tropical congas and marimba-like accents with deliberate variation. Avoid weak bass, overcrowded orchestration, excessive atmospheric introductions and generic pop-ballad pacing.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with original percussion accents and a heavy electronic bass motif.",
+          "Begin with alternate punchy synth plucks over a kick-synchronized bass groove."
+        ],
+        "progressions": [
+          "Use original minimal dance harmony with strong sub-bass and controlled mid-bass.",
+          "Use alternate bright synth stabs and a new repeating rhythmic bass motif."
+        ],
+        "arrangements": [
+          "Vary percussion accents and instrumental breaks through the dance groove.",
+          "Change synth riffs and rhythmic breakdown before the powerful final chorus."
+        ],
+        "melody": [
+          "Create an original simple memorable hook with rhythmic phrasing.",
+          "Create a contrasting playful melody with evolving instrumental motif responses."
+        ],
+        "lyrical": [
+          "Develop original dancing, enjoyment and good-times verses.",
+          "Develop romance, nightlife and confidence through fresh party-focused hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "afro-dance"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "clap"
+        ],
+        [
+          "shaker"
+        ],
+        [
+          "sub-bass"
+        ],
+        [
+          "mid-bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "guitar"
+        ],
+        [
+          "tropical"
+        ],
+        [
+          "conga"
+        ],
+        [
+          "marimba"
+        ]
+      ],
+      "research_references": [
+        "Tekno"
       ]
     }
   ]
