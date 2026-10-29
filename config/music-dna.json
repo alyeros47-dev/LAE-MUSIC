@@ -1,5 +1,5 @@
 {
-  "revision": "music-dna-g1-g2-g3-g4-g5-g6-g7-g8-g9-g10-g11-g12-g13-g14-s1-s2-s3-s4-s5-s6-s7-s8-s9-s10-s11-s12-v1",
+  "revision": "music-dna-g1-g14-s1-s13-v1",
   "status": "approved",
   "departments": [
     {
@@ -179,6 +179,12 @@
       "group_id": "S12",
       "department_id": "secular-afrobeats",
       "name": "Francophone African Dance"
+    },
+    {
+      "id": "secular-s13",
+      "group_id": "S13",
+      "department_id": "secular-afrobeats",
+      "name": "Senegalese Mbalax & Afro-Pop"
     }
   ],
   "styles": [
@@ -11658,6 +11664,466 @@
       ],
       "research_references": [
         "Kerozen"
+      ]
+    },
+    {
+      "id": "S13-01",
+      "name": "Dakar Royal Mbalax",
+      "description": "Classic Senegalese Mbalax with powerful sabar drums, melodic bass and rich live-band arrangements.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s13",
+      "tempo": {
+        "min": 108,
+        "max": 136
+      },
+      "mood": "Joyful, majestic, energetic and celebratory.",
+      "energy": "Layered sabar tension, expressive tama responses and melodic electric bass drive majestic Senegalese live-band dance movement.",
+      "rhythm": "Traditional Mbalax foundations with layered sabar patterns, rhythmic tension and energetic Senegalese live-band movement.",
+      "drums_percussion": "Layered sabar drum ensemble, tama talking drum, strong live kick, crisp snare, rolling toms, shakers and intricate Senegalese rhythmic breaks.",
+      "bass": "Deep melodic electric bass with flowing syncopated patterns, expressive runs and strong interaction with sabar percussion.",
+      "instruments": {
+        "keys": "Bright piano chords, rhythmic organ, warm electric piano and melodic keyboard responses.",
+        "guitar": "Clean rhythmic electric guitar, bright West African guitar phrases and short melodic lead-guitar passages.",
+        "other": "Brass section, traditional Senegalese percussion, handclaps and occasional balafon accents."
+      },
+      "melody_harmony": "Original expressive melodies, strong melodic refrains and powerful call-and-response opportunities.",
+      "vocal_delivery": "Joyful majestic expressive phrasing and strong melodic group responses; selected voice remains independent.",
+      "arrangement": "Sabar-and-bass introduction → melodic verse → uplifting chorus → instrumental brass-and-guitar passage → second verse → extended sabar dance break → final chorus.",
+      "lyrics": {
+        "structure": "Community, family, celebration, cultural pride, unity, hope, perseverance and everyday life.",
+        "vocabulary": "Use original meaningful secular Senegalese expressions in the selected supported language or combination. Senegalese origin never forces Wolof, French or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Authentic Senegalese live-band Mbalax energy: sabar and tama are central musical voices, not decoration. Keep melodic electric bass interacting with intricate sabar phrases, live kick clear, guitar bright and piano/organ rich; balance brass, balafon accents and handclaps. Avoid generic four-on-the-floor Afrobeats drums replacing the Mbalax foundation; maintain clear bass and natural rhythmic complexity.",
+      "variations": {
+        "introductions": [
+          "Begin with original layered sabar phrases and flowing melodic electric bass.",
+          "Begin with alternate tama responses and a majestic sabar/bass conversation."
+        ],
+        "progressions": [
+          "Use original bright Mbalax harmony with syncopated electric-bass runs.",
+          "Use alternate warm organ/piano voicings and melodic bass interacting with sabar accents."
+        ],
+        "arrangements": [
+          "Vary brass harmonies and guitar phrases through the instrumental passage.",
+          "Change sabar conversations and extended dance-break development before the final chorus."
+        ],
+        "melody": [
+          "Create an original expressive refrain with powerful call-and-response.",
+          "Create a contrasting majestic melody and bright West African guitar reply."
+        ],
+        "lyrical": [
+          "Develop original community, family and cultural-pride verses.",
+          "Develop unity, hope and perseverance through fresh everyday-life celebration."
+        ]
+      },
+      "production_terms": [
+        [
+          "senegalese"
+        ],
+        [
+          "mbalax"
+        ],
+        [
+          "sabar"
+        ],
+        [
+          "tama"
+        ],
+        [
+          "live"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "balafon"
+        ]
+      ],
+      "research_references": [
+        "Youssou N'Dour"
+      ]
+    },
+    {
+      "id": "S13-02",
+      "name": "Modern Dakar Dance Mbalax",
+      "description": "Contemporary Mbalax with deep electronic bass, bright keyboards and energetic percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s13",
+      "tempo": {
+        "min": 116,
+        "max": 140
+      },
+      "mood": "Confident, romantic, energetic and festive.",
+      "energy": "Modern club pressure supports unmistakable traditional sabar-driven movement without overpowering percussion.",
+      "rhythm": "Modern Senegalese Mbalax with authentic sabar-driven rhythmic movement and strong contemporary dance energy.",
+      "drums_percussion": "Strong modern kick, sharp snare, layered sabar percussion, tama talking drum, rolling toms, claps and energetic rhythmic breaks.",
+      "bass": "Thick electronic bass layered with melodic electric-bass movement for strong club pressure that never overpowers sabar/tama percussion.",
+      "instruments": {
+        "keys": "Bright synth plucks, rhythmic piano riffs, warm organ and modern electronic textures.",
+        "guitar": "Clean rhythmic guitar, short melodic lead phrases and bright West African guitar accents.",
+        "other": "Brass stabs, traditional Senegalese percussion, shakers and contemporary electronic effects."
+      },
+      "melody_harmony": "Original catchy melodic hooks, romantic refrains and energetic chorus phrases.",
+      "vocal_delivery": "Confident romantic melodic hooks and festive energetic refrains; selected voice remains independent.",
+      "arrangement": "Modern synth-and-sabar introduction → melodic verse → catchy chorus → instrumental dance groove → second verse → extended percussion break → final energetic chorus.",
+      "lyrics": {
+        "structure": "Romance, celebration, success, friendship, confidence and enjoyment.",
+        "vocabulary": "Use original meaningful secular Senegalese expressions in the selected supported language or combination. Senegalese origin never forces Wolof, French or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Polished modern Senegalese Mbalax with deep electronic/electric bass and unmistakable sabar/tama interplay. Keep bass pressure controlled below central traditional percussion, kick/snare clear, piano/organ rhythmic and synth hooks bright; balance guitar and brass accents. Avoid ordinary electronic Afropop that removes Senegalese rhythmic character.",
+      "variations": {
+        "introductions": [
+          "Begin with original bright synth hooks and layered sabar phrases.",
+          "Begin with alternate tama responses over controlled electronic/electric bass."
+        ],
+        "progressions": [
+          "Use original contemporary Mbalax harmony with layered electronic and melodic electric bass.",
+          "Use alternate warm organ/piano voicings and a new bass motif supporting sabar accents."
+        ],
+        "arrangements": [
+          "Vary sabar arrangements and guitar accents through the instrumental dance groove.",
+          "Change synth hooks and chorus development around the extended percussion break."
+        ],
+        "melody": [
+          "Create an original catchy romantic refrain and energetic chorus phrase.",
+          "Create a contrasting confident melody with bright rhythmic responses."
+        ],
+        "lyrical": [
+          "Develop original romance and friendship verses with festive confidence.",
+          "Develop success, celebration and enjoyment through fresh uplifting hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "senegalese"
+        ],
+        [
+          "mbalax"
+        ],
+        [
+          "sabar"
+        ],
+        [
+          "tama"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "snare"
+        ],
+        [
+          "electronic bass"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "synth"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "guitar"
+        ]
+      ],
+      "research_references": [
+        "Wally Seck"
+      ]
+    },
+    {
+      "id": "S13-03",
+      "name": "Senegalese Festival Fire",
+      "description": "Uplifting Afro-Pop and Mbalax fusion with lively drums, guitars and brass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s13",
+      "tempo": {
+        "min": 112,
+        "max": 138
+      },
+      "mood": "Bold, joyful, uplifting and celebratory.",
+      "energy": "Rich Senegalese festival movement blends strong sabar/tama rhythm, bouncy melodic bass and uplifting contemporary dance energy.",
+      "rhythm": "Energetic Senegalese Mbalax-Afro-Pop fusion with strong sabar rhythms and contemporary dance movement.",
+      "drums_percussion": "Punchy live kick, crisp snare, layered sabar percussion, tama talking drum, congas, shakers and exciting drum fills.",
+      "bass": "Deep bouncy electric bass with melodic African dance movement, expressive runs and strong rhythmic momentum.",
+      "instruments": {
+        "keys": "Bright piano riffs, rhythmic organ stabs, warm synth pads and lively melodic keyboard hooks.",
+        "guitar": "Clean West African rhythmic electric guitar, bright lead-guitar responses and energetic melodic phrases.",
+        "other": "Brass section, balafon accents, handclaps and traditional Senegalese percussion."
+      },
+      "melody_harmony": "Original powerful melodic hooks, expressive refrains and exciting call-and-response sections.",
+      "vocal_delivery": "Bold joyful expressive melodic phrasing and energetic group responses; customer-selected voice remains independent without a default gender or register.",
+      "arrangement": "Percussion-and-guitar introduction → energetic verse → uplifting chorus → instrumental sabar-and-brass groove → second verse → dance break → final chorus.",
+      "lyrics": {
+        "structure": "Celebration, confidence, cultural pride, friendship, relationships, perseverance and success.",
+        "vocabulary": "Use original meaningful secular Senegalese expressions in the selected supported language or combination. Senegalese origin never forces Wolof, French or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Rich exciting Senegalese festival sound with central sabar/tama conversations, powerful percussion and clear bouncy electric bass. Keep guitar lively, piano/organ bright, balafon/brass accents expressive and synth pads warm; preserve Mbalax rhythmic foundations beneath modern Afro-Pop. Never assign a default lead gender or register from the style or reference.",
+      "variations": {
+        "introductions": [
+          "Begin with original sabar/tama percussion and lively West African guitar.",
+          "Begin with alternate brass accents and melodic electric-bass runs."
+        ],
+        "progressions": [
+          "Use original joyful Mbalax-Afro-Pop chords with bouncy electric bass.",
+          "Use alternate bright piano/organ voicings and syncopated melodic bass phrases."
+        ],
+        "arrangements": [
+          "Vary sabar patterns and brass accents through the instrumental groove.",
+          "Change guitar riffs and festival chorus structure around the dance break."
+        ],
+        "melody": [
+          "Create an original powerful melodic hook and expressive refrain.",
+          "Create a contrasting bold chorus and exciting call-and-response."
+        ],
+        "lyrical": [
+          "Develop original cultural-pride and friendship verses.",
+          "Develop resilience, success and relationships through fresh celebratory hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "senegalese"
+        ],
+        [
+          "mbalax"
+        ],
+        [
+          "sabar"
+        ],
+        [
+          "tama"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "balafon"
+        ],
+        [
+          "conga"
+        ]
+      ],
+      "research_references": [
+        "Viviane Chidid"
+      ]
+    },
+    {
+      "id": "S13-04",
+      "name": "Sabar Street Celebration",
+      "description": "Fast Senegalese dance Mbalax with explosive percussion and powerful bass.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s13",
+      "tempo": {
+        "min": 122,
+        "max": 148
+      },
+      "mood": "Explosive, joyful, confident and festive.",
+      "energy": "Fast percussion-intensive Senegalese movement uses complex sabar conversations, expressive tama and powerful clear live-band dance breaks.",
+      "rhythm": "Fast percussion-intensive Senegalese Mbalax with complex sabar conversations and explosive dance sections.",
+      "drums_percussion": "Fast sabar drum patterns, prominent tama talking drum, heavy kick, crisp snare, rolling toms, claps and dramatic rhythmic breaks.",
+      "bass": "Powerful melodic electric bass with rapid syncopated movement, expressive slides and tight interaction with percussion.",
+      "instruments": {
+        "keys": "Bright organ riffs, energetic piano chords, rhythmic synth stabs and short melodic phrases.",
+        "guitar": "Fast rhythmic electric guitar, bright West African lead-guitar passages and lively instrumental responses.",
+        "other": "Brass stabs, shakers, handclaps, balafon accents and traditional percussion."
+      },
+      "melody_harmony": "Original energetic melodic hooks, short rhythmic refrains and lively call-and-response opportunities.",
+      "vocal_delivery": "Confident festive short melodic refrains and lively group responses; selected voice remains independent.",
+      "arrangement": "Immediate sabar-and-bass introduction → energetic verse → powerful chorus → extended percussion-and-guitar dance section → second verse → dramatic sabar breakdown → final celebration.",
+      "lyrics": {
+        "structure": "Dancing, celebration, friendship, success, cultural pride, enjoyment and community.",
+        "vocabulary": "Use original meaningful secular Senegalese expressions in the selected supported language or combination. Senegalese origin never forces Wolof, French or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Maximum Senegalese Mbalax dance energy with clean powerful live sabar/tama percussion. Keep rapid melodic electric bass and slides clear beside complex drum conversations, organ/piano energetic and electric guitar bright; balance brass, balafon and handclaps. Avoid uncontrolled percussion layers that cause muddy or distorted sound; percussion remains central, not decorative.",
+      "variations": {
+        "introductions": [
+          "Begin immediately with original fast sabar phrases and powerful electric bass.",
+          "Begin with alternate tama responses and dramatic percussion/bass exchanges."
+        ],
+        "progressions": [
+          "Use original energetic Mbalax harmony with rapid syncopated electric bass.",
+          "Use alternate bright organ/piano voicings and expressive bass slides."
+        ],
+        "arrangements": [
+          "Vary guitar breaks and percussion conversations through the extended dance section.",
+          "Change keyboard riffs and dramatic sabar breakdown before final celebration."
+        ],
+        "melody": [
+          "Create an original energetic hook and lively call-and-response.",
+          "Create a contrasting short rhythmic refrain with bright guitar replies."
+        ],
+        "lyrical": [
+          "Develop original friendship and community celebration verses.",
+          "Develop cultural pride, success and enjoyment through fresh festive hooks."
+        ]
+      },
+      "production_terms": [
+        [
+          "senegalese"
+        ],
+        [
+          "mbalax"
+        ],
+        [
+          "sabar"
+        ],
+        [
+          "tama"
+        ],
+        [
+          "kick"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "slid"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "brass"
+        ],
+        [
+          "balafon"
+        ]
+      ],
+      "research_references": [
+        "Pape Diouf"
+      ]
+    },
+    {
+      "id": "S13-05",
+      "name": "Sahel Golden Afro-Soul",
+      "description": "Warm Senegalese Afro-Soul with acoustic guitar, kora and gentle traditional percussion.",
+      "department_id": "secular-afrobeats",
+      "category_id": "secular-s13",
+      "tempo": {
+        "min": 86,
+        "max": 112
+      },
+      "mood": "Reflective, hopeful, heartfelt and uplifting.",
+      "energy": "Gentle Mbalax-inspired sabar/tama rhythm and organic acoustic movement support rich harmonic storytelling without aggressive club energy.",
+      "rhythm": "Gentle Senegalese Afro-Soul with Mbalax-inspired percussion, organic instrumental movement and expressive harmonic arrangements.",
+      "drums_percussion": "Gentle live kick, warm snare, restrained sabar percussion, soft tama responses, shakers and subtle hand percussion.",
+      "bass": "Warm melodic electric bass with expressive passing notes, smooth rhythmic movement and natural live-band dynamics.",
+      "instruments": {
+        "keys": "Rich acoustic piano, warm electric piano, soft organ and gentle harmonic pads.",
+        "guitar": "Fingerpicked acoustic guitar, clean West African electric guitar and expressive melodic responses.",
+        "other": "Kora, balafon, soft strings, subtle brass and traditional Senegalese percussion."
+      },
+      "melody_harmony": "Original emotionally expressive melodies, thoughtful storytelling and memorable uplifting refrains.",
+      "vocal_delivery": "Heartfelt reflective melodic storytelling and hopeful expressive refrains; selected voice remains independent.",
+      "arrangement": "Acoustic guitar-and-kora introduction → reflective verse → soulful chorus → instrumental kora-and-guitar passage → second verse → emotional bridge → final chorus.",
+      "lyrics": {
+        "structure": "Humanity, family, hope, peace, resilience, community, relationships and life lessons.",
+        "vocabulary": "Use original meaningful secular Senegalese expressions in the selected supported language or combination. Senegalese origin never forces Wolof, French or another language or lead gender; do not invent unsupported translations or reproduce identifiable voices, lyrics, melodies, signature hooks or recordings."
+      },
+      "production_mix": "Warm organic Senegalese Afro-Soul with authentic traditional instrumentation. Keep gentle sabar and soft tama musically integrated with fingerpicked acoustic guitar, kora, balafon and melodic electric bass; balance warm piano/organ, strings and subtle brass. Avoid aggressive club drums and excessive electronic effects; preserve clear lows and expressive natural harmonic movement.",
+      "variations": {
+        "introductions": [
+          "Begin with original fingerpicked acoustic guitar and kora phrases.",
+          "Begin with alternate gentle sabar/tama responses under warm acoustic harmony."
+        ],
+        "progressions": [
+          "Use original expressive Senegalese Afro-Soul harmony with melodic electric bass.",
+          "Use alternate warm piano/organ voicings and smooth bass passing notes."
+        ],
+        "arrangements": [
+          "Vary kora phrases and acoustic guitar patterns through the instrumental passage.",
+          "Change piano harmony and emotional bridge development while retaining gentle traditional rhythm."
+        ],
+        "melody": [
+          "Create an original emotionally expressive refrain and thoughtful narrative melody.",
+          "Create a contrasting hopeful chorus contour with warm instrumental responses."
+        ],
+        "lyrical": [
+          "Develop original humanity, family and peace storytelling.",
+          "Develop resilience, relationships and life lessons through fresh hopeful verses."
+        ]
+      },
+      "production_terms": [
+        [
+          "senegalese"
+        ],
+        [
+          "sabar"
+        ],
+        [
+          "tama"
+        ],
+        [
+          "electric bass"
+        ],
+        [
+          "piano"
+        ],
+        [
+          "electric piano"
+        ],
+        [
+          "organ"
+        ],
+        [
+          "acoustic guitar"
+        ],
+        [
+          "electric guitar"
+        ],
+        [
+          "kora"
+        ],
+        [
+          "balafon"
+        ],
+        [
+          "shaker"
+        ]
+      ],
+      "research_references": [
+        "Coumba Gawlo"
       ]
     }
   ]
