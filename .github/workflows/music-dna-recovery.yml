@@ -1,0 +1,42 @@
+name: Music DNA isolated recovery verification
+on:
+  workflow_dispatch:
+    inputs:
+      recovery_backup_branch:
+        description: "Optional existing owned backup branch; supply its original run ID too"
+        required: false
+        type: string
+        default: ""
+      recovery_backup_run:
+        description: "Workflow run ID that created the optional saved backup"
+        required: false
+        type: string
+        default: ""
+permissions:
+  contents: read
+jobs:
+  recovery:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/music-dna-foundation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: lae-existing-database-recovery
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - name: Verify isolated recovery guards
+        run: node --test tests/neon-recovery-rehearsal.test.cjs tests/neon-recovery.test.cjs
+      - name: Restore and rehearse migrations only in a private disposable database
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          LAE_EXISTING_RECOVERY_REHEARSAL: "1"
+          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
+          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
+        run: node scripts/rehearse-existing-recovery.cjs
