@@ -79,3 +79,10 @@ test('actual music route rejects missing own-lyrics consent and archived styles 
  const {sonicFlow}=require('./music-dna-audit-support.cjs');
  for(const change of [{rightsConfirmed:false},{musicDnaStyle:'W1-01'}]){const r=await sonicFlow({...own,...change});assert.equal(r.status,400);assert(!r.sent);assert(!r.calls.some(c=>c.sql.startsWith('INSERT INTO artist_studio_usage')));}
 });
+test('generated audio is fingerprinted before storage PUT, preventing a concurrent replacement with different bytes',async()=>{
+ const f=codeFixture();await codes.issue(f.options);const {Readable}=require('node:stream');const args={pool:f.pool,artistId:7,trackId:2,length:f.audio.length};
+ const good=await codes.verifiedUploadBody({...args,input:Readable.from([f.audio])});assert(good.equals(f.audio));
+ const wrong=Buffer.alloc(f.audio.length,7);await assert.rejects(codes.verifiedUploadBody({...args,input:Readable.from([wrong])}),e=>e.status===400);
+ await assert.rejects(codes.verifiedUploadBody({...args,input:Readable.from([f.audio.subarray(0,5)])}),e=>e.status===400);
+ await assert.rejects(codes.verifiedUploadBody({...args,input:Readable.from([Buffer.concat([f.audio,Buffer.from('extra')])])}),e=>e.status===413);
+});

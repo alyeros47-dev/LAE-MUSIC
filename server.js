@@ -119,8 +119,9 @@ function create({pool,me,authAdmin}){
  if(!Number.isSafeInteger(length)||length<1||length>max||(kind==='audio'&&length!==t.audio_bytes))return send(res,413,{error:'File size does not match upload details'}),true;
  if(req.headers['content-type']!==expected)return send(res,415,{error:'File format does not match upload details'}),true;
  const st=getStore();if(!st)return send(res,503,{error:'Cloudflare storage not configured'}),true;
+ const uploadBody=kind==='audio'?await require('./lib/music-upload-codes').verifiedUploadBody({pool,artistId:u.id,trackId:id,input:req,length}):req;
  let upstream;
- try{upstream=await fetch(presign(st,key,'put'),{method:'PUT',headers:{'Content-Type':expected,'Content-Length':String(length)},body:req,duplex:'half',signal:AbortSignal.timeout(120000)})}
+ try{upstream=await fetch(presign(st,key,'put'),{method:'PUT',headers:{'Content-Type':expected,'Content-Length':String(length)},body:uploadBody,duplex:'half',signal:AbortSignal.timeout(120000)})}
  catch(err){console.error('R2 proxy upload failed:',err);return send(res,502,{error:'Could not reach Cloudflare storage from the server'}),true}
  if(!upstream.ok){console.error('R2 upload rejected:',upstream.status,(await upstream.text()).slice(0,350));return send(res,502,{error:'Cloudflare rejected the upload (HTTP '+upstream.status+'). Check R2 credentials and bucket access.'}),true}
  return send(res,200,{ok:true}),true;
