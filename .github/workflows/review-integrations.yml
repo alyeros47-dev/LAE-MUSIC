@@ -8,7 +8,7 @@ on:
         type: choice
         required: false
         default: none
-        options: [none, publish]
+        options: [none, publish, verify]
       persistence_mode:
         description: "unchanged deploys normal review code; plan is read-only; activate requires explicit cost approval"
         type: choice
@@ -134,3 +134,29 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: node scripts/provision-gospel-inspection.cjs
+
+  gospel-lyrics-focused-verification:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.gospel_preview == 'verify'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Verify message, diversity, credit and studio contracts using mocks
+        run: node --test tests/lyrics-originality.test.cjs tests/gospel-launch.test.cjs tests/services.test.cjs tests/studio-profiles.test.cjs tests/studio-workflow.test.cjs tests/lyrics-library.test.cjs tests/music-dna.test.cjs tests/music-dna-g1.test.cjs tests/music-dna-g4.test.cjs tests/music-dna-g6.test.cjs tests/music-dna-mood.test.cjs tests/gospel-preview.test.cjs
+      - name: Verify concurrent saves and refunds on disposable PostgreSQL
+        run: |
+          docker run -d --name lae-originality-ci -p 127.0.0.1:55439:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=lae_originality_fixture_only -e POSTGRES_DB=lae_music_ci postgres:16
+          for i in $(seq 1 30); do docker exec lae-originality-ci pg_isready -U postgres && break; sleep 1; done
+          LAE_DB_TESTS=true DATABASE_URL=postgres://postgres:lae_originality_fixture_only@127.0.0.1:55439/lae_music_ci node tests/lyrics-originality-postgres.cjs
+      - name: Stop only the disposable originality database
+        if: always()
+        run: docker rm -f lae-originality-ci 2>/dev/null || true
+      - run: npx playwright install --with-deps chromium
+      - name: Verify actual mobile and desktop studio including own lyrics
+        run: node tests/gospel-launch-browser.cjs && node tests/gospel-inspection-browser.cjs

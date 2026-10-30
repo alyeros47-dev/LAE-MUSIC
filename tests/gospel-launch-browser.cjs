@@ -47,12 +47,13 @@ const AxeBuilder=require('@axe-core/playwright').default;
   });
   await page.goto(origin+'/studio');await page.getByLabel('Creation method').waitFor({timeout:10000}).catch(async e=>{console.error('UI diagnostics',errors,await page.locator('main').innerText());throw e;});
   assert.equal(await page.locator('#lyrics-studio-form [name="musicDnaDepartment"] option').count(),2);
+  const lyricsType=page.getByLabel('Lyrics Type (optional)',{exact:true});assert.equal(await lyricsType.locator('option').count(),18);assert.equal(await lyricsType.inputValue(),'');await lyricsType.selectOption('personal-testimony');await page.reload();await page.getByLabel('Creation method').waitFor();assert.equal(await lyricsType.inputValue(),'personal-testimony');
   assert.equal(await page.getByLabel('Music department',{exact:true}).inputValue(),'gospel');assert(await page.locator('#lyrics-studio-form [name=musicDnaGroup]').evaluate(x=>x.required));assert(await page.locator('#lyrics-studio-form [name=musicProfile]').isDisabled());
   await page.getByLabel('Music department',{exact:true}).selectOption('gospel');
   assert.equal(await page.locator('#lyrics-studio-form [name="musicDnaGroup"] option').count(),15);
   for(const group of catalogue.categories){await page.getByLabel('Music group',{exact:true}).selectOption(group.id);assert.equal(await page.locator('#lyrics-studio-form [name="musicDnaStyle"] option').count(),6);}
   for(const text of ['Secular music','Western & International Music','Also explore Reggae Gospel'])assert.equal(await page.getByText(text,{exact:true}).count(),0);
-  await page.getByLabel('Creation method').selectOption('own');assert(await page.locator('[data-ai-creation]').isHidden());
+  await page.getByLabel('Creation method').selectOption('own');assert(await page.locator('[data-ai-creation]').isHidden());assert(await lyricsType.isHidden());
   await page.locator('#studio-form [name=musicDnaGroup]').selectOption('gospel-g1');await page.getByLabel('Gospel individual style',{exact:true}).selectOption('G1-01');
   await page.locator('#studio-form [name="musicDnaMood"]').selectOption('energetic');await page.getByLabel('Lead voice',{exact:true}).selectOption('female');await page.getByLabel('Lyrics languages',{exact:true}).selectOption(['en','yo']);
   await page.getByLabel('Song title for music',{exact:true}).fill('My original prayer');await page.getByLabel('Song lyrics',{exact:true}).fill('These are my original words of prayer and gratitude to God.');

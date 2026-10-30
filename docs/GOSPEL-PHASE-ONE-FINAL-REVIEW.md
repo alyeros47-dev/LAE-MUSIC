@@ -1,5 +1,7 @@
 # Gospel Phase 1: historical lyrics audit and customer visibility review
 
+Current follow-up: the owner has now supplied 17 **proposed** Christian message types. They are implemented as an optional AI-only selector, pending final owner review, rather than falsely claimed as a recovered historical list. See [Lyrics Types and Originality](LYRICS-TYPES-AND-ORIGINALITY.md). The historical search evidence below remains valid.
+
 Development only, PR #12. No merge, production configuration edit, production database write or Render deployment is authorized by this report.
 
 ## The requested 17 lyrics types: not recovered
@@ -12,7 +14,7 @@ One **17-entry intermediate Music DNA category catalogue** exists at [the S3 dev
 
 The preserved legacy genre selector has nine entries: Gospel & Worship; Reggae; Afrobeats; Nigerian Praise; Highlife; Hip-Hop & R&B; Pop; Traditional African; Other. These were not renamed or expanded into invented lyrics types. The current Gospel launch projection still contains exactly 14 approved groups and 70 styles; all 215 original DNA profiles remain in source.
 
-**Resolution needed:** the owner must provide or approve the actual 17 names and their intended generation guidance. Nothing has been fabricated or falsely certified as restored.
+**Historical resolution:** the original 17-type list was not recovered. The owner subsequently supplied a new proposed 17-type list for implementation and final review. Nothing is falsely certified as historically restored.
 
 ## Customer-facing visibility repairs
 
@@ -65,4 +67,4 @@ This minimum audio batch is not evidence that the still-missing 17 lyrics types 
 
 ## Deployment readiness
 
-**NOT READY FOR DEPLOYMENT / VERIFICATION INCOMPLETE.** The missing approved 17-type specification remains unresolved. The new audio paths have mock/fixture coverage and earlier owner-reported engine acceptance, but the proposed real-generation acceptance batch has not run. Its 40-credit provider budget is verified; its account-specific dollar equivalent is not. Live checkout and bank payouts remain closed and hidden, not declared complete. A later authorized release also requires fresh recovery/backup and release-candidate pin checks. No merge or deployment has occurred.
+**NOT READY FOR DEPLOYMENT / VERIFICATION INCOMPLETE.** Final owner review of the newly supplied proposed 17-type selector remains pending. The new audio paths have mock/fixture coverage and earlier owner-reported engine acceptance, but the proposed real-generation acceptance batch has not run. Its 40-credit provider budget is verified; its account-specific dollar equivalent is not. Live checkout and bank payouts remain closed and hidden, not declared complete. A later authorized release also requires fresh recovery/backup and release-candidate pin checks. No merge or deployment has occurred.

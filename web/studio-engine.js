@@ -52,6 +52,7 @@ export function lyricsRequest(brief) {
       throw Error("Choose GPT-6.1 Sol or GPT-6 Astra.");
     return {
       model: brief.lyricsModel,
+      ...(brief.lyricsType ? {lyricsType:brief.lyricsType} : {}),
       idea: brief.idea,
       ...(brief.title?.trim() ? {title:brief.title.trim()} : {}),
       ...(brief.musicDnaMood ? {musicDnaMood:brief.musicDnaMood} : {}),
@@ -69,6 +70,7 @@ export function lyricsRequest(brief) {
     throw Error("Choose GPT-6.1 Sol or GPT-6 Astra.");
   return {
     ...(brief.lyricsModel ? { model: brief.lyricsModel } : {}),
+    ...(brief.lyricsType ? {lyricsType:brief.lyricsType} : {}),
     idea: brief.idea,
     ...(brief.title?.trim() ? {title:brief.title.trim()} : {}),
     genre: brief.genre,

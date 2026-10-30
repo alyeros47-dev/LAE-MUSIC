@@ -2,9 +2,29 @@
 
 Extracted from PR #12 implementation; no style or lyrics instructions were changed to prepare this list.
 
-There is **no separate implemented selector named “17 lyrics types.”** The current visible musical choices are the following **14 Gospel groups and 70 individual styles**. Group headings are not individual styles. These names are provided for the owner to compare against the intended lyrics-type specification; they must not be treated as a recovered 17-type list.
+The studio now offers **17 optional Christian Lyrics Types proposed by the owner for final review**, separately from the **14 Gospel music groups and 70 individual musical styles**. Lyrics Type guides the message; the description supplies the particular story; Music DNA guides how it sounds. These proposed types are not represented as a recovered historical list. Leaving the selector on **Follow my description** remains supported. The selector is shown only for AI Creates My Song.
 
 Creation methods: **AI Creates My Song** and **I Have My Own Lyrics**. The supplied-lyrics method supports an approved Gospel style or the artist’s own Gospel production directions.
+
+## Proposed Lyrics Types — optional, AI lyrics only
+
+1. Deep Worship
+2. Praise and Celebration
+3. Thanksgiving
+4. Personal Testimony
+5. Prayer and Supplication
+6. Repentance and Forgiveness
+7. Salvation and New Life
+8. Healing and Restoration
+9. Deliverance and Spiritual Victory
+10. Faith and Trust
+11. Hope and Encouragement
+12. God's Love and Grace
+13. Holy Spirit and Revival
+14. Prophetic Declaration
+15. Scripture-Inspired Songs
+16. Evangelism and Gospel Message
+17. Dedication and Surrender
 
 ## G1 — Deep Worship & Spiritual Encounter
 
@@ -205,7 +225,7 @@ Preserved Gospel presets (archived selector; not a second visible 66-choice menu
 
 ## Inspection boundaries
 
-This stage is personal interface inspection. Do not use paid generation buttons until a costed test is approved. Signing into the preview uses its own test account, not a production account. A preview is not evidence of production readiness, musical fidelity, live payments or payouts. Missing lyrics types will be added only after owner identification/approval.
+This stage is personal interface inspection. Do not use paid generation buttons until a costed test is approved. Signing into the preview uses its own test account, not a production account. A preview is not evidence of production readiness, musical fidelity, live payments or payouts. The owner-proposed 17 types now await final review. No existing musical group, style or legacy preset was removed.
 
 ## Separate read-only preview
 
