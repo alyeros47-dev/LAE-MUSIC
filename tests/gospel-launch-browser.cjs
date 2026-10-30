@@ -9,7 +9,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://127.0.0.1:'+server.address().port;
  const catalogue=require('../lib/studio-launch').catalogue(),calls=[],results=[];
  try{for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
-  let unavailable=false;
+  let unavailable=false,listenerSignedIn=false;
   const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.stack));
   await page.route('**/api/**',async route=>{
@@ -17,7 +17,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
    const send=data=>route.fulfill({contentType:'application/json',body:JSON.stringify(data)});
    if(p==='/api/platform/currencies')return send(require('../lib/currency').options());
    if(p==='/api/platform/pricing')return send({country:'NG',currency:'USD',base_currency:'USD',plans:[]});
-   if(p==='/api/platform/session')return send({artist:{id:7,display_name:'Gospel test artist',country:'NG'},listener:null,admin:false});
+   if(p==='/api/platform/session')return send({artist:{id:7,display_name:'Gospel test artist',country:'NG'},listener:listenerSignedIn?{id:8,display_name:'Historical Premium listener'}:null,admin:false});
    if(p==='/api/artist/studio-allowance')return send({active:true,included_generations:2,remaining_generations:2});
    if(p==='/api/platform/capabilities')return send({music_provider_configured:!unavailable,lyrics_configured:!unavailable,studio_release_import:false,voice_upload_available:false,payments:false,payment_mode:'sandbox',payouts:false,review_tools:false,offline_listening:false});
    if(p==='/api/platform/account/capabilities')return send({email_delivery_enabled:false});
@@ -26,6 +26,8 @@ const AxeBuilder=require('@axe-core/playwright').default;
    if(p==='/api/music/status')return send({uploadsEnabled:false});
    if(p==='/api/platform/financial-policy')return send(require('../lib/financial-policy').disclosure());
    if(p==='/api/platform/finance')return send({balances:{USD:{available_minor:0,held_minor:0},NGN:{available_minor:0}},legacy_gift_kobo:0,withdrawals:[],history:[],notice:'Verified records only.'});
+   if(p==='/api/platform/premium/complaints')return send({complaints:[]});
+   if(p==='/api/platform/premium/status')return send({active:false,current:null,activity:{premium_streams:0},orders:[{id:'owned_history_123',plan:'Monthly Premium',amount_minor:60,currency:'USD',mode:'sandbox',verified_at:'2026-01-01T00:00:00Z',reference:'historic-owned-order-ref',checkout_url:'https://checkout.paystack.com/old-test',attempt_id:'historic_attempt_123'}],entitlements:[]});
    if(p==='/api/platform/premium/plans')return send({...require('../lib/premium-pricing').catalog(),providers:[],price_status:'approved'});
    if(p==='/api/affiliate/earnings')return send({totals:[],history:[]});
    if(p==='/api/affiliate/product-links')return send({links:{}});
@@ -71,9 +73,12 @@ const AxeBuilder=require('@axe-core/playwright').default;
   await page.goto(origin+'/premium');await page.getByRole('heading',{name:'Your music stays yours.',exact:true}).waitFor();assert.equal(await page.locator('[data-premium-plan]:visible').count(),0);assert.equal(await page.locator('[data-feature=offline_save]:visible').count(),0);
   await page.goto(origin+'/partners?mode=demo');await page.getByRole('heading',{name:'Your connections. Real possibility.',exact:true}).waitFor();assert.equal(await page.getByRole('link',{name:'Practice with demo transactions',exact:true}).count(),0);assert.equal(await page.locator('#partner-practice-form').count(),0);
   assert(!calls.some(c=>c.p==='/api/platform/partners/practice'));assert.deepEqual(errors,[]);
+  listenerSignedIn=true;await page.goto(origin+'/premium');await page.getByText('historic-owned-order-ref',{exact:true}).waitFor();assert(await page.locator('.sidebar a[href="/premium"]').isVisible());assert(await page.getByRole('button',{name:'Submit a payment complaint',exact:true}).isVisible());assert.equal(await page.locator('[data-feature=checkout]:visible').count(),0);
+  listenerSignedIn=false;
+
   await page.goto(origin+'/recover');await page.locator('#account-recovery-form').waitFor({state:'attached'});assert(await page.locator('#account-recovery-form').isHidden());
   await page.goto(origin+'/join');await page.locator('#auth-form').waitFor();assert(await page.locator('a[href^="/recover"]').isHidden());
-  fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/gospel-phase-one-'+viewport.width+'.png',fullPage:true});results.push({width:viewport.width,groups:14,styles:70,own_lyrics_dna:true,own_lyrics_custom:true,rights_gate:true,upload_code:true,draft_restored:true,axe_violations:0,inactive_customer_features_hidden:true});await context.close();
+  fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/gospel-phase-one-'+viewport.width+'.png',fullPage:true});results.push({width:viewport.width,groups:14,styles:70,own_lyrics_dna:true,own_lyrics_custom:true,rights_gate:true,upload_code:true,draft_restored:true,axe_violations:0,inactive_customer_features_hidden:true,historical_premium_records_preserved:true});await context.close();
  }}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
  console.log(JSON.stringify({status:'passed',viewports:results,paid_calls:0}));
 })().catch(e=>{console.error(e);process.exitCode=1;});
