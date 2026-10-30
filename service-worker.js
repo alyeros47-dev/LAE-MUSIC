@@ -4,7 +4,7 @@ self.addEventListener('push',event=>{let data={};try{data=event.data?event.data.
 self.addEventListener('notificationclick',event=>{event.notification.close();const url=localUrl(event.notification.data?.url);event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(async windows=>{for(const w of windows){if(new URL(w.url).origin===self.location.origin&&'focus'in w){if(new URL(w.url).searchParams.get('legacy')==='1')await w.navigate(url);else w.postMessage({type:'LAE_NAVIGATE',url});return w.focus();}}return clients.openWindow(new URL(url,self.location.origin).href);}));});
 
 // Public app resources only. APIs, audio, recovery/admin pages and signed URLs are never cached.
-const OFFLINE_CACHE='lae-offline-shell-v17';
+const OFFLINE_CACHE='lae-offline-shell-v18';
 const OFFLINE_ASSETS=['/offline','/web/offline-app.js','/web/feature-visibility.js','/web/offline.js','/web/offline-protocol.js','/web/player.js','/web/ui.css','/web/mark.svg','/web/artwork.svg','/web/manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(OFFLINE_CACHE).then(cache=>cache.addAll(OFFLINE_ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('lae-offline-shell-')&&k!==OFFLINE_CACHE).map(k=>caches.delete(k)))).then(()=>clients.claim())));

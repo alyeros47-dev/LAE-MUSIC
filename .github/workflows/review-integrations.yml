@@ -159,4 +159,4 @@ jobs:
         run: docker rm -f lae-originality-ci 2>/dev/null || true
       - run: npx playwright install --with-deps chromium
       - name: Verify actual mobile and desktop studio including own lyrics
-        run: node tests/gospel-launch-browser.cjs && node tests/gospel-inspection-browser.cjs
+        run: node tests/gospel-launch-browser.cjs && node tests/gospel-inspection-browser.cjs && node tests/automatic-song-codes-browser.cjs

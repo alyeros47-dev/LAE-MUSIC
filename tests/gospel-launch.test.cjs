@@ -86,3 +86,4 @@ test('generated audio is fingerprinted before storage PUT, preventing a concurre
  await assert.rejects(codes.verifiedUploadBody({...args,input:Readable.from([f.audio.subarray(0,5)])}),e=>e.status===400);
  await assert.rejects(codes.verifiedUploadBody({...args,input:Readable.from([Buffer.concat([f.audio,Buffer.from('extra')])])}),e=>e.status===413);
 });
+test('AI-produced and self-supplied lyrics/style each reserve exactly one music generation',async()=>{const {sonicFlow}=require('./music-dna-audit-support.cjs');for(const creationMode of [undefined,'own']){const r=await sonicFlow({...own,creationMode});assert.equal(r.status,200);assert.equal(r.network,1);assert.equal(r.sent.prompt,own.lyrics);assert.equal(r.calls.filter(c=>c.sql.startsWith('INSERT INTO artist_studio_usage')).length,1);assert.equal(r.calls.filter(c=>c.sql.includes('generation_wallets')).length,0);}});
