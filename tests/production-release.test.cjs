@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "d8c41d0ca789ea633d01935465621ef95870dd8d";
+  base = "706ee59ec4fe07594f40e30dcfab49cd4ba0901b";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -113,10 +113,10 @@ function fixture(
       else if (p.includes("/branches/"))
         data = {
           branch: {
-            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-frosty-brook-b4kmnzhw",
+            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-spring-night-b4y9h9xp",
             project_id: PROJECT,
             parent_id: SOURCE,
-            name: "lae-release-40963275791-backup",
+            name: "lae-release-41141460115-backup",
             expires_at: expiredBackup ? "2000-01-01T00:00:00Z" : "2100-01-01T00:00:00Z",
           },
         };
@@ -125,13 +125,13 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/11"))
+      if (p.endsWith("/pulls/12"))
         data = {
           merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/studio-navigation-mood"))
+      else if (p.endsWith("/git/ref/heads/codex/gospel-phase-one"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
         data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };
@@ -245,7 +245,7 @@ test("release settings retain approved media hosts and reject unexpected live-mo
   );
 });
 
-test("PR 11 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
+test("PR 12 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
   for (const [mode, options] of [["plan", {oldBackup:true}], ["plan", {expiredBackup:true}], ["plan", {movedBase:true}], ["deploy", {unmergedPR:true}]]) {
     const f=fixture(mode, options);
     await assert.rejects(f.run());

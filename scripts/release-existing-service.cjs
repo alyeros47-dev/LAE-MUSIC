@@ -7,7 +7,7 @@ async function main() {
   if (
     process.env.GITHUB_REPOSITORY !== "alyeros47-dev/LAE-MUSIC" ||
     (!deployingMain &&
-      process.env.GITHUB_REF !== "refs/heads/codex/studio-navigation-mood") ||
+      process.env.GITHUB_REF !== "refs/heads/codex/gospel-phase-one") ||
     process.env.GITHUB_SHA !==
       (deployingMain
         ? process.env.LAE_RELEASE_COMMIT_SHA
