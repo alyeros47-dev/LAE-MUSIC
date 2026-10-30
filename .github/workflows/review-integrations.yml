@@ -3,6 +3,11 @@ name: Configure isolated review integrations
 on:
   workflow_dispatch:
     inputs:
+      paid_audio_resume_run:
+        description: "Only the independently verified zero-submission preflight run may continue its original unused budget"
+        type: string
+        required: false
+        default: ""
       authorized_music_credits:
         description: "Owner-authorized MusicAPI test ceiling; exactly two create_music operations maximum"
         type: choice
@@ -201,15 +206,36 @@ jobs:
           LAE_DB_TESTS: "true"
           DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
         run: node scripts/paid-audio-acceptance.cjs --local-preflight
+      - name: Download the immutable prior zero-submission evidence when requested
+        if: inputs.paid_audio_resume_run != ''
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.paid_audio_resume_run }}
+          name: lae-pr12-paid-audio-results-${{ inputs.paid_audio_resume_run }}
+          path: prior-paid-results
+      - name: Verify existing music configuration and sufficient balance WITHOUT provider writes
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_MUSICAPI_BUDGET: "40"
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
+        run: node scripts/paid-audio-acceptance.cjs --external-preflight
       - name: Refuse any existing claim for this one-time authorized budget
         env:
           GITHUB_TOKEN: ${{ github.token }}
           LAE_MUSICAPI_BUDGET: "40"
-        run: node scripts/paid-audio-acceptance.cjs --claim
+          RESUME_RUN: ${{ inputs.paid_audio_resume_run }}
+        run: |
+          if [ -n "$RESUME_RUN" ]; then
+            node scripts/paid-audio-acceptance.cjs --resume-zero
+          else
+            node scripts/paid-audio-acceptance.cjs --claim
+          fi
       - name: Persist the budget claim BEFORE a provider write
         uses: actions/upload-artifact@v4
         with:
-          name: lae-pr12-musicapi-authorized40-20261030
+          name: lae-pr12-musicapi-authorized40-20261030${{ inputs.paid_audio_resume_run != '' && '-resume1' || '' }}
           path: paid-results/claim.json
           retention-days: 90
           if-no-files-found: error
