@@ -82,3 +82,21 @@ jobs:
           SANDBOX_R2_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_R2_SECRET_ACCESS_KEY }}
           SANDBOX_R2_BUCKET: ${{ secrets.SANDBOX_R2_BUCKET }}
         run: node scripts/configure-review-integrations.cjs
+
+  gospel-inspection-readiness:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.persistence_mode == 'plan'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test read-only inspection guards
+        run: node --test tests/gospel-preview.test.cjs
+      - name: Inspect existing sandbox without replacing it
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-gospel-preview.cjs
