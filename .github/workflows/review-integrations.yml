@@ -186,7 +186,12 @@ jobs:
         run: node --test tests/paid-audio-budget.test.cjs
       - run: npx playwright install --with-deps chromium
       - name: Require real audio decoder before any spend
-        run: command -v ffprobe
+        run: |
+          if ! command -v ffprobe; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          ffprobe -version | head -1
       - name: Create a fresh disposable acceptance database
         run: |
           docker run -d --name lae-paid-audio-ci -p 127.0.0.1:55441:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=lae_paid_audio_fixture_only -e POSTGRES_DB=lae_music_ci postgres:16
