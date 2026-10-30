@@ -4,7 +4,7 @@ export function customerFeatures(capabilities={},browser={}){
  return {
   checkout:review||(capabilities.payments===true&&capabilities.payment_mode==='live'),
   payouts:review||capabilities.payouts===true,
-  premium_access:review||browser.premiumActive===true||(capabilities.payments===true&&capabilities.payment_mode==='live'),
+  premium_access:review||browser.listenerAccount===true||browser.premiumActive===true||(capabilities.payments===true&&capabilities.payment_mode==='live'),
   offline_library:browser.offline===true&&(capabilities.offline_listening===true||browser.offlineCached===true),
   review,
   email:capabilities.email_delivery_enabled===true,

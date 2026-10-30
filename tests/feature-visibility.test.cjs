@@ -11,7 +11,7 @@ test('configured customer features stay independent of unrelated payments and pr
  const {customerFeatures}=await modulePromise;
  const c=customerFeatures({payments:true,payment_mode:'live',payouts:true,music_provider_configured:true,lyrics_configured:true,voice_upload_available:true,studio_release_import:true,offline_listening:true},{offline:true});
  for(const k of ['checkout','payouts','music','lyrics','voice_upload','imports','offline_save'])assert.equal(c[k],true);
- assert.equal(c.review,false);assert.equal(customerFeatures({},{premiumActive:true}).premium_access,true);assert.equal(customerFeatures({},{offline:true,offlineCached:true}).offline_library,true);assert.equal(customerFeatures({offline_listening:true},{offline:false}).offline_save,false);
+ assert.equal(c.review,false);assert.equal(customerFeatures({},{listenerAccount:true,premiumActive:false}).premium_access,true);assert.equal(customerFeatures({},{premiumActive:true}).premium_access,true);assert.equal(customerFeatures({},{offline:true,offlineCached:true}).offline_library,true);assert.equal(customerFeatures({offline_listening:true},{offline:false}).offline_save,false);
 });
 test('explicit review environment can exercise sandbox controls without enabling public live checkout',async()=>{
  const {customerFeatures}=await modulePromise;const c=customerFeatures({review_tools:true,payments:false});assert.equal(c.review,true);assert.equal(c.checkout,true);assert.equal(c.payouts,true);
