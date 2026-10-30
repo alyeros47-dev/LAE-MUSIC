@@ -140,7 +140,7 @@ module.exports = async (t, { pool }) => {
         replay.replay.music_dna.variation_id,
         contexts[winner].variation_id,
       );
-      assert(/^[A-F0-9]{36}$/.test(replay.replay.uploadCode));
+      assert.equal(replay.replay.uploadCode,null);
       await assert.rejects(
         credits.reserveLyrics(pool, artists[winner], keys[winner], {
           ...payload,
@@ -249,7 +249,7 @@ module.exports = async (t, { pool }) => {
             },
             "gpt-6.1-sol",
           );
-          assert(/^[A-F0-9]{36}$/.test(complete.uploadCode));
+          assert.equal(complete.uploadCode,null);
           assert.equal(
             (await credits.reserveLyrics(pool, a.id, key, payload)).replay
               .uploadCode,
@@ -268,13 +268,7 @@ module.exports = async (t, { pool }) => {
           assert.equal(row.profile_snapshot.profile.id, profile.id);
           assert.deepEqual(row.languages, ["en", "yo"]);
           assert.equal(row.voice, "female");
-          assert.equal(
-            row.code_hash,
-            crypto
-              .createHash("sha256")
-              .update(complete.uploadCode)
-              .digest("hex"),
-          );
+          assert.match(row.code_hash,/^[a-f0-9]{64}$/); // Historical storage identity is retained; lyrics no longer authorize publication.
           assert(
             !JSON.stringify(row.profile_snapshot).includes(
               "research_references",

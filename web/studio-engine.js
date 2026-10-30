@@ -34,6 +34,7 @@ export function musicRequest(brief, voiceProfile) {
       "Your lyrics are too long for this duration. Choose a longer song or shorten the lyrics; nothing was sent or charged.",
     );
   return {
+    ...(brief.creationMode==='own'?{creationMode:'own',rightsConfirmed:brief.rights==='on'||brief.rightsConfirmed===true,musicDnaStyle:brief.musicDnaStyle||'',musicDnaMood:brief.musicDnaMood||'',musicDnaLanguages:brief.musicDnaLanguages||[],voice:brief.voice||'neutral'}:{}),
     title: brief.title,
     lyrics: brief.lyrics,
     style,
@@ -51,6 +52,7 @@ export function lyricsRequest(brief) {
       throw Error("Choose GPT-6.1 Sol or GPT-6 Astra.");
     return {
       model: brief.lyricsModel,
+      ...(brief.lyricsType ? {lyricsType:brief.lyricsType} : {}),
       idea: brief.idea,
       ...(brief.title?.trim() ? {title:brief.title.trim()} : {}),
       ...(brief.musicDnaMood ? {musicDnaMood:brief.musicDnaMood} : {}),
@@ -68,6 +70,7 @@ export function lyricsRequest(brief) {
     throw Error("Choose GPT-6.1 Sol or GPT-6 Astra.");
   return {
     ...(brief.lyricsModel ? { model: brief.lyricsModel } : {}),
+    ...(brief.lyricsType ? {lyricsType:brief.lyricsType} : {}),
     idea: brief.idea,
     ...(brief.title?.trim() ? {title:brief.title.trim()} : {}),
     genre: brief.genre,

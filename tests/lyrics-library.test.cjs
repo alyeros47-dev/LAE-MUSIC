@@ -8,7 +8,7 @@ test("lyrics library returns only the signed-in artist drafts and no upload secr
     {
       query: async (sql, params) => {
         called++;
-        assert.match(sql, /WHERE creator_id=\$1 ORDER BY id DESC LIMIT 50/);
+        assert.match(sql, /WHERE creator_id=\$1 AND model<>'musicapi-sonic' ORDER BY id DESC LIMIT 50/);
         assert.deepEqual(params, [7]);
         assert(!sql.includes("code_hash"));
         return {

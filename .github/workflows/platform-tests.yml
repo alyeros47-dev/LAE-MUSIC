@@ -98,7 +98,7 @@ jobs:
           LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
         run: npm run test:dna
   existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/studio-navigation-mood' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
+    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/gospel-phase-one' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
@@ -135,7 +135,7 @@ jobs:
           LAE_LIVE_RELEASE_VERIFY: "1"
         run: node scripts/verify-live-release.cjs
   existing-service-recovery-rehearsal:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
@@ -160,7 +160,7 @@ jobs:
           LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
   existing-service-audit:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -264,6 +264,10 @@ jobs:
           LAE_DB_TESTS: "true"
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
       - run: npm run test:upgrade
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
+      - run: node tests/gospel-launch-postgres.cjs
         env:
           LAE_DB_TESTS: "true"
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci

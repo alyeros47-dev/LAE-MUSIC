@@ -270,7 +270,7 @@ module.exports = async (t, { pool }) => {
         "free_lyrics_key_001",
         { idea: "fixture" },
       );
-      assert(replay.replay.uploadCode);
+      assert.equal(replay.replay.uploadCode,null);
       const second = await credits.reserveLyrics(
         pool,
         id,

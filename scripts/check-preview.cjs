@@ -25,7 +25,7 @@ async function checkPreview(value) {
     const p=JSON.parse(s);return r.status===200 && p.base_currency==='USD' && JSON.stringify(p.plans.map(x=>x.amount_minor))==='[8,23,60,121,588]';
   });
   await probe('/api/platform/studio/catalog',(r,s)=>{
-    const c=JSON.parse(s);return r.status===200 && c.gospel?.length===66 && c.secular?.length===33 && c.secular.some(x=>x.id==='sec-nigeria-2') && c.beat?.some(x=>x.value==='none');
+    const c=JSON.parse(s);return r.status===200 && c.gospel?.length===66 && c.secular?.length===0 && c.gospel.some(x=>x.id==='afro-gospel-1') && c.beat?.some(x=>x.value==='none');
   });
   await probe('/api/platform/discover',r=>r.status===200);
   await probe('/api/platform/admin/report?section=payments',r=>r.status===401);

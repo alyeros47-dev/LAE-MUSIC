@@ -161,6 +161,8 @@ async function api(p, b) {
     );
   assert.equal(bytes.status, 206);
   assert(Buffer.from(await bytes.arrayBuffer()).equals(audio.subarray(0, 64)));
+  await assert.rejects(service.publish(artist,release.id,crypto.randomUUID(),true),e=>e.status===403);
+  await pool.query("INSERT INTO artist_subscriptions(artist_id,plan,amount_cents,payment_reference,status,starts_at,expires_at) VALUES($1,'starter',600,$2,'paid',NOW(),NOW()+INTERVAL '1 year')",[artist,'isolated-plan-'+crypto.randomUUID()]);
   const published = await service.publish(
     artist,
     release.id,
@@ -231,7 +233,7 @@ async function api(p, b) {
     200,
   );
   console.log(
-    "PASS real PostgreSQL/files/HTTP: private audio/artwork import, duplicate save protection, logout/login recovery, private ranges, free review publication, anonymous audio/artwork streaming and one-use generated upload code. Provider media mocked. R2/production writes: 0.",
+    "PASS real PostgreSQL/files/HTTP: private audio/artwork import, duplicate save protection, logout/login recovery, private ranges, plan-gated review publication, anonymous audio/artwork streaming and one-use generated upload code. Provider media mocked. R2/production writes: 0.",
   );
 })()
   .catch((e) => {

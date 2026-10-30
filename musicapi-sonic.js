@@ -15,8 +15,12 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
  if(p==='/api/music/sonic/output')return require('./lib/studio-output').create({pool,provider:module.exports.releaseProvider}).handle(req,res,new URL(req.url,'http://localhost'),async()=>user);
 
 
+ if(p==='/api/music/sonic/upload-code'&&req.method==='POST'){
+  try{const b=await body(req);const permit=await require('./lib/music-upload-codes').issue({pool,provider:module.exports.releaseProvider,artistId:user.id,taskId:String(b?.task_id||''),clipId:String(b?.clip_id||'')});return send(res,200,{uploadCode:permit.uploadCode,title:permit.title,task_id:permit.task_id,clip_id:permit.clip_id}),true;}catch(e){return send(res,e.status||503,{error:e.status?e.message:'The upload code could not be prepared. Your generated song is preserved; try again without generating another song.'}),true;}
+ }
  if(p==='/api/music/sonic/create'&&req.method==='POST'){
   let b;try{b=await body(req)}catch(e){return send(res,e.status||400,{error:e.message}),true}if(!b||typeof b!=='object'||Array.isArray(b))return send(res,400,{error:'Invalid song request'}),true;
+  try{require('./lib/studio-launch').assertStyle(b.musicDnaStyle);if(b.creationMode==='own'){b.style=require('./lib/studio-launch').ownLyricsStyle(b,user.id,req.headers?.['idempotency-key']);}}catch(e){return send(res,e.status||400,{error:e.message}),true;}
   const title=String(b.title||'').trim(),lyrics=String(b.lyrics||'').trim(),style=String(b.style||'').trim();
   if(title.length<2||title.length>80||lyrics.length<20||lyrics.length>5000||style.length<3||style.length>1000)return send(res,400,{error:'Enter a title, lyrics and music style within the permitted lengths.'}),true;
   let targetDuration;try{targetDuration=require('./lib/studio-limits').durationSeconds(b.duration);require('./lib/studio-limits').validateLyrics(lyrics,targetDuration);}catch(error){return send(res,error.status||400,{error:error.message}),true;}

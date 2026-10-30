@@ -121,6 +121,7 @@ function wav() {
           return res.end(fs.readFileSync(file));
         }
       }
+      if(p === "/api/platform/capabilities")return send({offline_listening:true,payments:false,payouts:false,review_tools:false});
       if (p === "/api/platform/session")
         return send({
           artist: null,

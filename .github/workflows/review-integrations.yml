@@ -3,6 +3,23 @@ name: Configure isolated review integrations
 on:
   workflow_dispatch:
     inputs:
+      paid_audio_resume_run:
+        description: "Only the independently verified zero-submission preflight run may continue its original unused budget"
+        type: string
+        required: false
+        default: ""
+      authorized_music_credits:
+        description: "Owner-authorized MusicAPI test ceiling; exactly two create_music operations maximum"
+        type: choice
+        required: false
+        default: "0"
+        options: ["0", "40"]
+      gospel_preview:
+        description: "Create a separate FREE read-only Gospel interface preview; no provider keys or existing-site changes"
+        type: choice
+        required: false
+        default: none
+        options: [none, publish, verify, paid40]
       persistence_mode:
         description: "unchanged deploys normal review code; plan is read-only; activate requires explicit cost approval"
         type: choice
@@ -82,3 +99,161 @@ jobs:
           SANDBOX_R2_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_R2_SECRET_ACCESS_KEY }}
           SANDBOX_R2_BUCKET: ${{ secrets.SANDBOX_R2_BUCKET }}
         run: node scripts/configure-review-integrations.cjs
+
+  gospel-inspection-readiness:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.persistence_mode == 'plan'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test read-only inspection guards
+        run: node --test tests/gospel-preview.test.cjs
+      - name: Inspect existing sandbox without replacing it
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-gospel-preview.cjs
+
+  gospel-read-only-preview:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.gospel_preview == 'publish' && inputs.approve_monthly_charge == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: node --test tests/gospel-preview.test.cjs
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/gospel-inspection-browser.cjs
+      - name: Verify keyless inspection image
+        run: |
+          docker build -f deploy/gospel-inspection.Dockerfile -t lae-inspection-ci .
+          docker run -d --name lae-inspection-ci -p 127.0.0.1:3217:10000 lae-inspection-ci
+          node -e 'const wait=()=>new Promise(r=>setTimeout(r,1000));(async()=>{for(let i=0;i<20;i++){try{const r=await fetch("http://127.0.0.1:3217/health");const j=await r.json();if(j.inspection_only===true&&j.paid_calls_possible===false)return;}catch{}await wait();}throw Error("Inspection image unavailable");})().catch(e=>{console.error(e);process.exitCode=1;});'
+      - name: Stop only inspection test container
+        if: always()
+        run: docker rm -f lae-inspection-ci 2>/dev/null || true
+      - name: Create only the separate free read-only preview
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/provision-gospel-inspection.cjs
+
+  gospel-lyrics-focused-verification:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.gospel_preview == 'verify'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Verify message, diversity, credit and studio contracts using mocks
+        run: node --test tests/lyrics-originality.test.cjs tests/gospel-launch.test.cjs tests/services.test.cjs tests/studio-profiles.test.cjs tests/studio-workflow.test.cjs tests/lyrics-library.test.cjs tests/music-dna.test.cjs tests/music-dna-g1.test.cjs tests/music-dna-g4.test.cjs tests/music-dna-g6.test.cjs tests/music-dna-mood.test.cjs tests/gospel-preview.test.cjs
+      - name: Verify concurrent saves and refunds on disposable PostgreSQL
+        run: |
+          docker run -d --name lae-originality-ci -p 127.0.0.1:55439:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=lae_originality_fixture_only -e POSTGRES_DB=lae_music_ci postgres:16
+          for i in $(seq 1 30); do docker exec lae-originality-ci pg_isready -U postgres && break; sleep 1; done
+          LAE_DB_TESTS=true DATABASE_URL=postgres://postgres:lae_originality_fixture_only@127.0.0.1:55439/lae_music_ci node tests/lyrics-originality-postgres.cjs
+      - name: Stop only the disposable originality database
+        if: always()
+        run: docker rm -f lae-originality-ci 2>/dev/null || true
+      - run: npx playwright install --with-deps chromium
+      - name: Verify actual mobile and desktop studio including own lyrics
+        run: node tests/gospel-launch-browser.cjs && node tests/gospel-inspection-browser.cjs && node tests/automatic-song-codes-browser.cjs
+
+  authorized-real-audio-acceptance:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.gospel_preview == 'paid40' && inputs.authorized_music_credits == '40' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Verify the paid-request and artifact replay guards before any spend
+        run: node --test tests/paid-audio-budget.test.cjs
+      - run: npx playwright install --with-deps chromium
+      - name: Require real audio decoder before any spend
+        run: |
+          if ! command -v ffprobe; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          ffprobe -version | head -1
+      - name: Create a fresh disposable acceptance database
+        run: |
+          docker run -d --name lae-paid-audio-ci -p 127.0.0.1:55441:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=lae_paid_audio_fixture_only -e POSTGRES_DB=lae_music_ci postgres:16
+          for i in $(seq 1 30); do docker exec lae-paid-audio-ci pg_isready -U postgres && break; sleep 1; done
+      - name: Verify the real local account and entitlement flow before reserving the paid budget
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
+        run: node scripts/paid-audio-acceptance.cjs --local-preflight
+      - name: Download the immutable prior zero-submission evidence when requested
+        if: inputs.paid_audio_resume_run != ''
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.paid_audio_resume_run }}
+          name: lae-pr12-paid-audio-results-${{ inputs.paid_audio_resume_run }}
+          path: prior-paid-results
+      - name: Verify existing music configuration and sufficient balance WITHOUT provider writes
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_MUSICAPI_BUDGET: "40"
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
+        run: node scripts/paid-audio-acceptance.cjs --external-preflight
+      - name: Refuse any existing claim for this one-time authorized budget
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LAE_MUSICAPI_BUDGET: "40"
+          RESUME_RUN: ${{ inputs.paid_audio_resume_run }}
+        run: |
+          if [ -n "$RESUME_RUN" ]; then
+            node scripts/paid-audio-acceptance.cjs --resume-zero
+          else
+            node scripts/paid-audio-acceptance.cjs --claim
+          fi
+      - name: Persist the budget claim BEFORE a provider write
+        uses: actions/upload-artifact@v4
+        with:
+          name: lae-pr12-musicapi-authorized40-20261030${{ inputs.paid_audio_resume_run != '' && '-resume1' || '' }}
+          path: paid-results/claim.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Run the two authorized music requests in isolation; never retry ambiguous submission
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_MUSICAPI_BUDGET: "40"
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
+        run: node scripts/paid-audio-acceptance.cjs
+      - name: Preserve private audio and acceptance journal, including incomplete results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lae-pr12-paid-audio-results-${{ github.run_id }}
+          path: paid-results/
+          retention-days: 30
+          if-no-files-found: ignore
+      - name: Remove only the disposable acceptance database
+        if: always()
+        run: docker rm -f lae-paid-audio-ci 2>/dev/null || true

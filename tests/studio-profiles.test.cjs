@@ -11,7 +11,7 @@ test('redesigned studio exposes every original gospel/secular profile without re
   assert.deepEqual(catalog[family].map(x=>x.id).sort(),Object.keys(profiles).sort());
   for(const x of catalog[family]){assert.equal(x.name,profiles[x.id].name);assert(x.country);assert(profiles[x.id].guide.length>100);}
  }
- const app=await runtime();const r=await app.request('/api/platform/studio/catalog');assert.equal(r.status,200);assert.deepEqual(r.json(),catalog);assert(!r.text.includes('guide'));
+ const app=await runtime();const r=await app.request('/api/platform/studio/catalog');assert.equal(r.status,200);assert.deepEqual(r.json(),require('../lib/studio-launch').legacyCatalogue());assert(!r.text.includes('guide'));
 });
 test('style request keeps families exclusive and forwards every existing creative control',async()=>{
  const {lyricsRequest}=await adapter;
