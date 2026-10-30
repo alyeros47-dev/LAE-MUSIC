@@ -160,7 +160,7 @@ jobs:
           LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
   existing-service-audit:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:

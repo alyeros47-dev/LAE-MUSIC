@@ -32,3 +32,7 @@ test('initially hidden navigation reveals only when its actual capability or exi
  const link={hidden:true,dataset:{feature:'premium_access',featurePending:'true'}},root={querySelectorAll:s=>s==='[data-feature]'?[link]:[]};
  hideInactiveFeatures(root,{premium_access:false});assert.equal(link.hidden,true);hideInactiveFeatures(root,{premium_access:true});assert.equal(link.hidden,false);assert.equal(link.dataset.featureInactive,undefined);
 });
+test('read-only production inspection can use the current development migration inventory without authorizing deployment',()=>{
+ const source=fs.readFileSync('.github/workflows/platform-tests.yml','utf8'),audit=source.slice(source.indexOf('  existing-service-audit:'),source.indexOf('  review-auth-diagnostic:'));
+ assert(audit.includes("github.ref == 'refs/heads/codex/gospel-phase-one'"));assert(audit.includes('node scripts/audit-existing-service.cjs'));assert(!audit.includes('LAE_EXISTING_RECOVERY_REHEARSAL'));assert(!audit.includes('release-existing-service.cjs'));
+});
