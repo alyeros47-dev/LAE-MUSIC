@@ -3,12 +3,18 @@ name: Configure isolated review integrations
 on:
   workflow_dispatch:
     inputs:
+      authorized_music_credits:
+        description: "Owner-authorized MusicAPI test ceiling; exactly two create_music operations maximum"
+        type: choice
+        required: false
+        default: "0"
+        options: ["0", "40"]
       gospel_preview:
         description: "Create a separate FREE read-only Gospel interface preview; no provider keys or existing-site changes"
         type: choice
         required: false
         default: none
-        options: [none, publish, verify]
+        options: [none, publish, verify, paid40]
       persistence_mode:
         description: "unchanged deploys normal review code; plan is read-only; activate requires explicit cost approval"
         type: choice
@@ -160,3 +166,63 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Verify actual mobile and desktop studio including own lyrics
         run: node tests/gospel-launch-browser.cjs && node tests/gospel-inspection-browser.cjs && node tests/automatic-song-codes-browser.cjs
+
+  authorized-real-audio-acceptance:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.gospel_preview == 'paid40' && inputs.authorized_music_credits == '40' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Verify the paid-request and artifact replay guards before any spend
+        run: node --test tests/paid-audio-budget.test.cjs
+      - run: npx playwright install --with-deps chromium
+      - name: Require real audio decoder before any spend
+        run: command -v ffprobe
+      - name: Create a fresh disposable acceptance database
+        run: |
+          docker run -d --name lae-paid-audio-ci -p 127.0.0.1:55441:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=lae_paid_audio_fixture_only -e POSTGRES_DB=lae_music_ci postgres:16
+          for i in $(seq 1 30); do docker exec lae-paid-audio-ci pg_isready -U postgres && break; sleep 1; done
+      - name: Verify the real local account and entitlement flow before reserving the paid budget
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
+        run: node scripts/paid-audio-acceptance.cjs --local-preflight
+      - name: Refuse any existing claim for this one-time authorized budget
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LAE_MUSICAPI_BUDGET: "40"
+        run: node scripts/paid-audio-acceptance.cjs --claim
+      - name: Persist the budget claim BEFORE a provider write
+        uses: actions/upload-artifact@v4
+        with:
+          name: lae-pr12-musicapi-authorized40-20261030
+          path: paid-results/claim.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Run the two authorized music requests in isolation; never retry ambiguous submission
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_MUSICAPI_BUDGET: "40"
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_paid_audio_fixture_only@127.0.0.1:55441/lae_music_ci
+        run: node scripts/paid-audio-acceptance.cjs
+      - name: Preserve private audio and acceptance journal, including incomplete results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lae-pr12-paid-audio-results-${{ github.run_id }}
+          path: paid-results/
+          retention-days: 30
+          if-no-files-found: ignore
+      - name: Remove only the disposable acceptance database
+        if: always()
+        run: docker rm -f lae-paid-audio-ci 2>/dev/null || true
