@@ -47,6 +47,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
   });
   await page.goto(origin+'/studio');await page.getByLabel('Creation method').waitFor({timeout:10000}).catch(async e=>{console.error('UI diagnostics',errors,await page.locator('main').innerText());throw e;});
   assert.equal(await page.locator('#lyrics-studio-form [name="musicDnaDepartment"] option').count(),2);
+  assert.equal(await page.getByLabel('Music department',{exact:true}).inputValue(),'gospel');assert(await page.locator('#lyrics-studio-form [name=musicDnaGroup]').evaluate(x=>x.required));assert(await page.locator('#lyrics-studio-form [name=musicProfile]').isDisabled());
   await page.getByLabel('Music department',{exact:true}).selectOption('gospel');
   assert.equal(await page.locator('#lyrics-studio-form [name="musicDnaGroup"] option').count(),15);
   for(const group of catalogue.categories){await page.getByLabel('Music group',{exact:true}).selectOption(group.id);assert.equal(await page.locator('#lyrics-studio-form [name="musicDnaStyle"] option').count(),6);}

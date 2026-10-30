@@ -24,7 +24,7 @@ export function bindMusicDNA(form,saved,catalogue){
     if(!selected&&style.value)style.value='';
     const active=!!selected;
     if(gospelLink)gospelLink.hidden=department.value!=='gospel'||!reggaeGospel;
-    for(const name of ['musicFamily','musicCountry','musicProfile','genre','beat','language','extraLanguage'])if(form.elements[name])form.elements[name].disabled=active;
+    for(const name of ['musicFamily','musicCountry','musicProfile','genre','beat','language','extraLanguage'])if(form.elements[name])form.elements[name].disabled=active||catalogue.launch==='gospel-phase-one';
     const custom=form.querySelector('[data-studio-custom-direction]');if(custom){custom.hidden=active||catalogue.launch==='gospel-phase-one';if(!active&&['musicFamily','musicCountry','musicProfile','genre','beat','language'].some(name=>form.elements[name]?.value))custom.open=true;}
     languages.disabled=!active;mood.disabled=!active;mood.required=active;
     const category=groups().find(c=>c.id===group.value);
@@ -39,7 +39,7 @@ export function bindMusicDNA(form,saved,catalogue){
   style.addEventListener('change',changed);mood.addEventListener('change',changed);
   if(gospelLink)gospelLink.addEventListener('click',()=>{if(!reggaeGospel)return;department.value=reggaeGospel.department_id;populateGroups();group.value=reggaeGospel.id;populateStyles();changed();style.focus();});
   const restored=catalogue.styles.find(s=>s.id===saved?.musicDnaStyle);
-  department.value=restored?.department_id||(catalogue.departments.some(d=>d.id===saved?.musicDnaDepartment)?saved.musicDnaDepartment:'');populateGroups();group.value=restored?.category_id||(groups().some(c=>c.id===saved?.musicDnaGroup)?saved.musicDnaGroup:'');populateStyles();style.value=restored?.id||'';
+  department.value=restored?.department_id||(catalogue.departments.some(d=>d.id===saved?.musicDnaDepartment)?saved.musicDnaDepartment:catalogue.launch==='gospel-phase-one'?'gospel':'');populateGroups();group.value=restored?.category_id||(groups().some(c=>c.id===saved?.musicDnaGroup)?saved.musicDnaGroup:'');populateStyles();style.value=restored?.id||'';
   mood.value=(catalogue.moods||[]).some(m=>m.id===saved?.musicDnaMood)?saved.musicDnaMood:'';
   for(const option of languages.options)option.selected=Array.isArray(saved?.musicDnaLanguages)&&saved.musicDnaLanguages.includes(option.value);
   update();return update;
