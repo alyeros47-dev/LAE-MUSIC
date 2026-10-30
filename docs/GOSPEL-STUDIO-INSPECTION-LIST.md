@@ -206,3 +206,11 @@ Preserved Gospel presets (archived selector; not a second visible 66-choice menu
 ## Inspection boundaries
 
 This stage is personal interface inspection. Do not use paid generation buttons until a costed test is approved. Signing into the preview uses its own test account, not a production account. A preview is not evidence of production readiness, musical fidelity, live payments or payouts. Missing lyrics types will be added only after owner identification/approval.
+
+## Separate read-only preview
+
+The existing Review Sandbox was inspected without changes in workflow run [41125642988](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/41125642988). It runs older code and does not have verified persistent storage. Replacing it could discard its test accounts/files; it was not replaced.
+
+The separate temporary inspection service uses the **same `web` studio interface and approved catalogues from PR #12**, served by `scripts/gospel-inspection-server.cjs`. Its clearly labelled sample workspace exists only to show the interface without registration. It is not a real artist account, credit grant or backend integration test. No database, live music, provider keys, storage keys or payment credentials are attached. All non-read HTTP methods are refused, provider/payment/upload actions are hidden, and the browser cannot connect to external services. Production and the old sandbox are not updated. No lyrics/style specification is replaced or invented.
+
+Use this preview to inspect the two creation methods and compare the actual group/style names, descriptions, language, voice and mood controls. It cannot verify generated lyrics, audio, microphone processing or publishing; those remain later acceptance work. The free preview can sleep when idle and needs time to wake. Report the group/style ID and the exact desired correction after inspection. Its eventual removal is separate from production deployment.

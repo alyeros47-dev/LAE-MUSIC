@@ -3,6 +3,12 @@ name: Configure isolated review integrations
 on:
   workflow_dispatch:
     inputs:
+      gospel_preview:
+        description: "Create a separate FREE read-only Gospel interface preview; no provider keys or existing-site changes"
+        type: choice
+        required: false
+        default: none
+        options: [none, publish]
       persistence_mode:
         description: "unchanged deploys normal review code; plan is read-only; activate requires explicit cost approval"
         type: choice
@@ -100,3 +106,31 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: node scripts/inspect-gospel-preview.cjs
+
+  gospel-read-only-preview:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/gospel-phase-one' && inputs.gospel_preview == 'publish' && inputs.approve_monthly_charge == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: node --test tests/gospel-preview.test.cjs
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/gospel-inspection-browser.cjs
+      - name: Verify keyless inspection image
+        run: |
+          docker build -f deploy/gospel-inspection.Dockerfile -t lae-inspection-ci .
+          docker run -d --name lae-inspection-ci -p 127.0.0.1:3217:10000 lae-inspection-ci
+          node -e 'const wait=()=>new Promise(r=>setTimeout(r,1000));(async()=>{for(let i=0;i<20;i++){try{const r=await fetch("http://127.0.0.1:3217/health");const j=await r.json();if(j.inspection_only===true&&j.paid_calls_possible===false)return;}catch{}await wait();}throw Error("Inspection image unavailable");})().catch(e=>{console.error(e);process.exitCode=1;});'
+      - name: Stop only inspection test container
+        if: always()
+        run: docker rm -f lae-inspection-ci 2>/dev/null || true
+      - name: Create only the separate free read-only preview
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/provision-gospel-inspection.cjs
