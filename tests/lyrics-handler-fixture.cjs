@@ -19,6 +19,7 @@ async function handler({
   engine: providedEngine,
   actor: requestActor = actor,
   voiceReady = false,
+  launchPolicy = false,
   transportError = false,
 } = {}) {
   const src = fs.readFileSync("server.js", "utf8"),
@@ -106,7 +107,13 @@ async function handler({
     },
     AbortSignal,
     async () => {},
-    (name) => (name === "./lib/music-dna" ? { ...dna, ...e } : load(name)),
+    (name) => {
+      if(name === "./lib/music-dna")return {...dna,...e};
+      // Archived catalogue contracts use an explicitly injected synthetic engine.
+      // Launch-policy tests opt into the real production gate separately.
+      if(name === "./lib/studio-launch"&&!launchPolicy)return {assertStyle(id){if(id&&!e.catalogue().styles.some(s=>s.id===id))throw Object.assign(Error('Unavailable style'),{status:400});}};
+      return load(name);
+    },
   ).catch(error => ({status:error.status||500,data:{error:error.message}})); // Same HTTP error boundary as server.js.
 
   return { result, counts, request, reserved };

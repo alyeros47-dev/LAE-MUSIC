@@ -57,8 +57,8 @@ async function main() {
     }
   }
   const dnaCatalogue=await api("/api/platform/studio/dna/catalog");
-  check(dnaCatalogue.status===200&&JSON.stringify(dnaCatalogue.data)===JSON.stringify(require("../lib/music-dna").catalogue()),"exact public Music DNA catalogue and mood options");
-  check(dnaCatalogue.data.styles.length===215&&dnaCatalogue.data.categories.length===43&&dnaCatalogue.data.moods.length===4,"complete studio selection inventory");
+  check(dnaCatalogue.status===200&&JSON.stringify(dnaCatalogue.data)===JSON.stringify(require("../lib/studio-launch").catalogue()),"exact public Music DNA catalogue and mood options");
+  check(dnaCatalogue.data.styles.length===70&&dnaCatalogue.data.categories.length===14&&dnaCatalogue.data.moods.length===4,"complete studio selection inventory");
   const artistBody = {
     name: "LAE Release QA Artist",
     country: "Nigeria",
@@ -241,8 +241,8 @@ async function main() {
       status: "live_release_verified",
       asset_origins_verified: 2,
       studio_assets_per_origin_verified: 4,
-      music_dna_styles_verified: 215,
-      music_dna_groups_verified: 43,
+      music_dna_styles_verified: 70,
+      music_dna_groups_verified: 14,
       customer_moods_verified: 4,
       artist_registration_logout_login: true,
       listener_registration_logout_login: true,

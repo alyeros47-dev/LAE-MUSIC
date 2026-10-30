@@ -218,7 +218,7 @@ test("DNA public API is served without leaking profiles and history remains acco
   const app = await require("./runtime.cjs").runtime();
   const c = await app.request("/api/platform/studio/dna/catalog");
   assert.equal(c.status, 200);
-  assert.deepEqual(c.json(), dna.catalogue());
+  assert.deepEqual(c.json(), require('../lib/studio-launch').catalogue());
   assert.equal(
     (await app.request("/api/platform/studio/dna/history")).status,
     401,

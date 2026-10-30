@@ -34,6 +34,7 @@ export function musicRequest(brief, voiceProfile) {
       "Your lyrics are too long for this duration. Choose a longer song or shorten the lyrics; nothing was sent or charged.",
     );
   return {
+    ...(brief.creationMode==='own'?{creationMode:'own',rightsConfirmed:brief.rights==='on'||brief.rightsConfirmed===true,musicDnaStyle:brief.musicDnaStyle||'',musicDnaMood:brief.musicDnaMood||'',musicDnaLanguages:brief.musicDnaLanguages||[],voice:brief.voice||'neutral'}:{}),
     title: brief.title,
     lyrics: brief.lyrics,
     style,

@@ -66,8 +66,8 @@ export function bindStudioWorkflow({
     by("studio-code-status").textContent = valid
       ? "Your upload code is ready. Keep it with “" +
         title +
-        "”. The server checks ownership, title and one-time use. A lyrics code alone does not authenticate an audio file."
-      : "No upload code was returned. Your lyrics are preserved. Do not spend another credit just to obtain a code; contact support.";
+        "”. The server checks ownership, title and one-time use. The server also checks the generated audio and your artist-plan entitlement."
+      : "Upload codes are available for each successfully generated song below. Lyrics generation alone does not issue a publishing code.";
   }
   try {
     const draft = JSON.parse(

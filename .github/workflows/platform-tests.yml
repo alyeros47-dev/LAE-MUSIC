@@ -267,6 +267,10 @@ jobs:
         env:
           LAE_DB_TESTS: "true"
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
+      - run: node tests/gospel-launch-postgres.cjs
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
 
   browser-compatibility:
     needs: change-scope
