@@ -22,7 +22,7 @@ The following are hidden for ordinary customers when unavailable:
 
 - Live purchase/checkout actions, Premium purchase controls and additional-generation purchase actions; there is no disabled “Checkout unavailable” button or public unpaid-purchase workaround.
 - Bank payout/withdrawal submission while payouts are inactive. Existing earnings, ledger and withdrawal records remain readable.
-- Affiliate practice/demo entry points. A query parameter cannot reveal them on the ordinary customer interface. Explicit isolated review environments retain the approved testing tools; production cannot enable them with review-only environment variables.
+- Affiliate practice/demo entry points. A query parameter cannot reveal them on the ordinary customer interface. Explicit isolated review environments retain approved testing tools. Review mode alone cannot enable checkout or payouts: checkout additionally needs an available sandbox payment service, and payout submission needs its own capability. Production cannot enable review tools with review-only environment variables.
 - AI lyrics or audio generation tools when the corresponding provider is unconfigured, including invalid creation-method choices and progress actions that need that provider.
 - Voice sample saving/training tools without the configured provider/storage; an unready custom voice is removed from the selector. A ready saved voice remains usable independently of new-upload availability, and successful training reveals its ready choice.
 - Private-release saving/retrying when imports are unavailable, and publishing/upload submission without current artist entitlement. Server plan, quota, ownership, audio and one-use checks remain authoritative.

@@ -14,7 +14,7 @@ test('configured customer features stay independent of unrelated payments and pr
  assert.equal(c.review,false);assert.equal(customerFeatures({},{listenerAccount:true,premiumActive:false}).premium_access,true);assert.equal(customerFeatures({},{premiumActive:true}).premium_access,true);assert.equal(customerFeatures({},{offline:true,offlineCached:true}).offline_library,true);assert.equal(customerFeatures({offline_listening:true},{offline:false}).offline_save,false);
 });
 test('explicit review environment can exercise sandbox controls without enabling public live checkout',async()=>{
- const {customerFeatures}=await modulePromise;const c=customerFeatures({review_tools:true,payments:false});assert.equal(c.review,true);assert.equal(c.checkout,true);assert.equal(c.payouts,true);
+ const {customerFeatures}=await modulePromise;const c=customerFeatures({review_tools:true,payments:false});assert.equal(c.review,true);assert.equal(c.checkout,false);assert.equal(c.payouts,false);assert.equal(customerFeatures({review_tools:true,payments:true,payment_mode:'sandbox'}).checkout,true);
 });
 test('unavailable controls are actually hidden and retain a monotonic display fence through form updates',async()=>{
  const {hideInactiveFeatures}=await modulePromise,off={hidden:false,dataset:{feature:'imports'}},on={hidden:false,dataset:{feature:'music'}},workflow={hidden:false,dataset:{feature:'lyrics'}};

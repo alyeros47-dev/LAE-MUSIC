@@ -123,7 +123,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
    if(p==='/api/artist/subscription')return send({plan:'starter',artist_features_active:uploadPlanActive,uploads_used:2,upload_limit:7,studio_generations_included:2,additional_generation_usd:3,upcoming_subscriptions:[{plan:'growth',starts_at:'2027-10-01',expires_at:'2028-10-01'}],subscription:{expires_at:'2027-10-01T00:00:00Z'}});
    if(p==='/api/music/status')return send({uploadsEnabled:true});
    if(p==='/api/artist/studio-allowance')return send({active:true,artist_test_access:true,included_generations:2,remaining_generations:2});
-   if(p==='/api/platform/capabilities')return send({email_delivery_enabled:emailEnabled,review_tools:true,payments:false,payouts:true,offline_listening:true,music_provider_configured:true,lyrics_configured:true,studio_release_import:releaseImportEnabled,voice_upload_available:voiceUploadAvailable});
+   if(p==='/api/platform/capabilities')return send({email_delivery_enabled:emailEnabled,review_tools:true,payments:true,payment_mode:'sandbox',payouts:true,offline_listening:true,music_provider_configured:true,lyrics_configured:true,studio_release_import:releaseImportEnabled,voice_upload_available:voiceUploadAvailable});
    if(p==='/api/voice/profile')return send(existingVoiceProfile);
    if(p==='/api/voice/upload'){assert.equal(data.consent,true);existingVoiceProfile={status:'uploading',hasVoice:false};return send({url:'/api/voice/sample?reference=00000000-0000-4000-8000-000000000007'});}
    if(p==='/api/voice/sample')return route.continue();

@@ -2,8 +2,8 @@
 export function customerFeatures(capabilities={},browser={}){
  const review=capabilities.review_tools===true;
  return {
-  checkout:review||(capabilities.payments===true&&capabilities.payment_mode==='live'),
-  payouts:review||capabilities.payouts===true,
+  checkout:capabilities.payments===true&&(capabilities.payment_mode==='live'||(review&&capabilities.payment_mode==='sandbox')),
+  payouts:capabilities.payouts===true,
   premium_access:review||browser.listenerAccount===true||browser.premiumActive===true||(capabilities.payments===true&&capabilities.payment_mode==='live'),
   offline_library:browser.offline===true&&(capabilities.offline_listening===true||browser.offlineCached===true),
   review,
