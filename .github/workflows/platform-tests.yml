@@ -135,7 +135,7 @@ jobs:
           LAE_LIVE_RELEASE_VERIFY: "1"
         run: node scripts/verify-live-release.cjs
   existing-service-recovery-rehearsal:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/premium-platform-release'
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
