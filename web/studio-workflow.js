@@ -56,6 +56,7 @@ export function bindStudioWorkflow({
     timer = null,
     sample = null,
     previewURL = null;
+  if(!navigator.mediaDevices?.getUserMedia||!(window.AudioContext||window.webkitAudioContext)){by('studio-record-voice').hidden=true;by('studio-stop-voice').hidden=true;}
   const canAct = () => !disposed && active() && form.isConnected;
   const persist = () =>
     lyricsForm.dispatchEvent(new Event("input", { bubbles: true }));
@@ -182,7 +183,7 @@ export function bindStudioWorkflow({
   const dictation = by("studio-dictation-status"),
     dictate = by("studio-dictate");
   if (!Speech) {
-    dictate.disabled = true;
+    dictate.hidden = true;
     dictation.textContent =
       "Speech dictation is unavailable in this browser. Use your phone keyboard’s microphone or type your idea.";
   } else
@@ -415,7 +416,11 @@ export function bindStudioWorkflow({
     const customOption = lyricsForm.elements.voice?.querySelector(
       'option[value="custom"]',
     );
-    if (customOption) customOption.disabled = !ready;
+    if(customOption&&!ready)customOption.remove();
+    if(ready&&!customOption&&lyricsForm.elements.voice)lyricsForm.elements.voice.add(new Option('My saved voice profile','custom'));
+    musicForm.elements.useVoice.closest('label').hidden=!ready;
+    const voicePanel=by('studio-voice');if(voicePanel&&ready)voicePanel.hidden=false;
+    const voiceNav=form.querySelector('[data-voice-navigation]');if(voiceNav&&ready)voiceNav.hidden=false;
     if (!ready && lyricsForm.elements.voice?.value === "custom")
       lyricsForm.elements.voice.value = "";
     refreshSave();

@@ -25,7 +25,7 @@ export function bindMusicDNA(form,saved,catalogue){
     const active=!!selected;
     if(gospelLink)gospelLink.hidden=department.value!=='gospel'||!reggaeGospel;
     for(const name of ['musicFamily','musicCountry','musicProfile','genre','beat','language','extraLanguage'])if(form.elements[name])form.elements[name].disabled=active;
-    const custom=form.querySelector('[data-studio-custom-direction]');if(custom){custom.hidden=active;if(!active&&['musicFamily','musicCountry','musicProfile','genre','beat','language'].some(name=>form.elements[name]?.value))custom.open=true;}
+    const custom=form.querySelector('[data-studio-custom-direction]');if(custom){custom.hidden=active||catalogue.launch==='gospel-phase-one';if(!active&&['musicFamily','musicCountry','musicProfile','genre','beat','language'].some(name=>form.elements[name]?.value))custom.open=true;}
     languages.disabled=!active;mood.disabled=!active;mood.required=active;
     const category=groups().find(c=>c.id===group.value);
     const examples=catalogue.styles.filter(s=>s.category_id===category?.id);

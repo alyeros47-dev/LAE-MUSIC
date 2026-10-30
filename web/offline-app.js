@@ -1,3 +1,4 @@
+import {customerFeatures,hideInactiveFeatures} from './feature-visibility.js';
 import { OfflineLibrary, offlinePage } from "./offline.js";
 import { MusicPlayer } from "./player.js";
 const node = (id) => document.getElementById(id);
@@ -74,8 +75,11 @@ navigator.serviceWorker?.addEventListener("message", (event) => {
   else
     toast("Connect to open this release. Your saved music remains available.");
 });
+let featureCapabilities={};
+const featureState=()=>customerFeatures(featureCapabilities,{offline:offline.supported,offlineCached:!!offline.device,premiumActive:!!offline.device});
 async function refresh() {
   if (navigator.onLine) {
+    featureCapabilities=await api("/api/platform/capabilities").catch(()=>({}));
     const s = await api("/api/platform/session");
     await offline.activate(s.listener);
   } else await offline.boot();
@@ -83,6 +87,7 @@ async function refresh() {
 const view = {
   set(html) {
     node("page").innerHTML = html;
+    hideInactiveFeatures(document,featureState());
     return true;
   },
 };

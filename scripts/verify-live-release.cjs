@@ -48,7 +48,7 @@ async function main() {
   }
   check(ready, "integrated capabilities route");
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    for (const file of ["web/app.js","web/music-dna.js","web/studio-engine.js","web/ui.css"]) {
+    for (const file of ["web/app.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css"]) {
       const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
       const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA,
         {redirect:"error",signal:AbortSignal.timeout(30000)});
@@ -240,7 +240,7 @@ async function main() {
     JSON.stringify({
       status: "live_release_verified",
       asset_origins_verified: 2,
-      studio_assets_per_origin_verified: 4,
+      studio_assets_per_origin_verified: 5,
       music_dna_styles_verified: 70,
       music_dna_groups_verified: 14,
       customer_moods_verified: 4,

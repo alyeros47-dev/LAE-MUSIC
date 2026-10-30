@@ -37,3 +37,7 @@ Authorizations use existing `generation_records` and `platform_requests` tables.
 2. Real musical/audio acceptance of the new own-lyrics DNA compilation has not been tested with a paid provider request. Local/CI mocks establish request handling, not musical quality or voice fidelity.
 3. A new authorized release needs exact candidate CI, fresh backup/recovery verification and updated release-candidate/PR pins. The previous PR #11 deployment receipt is not approval for this phase. Do not merge or deploy this work without new explicit approval.
 4. Unrelated full-platform payment, payout and operational acceptance gates remain as previously documented; this studio batch does not certify overall commercial launch readiness.
+
+## Follow-up review
+
+See [the historical lyrics investigation, visibility repairs and paid-test proposal](GOSPEL-PHASE-ONE-FINAL-REVIEW.md). The only historical 17-entry DNA snapshot mixes 14 Gospel and three secular groups; it is not a 17-type lyrics specification and was not restored. Inactive customer actions now use capability visibility gates, including email, checkout, voice, imports and offline support.
