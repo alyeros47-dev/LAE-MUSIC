@@ -29,5 +29,5 @@ test('all scenarios remain simulations and reject manipulated or invalid inputs'
  for(const p of demo.products())for(const depth of [1,2,3])for(const payment_state of ['pending','verified','full_refund','held']){
   const x=demo.preview({...sample,product:p.id,depth,payment_state});assert.equal(x.demo,true);assert.equal(x.actual_payment_received_minor,0);assert.equal(x.actual_withdrawable_minor,0);assert.match(x.disclosure,/does not verify Paystack/);
  }
- for(const update of [{product:'unknown'},{depth:0},{depth:true},{count:101},{count:0},{count:1.5},{sale_date:'2026-02-30'},{payment_state:'paid'},{commission_minor:9999},{currency:'NGN'}])assert.throws(()=>demo.preview({...sample,...update}),e=>e.status===400);
+ for(const update of [{product:'unknown'},{depth:0},{depth:true},{depth:{toString:null}},{count:{toString:null}},{count:101},{count:0},{count:1.5},{sale_date:'2026-02-30'},{payment_state:'paid'},{commission_minor:9999},{currency:'NGN'}])assert.throws(()=>demo.preview({...sample,...update}),e=>e.status===400);
 });
