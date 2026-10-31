@@ -30,7 +30,7 @@ jobs:
            const pool=new Pool(require('./lib/database').databaseOptions(env)),db=await pool.connect();
            const report={artist_requested:'Olum Pius',database_writes:0,storage_writes:0,paid_requests:0};
            try{await db.query('BEGIN READ ONLY');await db.query("SET LOCAL statement_timeout='15s'");
-           const artists=await db.query("SELECT id,display_name FROM creators WHERE regexp_replace(lower(display_name),'[^a-z0-9]','','g')='olumpius' OR (display_name ILIKE '%olum%' AND display_name ILIKE '%pius%') LIMIT 5");
+           const artists=await db.query("SELECT id,display_name FROM creators WHERE regexp_replace(lower(display_name),'[^a-z0-9]','','g')='olumpius' OR display_name ILIKE '%olum%' OR display_name ILIKE '%pius%' OR display_name ILIKE '%pious%' LIMIT 8");
            report.match_count=artists.rowCount;if(artists.rowCount!==1){report.match_names=artists.rows.map(a=>a.display_name);console.log(JSON.stringify(report));return;}
            const artist=artists.rows[0];report.artist=artist.display_name;
            const profile=(await db.query('SELECT object_key,task_id,persona_id,status,updated_at FROM artist_voice_profiles WHERE creator_id=$1',[artist.id])).rows[0];
