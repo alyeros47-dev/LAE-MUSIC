@@ -57,3 +57,5 @@ test('isolated PostgreSQL application journeys, migrations, concurrency and dura
   await t.test('restart retains account/financial data and does not repeat migrations or credit campaigns',async()=>{const before=await pool.query('SELECT (SELECT COUNT(*) FROM creators) AS artists,(SELECT COUNT(*) FROM finance_transfers) AS transfers,(SELECT SUM(credits) FROM generation_wallets) AS credits');await stop();await start();const after=await pool.query('SELECT (SELECT COUNT(*) FROM creators) AS artists,(SELECT COUNT(*) FROM finance_transfers) AS transfers,(SELECT SUM(credits) FROM generation_wallets) AS credits');assert.deepEqual(after.rows,before.rows);assert.deepEqual(await migrate(pool),[]);});
  }finally{await stop();await pool.end();}
 });
+
+require('./listening-preferences.test.cjs');
