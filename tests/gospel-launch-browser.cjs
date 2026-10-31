@@ -9,7 +9,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://127.0.0.1:'+server.address().port;
  const catalogue=require('../lib/studio-launch').catalogue(),calls=[],results=[];
  try{for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
-  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false;
+  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false;
   const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.stack));
   await page.route('**/api/**',async route=>{
@@ -22,7 +22,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
    if(p==='/api/platform/capabilities')return send({music_provider_configured:!unavailable,lyrics_configured:!unavailable,studio_release_import:false,voice_upload_available:false,payments:false,payment_mode:'sandbox',payouts:false,review_tools:false,offline_listening:false});
    if(p==='/api/platform/account/capabilities')return send({email_delivery_enabled:false});
    if(p==='/api/plans')return send({plans:require('../lib/plans')});
-   if(p==='/api/artist/subscription')return send({artist_features_active:uploadPlanActive,review_test_access:reviewUploadAccess,plan:'starter',uploads_used:0,upload_limit:7,subscription:null});
+   if(p==='/api/artist/subscription')return send({artist_features_active:uploadPlanActive,review_test_access:reviewUploadAccess,artist_test_access:artistTestAccess,plan:'starter',uploads_used:0,upload_limit:7,subscription:null});
    if(p==='/api/music/status')return send({uploadsEnabled:uploadStorageAvailable});
    if(p==='/api/platform/financial-policy')return send(require('../lib/financial-policy').disclosure());
    if(p==='/api/platform/finance')return send({balances:{USD:{available_minor:0,held_minor:0},NGN:{available_minor:0}},legacy_gift_kobo:0,withdrawals:[],history:[],notice:'Verified records only.'});
@@ -77,11 +77,16 @@ const AxeBuilder=require('@axe-core/playwright').default;
   uploadStorageAvailable=true;await page.reload();await page.locator('#upload-form').waitFor();
   assert((await page.locator('#upload-access-status').innerText()).includes('active artist package'));
   assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').length,results.length*2);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').length,results.length*3);
   // Active paid and explicitly granted review access both retain the file controls.
-  for(const access of ['paid','review']){
-   uploadPlanActive=access==='paid';reviewUploadAccess=access==='review';
+  for(const access of ['paid','review','complimentary']){
+   uploadPlanActive=access==='paid';reviewUploadAccess=access==='review';artistTestAccess=access==='complimentary';
    await page.reload();await page.locator('#upload-form').waitFor();
+   if(artistTestAccess){
+    await page.getByLabel('Generated-song upload code',{exact:true}).fill('');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
+    await page.getByLabel('Generated-song upload code',{exact:true}).fill('not-a-code');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
+    await page.getByLabel('Generated-song upload code',{exact:true}).fill('a'.repeat(36));assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isEnabled());
+   }
    await page.getByLabel('Genre',{exact:true}).fill('Gospel');
    await page.locator('#upload-form [name=audio]').setInputFiles({name:'prayer.mp3',mimeType:'audio/mpeg',buffer:Buffer.alloc(2048,1)});
    await page.locator('#upload-form [name=cover]').setInputFiles({name:'cover.png',mimeType:'image/png',buffer:Buffer.from('fixture-cover')});
@@ -92,12 +97,12 @@ const AxeBuilder=require('@axe-core/playwright').default;
    assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').at(-1).data.uploadCode,'A'.repeat(36));
    await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
   }
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/finish').length,(results.length+1)*2);
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/file').length,(results.length+1)*4);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/finish').length,(results.length+1)*3);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/file').length,(results.length+1)*6);
   const uploadAxe=await new AxeBuilder({page}).analyze();assert.deepEqual(uploadAxe.violations.map(v=>v.id),[]);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/upload-form-'+viewport.width+'.png',fullPage:true});
-  uploadPlanActive=false;reviewUploadAccess=false;uploadStorageAvailable=false;
+  uploadPlanActive=false;reviewUploadAccess=false;artistTestAccess=false;uploadStorageAvailable=false;
   await page.goto(origin+'/studio');await page.getByLabel('Creation method').waitFor();
   await page.getByRole('checkbox',{name:/I have permission to use these lyrics/}).check();
   await page.getByLabel('Music direction',{exact:true}).selectOption('custom');await page.getByLabel('Song style & arrangement',{exact:true}).fill('Christian praise with traditional Ogene percussion and warm acoustic guitar.');await page.locator('#studio-form [name="musicDnaMood"]').selectOption('smooth');

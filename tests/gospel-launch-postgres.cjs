@@ -24,6 +24,33 @@ const codes=require('../lib/music-upload-codes');
   await assert.rejects(codes.assertUnpublished(pool,a,task,clip),e=>e.status===409);checks++;
   // The post-storage publication gate rejects a code-funded song without an active plan.
   await assert.rejects(require('../lib/upload-publication').publishUpload(pool,a,track),e=>e.status===403);assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[track])).rows[0].status,'pending_upload');checks++;
+  // Free publishing is limited to the same owned completed complimentary task.
+  const savedEnv=process.env.LAE_ARTIST_TEST_ACCESS;
+  try{
+   process.env.LAE_ARTIST_TEST_ACCESS='1';
+   await assert.rejects(codes.requireUploadAccess(pool,a,{generationId:one.generation_id}),e=>e.status===403);checks++;
+   const reference='complimentary-'+crypto.randomUUID();
+   await pool.query("INSERT INTO artist_test_generations(reservation_reference,artist_id,task_reference,status) VALUES($1,$2,$3,'reserved')",[reference,a,task]);
+   await assert.rejects(codes.requireUploadAccess(pool,a,{generationId:one.generation_id}),e=>e.status===403);checks++;
+   await pool.query("UPDATE artist_test_generations SET status='completed' WHERE reservation_reference=$1",[reference]);
+   await assert.rejects(codes.requireUploadAccess(pool,String(BigInt(a)+999n),{generationId:one.generation_id}),e=>e.status===403);checks++;
+   await assert.rejects(codes.requireUploadAccess(pool,a),e=>e.status===403);checks++;
+   await codes.requireUploadAccess(pool,a,{generationId:one.generation_id});checks++;
+   process.env.LAE_ARTIST_TEST_ACCESS='0';await assert.rejects(codes.requireUploadAccess(pool,a,{generationId:one.generation_id}),e=>e.status===403);checks++;
+   process.env.LAE_ARTIST_TEST_ACCESS='1';
+   await pool.query("UPDATE artist_test_generations SET status='restored' WHERE reservation_reference=$1",[reference]);
+   await assert.rejects(require('../lib/upload-publication').publishUpload(pool,a,track),e=>e.status===403);checks++;
+   await pool.query("UPDATE artist_test_generations SET status='completed' WHERE reservation_reference=$1",[reference]);
+   await pool.query("UPDATE sonic_test_tasks SET status='failed' WHERE task_id=$1",[task]);
+   await assert.rejects(require('../lib/upload-publication').publishUpload(pool,a,track),e=>e.status===403);checks++;
+   await pool.query("UPDATE sonic_test_tasks SET status='succeeded' WHERE task_id=$1",[task]);
+   await codes.verifiedUploadBody({pool,artistId:a,trackId:track,length:audio.length,input:require('node:stream').Readable.from([audio])});
+   await require('../lib/upload-publication').publishUpload(pool,a,track);
+   assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[track])).rows[0].status,'published');
+   await assert.rejects(codes.assertUnpublished(pool,a,task,clip),e=>e.status===409);checks++;
+   // Return only this disposable fixture to pending to exercise the paid gate below.
+   await pool.query("UPDATE music_tracks SET status='pending_upload',published_at=NULL WHERE id=$1",[track]);
+  }finally{if(savedEnv===undefined)delete process.env.LAE_ARTIST_TEST_ACCESS;else process.env.LAE_ARTIST_TEST_ACCESS=savedEnv;}
   const sub=(await pool.query("INSERT INTO artist_subscriptions(artist_id,plan,amount_cents,payment_reference,status,starts_at,expires_at) VALUES($1,'starter',600,$2,'paid',NOW()-INTERVAL '1 day',NOW()+INTERVAL '365 days') RETURNING id",[a,'isolated-'+crypto.randomUUID()])).rows[0].id;
   await codes.requirePlan(pool,a);checks++;
   await pool.query('UPDATE artist_subscriptions SET payment_hold=TRUE WHERE id=$1',[sub]);await assert.rejects(codes.requirePlan(pool,a),e=>e.status===403);await pool.query('UPDATE artist_subscriptions SET payment_hold=FALSE WHERE id=$1',[sub]);checks++;
