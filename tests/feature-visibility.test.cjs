@@ -25,7 +25,7 @@ test('unavailable controls are actually hidden and retain a monotonic display fe
 test('public production capabilities do not expose review-only tools or activate paid operations',async()=>{
  const app=await require('./runtime.cjs').runtime({env:{NODE_ENV:'production',LAE_REVIEW_TEST_ACCESS:'1',LAE_REVIEW_ENVIRONMENT:'pr6-ephemeral-review-v1'}});
  const r=await app.request('/api/platform/capabilities');assert.equal(r.status,200);const c=r.json();assert.equal(c.review_tools,false);assert.equal(c.payments,false);assert.equal(c.payouts,false);assert.equal(c.offline_listening,false);
- const asset=await app.request('/web/feature-visibility.js');assert.equal(asset.status,200);assert(asset.text.includes('hideInactiveFeatures'));
+ const asset=await app.request('/web/feature-visibility.js');assert.equal(asset.status,200);assert(asset.text.includes('hideInactiveFeatures'));const demoAsset=await app.request('/web/partner-demo.js');assert.equal(demoAsset.status,200);assert(demoAsset.headers['content-type']?.includes('javascript')||demoAsset.text.includes('export async function partnerDemoPage'));
 });
 test('initially hidden navigation reveals only when its actual capability or existing account permits it',async()=>{
  const {hideInactiveFeatures}=await modulePromise;
@@ -36,3 +36,5 @@ test('read-only production inspection can use the current development migration 
  const source=fs.readFileSync('.github/workflows/platform-tests.yml','utf8'),audit=source.slice(source.indexOf('  existing-service-audit:'),source.indexOf('  review-auth-diagnostic:'));
  assert(audit.includes("github.ref == 'refs/heads/codex/gospel-phase-one'"));assert(audit.includes('node scripts/audit-existing-service.cjs'));assert(!audit.includes('LAE_EXISTING_RECOVERY_REHEARSAL'));assert(!audit.includes('release-existing-service.cjs'));
 });
+
+test('affiliate demo is independent of live checkout and unrelated review tools',async()=>{const {customerFeatures}=await modulePromise;const c=customerFeatures({affiliate_demo:true,payments:false,review_tools:false});assert.equal(c.affiliate_demo,true);assert.equal(c.checkout,false);assert.equal(c.review,false);assert.equal(c.payouts,false);assert.equal(customerFeatures({affiliate_demo:'true'}).affiliate_demo,false);});

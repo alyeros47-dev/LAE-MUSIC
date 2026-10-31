@@ -67,6 +67,13 @@ module.exports = async (t, { pool, api }) => {
         ).status,
         409,
       );
+      const caps=(await api('/api/platform/capabilities')).data;assert.equal(caps.affiliate_demo,true);assert.equal(caps.payments,false);
+      const example={product:'premium:monthly',depth:'2',payment_state:'verified',sale_date:'2026-12-21'};
+      assert.equal((await api('/api/platform/partners/practice/preview',{method:'POST',body:example})).status,401);
+      assert.equal((await api('/api/platform/partners/practice/preview',{cookie:who.cookie})).status,405);
+      const simulated=await api('/api/platform/partners/practice/preview',{method:'POST',cookie:who.cookie,body:example});
+      assert.equal(simulated.status,200);assert.equal(simulated.data.team.period,'2027-Q1');assert.equal(simulated.data.your_team_projection_minor,3);assert.equal(simulated.data.actual_withdrawable_minor,0);
+      assert.equal((await api('/api/platform/partners/practice/preview',{method:'POST',cookie:who.cookie,body:{...example,commission_minor:9999}})).status,400);
       const after = (
         await pool.query(
           "SELECT (SELECT COUNT(*) FROM affiliate_subscription_commissions) AS commissions,(SELECT COUNT(*) FROM finance_transfers) AS transfers,(SELECT COUNT(*) FROM artist_subscriptions) AS packages",

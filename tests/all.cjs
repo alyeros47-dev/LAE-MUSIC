@@ -174,3 +174,5 @@ require('./gospel-launch.test.cjs');
 require('./feature-visibility.test.cjs');
 
 require('./lyrics-originality.test.cjs');
+
+require('./partner-demo.test.cjs');
