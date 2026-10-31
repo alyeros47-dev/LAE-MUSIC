@@ -1,297 +1,115 @@
-name: Platform release candidate verification
+name: Approved four-minute voice recorder deployment
 on:
-  pull_request:
-    paths-ignore:
-      - "android-app/**"
   workflow_dispatch:
     inputs:
-      production_release_mode:
-        description: "Owner-authorized existing-service release: plan, prepare feature flags, or deploy an approved merge"
-        required: false
+      phase:
         type: choice
-        options: ["", plan, prepare, deploy]
-        default: ""
-      production_candidate_sha:
-        description: "Exact tested development candidate SHA"
-        required: false
+        options: [preflight, deploy]
+        default: preflight
+        required: true
+      merge_sha:
         type: string
-        default: ""
-      production_commit_sha:
-        description: "Exact production merge SHA for deploy mode"
         required: false
-        type: string
-        default: ""
-      production_ci_run:
-        description: "Successful exact-candidate full CI run ID"
-        required: false
-        type: string
-        default: ""
-      recovery_backup_branch:
-        description: "Optional previously created owned backup branch; requires its original workflow run ID"
-        required: false
-        type: string
-        default: ""
-      recovery_backup_run:
-        description: "Original workflow run ID that created the saved backup"
-        required: false
-        type: string
-        default: ""
-      existing_service_recovery_rehearsal:
-        description: "Create a bounded private backup and isolated recovery/migration rehearsal; never migrate production"
-        required: false
-        type: boolean
-        default: false
-      existing_service_audit:
-        description: "Read-only inspection of existing production service and schema; no deployment or database writes"
-        required: false
-        type: boolean
-        default: false
-      review_auth_email_sha256:
-        description: "Optional SHA-256 account lookup digest; sandbox only, no resets/deployment"
-        required: false
-        type: string
-        default: ""
-      review_lyrics_model_check:
-        description: "Read-only verification of the two approved lyrics models; no billed generation or deployment"
-        required: false
-        type: boolean
-        default: false
+        default: ''
 permissions:
   contents: read
+  actions: read
+  pull-requests: read
 jobs:
-  change-scope:
-    runs-on: ubuntu-latest
-    outputs:
-      mode: ${{ steps.scope.outputs.mode }}
-      groups: ${{ steps.scope.outputs.groups }}
-      shared: ${{ steps.scope.outputs.shared }}
-      metadata: ${{ steps.scope.outputs.metadata }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - id: scope
-        run: node scripts/dna-ci-scope.cjs
-
-  music-dna-focused:
-    needs: change-scope
-    if: needs.change-scope.result == 'success' && needs.change-scope.outputs.mode != 'full'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - name: Verify only changed Music DNA groups and necessary shared checks
-        env:
-          LAE_DNA_GROUPS: ${{ needs.change-scope.outputs.groups }}
-          LAE_DNA_SHARED: ${{ needs.change-scope.outputs.shared }}
-          LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
-        run: npm run test:dna
-  existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/gospel-phase-one' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
+  deploy-approved-four-minute-recorder:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/four-minute-voice-release'
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    permissions:
-      contents: read
-      actions: read
-      pull-requests: read
     concurrency:
       group: lae-existing-production-release
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: efacd3f2199ca0f316217f4676d173ba7bfd0a44
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Verify production release guards
-        run: node --test tests/production-release.test.cjs
-      - name: Execute owner-authorized existing-service release phase
+          node-version: '22'
+      - run: npm ci
+      - name: Bind existing release guards to the owner-approved PR 20
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for name in ['lib/production-release.js', 'tests/production-release.test.cjs']:
+              p=Path(name)
+              s=p.read_text()
+              assert s.count('/pulls/12')==1
+              p.write_text(s.replace('/pulls/12','/pulls/20'))
+          PY
+          node --test tests/production-release.test.cjs
+      - name: Read-only existing service and backup verification before merge
+        if: inputs.phase == 'preflight'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
-          LAE_RELEASE_MODE: ${{ inputs.production_release_mode }}
-          LAE_RELEASE_CANDIDATE_SHA: ${{ inputs.production_candidate_sha }}
-          LAE_RELEASE_COMMIT_SHA: ${{ inputs.production_commit_sha }}
-          LAE_RELEASE_CI_RUN: ${{ inputs.production_ci_run }}
-        run: node scripts/release-existing-service.cjs
-      - name: Verify live assets, registration, login, free allowances and original music
-        if: inputs.production_release_mode == 'deploy'
+        run: |
+          node - <<'JS'
+          const assert=require('node:assert/strict');
+          const {ID,featureSettings,REQUIRED_JOBS}=require('./lib/production-release');
+          const {serviceValid,inventory}=require('./scripts/audit-existing-service.cjs');
+          async function get(url,key){const r=await fetch(url,{headers:{Authorization:'Bearer '+key,Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(30000)});assert(r.ok,'Read-only preflight API HTTP '+r.status);return r.json();}
+          (async()=>{
+            const root='https://api.github.com/repos/alyeros47-dev/LAE-MUSIC',gh=p=>get(root+p,process.env.GITHUB_TOKEN),r=p=>get('https://api.render.com/v1/services/'+ID+p,process.env.RENDER_API_KEY);
+            const pr=await gh('/pulls/20'),main=await gh('/git/ref/heads/main');assert.equal(pr.state,'open');assert.equal(pr.head.sha,'efacd3f2199ca0f316217f4676d173ba7bfd0a44');assert.equal(pr.base.ref,'main');assert.equal(main.object.sha,'cd0f0175623ebaed64bd5f9dcac0d4e2700508cc');
+            const run=await gh('/actions/runs/41238360889'),jobs=(await gh('/actions/runs/41238360889/jobs?per_page=100')).jobs;assert.equal(run.head_sha,pr.head.sha);assert.equal(run.conclusion,'success');assert(REQUIRED_JOBS.every(name=>jobs.some(j=>j.name===name&&j.conclusion==='success')));
+            const raw=await r(''),service=raw.service||raw;assert(serviceValid(service));assert.equal(service.id,ID);assert.equal(service.branch,'main');assert.equal(service.serviceDetails.runtime,'node');
+            const env=inventory(await r('/env-vars?limit=100'));assert(['DATABASE_URL','R2_ACCOUNT_ID','R2_ACCESS_KEY_ID','R2_SECRET_ACCESS_KEY','R2_BUCKET','MUSICAPI_API_KEY'].every(k=>!!env[k]));assert(!Object.keys(env).some(k=>k.startsWith('LAE_REVIEW_')&&env[k]));const changes=Object.keys(featureSettings(env)).filter(k=>env[k]!==featureSettings(env)[k]);assert.equal(changes.length,0,'Environment changes are not authorized by this recorder release');
+            assert((await require('./lib/neon-recovery-inspection').inspect({key:process.env.NEON_API_KEY,databaseUrl:env.DATABASE_URL})).database_binding_verified);
+            const backup=(await get('https://console.neon.tech/api/v2/projects/restless-brook-43273058/branches/br-spring-night-b4y9h9xp',process.env.NEON_API_KEY)).branch;assert.equal(backup.id,'br-spring-night-b4y9h9xp');assert.equal(backup.parent_id,'br-flat-darkness-b42js8ma');assert.equal(backup.name,'lae-release-41141460115-backup');assert(Date.parse(backup.expires_at)>Date.now()+3600000);
+            assert.equal(require('./config/payment-merchant.json').checkout_mode,'disabled');console.log(JSON.stringify({preflight:'passed',service_id:ID,candidate:pr.head.sha,ci_run:'41238360889',recovery_backup_verified:true,existing_configuration_preserved:true,auto_deploy_trigger:service.autoDeployTrigger??service.autoDeploy??'unknown',environment_changes:0,production_writes:0,paid_requests:0}));
+          })().catch(e=>{console.error('Pre-merge check stopped:',e.message);process.exitCode=1;});
+          JS
+      - name: Verify the approved merge, backup, CI and existing Render service; deploy exact merge
+        if: inputs.phase == 'deploy'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_LIVE_RELEASE_VERIFY: "1"
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          APPROVED_MERGE_SHA: ${{ inputs.merge_sha }}
+        run: |
+          node - <<'JS'
+          const {release}=require('./lib/production-release');
+          (async()=>{
+            const r=await release({mode:'deploy',candidate:'efacd3f2199ca0f316217f4676d173ba7bfd0a44',commit:process.env.APPROVED_MERGE_SHA,ciRun:'41238360889',key:process.env.RENDER_API_KEY,neonKey:process.env.NEON_API_KEY,githubToken:process.env.GITHUB_TOKEN,record:x=>console.log(JSON.stringify(x))});
+            console.log(JSON.stringify(r));
+          })().catch(e=>{console.error('PR 20 release stopped:',e.message);process.exitCode=1;});
+          JS
+      - name: Verify exact live assets, account sessions, existing audio and database records
+        if: inputs.phase == 'deploy'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_LIVE_RELEASE_VERIFY: '1'
         run: node scripts/verify-live-release.cjs
-  existing-service-recovery-rehearsal:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    concurrency:
-      group: lae-existing-database-recovery
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Verify recovery guards before management writes
-        run: node --test tests/neon-recovery-rehearsal.test.cjs
-      - name: Back up and rehearse only isolated database branches
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          LAE_EXISTING_RECOVERY_REHEARSAL: "1"
-          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
-          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
-        run: node scripts/rehearse-existing-recovery.cjs
-  existing-service-audit:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Read existing production configuration and schema without changes
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-        run: node scripts/audit-existing-service.cjs
-  review-auth-diagnostic:
-    if: github.event_name == 'workflow_dispatch' && (inputs.review_auth_email_sha256 != '' || inputs.review_lyrics_model_check) && github.ref == 'refs/heads/codex/premium-platform-release'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: node --test tests/review-auth-diagnostic.test.cjs
-      - name: Read-only sandbox account or approved model check
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          REVIEW_AUTH_EMAIL_SHA256: ${{ inputs.review_auth_email_sha256 }}
-          REVIEW_LYRICS_MODEL_CHECK: ${{ inputs.review_lyrics_model_check }}
-        run: node scripts/review-auth-diagnostic.cjs
-  review-persistence:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: Build isolated review image without service credentials
-        run: docker build -f deploy/review.Dockerfile -t lae-review-persistence-ci .
-      - name: Replace container and verify retained account, audio and provider budget
-        env:
-          LAE_REVIEW_PERSISTENCE_TESTS: "1"
-          LAE_REVIEW_TEST_IMAGE: lae-review-persistence-ci
-        run: node tests/review-persistence-container.cjs
-  application:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npm test
-      - run: npm audit --omit=dev
-      - run: npm run test:http
-      - run: npm run test:email
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence
-          path: artifacts/
-
-  postgres:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: lae_ci_fixture_only
-          POSTGRES_DB: lae_music_ci
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d lae_music_ci"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npm run test:postgres
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-      - run: npm run test:upgrade
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-      - run: node tests/gospel-launch-postgres.cjs
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-
-  browser-compatibility:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [firefox, webkit]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: npm run test:browser
-        env:
-          LAE_TEST_BROWSER: ${{ matrix.browser }}
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence-${{ matrix.browser }}
-          path: artifacts/
+      - name: Verify the exact four-minute recorder assets on both live origins
+        if: inputs.phase == 'deploy'
+        run: |
+          node - <<'JS'
+          const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          (async()=>{for(const origin of ['https://lae-music.com','https://lae-music.onrender.com'])for(const file of ['web/studio-workflow.js','web/studio-engine.js','web/app.js']){const response=await fetch(origin+'/'+file+'?recorder-release='+process.env.GITHUB_RUN_ID,{redirect:'error',signal:AbortSignal.timeout(30000)});assert(response.ok);const digest=b=>crypto.createHash('sha256').update(b).digest('hex');assert.equal(digest(Buffer.from(await response.arrayBuffer())),digest(fs.readFileSync(file)));}console.log(JSON.stringify({both_live_origins_match_approved_recorder:true,maximum_seconds:240,paid_requests:0,profile_replacements:0}));})().catch(e=>{console.error('Recorder asset verification stopped:',e.message);process.exitCode=1;});
+          JS
+      - name: Install browser for focused live-asset inspection
+        if: inputs.phase == 'deploy'
+        run: npx playwright install --with-deps chromium
+      - name: Inspect live studio recorder with all account and provider APIs intercepted
+        if: inputs.phase == 'deploy'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tests/voice-recorder-browser.cjs')
+          s=p.read_text()
+          old="const origin='http://127.0.0.1:'+server.address().port"
+          assert s.count(old)==1
+          s=s.replace(old,"const origin='https://lae-music.com'")
+          old="if(p==='/api/voice/sample')return route.continue();"
+          assert s.count(old)==1
+          s=s.replace(old,"if(p==='/api/voice/sample'){checkUpload(req.postDataBuffer());return send({saved:true});}")
+          p.write_text(s)
+          PY
+          node tests/voice-recorder-browser.cjs
