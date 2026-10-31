@@ -126,8 +126,8 @@ async function main() {
         }),
         sub = await api("/api/artist/subscription", { cookie: login.cookie });
       check(
-        wallet.status === 200 && wallet.data.credits === 2,
-        "two persistent complimentary lyrics credits",
+        wallet.status === 200 && wallet.data.credits === 0,
+        "unpaid account receives no complimentary lyrics credits",
       );
       check(
         wallet.data.models.includes("gpt-6.1-sol") &&
@@ -136,9 +136,9 @@ async function main() {
       );
       check(
         allowance.status === 200 &&
-          allowance.data.artist_test_access &&
-          allowance.data.remaining_generations === 2,
-        "free music-generation allowance",
+          allowance.data.active === false &&
+          allowance.data.remaining_generations === 0,
+        "unpaid artist production remains locked",
       );
       check(
         sub.data.artist_features_active === false && !sub.data.subscription,
@@ -246,8 +246,8 @@ async function main() {
       customer_moods_verified: 4,
       artist_registration_logout_login: true,
       listener_registration_logout_login: true,
-      free_lyrics_credits: 2,
-      free_music_requests: 2,
+      free_lyrics_credits: 0,
+      free_music_requests: 0,
       existing_audio_ranges_passed: audio,
       migrations_verified: migrationsVerified,
       existing_core_records_retained: true,

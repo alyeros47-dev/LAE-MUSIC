@@ -181,13 +181,13 @@ test("production plan is read-only, preserves secrets and identifies only approv
   assert.equal(r.payments_enabled, false);
   assert.equal(r.service_id, ID);
   assert(!JSON.stringify(r).includes("private-"));
-  assert(r.feature_keys_to_update.includes("LAE_ARTIST_TEST_ACCESS"));
+  assert(!r.feature_keys_to_update.includes("LAE_ARTIST_TEST_ACCESS"));
 });
 test("production preparation updates individual feature keys and retains database, R2 and API values", async () => {
   const f = fixture("prepare"),
     r = await f.run();
   assert(r.existing_environment_preserved);
-  assert.equal(f.env.LAE_ARTIST_TEST_ACCESS, "1");
+  assert.equal(f.env.LAE_ARTIST_TEST_ACCESS, undefined);
   assert.equal(f.env.R2_SECRET_ACCESS_KEY, "private-r2-fixture");
   assert.equal(f.env.STUDIO_RELEASE_WORKER_ENABLED, "true");
   assert(!f.calls.some((x) => x.method === "POST"));

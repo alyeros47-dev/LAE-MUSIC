@@ -11,6 +11,7 @@ function fixture(p){
  case '/api/platform/capabilities':return {inspection_only:true,music_provider_configured:true,lyrics_configured:true,studio_release_import:false,voice_upload_available:false,payments:false,payouts:false,payment_mode:'disabled',review_tools:false,offline_listening:false,email_delivery_enabled:false};
  case '/api/platform/currencies':return require('../lib/currency').options();
  case '/api/platform/pricing':return {country:'NG',currency:'USD',base_currency:'USD',plans:[]};
+ case '/api/artist/subscription':return {artist_features_active:true,plan:'starter',inspection_sample:true};
  case '/api/artist/studio-allowance':return {active:true,included_generations:2,remaining_generations:2,inspection_sample:true};
  case '/api/generation/wallet':return {credits:2,inspection_sample:true};
  case '/api/generation/history':return {records:[]};

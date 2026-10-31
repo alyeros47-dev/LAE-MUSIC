@@ -9,7 +9,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://127.0.0.1:'+server.address().port;
  const catalogue=require('../lib/studio-launch').catalogue(),calls=[],results=[];
  try{for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
-  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false,createdTask=false,failNextAudioPut=false,uploadReserved=false;
+  let unavailable=false,listenerSignedIn=false,uploadPlanActive=true,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false,createdTask=false,failNextAudioPut=false,uploadReserved=false;
   const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.stack));
   await page.route('**/api/**',async route=>{
@@ -87,19 +87,13 @@ const AxeBuilder=require('@axe-core/playwright').default;
   for(const name of ['audio','cover'])assert(await page.locator('#upload-form [name='+name+']').isVisible());
   assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
   assert((await page.locator('#upload-access-status').innerText()).includes('storage'));
-  uploadStorageAvailable=true;await page.reload();await page.locator('#upload-form').waitFor();
-  assert((await page.locator('#upload-access-status').innerText()).includes('active artist package'));
-  assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').length,results.length*4);
+  uploadStorageAvailable=true;uploadPlanActive=false;await page.reload();await page.getByRole('heading',{name:'Choose a paid artist package.',exact:true}).waitFor();assert.equal(await page.locator('#upload-form').count(),0);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').length,results.length*3);
   // Active paid and explicitly granted review access both retain the file controls.
-  for(const access of ['paid','review','complimentary']){
-   uploadPlanActive=access==='paid';reviewUploadAccess=access==='review';artistTestAccess=access==='complimentary';uploadReserved=false;failNextAudioPut=access==='complimentary';
+  for(const access of ['paid','review']){
+   uploadPlanActive=access==='paid';reviewUploadAccess=access==='review';artistTestAccess=access==='complimentary';uploadReserved=false;failNextAudioPut=access==='paid';
    await page.reload();await page.locator('#upload-form').waitFor();
-   if(artistTestAccess){
-    await page.getByLabel('Generated-song upload code',{exact:true}).fill('');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
-    await page.getByLabel('Generated-song upload code',{exact:true}).fill('not-a-code');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
-    await page.getByLabel('Generated-song upload code',{exact:true}).fill('a'.repeat(36));assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isEnabled());
-   }
+
    await page.getByLabel('Genre',{exact:true}).fill('Gospel');
    await page.locator('#upload-form [name=audio]').setInputFiles({name:'prayer.mp3',mimeType:'audio/mpeg',buffer:Buffer.alloc(2048,1)});
    await page.locator('#upload-form [name=cover]').setInputFiles({name:'cover.png',mimeType:'image/png',buffer:Buffer.from('fixture-cover')});
@@ -107,7 +101,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
    assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isEnabled());
    const generationsBeforeUpload=calls.filter(c=>c.p==='/api/music/sonic/create').length;
    await page.getByRole('button',{name:'Upload & publish',exact:true}).click();
-   if(artistTestAccess){
+   if(access==='paid'){
     await page.locator('#upload-form .form-status').getByText(/Your song and code are preserved/).waitFor();
     assert.equal((await page.getByLabel('Generated-song upload code',{exact:true}).inputValue()).toUpperCase(),'A'.repeat(36));
     await page.getByRole('button',{name:'Upload & publish',exact:true}).click();
@@ -117,12 +111,12 @@ const AxeBuilder=require('@axe-core/playwright').default;
    assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').at(-1).data.uploadCode,'A'.repeat(36));
    await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
   }
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/finish').length,(results.length+1)*3);
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/file').length,(results.length+1)*7);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/finish').length,(results.length+1)*2);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/file').length,(results.length+1)*5);
   const uploadAxe=await new AxeBuilder({page}).analyze();assert.deepEqual(uploadAxe.violations.map(v=>v.id),[]);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/upload-form-'+viewport.width+'.png',fullPage:true});
-  uploadPlanActive=false;reviewUploadAccess=false;artistTestAccess=false;uploadStorageAvailable=false;
+  uploadPlanActive=true;reviewUploadAccess=false;artistTestAccess=false;uploadStorageAvailable=false;
   await page.goto(origin+'/studio');await page.getByLabel('Creation method').waitFor();
   await page.getByRole('checkbox',{name:/I have permission to use these lyrics/}).check();
   await page.getByLabel('Music direction',{exact:true}).selectOption('custom');await page.getByLabel('Song style & arrangement',{exact:true}).fill('Christian praise with traditional Ogene percussion and warm acoustic guitar.');await page.locator('#studio-form [name="musicDnaMood"]').selectOption('smooth');
@@ -132,7 +126,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
   const axe=await new AxeBuilder({page}).analyze();assert.deepEqual(axe.violations.map(v=>({id:v.id,impact:v.impact})),[]);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(errors,[]);
   assert(await page.locator('#studio-voice').isHidden());assert.equal(await page.locator('#lyrics-studio-form option[value=custom]').count(),0);assert(await page.locator('[data-studio-custom-direction]').isHidden());
   unavailable=true;await page.reload();await page.getByLabel('Creation method').waitFor({state:'attached'});assert(await page.locator('[data-ai-creation]').isHidden());assert(await page.locator('.music-studio-panel').isHidden());assert(await page.getByLabel('Creation method').isHidden());
-  await page.goto(origin+'/workspace?tab=plans');await page.getByRole('heading',{name:'Your music. Your pace.',exact:true}).waitFor();assert.equal(await page.locator('[data-plan]:visible').count(),0);assert.equal(await page.getByRole('button',{name:/Checkout unavailable|Save unpaid purchase/}).count(),0);
+  await page.goto(origin+'/workspace?tab=plans');await page.getByRole('heading',{name:'Your music. Your pace.',exact:true}).waitFor();assert.equal(await page.locator('[data-plan]:visible').count(),3);assert.equal(await page.getByRole('button',{name:/Checkout unavailable|Save unpaid purchase/}).count(),0);
   await page.goto(origin+'/workspace?tab=finance');await page.getByRole('heading',{name:'Your ledger',exact:true}).waitFor();assert(await page.locator('#withdraw-form').isHidden());
   await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor({state:'attached'});assert(await page.locator('#upload-form').isVisible());assert(await page.locator('#upload-form [name=audio]').isVisible());assert(await page.locator('#upload-form [name=cover]').isVisible());assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
   await page.goto(origin+'/premium');await page.getByRole('heading',{name:'Your music stays yours.',exact:true}).waitFor();assert.equal(await page.locator('[data-premium-plan]:visible').count(),0);assert.equal(await page.locator('[data-feature=offline_save]:visible').count(),0);

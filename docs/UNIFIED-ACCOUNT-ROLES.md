@@ -20,7 +20,7 @@ Migration `025-linked-account-roles.sql` adds an initially empty one-to-one role
 
 Existing creator/listener IDs remain the owners of their respective records. Linking is transactional and audited. Existing profiles keep their names, country, selected package, referrer and financial history. A new artist profile preserves a valid incoming referrer and requested package; its membership remains pending payment. Purchase-link handoffs retain the selected package/referrer; Premium listener invitations retain their return destination. Existing referrers are not overwritten on retry.
 
-Adding a role is free. It does not buy Premium or an artist package, grant paid access, reset an existing artist's credits, create commissions or send money. Existing free-testing rules still apply to genuinely new artist workspaces.
+Adding a role is free. It does not buy Premium or an artist package, grant paid access, reset an existing artist's credits, create commissions or send money. The owner has closed public free artist testing. Neither linking roles nor the legacy LAE_ARTIST_TEST_ACCESS flag grants production access. Existing credits and historical trial records remain intact, but using production services requires an active verified artist package.
 
 ## Authentication and recovery
 
@@ -38,3 +38,16 @@ Focused tests cover access from either role; one email/password across all three
 The real studio frontend is checked at phone and laptop widths using intercepted APIs, including role access from both My account and registration, eye controls, error recovery, dashboard links and automated accessibility checks. Tests use disposable local PostgreSQL schemas and mocked providers. No production data, R2 writes, paid API calls, checkout or withdrawal operations are used.
 
 Production deployment requires owner approval and the standard exact-candidate checks. Existing customers' old same-email profiles are not bulk-linked during deployment; each customer proves ownership through the account page.
+
+
+## Paid artist production and free partner access
+
+The same email/password does not imply the same paid entitlements. Artist production is locked until an active paid artist subscription has started, has not expired and is not on a payment hold. A selected plan name, membership-status text, Premium Listener subscription, existing wallet credits or the retired public-testing environment flag cannot bypass the server checks.
+
+The backend gates lyrics requests, new music generation, voice upload/training, WAV preparation, upload/code preparation and new release imports/publication before provider or storage operations. Lyrics reservation and voice training also recheck the package inside their transactions. Existing owned outputs, financial records and historical credit/reconciliation entries are preserved.
+
+Unpaid customers see package choices rather than production forms. Selecting a package stores a preference, not a payment or activation. Partner dashboards, referral/product links and legitimate earnings records remain free; commissions still require independently verified qualifying product purchases. Artist subscriptions do not grant Premium Listener benefits, and Premium Listener subscriptions do not grant artist production access.
+
+The existing checkout configuration remains disabled. The release does not activate live financial operations: new unpaid customers can select a package, but cannot use production tools until payment is verified through the approved payment flow. Existing eligible paid artist records continue to unlock their original package limits.
+
+Dedicated isolated review fixtures remain separate from production and retain their controlled test provider/storage limits. Production cannot reopen the retired public trial through its old environment flag. No API key or environment value needs replacement for this policy.

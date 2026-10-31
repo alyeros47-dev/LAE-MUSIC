@@ -262,6 +262,7 @@ module.exports = async function voice(req, res, p, ctx) {
         await db.query("SELECT id FROM creators WHERE id=$1 FOR UPDATE", [
           user.id,
         ]);
+        if(!local)await require('./lib/artist-access').requirePackage(db,user.id,process.env,{lock:true});
         x = (
           await db.query(
             "SELECT object_key,task_id,persona_id,status FROM artist_voice_profiles WHERE creator_id=$1",

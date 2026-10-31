@@ -63,3 +63,5 @@ require('./listening-preferences.test.cjs');
 require('./social-auth-postgres.cjs');
 
 require('./account-roles-postgres.cjs');
+
+require('./artist-access-postgres.cjs');
