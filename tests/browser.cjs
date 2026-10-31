@@ -192,17 +192,17 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
   releaseImportEnabled=false;existingVoiceProfile={status:'none',hasVoice:false};await page.goto(origin+'/studio');await page.locator('[data-studio-custom-direction]').evaluate(el=>el.open=true);await page.getByText('Language notes (optional)',{exact:true}).evaluate(el=>el.parentElement.open=true);assert(await page.getByLabel('Use my saved voice profile',{exact:true}).isHidden());assert.equal(await page.getByRole('button',{name:/Generate music/}).isDisabled(),false);await page.getByRole('button',{name:'Check progress & previews',exact:true}).click();assert(await page.getByRole('button',{name:'Save as a private release',exact:true}).isHidden());assert(!calls.some(x=>['/api/voice/upload','/api/voice/train'].includes(x.p)));releaseImportEnabled=true;existingVoiceProfile={status:'ready',hasVoice:true};
   // Actual studio DOM + recording lifecycle, mocked microphone/storage/provider only.
   voiceUploadAvailable=true;existingVoiceProfile={status:'none',hasVoice:false};voicePutFails=true;
-  exportsServer.setVoiceUpload(bytes=>{voicePuts++;assert.equal(bytes.subarray(0,4).toString(),'RIFF');assert.equal(bytes.readUInt32LE(24),8000);assert.equal(bytes.length,44+8000*60*2);return {status:voicePutFails?502:200,body:voicePutFails?{error:'Fixture storage unavailable; training was not started.'}:{saved:true}};});
+  exportsServer.setVoiceUpload(bytes=>{voicePuts++;assert.equal(bytes.subarray(0,4).toString(),'RIFF');assert.equal(bytes.readUInt32LE(24),8000);assert.equal(bytes.length,44+8000*240*2);return {status:voicePutFails?502:200,body:voicePutFails?{error:'Fixture storage unavailable; training was not started.'}:{saved:true}};});
   await page.goto(origin+'/studio');await page.locator('[data-studio-custom-direction]').evaluate(el=>el.open=true);await page.getByText('Language notes (optional)',{exact:true}).evaluate(el=>el.parentElement.open=true);
   await page.evaluate(()=>{
     window.__originalAudioContext=window.AudioContext;
     Object.defineProperty(navigator,'mediaDevices',{configurable:true,value:{getUserMedia:async()=>({getTracks:()=>[{stop(){window.__microphoneStopped=true;}}]})}});
-    window.AudioContext=class{constructor(){this.sampleRate=8000;this.destination={};}async resume(){}async close(){}createMediaStreamSource(){return{connect(){},disconnect(){}};}createScriptProcessor(){window.__voiceProcessor={connect(){},disconnect(){}};return window.__voiceProcessor;}};
+    window.AudioContext=class{constructor(options){window.__voiceOptions=options;this.sampleRate=8000;this.destination={};}async resume(){}async close(){}createMediaStreamSource(){return{connect(){},disconnect(){}};}createScriptProcessor(){window.__voiceProcessor={connect(){},disconnect(){}};return window.__voiceProcessor;}};
   });
   const voiceSave=page.getByRole('button',{name:'Save & create my voice profile',exact:true});
   await page.getByRole('button',{name:'Record my singing voice',exact:true}).click();
   await page.waitForFunction(()=>!!window.__voiceProcessor?.onaudioprocess);
-  await page.evaluate(()=>{const sample=new Float32Array(4096);for(let n=0;n<118&&window.__voiceProcessor.onaudioprocess;n++)window.__voiceProcessor.onaudioprocess({inputBuffer:{getChannelData:()=>sample}});window.AudioContext=window.__originalAudioContext;});
+  await page.evaluate(()=>{const sample=new Float32Array(4096);for(let n=0;n<118&&window.__voiceProcessor.onaudioprocess;n++)window.__voiceProcessor.onaudioprocess({inputBuffer:{getChannelData:()=>sample}});window.__continuedPastOneMinute=!!window.__voiceProcessor.onaudioprocess;for(let n=118;n<469&&window.__voiceProcessor.onaudioprocess;n++)window.__voiceProcessor.onaudioprocess({inputBuffer:{getChannelData:()=>sample}});window.AudioContext=window.__originalAudioContext;});assert(await page.evaluate(()=>window.__continuedPastOneMinute));assert.equal(await page.evaluate(()=>window.__voiceOptions.sampleRate),24000);
   await page.getByText(/Your singing sample is ready for local preview/).waitFor();
   assert(await page.evaluate(()=>window.__microphoneStopped));assert(await voiceSave.isDisabled());
   await page.locator('#studio-voice-consent').check();assert.equal(await voiceSave.isDisabled(),false);
@@ -211,7 +211,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
   voicePutFails=false;await voiceSave.click();await page.getByText('Your singing voice is ready. Select “Use my saved voice profile” to use it.',{exact:true}).waitFor();
   assert.equal(voicePuts,2);assert.equal(voiceTrains,1);assert.equal(await page.locator('#lyrics-studio-form [name=voice] option[value=custom]').isDisabled(),false);assert.equal(await page.getByLabel('Use my saved voice profile',{exact:true}).isDisabled(),false);
   await page.getByLabel('Use my saved voice profile',{exact:true}).check();await page.reload();
-  assert.equal(await page.getByLabel('Use my saved voice profile',{exact:true}).isDisabled(),false);
+  assert.equal(await page.getByLabel('Use my saved voice profile',{exact:true}).isDisabled(),false);assert(await page.getByLabel('Use my saved voice profile',{exact:true}).isChecked());assert.match(await page.locator('#studio-generation-voice-mode').innerText(),/your saved voice profile/);await page.getByRole('button',{name:'Use standard AI voice instead',exact:true}).click();assert.equal(await page.getByLabel('Use my saved voice profile',{exact:true}).isChecked(),false);
   // Clear explicit prior presets and verify a custom idea remains the whole direction.
   for(const name of ['musicFamily','musicCountry','musicProfile','genre','language','voice','duration','beat'])await page.locator('#lyrics-studio-form [name='+name+']').selectOption('');
   await page.getByLabel('Lyrics model',{exact:true}).selectOption('');
