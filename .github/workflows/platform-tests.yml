@@ -24,7 +24,7 @@ jobs:
           node - <<'JS'
           const assert=require('node:assert/strict'),{Pool}=require('pg');
           const {inventory,serviceValid}=require('./scripts/audit-existing-service.cjs');
-          const normalize=x=>String(x||'').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
+          const normalize=x=>String(x||'').normalize('NFKD').replace(/\p{M}/gu,'').toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
           (async()=>{
             const root='https://api.render.com/v1/services/srv-db84s7m89jmc73c7l9rg';
             const read=async path=>{const r=await fetch(root+path,{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY},signal:AbortSignal.timeout(30000)});assert(r.ok,'Read-only service access');return r.json();};
@@ -48,16 +48,17 @@ jobs:
               }finally{db.release();}
             }finally{await pool.end();}
             process.env.MUSICAPI_API_KEY=env.MUSICAPI_API_KEY;
-            let matches=0,recoverable=0,reads=0,failures=0;
+            let matches=0,recoverable=0,reads=0,failures=0;const returnedTitles=[];
             for(const task of tasks){
               try{
                 reads++;
                 const songs=await require('./musicapi-sonic').releaseProvider.clips(task.task_id);
+                returnedTitles.push(...songs.map(song=>({title:song.title,duration:song.duration||null})));
                 const found=songs.filter(song=>normalize(song.title).includes(normalize('KO SI BRAKE')));
                 matches+=found.length;
                 if(history.some(g=>g.generation_reference===task.task_id))recoverable+=found.length;
               }catch{failures++;}
             }
-            console.log(JSON.stringify({artist_name_matches:owners,existing_matching_title_records:matchingCodes,owned_recent_tasks:tasks.length,read_only_provider_status_requests:reads,provider_read_failures:failures,matching_completed_songs:matches,matching_songs_in_repaired_history:recoverable,database_writes:0,generation_requests:0,paid_credits_used:0,private_emails_or_media_urls_exposed:false}));
+            console.log(JSON.stringify({artist_name_matches:owners,returned_song_titles:returnedTitles,existing_matching_title_records:matchingCodes,owned_recent_tasks:tasks.length,read_only_provider_status_requests:reads,provider_read_failures:failures,matching_completed_songs:matches,matching_songs_in_repaired_history:recoverable,database_writes:0,generation_requests:0,paid_credits_used:0,private_emails_or_media_urls_exposed:false}));
           })().catch(e=>{console.error('Read-only recovery inspection stopped:',e.message);process.exitCode=1;});
           JS
