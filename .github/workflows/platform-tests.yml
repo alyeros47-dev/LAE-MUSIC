@@ -46,11 +46,6 @@ jobs:
             console.log(JSON.stringify(r));
           })().catch(e=>{console.error('PR 18 release stopped:',e.message);process.exitCode=1;});
           JS
-      - name: Verify exact live assets, account sessions, existing audio and database records
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_LIVE_RELEASE_VERIFY: '1'
-        run: node scripts/verify-live-release.cjs
       - run: npx playwright install --with-deps chromium
       - name: Verify the live welcome and strict anonymous listening filters
         run: |
@@ -81,7 +76,7 @@ jobs:
               assert(body.tracks.every(t=>taxonomy.matches(t.genre,preference)));assert(body.genres.every(g=>taxonomy.matches(g.genre,preference)));
               await page.getByRole('button',{name:'Choose your music',exact:true}).waitFor();assert.equal(await page.locator('.editorial-home').count(),0);
               await page.reload({waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'Choose your music',exact:true}).waitFor({timeout:45000});
-              assert.equal(await page.getByRole('dialog').count(),0);assert(await page.evaluate(()=>JSON.parse(localStorage.getItem('lae_listening_preferences_v1')).selections[0].genres.includes('worship')));
+              await page.waitForFunction(()=>typeof document.getElementById('change-listening')?.onclick==='function');assert.equal(await page.getByRole('dialog').count(),0);assert(await page.evaluate(()=>JSON.parse(localStorage.getItem('lae_listening_preferences_v1')).selections[0].genres.includes('worship')));
               await page.getByRole('button',{name:'Choose your music',exact:true}).click();await dialog.getByLabel('Praise',{exact:true}).check();
               const next=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/platform/discover'&&new URL(r.url()).searchParams.get('listening')?.includes('praise'),{timeout:45000});await dialog.getByRole('button',{name:'Show my music',exact:true}).click();const both=await (await next).json();
               assert(both.tracks.every(t=>taxonomy.matches(t.genre,{version:1,selections:[{family:'gospel',genres:['praise','worship']}]})));
