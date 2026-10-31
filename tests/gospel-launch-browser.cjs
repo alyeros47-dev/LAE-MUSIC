@@ -9,7 +9,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://127.0.0.1:'+server.address().port;
  const catalogue=require('../lib/studio-launch').catalogue(),calls=[],results=[];
  try{for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
-  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false,createdTask=false;
+  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false,createdTask=false,failNextAudioPut=false,uploadReserved=false;
   const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.stack));
   await page.route('**/api/**',async route=>{
@@ -42,9 +42,9 @@ const AxeBuilder=require('@axe-core/playwright').default;
    if(p==='/api/generation/history')return send({records:[]});
    if(p==='/api/platform/studio/catalog')return send(require('../lib/studio-launch').legacyCatalogue());
    if(p==='/api/platform/studio/dna/catalog')return send(catalogue);
-   if(p==='/api/generation/code/check')return send({valid:true,title:'My original prayer'});
-   if(p==='/api/music/upload/start')return send({id:'upload-fixture-1'});
-   if(p==='/api/music/upload/file')return send({saved:true});
+   if(p==='/api/generation/code/check')return send({valid:true,resumable:uploadReserved,title:'My original prayer'});
+   if(p==='/api/music/upload/start'){const resumed=uploadReserved;uploadReserved=true;return send({id:'upload-fixture-1',resumed,audio_already_stored:resumed});}
+   if(p==='/api/music/upload/file'){if(failNextAudioPut&&new URL(request.url()).searchParams.get('kind')==='cover'){failNextAudioPut=false;return route.abort('failed');}return send({saved:true});}
    if(p==='/api/music/upload/finish')return send({published:true});
    if(p==='/api/platform/artist-overview')return send({tracks:[],stats:{published:0,plays:0,followers:0}});
    if(p==='/api/music/sonic/create'){createdTask=true;assert.equal(data.creationMode,'own');assert.equal(data.rightsConfirmed,true);assert(request.headers()['idempotency-key']);return send({task_id:'browser_gospel_task_123',status:'pending'});}
@@ -90,10 +90,10 @@ const AxeBuilder=require('@axe-core/playwright').default;
   uploadStorageAvailable=true;await page.reload();await page.locator('#upload-form').waitFor();
   assert((await page.locator('#upload-access-status').innerText()).includes('active artist package'));
   assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').length,results.length*3);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').length,results.length*4);
   // Active paid and explicitly granted review access both retain the file controls.
   for(const access of ['paid','review','complimentary']){
-   uploadPlanActive=access==='paid';reviewUploadAccess=access==='review';artistTestAccess=access==='complimentary';
+   uploadPlanActive=access==='paid';reviewUploadAccess=access==='review';artistTestAccess=access==='complimentary';uploadReserved=false;failNextAudioPut=access==='complimentary';
    await page.reload();await page.locator('#upload-form').waitFor();
    if(artistTestAccess){
     await page.getByLabel('Generated-song upload code',{exact:true}).fill('');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
@@ -105,13 +105,20 @@ const AxeBuilder=require('@axe-core/playwright').default;
    await page.locator('#upload-form [name=cover]').setInputFiles({name:'cover.png',mimeType:'image/png',buffer:Buffer.from('fixture-cover')});
    await page.locator('#upload-form [name=rights]').check();
    assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isEnabled());
+   const generationsBeforeUpload=calls.filter(c=>c.p==='/api/music/sonic/create').length;
    await page.getByRole('button',{name:'Upload & publish',exact:true}).click();
+   if(artistTestAccess){
+    await page.locator('#upload-form .form-status').getByText(/Your song and code are preserved/).waitFor();
+    assert.equal((await page.getByLabel('Generated-song upload code',{exact:true}).inputValue()).toUpperCase(),'A'.repeat(36));
+    await page.getByRole('button',{name:'Upload & publish',exact:true}).click();
+   }
    await page.getByRole('heading',{name:'Your music catalog',exact:true}).waitFor();
+   assert.equal(calls.filter(c=>c.p==='/api/music/sonic/create').length,generationsBeforeUpload);
    assert.equal(calls.filter(c=>c.p==='/api/music/upload/start').at(-1).data.uploadCode,'A'.repeat(36));
    await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
   }
   assert.equal(calls.filter(c=>c.p==='/api/music/upload/finish').length,(results.length+1)*3);
-  assert.equal(calls.filter(c=>c.p==='/api/music/upload/file').length,(results.length+1)*6);
+  assert.equal(calls.filter(c=>c.p==='/api/music/upload/file').length,(results.length+1)*7);
   const uploadAxe=await new AxeBuilder({page}).analyze();assert.deepEqual(uploadAxe.violations.map(v=>v.id),[]);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/upload-form-'+viewport.width+'.png',fullPage:true});
