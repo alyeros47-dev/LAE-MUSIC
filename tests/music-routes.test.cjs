@@ -7,3 +7,34 @@ test('public streaming signs a real platform object without requiring a listener
 test('upload proxy rejects another artist’s pending target before reaching storage',async()=>{let calls=0;const call=load({pool:{query:async(sql,args)=>{assert.match(sql,/creator_id=\$2/);assert.equal(args[1],7);return {rowCount:0,rows:[]};}},fetcher:async()=>{calls++;}});const r=await call('/api/music/upload/file?id=12&kind=audio',{method:'PUT',headers:{'content-length':'1024','content-type':'audio/mpeg'}});assert.equal(r.status,404);assert.equal(calls,0);});
 test('publication rejects forged audio bytes even if stored MIME and length match',async()=>{let published=false;const track={id:1,creator_id:7,status:'pending_upload',audio_key:'music/7/test.mp3',audio_bytes:1024,audio_mime:'audio/mpeg'};const call=load({pool:{query:async sql=>{if(sql.startsWith('UPDATE'))published=true;return {rowCount:1,rows:[track]};}},fetcher:async(_url,options)=>options?.method==='HEAD'?new Response(null,{headers:{'Content-Length':'1024','Content-Type':'audio/mpeg'}}):new Response('<html>not an audio file</html>')});const r=await call('/api/music/upload/finish',{method:'POST',body:{id:1}});assert.equal(r.status,415);assert.equal(published,false);});
 test('concurrent upload reservations respect the final annual slot inside a transaction (serialized mock)',async()=>{let used=6,id=20,tail=Promise.resolve();const pool={async query(sql,args=[]){if(sql.startsWith('SELECT expires_at'))return {rowCount:1,rows:[{expires_at:'2099-01-01'}]};if(sql.startsWith('SELECT COUNT(*)::int AS n'))return {rowCount:1,rows:[{n:used}]};if(sql.startsWith('SELECT id,plan,starts_at'))return {rowCount:1,rows:[{id:1,plan:'starter',starts_at:'2026-01-01'}]};if(sql.startsWith('INSERT INTO music_tracks')){used++;return {rowCount:1,rows:[{id:++id}]};}if(sql.startsWith('SELECT id FROM creators')||['BEGIN','COMMIT','ROLLBACK'].includes(sql))return {rowCount:1,rows:[{id:7}]};throw Error('Unexpected music SQL: '+sql);},async connect(){let release;const previous=tail;tail=new Promise(resolve=>{release=resolve;});await previous;const before=used;return {query:async(sql,args)=>{if(sql==='ROLLBACK')used=before;return pool.query(sql,args);},release};}};const call=load({pool});const payload={title:'Original upload',genre:'Highlife',description:'Original',audioMime:'audio/mpeg',audioBytes:1024};const results=await Promise.all([call('/api/music/upload/start',{method:'POST',body:payload}),call('/api/music/upload/start',{method:'POST',body:{...payload,title:'Another original upload'}})]);assert.equal(results.filter(r=>r.status===201).length,1);assert.equal(used,7);const good=results.find(r=>r.status===201);assert.match(good.body.audioUrl,/^\/api\/music\/upload\/file\?id=/);assert(!good.body.audioUrl.includes('X-Amz'));});
+
+test('lost finish responses can be safely confirmed again for the owned published track',async()=>{let storage=0;const call=load({pool:{query:async(sql,args)=>{assert(sql.includes('creator_id=$2'));assert.equal(args[1],7);return {rowCount:1,rows:[{id:12,creator_id:7,status:'published'}]};}},fetcher:async()=>{storage++;throw Error('No storage operation expected');}});const r=await call('/api/music/upload/finish',{method:'POST',body:{id:12}});assert.equal(r.status,200);assert.equal(r.body.already_published,true);assert.equal(storage,0);});
+test('reserving an interrupted upload verifies existing audio before skipping its PUT (actual handler, mocked storage)',async()=>{
+ const crypto=require('node:crypto'),audio=Buffer.alloc(2048);audio.write('ID3');
+ for(const mode of ['stored','corrupt','missing']){
+  const queries=[],network=[];
+  const row=x=>({rowCount:1,rows:[x]});
+  const pool={query:async(sql,args=[])=>{
+   queries.push(sql);
+   if(['BEGIN','COMMIT','ROLLBACK'].includes(sql)||sql.startsWith('SELECT id FROM creators')||sql.startsWith('UPDATE music_tracks'))return row({id:7});
+   if(sql.startsWith('SELECT expires_at'))return row({expires_at:'2099-01-01'});
+   if(sql.startsWith('SELECT COUNT(*)'))return row({n:sql.includes('$3::bigint')?6:7});
+   if(sql.startsWith('SELECT id,plan,starts_at'))return row({id:1,plan:'starter',starts_at:'2026-01-01'});
+   if(sql.startsWith('SELECT id,title,used_at'))return row({id:19,title:'Resume original',used_at:new Date(),generated_track_id:12});
+   if(sql.startsWith('SELECT result FROM platform_requests'))return row({result:{generation_id:'19',task_id:'task_resume_123',clip_id:'clip_resume_123',audio_sha256:crypto.createHash('sha256').update(audio).digest('hex')}});
+   if(sql.startsWith('SELECT 1 FROM artist_test_generations'))return {rowCount:0,rows:[]};
+   if(sql.startsWith('SELECT id,status,audio_mime'))return row({id:12,status:'pending_upload',audio_mime:'audio/mpeg',audio_bytes:audio.length,cover_mime:'image/png'});
+   if(sql.startsWith('SELECT audio_key,audio_bytes'))return row({audio_key:'music/7/original.mp3',audio_bytes:audio.length,audio_mime:'audio/mpeg'});
+   if(sql.startsWith('SELECT id FROM generation_records'))return row({id:19});
+   throw Error('Unexpected resume query: '+sql);
+  },connect:async()=>({query:pool.query,release(){}})};
+  const call=load({pool,fetcher:async(_url,opt={})=>{
+   network.push(opt.method||'GET');
+   if(opt.method==='HEAD')return new Response(null,{status:mode==='missing'?404:200,headers:{'Content-Length':String(audio.length),'Content-Type':'audio/mpeg'}});
+   assert.equal(opt.method,undefined);return new Response(mode==='corrupt'?Buffer.alloc(audio.length,9):audio);
+  }});
+  const r=await call('/api/music/upload/start',{method:'POST',body:{uploadCode:'A'.repeat(36),title:'Resume original',genre:'Gospel',audioMime:'audio/mpeg',audioBytes:audio.length,coverMime:'image/png',coverBytes:1024}});
+  assert.equal(r.status,201);assert.equal(r.body.id,12);assert.equal(r.body.resumed,true);assert.equal(r.body.audio_already_stored,mode==='stored');
+  assert(!queries.some(sql=>sql.startsWith('INSERT')));assert(!network.includes('PUT'));
+ }
+});
