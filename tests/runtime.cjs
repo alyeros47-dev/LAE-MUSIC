@@ -14,11 +14,15 @@ async function runtime({pool=null,env={},paymentService,accountService,adminServ
  }};
 }
 class AccountPool{
- constructor(){this.users=[];this.listeners=[];this.sessions=new Map();this.listenerSessions=new Map();this.calls=[];}
+ constructor(){this.users=[];this.listeners=[];this.roleLinks=[];this.sessions=new Map();this.listenerSessions=new Map();this.calls=[];}
  async connect(){return {query:this.query.bind(this),release(){}};}
  async query(sql,args=[]){this.calls.push({sql,args});const row=x=>({rowCount:1,rows:[x]}),none=()=>({rowCount:0,rows:[]});
   if(sql.startsWith('INSERT INTO creators(')||sql.startsWith('INSERT INTO listeners(')){const table=sql.startsWith('INSERT INTO creators')?this.users:this.listeners;if(table.some(u=>u.email===args[1]))throw Object.assign(Error('duplicate'),{code:'23505'});const u={id:table.length+1,display_name:args[0],email:args[1],password_salt:args[2],password_hash:args[3],plan:args[4]||'starter',membership_status:'pending_payment'};table.push(u);const result={...u};delete result.password_salt;delete result.password_hash;return row(result);}
   if(sql.startsWith('INSERT INTO sessions(')){this.sessions.set(args[0],args[1]);return none();}if(sql.startsWith('INSERT INTO listener_sessions(')){this.listenerSessions.set(args[0],args[1]);return none();}
+  if(sql.startsWith('SELECT artist_id,listener_id FROM account_role_links')){const entry=this.roleLinks.find(x=>String(sql.includes('WHERE artist_id=')?x.artist_id:x.listener_id)===String(args[0]));return entry?row(entry):none();}
+  if(sql.startsWith('INSERT INTO account_role_links')){this.roleLinks.push({artist_id:args[0],listener_id:args[1]});return none();}
+  if(sql.startsWith('SELECT email FROM creators WHERE id=')){const u=this.users.find(u=>String(u.id)===String(args[0]));return u?row({email:u.email}):none();}
+  if(sql.startsWith('SELECT email FROM listeners WHERE id=')){const u=this.listeners.find(u=>String(u.id)===String(args[0]));return u?row({email:u.email}):none();}
   if(sql.startsWith('SELECT named_enabled FROM admin_auth_settings'))return row({named_enabled:false});
   if(sql.startsWith('INSERT INTO account_security_rates'))return row({attempts:1});
   if(sql.startsWith('SELECT * FROM creators WHERE id='))return this.users.find(u=>String(u.id)===String(args[0]))?row(this.users.find(u=>String(u.id)===String(args[0]))):none();
@@ -30,8 +34,9 @@ class AccountPool{
   if(sql.includes('FROM sessions s JOIN creators')){const u=this.users.find(u=>u.id===this.sessions.get(args[0]));return u?row({id:u.id,display_name:u.display_name,email:u.email,plan:u.plan,membership_status:u.membership_status}):none();}
   if(sql.includes('FROM listener_sessions s JOIN listeners')){const u=this.listeners.find(u=>u.id===this.listenerSessions.get(args[0]));return u?row({id:u.id,display_name:u.display_name,email:u.email,plan:u.plan,membership_status:u.membership_status}):none();}
   if(sql.startsWith('SELECT password_salt,password_hash FROM listeners')){const u=this.listeners.find(u=>u.id===args[0]);return u?row({password_salt:u.password_salt,password_hash:u.password_hash}):none();}
+  if(sql.startsWith('UPDATE creators SET password_salt=')){const u=this.users.find(u=>u.id===args[2]);u.password_salt=args[0];u.password_hash=args[1];return none();}
   if(sql.startsWith('UPDATE listeners SET password_salt=')){const u=this.listeners.find(u=>u.id===args[2]);u.password_salt=args[0];u.password_hash=args[1];return none();}
-  if(sql.startsWith('DELETE FROM listener_sessions WHERE listener_id=')){for(const [key,id]of this.listenerSessions)if(id===args[0])this.listenerSessions.delete(key);return none();}
+  if(sql.startsWith('DELETE FROM listener_sessions WHERE listener_id=')||sql.startsWith('DELETE FROM sessions WHERE creator_id=')){const map=sql.includes('listener_sessions')?this.listenerSessions:this.sessions,removed=[];for(const [token,id]of map){if(String(id)!==String(args[0]))continue;if(sql.includes('token_hash<>$2')&&token===args[1])continue;if(sql.includes('token_hash=$2')&&token!==args[1])continue;map.delete(token);removed.push({token_hash:token});}return {rowCount:removed.length,rows:removed};}
   if(sql.startsWith('DELETE FROM sessions WHERE token_hash=')){this.sessions.delete(args[0]);return none();}if(sql.startsWith('DELETE FROM listener_sessions WHERE token_hash=')){this.listenerSessions.delete(args[0]);return none();}
   if(sql.startsWith('SELECT public_key,private_key FROM push_config'))return row({public_key:'test-public',private_key:'test-private'});
   // Startup DDL/reference seeds and empty reports are accepted only in this account-flow fixture.
