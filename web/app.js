@@ -398,6 +398,7 @@ async function studio(view) {
 async function showGeneration(id, view, canSaveRelease=false) {
   if (!view.active()) return;
   try{localStorage.setItem('lae_last_generation:'+session.artist.id,id);}catch{}
+  const studioUrl=new URL(location.href);if(studioUrl.searchParams.has('create')){studioUrl.searchParams.delete('create');window.history.replaceState({},'',studioUrl.pathname+studioUrl.search+studioUrl.hash);}
   const box = $('generation-result'); box.hidden = false; box.innerHTML = `<span class="eyebrow">YOUR SOUND IS TAKING SHAPE</span><h2>Generation progress</h2><p>${e(id)}</p><div class="progress" role="progressbar" aria-label="Music generation in progress"></div><p id="generation-status">Checking your generation…</p><div id="generation-songs"></div>${canSaveRelease?'':''}<button id="generation-refresh" class="button secondary">Check again</button>`; box.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'nearest' });
   const version = id + ':' + Date.now(); box.dataset.generation = version;
   const check = async () => {
