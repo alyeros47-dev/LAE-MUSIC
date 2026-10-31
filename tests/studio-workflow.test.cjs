@@ -27,7 +27,7 @@ test("microphone capture produces real mono PCM WAV accepted by the original voi
   assert.equal(bytes.readUInt32LE(40), data.length * 2);
   assert.throws(() => pcmWav(data, 0));
   assert.throws(() => pcmWav(new Float32Array(192000 * 40), 192000));
-  assert.throws(() => pcmWav(new Float32Array(8000 * 61), 8000));
+  assert.throws(() => pcmWav(new Float32Array(8000 * 241), 8000));
 });
 test("studio workflow is served by the actual application without a second backend", async () => {
   const { runtime } = require("./runtime.cjs");
@@ -41,4 +41,13 @@ test("studio workflow is served by the actual application without a second backe
   assert.equal(shell.status, 200);
   assert(shell.headers["permissions-policy"].includes("microphone=(self)"));
   assert(shell.headers["permissions-policy"].includes("camera=()"));
+});
+
+test("four-minute microphone WAV keeps the complete recording below the existing upload ceiling", async () => {
+ const {pcmWav,VOICE_RECORDING_SECONDS,VOICE_RECORDING_RATE}=await modulePromise;
+ assert.equal(VOICE_RECORDING_SECONDS,240);assert.equal(VOICE_RECORDING_RATE,24000);
+ const samples=new Float32Array(VOICE_RECORDING_SECONDS*VOICE_RECORDING_RATE);samples[samples.length-1]=0.5;
+ const bytes=Buffer.from(await pcmWav(samples,VOICE_RECORDING_RATE).arrayBuffer());
+ assert.equal(bytes.length,11520044);assert(bytes.length<12000000);assert.equal(bytes.readUInt32LE(40)/bytes.readUInt32LE(28),240);assert.equal(bytes.readInt16LE(bytes.length-2),16383);
+ assert.throws(()=>pcmWav(new Float32Array(VOICE_RECORDING_RATE*241),VOICE_RECORDING_RATE));
 });

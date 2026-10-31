@@ -1,6 +1,6 @@
 // UI adapter only. The existing backend owns profiles, provider calls and quotas.
 export function musicRequest(brief, voiceProfile) {
-  const useVoice = brief.useVoice === "on" || brief.useVoice === true;
+  const useVoice = brief.useVoice === "on" || brief.useVoice === true || voiceProfile?.requestedSavedVoice === true;
   if (
     useVoice &&
     !(voiceProfile?.hasVoice === true && voiceProfile.status === "ready")

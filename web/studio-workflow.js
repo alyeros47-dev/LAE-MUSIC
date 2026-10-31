@@ -1,15 +1,17 @@
 // Presentation adapter for the original lyrics/voice/music handlers.
 // A recording is local until an explicit save; no auto-training or provider calls.
+export const VOICE_RECORDING_SECONDS = 240;
+export const VOICE_RECORDING_RATE = 24000;
 export function pcmWav(samples, sampleRate) {
   if (
     !Number.isInteger(sampleRate) ||
     sampleRate < 8000 ||
     sampleRate > 192000 ||
-    samples.length > sampleRate * 60 ||
+    samples.length > sampleRate * VOICE_RECORDING_SECONDS ||
     samples.length * 2 + 44 > 12000000
   )
     throw Error(
-      "Record up to 60 seconds at a supported microphone sample rate.",
+      "Record up to four minutes in mono WAV, within the 12 MB limit.",
     );
   const bytes = new ArrayBuffer(44 + samples.length * 2),
     view = new DataView(bytes);
@@ -122,27 +124,43 @@ export function bindStudioWorkflow({
     output.addEventListener("input", persist);
   }
   const musicKey = "lae_music_studio_draft:" + artistId;
+  voiceProfile.requestedSavedVoice = false;
+  const savedVoiceControl = musicForm.elements.useVoice;
+  function showVoiceMode() {
+    const wanted = voiceProfile.requestedSavedVoice === true;
+    const ready = voiceProfile.hasVoice === true && voiceProfile.status === "ready";
+    savedVoiceControl.checked = wanted && ready;
+    const text = by("studio-generation-voice-mode"), standard = by("studio-standard-voice");
+    if(text) text.textContent = wanted ? ready ? "Generation voice: your saved voice profile. Voice resemblance depends on the sample and provider; an exact match is not guaranteed." : "Your saved voice is selected but is not ready. Generation will stop until it is available, or you explicitly choose the standard AI voice." : "Generation voice: standard AI voice. Select your saved profile above if you want to use it.";
+    if(standard) standard.hidden = !wanted;
+  }
   try {
     const saved = JSON.parse(localStorage.getItem(musicKey));
+    voiceProfile.requestedSavedVoice = saved?.useVoice === true;
     for (const name of ["title", "lyrics", "style", "duration"])
       if (typeof saved?.[name] === "string")
         musicForm.elements[name].value = saved[name];
   } catch {}
-  musicForm.addEventListener("input", () => {
+  musicForm.addEventListener("input", (event) => {
+    if(event.target === savedVoiceControl) voiceProfile.requestedSavedVoice = savedVoiceControl.checked;
+    showVoiceMode();
     try {
       localStorage.setItem(
         musicKey,
         JSON.stringify(
-          Object.fromEntries(
+          {...Object.fromEntries(
             ["title", "lyrics", "style", "duration"].map((name) => [
               name,
               musicForm.elements[name].value,
             ]),
-          ),
+          ),useVoice:voiceProfile.requestedSavedVoice===true},
         ),
       );
     } catch {}
   });
+  showVoiceMode();
+  const standardVoice = by("studio-standard-voice");
+  if(standardVoice) standardVoice.onclick = () => {voiceProfile.requestedSavedVoice=false;savedVoiceControl.checked=false;musicForm.dispatchEvent(new Event("input",{bubbles:true}));};
   by("send-to-music").onclick = () => {
     const values = {
       title: lyricsForm.elements.title.value,
@@ -300,6 +318,7 @@ export function bindStudioWorkflow({
     captureVersion++;
     clearTimeout(timer);
     timer = null;
+    finish = null;
     if (processor) {
       processor.onaudioprocess = null;
       processor.disconnect();
@@ -336,7 +355,7 @@ export function bindStudioWorkflow({
       }
       stream = granted;
       const Audio = window.AudioContext || window.webkitAudioContext;
-      context = new Audio();
+      context = new Audio({ sampleRate: VOICE_RECORDING_RATE });
       await context.resume();
       if (!canAct() || ticket !== captureVersion) {
         if (ticket === captureVersion) endCapture();
@@ -344,8 +363,9 @@ export function bindStudioWorkflow({
       }
       const rate = context.sampleRate,
         chunks = [];
-      const maxSamples = Math.min(rate * 60, Math.floor((12000000 - 44) / 2));
-      let count = 0;
+      const maxSamples = rate * VOICE_RECORDING_SECONDS;
+      if (maxSamples * 2 + 44 > 12000000) throw Error("Unsupported recording format");
+      let count = 0, shownSecond = -1;
       source = context.createMediaStreamSource(stream);
       processor = context.createScriptProcessor(4096, 1, 1);
       finish = () => {
@@ -382,20 +402,25 @@ export function bindStudioWorkflow({
           chunks.push(copy);
           count += copy.length;
         }
+        const second = Math.floor(count / rate);
+        if (second !== shownSecond) {
+          shownSecond = second;
+          voiceStatus.textContent = "Recording " + Math.floor(second / 60) + ":" + String(second % 60).padStart(2, "0") + " / 4:00. Sing alone clearly; keep this page open. Press Stop recording when finished.";
+        }
         if (count >= maxSamples) finish();
       };
       source.connect(processor);
       processor.connect(context.destination); // output stays silent; capture input only.
       stop.disabled = false;
       voiceStatus.textContent =
-        "Recording your singing voice locally. Sing alone for 15–60 seconds, then press Stop recording.";
-      timer = setTimeout(() => finish?.(), 60000);
+        "Recording your singing voice locally, up to four minutes. Sing alone for at least 15 seconds, then press Stop recording.";
+      timer = setTimeout(() => finish?.(), VOICE_RECORDING_SECONDS * 1000);
     } catch {
       if (ticket !== captureVersion) return;
       endCapture();
       if (canAct())
         voiceStatus.textContent =
-          "Recording could not start. Check microphone permission or choose an MP3/WAV file.";
+          "Four-minute recording could not start. Check microphone permission and browser support, or upload an MP3/WAV sample up to 12 MB.";
     }
   };
   stop.onclick = () => finish?.();
@@ -426,6 +451,7 @@ export function bindStudioWorkflow({
     refreshSave();
     musicForm.elements.useVoice.disabled = !ready;
     if (!ready) musicForm.elements.useVoice.checked = false;
+    showVoiceMode();
     voiceStatus.textContent = ready
       ? "Your singing voice is ready. Select “Use my saved voice profile” to use it."
       : result.status === "training"

@@ -21,3 +21,10 @@ test('existing voice status is owner-scoped and read without any storage/provide
  async function profile(id){const res={writeHead(status){this.status=status;},end(s){this.data=JSON.parse(s);}};await ctx.module.exports({method:'GET',headers:{}},res,'/api/voice/profile',{me:async()=>({id}),validOrigin:()=>true,storage:()=>{throw Error('Must not access R2');},pool:{query:async(sql,args)=>{queries++;if(sql.startsWith('CREATE'))return {};assert.match(sql,/WHERE creator_id=\$1/);assert.equal(args[0],id);return {rows:id===7?[{status:'ready',persona_id:'private-owned-persona',object_key:'private-existing-key'}]:[]};}}});return res;}
  const own=await profile(7),other=await profile(8);assert.equal(own.status,200);assert.deepEqual(own.data,{status:'ready',hasVoice:true});assert.deepEqual(other.data,{status:'none',hasVoice:false});assert(!JSON.stringify(own.data).includes('private-'));assert(queries>=3);
 });
+
+test('an explicitly remembered saved voice survives missing checkbox serialization and never silently becomes standard',async()=>{
+ const {musicRequest}=await adapter,brief={title:'My song',lyrics:'Original words',style:'Highlife'};
+ assert.equal(musicRequest(brief,{status:'ready',hasVoice:true,requestedSavedVoice:true}).useVoice,true);
+ for(const status of ['none','training','unavailable'])assert.throws(()=>musicRequest(brief,{status,hasVoice:false,requestedSavedVoice:true}),/not ready/);
+ assert.equal(musicRequest(brief,{status:'ready',hasVoice:true,requestedSavedVoice:false}).useVoice,false);
+});
