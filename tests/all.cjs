@@ -178,3 +178,5 @@ require('./lyrics-originality.test.cjs');
 require('./partner-demo.test.cjs');
 
 require('./listening-preferences.test.cjs');
+
+require('./song-sharing.test.cjs');
