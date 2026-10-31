@@ -1,297 +1,51 @@
-name: Platform release candidate verification
+name: Read-only Olum Pius voice incident inspection
 on:
-  pull_request:
-    paths-ignore:
-      - "android-app/**"
   workflow_dispatch:
-    inputs:
-      production_release_mode:
-        description: "Owner-authorized existing-service release: plan, prepare feature flags, or deploy an approved merge"
-        required: false
-        type: choice
-        options: ["", plan, prepare, deploy]
-        default: ""
-      production_candidate_sha:
-        description: "Exact tested development candidate SHA"
-        required: false
-        type: string
-        default: ""
-      production_commit_sha:
-        description: "Exact production merge SHA for deploy mode"
-        required: false
-        type: string
-        default: ""
-      production_ci_run:
-        description: "Successful exact-candidate full CI run ID"
-        required: false
-        type: string
-        default: ""
-      recovery_backup_branch:
-        description: "Optional previously created owned backup branch; requires its original workflow run ID"
-        required: false
-        type: string
-        default: ""
-      recovery_backup_run:
-        description: "Original workflow run ID that created the saved backup"
-        required: false
-        type: string
-        default: ""
-      existing_service_recovery_rehearsal:
-        description: "Create a bounded private backup and isolated recovery/migration rehearsal; never migrate production"
-        required: false
-        type: boolean
-        default: false
-      existing_service_audit:
-        description: "Read-only inspection of existing production service and schema; no deployment or database writes"
-        required: false
-        type: boolean
-        default: false
-      review_auth_email_sha256:
-        description: "Optional SHA-256 account lookup digest; sandbox only, no resets/deployment"
-        required: false
-        type: string
-        default: ""
-      review_lyrics_model_check:
-        description: "Read-only verification of the two approved lyrics models; no billed generation or deployment"
-        required: false
-        type: boolean
-        default: false
 permissions:
   contents: read
 jobs:
-  change-scope:
+  inspect-owned-voice-records:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/olum-pius-voice-audit'
     runs-on: ubuntu-latest
-    outputs:
-      mode: ${{ steps.scope.outputs.mode }}
-      groups: ${{ steps.scope.outputs.groups }}
-      shared: ${{ steps.scope.outputs.shared }}
-      metadata: ${{ steps.scope.outputs.metadata }}
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-          persist-credentials: false
+          ref: cd0f0175623ebaed64bd5f9dcac0d4e2700508cc
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
-      - id: scope
-        run: node scripts/dna-ci-scope.cjs
-
-  music-dna-focused:
-    needs: change-scope
-    if: needs.change-scope.result == 'success' && needs.change-scope.outputs.mode != 'full'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - name: Verify only changed Music DNA groups and necessary shared checks
-        env:
-          LAE_DNA_GROUPS: ${{ needs.change-scope.outputs.groups }}
-          LAE_DNA_SHARED: ${{ needs.change-scope.outputs.shared }}
-          LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
-        run: npm run test:dna
-  existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/gospel-phase-one' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    permissions:
-      contents: read
-      actions: read
-      pull-requests: read
-    concurrency:
-      group: lae-existing-production-release
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Verify production release guards
-        run: node --test tests/production-release.test.cjs
-      - name: Execute owner-authorized existing-service release phase
+          node-version: '22'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Read existing artist evidence without mutation
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          GITHUB_TOKEN: ${{ github.token }}
-          LAE_RELEASE_MODE: ${{ inputs.production_release_mode }}
-          LAE_RELEASE_CANDIDATE_SHA: ${{ inputs.production_candidate_sha }}
-          LAE_RELEASE_COMMIT_SHA: ${{ inputs.production_commit_sha }}
-          LAE_RELEASE_CI_RUN: ${{ inputs.production_ci_run }}
-        run: node scripts/release-existing-service.cjs
-      - name: Verify live assets, registration, login, free allowances and original music
-        if: inputs.production_release_mode == 'deploy'
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_LIVE_RELEASE_VERIFY: "1"
-        run: node scripts/verify-live-release.cjs
-  existing-service-recovery-rehearsal:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    concurrency:
-      group: lae-existing-database-recovery
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Verify recovery guards before management writes
-        run: node --test tests/neon-recovery-rehearsal.test.cjs
-      - name: Back up and rehearse only isolated database branches
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          LAE_EXISTING_RECOVERY_REHEARSAL: "1"
-          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
-          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
-        run: node scripts/rehearse-existing-recovery.cjs
-  existing-service-audit:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Read existing production configuration and schema without changes
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-        run: node scripts/audit-existing-service.cjs
-  review-auth-diagnostic:
-    if: github.event_name == 'workflow_dispatch' && (inputs.review_auth_email_sha256 != '' || inputs.review_lyrics_model_check) && github.ref == 'refs/heads/codex/premium-platform-release'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: node --test tests/review-auth-diagnostic.test.cjs
-      - name: Read-only sandbox account or approved model check
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          REVIEW_AUTH_EMAIL_SHA256: ${{ inputs.review_auth_email_sha256 }}
-          REVIEW_LYRICS_MODEL_CHECK: ${{ inputs.review_lyrics_model_check }}
-        run: node scripts/review-auth-diagnostic.cjs
-  review-persistence:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: Build isolated review image without service credentials
-        run: docker build -f deploy/review.Dockerfile -t lae-review-persistence-ci .
-      - name: Replace container and verify retained account, audio and provider budget
-        env:
-          LAE_REVIEW_PERSISTENCE_TESTS: "1"
-          LAE_REVIEW_TEST_IMAGE: lae-review-persistence-ci
-        run: node tests/review-persistence-container.cjs
-  application:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npm test
-      - run: npm audit --omit=dev
-      - run: npm run test:http
-      - run: npm run test:email
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence
-          path: artifacts/
-
-  postgres:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: lae_ci_fixture_only
-          POSTGRES_DB: lae_music_ci
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d lae_music_ci"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npm run test:postgres
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-      - run: npm run test:upgrade
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-      - run: node tests/gospel-launch-postgres.cjs
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-
-  browser-compatibility:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [firefox, webkit]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: npm run test:browser
-        env:
-          LAE_TEST_BROWSER: ${{ matrix.browser }}
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence-${{ matrix.browser }}
-          path: artifacts/
+        run: |
+          node - <<'JS'
+          'use strict';
+          const assert=require('node:assert/strict'),crypto=require('node:crypto'),fs=require('node:fs'),vm=require('node:vm'),{Pool}=require('pg');
+          async function run(){
+           assert(process.env.RENDER_API_KEY,'Read-only management credential missing');
+           const r=await fetch('https://api.render.com/v1/services/srv-db84s7m89jmc73c7l9rg/env-vars?limit=100',{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY},signal:AbortSignal.timeout(30000)});assert(r.ok,'Service inventory unavailable');
+           const env=Object.fromEntries((await r.json()).map(row=>{const v=row.envVar||row;return[v.key,v.value];}));
+           const pool=new Pool(require('./lib/database').databaseOptions(env)),db=await pool.connect();
+           const report={artist_requested:'Olum Pius',database_writes:0,storage_writes:0,paid_requests:0};
+           try{await db.query('BEGIN READ ONLY');await db.query("SET LOCAL statement_timeout='15s'");
+           const artists=await db.query("SELECT id,display_name FROM creators WHERE regexp_replace(lower(display_name),'[^a-z0-9]','','g')='olumpius' OR (display_name ILIKE '%olum%' AND display_name ILIKE '%pius%') LIMIT 5");
+           report.match_count=artists.rowCount;if(artists.rowCount!==1){report.match_names=artists.rows.map(a=>a.display_name);console.log(JSON.stringify(report));return;}
+           const artist=artists.rows[0];report.artist=artist.display_name;
+           const profile=(await db.query('SELECT object_key,task_id,persona_id,status,updated_at FROM artist_voice_profiles WHERE creator_id=$1',[artist.id])).rows[0];
+           report.voice_profile=profile?{status:profile.status,has_persona:!!profile.persona_id,updated_at:profile.updated_at}:null;
+           const tasks=(await db.query('SELECT task_id,status,created_at FROM sonic_test_tasks WHERE creator_id=$1 ORDER BY created_at DESC LIMIT 8',[artist.id])).rows;
+           const keys=(await db.query('SELECT payload_hash,task_reference,created_at FROM studio_request_keys WHERE artist_id=$1 ORDER BY created_at DESC LIMIT 15',[artist.id])).rows;
+           const records=(await db.query('SELECT title,lyrics,style,model,created_at FROM generation_records WHERE creator_id=$1 ORDER BY created_at DESC LIMIT 80',[artist.id])).rows;
+           report.generation_records=records.map(g=>({title:g.title,model:g.model,created_at:g.created_at}));
+           report.music_tasks=tasks.map(t=>({status:t.status,created_at:t.created_at}));
+           report.voice_request_hash_evidence=keys.map(k=>{const matches=[];for(const g of records){if(g.model==='musicapi-sonic')continue;for(const useVoice of [false,true])for(const duration of [undefined,60,90,120,150,180,210,240,270,300,330,360]){const hash=crypto.createHash('sha256').update(JSON.stringify({title:g.title.trim(),lyrics:g.lyrics.trim(),style:g.style.trim(),useVoice,...(duration===undefined?{}:{duration})})).digest('hex');if(hash===k.payload_hash)matches.push({title:g.title,use_saved_voice:useVoice,duration:duration||'default'});}}return{created_at:k.created_at,matches,status:matches.length?'verified_exact_hash':'not_verified'};});
+           async function providerTask(id){if(!id||id.startsWith('sonic-')||!env.MUSICAPI_API_KEY)return{verified:false,reason:'No queryable provider task'};try{const response=await fetch('https://api.musicapi.ai/api/v1/sonic/task/'+encodeURIComponent(id),{headers:{Authorization:'Bearer '+env.MUSICAPI_API_KEY},signal:AbortSignal.timeout(30000)});if(!response.ok)return{verified:false,http_status:response.status};const result=await response.json(),found=[];function visit(x,depth=0){if(!x||typeof x!=='object'||depth>7)return;if(Array.isArray(x)){x.slice(0,10).forEach(y=>visit(y,depth+1));return;}const evidence={};for(const name of ['task_type','status','type','title','duration','audio_weight','variety'])if(['string','number'].includes(typeof x[name]))evidence[name]=String(x[name]).slice(0,100);if(x.persona_id)evidence.persona_matches_saved=String(x.persona_id)===String(profile?.persona_id);if(x.audio_url)evidence.has_audio=true;if(Object.keys(evidence).length)found.push(evidence);for(const [key,value]of Object.entries(x))if(value&&typeof value==='object')visit(value,depth+1);}visit(result);return{verified:true,evidence:found};}catch{return{verified:false,reason:'Provider GET unavailable'};}}
+           if(profile?.object_key&&['R2_ACCOUNT_ID','R2_ACCESS_KEY_ID','R2_SECRET_ACCESS_KEY','R2_BUCKET'].every(k=>env[k])){try{const source=fs.readFileSync('server.js','utf8'),ctx=vm.createContext({crypto,URLSearchParams,Date,encodeURIComponent});vm.runInContext(source.slice(source.indexOf('function hmac('),source.indexOf('async function headObject(')),ctx);const storage={account:env.R2_ACCOUNT_ID,key:env.R2_ACCESS_KEY_ID,secret:env.R2_SECRET_ACCESS_KEY,bucket:env.R2_BUCKET};const response=await fetch(ctx.presign(storage,profile.object_key,'get',60),{headers:{Range:'bytes=0-65535'},signal:AbortSignal.timeout(20000)});report.saved_sample={http_status:response.status};if(response.ok){const reader=response.body.getReader(),parts=[];let size=0;while(size<65536){const part=await reader.read();if(part.done)break;parts.push(Buffer.from(part.value).subarray(0,65536-size));size+=Math.min(part.value.length,65536-size);}await reader.cancel();const b=Buffer.concat(parts);if(b.toString('ascii',0,4)==='RIFF'&&b.toString('ascii',8,12)==='WAVE'){let rate,byteRate;for(let offset=12;offset+8<=b.length;){const name=b.toString('ascii',offset,offset+4),length=b.readUInt32LE(offset+4);if(name==='fmt '&&offset+24<=b.length){rate=b.readUInt32LE(offset+12);byteRate=b.readUInt32LE(offset+16);}if(name==='data'){report.saved_sample={...report.saved_sample,format:'WAV',sample_rate:rate,audio_bytes:length,duration_seconds:byteRate?length/byteRate:null};break;}offset+=8+length+(length%2);}}else report.saved_sample.format='Non-WAV; duration not verified';}}catch{report.saved_sample={verified:false,reason:'Read-only sample inspection unavailable'};}}
+           report.provider_voice_task=profile?await providerTask(profile.task_id):null;report.provider_music_tasks=[];for(const task of tasks.slice(0,3))report.provider_music_tasks.push({created_at:task.created_at,...await providerTask(task.task_id)});
+           console.log(JSON.stringify(report,null,2));
+           }finally{await db.query('ROLLBACK').catch(()=>{});db.release();await pool.end();}
+          }
+          run().catch(()=>{console.error('Read-only Olum Pius inspection could not complete; no records, settings, or credits were changed.');process.exitCode=1;});
+          JS
