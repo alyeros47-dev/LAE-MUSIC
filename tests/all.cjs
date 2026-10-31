@@ -182,3 +182,5 @@ require('./listening-preferences.test.cjs');
 require('./song-sharing.test.cjs');
 
 require('./social-auth.test.cjs');
+
+require('./artist-access.test.cjs');

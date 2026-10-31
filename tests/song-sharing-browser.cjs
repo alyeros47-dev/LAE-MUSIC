@@ -14,7 +14,7 @@ if(p==='/api/platform/discover')return send({tracks:[track],genres:[{genre:'Gosp
 if(p==='/api/platform/editorial')return send({promotions:[],featured_tracks:[],featured_artists:[]});
 if(p==='/api/music/track/1')return send({track});if(p==='/api/listener/song-engagement')return send({liked:false,likes:1});if(p==='/api/listener/comments')return send({comments:[]});
 if(p==='/api/platform/artist-overview')return send({tracks:[track,draft],stats:{published:1,plays:0,followers:0}});
-if(p==='/api/artist/subscription')return send({artist_features_active:false,uploads_used:0,upload_limit:7});
+if(p==='/api/artist/subscription')return send({artist_features_active:true,uploads_used:0,upload_limit:7});
 if(p==='/api/listener/playlist/tracks')return send({playlist:{id:1,name:'A playlist',revision:1},tracks:[track,draft]});return send({});});
 await page.goto(origin+'/');await page.getByRole('button',{name:'Share Ọpẹ & Praise',exact:true}).click();const dialog=page.getByRole('dialog');await dialog.getByRole('heading',{name:'Share this song',exact:true}).waitFor();assert.equal(new URL(page.url()).pathname,'/');const url=origin+'/discover?track=1';assert.equal(await dialog.getByLabel('Public song link',{exact:true}).inputValue(),url);
 const whatsapp=dialog.getByRole('link',{name:'Share on WhatsApp',exact:true});const destination=new URL(await whatsapp.getAttribute('href'));assert.equal(destination.origin,'https://wa.me');assert(destination.searchParams.get('text').includes(url));assert.equal(await whatsapp.getAttribute('rel'),'noopener noreferrer');

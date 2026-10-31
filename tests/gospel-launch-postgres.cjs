@@ -24,7 +24,7 @@ const codes=require('../lib/music-upload-codes');
   await assert.rejects(codes.assertUnpublished(pool,a,task,clip),e=>e.status===409);checks++;
   // The post-storage publication gate rejects a code-funded song without an active plan.
   await assert.rejects(require('../lib/upload-publication').publishUpload(pool,a,track),e=>e.status===403);assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[track])).rows[0].status,'pending_upload');checks++;
-  // Free publishing is limited to the same owned completed complimentary task.
+  // Historical complimentary recordings are preserved, but the retired flag no longer permits unpaid publication.
   const savedEnv=process.env.LAE_ARTIST_TEST_ACCESS;
   try{
    process.env.LAE_ARTIST_TEST_ACCESS='1';
@@ -35,7 +35,7 @@ const codes=require('../lib/music-upload-codes');
    await pool.query("UPDATE artist_test_generations SET status='completed' WHERE reservation_reference=$1",[reference]);
    await assert.rejects(codes.requireUploadAccess(pool,String(BigInt(a)+999n),{generationId:one.generation_id}),e=>e.status===403);checks++;
    await assert.rejects(codes.requireUploadAccess(pool,a),e=>e.status===403);checks++;
-   await codes.requireUploadAccess(pool,a,{generationId:one.generation_id});checks++;
+   await assert.rejects(codes.requireUploadAccess(pool,a,{generationId:one.generation_id}),e=>e.status===403);checks++;
    process.env.LAE_ARTIST_TEST_ACCESS='0';await assert.rejects(codes.requireUploadAccess(pool,a,{generationId:one.generation_id}),e=>e.status===403);checks++;
    process.env.LAE_ARTIST_TEST_ACCESS='1';
    await pool.query("UPDATE artist_test_generations SET status='restored' WHERE reservation_reference=$1",[reference]);
@@ -45,8 +45,8 @@ const codes=require('../lib/music-upload-codes');
    await assert.rejects(require('../lib/upload-publication').publishUpload(pool,a,track),e=>e.status===403);checks++;
    await pool.query("UPDATE sonic_test_tasks SET status='succeeded' WHERE task_id=$1",[task]);
    await codes.verifiedUploadBody({pool,artistId:a,trackId:track,length:audio.length,input:require('node:stream').Readable.from([audio])});
-   await require('../lib/upload-publication').publishUpload(pool,a,track);
-   assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[track])).rows[0].status,'published');
+   await assert.rejects(require('../lib/upload-publication').publishUpload(pool,a,track),e=>e.status===403);
+   assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[track])).rows[0].status,'pending_upload');
    await assert.rejects(codes.assertUnpublished(pool,a,task,clip),e=>e.status===409);checks++;
    // Return only this disposable fixture to pending to exercise the paid gate below.
    await pool.query("UPDATE music_tracks SET status='pending_upload',published_at=NULL WHERE id=$1",[track]);

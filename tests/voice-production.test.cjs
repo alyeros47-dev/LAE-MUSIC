@@ -42,6 +42,7 @@ function fixture() {
     async query(sql, args = []) {
       queries.push(sql);
       let rows = [];
+      if(sql.includes("FROM artist_subscriptions"))rows=[{id:1,plan:"starter"}];
       if (
         sql.startsWith("SELECT") &&
         sql.includes("FROM artist_voice_profiles")
@@ -64,7 +65,7 @@ function fixture() {
           persona_id: args[0],
           status: "ready",
         });
-      return { rows };
+      return { rows, rowCount:rows.length };
     },
     async connect() {
       return { ...this, release() {} };

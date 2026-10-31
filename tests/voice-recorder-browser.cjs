@@ -11,6 +11,7 @@ if(p==='/api/platform/capabilities')return send({music_provider_configured:true,
 if(p==='/api/platform/currencies')return send(require('../lib/currency').options());
 if(p==='/api/platform/studio/dna/catalog')return send(require('../lib/studio-launch').catalogue());
 if(p==='/api/platform/studio/catalog')return send(require('../lib/studio-launch').legacyCatalogue());
+if(p==='/api/artist/subscription')return send({artist_features_active:true,plan:'starter'});
 if(p==='/api/artist/studio-allowance')return send({active:true,included_generations:2,remaining_generations:2});
 if(p==='/api/artist/studio-history')return send({generations:[]});if(p==='/api/generation/history')return send({records:[]});if(p==='/api/generation/wallet')return send({credits:2});
 if(p==='/api/voice/profile'||p==='/api/voice/status')return send({status:ready?'ready':'none',hasVoice:ready});
