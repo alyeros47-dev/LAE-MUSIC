@@ -34,7 +34,7 @@ jobs:
             let owners=0,records=[],sample=null;
             try{const db=await pool.connect();try{
               await db.query('BEGIN READ ONLY');await db.query("SET LOCAL statement_timeout='15s'");
-              const who=await db.query("SELECT id FROM creators WHERE LOWER(REGEXP_REPLACE(display_name,'[^[:alnum:]]','','g'))=$1",['wokie']);owners=who.rowCount;
+              const who=await db.query("SELECT id FROM creators WHERE LOWER(REGEXP_REPLACE(display_name,'[^[:alnum:]]','','g')) LIKE $1",['%wokie%']);owners=who.rowCount;
               if(owners===1){records=(await db.query("SELECT g.title,g.used_at,t.status,t.audio_key,t.cover_key,t.audio_bytes,t.audio_mime,t.cover_mime FROM generation_records g LEFT JOIN music_tracks t ON t.id=g.generated_track_id AND t.creator_id=g.creator_id WHERE g.creator_id=$1 ORDER BY g.id DESC LIMIT 100",[who.rows[0].id])).rows.filter(x=>norm(x.title).includes('mabokolikolo')).slice(0,10);}
               sample=(await db.query("SELECT audio_key FROM music_tracks WHERE status='published' ORDER BY id LIMIT 1")).rows[0];
               await db.query('ROLLBACK');
