@@ -16,7 +16,7 @@ if (
   );
 }
 for (const engine of selected) {
-  for (const file of ["tests/gospel-launch-browser.cjs", "tests/browser.cjs", "tests/offline-browser.cjs", "tests/artist-downloads-browser.cjs"]) {
+  for (const file of ["tests/listening-preferences-browser.cjs", "tests/gospel-launch-browser.cjs", "tests/browser.cjs", "tests/offline-browser.cjs", "tests/artist-downloads-browser.cjs"]) {
     const result = spawnSync(process.execPath, [file], {
       stdio: "inherit",
       env: { ...process.env, LAE_TEST_BROWSER: engine },
