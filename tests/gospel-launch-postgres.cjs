@@ -55,6 +55,15 @@ const codes=require('../lib/music-upload-codes');
   await codes.requirePlan(pool,a);checks++;
   await pool.query('UPDATE artist_subscriptions SET payment_hold=TRUE WHERE id=$1',[sub]);await assert.rejects(codes.requirePlan(pool,a),e=>e.status===403);await pool.query('UPDATE artist_subscriptions SET payment_hold=FALSE WHERE id=$1',[sub]);checks++;
   await require('../lib/upload-publication').publishUpload(pool,a,track);assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[track])).rows[0].status,'published');checks++;
+  const {studioHistory}=require('../lib/studio-history');
+  let recovered=await studioHistory(pool,a);
+  assert(recovered.generations.some(g=>g.generation_reference===task&&g.status==='succeeded'));checks++;
+  assert.equal((await studioHistory(pool,String(BigInt(a)+99999n))).generations.length,0);checks++;
+  await pool.query('INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)',[sub,a,task]);
+  recovered=await studioHistory(pool,a);assert.equal(recovered.generations.filter(g=>g.generation_reference===task).length,1);checks++;
+  const provisional='sonic-history-'+crypto.randomUUID();
+  await pool.query('INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)',[sub,a,provisional]);
+  recovered=await studioHistory(pool,a);assert(recovered.generations.some(g=>g.generation_reference===provisional&&g.status==='reserved'));checks++;
   const limit=require('../lib/plans').starter.uploads;for(let n=1;n<limit;n++)await pool.query("INSERT INTO music_tracks(creator_id,title,genre,audio_key,audio_mime,audio_bytes) VALUES($1,'Quota fixture','Gospel',$2,'audio/mpeg',2048)",[a,'isolated/'+crypto.randomUUID()]);await assert.rejects(codes.requirePlan(pool,a),e=>e.status===409);checks++;
   console.log(JSON.stringify({status:'passed',database:'disposable local PostgreSQL',checks,paid_calls:0,production_writes:0}));
  }finally{await pool.end();}

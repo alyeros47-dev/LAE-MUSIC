@@ -9,7 +9,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://127.0.0.1:'+server.address().port;
  const catalogue=require('../lib/studio-launch').catalogue(),calls=[],results=[];
  try{for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
-  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false;
+  let unavailable=false,listenerSignedIn=false,uploadPlanActive=false,reviewUploadAccess=false,uploadStorageAvailable=false,artistTestAccess=false,createdTask=false;
   const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.stack));
   await page.route('**/api/**',async route=>{
@@ -35,7 +35,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
    if(p==='/api/platform/affiliate-premium')return send({commissions:[],notice:'Verified records only.'});
    if(p==='/api/platform/partners/accounting')return send({unavailable:true});
    if(p==='/api/voice/profile')return send({status:'none',hasVoice:false});
-   if(p==='/api/artist/studio-history')return send({generations:[]});
+   if(p==='/api/artist/studio-history')return send({generations:createdTask?[{generation_reference:'browser_gospel_task_123',created_at:new Date().toISOString(),status:'succeeded',funding_source:'recorded'}]:[]});
    if(p==='/api/generation/wallet')return send({credits:2});
    if(p==='/api/generation/history')return send({records:[]});
    if(p==='/api/platform/studio/catalog')return send(require('../lib/studio-launch').legacyCatalogue());
@@ -45,7 +45,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
    if(p==='/api/music/upload/file')return send({saved:true});
    if(p==='/api/music/upload/finish')return send({published:true});
    if(p==='/api/platform/artist-overview')return send({tracks:[],stats:{published:0,plays:0,followers:0}});
-   if(p==='/api/music/sonic/create'){assert.equal(data.creationMode,'own');assert.equal(data.rightsConfirmed,true);assert(request.headers()['idempotency-key']);return send({task_id:'browser_gospel_task_123',status:'pending'});}
+   if(p==='/api/music/sonic/create'){createdTask=true;assert.equal(data.creationMode,'own');assert.equal(data.rightsConfirmed,true);assert(request.headers()['idempotency-key']);return send({task_id:'browser_gospel_task_123',status:'pending'});}
    if(p==='/api/music/sonic/status')return send({task_id:'browser_gospel_task_123',status:'succeeded',songs:[{clip_id:'browser_gospel_clip_123',title:'My original prayer',audio_url:origin+'/mock.mp3'}]});
    if(p==='/api/music/sonic/upload-code')return send({uploadCode:'A'.repeat(36),title:'My original prayer'});
    return send({});
@@ -67,6 +67,17 @@ const AxeBuilder=require('@axe-core/playwright').default;
   await page.getByRole('checkbox',{name:/I have permission to use these lyrics/}).check();await page.getByRole('button',{name:/Generate music/}).click();await page.getByLabel('Upload code for My original prayer',{exact:true}).waitFor();
   let sent=calls.filter(c=>c.p==='/api/music/sonic/create').at(-1).data;assert.equal(sent.musicDnaStyle,'G1-01');assert.deepEqual(sent.musicDnaLanguages,['en','yo']);
   await page.getByLabel('Upload code for My original prayer',{exact:true}).waitFor();
+  const createdBeforeRefresh=calls.filter(c=>c.p==='/api/music/sonic/create').length;
+  await page.reload();await page.getByLabel('Upload code for My original prayer',{exact:true}).waitFor();
+  assert.equal(calls.filter(c=>c.p==='/api/music/sonic/create').length,createdBeforeRefresh);
+  await page.evaluate(()=>localStorage.setItem('lae_last_generation:7','another_artists_task'));
+  await page.reload();await page.getByLabel('Upload code for My original prayer',{exact:true}).waitFor();
+  assert.equal(await page.evaluate(()=>localStorage.getItem('lae_last_generation:7')),'browser_gospel_task_123');
+  await page.getByRole('button',{name:'Prepare a new generation',exact:true}).click();
+  await page.waitForURL(/create=new/);await page.getByLabel('Creation method').waitFor();assert(await page.locator('#generation-result').isHidden());
+  await page.getByRole('button',{name:'Check progress & previews',exact:true}).click();await page.getByLabel('Upload code for My original prayer',{exact:true}).waitFor();
+  assert.equal(new URL(page.url()).searchParams.has('create'),false);await page.reload();await page.getByLabel('Upload code for My original prayer',{exact:true}).waitFor();
+  assert.equal(calls.filter(c=>c.p==='/api/music/sonic/create').length,createdBeforeRefresh);
   await page.getByRole('link',{name:'Upload this song ↗',exact:true}).click();
   await page.getByLabel('Generated-song upload code',{exact:true}).waitFor();
   assert.equal(await page.getByLabel('Generated-song upload code',{exact:true}).inputValue(),'A'.repeat(36));
