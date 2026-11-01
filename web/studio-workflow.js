@@ -222,10 +222,9 @@ export function bindStudioWorkflow({
           .filter((r) => r.isFinal)
           .map((r) => r[0].transcript)
           .join(" ");
-        lyricsForm.elements.idea.value = [initial, transcript]
-          .filter(Boolean)
-          .join(" ")
-          .slice(0, 1200);
+        const dictated=[initial, transcript].filter(Boolean).join(' '),limit=lyricsForm.elements.idea.maxLength>0?lyricsForm.elements.idea.maxLength:12000;
+        if(dictated.length>limit){recognition.stop();dictation.textContent='Your description has reached its limit. The last spoken text was not inserted; review your words before continuing.';return;}
+        lyricsForm.elements.idea.value=dictated;
         persist();
         dictation.textContent =
           "Added your spoken idea. Review the text before generating.";

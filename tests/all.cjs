@@ -188,3 +188,5 @@ require('./artist-access.test.cjs');
 require('./artist-packages.test.cjs');
 
 require('./referral-demo.test.cjs');
+
+require('./description-studio.test.cjs');
