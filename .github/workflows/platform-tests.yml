@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 7f5f738f42da86dc0ce17ac56ed524c2926fa19d
+          ref: f849ab6efd4e8e4cead8a774ae76c6350de4bb8f
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -20,7 +20,7 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          LAB_COMMIT: 7f5f738f42da86dc0ce17ac56ed524c2926fa19d
+          LAB_COMMIT: f849ab6efd4e8e4cead8a774ae76c6350de4bb8f
           LAB_APPROVED_USD: '0'
         run: |
           node - <<'JS'
