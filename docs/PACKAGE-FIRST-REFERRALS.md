@@ -17,3 +17,6 @@ No payment-before-account capability is advertised as active. Production setting
 ## Focused verification
 
 Tests exercise public route selection, old link compatibility, safe referral/product parsing, retained attribution across package changes, absence of account/payment writes, disabled checkout, actual phone/laptop layouts and accessibility, free listener/partner enrollment, explicit sign-in and linked-role navigation. No paid services are needed.
+
+
+The link-based internal demo now extends this page with a separate simulated purchase/profile/referral experience. See [LINK-BASED-REFERRAL-DEMO.md](LINK-BASED-REFERRAL-DEMO.md). It does not enable the real guest-payment or account-claim journey described above.
