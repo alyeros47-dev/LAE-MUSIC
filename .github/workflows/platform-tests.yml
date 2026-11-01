@@ -10,16 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 252d5e2e46f740057a90e1f9b5836730017a2239
+          ref: 03ff8f242dba3a69e2a855a8f0061e7b90910d08
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci --omit=dev
-      - name: Create only the separate free preview and isolated empty usage database
+      - name: Create only the separate free private preview at a zero-dollar budget
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          LAB_COMMIT: 252d5e2e46f740057a90e1f9b5836730017a2239
+          LAB_COMMIT: 03ff8f242dba3a69e2a855a8f0061e7b90910d08
           LAB_APPROVED_USD: '0'
-        run: node scripts/provision-studio-lab.cjs
+        run: |
+          node - <<'JS'
+          const {provision}=require('./scripts/provision-studio-lab.cjs');
+          const {verify}=require('./scripts/verify-studio-lab-preview.cjs');
+          (async()=>{const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          JS
