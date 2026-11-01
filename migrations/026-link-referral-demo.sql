@@ -1,4 +1,4 @@
--- Examples only. No real account, entitlement, payment or earnings table is changed.
+-- Additive: examples only. No real account, entitlement, payment or earnings table is changed.
 CREATE TABLE referral_demo_sessions(
  token_hash CHAR(64) PRIMARY KEY,
  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
