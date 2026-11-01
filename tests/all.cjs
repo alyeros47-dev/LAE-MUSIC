@@ -184,3 +184,5 @@ require('./song-sharing.test.cjs');
 require('./social-auth.test.cjs');
 
 require('./artist-access.test.cjs');
+
+require('./artist-packages.test.cjs');
