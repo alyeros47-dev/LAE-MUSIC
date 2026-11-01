@@ -10,12 +10,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: d106cd1d62a551fd274df0aecdff0148de275fe7
+          ref: d964dba43a05cde572390d5375946ce310d8dbab
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci
+      - name: Create only the separate free private preview at a zero-dollar budget
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAB_COMMIT: d964dba43a05cde572390d5375946ce310d8dbab
+          LAB_APPROVED_USD: '0'
+        run: |
+          node - <<'JS'
+          const {provision}=require('./scripts/provision-studio-lab.cjs');
+          const {verify}=require('./scripts/verify-studio-lab-preview.cjs');
+          (async()=>{const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url,durable:true})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          JS
+
       - name: Install browser for hosted sign-in checks
         run: npx playwright install --with-deps chromium
       - name: Verify real hosted sign-in feedback and cookies on mobile and desktop
