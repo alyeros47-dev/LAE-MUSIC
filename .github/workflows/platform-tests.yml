@@ -1,29 +1,22 @@
-name: Verify authorized real customer-description text
+name: Read-only diagnose live songwriting request
 on: workflow_dispatch
 permissions: {contents: read}
 jobs:
-  verify:
+  diagnose:
     if: github.ref == 'refs/heads/codex/studio-lab-preview-provision'
     runs-on: ubuntu-latest
-    timeout-minutes: 9
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: 1a0581c45512c23bacb4210f7066ff6678f8846b
-          persist-credentials: false
+        with: {ref: 64584bcc91a4c9238477edde89de8d44b08f5bb5, persist-credentials: false}
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
       - run: npm ci --omit=dev
-      - name: Align only the private key and perform one real text generation
+      - name: Inspect only new songwriting job metadata without generating or changing data
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_REAL_TEXT_TEST: owner-authorized
         run: |
           node - <<'JS'
-          (async()=>{console.log(JSON.stringify(await require('./scripts/align-studio-lab-admin.cjs').align()));console.log(JSON.stringify(await require('./scripts/verify-real-description-text.cjs').verify()));})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          const assert=require('node:assert/strict');
+          (async()=>{const r=await fetch('https://api.render.com/v1/services/srv-db84s7m89jmc73c7l9rg/env-vars?limit=100',{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY}});assert(r.ok);const env=Object.fromEntries((await r.json()).map(v=>[(v.envVar||v).key,(v.envVar||v).value]));const p=new(require('pg').Pool)(require('./lib/database').databaseOptions(env));try{await p.query('BEGIN READ ONLY');const rows=(await p.query("SELECT scope,request_key,result->>'status' AS status,result->>'state' AS state,result->>'phase' AS phase,result->>'model' AS model,result->>'estimated_usd' AS estimated_usd,result->>'reserved_estimate_usd' AS reserved_usd,result->>'reference' AS reference,result->'output'->>'description_request_id' AS output_reference,length(result->'output'->>'lyrics') AS lyrics_chars,length(result->'output'->>'detailed_style') AS style_chars,jsonb_array_length(COALESCE(result->'requests','[]'::jsonb)) AS research_requests,created_at FROM platform_requests WHERE scope LIKE 'description-%' ORDER BY created_at DESC LIMIT 15")).rows;console.log(JSON.stringify({jobs:rows}));const types=(await p.query("SELECT column_name,data_type FROM information_schema.columns WHERE table_name='platform_requests'")).rows;console.log(JSON.stringify({journal_column_types:types}));await p.query('ROLLBACK');}finally{await p.end();}})().catch(e=>{console.error(e.message);process.exitCode=1;});
           JS
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: authorized-real-text-verification
-          path: artifacts/real-description-text.json
