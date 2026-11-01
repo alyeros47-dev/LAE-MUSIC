@@ -10,7 +10,7 @@ async function verify({env=process.env,fetchImpl=fetch}={}){
  assert(new URL(settings.STUDIO_LAB_DATABASE_URL).hostname!==new URL(live.DATABASE_URL).hostname,'Production database access is prohibited in this test.');
  const pool=new(require('pg').Pool)({connectionString:settings.STUDIO_LAB_DATABASE_URL,max:2,connectionTimeoutMillis:20000});
  const store=require('../lib/studio-lab-store').createStore({pool,cap:1});let providerPosts=0;
- const meteredFetch=async(url,options={})=>{const r=await fetchImpl(url,options);if(url==='https://api.openai.com/v1/responses'){providerPosts++;if(!r.ok){let err={};try{err=await r.clone().json();}catch{}console.log(JSON.stringify({provider_http:r.status,provider_error_code:err.error?.code||null,provider_error_type:err.error?.type||null,parameter:err.error?.param||null,model:'gpt-6.1-sol'}));}}return r;};
+ const meteredFetch=async(url,options={})=>{const r=await fetchImpl(url,options);if(url==='https://api.openai.com/v1/responses'){providerPosts++;if(!r.ok){let err={};try{err=await r.clone().json();}catch{}console.log(JSON.stringify({provider_http:r.status,provider_error_code:err.error?.code||null,provider_error_type:err.error?.type||null,parameter:err.error?.param||null,provider_message:String(err.error?.message||'').replaceAll(live.OPENAI_API_KEY,'[REDACTED]').replace(/sk-[A-Za-z0-9_-]+/g,'[REDACTED]').slice(0,300),model:'gpt-6.1-sol'}));}}return r;};
  try{
   await store.init();const run=await store.begin('owner-controlled-real-text-verification',crypto.randomUUID());
   const core=require('../lib/studio-lab').createLab({store,key:live.OPENAI_API_KEY,privacyKey:lab.ADMIN_KEY,fetchImpl:meteredFetch});
