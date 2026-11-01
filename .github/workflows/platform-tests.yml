@@ -92,6 +92,19 @@ jobs:
       - name: Install browser for one real customer-text verification
         if: inputs.phase == 'deploy'
         run: npx playwright install --with-deps chromium
+      - name: Correct verifier timeout without changing the tested application
+        if: inputs.phase == 'deploy'
+        run: |
+          python - <<'PYFIX'
+          from pathlib import Path
+          p=Path('scripts/verify-live-description.cjs')
+          s=p.read_text()
+          old="await page.waitForFunction(()=>document.querySelector('#customer-song-style')?.value.length>100,{timeout:220000});"
+          assert old in s
+          s=s.replace(old,"await page.waitForFunction(()=>document.querySelector('#customer-song-style')?.value.length>100 || document.querySelector('#customer-song-status')?.classList.contains('error'),undefined,{timeout:220000});\n  assert(!await page.locator('#customer-song-status').evaluate(el=>el.classList.contains('error')), 'The customer songwriting request reported a failure; inspect its metered phase before retrying.');")
+          p.write_text(s)
+          PYFIX
+          node --check scripts/verify-live-description.cjs
       - name: Verify real clean-secular generation through the live customer interface
         if: inputs.phase == 'deploy'
         env:
