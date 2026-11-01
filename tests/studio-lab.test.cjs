@@ -95,3 +95,7 @@ test('stateless preview can never spend; enabling a paid budget requires separat
  await assert.rejects(createServer({env:{STUDIO_LAB_ENVIRONMENT:'description-lab-v1',NODE_ENV:'staging',ADMIN_KEY:'fixture-admin-key-123456789',STUDIO_LAB_BUDGET_USD:'1'}}),/separate lab usage database/);
  const u=clone(understanding);u.artists=[{as_written:'Invented artist',search_name:'Invented artist'}];assert.throws(()=>p.validateInterpretation(u,{brief:'No musician reference here',answer:''}),/No external research query/);
 });
+
+test('deployment comparison permits Render metadata refresh but rejects a real release/state change',()=>{
+ const {deploymentIdentity}=require('../scripts/provision-studio-lab.cjs'),d={id:'dep-live',commit:{id:'tested-live-sha'},status:'live',updatedAt:'before'};assert.equal(deploymentIdentity([{deploy:d}]),deploymentIdentity([{deploy:{...d,updatedAt:'after'}}]));assert.notEqual(deploymentIdentity([{deploy:d}]),deploymentIdentity([{deploy:{...d,id:'dep-new',commit:{id:'new-sha'}}}]));assert.notEqual(deploymentIdentity([{deploy:d}]),deploymentIdentity([{deploy:{...d,status:'deactivated'}}]));
+});
