@@ -70,20 +70,13 @@ test('owner-only HTTP boundary, origin/CSRF checks, public routes absent and ide
  const handoff=await(await fetch(origin+'/api/lab/handoff',{method:'POST',headers,body:JSON.stringify({...output,run_id:first.id})})).json();assert.equal(handoff.audio_requested,false);assert.equal(handoff.customer_credits_used,0);assert.equal(handoff.provider_payload.prompt,output.lyrics);
  }finally{await new Promise(r=>server.close(r));}
 });
-test('preview provisioning can mutate only a new free lab and schema-only test branch; live/review are unchanged',async()=>{
+test('preview provisioning can mutate only a new free $0 lab; live/review and databases are unchanged',async()=>{
  const {provision}=require('../scripts/provision-studio-lab.cjs'),writes=[],candidate='a'.repeat(40),live='srv-db84s7m89jmc73c7l9rg',review='srv-dbfmk5ss728c73ded300';let service=null;
  const mk=(id,name)=>({id,name,ownerId:'tea-fixture',repo:'https://github.com/alyeros47-dev/LAE-MUSIC',branch:id===live?'main':'codex/premium-platform-release',serviceDetails:{url:'https://fixture.onrender.com'}}),deployment={deploy:{status:'live',commit:{id:candidate}}};
  const fetchImpl=async(url,options={})=>{
   const u=new URL(url),method=options.method||'GET',body=options.body?JSON.parse(options.body):null;if(method!=='GET')writes.push({url,body,method});
   if(u.hostname==='fixture-studio-lab.onrender.com')return Response.json({studio_lab:true,model:'gpt-6.1-sol',source_commit:candidate,customer_credit_operations:false,audio_generation_enabled:false});
-  if(u.hostname==='console.neon.tech'){
-   if(u.pathname.endsWith('/branches')&&method==='GET')return Response.json({branches:[]});
-   if(u.pathname.endsWith('/branches')&&method==='POST')return Response.json({branch:{id:'br-lab-only',name:'lae-studio-description-lab',init_source:'schema-only'},endpoints:[{host:'ep-lab-only.neon.tech',branch_id:'br-lab-only',type:'read_write'}]});
-   if(u.pathname.endsWith('/branches/br-lab-only'))return Response.json({branch:{current_state:'ready'}});
-   if(u.pathname.endsWith('/roles'))return Response.json({role:{name:'lae_studio_lab_owner',password:'fixture-password-only'}});
-   if(u.pathname.endsWith('/databases'))return Response.json({database:{name:'lae_studio_lab'}});
-   throw Error('Unexpected Neon API path');
-  }
+  assert.equal(u.hostname,'api.render.com');
   if(u.pathname.endsWith('/services/'+live))return Response.json(mk(live,'LAE-MUSIC'));
   if(u.pathname.endsWith('/services/'+review))return Response.json(mk(review,'lae-music-review-sandbox'));
   if(u.pathname.endsWith('/services/'+review+'/env-vars'))return Response.json([{envVar:{key:'ADMIN_KEY',value:'fixture-admin-key-long-enough'}},{envVar:{key:'OPENAI_API_KEY',value:'fixture-provider-key'}}]);
@@ -94,5 +87,11 @@ test('preview provisioning can mutate only a new free lab and schema-only test b
   throw Error('Unexpected Render API path');
  };
  const result=await provision({env:{RENDER_API_KEY:'fixture',NEON_API_KEY:'fixture',LAB_COMMIT:candidate},fetchImpl,wait:async()=>{},log:()=>{}});assert.equal(result.url,'https://fixture-studio-lab.onrender.com/studio-lab');assert.equal(result.production_writes,0);
- assert(!writes.some(w=>w.url.includes(live)||w.url.includes(review)));assert.equal(writes.find(w=>w.url.endsWith('/branches')).body.branch.init_source,'schema-only');const payload=writes.find(w=>w.url.endsWith('/services')).body;assert.equal(payload.serviceDetails.plan,'free');assert.equal(payload.autoDeployTrigger,'off');assert(!payload.envVars.some(v=>/R2|MUSICAPI|DATABASE_URL/.test(v.key)&&v.key!=='STUDIO_LAB_DATABASE_URL'));assert.equal(payload.envVars.find(v=>v.key==='STUDIO_LAB_BUDGET_USD').value,'0');
+ assert(!writes.some(w=>w.url.includes(live)||w.url.includes(review)));assert(!writes.some(w=>w.url.includes('neon.tech')));const payload=writes.find(w=>w.url.endsWith('/services')).body;assert.equal(payload.serviceDetails.plan,'free');assert.equal(payload.autoDeployTrigger,'off');assert(!payload.envVars.some(v=>/R2|MUSICAPI|DATABASE_URL/.test(v.key)&&v.key!=='STUDIO_LAB_DATABASE_URL'));assert.equal(payload.envVars.find(v=>v.key==='STUDIO_LAB_BUDGET_USD').value,'0');
+});
+
+test('stateless preview can never spend; enabling a paid budget requires separate durable storage',async()=>{
+ const {zeroBudgetStore}=require('../lib/studio-lab-store'),zero=zeroBudgetStore();assert.equal((await zero.status()).cap_usd,0);await assert.rejects(zero.reserve(),e=>e.status===402);
+ await assert.rejects(createServer({env:{STUDIO_LAB_ENVIRONMENT:'description-lab-v1',NODE_ENV:'staging',ADMIN_KEY:'fixture-admin-key-123456789',STUDIO_LAB_BUDGET_USD:'1'}}),/separate lab usage database/);
+ const u=clone(understanding);u.artists=[{as_written:'Invented artist',search_name:'Invented artist'}];assert.throws(()=>p.validateInterpretation(u,{brief:'No musician reference here',answer:''}),/No external research query/);
 });

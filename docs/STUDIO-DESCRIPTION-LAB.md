@@ -16,7 +16,7 @@ shortened to 950 characters. The existing music engine accepts lyrics in
 in `tags` (maximum 1,000); the engine's model is `sonic-v6`.
 
 The experiment does **not** patch those live routes. It has its own entrypoint,
-assets, isolated usage database and private administrator login. Its first model
+assets, optional isolated usage database and private administrator login. Its first model
 request interprets the full 12,000-character description; its second composes
 lyrics and musical direction from the original full description plus the
 interpretation and real retrieved evidence. There are no preset, mood, gender,
@@ -73,7 +73,7 @@ there is no automatic paid regeneration. This catches obvious reuse, not every
 possible paraphrase or semantic similarity.
 
 Full briefs/lyrics/results exist only in the private job's memory (one hour)
-and the current tab's session storage (cleared at sign-out). Durable lab tables
+and the current tab's session storage (cleared at sign-out). Durable lab tables, when configured,
 store metering metadata, research request metadata and keyed fingerprints.
 Original lyrics are not saved to the customer catalogue. An in-flight process
 restart can lose an output; durable idempotency prevents charging again as a
@@ -105,24 +105,30 @@ reset/delete the metering tables to replenish an approved test allowance.
 
 ## Deployment isolation
 
-`scripts/provision-studio-lab.cjs` can create only the new free Node lab service
-and a seven-day schema-only Neon test branch with a new empty `lae_studio_lab`
-database and separate `lae_studio_lab_owner` role. It never copies customer rows,
-changes live role passwords, updates either existing service, or supplies R2 or
-MusicAPI credentials. Existing review OpenAI/admin keys are copied securely in
-memory into separate lab variables without removing/changing their originals.
-There is no paid-plan fallback and no automatic production deployment.
+`scripts/provision-studio-lab.cjs` can create only the new free Node lab service.
+It never changes either existing service, database, role/password or storage.
+Existing review OpenAI/admin keys are copied securely in memory into separate
+lab variables without removing/changing their originals. No R2 or MusicAPI
+keys are supplied. There is no paid-plan fallback or production deployment.
 
-The temporary database expires after seven days, then the lab fails closed.
-Do not delete or reset a production/backup branch to make room. Branch/storage
-limits or unavailable free Render capacity must be reported as preview blockers.
+The first attempt at isolated Neon metering provisioning returned **HTTP 423**.
+No production workaround was attempted. The initial preview therefore runs
+without a database at a **hard $0 cap**. Its store refuses every paid reservation;
+it is not a substitute for durable paid metering. A nonzero budget cannot start
+without a separately configured lab-only database passing isolation checks.
+The PostgreSQL ledger is implemented and verified against disposable local CI
+PostgreSQL, but a hosted lab database remains a prerequisite for paid text tests.
+No account/artist data needs to be copied for this experiment.
+
 The existing review service was found to be ephemeral, so updating it would risk
-losing test accounts; it is deliberately untouched.
+losing test accounts; it is deliberately untouched. The temporary lab uses only
+same-tab drafts and short-lived in-memory jobs until durable metering is arranged.
 
-Required lab-only environment variables: `STUDIO_LAB_ENVIRONMENT`, `ADMIN_KEY`,
-`OPENAI_API_KEY`, `OPENAI_LYRICS_MODEL`, `STUDIO_LAB_DATABASE_URL`,
-`STUDIO_LAB_DATABASE_HOST`, `STUDIO_LAB_BUDGET_USD`,
-`STUDIO_LAB_CURRENT_STUDIO`; `NODE_ENV=staging`. Secret values are never logged.
+Required preview-only variables: `STUDIO_LAB_ENVIRONMENT`, `ADMIN_KEY`,
+`OPENAI_API_KEY`, `OPENAI_LYRICS_MODEL`, `STUDIO_LAB_BUDGET_USD`,
+`STUDIO_LAB_CURRENT_STUDIO`; `NODE_ENV=staging`. A separately isolated
+`STUDIO_LAB_DATABASE_URL` and `STUDIO_LAB_DATABASE_HOST` are mandatory before
+any nonzero budget. Secret values are never logged.
 Owner login uses the existing review administrator key on the separate origin;
 artist/listener/partner credentials do not grant access. Same-origin JSON and
 CSRF checks protect writes. There are no public studio or financial routes.

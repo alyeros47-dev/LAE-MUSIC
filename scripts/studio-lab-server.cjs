@@ -3,7 +3,8 @@ const http=require('node:http'),fs=require('node:fs/promises'),path=require('nod
 const {createAdminAuth}=require('../lib/admin-auth');
 const prompts=require('../lib/studio-lab-prompts');
 const {createLab}=require('../lib/studio-lab');
-const {databaseUrl,createStore}=require('../lib/studio-lab-store');
+const {databaseUrl,createStore,zeroBudgetStore}=require('../lib/studio-lab-store');
+const {createResearch}=require('../lib/studio-lab-research');
 function configuration(env){
  if(env.STUDIO_LAB_ENVIRONMENT!=='description-lab-v1'||env.NODE_ENV==='production'||(env.ADMIN_KEY||'').length<16)throw Error('This entrypoint requires an isolated, administrator-only studio lab.');
  if(env.OPENAI_LYRICS_MODEL&&env.OPENAI_LYRICS_MODEL!==prompts.MODEL)throw Error('The lab requires gpt-6.1-sol; no model substitution is allowed.');
@@ -11,11 +12,12 @@ function configuration(env){
  const current=new URL(env.STUDIO_LAB_CURRENT_STUDIO||'https://lae-music.com/studio');if(current.protocol!=='https:'||!['lae-music.com','lae-music.onrender.com','lae-music-review-sandbox.onrender.com'].includes(current.hostname))throw Error('Invalid existing-studio link.');
  return {cap,current:current.href};
 }
-async function createServer({env=process.env,store,lab,auth,now=Date.now}={}){
+async function createServer({env=process.env,store,lab,auth,research,now=Date.now}={}){
  const config=configuration(env);let pool;
+ if(!store&&!env.STUDIO_LAB_DATABASE_URL&&config.cap===0)store=zeroBudgetStore();
  if(!store){databaseUrl(env);pool=new(require('pg').Pool)({connectionString:env.STUDIO_LAB_DATABASE_URL,max:3,ssl:env.STUDIO_LAB_DATABASE_HOST?{rejectUnauthorized:true}:undefined});store=createStore({pool,cap:config.cap});await store.init();}
  auth||=createAdminAuth({pool:null,env});lab||=createLab({store,key:env.OPENAI_API_KEY,privacyKey:env.ADMIN_KEY});
- const jobs=new Map(),loginRates=new Map();
+ const jobs=new Map(),loginRates=new Map(),researchTool=research||createResearch();let researchCount=0,researchUntil=now()+3600000;
  function json(res,status,data,extra={}){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer',...extra});res.end(JSON.stringify(data));}
  async function body(req){const chunks=[];let n=0;for await(const chunk of req){n+=chunk.length;if(n>70000)throw prompts.fail('The request is too large; nothing was shortened.',413);chunks.push(chunk);}try{return JSON.parse(Buffer.concat(chunks).toString());}catch{throw prompts.fail('Send a valid JSON request.');}}
  const csrf=p=>lab.hash('csrf:'+p.session_hash);
@@ -41,6 +43,11 @@ async function createServer({env=process.env,store,lab,auth,now=Date.now}={}){
   if(req.method==='POST'&&req.headers['x-csrf-token']!==csrf(principal))throw prompts.fail('Refresh the lab page before submitting.',403);
   if(p==='/api/lab/logout'&&req.method==='POST')return json(res,200,{ok:true},{'Set-Cookie':'lae_admin=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0'});
   if(p==='/api/lab/usage'&&req.method==='GET')return json(res,200,await store.status());
+  if(p==='/api/lab/research'&&req.method==='POST'){
+   if(now()>researchUntil){researchCount=0;researchUntil=now()+3600000;}if(researchCount>=20)throw prompts.fail('The free research check limit is 20 per hour.',429);
+   const input=await body(req),name=input.artist;if(typeof name!=='string'||name.trim().length<2||name.length>80||/[\r\n]/.test(name))throw prompts.fail('Enter only an artist name, between 2 and 80 characters.');researchCount++;
+   return json(res,200,await researchTool.artist({as_written:name,search_name:name}));
+  }
   if(p==='/api/lab/generate'&&req.method==='POST'){
    const input=await body(req),key=input.request_key;if(!/^[a-f0-9-]{36}$/.test(key||''))throw prompts.fail('Refresh the form to create a valid request identifier.');
    const ownerId=lab.hash(principal.id),duplicate=[...jobs.values()].find(j=>j.owner===ownerId&&j.key===key);if(duplicate)return json(res,202,{id:duplicate.id,status:duplicate.status});
