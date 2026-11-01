@@ -1,0 +1,40 @@
+name: Isolated description-led studio checks
+on:
+  push:
+    branches: [codex/description-led-studio-lab]
+  pull_request:
+    paths: ['lib/studio-lab*', 'web/studio-lab*', 'scripts/studio-lab-server.cjs', 'scripts/provision-studio-lab.cjs', 'tests/studio-lab*', '.github/workflows/studio-lab-tests.yml']
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: lae_ci
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: lae_music_ci
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U lae_ci -d lae_music_ci" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/studio-lab.test.cjs
+      - run: node tests/studio-lab-postgres.cjs
+        env:
+          LAE_DB_TESTS: 'true'
+          DATABASE_URL: postgres://lae_ci:local-test-only@127.0.0.1:5432/lae_music_ci
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/studio-lab-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: studio-lab-mobile-desktop
+          path: artifacts/studio-lab-*.png
