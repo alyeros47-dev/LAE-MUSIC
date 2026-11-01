@@ -44,9 +44,9 @@
      $('key').value='';loginStatus('success','Signed in successfully. Opening your studio…');location.replace('/studio-lab');
     }catch(error){waiting(false);loginStatus('error',error.message+(error.status===401?' Use the ADMIN_KEY value from lae-music-studio-lab → Environment on Render. A Render API token or artist password will not work.':''));$('status').focus();}
     finally{clearTimeout(slow);}
-   };return;
+   };waiting(false);loginStatus('ready','Paste your key, then select Open test studio.');return;
   }
-  session=await api('/api/lab/session');if(!session.authenticated){location.reload();return;}$('current').href=session.current_studio;$('model').textContent=session.model;restore();await usage();
+  session=await api('/api/lab/session');if(!session.authenticated){location.reload();return;}$('current').href=session.current_studio;$('model').textContent=session.model;restore();
   $('research-check').onclick=async()=>{try{$('research-check').disabled=true;const result=await api('/api/lab/research',{artist:$('research-name').value});$('research-result').textContent=JSON.stringify(result,null,2);$('research-result').hidden=false;}catch(e){say(e.message);}finally{$('research-check').disabled=false;}};
   $('logout').onclick=async()=>{await api('/api/lab/logout',{});sessionStorage.removeItem(storageKey);location.reload();};
   for(const id of ['brief','answer','title','lyrics','style','provider-style','duration'])$(id).addEventListener('input',()=>{if(id==='style'){styleChanged=true;$('style-status').textContent='Detailed direction changed: update the engine prompt below to match, then review both.';}if(['style','provider-style','lyrics','title','duration'].includes(id)){$('reviewed').checked=false;$('payload').hidden=true;}save();$('count').textContent=$('brief').value.length+' / 12,000';});
@@ -60,6 +60,8 @@
    recognition.onresult=e=>{let added='';for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)added+=' '+e.results[i][0].transcript;const full=$('brief').value+added;if(full.length>12000){recognition.stop();say('The description reached its limit. The final dictated segment was not inserted; review the text before continuing.');return;}$('brief').value=full;$('brief').dispatchEvent(new Event('input'));};
    $('dictate').onclick=()=>{try{recording?recognition.stop():recognition.start();}catch{say('Dictation is already starting.');}};
   }
+  for(const id of ['logout','research-check','generate','dictate'])$(id).disabled=false;
+  void usage();
   if(jobId)await poll();
  }
  start().catch(e=>say(e.message));
