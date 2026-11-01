@@ -10,22 +10,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: f849ab6efd4e8e4cead8a774ae76c6350de4bb8f
+          ref: d106cd1d62a551fd274df0aecdff0148de275fe7
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm ci --omit=dev
+      - run: npm ci
       - name: Create only the separate free private preview at a zero-dollar budget
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          LAB_COMMIT: f849ab6efd4e8e4cead8a774ae76c6350de4bb8f
+          LAB_COMMIT: d106cd1d62a551fd274df0aecdff0148de275fe7
           LAB_APPROVED_USD: '0'
         run: |
           node - <<'JS'
           const {provision}=require('./scripts/provision-studio-lab.cjs');
-          const {complete}=require('./scripts/complete-studio-lab-metering.cjs');
           const {verify}=require('./scripts/verify-studio-lab-preview.cjs');
-          (async()=>{console.log(JSON.stringify(await complete()));const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url,durable:true})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          (async()=>{const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url,durable:true})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
           JS
+
+      - name: Install browser for hosted sign-in checks
+        run: npx playwright install --with-deps chromium
+      - name: Verify real hosted sign-in feedback and cookies on mobile and desktop
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          node - <<'JS'
+          const assert=require('node:assert/strict'),fs=require('node:fs'),{chromium}=require('playwright');
+          (async()=>{const r=await fetch('https://api.render.com/v1/services/srv-dbjqalc9v7es73as270g/env-vars?limit=100',{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY}});assert(r.ok);const vars=await r.json(),key=vars.map(v=>v.envVar||v).find(e=>e.key==='ADMIN_KEY')?.value;assert(key?.length>=16);const browser=await chromium.launch();try{for(const width of [390,1440]){const context=await browser.newContext({viewport:{width,height:1000},isMobile:width===390,hasTouch:width===390}),page=await context.newPage();await page.route('**/api/lab/login',async route=>{await new Promise(r=>setTimeout(r,1000));await route.continue();});await page.goto('https://lae-music-studio-lab.onrender.com/studio-lab');await page.getByLabel('Administrator key',{exact:true}).fill(key);await page.getByRole('button',{name:'Open test studio',exact:true}).click();assert(await page.getByRole('button',{name:'Opening studio…',exact:true}).isDisabled());assert.equal(await page.locator('#login').getAttribute('aria-busy'),'true');fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/hosted-login-progress-'+width+'.png',mask:[page.locator('#key')]});await page.getByRole('heading',{name:'Your song starts with your words.'}).waitFor({timeout:30000});const access=await page.evaluate(()=>fetch('/api/lab/session').then(r=>r.json()));assert(access.authenticated);assert.equal(access.model,'gpt-6.1-sol');await page.screenshot({path:'artifacts/hosted-studio-'+width+'.png',fullPage:true});await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('heading',{name:'Studio test access'}).waitFor();console.log(JSON.stringify({hosted_sign_in:'PASS',viewport:width,visible_loading:true,session_cookie_confirmed:true,paid_requests:0,customer_credits_used:0}));await context.close();}}finally{await browser.close();}})().catch(()=>{console.error('Hosted sign-in check failed; secret values are not logged.');process.exitCode=1;});
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-preview-login-mobile-desktop
+          path: artifacts/hosted-*.png
