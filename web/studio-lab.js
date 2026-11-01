@@ -1,0 +1,68 @@
+'use strict';
+(()=>{
+ const $=id=>document.getElementById(id),storageKey='lae-description-lab-v1';let session,jobId=null,polling=false,styleChanged=false,recognition=null,preserveEdits=false;
+ const say=message=>{$('status').textContent=message;};
+ async function api(url,body,{timeoutMs=45000}={}){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+   let r;try{r=await fetch(url,{credentials:'same-origin',method:body===undefined?'GET':'POST',headers:body===undefined?{}:{'Content-Type':'application/json','X-CSRF-Token':session?.csrf||''},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal});}catch(e){if(controller.signal.aborted)throw e;throw Error('Could not connect to the test studio. Check your connection and try again.');}
+   let data;try{data=await r.json();}catch(e){if(controller.signal.aborted)throw e;throw Error('The lab connection was interrupted. Refresh to recover this tab’s draft; do not resubmit while a test is running.');}
+   if(!r.ok)throw Object.assign(Error(data.error||'The request could not finish.'),{status:r.status});return data;
+  }catch(e){if(controller.signal.aborted)throw Error('The connection timed out. The studio has stopped waiting. Check your connection, then try again.');throw e;}
+  finally{clearTimeout(timer);}
+ }
+ function save(){if(!$('brief'))return;const draft={jobId,styleChanged};for(const id of ['brief','answer','title','lyrics','style','provider-style','duration'])draft[id]=$(id).value;try{sessionStorage.setItem(storageKey,JSON.stringify(draft));}catch{say('This browser could not save the draft. Copy the lyrics and style before leaving this page.');}}
+ function restore(){try{const d=JSON.parse(sessionStorage.getItem(storageKey)||'null');if(!d)return;for(const id of ['brief','answer','title','lyrics','style','provider-style','duration'])if(typeof d[id]==='string')$(id).value=d[id];jobId=d.jobId||null;styleChanged=!!d.styleChanged;if(d.lyrics){$('result').hidden=false;preserveEdits=true;}}catch{say('The saved draft could not be read.');}}
+ async function usage(){try{const data=await api('/api/lab/usage');$('usage').textContent=JSON.stringify(data,null,2);if(data.cap_usd===0)say('Preview ready. Real text generation is paused at a $0 test budget pending your separate USD authorization. Research connectivity and automated mock checks do not consume customer credits.');}catch(e){$('usage').textContent=e.message;}}
+ function el(tag,text){const node=document.createElement(tag);node.textContent=text;return node;}
+ function showResult(result){
+  const u=result.understanding||{};$('interpretation').replaceChildren(el('p',u.interpreted_brief||''));
+  for(const c of u.corrections||[])$('interpretation').append(el('p',`Correction: “${c.original}” → “${c.corrected}”. ${c.reason}`));
+  $('research').replaceChildren();for(const r of result.artist_research||[]){$('research').append(el('h3',`${r.as_written} → ${r.resolved_name}`));for(const fact of r.facts||[])$('research').append(el('p',`Researched: ${fact.characteristic} (evidence: “${fact.evidence_quote}”)`));$('research').append(el('p','Original production interpretation: '+r.original_translation));}
+  for(const r of result.research||[])for(const s of r.sources||[]){const p=el('p','Source: '),a=el('a',s.title);try{const url=new URL(s.url);if(url.protocol==='https:'&&['musicbrainz.org','en.wikipedia.org'].includes(url.hostname)){a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';p.append(a);$('research').append(p);}}catch{}}
+  if(result.status!=='ready'){$('question').textContent=result.question;$('clarify').hidden=false;$('result').hidden=true;say(result.question);return;}
+  $('clarify').hidden=true;$('result').hidden=false;if(!preserveEdits){$('title').value=result.title;$('lyrics').value=result.lyrics;$('style').value=result.detailed_style;$('provider-style').value=result.provider_style;$('duration').value=result.duration_seconds;}$('originality').textContent=result.originality.note;$('handoff').disabled=!result.audio_ready;$('reviewed').checked=false;if(!preserveEdits)styleChanged=false;$('style-status').textContent=styleChanged?'Detailed direction changed: check that the engine prompt matches.':'Both prompts were generated from the same description. Review them before continuing.';
+  say('Draft ready for review. No audio has been generated and no customer credits were used.');save();
+ }
+ async function poll(){if(!jobId||polling)return;polling=true;let running=false;$('generate').disabled=true;try{const job=await api('/api/lab/jobs/'+encodeURIComponent(jobId));if(job.status==='running'){running=true;say('Reading the full description, researching any artist references, then writing matching lyrics and production instructions…');setTimeout(()=>{polling=false;poll();},1500);return;}if(job.status==='failed')throw Error(job.error);showResult(job.result);await usage();}catch(e){say(e.message);}finally{polling=false;$('generate').disabled=running;}}
+ async function start(){
+  const login=$('login');if(login){
+   const submit=$('login-submit');let busy=false;
+   function loginStatus(state,message){$('status').dataset.state=state;say(message);$('status').scrollIntoView({block:'nearest'});}
+   function waiting(value){busy=value;login.setAttribute('aria-busy',String(value));submit.disabled=value;$('key').disabled=value;$('show').disabled=value;submit.textContent=value?'Opening studio…':'Open test studio';}
+   $('show').onclick=()=>{const show=$('key').type==='password';$('key').type=show?'text':'password';$('show').textContent=show?'Hide':'Show';$('show').setAttribute('aria-label',(show?'Hide':'Show')+' administrator key');loginStatus('ready','Select “Open test studio” below to sign in.');};
+   login.onsubmit=async e=>{
+    e.preventDefault();if(busy)return;
+    const password=$('key').value;if(!password.trim()){loginStatus('error','Paste the same administrator key you use for your main LAE-MUSIC administrator panel.');return;}
+    waiting(true);loginStatus('loading','Checking your administrator key…');
+    const slow=setTimeout(()=>loginStatus('loading','Still connecting to the test studio. Please keep this page open; you do not need to click again.'),5000);
+    try{
+     await api('/api/lab/login',{password},{timeoutMs:20000});clearTimeout(slow);
+     loginStatus('loading','Key accepted. Checking your sign-in session…');
+     const access=await api('/api/lab/session',undefined,{timeoutMs:10000});
+     if(!access.authenticated)throw Error('Your key was accepted, but your browser did not save the sign-in session. Open this link in Chrome, Safari or Firefox and allow cookies for this test site, then try again.');
+     $('key').value='';loginStatus('success','Signed in successfully. Opening your studio…');location.replace('/studio-lab');
+    }catch(error){waiting(false);loginStatus('error',error.message+(error.status===401?' Use the same ADMIN_KEY you use for your main LAE-MUSIC administrator panel. You do not need a separate preview key.':''));$('status').focus();}
+    finally{clearTimeout(slow);}
+   };waiting(false);loginStatus('ready','Paste your key, then select Open test studio.');return;
+  }
+  session=await api('/api/lab/session');if(!session.authenticated){location.reload();return;}$('current').href=session.current_studio;$('model').textContent=session.model;restore();
+  $('research-check').onclick=async()=>{try{$('research-check').disabled=true;const result=await api('/api/lab/research',{artist:$('research-name').value});$('research-result').textContent=JSON.stringify(result,null,2);$('research-result').hidden=false;}catch(e){say(e.message);}finally{$('research-check').disabled=false;}};
+  $('logout').onclick=async()=>{await api('/api/lab/logout',{});sessionStorage.removeItem(storageKey);location.reload();};
+  for(const id of ['brief','answer','title','lyrics','style','provider-style','duration'])$(id).addEventListener('input',()=>{if(id==='style'){styleChanged=true;$('style-status').textContent='Detailed direction changed: update the engine prompt below to match, then review both.';}if(['style','provider-style','lyrics','title','duration'].includes(id)){$('reviewed').checked=false;$('payload').hidden=true;}save();$('count').textContent=$('brief').value.length+' / 12,000';});
+  $('count').textContent=$('brief').value.length+' / 12,000';
+  $('brief-form').onsubmit=async e=>{e.preventDefault();if(polling)return;recognition?.stop();$('generate').disabled=true;try{const result=await api('/api/lab/generate',{brief:$('brief').value,answer:$('answer').value||undefined,request_key:crypto.randomUUID()});jobId=result.id;preserveEdits=false;save();await poll();}catch(error){say(error.message);$('generate').disabled=false;}};
+  document.querySelectorAll('[data-copy]').forEach(button=>button.onclick=async()=>{try{await navigator.clipboard.writeText($(button.dataset.copy).value);say('Copied.');}catch{const area=$(button.dataset.copy);area.focus();area.select();say('Text selected. Use your device’s Copy command.');}});
+  $('handoff').onclick=async()=>{if(!$('reviewed').checked){say('Review the lyrics and both musical prompts, then tick the review checkbox.');return;}try{const result=await api('/api/lab/handoff',{run_id:jobId,title:$('title').value,lyrics:$('lyrics').value,provider_style:$('provider-style').value,duration_seconds:Number($('duration').value)});$('payload').textContent=JSON.stringify(result,null,2);$('payload').hidden=false;say('Handoff validated against the existing music engine’s limits. No audio request was sent.');}catch(error){say(error.message);}};
+  const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Speech){$('dictate').hidden=true;$('speech-note').textContent='Voice-to-text is unavailable in this browser. Type your description or use your keyboard’s microphone. This test does not analyse recordings.';}else{
+   recognition=new Speech();recognition.continuous=true;recognition.interimResults=false;recognition.lang=navigator.language||'en-NG';let recording=false;
+   recognition.onstart=()=>{recording=true;$('dictate').textContent='Stop dictation';};recognition.onend=()=>{recording=false;$('dictate').textContent='🎙 Dictate description';};recognition.onerror=e=>say('Dictation could not continue ('+e.error+'). Your typed description is preserved. Use typing or your keyboard microphone.');
+   recognition.onresult=e=>{let added='';for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)added+=' '+e.results[i][0].transcript;const full=$('brief').value+added;if(full.length>12000){recognition.stop();say('The description reached its limit. The final dictated segment was not inserted; review the text before continuing.');return;}$('brief').value=full;$('brief').dispatchEvent(new Event('input'));};
+   $('dictate').onclick=()=>{try{recording?recognition.stop():recognition.start();}catch{say('Dictation is already starting.');}};
+  }
+  for(const id of ['logout','research-check','generate','dictate'])$(id).disabled=false;
+  void usage();
+  if(jobId)await poll();
+ }
+ start().catch(e=>say(e.message));
+})();

@@ -48,7 +48,7 @@ async function main() {
   }
   check(ready, "integrated capabilities route");
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    for (const file of ["web/app.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css"]) {
+    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css"]) {
       const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
       const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA,
         {redirect:"error",signal:AbortSignal.timeout(30000)});

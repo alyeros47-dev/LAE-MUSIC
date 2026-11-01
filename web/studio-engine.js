@@ -19,7 +19,7 @@ export function musicRequest(brief, voiceProfile) {
     throw Error(
       "Shorten your style and language instructions to 1,000 characters.",
     );
-  const seconds = brief.duration ? parseInt(brief.duration, 10) * 60 : 180,
+  const seconds = brief.duration ? parseFloat(brief.duration) * 60 : 180,
     lyrics = String(brief.lyrics || ""),
     words = lyrics
       .replace(/\[[^\]\n]*\]/g, " ")
@@ -40,7 +40,7 @@ export function musicRequest(brief, voiceProfile) {
     style,
     useVoice,
     ...(brief.duration
-      ? { duration: Math.round(parseInt(brief.duration, 10) * 60) }
+      ? { duration: Math.round(parseFloat(brief.duration) * 60) }
       : {}),
   };
 }
