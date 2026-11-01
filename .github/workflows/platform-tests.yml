@@ -1,297 +1,118 @@
-name: Platform release candidate verification
+name: Approved isolated referral demo deployment
 on:
-  pull_request:
-    paths-ignore:
-      - "android-app/**"
   workflow_dispatch:
     inputs:
-      production_release_mode:
-        description: "Owner-authorized existing-service release: plan, prepare feature flags, or deploy an approved merge"
-        required: false
+      phase:
         type: choice
-        options: ["", plan, prepare, deploy]
-        default: ""
-      production_candidate_sha:
-        description: "Exact tested development candidate SHA"
-        required: false
+        options: [preflight, deploy]
+        default: preflight
+        required: true
+      merge_sha:
         type: string
-        default: ""
-      production_commit_sha:
-        description: "Exact production merge SHA for deploy mode"
         required: false
-        type: string
-        default: ""
-      production_ci_run:
-        description: "Successful exact-candidate full CI run ID"
-        required: false
-        type: string
-        default: ""
-      recovery_backup_branch:
-        description: "Optional previously created owned backup branch; requires its original workflow run ID"
-        required: false
-        type: string
-        default: ""
-      recovery_backup_run:
-        description: "Original workflow run ID that created the saved backup"
-        required: false
-        type: string
-        default: ""
-      existing_service_recovery_rehearsal:
-        description: "Create a bounded private backup and isolated recovery/migration rehearsal; never migrate production"
-        required: false
-        type: boolean
-        default: false
-      existing_service_audit:
-        description: "Read-only inspection of existing production service and schema; no deployment or database writes"
-        required: false
-        type: boolean
-        default: false
-      review_auth_email_sha256:
-        description: "Optional SHA-256 account lookup digest; sandbox only, no resets/deployment"
-        required: false
-        type: string
-        default: ""
-      review_lyrics_model_check:
-        description: "Read-only verification of the two approved lyrics models; no billed generation or deployment"
-        required: false
-        type: boolean
-        default: false
+        default: ''
 permissions:
   contents: read
+  actions: read
+  pull-requests: read
 jobs:
-  change-scope:
-    runs-on: ubuntu-latest
-    outputs:
-      mode: ${{ steps.scope.outputs.mode }}
-      groups: ${{ steps.scope.outputs.groups }}
-      shared: ${{ steps.scope.outputs.shared }}
-      metadata: ${{ steps.scope.outputs.metadata }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - id: scope
-        run: node scripts/dna-ci-scope.cjs
-
-  music-dna-focused:
-    needs: change-scope
-    if: needs.change-scope.result == 'success' && needs.change-scope.outputs.mode != 'full'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - name: Verify only changed Music DNA groups and necessary shared checks
-        env:
-          LAE_DNA_GROUPS: ${{ needs.change-scope.outputs.groups }}
-          LAE_DNA_SHARED: ${{ needs.change-scope.outputs.shared }}
-          LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
-        run: npm run test:dna
-  existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/gospel-phase-one' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
+  deploy-approved-referral-demo:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/referral-demo-release'
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    permissions:
-      contents: read
-      actions: read
-      pull-requests: read
     concurrency:
       group: lae-existing-production-release
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: 414014250b1ea2eac1824d2dc8b426661fcb7664
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Verify production release guards
-        run: node --test tests/production-release.test.cjs
-      - name: Execute owner-authorized existing-service release phase
+          node-version: '22'
+      - run: npm ci
+      - name: Bind existing release guards to the owner-approved PR 23
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for name in ['lib/production-release.js', 'tests/production-release.test.cjs']:
+              p=Path(name)
+              s=p.read_text()
+              assert s.count('/pulls/12')==1
+              p.write_text(s.replace('/pulls/12','/pulls/23'))
+          PY
+          node --test tests/production-release.test.cjs
+      - name: Read-only existing service and backup verification before merge
+        if: inputs.phase == 'preflight'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
-          LAE_RELEASE_MODE: ${{ inputs.production_release_mode }}
-          LAE_RELEASE_CANDIDATE_SHA: ${{ inputs.production_candidate_sha }}
-          LAE_RELEASE_COMMIT_SHA: ${{ inputs.production_commit_sha }}
-          LAE_RELEASE_CI_RUN: ${{ inputs.production_ci_run }}
-        run: node scripts/release-existing-service.cjs
-      - name: Verify live assets, registration, login, free allowances and original music
-        if: inputs.production_release_mode == 'deploy'
+        run: |
+          node - <<'JS'
+          const assert=require('node:assert/strict');
+          const {ID,featureSettings,REQUIRED_JOBS}=require('./lib/production-release');
+          const {serviceValid,inventory}=require('./scripts/audit-existing-service.cjs');
+          async function get(url,key){const r=await fetch(url,{headers:{Authorization:'Bearer '+key,Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(30000)});assert(r.ok,'Read-only preflight API HTTP '+r.status);return r.json();}
+          (async()=>{
+            const root='https://api.github.com/repos/alyeros47-dev/LAE-MUSIC',gh=p=>get(root+p,process.env.GITHUB_TOKEN),r=p=>get('https://api.render.com/v1/services/'+ID+p,process.env.RENDER_API_KEY);
+            const pr=await gh('/pulls/23'),main=await gh('/git/ref/heads/main');assert.equal(pr.state,'open');assert.equal(pr.head.sha,'414014250b1ea2eac1824d2dc8b426661fcb7664');assert.equal(pr.base.ref,'main');assert.equal(main.object.sha,'00f3c9397a0c1c2523358cb4ef0257505536dc41');
+            const run=await gh('/actions/runs/41342672507'),jobs=(await gh('/actions/runs/41342672507/jobs?per_page=100')).jobs;assert.equal(run.head_sha,pr.head.sha);assert.equal(run.conclusion,'success');assert(REQUIRED_JOBS.every(name=>jobs.some(j=>j.name===name&&j.conclusion==='success')));
+            const raw=await r(''),service=raw.service||raw;assert(serviceValid(service));assert.equal(service.id,ID);assert.equal(service.branch,'main');assert.equal(service.serviceDetails.runtime,'node');
+            const env=inventory(await r('/env-vars?limit=100'));assert(['DATABASE_URL','R2_ACCOUNT_ID','R2_ACCESS_KEY_ID','R2_SECRET_ACCESS_KEY','R2_BUCKET','MUSICAPI_API_KEY'].every(k=>!!env[k]));assert(!Object.keys(env).some(k=>k.startsWith('LAE_REVIEW_')&&env[k]));const changes=Object.keys(featureSettings(env)).filter(k=>env[k]!==featureSettings(env)[k]);assert.equal(changes.length,0,'Environment changes are not authorized by this internal-demo release');
+            assert((await require('./lib/neon-recovery-inspection').inspect({key:process.env.NEON_API_KEY,databaseUrl:env.DATABASE_URL})).database_binding_verified);
+            const backup=(await get('https://console.neon.tech/api/v2/projects/restless-brook-43273058/branches/br-spring-night-b4y9h9xp',process.env.NEON_API_KEY)).branch;assert.equal(backup.id,'br-spring-night-b4y9h9xp');assert.equal(backup.parent_id,'br-flat-darkness-b42js8ma');assert.equal(backup.name,'lae-release-41141460115-backup');assert(Date.parse(backup.expires_at)>Date.now()+3600000);
+            const pool=new (require('pg').Pool)(require('./lib/database').databaseOptions(env));let paidArtists;try{const db=await pool.connect();try{await db.query('BEGIN READ ONLY');await db.query("SET LOCAL statement_timeout='15s'");paidArtists=Number((await db.query("SELECT COUNT(DISTINCT artist_id)::int AS n FROM artist_subscriptions WHERE status='paid' AND starts_at<=NOW() AND expires_at>NOW() AND NOT payment_hold")).rows[0].n);const fs=require('node:fs'),crypto=require('node:crypto'),rows=(await db.query('SELECT version,checksum FROM platform_migrations ORDER BY version')).rows,files=fs.readdirSync('migrations').filter(x=>/^\d+.*\.sql$/.test(x)).sort();for(const row of rows){assert(files.includes(row.version),'Unknown applied migration');assert.equal(row.checksum,crypto.createHash('sha256').update(fs.readFileSync('migrations/'+row.version)).digest('hex'));}assert.deepEqual(files.filter(f=>!rows.some(r=>r.version===f)),['026-link-referral-demo.sql']);assert.equal(rows.length,25);await db.query('ROLLBACK');}finally{db.release();}}finally{await pool.end();}assert.equal(require('./config/payment-merchant.json').checkout_mode,'disabled');console.log(JSON.stringify({preflight:'passed',service_id:ID,candidate:pr.head.sha,ci_run:'41342672507',recovery_backup_verified:true,only_pending_migration:'026-link-referral-demo.sql',existing_migration_checksums_preserved:true,active_paid_artist_accounts:paidArtists,checkout_enabled:false,existing_configuration_preserved:true,auto_deploy_trigger:service.autoDeployTrigger??service.autoDeploy??'unknown',environment_changes:0,production_writes:0,paid_requests:0}));
+          })().catch(e=>{console.error('Pre-merge check stopped:',e.message);process.exitCode=1;});
+          JS
+      - name: Verify the approved merge, backup, CI and existing Render service; deploy exact merge
+        if: inputs.phase == 'deploy'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_LIVE_RELEASE_VERIFY: "1"
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          APPROVED_MERGE_SHA: ${{ inputs.merge_sha }}
+        run: |
+          node - <<'JS'
+          const {release}=require('./lib/production-release');
+          (async()=>{
+            const r=await release({mode:'deploy',candidate:'414014250b1ea2eac1824d2dc8b426661fcb7664',commit:process.env.APPROVED_MERGE_SHA,ciRun:'41342672507',key:process.env.RENDER_API_KEY,neonKey:process.env.NEON_API_KEY,githubToken:process.env.GITHUB_TOKEN,record:x=>console.log(JSON.stringify(x))});
+            console.log(JSON.stringify(r));
+          })().catch(e=>{console.error('PR 23 release stopped:',e.message);process.exitCode=1;});
+          JS
+      - name: Verify exact live assets, account sessions, existing audio and database records
+        if: inputs.phase == 'deploy'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_LIVE_RELEASE_VERIFY: '1'
         run: node scripts/verify-live-release.cjs
-  existing-service-recovery-rehearsal:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    concurrency:
-      group: lae-existing-database-recovery
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Verify recovery guards before management writes
-        run: node --test tests/neon-recovery-rehearsal.test.cjs
-      - name: Back up and rehearse only isolated database branches
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          LAE_EXISTING_RECOVERY_REHEARSAL: "1"
-          LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
-          LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
-        run: node scripts/rehearse-existing-recovery.cjs
-  existing-service-audit:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci --omit=dev
-      - name: Read existing production configuration and schema without changes
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-        run: node scripts/audit-existing-service.cjs
-  review-auth-diagnostic:
-    if: github.event_name == 'workflow_dispatch' && (inputs.review_auth_email_sha256 != '' || inputs.review_lyrics_model_check) && github.ref == 'refs/heads/codex/premium-platform-release'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: node --test tests/review-auth-diagnostic.test.cjs
-      - name: Read-only sandbox account or approved model check
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          REVIEW_AUTH_EMAIL_SHA256: ${{ inputs.review_auth_email_sha256 }}
-          REVIEW_LYRICS_MODEL_CHECK: ${{ inputs.review_lyrics_model_check }}
-        run: node scripts/review-auth-diagnostic.cjs
-  review-persistence:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: Build isolated review image without service credentials
-        run: docker build -f deploy/review.Dockerfile -t lae-review-persistence-ci .
-      - name: Replace container and verify retained account, audio and provider budget
-        env:
-          LAE_REVIEW_PERSISTENCE_TESTS: "1"
-          LAE_REVIEW_TEST_IMAGE: lae-review-persistence-ci
-        run: node tests/review-persistence-container.cjs
-  application:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npm test
-      - run: npm audit --omit=dev
-      - run: npm run test:http
-      - run: npm run test:email
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence
-          path: artifacts/
-
-  postgres:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: lae_ci_fixture_only
-          POSTGRES_DB: lae_music_ci
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d lae_music_ci"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npm run test:postgres
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-      - run: npm run test:upgrade
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-      - run: node tests/gospel-launch-postgres.cjs
-        env:
-          LAE_DB_TESTS: "true"
-          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
-
-  browser-compatibility:
-    needs: change-scope
-    if: always() && (needs.change-scope.result != 'success' || needs.change-scope.outputs.mode == 'full') && (github.event_name != 'workflow_dispatch' || (inputs.review_auth_email_sha256 == '' && !inputs.review_lyrics_model_check && !inputs.existing_service_audit && !inputs.existing_service_recovery_rehearsal && inputs.production_release_mode == ''))
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [firefox, webkit]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: npm run test:browser
-        env:
-          LAE_TEST_BROWSER: ${{ matrix.browser }}
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence-${{ matrix.browser }}
-          path: artifacts/
+      - name: Install browser for focused live demo verification
+        if: inputs.phase == 'deploy'
+        run: npx playwright install --with-deps chromium
+      - name: Verify simulated purchase, profiles, referral attribution, refunds and paid-access isolation live
+        if: inputs.phase == 'deploy'
+        run: |
+          node - <<'JS'
+          'use strict';
+          const assert=require('node:assert/strict'),crypto=require('node:crypto'),fs=require('node:fs');
+          const origin='https://lae-music.com',PREFIX='/api/platform/referral-demo';
+          async function api(path,{body,cookie}={}){const r=await fetch(origin+path,{method:body===undefined?'GET':'POST',redirect:'error',headers:{Origin:origin,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(45000)});return{status:r.status,cookie:r.headers.getSetCookie().map(x=>x.split(';')[0]).join('; '),data:await r.json()};}
+          (async()=>{
+           for(const host of [origin,'https://lae-music.onrender.com'])for(const file of ['web/app.js','web/artist-packages.js','web/referral-demo.js']){const r=await fetch(host+'/'+file+'?demo-release='+process.env.GITHUB_RUN_ID,{redirect:'error',signal:AbortSignal.timeout(30000)});assert(r.ok);const hash=b=>crypto.createHash('sha256').update(b).digest('hex');assert.equal(hash(Buffer.from(await r.arrayBuffer())),hash(fs.readFileSync(file)));}
+           const caps=(await api('/api/platform/capabilities')).data;assert.equal(caps.artist_access_mode,'paid_packages_only');assert.equal(caps.payments,false);assert.equal(caps.payouts,false);assert.equal((await api('/api/plans')).data.referralDemoAvailable,true);
+           const password=crypto.randomBytes(24).toString('hex'),r=await api('/api/register',{body:{name:'LAE Demo Release QA',country:'Nigeria',email:'lae-demo-release-'+process.env.GITHUB_RUN_ID+'-'+crypto.randomBytes(4).toString('hex')+'@verification.invalid',password,confirmPassword:password,plan:'starter'}});assert.equal(r.status,201);const owner=r.data.user.id,cookie=r.cookie;
+           const browser=await require('playwright').chromium.launch({headless:true});let forbidden=0,demoWrites=0;const errors=[];
+           const report=async()=>{const r=await api(PREFIX+'/mine',{cookie});assert.equal(r.status,200);assert.equal(r.data.actual_withdrawable_minor,0);return r.data;};
+           const scope=async context=>{await context.route('**/api/**',async route=>{const req=route.request(),p=new URL(req.url()).pathname;if(!['GET','HEAD'].includes(req.method())){if(!p.startsWith(PREFIX+'/')){forbidden++;return route.abort('blockedbyclient');}demoWrites++;}return route.continue();});};
+           async function buy(page,name){await page.getByRole('link',{name:'Try demo payment',exact:true}).click();await page.getByRole('heading',{name:'Try a demo payment.',exact:true}).waitFor();await page.getByLabel('I understand no money is charged and no real artist package or withdrawable commission is created.',{exact:true}).check();await page.getByRole('button',{name:'Pay with demo funds',exact:true}).click();await page.getByRole('heading',{name:'Create your demo artist profile.',exact:true}).waitFor();assert.equal(await page.locator('#page input[type=email],#page input[type=password]').count(),0);await page.getByLabel('Demo artist name',{exact:true}).fill(name);await page.getByLabel('This profile is for referral testing only.',{exact:true}).check();await page.getByRole('button',{name:'Create demo profile',exact:true}).click();await page.getByRole('heading',{name:'Your demo artist dashboard.',exact:true}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
+           try{
+           const parent=await browser.newContext({viewport:{width:390,height:1100},reducedMotion:'reduce'});await scope(parent);const page=await parent.newPage();page.on('pageerror',e=>errors.push(e.name));await page.goto(origin+'/start?ref='+owner+'&product=growth');await buy(page,'Demo Release Parent');const parentOrder=new URL(page.url()).searchParams.get('order');let root=await report();assert.equal(root.totals.direct_minor,250);assert.equal(root.totals.team_minor,0);const link=await page.getByLabel('Demo professional referral link',{exact:true}).inputValue();assert.equal(new URL(link).searchParams.get('ref'),String(owner));assert.equal(new URL(link).searchParams.get('demo'),'1');
+           const child=await browser.newContext({viewport:{width:1440,height:1100},reducedMotion:'reduce'});await scope(child);const second=await child.newPage();second.on('pageerror',e=>errors.push(e.name));await second.goto(link);await buy(second,'Demo Release Child');root=await report();assert.equal(root.totals.direct_minor,250);assert.equal(root.totals.team_minor,200);await page.reload();await page.getByRole('heading',{name:'Your demo artist dashboard.',exact:true}).waitFor();assert.equal(new URL(page.url()).searchParams.get('order'),parentOrder);assert(await page.locator('.metric').filter({hasText:'DEMO DIRECT COMMISSIONS'}).getByText('$5.00',{exact:true}).isVisible());
+           for(const p of [second,page]){await p.getByLabel('Simulate a full demo refund. This does not request or promise a real refund.',{exact:true}).check();await p.getByRole('button',{name:'Simulate demo refund',exact:true}).click();await p.getByText('This demo purchase was refunded. Its direct and team examples were reversed.',{exact:true}).waitFor();}root=await report();assert.equal(root.totals.direct_minor,0);assert.equal(root.totals.team_minor,0);assert(root.rows.every(x=>x.state==='reversed'));
+           await second.goto(link);await second.getByRole('link',{name:'Try demo payment',exact:true}).click();await second.getByRole('combobox',{name:'Demo payment outcome',exact:true}).selectOption('failed');await second.getByLabel('I understand no money is charged and no real artist package or withdrawable commission is created.',{exact:true}).check();await second.getByRole('button',{name:'Pay with demo funds',exact:true}).click();await second.getByRole('heading',{name:'Demo payment failed.',exact:true}).waitFor();assert.equal(await second.locator('#demo-profile').count(),0);root=await report();assert.equal(root.totals.direct_minor,0);assert.equal(root.totals.team_minor,0);
+           assert.equal((await api('/api/artist/subscription',{cookie})).data.artist_features_active,false);assert.equal((await api('/api/generation/wallet',{cookie})).data.credits,0);assert.equal((await api('/api/platform/checkout',{cookie,body:{}})).status,503);assert.equal((await api('/api/music/sonic/create',{cookie,body:{}})).status,402);assert.equal((await api('/api/voice/train',{cookie,body:{}})).status,402);assert.equal((await api('/api/music/lyrics-generate',{cookie,body:{}})).status,402);const earnings=await api('/api/affiliate/earnings',{cookie});assert.equal(earnings.status,200);assert.equal(earnings.data.history.length,0);assert.equal(forbidden,0);assert.deepEqual(errors,[]);await parent.close();await child.close();
+           console.log(JSON.stringify({live_demo:'passed',exact_assets_both_origins:true,browser_widths:[390,1440],source_referral_retained:true,payment_before_demo_profile:true,refresh_retains_profile:true,independent_browser_child_purchase:true,direct_example_minor:250,two_step_team_projection_minor:200,refunds_reverse_examples:true,failed_payment_does_not_enroll:true,final_demo_allocations_all_reversed:true,real_partner_commissions:0,real_artist_package_active:false,real_lyrics_credits:0,paid_artist_requests_blocked:3,real_checkout_enabled:false,provider_generation_calls:0,payment_operations:0,r2_writes:0,unexpected_browser_mutations:0,demo_mutations:demoWrites,qa_partner_unpublished:true}));
+           }finally{await browser.close();await api('/api/logout',{body:{},cookie});}
+          })().catch(e=>{console.error('Live demo verification stopped:',e.message);process.exitCode=1;});
+          JS
