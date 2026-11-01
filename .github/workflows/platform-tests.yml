@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 03ff8f242dba3a69e2a855a8f0061e7b90910d08
+          ref: 7f5f738f42da86dc0ce17ac56ed524c2926fa19d
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -19,11 +19,13 @@ jobs:
       - name: Create only the separate free private preview at a zero-dollar budget
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAB_COMMIT: 03ff8f242dba3a69e2a855a8f0061e7b90910d08
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          LAB_COMMIT: 7f5f738f42da86dc0ce17ac56ed524c2926fa19d
           LAB_APPROVED_USD: '0'
         run: |
           node - <<'JS'
           const {provision}=require('./scripts/provision-studio-lab.cjs');
+          const {complete}=require('./scripts/complete-studio-lab-metering.cjs');
           const {verify}=require('./scripts/verify-studio-lab-preview.cjs');
-          (async()=>{const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          (async()=>{console.log(JSON.stringify(await complete()));const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url,durable:true})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
           JS
