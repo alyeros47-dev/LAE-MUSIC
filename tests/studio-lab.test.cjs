@@ -79,6 +79,7 @@ test('preview provisioning can mutate only a new free $0 lab; live/review and da
   assert.equal(u.hostname,'api.render.com');
   if(u.pathname.endsWith('/services/'+live))return Response.json(mk(live,'LAE-MUSIC'));
   if(u.pathname.endsWith('/services/'+review))return Response.json(mk(review,'lae-music-review-sandbox'));
+  if(u.pathname.endsWith('/services/'+live+'/env-vars'))return Response.json([{envVar:{key:'ADMIN_KEY',value:'fixture-live-admin-key-long-enough'}}]);
   if(u.pathname.endsWith('/services/'+review+'/env-vars'))return Response.json([{envVar:{key:'ADMIN_KEY',value:'fixture-admin-key-long-enough'}},{envVar:{key:'OPENAI_API_KEY',value:'fixture-provider-key'}}]);
   if(u.pathname.endsWith('/services')&&method==='GET')return Response.json([]);
   if(u.pathname.endsWith('/services')&&method==='POST'){service={...mk('srv-lab-only',body.name),branch:body.branch,serviceDetails:{...body.serviceDetails,url:'https://fixture-studio-lab.onrender.com'}};return Response.json({service});}
@@ -87,7 +88,7 @@ test('preview provisioning can mutate only a new free $0 lab; live/review and da
   throw Error('Unexpected Render API path');
  };
  const result=await provision({env:{RENDER_API_KEY:'fixture',NEON_API_KEY:'fixture',LAB_COMMIT:candidate},fetchImpl,wait:async()=>{},log:()=>{}});assert.equal(result.url,'https://fixture-studio-lab.onrender.com/studio-lab');assert.equal(result.production_writes,0);
- assert(!writes.some(w=>w.url.includes(live)||w.url.includes(review)));assert(!writes.some(w=>w.url.includes('neon.tech')));const payload=writes.find(w=>w.url.endsWith('/services')).body;assert.equal(payload.serviceDetails.plan,'free');assert.equal(payload.autoDeployTrigger,'off');assert(!payload.envVars.some(v=>/R2|MUSICAPI|DATABASE_URL/.test(v.key)&&v.key!=='STUDIO_LAB_DATABASE_URL'));assert.equal(payload.envVars.find(v=>v.key==='STUDIO_LAB_BUDGET_USD').value,'0');
+ assert(!writes.some(w=>w.url.includes(live)||w.url.includes(review)));assert(!writes.some(w=>w.url.includes('neon.tech')));const payload=writes.find(w=>w.url.endsWith('/services')).body;assert.equal(payload.serviceDetails.plan,'free');assert.equal(payload.autoDeployTrigger,'off');assert.equal(payload.envVars.find(v=>v.key==='ADMIN_KEY').value,'fixture-live-admin-key-long-enough');assert(!payload.envVars.some(v=>/R2|MUSICAPI|DATABASE_URL/.test(v.key)&&v.key!=='STUDIO_LAB_DATABASE_URL'));assert.equal(payload.envVars.find(v=>v.key==='STUDIO_LAB_BUDGET_USD').value,'0');
 });
 
 test('stateless preview can never spend; enabling a paid budget requires separate durable storage',async()=>{
@@ -98,4 +99,11 @@ test('stateless preview can never spend; enabling a paid budget requires separat
 
 test('deployment comparison permits Render metadata refresh but rejects a real release/state change',()=>{
  const {deploymentIdentity}=require('../scripts/provision-studio-lab.cjs'),d={id:'dep-live',commit:{id:'tested-live-sha'},status:'live',updatedAt:'before'};assert.equal(deploymentIdentity([{deploy:d}]),deploymentIdentity([{deploy:{...d,updatedAt:'after'}}]));assert.notEqual(deploymentIdentity([{deploy:d}]),deploymentIdentity([{deploy:{...d,id:'dep-new',commit:{id:'new-sha'}}}]));assert.notEqual(deploymentIdentity([{deploy:d}]),deploymentIdentity([{deploy:{...d,status:'deactivated'}}]));
+});
+
+test('administrator alignment copies the existing live key only to the new lab, preserves both existing sites and is idempotent',async()=>{
+ const {align}=require('../scripts/align-studio-lab-admin.cjs'),live='srv-db84s7m89jmc73c7l9rg',lab='srv-dbjqalc9v7es73as270g',review='srv-dbfmk5ss728c73ded300',ownerId='tea-fixture',repo='https://github.com/alyeros47-dev/LAE-MUSIC',writes=[];
+ const values={[live]:{ADMIN_KEY:'existing-owner-admin-key-value'},[review]:{ADMIN_KEY:'older-review-admin-key-value'},[lab]:{ADMIN_KEY:'older-review-admin-key-value',NODE_ENV:'staging',STUDIO_LAB_ENVIRONMENT:'description-lab-v1',STUDIO_LAB_BUDGET_USD:'0',OPENAI_API_KEY:'fixture-provider-key',STUDIO_LAB_DATABASE_URL:'fixture-never-log'}};
+ const fetchImpl=async(url,options={})=>{const path=new URL(url).pathname.replace('/v1',''),id=path.split('/')[2];if(options.method==='PUT'){assert.equal(path,'/services/'+lab+'/env-vars/ADMIN_KEY');writes.push(path);values[lab].ADMIN_KEY=JSON.parse(options.body).value;return Response.json({ok:true});}if(path.includes('/env-vars'))return Response.json(Object.entries(values[id]).map(([key,value])=>({envVar:{key,value}})));return Response.json({id,name:id===live?'LAE-MUSIC':id===review?'lae-music-review-sandbox':'lae-music-studio-lab',branch:id===lab?'codex/description-led-studio-lab':'main',repo,ownerId});};
+ const first=await align({key:'fixture',fetchImpl});assert.equal(first.lab_matches_live_before,false);assert.equal(first.lab_matches_live_after,true);assert.equal(first.review_matches_live,false);assert.equal(writes.length,1);assert.equal(values[live].ADMIN_KEY,'existing-owner-admin-key-value');assert.equal(values[review].ADMIN_KEY,'older-review-admin-key-value');assert.equal(values[lab].OPENAI_API_KEY,'fixture-provider-key');assert.equal(values[lab].STUDIO_LAB_BUDGET_USD,'0');assert(!JSON.stringify(first).includes(values[live].ADMIN_KEY));await align({key:'fixture',fetchImpl});assert.equal(writes.length,1);
 });

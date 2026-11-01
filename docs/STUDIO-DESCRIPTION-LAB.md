@@ -107,8 +107,9 @@ reset/delete the metering tables to replenish an approved test allowance.
 
 `scripts/provision-studio-lab.cjs` can create only the new free Node lab service.
 It never changes either existing service, database, role/password or storage.
-Existing review OpenAI/admin keys are copied securely in memory into separate
-lab variables without removing/changing their originals. No R2 or MusicAPI
+The review OpenAI connection and existing live administrator key are copied
+securely in memory into separate lab variables without removing/changing their
+originals. The private lab accepts the same administrator key as the main site. No R2 or MusicAPI
 keys are supplied. There is no paid-plan fallback or production deployment.
 
 The first attempt at isolated Neon metering provisioning returned **HTTP 423**
@@ -135,7 +136,7 @@ Required preview-only variables: `STUDIO_LAB_ENVIRONMENT`, `ADMIN_KEY`,
 `STUDIO_LAB_CURRENT_STUDIO`; `NODE_ENV=staging`. A separately isolated
 `STUDIO_LAB_DATABASE_URL` and `STUDIO_LAB_DATABASE_HOST` are mandatory before
 any nonzero budget. Secret values are never logged.
-Owner login uses the existing review administrator key on the separate origin;
+Owner login uses the existing live administrator key on the separate origin;
 artist/listener/partner credentials do not grant access. Same-origin JSON and
 CSRF checks protect writes. There are no public studio or financial routes.
 
@@ -153,3 +154,8 @@ used. Public MusicBrainz and Wikipedia were additionally checked with real,
 free HTTP requests, both returning HTTP 200. Model availability checks are
 read-only; actual real-model lyric/interpretation quality remains unverified
 until a separately approved capped USD test.
+
+`align-studio-lab-admin.cjs` checks for accidental use of an older review-only
+administrator key, and updates only the new lab ADMIN_KEY to the existing live
+value when necessary. It creates/resets no key, never writes to either existing
+service, verifies other lab variables remain unchanged, and logs only booleans.

@@ -33,7 +33,7 @@
    $('show').onclick=()=>{const show=$('key').type==='password';$('key').type=show?'text':'password';$('show').textContent=show?'Hide':'Show';$('show').setAttribute('aria-label',(show?'Hide':'Show')+' administrator key');loginStatus('ready','Select “Open test studio” below to sign in.');};
    login.onsubmit=async e=>{
     e.preventDefault();if(busy)return;
-    const password=$('key').value.trim();if(!password){loginStatus('error','Paste the ADMIN_KEY value from the test service on Render.');return;}
+    const password=$('key').value;if(!password.trim()){loginStatus('error','Paste the same administrator key you use for your main LAE-MUSIC administrator panel.');return;}
     waiting(true);loginStatus('loading','Checking your administrator key…');
     const slow=setTimeout(()=>loginStatus('loading','Still connecting to the test studio. Please keep this page open; you do not need to click again.'),5000);
     try{
@@ -42,7 +42,7 @@
      const access=await api('/api/lab/session',undefined,{timeoutMs:10000});
      if(!access.authenticated)throw Error('Your key was accepted, but your browser did not save the sign-in session. Open this link in Chrome, Safari or Firefox and allow cookies for this test site, then try again.');
      $('key').value='';loginStatus('success','Signed in successfully. Opening your studio…');location.replace('/studio-lab');
-    }catch(error){waiting(false);loginStatus('error',error.message+(error.status===401?' Use the ADMIN_KEY value from lae-music-studio-lab → Environment on Render. A Render API token or artist password will not work.':''));$('status').focus();}
+    }catch(error){waiting(false);loginStatus('error',error.message+(error.status===401?' Use the same ADMIN_KEY you use for your main LAE-MUSIC administrator panel. You do not need a separate preview key.':''));$('status').focus();}
     finally{clearTimeout(slow);}
    };waiting(false);loginStatus('ready','Paste your key, then select Open test studio.');return;
   }
