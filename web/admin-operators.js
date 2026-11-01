@@ -22,10 +22,10 @@ async function showRecovery(root, result, ctx) {
   root.querySelector('[data-copy-codes]').onclick = async () => { try { await navigator.clipboard.writeText(result.recovery_codes.join('\n')); root.querySelector('.form-status').textContent = 'Copied. Save these codes somewhere private.'; } catch { root.querySelector('.form-status').textContent = 'Select and copy the codes to a private location.'; } };
   root.querySelector('[data-finish-setup]').onclick = () => { root.replaceChildren(); navigate('/admin/console?section=operators'); };
 }
-export async function adminSignIn(view, ctx) {
+export async function adminSignIn(view, ctx, { studio = false } = {}) {
   const { api, heading, notice, bindForm, refreshSession, route } = ctx;
   const state = await api('/api/platform/admin/auth/status');
-  if (!view.set(heading('PROTECTED PLATFORM WORKSPACE', 'Administrator access.', 'Authorized operators only.') + `<section class="panel auth-panel">${!state.configuration_ready ? notice('Administrator authentication needs configuration. Contact the platform owner.', true) : ''}<form id="admin-login">${state.mode === 'named' ? '<label>Operator email<input name="email" type="email" autocomplete="username" maxlength="254" required></label>' + passwordFields() + codeField : passwordFields('password', 'Administrator key')}${submit('Sign in securely')}</form></section>`)) return;
+  if (!view.set(heading('PROTECTED PLATFORM WORKSPACE', studio ? 'Owner studio access.' : 'Administrator access.', studio ? 'Use your existing administrator sign-in to inspect the real studio. No artist package or demo purchase is needed.' : 'Authorized operators only.') + `<section class="panel auth-panel">${!state.configuration_ready ? notice('Administrator authentication needs configuration. Contact the platform owner.', true) : ''}<form id="admin-login">${state.mode === 'named' ? '<label>Operator email<input name="email" type="email" autocomplete="username" maxlength="254" required></label>' + passwordFields() + codeField : passwordFields('password', 'Administrator key')}${submit(studio ? 'Open studio' : 'Sign in securely')}</form></section>`)) return;
   bindForm(document.getElementById('admin-login'), async (b, form) => { await api('/api/admin/login', 'POST', b); form.reset(); await refreshSession(); route(); });
 }
 export function bindAdminToolbar(ctx) {
