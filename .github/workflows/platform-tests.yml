@@ -1,45 +1,29 @@
-name: Provision isolated internal studio preview
+name: Verify authorized real customer-description text
 on: workflow_dispatch
-permissions:
-  contents: read
+permissions: {contents: read}
 jobs:
-  preview:
-    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/studio-lab-preview-provision'
+  verify:
+    if: github.ref == 'refs/heads/codex/studio-lab-preview-provision'
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: d964dba43a05cde572390d5375946ce310d8dbab
+          ref: 382ea5d4855fad7df0631e40f8738277c7c0d20b
           persist-credentials: false
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - run: npm ci
-      - name: Create only the separate free private preview at a zero-dollar budget
+        with: {node-version: '22'}
+      - run: npm ci --omit=dev
+      - name: Align only the private key and perform one real text generation
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAB_COMMIT: d964dba43a05cde572390d5375946ce310d8dbab
-          LAB_APPROVED_USD: '0'
+          LAE_REAL_TEXT_TEST: owner-authorized
         run: |
           node - <<'JS'
-          const {provision}=require('./scripts/provision-studio-lab.cjs');
-          const {verify}=require('./scripts/verify-studio-lab-preview.cjs');
-          (async()=>{const result=await provision();console.log(JSON.stringify(result));console.log(JSON.stringify(await verify({url:result.url,durable:true})));})().catch(e=>{console.error(e.message);process.exitCode=1;});
-          JS
-
-      - name: Install browser for hosted sign-in checks
-        run: npx playwright install --with-deps chromium
-      - name: Verify real hosted sign-in feedback and cookies on mobile and desktop
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: |
-          node - <<'JS'
-          const assert=require('node:assert/strict'),fs=require('node:fs'),{chromium}=require('playwright');let stage='setup';
-          (async()=>{const r=await fetch('https://api.render.com/v1/services/srv-dbjqalc9v7es73as270g/env-vars?limit=100',{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY}});assert(r.ok);const vars=await r.json(),key=vars.map(v=>v.envVar||v).find(e=>e.key==='ADMIN_KEY')?.value;assert(key?.length>=16);const browser=await chromium.launch();try{for(const width of [390,1440]){const context=await browser.newContext({viewport:{width,height:1000},isMobile:width===390,hasTouch:width===390}),page=await context.newPage();await page.route('**/api/lab/login',async route=>{await new Promise(r=>setTimeout(r,1000));await route.continue();});stage='open-'+width;await page.goto('https://lae-music-studio-lab.onrender.com/studio-lab');stage='enter-key-'+width;await page.getByLabel('Administrator key',{exact:true}).fill(key);await page.getByRole('button',{name:'Open test studio',exact:true}).click();stage='busy-indicator-'+width;assert(await page.getByRole('button',{name:'Opening studio…',exact:true}).isDisabled());assert.equal(await page.locator('#login').getAttribute('aria-busy'),'true');fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/hosted-login-progress-'+width+'.png',mask:[page.locator('#key')]});stage='enter-studio-'+width;await page.getByRole('heading',{name:'Your song starts with your words.'}).waitFor({timeout:30000});stage='check-session-'+width;const access=await page.evaluate(()=>fetch('/api/lab/session').then(r=>r.json()));assert(access.authenticated);assert.equal(access.model,'gpt-6.1-sol');await page.screenshot({path:'artifacts/hosted-studio-'+width+'.png',fullPage:true});stage='sign-out-'+width;console.log(JSON.stringify({stage,handler_ready:await page.locator('#logout').evaluate(el=>typeof el.onclick==='function')}));await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('heading',{name:'Studio test access'}).waitFor();console.log(JSON.stringify({hosted_sign_in:'PASS',viewport:width,visible_loading:true,session_cookie_confirmed:true,paid_requests:0,customer_credits_used:0}));await context.close();}}finally{await browser.close();}})().catch(()=>{console.error(JSON.stringify({hosted_sign_in:'FAIL',stage,secret_values_logged:false}));process.exitCode=1;});
+          (async()=>{console.log(JSON.stringify(await require('./scripts/align-studio-lab-admin.cjs').align()));console.log(JSON.stringify(await require('./scripts/verify-real-description-text.cjs').verify()));})().catch(e=>{console.error(e.message);process.exitCode=1;});
           JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hosted-preview-login-mobile-desktop
-          path: artifacts/hosted-*.png
+          name: authorized-real-text-verification
+          path: artifacts/real-description-text.json
