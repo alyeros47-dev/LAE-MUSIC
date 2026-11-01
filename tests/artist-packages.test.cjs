@@ -1,6 +1,7 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
-const source=fs.readFileSync('web/artist-packages.js','utf8');
+const dependency='data:text/javascript;base64,'+Buffer.from(fs.readFileSync('web/referral-demo.js','utf8')).toString('base64');
+const source=fs.readFileSync('web/artist-packages.js','utf8').replace("'./referral-demo.js'",JSON.stringify(dependency));
 const modulePromise=import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const url=path=>new URL(path,'https://lae-music.com');
 test('artist referral destinations open packages before any registration regardless of signed-in role',async()=>{
@@ -30,3 +31,5 @@ test('real server serves public referral pages and module, including old legacy 
  const plans=(await app.request('/api/plans')).json();assert.deepEqual(Object.keys(plans.plans),['starter','growth','professional']);assert.equal(plans.paymentEnabled,false);
  const checkout=await app.request('/api/platform/checkout',{method:'POST',body:{plan:'growth',paid:true}});assert.equal(checkout.status,503);assert.equal(checkout.json().payment_enabled,false);
 });
+
+test('demo referral selection preserves its public chain reference without accepting payment claims',async()=>{const {artistPackageLink}=await modulePromise,ref='11111111-1111-4111-8111-111111111111';const next=url(artistPackageLink(url('/start?ref=9&demo=1&demo_ref='+ref+'&paid=true'),'professional'));assert.equal(next.searchParams.get('demo_ref'),ref);assert.equal(next.searchParams.get('demo'),'1');assert.equal(next.searchParams.get('ref'),'9');assert.equal(next.searchParams.get('product'),'professional');assert.equal(next.searchParams.has('paid'),false);});
