@@ -111,18 +111,24 @@ Existing review OpenAI/admin keys are copied securely in memory into separate
 lab variables without removing/changing their originals. No R2 or MusicAPI
 keys are supplied. There is no paid-plan fallback or production deployment.
 
-The first attempt at isolated Neon metering provisioning returned **HTTP 423**.
-No production workaround was attempted. The initial preview therefore runs
-without a database at a **hard $0 cap**. Its store refuses every paid reservation;
-it is not a substitute for durable paid metering. A nonzero budget cannot start
-without a separately configured lab-only database passing isolation checks.
-The PostgreSQL ledger is implemented and verified against disposable local CI
-PostgreSQL, but a hosted lab database remains a prerequisite for paid text tests.
-No account/artist data needs to be copied for this experiment.
+The first attempt at isolated Neon metering provisioning returned **HTTP 423**
+after the schema-only branch and separate role were created, before the empty
+lab database was created. Read-only follow-up confirmed the test branch is
+ready and its compute is idle. `scripts/complete-studio-lab-metering.cjs` resumes
+only that exact test branch, wakes its isolated compute with `SELECT 1`, creates
+the empty lab database, initializes only lab metering tables, and configures only
+the two database variables on the new lab service. It never resets passwords or
+connects to the production endpoint. The branch expires 2026-11-08 at 20:42 UTC.
+The hosted verification report records whether durable metering is ready.
+
+The initial preview can also run without a database at a **hard $0 cap**. That
+inspection-only store refuses every paid reservation; it cannot substitute for
+durable metering. A nonzero budget cannot start without a separately configured
+lab-only database passing isolation checks. No account/artist data is copied.
 
 The existing review service was found to be ephemeral, so updating it would risk
 losing test accounts; it is deliberately untouched. The temporary lab uses only
-same-tab drafts and short-lived in-memory jobs until durable metering is arranged.
+same-tab drafts and short-lived in-memory jobs when metering is unavailable.
 
 Required preview-only variables: `STUDIO_LAB_ENVIRONMENT`, `ADMIN_KEY`,
 `OPENAI_API_KEY`, `OPENAI_LYRICS_MODEL`, `STUDIO_LAB_BUDGET_USD`,

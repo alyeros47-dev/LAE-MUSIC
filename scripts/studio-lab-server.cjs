@@ -16,8 +16,8 @@ async function createServer({env=process.env,store,lab,auth,research,now=Date.no
  const config=configuration(env);let pool;
  if(!store&&!env.STUDIO_LAB_DATABASE_URL&&config.cap===0)store=zeroBudgetStore();
  if(!store){databaseUrl(env);pool=new(require('pg').Pool)({connectionString:env.STUDIO_LAB_DATABASE_URL,max:3,ssl:env.STUDIO_LAB_DATABASE_HOST?{rejectUnauthorized:true}:undefined});store=createStore({pool,cap:config.cap});await store.init();}
- auth||=createAdminAuth({pool:null,env});lab||=createLab({store,key:env.OPENAI_API_KEY,privacyKey:env.ADMIN_KEY});
- const jobs=new Map(),loginRates=new Map(),researchTool=research||createResearch();let researchCount=0,researchUntil=now()+3600000;
+ const researchTool=research||createResearch();auth||=createAdminAuth({pool:null,env});lab||=createLab({store,key:env.OPENAI_API_KEY,privacyKey:env.ADMIN_KEY,research:researchTool});
+ const jobs=new Map(),loginRates=new Map();let researchCount=0,researchUntil=now()+3600000;
  function json(res,status,data,extra={}){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer',...extra});res.end(JSON.stringify(data));}
  async function body(req){const chunks=[];let n=0;for await(const chunk of req){n+=chunk.length;if(n>70000)throw prompts.fail('The request is too large; nothing was shortened.',413);chunks.push(chunk);}try{return JSON.parse(Buffer.concat(chunks).toString());}catch{throw prompts.fail('Send a valid JSON request.');}}
  const csrf=p=>lab.hash('csrf:'+p.session_hash);
