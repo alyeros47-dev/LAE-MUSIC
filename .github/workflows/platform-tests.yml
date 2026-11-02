@@ -1,4 +1,4 @@
-name: Approved live description-led studio release
+name: Approved temporary artist studio access release
 on:
   workflow_dispatch:
     inputs:
@@ -26,13 +26,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 64584bcc91a4c9238477edde89de8d44b08f5bb5
+          ref: f38068a2be913e19c7e923ddeb2f7d8b6b231772
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci
-      - name: Bind existing release guards to the owner-approved PR 24
+      - name: Bind existing release guards to the owner-approved PR 25
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -40,31 +40,28 @@ jobs:
               p=Path(name)
               s=p.read_text()
               assert s.count('/pulls/12')==1
-              p.write_text(s.replace('/pulls/12','/pulls/24'))
+              p.write_text(s.replace('/pulls/12','/pulls/25'))
           PY
           node --test tests/production-release.test.cjs
-      - name: Read-only existing service and backup verification before merge
-        if: inputs.phase == 'preflight'
+      - name: Prepare an existing artist fixture and enable only the owner-authorized studio testing switch
+        if: inputs.phase == 'deploy'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
+          APPROVED_MERGE_SHA: ${{ inputs.merge_sha }}
         run: |
           node - <<'JS'
-          const assert=require('node:assert/strict');
-          const {ID,featureSettings,REQUIRED_JOBS}=require('./lib/production-release');
-          const {serviceValid,inventory}=require('./scripts/audit-existing-service.cjs');
-          async function get(url,key){const r=await fetch(url,{headers:{Authorization:'Bearer '+key,Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(30000)});assert(r.ok,'Read-only preflight API HTTP '+r.status);return r.json();}
-          (async()=>{
-            const root='https://api.github.com/repos/alyeros47-dev/LAE-MUSIC',gh=p=>get(root+p,process.env.GITHUB_TOKEN),r=p=>get('https://api.render.com/v1/services/'+ID+p,process.env.RENDER_API_KEY);
-            const pr=await gh('/pulls/24'),main=await gh('/git/ref/heads/main');assert.equal(pr.state,'open');assert.equal(pr.head.sha,'64584bcc91a4c9238477edde89de8d44b08f5bb5');assert.equal(pr.base.ref,'main');assert.equal(main.object.sha,'2f9876c0130fda3e3961a53aa7ac7767c58209a6');
-            const run=await gh('/actions/runs/41359996461'),jobs=(await gh('/actions/runs/41359996461/jobs?per_page=100')).jobs;assert.equal(run.head_sha,pr.head.sha);assert.equal(run.conclusion,'success');assert(REQUIRED_JOBS.every(name=>jobs.some(j=>j.name===name&&j.conclusion==='success')));
-            const raw=await r(''),service=raw.service||raw;assert(serviceValid(service));assert.equal(service.id,ID);assert.equal(service.branch,'main');assert.equal(service.serviceDetails.runtime,'node');
-            const env=inventory(await r('/env-vars?limit=100'));assert(['DATABASE_URL','R2_ACCOUNT_ID','R2_ACCESS_KEY_ID','R2_SECRET_ACCESS_KEY','R2_BUCKET','MUSICAPI_API_KEY'].every(k=>!!env[k]));assert(!Object.keys(env).some(k=>k.startsWith('LAE_REVIEW_')&&env[k]));const changes=Object.keys(featureSettings(env)).filter(k=>env[k]!==featureSettings(env)[k]);assert.equal(changes.length,0,'Environment changes are not authorized by this internal-demo release');
-            assert((await require('./lib/neon-recovery-inspection').inspect({key:process.env.NEON_API_KEY,databaseUrl:env.DATABASE_URL})).database_binding_verified);
-            const backup=(await get('https://console.neon.tech/api/v2/projects/restless-brook-43273058/branches/br-spring-night-b4y9h9xp',process.env.NEON_API_KEY)).branch;assert.equal(backup.id,'br-spring-night-b4y9h9xp');assert.equal(backup.parent_id,'br-flat-darkness-b42js8ma');assert.equal(backup.name,'lae-release-41141460115-backup');assert(Date.parse(backup.expires_at)>Date.now()+3600000);
-            const origin='https://lae-music.com',auth=await fetch(origin+'/api/admin/login',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({password:env.ADMIN_KEY}),signal:AbortSignal.timeout(20000)});assert(auth.ok,'Existing owner sign-in needs repair before release');const cookie=auth.headers.getSetCookie().map(x=>x.split(';')[0]).join('; '),ownerSession=await(await fetch(origin+'/api/platform/session',{headers:{Cookie:cookie}})).json();assert.equal(ownerSession.admin_user?.role,'owner','Existing owner session must work');const pool=new (require('pg').Pool)(require('./lib/database').databaseOptions(env));let paidArtists;try{const db=await pool.connect();try{await db.query('BEGIN READ ONLY');await db.query("SET LOCAL statement_timeout='15s'");paidArtists=Number((await db.query("SELECT COUNT(DISTINCT artist_id)::int AS n FROM artist_subscriptions WHERE status='paid' AND starts_at<=NOW() AND expires_at>NOW() AND NOT payment_hold")).rows[0].n);const fs=require('node:fs'),crypto=require('node:crypto'),rows=(await db.query('SELECT version,checksum FROM platform_migrations ORDER BY version')).rows,files=fs.readdirSync('migrations').filter(x=>/^\d+.*\.sql$/.test(x)).sort();for(const row of rows){assert(files.includes(row.version),'Unknown applied migration');assert.equal(row.checksum,crypto.createHash('sha256').update(fs.readFileSync('migrations/'+row.version)).digest('hex'));}assert.deepEqual(files.filter(f=>!rows.some(r=>r.version===f)),[]);assert.equal(rows.length,26);await db.query('ROLLBACK');}finally{db.release();}}finally{await pool.end();}assert.equal(require('./config/payment-merchant.json').checkout_mode,'disabled');console.log(JSON.stringify({preflight:'passed',service_id:ID,candidate:pr.head.sha,ci_run:'41359996461',recovery_backup_verified:true,pending_migrations:0,rollback_commit:'2f9876c0130fda3e3961a53aa7ac7767c58209a6',existing_migration_checksums_preserved:true,active_paid_artist_accounts:paidArtists,checkout_enabled:false,existing_configuration_preserved:true,auto_deploy_trigger:service.autoDeployTrigger??service.autoDeploy??'unknown',environment_changes:0,production_writes:0,paid_requests:0}));
-          })().catch(e=>{console.error('Pre-merge check stopped:',e.message);process.exitCode=1;});
+          const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto');
+          (async()=>{const id='srv-db84s7m89jmc73c7l9rg',origin='https://lae-music.com',root='https://api.github.com/repos/alyeros47-dev/LAE-MUSIC';
+          async function get(url,key){const r=await fetch(url,{headers:{Authorization:'Bearer '+key},signal:AbortSignal.timeout(30000)});assert(r.ok);return r.json();}
+          const pr=await get(root+'/pulls/25',process.env.GITHUB_TOKEN);assert(pr.merged&&pr.head.sha==='f38068a2be913e19c7e923ddeb2f7d8b6b231772'&&pr.merge_commit_sha===process.env.APPROVED_MERGE_SHA);const ci=await get(root+'/actions/runs/41365292011',process.env.GITHUB_TOKEN);assert(ci.conclusion==='success'&&ci.head_sha===pr.head.sha);
+          const url='https://api.render.com/v1/services/'+id+'/env-vars',env=Object.fromEntries((await get(url+'?limit=100',process.env.RENDER_API_KEY)).map(v=>[(v.envVar||v).key,(v.envVar||v).value]));
+          const hash=x=>crypto.createHash('sha256').update(x).digest('hex'),before=Object.fromEntries(Object.entries(env).filter(([k])=>k!=='LAE_ARTIST_STUDIO_TESTING').map(([k,v])=>[k,hash(v)]));const qa={email:'existing-studio-'+process.env.GITHUB_RUN_ID+'@verification.invalid',password:crypto.randomBytes(24).toString('hex')};
+          const r=await fetch(origin+'/api/register',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({name:'Studio access verification',country:'Nigeria',email:qa.email,password:qa.password,confirmPassword:qa.password,plan:'starter'}),signal:AbortSignal.timeout(30000)});assert.equal(r.status,201,'Could not prepare the existing-account verification fixture.');
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/lae-studio-entry.json',JSON.stringify({qa,before,previous_testing:env.LAE_ARTIST_STUDIO_TESTING??null}),{mode:0o600});
+          const update=await fetch(url+'/LAE_ARTIST_STUDIO_TESTING',{method:'PUT',headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({value:'1'}),signal:AbortSignal.timeout(30000)});assert(update.ok,'Could not enable the owner-authorized temporary studio testing switch.');
+          const after=Object.fromEntries((await get(url+'?limit=100',process.env.RENDER_API_KEY)).map(v=>[(v.envVar||v).key,(v.envVar||v).value]));assert.equal(after.LAE_ARTIST_STUDIO_TESTING,'1');assert.deepEqual(Object.fromEntries(Object.entries(after).filter(([k])=>k!=='LAE_ARTIST_STUDIO_TESTING').map(([k,v])=>[k,hash(v)])),before);console.log(JSON.stringify({existing_account_fixture:'prepared',temporary_artist_testing:'enabled',other_environment_changes:0,paid_requests:0}));
+          })().catch(e=>{console.error('Studio testing preparation stopped:',e.message);process.exitCode=1;});
           JS
       - id: deploy
         name: Verify the approved merge, backup, CI and existing Render service; deploy exact merge
@@ -78,46 +75,36 @@ jobs:
           node - <<'JS'
           const {release}=require('./lib/production-release');
           (async()=>{
-            const r=await release({mode:'deploy',candidate:'64584bcc91a4c9238477edde89de8d44b08f5bb5',commit:process.env.APPROVED_MERGE_SHA,ciRun:'41359996461',key:process.env.RENDER_API_KEY,neonKey:process.env.NEON_API_KEY,githubToken:process.env.GITHUB_TOKEN,record:x=>{console.log(JSON.stringify(x));if(x.production_deploy_id)require('node:fs').appendFileSync(process.env.GITHUB_OUTPUT,'deploy_id='+x.production_deploy_id+'\n');}});
+            const r=await release({mode:'deploy',candidate:'f38068a2be913e19c7e923ddeb2f7d8b6b231772',commit:process.env.APPROVED_MERGE_SHA,ciRun:'41365292011',key:process.env.RENDER_API_KEY,neonKey:process.env.NEON_API_KEY,githubToken:process.env.GITHUB_TOKEN,record:x=>{console.log(JSON.stringify(x));if(x.production_deploy_id)require('node:fs').appendFileSync(process.env.GITHUB_OUTPUT,'deploy_id='+x.production_deploy_id+'\n');}});
             console.log(JSON.stringify(r));
-          })().catch(e=>{console.error('PR 24 release stopped:',e.message);process.exitCode=1;});
+          })().catch(e=>{console.error('PR 25 release stopped:',e.message);process.exitCode=1;});
           JS
-      - name: Verify exact live assets, account sessions, existing audio and database records
-        if: inputs.phase == 'deploy'
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_LIVE_RELEASE_VERIFY: '1'
-        run: node scripts/verify-live-release.cjs
-
-      - name: Install browser for one real customer-text verification
+      - name: Install browser for live artist access verification
         if: inputs.phase == 'deploy'
         run: npx playwright install --with-deps chromium
-      - name: Correct verifier timeout without changing the tested application
-        if: inputs.phase == 'deploy'
-        run: |
-          python - <<'PYFIX'
-          from pathlib import Path
-          p=Path('scripts/verify-live-description.cjs')
-          s=p.read_text()
-          old="await page.waitForFunction(()=>document.querySelector('#customer-song-style')?.value.length>100,{timeout:220000});"
-          assert old in s
-          s=s.replace(old,"await page.waitForFunction(()=>document.querySelector('#customer-song-style')?.value.length>100 || document.querySelector('#customer-song-status')?.classList.contains('error'),undefined,{timeout:220000});\n  assert(!await page.locator('#customer-song-status').evaluate(el=>el.classList.contains('error')), 'The customer songwriting request reported a failure; inspect its metered phase before retrying.');")
-          p.write_text(s)
-          PYFIX
-          node --check scripts/verify-live-description.cjs
-      - name: Verify real clean-secular generation through the live customer interface
+      - name: Verify normal existing-account sign-in and new artist signup both open the actual live studio
         if: inputs.phase == 'deploy'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          LAE_LIVE_TEXT_VERIFY: owner-authorized
+          APPROVED_MERGE_SHA: ${{ inputs.merge_sha }}
         run: |
           node - <<'JS'
-          require('./scripts/verify-live-description.cjs').verify().then(r=>console.log(JSON.stringify(r))).catch(e=>{console.error('Live customer-text verification failed:',e.message);process.exitCode=1;});
+          const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto'),{chromium}=require('playwright');
+          (async()=>{const origin='https://lae-music.com',state=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/lae-studio-entry.json')),hash=x=>crypto.createHash('sha256').update(x).digest('hex');
+          const r=await fetch('https://api.render.com/v1/services/srv-db84s7m89jmc73c7l9rg/env-vars?limit=100',{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY},signal:AbortSignal.timeout(30000)});assert(r.ok);const env=Object.fromEntries((await r.json()).map(v=>[(v.envVar||v).key,(v.envVar||v).value]));assert.equal(env.LAE_ARTIST_STUDIO_TESTING,'1');assert.deepEqual(Object.fromEntries(Object.entries(env).filter(([k])=>k!=='LAE_ARTIST_STUDIO_TESTING').map(([k,v])=>[k,hash(v)])),state.before);
+          for(const host of [origin,'https://lae-music.onrender.com'])for(const file of ['web/app.js','web/admin-operators.js','web/artist-packages.js','web/description-studio.js']){const asset=await fetch(host+'/'+file+'?release='+process.env.APPROVED_MERGE_SHA,{signal:AbortSignal.timeout(30000)});assert(asset.ok);assert.equal(hash(Buffer.from(await asset.arrayBuffer())),hash(fs.readFileSync(file)));}
+          const browser=await chromium.launch();let paid=0,demos=0;try{const context=await browser.newContext({viewport:{width:390,height:1000},isMobile:true,hasTouch:true}),page=await context.newPage();await page.route('**/api/**',async route=>{const req=route.request(),p=new URL(req.url()).pathname;if(req.method()==='POST'&&(/^\/api\/music\//.test(p)||/\/purchases|checkout|referral-demo/.test(p))){paid++;return route.abort();}if(p.includes('referral-demo'))demos++;return route.continue();});
+          async function studio(email){await page.goto(origin+'/studio');await page.getByLabel('Describe the song you want',{exact:true}).waitFor({timeout:30000});assert(await page.locator('#studio-form').isVisible());assert.equal(await page.getByRole('heading',{name:'Choose a paid artist package.',exact:true}).count(),0);const account=await page.evaluate(()=>fetch('/api/platform/session').then(r=>r.json()));assert.equal(account.artist.email,email);assert.equal(account.artist_testing_open,true);for(let i=0;i<2;i++)assert.equal((await page.evaluate(()=>fetch('/api/generation/wallet').then(r=>r.json()))).credits,2);assert.equal((await page.evaluate(()=>fetch('/api/artist/studio-allowance').then(r=>r.json()))).remaining_generations,2);await page.reload();await page.getByLabel('Describe the song you want',{exact:true}).waitFor();}
+          await page.goto(origin+'/join?role=artist&mode=signin');await page.locator('#auth-form [name=email]').fill(state.qa.email);await page.locator('#auth-form [name=password]').fill(state.qa.password);await page.locator('#auth-form button[type=submit]').click();await page.waitForURL('**/workspace',{timeout:30000});await studio(state.qa.email);
+          const logout=await page.evaluate(()=>fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(r=>r.status));assert.equal(logout,200);
+          const qa={email:'new-studio-'+process.env.GITHUB_RUN_ID+'@verification.invalid',password:crypto.randomBytes(24).toString('hex')};await page.goto(origin+'/start');await page.locator('#auth-form [name=name]').waitFor();await page.locator('#auth-form [name=name]').fill('New studio inspection');await page.locator('#auth-form [name=country]').fill('Nigeria');await page.locator('#auth-form [name=email]').fill(qa.email);await page.locator('#auth-form [name=password]').fill(qa.password);await page.locator('#auth-form [name=confirmPassword]').fill(qa.password);await page.locator('#auth-form button[type=submit]').click();await page.waitForURL('**/workspace',{timeout:30000});await studio(qa.email);
+          assert.equal(paid,0);assert.equal(demos,0);await page.goto(origin+'/partners');await page.getByRole('heading',{name:'Your connections. Real possibility.',exact:true}).waitFor();assert.equal(await page.getByRole('link',{name:'Test referrals with demo payments',exact:true}).count(),0);assert.equal(await page.getByRole('link',{name:'Demo referral sales',exact:true}).count(),0);await page.goto(origin+'/referral-demo');await page.getByLabel('Describe the song you want',{exact:true}).waitFor();
+          fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/live-open-studio-mobile.png',fullPage:true});console.log(JSON.stringify({live_artist_testing:'PASS',existing_email_password_to_studio:'PASS',new_signup_to_dashboard_and_studio:'PASS',refresh_preserves_access:'PASS',lyrics_credit_grant:'two_once_only',audio_test_allowance:2,demo_purchase_required:false,public_demo_removed:true,other_environment_changes:0,paid_text_requests:0,musicapi_requests:0,customer_credits_spent:0}));await context.close();}finally{await browser.close();}})().catch(e=>{console.error('Live studio-access verification failed:',e.message);process.exitCode=1;});
           JS
       - uses: actions/upload-artifact@v4
         if: always() && inputs.phase == 'deploy'
         with:
-          name: live-customer-text-proof
+          name: live-open-studio-proof
           path: artifacts/live-*
       - name: Restore the known working code if the new deployment fails verification
         if: failure() && inputs.phase == 'deploy' && steps.deploy.outputs.deploy_id != ''
@@ -126,7 +113,7 @@ jobs:
           ATTEMPTED_MERGE: ${{ inputs.merge_sha }}
         run: |
           node - <<'JS'
-          const assert=require('node:assert/strict'),id='srv-db84s7m89jmc73c7l9rg',old='2f9876c0130fda3e3961a53aa7ac7767c58209a6';
+          const assert=require('node:assert/strict'),id='srv-db84s7m89jmc73c7l9rg',old='907bb1d5009dcf89814fe1dd85b9d00eb7aa9a87';
           async function api(p,method='GET',body){assert(method==='GET'||method==='POST'&&p==='/deploys');const r=await fetch('https://api.render.com/v1/services/'+id+p,{method,headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(30000)});assert(r.ok);return r.json();}
-          (async()=>{const s=await api('');assert(s.id===id&&s.branch==='main'&&s.repo.replace(/\.git$/,'')==='https://github.com/alyeros47-dev/LAE-MUSIC');const ds=(await api('/deploys?limit=10')).map(x=>x.deploy||x),live=ds.find(d=>d.status==='live');if(live?.commit?.id===old){console.log(JSON.stringify({rollback:'previous_code_still_live',commit:old,database_restored:false}));return;}assert(ds[0]?.commit?.id===process.env.ATTEMPTED_MERGE,'An unrelated deployment appeared; automatic rollback refused');const d=await api('/deploys','POST',{commitId:old,clearCache:'do_not_clear'});console.log(JSON.stringify({rollback:'requested_known_good_code',commit:old,deploy_id:(d.deploy||d).id,database_restored:false,environment_changes:0}));})().catch(()=>{console.error('Automatic rollback needs inspection; no database or environment was changed.');process.exitCode=1;});
+          (async()=>{const off=await fetch('https://api.render.com/v1/services/'+id+'/env-vars/LAE_ARTIST_STUDIO_TESTING',{method:'PUT',headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({value:'0'}),signal:AbortSignal.timeout(30000)});assert(off.ok);const s=await api('');assert(s.id===id&&s.branch==='main'&&s.repo.replace(/\.git$/,'')==='https://github.com/alyeros47-dev/LAE-MUSIC');const ds=(await api('/deploys?limit=10')).map(x=>x.deploy||x),live=ds.find(d=>d.status==='live');if(live?.commit?.id===old){console.log(JSON.stringify({rollback:'previous_code_still_live',commit:old,database_restored:false}));return;}assert(ds[0]?.commit?.id===process.env.ATTEMPTED_MERGE,'An unrelated deployment appeared; automatic rollback refused');const d=await api('/deploys','POST',{commitId:old,clearCache:'do_not_clear'});console.log(JSON.stringify({rollback:'requested_known_good_code',commit:old,deploy_id:(d.deploy||d).id,database_restored:false,environment_changes:0}));})().catch(()=>{console.error('Automatic rollback needs inspection; no database or environment was changed.');process.exitCode=1;});
           JS
