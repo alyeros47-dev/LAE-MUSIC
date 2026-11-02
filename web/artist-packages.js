@@ -20,6 +20,7 @@ export function artistPackageLink(url, plan) {
 }
 
 export function artistPackageEntry(url, session = {}) {
+  if(session.artist_testing_open===true)return false;
   if (url.hash === '#signin' || url.searchParams.get('social') === 'complete') return false;
   if (['/start', '/get-started'].includes(url.pathname)) return true;
   if (url.pathname !== '/join' || ['signin', 'login'].includes(url.searchParams.get('mode'))) return false;
