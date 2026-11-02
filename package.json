@@ -10,7 +10,7 @@
     "test:browser": "node scripts/test-browsers.cjs",
     "test:browser:all": "LAE_TEST_BROWSERS=chromium,firefox,webkit node scripts/test-browsers.cjs",
     "test:http": "LAE_NETWORK_TESTS=1 node tests/http.test.cjs",
-    "test:postgres": "node tests/postgres.cjs && node tests/description-studio-postgres.cjs",
+    "test:postgres": "node tests/postgres.cjs && node tests/description-studio-postgres.cjs && node tests/open-studio-postgres.cjs",
     "test:upgrade": "node tests/upgrade-postgres.cjs",
     "preflight": "node scripts/preflight.cjs",
     "verify:fx": "node scripts/verify-public-fx.cjs",

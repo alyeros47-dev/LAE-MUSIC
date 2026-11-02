@@ -50,7 +50,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    const ref='sonic-'+require('node:crypto').randomBytes(16).toString('hex');
    const openReview=process.env.LAE_REVIEW_TEST_OPEN==='1'&&require('./lib/review-testing').enabled(process.env);
    const artistTesting=require('./lib/artist-test-access');
-   if(artistTesting.enabled(process.env)&&await artistTesting.remaining(client,user.id)>0){await artistTesting.reserve(client,user.id,ref);trial='artist';}
+   if(artistTesting.enabled(process.env)&&await artistTesting.remaining(client,user.id)>0){await artistTesting.reserve(client,user.id,ref,process.env);trial='artist';}
    if(!trial&&(!sub.rowCount||openReview)){
     if(artistTesting.enabled(process.env)&&!sub.rowCount){await client.query('ROLLBACK');return send(res,402,{error:'Your two complimentary music-generation requests have been used or reserved. No payment was taken.'}),true}
     if(!(process.env.LAE_REVIEW_TEST_ACCESS==='1'&&require('./lib/review-testing').enabled(process.env))){await client.query('ROLLBACK');return send(res,402,{error:'An active paid artist package is required to generate music.'}),true}
