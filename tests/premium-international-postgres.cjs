@@ -86,7 +86,7 @@ module.exports = async (t, { pool }) => {
         return s;
       },
     };
-  const service = createPremium({
+  const service = createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,
       pool,
       rates,
       pricing: approvedPricing(),
@@ -387,7 +387,7 @@ module.exports = async (t, { pool }) => {
           });
         assert.equal(Number(q.charge_minor), expected);
         assert.equal(q.base_currency, "USD");
-        const late = createPremium({
+        const late = createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,
           pool,
           pricing: approvedPricing(),
           adapters: { paystack: adapter },
@@ -811,7 +811,7 @@ module.exports = async (t, { pool }) => {
             throw Error("Unexpected Flutterwave fixture request");
           },
         });
-      const international = createPremium({
+      const international = createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,
           pool,
           rates,
           pricing: approvedPricing(),

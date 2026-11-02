@@ -14,7 +14,10 @@
     "test:upgrade": "node tests/upgrade-postgres.cjs",
     "preflight": "node scripts/preflight.cjs",
     "verify:fx": "node scripts/verify-public-fx.cjs",
-    "test:email": "LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs"
+    "test:email": "LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs",
+    "test:affiliate": "node --test tests/partner-policy.test.cjs tests/partner-demo.test.cjs tests/partner-accounting.test.cjs tests/platform.test.cjs tests/premium-international.test.cjs tests/financial-policy.test.cjs tests/services.test.cjs",
+    "test:affiliate:postgres": "node tests/affiliate-purchase-year-postgres.cjs && node tests/affiliate-policy-regression-postgres.cjs",
+    "test:affiliate:browser": "node tests/affiliate-purchase-year-browser.cjs"
   },
   "engines": {
     "node": ">=20"

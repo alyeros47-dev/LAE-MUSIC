@@ -164,7 +164,7 @@ export async function premiumPage(view, url, ctx) {
               true,
             )
           : "") +
-        `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === "monthly" ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="checkout" data-premium-plan="${e(p.code)}" ${approved && plans.providers.length > 0 ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
+        `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="checkout" data-premium-plan="${e(p.code)}" ${approved && plans.providers.length > 0 ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
         notice(policy.premium) +
         notice(policy.complaints) +
         notice(policy.royalties) +
@@ -231,7 +231,7 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 10% direct. Eligible purchases exactly two referral steps below a leader count toward a separate quarterly 5% Premium Listener team bonus, subject to refunds and settlement.</p><button type="submit" class="button">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 20% direct and 10% quarterly team benefit at exactly two steps during the recipient’s one-year qualifying window. Refunded or disputed purchases require reconciliation.</p><button type="submit" class="button">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {

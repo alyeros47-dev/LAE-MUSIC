@@ -7,7 +7,7 @@ const finance=require('../lib/finance');
 module.exports=async function(t,{pool,origin,sonicRunner}){
  const secret='isolated-signature-fixture-not-a-credential',payments=new Map();let sequence=0;
  const adapter={verified:true,name:'isolated_fixture',merchantId:'isolated_merchant',verifyEvent:async(raw,headers)=>{const expected=crypto.createHmac('sha256',secret).update(raw).digest(),supplied=Buffer.from(headers.signature||'','hex');if(supplied.length!==expected.length||!crypto.timingSafeEqual(expected,supplied))throw Object.assign(Error('Invalid signature'),{status:401});return JSON.parse(raw);},retrievePayment:async id=>{if(!payments.has(id))throw Error('Provider lookup unavailable');return structuredClone(payments.get(id));}};
- const commerce=createCommerce({pool,adapter});
+ const commerce=createCommerce({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool,adapter});
  async function api(path,{body,cookie,key}={}){const r=await fetch(origin+path,{method:body?'POST':'GET',headers:{...(body?{'Content-Type':'application/json'}:{}),...(cookie?{Cookie:cookie}:{}),...(key?{'Idempotency-Key':key}:{})},body:body?JSON.stringify(body):undefined});return {status:r.status,data:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]};}
  async function account(name){const r=await api('/api/register',{body:{name,country:'Nigeria',email:name+'@commerce-ci.invalid',password:'CommerceFixturePassword123',confirmPassword:'CommerceFixturePassword123',plan:'starter'}});assert.equal(r.status,201);return {id:r.data.user.id,cookie:r.cookie};}
  function signed(id,paymentId){const raw=Buffer.from(JSON.stringify({id,paymentId}));return [raw,{signature:crypto.createHmac('sha256',secret).update(raw).digest('hex')}];}
@@ -21,6 +21,8 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   const referral=await api('/api/affiliate/prepare-purchase',{cookie:buyer.cookie,body:{plan:'starter',ref:String(partner.id)}});assert.equal(referral.status,200);
   const body={kind:'artist_subscription',plan:'starter',referral_token:referral.data.referral_token,amount_minor:1,paid:true};
   primaryDetails=body;
+  // Rehearse an already-prepared historical contract through the current HTTP replay.
+  await commerce.create(buyer.id,'commerce_http_create_123',body);
   const responses=await Promise.all([api('/api/platform/purchases',{cookie:buyer.cookie,body,key:'commerce_http_create_123'}),api('/api/platform/purchases',{cookie:buyer.cookie,body,key:'commerce_http_create_123'})]);
   assert(responses.every(r=>r.status===201));primary=responses[0].data.order;assert.equal(primary.id,responses[1].data.order.id);assert.equal(Number(primary.amount_minor),600);assert.equal(primary.status,'pending');assert.equal(primary.checkout_enabled,false);
   assert.equal((await api('/api/platform/purchases',{cookie:partner.cookie})).data.orders.length,0);
@@ -66,7 +68,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
  await t.test('settlement rolls back receipt, subscription, ledger and event together on persistence failure',async()=>{
   const order=await commerce.create(extraBuyer.id,'rollback_order_key_123',{kind:'artist_subscription',plan:'starter'});let failed=false;
   const faulty={query:pool.query.bind(pool),connect:async()=>{const db=await pool.connect();return {query:async(sql,args)=>{if(sql.startsWith('INSERT INTO commerce_events')&&!failed){failed=true;throw Error('Isolated evidence write failure');}return db.query(sql,args);},release:()=>db.release()};}};
-  const service=createCommerce({pool:faulty,adapter});const paymentId='rollback_payment',eventId='rollback_event';
+  const service=createCommerce({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool:faulty,adapter});const paymentId='rollback_payment',eventId='rollback_event';
   await assert.rejects(settle(order,{},paymentId,eventId,service),/write failure/);
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM commerce_receipts WHERE order_id=$1',[order.id])).rows[0].n,0);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM artist_subscriptions WHERE artist_id=$1',[extraBuyer.id])).rows[0].n,0);
   assert.equal((await commerce.ingest(...signed(eventId,paymentId))).outcome,'accepted');

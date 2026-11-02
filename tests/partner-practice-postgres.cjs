@@ -72,7 +72,7 @@ module.exports = async (t, { pool, api }) => {
       assert.equal((await api('/api/platform/partners/practice/preview',{method:'POST',body:example})).status,401);
       assert.equal((await api('/api/platform/partners/practice/preview',{cookie:who.cookie})).status,405);
       const simulated=await api('/api/platform/partners/practice/preview',{method:'POST',cookie:who.cookie,body:example});
-      assert.equal(simulated.status,200);assert.equal(simulated.data.team.period,'2027-Q1');assert.equal(simulated.data.your_team_projection_minor,3);assert.equal(simulated.data.actual_withdrawable_minor,0);
+      assert.equal(simulated.status,200);assert.equal(simulated.data.team.period,'2027-Q1');assert.equal(simulated.data.your_team_projection_minor,6);assert.equal(simulated.data.actual_withdrawable_minor,0);
       assert.equal((await api('/api/platform/partners/practice/preview',{method:'POST',cookie:who.cookie,body:{...example,commission_minor:9999}})).status,400);
       const after = (
         await pool.query(

@@ -38,12 +38,13 @@ test("quarter reconciliation reads a consistent snapshot, keeps sums beyond the 
               held_minor: "10000",
               eligible_minor: "100000",
               premium_eligible_minor: "20000",
+              legacy_premium_eligible_minor: "20000",
               recorded_commission_minor: "0",
             },
           ],
         };
       if (sql.includes("GROUP BY referrer_id")) return { rows: [] };
-      if (sql.includes("SELECT order_id,source,plan"))
+      if (sql.includes("SELECT order_id,source,policy_revision,plan"))
         return {
           rows: Array.from({ length: 101 }, () => ({
             gross_minor: "1000",
@@ -158,7 +159,7 @@ test("ordinary artists cannot select another owner through a query parameter, an
       release() {},
     };
   const platform = createPlatform({
-    pool: { connect: async () => db },
+    pool: { connect: async () => db, query: async (sql,args)=>{calls.push(sql);assert.equal(args[0],7);return {rows:[{product:'artist_subscription'}]};} },
     me: async () => ({ id: 7 }),
     listenerMe: async () => null,
     authAdmin: () => false,
@@ -201,6 +202,7 @@ test("quarter history keeps Premium volume at 5 percent when combined with artis
             qualifying_sales: "2",
             sales_cents: "200000",
             premium_sales_cents: "100000",
+            legacy_premium_sales_cents: "100000",
             refunded_cents: "0",
             held_cents: "0",
           },
@@ -215,5 +217,5 @@ test("quarter history keeps Premium volume at 5 percent when combined with artis
   assert.equal(x.quarters[0].potential_reward_cents, 15000);
   assert.equal(x.quarters[0].quarter_start, "2026-12-21");
   assert.equal(x.team_reward_percent, null);
-  assert.equal(x.team_rates.premium_listener, 5);
+  assert.equal(x.team_rates.premium_listener, 10);
 });

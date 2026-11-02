@@ -54,7 +54,7 @@ module.exports = async (t, { pool }) => {
         throw Error("Unexpected fixture provider call");
       },
     });
-  const service = createPremium({
+  const service = createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,
       pool,
       adapters: { paystack: adapter },
       callbackOrigin: "https://lae.test",
@@ -155,7 +155,7 @@ module.exports = async (t, { pool }) => {
       assert.equal(caps.status, 200);
       assert.deepEqual(
         caps.data.plans.map((p) => p.amount_minor),
-        [10000, 30000, 80000, 160000, 780000],
+        [10000, 30000, 80000, 160000, 180, 780000],
       );
       assert.equal(caps.data.automatic_renewal, false);
       direct = await register("artist", "direct");
@@ -178,7 +178,7 @@ module.exports = async (t, { pool }) => {
       );
       assert.equal((await service.status(user.id)).active, false);
       await assert.rejects(
-        createPremium({ pool }).checkout(user.id, key(), {
+        createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION, pool }).checkout(user.id, key(), {
           provider: "paystack",
           order_id: crypto.randomUUID(),
         }),
@@ -332,7 +332,7 @@ module.exports = async (t, { pool }) => {
         new Date(terms[1].expires_at) - new Date(terms[1].starts_at),
         30 * 86400000,
       );
-      const expired = await createPremium({
+      const expired = await createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,
         pool,
         now: () => Date.now() + 32 * 86400000,
       }).status(user.id);
@@ -974,7 +974,7 @@ module.exports = async (t, { pool }) => {
   });
   await t.test('quarterly Premium reserves reconcile exact aggregate cents and verified late reversals preserve finalized earnings for review',async()=>{
     const rates=require('../lib/exchange-rates').createExchangeRates({pool,env:{},fetchImpl:async()=>Response.json({result:'success',base_code:'USD',time_last_update_unix:Math.floor(Date.now()/1000),time_next_update_unix:Math.floor(Date.now()/1000)+86400,rates:{USD:1,NGN:1600}})});
-    const modern=createPremium({pool,rates,adapters:{paystack:adapter},callbackOrigin:'https://lae.test'}),ids=[];
+    const modern=createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool,rates,adapters:{paystack:adapter},callbackOrigin:'https://lae.test'}),ids=[];
     const microUser=await register('listener','quarter_micro');
     for(let n=0;n<5;n++){
       const o=await modern.prepare(microUser.id,key(),{plan:'daily',referrer_id:String(direct.id)}),q=await modern.prepareQuote(microUser.id,{order_id:o.id,provider:'paystack',currency:'NGN'});

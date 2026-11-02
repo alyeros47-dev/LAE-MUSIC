@@ -38,14 +38,14 @@ test("bonus windows cover the accounting year with no gap or duplicate eligibili
 test("product-specific direct commissions are preserved and only two-step quarterly sales are allowed", () => {
   assert.deepEqual(p.disclosure.direct_rates, {
     artist_subscription: { starter: 15, growth: 25, professional: 25 },
-    premium_listener: 10,
+    premium_listener: 20,
     studio_generation: 0,
   });
   assert.equal(p.disclosure.team_percent, null);
   assert.deepEqual(p.disclosure.team_rates, {
     artist_subscription: 10,
     studio_generation: 10,
-    premium_listener: 5,
+    premium_listener: 10,
   });
   assert.equal(p.disclosure.team_depth, 2);
   assert.equal(p.disclosure.immediate_indirect_percent, 0);
@@ -57,11 +57,11 @@ test("mixed products calculate independent approved rates and never allocate art
   const lines = [
     { order_id: "artist", source: "artist", eligible_minor: 100000 },
     { order_id: "studio", source: "studio", eligible_minor: 100000 },
-    { order_id: "premium", source: "premium", eligible_minor: 100000 },
+    { order_id: "premium", source: "premium", policy_revision:p.LEGACY_REVISION, eligible_minor: 100000 },
   ];
   const result = p.calculate(lines);
   assert.equal(result.bonus_minor, 25000);
-  assert.equal(p.project(300000, 100000), 25000);
+  assert.equal(p.project(300000, 100000,100000), 25000);
   assert.deepEqual(
     Object.fromEntries(result.shares.map((x) => [x.id, x.amount_minor])),
     { artist: 10000, studio: 10000, premium: 5000 },
@@ -77,6 +77,7 @@ test("Premium cents are rounded within their 5 percent group without borrowing t
     ...Array.from({ length: 5 }, (_, i) => ({
       order_id: "premium" + i,
       source: "premium",
+      policy_revision:p.LEGACY_REVISION,
       eligible_minor: 8,
     })),
   ];
@@ -93,4 +94,17 @@ test("Premium cents are rounded within their 5 percent group without borrowing t
     p.calculate(lines.map((x) => ({ ...x, eligible_minor: 0 }))).bonus_minor,
     0,
   );
+});
+
+test('new Premium uses 20 percent direct, ten percent team and no immediate indirect; historical rates stay versioned',()=>{
+ assert.deepEqual(p.premiumRates(p.REVISION),{direct:20,quarterly_team:10,immediate_indirect:0});
+ assert.deepEqual(p.premiumRates(p.LEGACY_REVISION),{direct:10,quarterly_team:5,immediate_indirect:0});
+ assert.deepEqual(p.premiumRates('legacy-premium-10-5'),{direct:10,quarterly_team:0,immediate_indirect:5});
+ assert.throws(()=>p.premiumRates('unknown'),e=>e.status===409);
+ const current=p.calculate([{order_id:'a',source:'artist',eligible_minor:5},{order_id:'b',source:'premium',policy_revision:p.REVISION,eligible_minor:5}]);
+ assert.equal(current.bonus_minor,1,'same-rate eligible volume rounds once across current products');
+ assert.equal(p.project(10,5),1);
+ const mixed=p.calculate([{order_id:'a',source:'premium',policy_revision:p.REVISION,eligible_minor:180},{order_id:'b',source:'premium',policy_revision:p.LEGACY_REVISION,eligible_minor:180}]);
+ assert.equal(mixed.bonus_minor,27);assert.equal(p.project(360,360,180),27);
+ assert.equal(current.shares.reduce((n,x)=>n+x.amount_minor,0),1);
 });
