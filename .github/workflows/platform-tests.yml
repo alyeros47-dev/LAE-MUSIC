@@ -8,14 +8,15 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-        with: {ref: 64584bcc91a4c9238477edde89de8d44b08f5bb5, persist-credentials: false}
+        with: {ref: 9a084380698050a1d8695d03e315e93206408ab4, persist-credentials: false}
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
       - run: npm ci --omit=dev
-      - name: Inspect only new songwriting job metadata without generating or changing data
+      - name: Verify one owner-authorized Kizz Daniel text request using isolated metering, no audio
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
           node - <<'JS'
-          const assert=require('node:assert/strict');(async()=>{const r=await fetch('https://api.render.com/v1/services/srv-db84s7m89jmc73c7l9rg/env-vars?limit=100',{headers:{Authorization:'Bearer '+process.env.RENDER_API_KEY}});assert(r.ok);const env=Object.fromEntries((await r.json()).map(v=>[(v.envVar||v).key,(v.envVar||v).value]));const p=new(require('pg').Pool)(require('./lib/database').databaseOptions(env));try{await p.query('BEGIN READ ONLY');console.log(JSON.stringify({description_models:(await p.query("SELECT result->>'model' AS model,result->>'phase' AS phase,result->>'state' AS state,created_at FROM platform_requests WHERE scope LIKE 'description-cost:%' ORDER BY created_at DESC LIMIT 14")).rows}));console.log(JSON.stringify({research_results:(await p.query("SELECT r.created_at,e->>'tool' AS tool,e->>'status' AS status,e->>'url' AS public_artist_lookup FROM (SELECT result,created_at FROM platform_requests WHERE scope LIKE 'description-research:%' ORDER BY created_at DESC LIMIT 8) r CROSS JOIN LATERAL jsonb_array_elements(r.result->'requests') e")).rows}));console.log(JSON.stringify({native_outputs:(await p.query("SELECT model,lyrics ILIKE '%Kizz Daniel%' AS mentions_reference,lyrics ~* 'which artist|full name|can I|shall I|may I|go ahead' AS contains_question,created_at FROM generation_records ORDER BY id DESC LIMIT 8")).rows}));await p.query('ROLLBACK');}finally{await p.end();}})().catch(e=>{console.error(e.message);process.exitCode=1});
+          const assert=require('node:assert/strict');
+          (async()=>{const result=await require('./scripts/verify-real-description-text.cjs').verify({env:{...process.env,LAE_REAL_TEXT_TEST:'owner-authorized'},expectedArtist:'Kizz Daniel',brief:'Create an original three-minute clean secular Afropop and Afrobeats song in natural English and Nigerian Pidgin about friends opening a neighbourhood fashion shop. The musical reference is Kizz Daniel. Research his broad musical qualities automatically and translate them into an original groove, instrumental arrangement, melodic phrasing, rhythmic articulation, expressive dynamics and memorable hook. Use warm guitar, melodic bass and crisp percussion. I mean broad singing and production qualities, not an exact voice clone. Do not copy existing lyrics or melodies. Keep the story about designing clothes, teamwork and welcoming the neighbours; no prayer, poverty or road story. Produce actual complete lyrics and a detailed matching production prompt without asking for optional permission or a legal name.'});assert.equal(result.provider_requests,2);assert.equal(result.model,'gpt-6.1-sol');console.log(JSON.stringify(result));})().catch(e=>{console.error('Controlled artist-reference text verification failed:',e.message);process.exitCode=1;});
           JS
