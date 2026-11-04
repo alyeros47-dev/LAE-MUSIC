@@ -159,6 +159,24 @@ jobs:
           LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
           LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
+  voice-profile-diagnostic:
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-training'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - run: node --test tests/voice-diagnostic.test.cjs
+      - name: Read the existing failed voice task without training or changing data
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_VOICE_ARTIST_SHA256: "41ed3aca9f6191b932cc49cb590b2e84714d4b3b8101f2057aed8185052a4b55"
+        run: node scripts/inspect-voice-profile.cjs
   existing-service-audit:
     if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one')
     runs-on: ubuntu-latest
