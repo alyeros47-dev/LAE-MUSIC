@@ -16,9 +16,9 @@ function summary(body,secrets){
  for(const [scope,source]of [['response',body],['data',body?.data]]){
   if(!source||typeof source!=='object'||Array.isArray(source))continue;
   result[scope+'_keys']=Object.keys(source).slice(0,35);
-  for(const key of ['code','type','status','message','error','error_message','detail']){
+  for(const key of ['code','type','status','message','error','error_message','detail','reason_code','retriable','refund_processed']){
    const value=source[key];
-   if(typeof value==='string'||typeof value==='number')result[scope+'_'+key]=redact(String(value),secrets);
+   if(typeof value==='string'||typeof value==='number'||typeof value==='boolean')result[scope+'_'+key]=redact(String(value),secrets);
    else if(value&&typeof value==='object'&&typeof value.message==='string')result[scope+'_'+key]=redact(value.message,secrets);
   }
  }
