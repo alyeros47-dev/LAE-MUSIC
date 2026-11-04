@@ -140,11 +140,13 @@ async function boot(name) {
       fs.readFileSync("tests/fixtures/review-tone.mp3.base64", "utf8"),
       "base64",
     );
+    const generated=require('./studio-song-fixture.cjs').seedContainerSong(names[0],id,'Persistent isolated QA tone',audio);
     phase = "upload";
     const started = await api("/api/music/upload/start", {
       method: "POST",
       body: {
         title: "Persistent isolated QA tone",
+        uploadCode:generated.uploadCode,
         genre: "Highlife",
         audioMime: "audio/mpeg",
         audioBytes: audio.length,

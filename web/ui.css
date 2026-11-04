@@ -1213,6 +1213,7 @@
     margin:12px 0
   }
   .site-footer{
+    flex-wrap:wrap;
     border-top:1px solid #272e23;
     padding:24px 42px;
     display:flex;

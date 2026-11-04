@@ -59,6 +59,7 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
   assert.equal(r.status, 201);
   const artistCookie=r.headers.get("set-cookie").split(";")[0];
   let result = await r.json();
+  const fixtureArtistId=result.user.id;
   assert.equal(result.user.membership_status, "pending_payment");
   r = await fetch(origin + "/api/listener/register", {
     method: "POST",
@@ -93,17 +94,20 @@ const { checkPreview } = require("../scripts/check-preview.cjs");
     const sub=await (await fetch(origin+'/api/artist/subscription',{headers:{Cookie:artistCookie}})).json();assert.equal(sub.review_test_access,true);assert.equal(sub.artist_features_active,false);
     const allowance=await (await fetch(origin+'/api/artist/studio-allowance',{headers:{Cookie:artistCookie}})).json();assert.equal(allowance.review_test_access,true);assert.equal(allowance.remaining_generations,2);
     const audio=Buffer.from(require('node:fs').readFileSync('tests/fixtures/review-tone.mp3.base64','utf8').trim(),'base64');
-    const prepare=await post('/api/music/upload/start',{title:'Original sandbox test tone',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:audio.length,rightsConfirmed:true});assert.equal(prepare.status,200);const upload=await prepare.json();assert.equal(upload.temporary_review_storage,true);
+    const fixture=require('./studio-song-fixture.cjs'),container=process.env.LAE_REVIEW_TEST_CONTAINER||'lae-review-ci';
+    const generated=fixture.seedContainerSong(container,fixtureArtistId,'Original sandbox test tone',audio);
+    assert.equal((await post('/api/music/upload/start',{title:'External blocked fixture',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:audio.length,rightsConfirmed:true})).status,403);
+    const prepare=await post('/api/music/upload/start',{title:'Original sandbox test tone',uploadCode:generated.uploadCode,genre:'Highlife',audioMime:'audio/mpeg',audioBytes:audio.length,rightsConfirmed:true});assert.equal(prepare.status,200);const upload=await prepare.json();assert.equal(upload.temporary_review_storage,true);
     const stranger=await fetch(origin+'/api/music/upload/file?id='+upload.id+'&kind=audio',{method:'PUT',headers:{Origin:origin,'Content-Type':'audio/mpeg'},body:audio});assert.equal(stranger.status,401);
     const put=await fetch(origin+'/api/music/upload/file?id='+upload.id+'&kind=audio',{method:'PUT',headers:{Origin:origin,'Content-Type':'audio/mpeg',Cookie:artistCookie},body:audio});assert.equal(put.status,200);
     const complete=await post('/api/music/upload/finish',{id:upload.id});assert.equal(complete.status,200);const duplicate=await post('/api/music/upload/finish',{id:upload.id});assert.equal(duplicate.status,200);
     const stream=await (await fetch(origin+'/api/music/tracks/'+upload.id+'/stream')).json();assert.equal(new URL(stream.url).origin,origin);const range=await fetch(stream.url,{headers:{Range:'bytes=0-63'}});assert.equal(range.status,206);assert.deepEqual(Buffer.from(await range.arrayBuffer()),audio.subarray(0,64));
     const own=await (await fetch(origin+'/api/music/mine',{headers:{Cookie:artistCookie}})).json();assert(own.tracks.some(x=>String(x.id)===String(upload.id)&&x.status==='published'));
     const ledger=await (await fetch(origin+'/api/artist/subscription',{headers:{Cookie:artistCookie}})).json();assert.equal(ledger.artist_features_active,false);
-    const pending=[];for(let i=0;i<4;i++){const x=await post('/api/music/upload/start',{title:'Quota fixture '+i,genre:'Highlife',audioMime:'audio/mpeg',audioBytes:1024,rightsConfirmed:true});assert.equal(x.status,200);pending.push((await x.json()).id);}
-    const sixth=await post('/api/music/upload/start',{title:'Over quota fixture',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:1024,rightsConfirmed:true});assert.equal(sixth.status,403);
+    const pending=[];for(let i=0;i<4;i++){const code=fixture.seedContainerSong(container,fixtureArtistId,'Quota fixture '+i,Buffer.alloc(1024));const x=await post('/api/music/upload/start',{uploadCode:code.uploadCode,title:'Quota fixture '+i,genre:'Highlife',audioMime:'audio/mpeg',audioBytes:1024,rightsConfirmed:true});assert.equal(x.status,200);pending.push((await x.json()).id);}
+    const sixthCode=fixture.seedContainerSong(container,fixtureArtistId,'Over quota fixture',Buffer.alloc(1024));const sixth=await post('/api/music/upload/start',{uploadCode:sixthCode.uploadCode,title:'Over quota fixture',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:1024,rightsConfirmed:true});assert.equal(sixth.status,403);
     for(const pendingId of pending){const x=await post('/api/platform/review-upload/cancel',{id:pendingId});assert.equal(x.status,200);}
-    const invalid=await post('/api/music/upload/start',{title:'Invalid format fixture',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:1024,rightsConfirmed:true});assert.equal(invalid.status,200);const invalidId=(await invalid.json()).id;const bad=Buffer.alloc(1024,32);bad.write('<html><script>bad</script></html>');const blocked=await fetch(origin+'/api/music/upload/file?id='+invalidId+'&kind=audio',{method:'PUT',headers:{Origin:origin,'Content-Type':'audio/mpeg',Cookie:artistCookie},body:bad});assert.equal(blocked.status,415);const unfinished=await post('/api/music/upload/finish',{id:invalidId});assert.equal(unfinished.status,409);assert.equal((await post('/api/platform/review-upload/cancel',{id:invalidId})).status,200);
+    const invalidCode=fixture.seedContainerSong(container,fixtureArtistId,'Invalid format fixture',Buffer.alloc(1024));const invalid=await post('/api/music/upload/start',{uploadCode:invalidCode.uploadCode,title:'Invalid format fixture',genre:'Highlife',audioMime:'audio/mpeg',audioBytes:1024,rightsConfirmed:true});assert.equal(invalid.status,200);const invalidId=(await invalid.json()).id;const bad=Buffer.alloc(1024,32);bad.write('<html><script>bad</script></html>');const blocked=await fetch(origin+'/api/music/upload/file?id='+invalidId+'&kind=audio',{method:'PUT',headers:{Origin:origin,'Content-Type':'audio/mpeg',Cookie:artistCookie},body:bad});assert.equal(blocked.status,400);const unfinished=await post('/api/music/upload/finish',{id:invalidId});assert.equal(unfinished.status,409);assert.equal((await post('/api/platform/review-upload/cancel',{id:invalidId})).status,200);
     console.log('PASS: fresh artist signup/session, complimentary review access, real MP3 upload/verification/publish/replay, anonymous range streaming, owned catalog and no paid subscription. No R2 or provider calls.');
   }
   console.log(

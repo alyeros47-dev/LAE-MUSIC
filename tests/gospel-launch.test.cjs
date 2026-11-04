@@ -9,7 +9,7 @@ function codeFixture(){
  let completed=true,clips=0,downloads=0,records=0;
  pool.query=async(sql,args=[])=>{
   const row=result=>({rowCount:1,rows:[result]}),none=()=>({rowCount:0,rows:[]});
-  if(sql.startsWith('SELECT result FROM platform_requests')){
+  if(sql.startsWith('SELECT result FROM platform_requests')||sql.startsWith('SELECT r.result FROM platform_requests')){
    const items=Object.entries(pool.state.requests).filter(([id])=>id.startsWith(args[0]+':')).map(([,r])=>r);
    const item=sql.includes("result->>")?items.find(r=>r.result.generation_id===String(args[1])):pool.state.requests[args[0]+':'+args[1]];return item?row(item):none();
   }
