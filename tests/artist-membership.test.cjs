@@ -16,3 +16,9 @@ test('agreement disclosure has a stable full-content hash and does not authorize
  const a=require('../lib/creator-agreement').disclosure(),{content_hash,...body}=a;
  assert.equal(content_hash,require('node:crypto').createHash('sha256').update(JSON.stringify(body)).digest('hex'));assert(a.sections.some(s=>/no recurring royalty deduction/.test(s.text)));assert(a.sections.some(s=>/does not set or change royalty shares, affiliate rates or payouts/.test(s.text)));
 });
+
+test('reviewable Creator Agreement is exactly the customer agreement document',()=>{
+ const a=require('../config/music-creator-agreement.json');
+ const expected='# '+a.title+'\n\nVersion: '+a.version+'\n\n'+a.sections.map(s=>'## '+s.title+'\n\n'+s.text).join('\n\n')+'\n';
+ assert.equal(require('node:fs').readFileSync(require('node:path').join(__dirname,'../docs/MUSIC-CREATOR-AGREEMENT.md'),'utf8'),expected);
+});

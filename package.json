@@ -19,7 +19,7 @@
     "test:affiliate:postgres": "node tests/affiliate-purchase-year-postgres.cjs && node tests/affiliate-policy-regression-postgres.cjs",
     "test:affiliate:browser": "node tests/affiliate-purchase-year-browser.cjs",
     "test:membership": "node --test tests/artist-membership.test.cjs tests/commerce.test.cjs tests/artist-access.test.cjs tests/commissions.test.cjs",
-    "test:membership:postgres": "node tests/artist-membership-migration.cjs && node tests/artist-membership-postgres.cjs",
+    "test:membership:postgres": "node tests/artist-membership-migration.cjs && node tests/artist-membership-postgres.cjs && node tests/artist-membership-integration-postgres.cjs",
     "test:membership:browser": "node tests/artist-membership-browser.cjs"
   },
   "engines": {
