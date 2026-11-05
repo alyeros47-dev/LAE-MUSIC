@@ -20,7 +20,10 @@
     "test:affiliate:browser": "node tests/affiliate-purchase-year-browser.cjs",
     "test:membership": "node --test tests/artist-membership.test.cjs tests/commerce.test.cjs tests/artist-access.test.cjs tests/commissions.test.cjs",
     "test:membership:postgres": "node tests/artist-membership-migration.cjs && node tests/artist-membership-postgres.cjs && node tests/artist-membership-integration-postgres.cjs",
-    "test:membership:browser": "node tests/artist-membership-browser.cjs"
+    "test:membership:browser": "node tests/artist-membership-browser.cjs",
+    "test:manual-bank": "node --test tests/manual-bank-payments.test.cjs",
+    "test:manual-bank:postgres": "node tests/manual-bank-payments-postgres.cjs",
+    "test:manual-bank:browser": "node tests/manual-bank-payments-browser.cjs"
   },
   "engines": {
     "node": ">=20"

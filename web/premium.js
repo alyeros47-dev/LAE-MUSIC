@@ -1,3 +1,4 @@
+import {openBankPayment,bankHistory} from './manual-bank-payments.js';
 import { refundConditions } from "./financial-policy.js";
 const dateTime = (value) =>
   new Date(value).toLocaleString(undefined, {
@@ -131,6 +132,9 @@ export async function premiumPage(view, url, ctx) {
       : { complaints: [] },
     data = session.listener ? await api("/api/platform/premium/status") : null,
     approved = plans.price_status === "approved";
+  const manualEnabled=plans.manual_bank?.enabled===true;
+  const bankData=session.listener&&plans.manual_bank?await api('/api/platform/manual-payments?role=listener'):{payments:[]};
+  const bankOrders=new Set(bankData.payments.map(p=>p.listener_order_id));
   const amount = (n, currency = "USD") =>
     new Intl.NumberFormat(undefined, {
       style: "currency",
@@ -145,7 +149,7 @@ export async function premiumPage(view, url, ctx) {
           }).resolvedOptions().maximumFractionDigits,
     );
   const record = (o) =>
-    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open sandbox checkout ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
+    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open sandbox checkout ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
     !view.set(
       heading(
@@ -164,7 +168,7 @@ export async function premiumPage(view, url, ctx) {
               true,
             )
           : "") +
-        `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="checkout" data-premium-plan="${e(p.code)}" ${approved && plans.providers.length > 0 ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
+        `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="${manualEnabled?'manual_bank':'checkout'}" data-premium-plan="${e(p.code)}" ${approved && (manualEnabled||plans.providers.length > 0) ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
         notice(policy.premium) +
         notice(policy.complaints) +
         notice(policy.royalties) +
@@ -173,7 +177,7 @@ export async function premiumPage(view, url, ctx) {
           "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
         ) +
         notice(
-          plans.providers.length
+          manualEnabled?"Pay by bank transfer. Your selected pass activates after an administrator verifies receipt.":plans.providers.length
             ? "Sandbox checkout only. Test payments never create withdrawable artist earnings."
             : "Payment checkout is unavailable until merchant accounts and supported currencies are verified.",
           true,
@@ -187,7 +191,10 @@ export async function premiumPage(view, url, ctx) {
     )
   )
     return;
+  if(bankData.payments.length){const section=document.createElement('div');section.innerHTML=bankHistory(bankData.payments,e);document.getElementById('page').querySelector('.page-content').append(section);}
+  document.querySelectorAll('[data-bank-payment]').forEach(b=>b.onclick=()=>openBankPayment(ctx,{role:'listener',paymentId:b.dataset.bankPayment}).catch(error=>toast(error.message,true)));
   currencyDisplay.paint();
+  document.querySelectorAll('[data-bank-order]').forEach(b=>b.onclick=()=>openBankPayment(ctx,{role:'listener',orderId:b.dataset.bankOrder}).catch(error=>toast(error.message,true)));
   document.querySelectorAll("[data-complaint]").forEach(
     (button) =>
       (button.onclick = () =>
@@ -231,21 +238,21 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 20% direct and 10% quarterly team benefit at exactly two steps during the recipient’s one-year qualifying window. Refunded or disputed purchases require reconciliation.</p><button type="submit" class="button">Save unpaid Premium record</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 20% direct and 10% quarterly team benefit at exactly two steps during the recipient’s one-year qualifying window. Refunded or disputed purchases require reconciliation.</p><button type="submit" class="button">${manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {
                 plan: p.code,
                 referrer_id: b.referrer_id || null,
               };
-              await api("/api/platform/premium/orders", "POST", payload, {
+              const savedOrder=await api("/api/platform/premium/orders", "POST", payload, {
                 headers: {
                   "Idempotency-Key": keyFor("premium-order", payload),
                 },
               });
               clearKey("premium-order");
               document.getElementById("action-dialog").close();
-              route(true);
+              if(manualEnabled)await openBankPayment(ctx,{role:'listener',orderId:savedOrder.id});else route(true);
             }),
         );
       }),
