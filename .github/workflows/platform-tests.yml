@@ -84,6 +84,13 @@ jobs:
           const get=async(origin,path)=>{const r=await fetch(origin+path,{redirect:'error',signal:AbortSignal.timeout(45000)});assert(r.ok,'Live route failed: '+path);return r;},hash=b=>crypto.createHash('sha256').update(b).digest('hex');
           (async()=>{
             for(const origin of ['https://lae-music.onrender.com','https://lae-music.com']){
+              let ready=false;
+              for(let attempt=0;attempt<30;attempt++){
+                try{const asset=await fetch(origin+'/web/business.js?release='+process.env.APPROVED_MERGE_SHA,{redirect:'error',signal:AbortSignal.timeout(15000)});if(asset.ok&&hash(Buffer.from(await asset.arrayBuffer()))===hash(fs.readFileSync('web/business.js'))){ready=true;break;}}catch{}
+                if(attempt%10===0)console.log(JSON.stringify({readiness:'waiting_for_pinned_asset',origin,attempt}));
+                await new Promise(resolve=>setTimeout(resolve,3000));
+              }
+              assert(ready,'Pinned business module did not become available after deployment handover');
               for(const file of ['web/business.js','web/app.js','web/artist-packages.js','web/ui.css'])assert.equal(hash(Buffer.from(await(await get(origin,'/'+file+'?release='+process.env.APPROVED_MERGE_SHA)).arrayBuffer())),hash(fs.readFileSync(file)),'Exact served asset '+file);
               const business=await(await get(origin,'/api/platform/business')).json();assert.deepEqual(business,policy.disclosure());
               const plans=await(await get(origin,'/api/plans')).json();assert.deepEqual(plans.plans,policy.packages());assert.equal(plans.publishingPolicy.external_uploads_enabled,false);
