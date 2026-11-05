@@ -262,6 +262,7 @@ export function bindStudioWorkflow({
     save.disabled =
       !storageReady ||
       savingVoice ||
+      voiceProfile.failure?.retry_allowed === false ||
       !sample ||
       ["training", "submitting", "verification_required"].includes(
         voiceProfile.status,
@@ -307,6 +308,7 @@ export function bindStudioWorkflow({
     useSample(
       new Blob([file], { type: type === "audio/x-wav" ? "audio/wav" : type }),
     );
+    if(voiceProfile.failure?.retry_allowed===false){voiceStatus.textContent=voiceProfile.failure.message;return;}
     voiceStatus.textContent =
       "Local sample ready to preview. " +
       (storageReady
@@ -437,6 +439,7 @@ export function bindStudioWorkflow({
     const ready = result.status === "ready";
     voiceProfile.status = result.status;
     voiceProfile.hasVoice = ready;
+    voiceProfile.failure = result.failure || null;
     const customOption = lyricsForm.elements.voice?.querySelector(
       'option[value="custom"]',
     );
@@ -455,10 +458,11 @@ export function bindStudioWorkflow({
       ? "Your singing voice is ready. Select “Use my saved voice profile” to use it."
       : result.status === "training"
         ? "Your voice profile is training. Check again shortly."
-        : "Voice profile status: " +
+        : result.failure?.message || ("Voice profile status: " +
           result.status +
-          ". Standard voice generation is still available.";
+          ". Standard voice generation is still available.");
   }
+  if (voiceProfile.failure?.message) voiceStatus.textContent=voiceProfile.failure.message;
   by("studio-refresh-voice").onclick = async () => {
     try {
       await pollVoice();
@@ -484,6 +488,7 @@ export function bindStudioWorkflow({
     if (!storageReady || !sample || !by("studio-voice-consent").checked) return;
     if (
       savingVoice ||
+      voiceProfile.failure?.retry_allowed === false ||
       ["submitting", "training", "verification_required"].includes(
         voiceProfile.status,
       )
