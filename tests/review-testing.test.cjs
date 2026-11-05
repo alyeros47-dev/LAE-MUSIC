@@ -188,6 +188,7 @@ test("upload preparation requires sign-in, same origin, ownership rights and val
           audioMime: "text/html",
           audioBytes: 1024,
           rightsConfirmed: true,
+          uploadCode: "A".repeat(36),
         }),
         json() {},
       });
