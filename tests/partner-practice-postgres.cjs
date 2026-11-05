@@ -67,7 +67,7 @@ module.exports = async (t, { pool, api }) => {
         ).status,
         409,
       );
-      const caps=(await api('/api/platform/capabilities')).data;assert.equal(caps.affiliate_demo,true);assert.equal(caps.payments,false);
+      const caps=(await api('/api/platform/capabilities')).data;assert.equal(caps.affiliate_demo,false);assert.equal(caps.affiliate_allocations_pending,true);assert.equal(caps.payments,false);
       const example={product:'premium:monthly',depth:'2',payment_state:'verified',sale_date:'2026-12-21'};
       assert.equal((await api('/api/platform/partners/practice/preview',{method:'POST',body:example})).status,401);
       assert.equal((await api('/api/platform/partners/practice/preview',{cookie:who.cookie})).status,405);

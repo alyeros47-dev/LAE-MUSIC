@@ -35,22 +35,22 @@ test("bonus windows cover the accounting year with no gap or duplicate eligibili
     }
   }
 });
-test("product-specific direct commissions are preserved and only two-step quarterly sales are allowed", () => {
-  assert.deepEqual(p.disclosure.direct_rates, {
+test("historical product-specific rates and two-step quarterly rules remain preserved", () => {
+  assert.deepEqual(p.historicalDisclosure.direct_rates, {
     artist_subscription: { starter: 15, growth: 25, professional: 25 },
     premium_listener: 20,
     studio_generation: 0,
   });
-  assert.equal(p.disclosure.team_percent, null);
-  assert.deepEqual(p.disclosure.team_rates, {
+  assert.equal(p.historicalDisclosure.team_percent, null);
+  assert.deepEqual(p.historicalDisclosure.team_rates, {
     artist_subscription: 10,
     studio_generation: 10,
     premium_listener: 10,
   });
-  assert.equal(p.disclosure.team_depth, 2);
-  assert.equal(p.disclosure.immediate_indirect_percent, 0);
-  assert.equal(p.disclosure.registration_reward, 0);
-  assert.equal(p.disclosure.payouts_enabled, false);
+  assert.equal(p.historicalDisclosure.team_depth, 2);
+  assert.equal(p.historicalDisclosure.immediate_indirect_percent, 0);
+  assert.equal(p.historicalDisclosure.registration_reward, 0);
+  assert.equal(p.historicalDisclosure.payouts_enabled, false);
 });
 
 test("mixed products calculate independent approved rates and never allocate artist-rate money to Premium", () => {
@@ -96,15 +96,15 @@ test("Premium cents are rounded within their 5 percent group without borrowing t
   );
 });
 
-test('new Premium uses 20 percent direct, ten percent team and no immediate indirect; historical rates stay versioned',()=>{
- assert.deepEqual(p.premiumRates(p.REVISION),{direct:20,quarterly_team:10,immediate_indirect:0});
+test('earlier purchase-year Premium contracts retain their original 20/10 rates',()=>{
+ assert.deepEqual(p.premiumRates(p.PURCHASE_YEAR_REVISION),{direct:20,quarterly_team:10,immediate_indirect:0});
  assert.deepEqual(p.premiumRates(p.LEGACY_REVISION),{direct:10,quarterly_team:5,immediate_indirect:0});
  assert.deepEqual(p.premiumRates('legacy-premium-10-5'),{direct:10,quarterly_team:0,immediate_indirect:5});
  assert.throws(()=>p.premiumRates('unknown'),e=>e.status===409);
- const current=p.calculate([{order_id:'a',source:'artist',eligible_minor:5},{order_id:'b',source:'premium',policy_revision:p.REVISION,eligible_minor:5}]);
+ const current=p.calculate([{order_id:'a',source:'artist',eligible_minor:5},{order_id:'b',source:'premium',policy_revision:p.PURCHASE_YEAR_REVISION,eligible_minor:5}]);
  assert.equal(current.bonus_minor,1,'same-rate eligible volume rounds once across current products');
  assert.equal(p.project(10,5),1);
- const mixed=p.calculate([{order_id:'a',source:'premium',policy_revision:p.REVISION,eligible_minor:180},{order_id:'b',source:'premium',policy_revision:p.LEGACY_REVISION,eligible_minor:180}]);
+ const mixed=p.calculate([{order_id:'a',source:'premium',policy_revision:p.PURCHASE_YEAR_REVISION,eligible_minor:180},{order_id:'b',source:'premium',policy_revision:p.LEGACY_REVISION,eligible_minor:180}]);
  assert.equal(mixed.bonus_minor,27);assert.equal(p.project(360,360,180),27);
  assert.equal(current.shares.reduce((n,x)=>n+x.amount_minor,0),1);
 });

@@ -26,5 +26,5 @@ test('review upload entry rejects code-free external recordings even during comp
 });
 test('Gospel configuration and own-lyrics workflow are unchanged by publishing policy',()=>{
  const catalogue=require('../lib/studio-launch').catalogue();assert.equal(catalogue.categories.length,14);assert.equal(catalogue.styles.length,70);assert.equal(catalogue.launch,'gospel-phase-one');
- assert.equal(require('../lib/partner-policy').disclosure.direct_rates.artist_subscription.professional,25);
+ assert.equal(require('../lib/partner-policy').historicalDisclosure.direct_rates.artist_subscription.professional,25);
 });

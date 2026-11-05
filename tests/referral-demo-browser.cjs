@@ -1,4 +1,5 @@
 'use strict';
+// Historical demo architecture only: explicit pre-hold capability fixture. Current customers see the allocation hold instead.
 // Actual UI; simulated API fixtures never contact providers or production data.
 const assert=require('node:assert/strict'),http=require('node:http'),crypto=require('node:crypto'),fs=require('node:fs');
 const AxeBuilder=require('@axe-core/playwright').default,{runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engine.cjs');
@@ -8,9 +9,9 @@ const AxeBuilder=require('@axe-core/playwright').default,{runtime}=require('./ru
  const demo=require('../lib/referral-demo'),report={demo:true,totals:{direct_minor:250,team_minor:0},rows:[]};
  await page.route('**/api/**',async route=>{const req=route.request(),u=new URL(req.url()),p=u.pathname,send=(body,status=200)=>route.fulfill({status,contentType:'application/json',body:JSON.stringify(body)});let data={};if(req.method()!=='GET'){writes.push(p);assert(p.startsWith('/api/platform/referral-demo/'),'No real account, provider, credit or purchase POST is allowed');data=req.postDataJSON();assert.equal(data.confirm_demo,true);}
  if(p==='/api/plans')return send({plans:require('../lib/plans'),referralDemoAvailable:true,paymentEnabled:false});
- if(p==='/api/platform/partners/eligibility')return send({eligible:real,activation_needed:false,qualifying_purchase:real?{expires_at:'2099-01-01'}:null});
+ if(p==='/api/platform/partners/eligibility')return send({eligible:real,registered:real,qualified:real,activation_needed:false,qualifying_purchase:real?{expires_at:'2099-01-01'}:null});
  if(p==='/api/platform/session')return send({artist:real?{id:7,display_name:'Real Partner',email:'partner@fixture.invalid'}:null,listener:null,admin:false});
- if(p==='/api/platform/capabilities')return send({affiliate_demo:true,payments:false});if(p==='/api/platform/currencies')return send(require('../lib/currency').options());if(p==='/api/platform/pricing')return send({});
+ if(p==='/api/platform/capabilities')return send({affiliate_allocations_pending:false,affiliate_demo:true,payments:false});if(p==='/api/platform/currencies')return send(require('../lib/currency').options());if(p==='/api/platform/pricing')return send({});
  if(p==='/api/platform/referral-demo/context')return send({demo:true,referrer:'Real Partner',quote:require('../lib/partner-practice').quote(u.searchParams.get('plan'))});
  if(p==='/api/platform/referral-demo/start'){assert.equal(data.ref,'7');assert(req.headers()['idempotency-key']);const q=require('../lib/partner-practice').quote(data.plan),f={id:crypto.randomUUID(),plan:q.plan,base_minor:q.base_minor,owner_id:7,status:'pending_demo',profile_at:null,display_name:null,public_ref:null,demo:true};f.reference='DEMO-'+f.id;orders.set(f.id,f);return send({flow:f},201);}
  if(p==='/api/platform/referral-demo/profiles')return send({profiles:[...orders.values()].filter(x=>x.profile_at)});

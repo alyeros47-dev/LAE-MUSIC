@@ -159,7 +159,7 @@ test("ordinary artists cannot select another owner through a query parameter, an
       release() {},
     };
   const platform = createPlatform({
-    pool: { connect: async () => db, query: async (sql,args)=>{calls.push(sql);assert.equal(args[0],7);return {rows:[{product:'artist_subscription'}]};} },
+    pool: { connect: async () => db, query: async (sql,args)=>{calls.push(sql);assert.equal(args[0],7);return {rows:[sql.includes('affiliate_participation_events')?{participating:true}:{product:'artist_subscription'}]};} },
     me: async () => ({ id: 7 }),
     listenerMe: async () => null,
     authAdmin: () => false,
@@ -217,5 +217,5 @@ test("quarter history keeps Premium volume at 5 percent when combined with artis
   assert.equal(x.quarters[0].potential_reward_cents, 15000);
   assert.equal(x.quarters[0].quarter_start, "2026-12-21");
   assert.equal(x.team_reward_percent, null);
-  assert.equal(x.team_rates.premium_listener, 10);
+  assert.equal(x.team_rates,null,'Current individual/team rates are held; historical source lines retain their original contracts');
 });

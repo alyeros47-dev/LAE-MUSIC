@@ -144,6 +144,8 @@ module.exports = async (
   await t.test(
     "ordinary users see only their own accounting, while reports reject attempts to post or manufacture a balance",
     async () => {
+      // Voluntary participation is required by the new dashboard policy; this buyer has a verified historical package.
+      await require('../lib/transactions').transaction(pool,db=>require('../lib/affiliate-access').setParticipation(db,buyer.id,{mode:'test',participating:true}));
       const self = await api(
         "/api/platform/partners/accounting?mode=test&artist_id=" + leader.id,
         { cookie: buyer.cookie },

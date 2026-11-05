@@ -198,3 +198,5 @@ require('./controlled-publishing.test.cjs');
 require('./artist-membership.test.cjs');
 
 require('./manual-bank-payments.test.cjs');
+
+require('./affiliate-framework.test.cjs');

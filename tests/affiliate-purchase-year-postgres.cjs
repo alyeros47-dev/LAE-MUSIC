@@ -3,10 +3,11 @@
 const target=require('./ci-database.cjs').ciDatabase();
 const test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {Pool}=require('pg'),{runtime}=require('./runtime.cjs');
-const access=require('../lib/affiliate-access'),policy=require('../lib/partner-policy');
+const currentAccess=require('../lib/affiliate-access'),policy=require('../lib/partner-policy');
 const {createPremium}=require('../lib/premium-listeners'),{createPaystack}=require('../lib/payments/paystack');
 const {createExchangeRates}=require('../lib/exchange-rates'),{createCheckoutService}=require('../lib/payments/checkout');
 const {createCommerce}=require('../lib/commerce');
+const access={...currentAccess,status:(db,id,options)=>currentAccess.status(db,id,{...options,policyRevision:policy.PURCHASE_YEAR_REVISION})};
 const key=()=>crypto.randomUUID(),confirmation={policy_accepted:true,policy_revision:require('../lib/financial-policy').disclosure().revision};
 test('purchase-qualified affiliate year, linked roles, versioned commissions and refunds',async t=>{
  const control=new Pool({connectionString:target.href,ssl:false}),schema='affiliate_year_'+crypto.randomBytes(6).toString('hex');
@@ -21,7 +22,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
    throw Error('Unexpected external operation: '+url);
   }});
   const rates=createExchangeRates({pool,env:{},fetchImpl:async()=>Response.json({result:'success',base_code:'USD',time_last_update_unix:Math.floor(Date.now()/1000),time_next_update_unix:Math.floor(Date.now()/1000)+86400,rates:{USD:1,NGN:1600}})});
-  const options={pool,rates,adapters:{paystack:adapter},callbackOrigin:'https://lae.test'};
+  const options={affiliatePolicyRevision:policy.PURCHASE_YEAR_REVISION,pool,rates,adapters:{paystack:adapter},callbackOrigin:'https://lae.test'};
   const premium=createPremium(options),checkout=createCheckoutService({...options,mode:'sandbox',merchantCountry:'NG'});
   const app=await runtime({pool,premiumService:premium,paymentService:checkout,env:{NODE_ENV:'test',ADMIN_KEY:'affiliate-year-local-admin',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
   const api=async(path,body,cookie)=>{
@@ -37,7 +38,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
    await service.verify(user.id,attempt.id);
    return {order,quote,attempt,payment:payments.get(attempt.reference)};
   }
-  async function activate(user){const r=await api('/api/platform/partners/activate',{},user.cookie);assert.equal(r.status,200,JSON.stringify(r.data));return {id:r.data.artist_id,cookie:r.cookie,listenerId:user.id};}
+  async function activate(user){const r=await api('/api/platform/partners/activate',{participating:true},user.cookie);assert.equal(r.status,200,JSON.stringify(r.data));return {id:r.data.artist_id,cookie:r.cookie,listenerId:user.id};}
   let leader,sponsor,buyer,leaderPurchase,sponsorPurchase,sale,renewal,monthlyOnly;
   await t.test('free signup, pending labels, demo receipts and short Premium cannot qualify',async()=>{
    const artist=await register('artist','unpaid');
@@ -47,7 +48,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
    assert.equal((await access.status(pool,artist.id,{mode:'test'})).eligible,false);
    monthlyOnly=await register('listener','monthly-only');await purchase(monthlyOnly,'monthly');
    assert.equal((await access.status(pool,null,{listenerId:monthlyOnly.id,mode:'test'})).eligible,false);
-   assert.equal((await api('/api/platform/partners/activate',{},monthlyOnly.cookie)).status,402);
+   assert.equal((await api('/api/platform/partners/activate',{},monthlyOnly.cookie)).status,400);
   });
   await t.test('$1.80 quarterly Premium qualifies a listener using the same email, without granting artist tools',async()=>{
    const l=await register('listener','leader');leaderPurchase=await purchase(l,'quarterly');
@@ -70,7 +71,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
    const c=(await pool.query('SELECT beneficiary_id,level,percent,amount_minor FROM premium_commissions WHERE order_id=ANY($1::uuid[]) ORDER BY amount_minor',[ [sale.order.id,renewal.order.id] ])).rows;
    assert.deepEqual(c.map(x=>[String(x.beneficiary_id),x.level,x.percent,Number(x.amount_minor)]),[[String(sponsor.id),1,20,12],[String(sponsor.id),1,20,36]]);
    const team=(await pool.query('SELECT team_leader_id,reserved_minor,policy_revision FROM premium_quarterly_team_sales WHERE order_id=ANY($1::uuid[]) ORDER BY reserved_minor',[[sale.order.id,renewal.order.id]])).rows;
-   assert.deepEqual(team.map(x=>[String(x.team_leader_id),Number(x.reserved_minor),x.policy_revision]),[[String(leader.id),6,policy.REVISION],[String(leader.id),18,policy.REVISION]]);
+   assert.deepEqual(team.map(x=>[String(x.team_leader_id),Number(x.reserved_minor),x.policy_revision]),[[String(leader.id),6,policy.PURCHASE_YEAR_REVISION],[String(leader.id),18,policy.PURCHASE_YEAR_REVISION]]);
    const quarter=policy.periodForSale(new Date()),report=await require('../lib/partner-accounting').create({pool}).overview(leader.id,{quarter,mode:'test'});
    assert.equal(report.team_projection_minor,24);assert.equal(report.rollup.team.eligible_minor,240);
   });
@@ -82,7 +83,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
    assert.equal((await access.status(pool,leader.id,{at:new Date(+boundary+1),mode:'test'})).eligible,false);
    await purchase({id:leader.listenerId},'monthly');
    const unchanged=await access.status(pool,leader.id,{mode:'test'});assert.equal(unchanged.qualifying_purchase.order_id,leaderPurchase.order.id);
-   const recipients=await access.recipients(pool,sponsor.id,leader.id,{at:new Date(+boundary+1),mode:'test',revision:policy.REVISION});
+   const recipients=await access.recipients(pool,sponsor.id,leader.id,{at:new Date(+boundary+1),mode:'test',revision:policy.PURCHASE_YEAR_REVISION});
    assert.equal(recipients.team,false);
    const before=(await pool.query('SELECT COUNT(*)::int AS n FROM premium_commissions')).rows[0].n;
    assert(before>=2);assert.equal((await pool.query('SELECT SUM(amount_minor)::int AS n FROM premium_commissions WHERE beneficiary_id=$1',[sponsor.id])).rows[0].n,48);
@@ -94,13 +95,14 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
    assert.equal(Number((await pool.query('SELECT reserved_minor FROM premium_quarterly_team_sales WHERE order_id=$1',[x.order.id])).rows[0].reserved_minor),6);
   });
   await t.test('verified $6 artist payment qualifies, but does not alter the artist product-specific direct rate',async()=>{
-   const artist=await register('artist','qualifying-artist'),commerce=createCommerce({pool});
+   const artist=await register('artist','qualifying-artist'),commerce=createCommerce({affiliatePolicyRevision:policy.PURCHASE_YEAR_REVISION,pool});
    await pool.query('UPDATE creators SET referred_by=$1 WHERE id=$2',[sponsor.id,artist.id]);
    const order=await commerce.create(artist.id,key(),{kind:'artist_subscription',plan:'starter'});
    const quote=await checkout.prepare(artist.id,{order_id:order.id,provider:'paystack',currency:'NGN'});
    const start=await checkout.start(artist.id,key(),{quote_id:quote.id,...confirmation});
    const attempt=(await pool.query('SELECT * FROM payment_checkout_attempts WHERE order_id=$1',[order.id])).rows[0];
    await checkout.reconcile(artist.id,attempt.id);
+   await currentAccess.setParticipation(pool,artist.id,{mode:'test',participating:true});
    const eligibility=await access.status(pool,artist.id,{mode:'test'});assert.equal(eligibility.eligible,true);assert.equal(eligibility.qualifying_purchase.product,'artist_subscription');
    const commission=(await pool.query('SELECT amount_cents FROM affiliate_subscription_commissions WHERE referred_artist_id=$1',[artist.id])).rows[0];assert.equal(Number(commission.amount_cents),90);
    assert(start);
@@ -131,7 +133,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
   });
   await t.test('existing same-email creator requires ownership verification instead of automatic role takeover',async()=>{
    const a=await register('artist','collision'),l=await register('listener','collision-listener','OtherListenerFixturePassword123');await pool.query('UPDATE listeners SET email=$1 WHERE id=$2',['collision@affiliate-year.invalid',l.id]);await purchase(l,'quarterly');
-   const r=await api('/api/platform/partners/activate',{},l.cookie);assert.equal(r.status,409);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM account_role_links WHERE artist_id=$1',[a.id])).rows[0].n,0);
+   const r=await api('/api/platform/partners/activate',{participating:true},l.cookie);assert.equal(r.status,409);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM account_role_links WHERE artist_id=$1',[a.id])).rows[0].n,0);
   });
  }finally{await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 });

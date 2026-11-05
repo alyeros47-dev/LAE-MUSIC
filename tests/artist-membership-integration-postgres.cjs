@@ -23,7 +23,7 @@ test('PR27 payment verification, independently funded royalty ledger and consent
   }});
   const checkout=createCheckoutService({pool,adapters:{paystack:adapter},mode:'sandbox',merchantCountry:'NG',callbackOrigin:'https://lae.test'});
   const historicalAdapter=require('../lib/payments/flutterwave').createFlutterwave({secretKey:'FLWSECK_TEST-pr27_fixture_only-X',secretHash:'pr27_fixture_webhook_hash_only_123456789',merchantId:'12345',mode:'test',approvedCurrencies:['USD'],reviewed:true,fetchImpl:async()=>{throw Error('Historical accounting fixtures must not contact a provider');}});
-  const premium=createPremium({pool,adapters:{paystack:adapter,flutterwave:historicalAdapter},callbackOrigin:'https://lae.test'});
+  const premium=createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool,adapters:{paystack:adapter,flutterwave:historicalAdapter},callbackOrigin:'https://lae.test'});
   const app=await runtime({pool,paymentService:checkout,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
   const commerce=createCommerce({pool}),membership=createMembership({pool,commerce}),royalties=createRoyalties(pool);
   const api=async(path,body,cookie,k=key())=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),'idempotency-key':k}});return {status:r.status,data:r.json(),cookie:[r.headers['set-cookie']||[]].flat().map(x=>x.split(';')[0]).join('; ')};};

@@ -1,5 +1,7 @@
 # Purchase-qualified affiliate access and one-year commissions
 
+> Historical policy/testing record, superseded for new receipts by `AFFILIATE-REVENUE-FRAMEWORK.md` (2026-11-05). New individual commissions are held, qualification no longer expires with the subscription, and obsolete customer commission demos are hidden. Previously earned contracts remain preserved.
+
 Status: implemented for review; not merged or deployed. No production database, environment setting, payment gateway or customer balance has been changed.
 
 ## Approved behavior

@@ -1,4 +1,6 @@
-# PR #27 final verification — 2026-11-05
+# PR #27 earlier membership verification — 2026-11-05
+
+> Historical verification snapshot. Subsequent owner-authorized Tasks 1 and 2 add manual bank transfers and the affiliate framework. See `MANUAL-BANK-PAYMENTS.md` and `AFFILIATE-REVENUE-FRAMEWORK.md` for current scope. The earlier affiliate-scope blocker below has been resolved by Task 2; enabling authenticated incoming bank payments no longer depends on a live gateway. Production verification and official bank setup remain pending.
 
 **Decision: NOT READY FOR PRODUCTION DEPLOYMENT.** The membership implementation and isolated integration checks pass, but the complete branch contains unresolved affiliate scope and the actual financial services remain unconnected. Passing fixture tests does not verify real cash collection or funding. Leave PR #27 draft; do not merge or deploy.
 

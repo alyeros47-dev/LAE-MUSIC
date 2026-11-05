@@ -238,7 +238,7 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified listener-product referrals use 20% direct and 10% quarterly team benefit at exactly two steps during the recipient’s one-year qualifying window. Refunded or disputed purchases require reconciliation.</p><button type="submit" class="button">${manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified purchases retain the original referral. The total affiliate/team budget is 30%; individual allocations remain pending until rules are approved. Refunded or disputed purchases require reconciliation.</p><button type="submit" class="button">${manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {
@@ -354,7 +354,7 @@ export async function artistRoyaltiesPage(view, url, intro, ctx) {
         heading(
           "STREAMING ROYALTIES",
           "Your sound. Your share.",
-          "50% of attributable net eligible Premium Listener revenue, for every artist package.",
+          "New Premium payments reserve 30% of eligible revenue for affiliate/team rewards; artists share half of the remaining 70% through eligible streams. Earlier contracts retain their recorded terms.",
         ) +
         `<form id="royalty-filter" class="row-actions"><label>Accounting month<input type="month" name="month" value="${e(month)}" required></label><label>Records<select name="mode" aria-label="Records"><option value="live" ${mode === "live" ? "selected" : ""}>Live</option><option value="test" ${mode === "test" ? "selected" : ""}>Sandbox · not cash</option></select></label><label>Accounting currency<select name="currency"><option value="USD" ${currency === "USD" ? "selected" : ""}>USD</option><option value="NGN" ${currency === "NGN" ? "selected" : ""}>Legacy NGN</option></select></label><button type="submit" class="button secondary">View period</button><p class="form-status" role="status"></p></form><div class="metrics">${[
           ["TOTAL PLAYS", x.counts.total_plays],
@@ -620,10 +620,11 @@ export async function adminRoyaltiesPage(view, intro, ctx) {
           ["refund_minor", "Refunds", accountAmount],
           ["tax_minor", "Excluded tax", accountAmount],
           ["fees_minor", "Actual fees", accountAmount],
-          ["commissions_minor", "Earned referrals", accountAmount],
+          ["commissions_minor", "Historical commissions / reserved budget", accountAmount],
+          ["unallocated_affiliate_minor", "Unallocated affiliate/team budget", accountAmount],
           ["rounding_minor", "Rounding reconciliation", accountAmount],
           ["net_minor", "Net eligible", accountAmount],
-          ["artist_pool_minor", "50% artist pool", accountAmount],
+          ["artist_pool_minor", "Artist streaming pool", accountAmount],
           ["stream_count", "Qualifying plays"],
           ["undistributed_minor", "Undistributed liability", accountAmount],
         ],

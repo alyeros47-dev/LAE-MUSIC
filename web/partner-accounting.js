@@ -7,7 +7,7 @@ export function partnerAccountingPanel(x, { e, money, table, notice, date }) {
     );
   const team = x.rollup.team,
     direct = x.rollup.direct;
-  return `<section class="panel" aria-labelledby="partner-accounting-heading"><span class="eyebrow">RECEIPTS, REFUNDS & TEAM PERFORMANCE</span><h2 id="partner-accounting-heading">Your reconciled quarter.</h2><form id="partner-accounting-filter" class="row-actions"><label>Accounting quarter<input name="quarter" aria-label="Accounting quarter" value="${e(x.period.code)}" pattern="20[0-9]{2}-Q[1-4]" placeholder="2026-Q4" required></label><label>Sales record mode<select name="records" aria-label="Sales record mode">${[
+  return `<section class="panel" aria-labelledby="partner-accounting-heading"><span class="eyebrow">RECEIPTS, REFUNDS & TEAM PERFORMANCE</span><h2 id="partner-accounting-heading">Historical reconciled quarter.</h2><form id="partner-accounting-filter" class="row-actions"><label>Accounting quarter<input name="quarter" aria-label="Accounting quarter" value="${e(x.period.code)}" pattern="20[0-9]{2}-Q[1-4]" placeholder="2026-Q4" required></label><label>Sales record mode<select name="records" aria-label="Sales record mode">${[
     ["live", "Live receipts"],
     ["test", "Test payments · no real money"],
     ["legacy", "Historical records · unverified mode"],
@@ -18,7 +18,7 @@ export function partnerAccountingPanel(x, { e, money, table, notice, date }) {
     )
     .join(
       "",
-    )}</select></label><button class="button secondary" type="submit">Review this quarter</button></form><p>${e(x.period.code)} · ${e(x.mode)} records · USD accounting. ${x.mode === "test" ? "These are verified test-payment records, not real money." : x.mode === "legacy" ? "Historical records without the required mode/receipt evidence are excluded from eligible totals." : ""}</p><div class="metrics"><div class="metric"><span>ELIGIBLE DIRECT VOLUME</span><strong>${money(direct.eligible_minor)}</strong><small>Product-specific direct rates remain in their original records</small></div><div class="metric"><span>ELIGIBLE TEAM VOLUME</span><strong>${money(team.eligible_minor)}</strong><small>Verified purchases exactly two referral steps below you</small></div><div class="metric"><span>TEAM REFUNDS</span><strong>${money(team.refund_minor)}</strong><small>Excluded from the team projection</small></div><div class="metric"><span>TEAM VOLUME ON HOLD</span><strong>${money(team.held_minor)}</strong><small>Refund requests and disputes need review</small></div><div class="metric"><span>TEAM BONUS PROJECTION</span><strong>${money(x.team_projection_minor)}</strong><small>Artist services 10% · new Premium 10% · historical Premium 5% · not an available balance</small></div></div>${notice(x.notice)}${
+    )}</select></label><button class="button secondary" type="submit">Review this quarter</button></form><p>${e(x.period.code)} · ${e(x.mode)} records · USD accounting. ${x.mode === "test" ? "These are verified test-payment records, not real money." : x.mode === "legacy" ? "Historical records without the required mode/receipt evidence are excluded from eligible totals." : ""}</p><div class="metrics"><div class="metric"><span>ELIGIBLE DIRECT VOLUME</span><strong>${money(direct.eligible_minor)}</strong><small>Product-specific direct rates remain in their original records</small></div><div class="metric"><span>ELIGIBLE TEAM VOLUME</span><strong>${money(team.eligible_minor)}</strong><small>Verified purchases exactly two referral steps below you</small></div><div class="metric"><span>TEAM REFUNDS</span><strong>${money(team.refund_minor)}</strong><small>Excluded from the team projection</small></div><div class="metric"><span>TEAM VOLUME ON HOLD</span><strong>${money(team.held_minor)}</strong><small>Refund requests and disputes need review</small></div><div class="metric"><span>TEAM BONUS PROJECTION</span><strong>${money(x.team_projection_minor)}</strong><small>Original historical contracts only; new allocation rules are pending · not an available balance</small></div></div>${notice(x.notice)}${
     x.team_rate_breakdown?.length
       ? `<h3>Team bonus by product group</h3>${table(x.team_rate_breakdown, [
           [
@@ -27,7 +27,7 @@ export function partnerAccountingPanel(x, { e, money, table, notice, date }) {
             (v) =>
               v === "historical_premium_listener"
                 ? "Historical Premium Listener"
-                : v === "artist_studio_and_new_premium" ? "Artist packages, studio & new Premium" : v === "premium_listener" ? "Premium Listener" : "Artist packages & studio",
+                : v === "artist_studio_and_new_premium" ? "Earlier artist, studio & Premium contracts" : v === "premium_listener" ? "Premium Listener" : "Artist packages & studio",
           ],
           ["percent", "Team rate", (v) => e(v) + "%"],
           ["basis_minor", "Eligible USD", money],
