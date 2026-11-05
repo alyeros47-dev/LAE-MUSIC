@@ -24,16 +24,16 @@ export class MusicPlayer {
   constructor({ api, toast, onLike, onDetail }) {
     this.api = api; this.toast = toast; this.onLike = onLike; this.onDetail = onDetail;
     this.queue = new PlaybackQueue(); this.audio = $('audio'); this.request = 0; this.controller = null; this.counted = false; this.playRecordKey=null; this.listened = 0; this.lastTime = 0; this.resumeAt = 0;
-    this.audio.volume = 0.8;
+    this.lastAudibleVolume = 0.8; this.audio.volume = 0.8;
     $('play-toggle').onclick = () => this.toggle(); $('expanded-toggle').onclick = () => this.toggle();
     $('expanded-previous').onclick=()=>$('previous').click(); $('expanded-next').onclick=()=>$('next').click();
     $('next').onclick = () => this.advance(); $('previous').onclick = () => { if (this.audio.currentTime > 3) this.audio.currentTime = 0; else this.playIndex(this.queue.previous()); };
     $('shuffle').onclick = () => { this.queue.shuffle = !this.queue.shuffle; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); this.save(); };
     $('repeat').onclick = () => { this.queue.repeat = { off: 'all', all: 'one', one: 'off' }[this.queue.repeat]; $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻'; $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); this.save(); };
-    $('expanded-volume').oninput=e=>{this.audio.volume=Number(e.target.value);this.audio.muted=false;$('volume').value=this.audio.volume;this.save();};
+    $('expanded-volume').oninput=e=>this.setVolume(e.target.value);
     $('expanded-seek').oninput=e=>{if(Number.isFinite(this.audio.duration)&&this.audio.duration>0){this.audio.currentTime=this.audio.duration*Number(e.target.value)/1000;this.lastTime=this.audio.currentTime;}};
-    $('volume').oninput = e => { this.audio.volume = Number(e.target.value); this.audio.muted = false; $ ('expanded-volume').value=this.audio.volume; this.updateMute(); this.save(); };
-    $('mute').onclick = () => { this.audio.muted = !this.audio.muted; this.updateMute(); };
+    $('volume').oninput = e => this.setVolume(e.target.value);
+    $('mute').onclick = () => this.toggleMute();
     $('seek').oninput = e => { if (Number.isFinite(this.audio.duration) && this.audio.duration > 0) { this.audio.currentTime = this.audio.duration * Number(e.target.value) / 1000; this.lastTime = this.audio.currentTime; } };
     for (const id of ['expand', 'player-art-button']) $(id).onclick = () => $('expanded-player').showModal();
     $('player-title').onclick = () => this.queue.current && this.onDetail(this.queue.current);
@@ -48,14 +48,33 @@ export class MusicPlayer {
     this.audio.addEventListener('loadedmetadata', () => { $('duration').textContent = time(this.audio.duration);$('expanded-duration').textContent=time(this.audio.duration);$('expanded-seek').disabled=!Number.isFinite(this.audio.duration)||this.audio.duration<=0; $('seek').disabled = !Number.isFinite(this.audio.duration) || this.audio.duration <= 0; if (this.resumeAt && Number.isFinite(this.audio.duration)) this.audio.currentTime = Math.min(this.resumeAt, Math.max(0, this.audio.duration - 1)); this.resumeAt = 0; });
     this.audio.addEventListener('timeupdate', () => this.timeUpdate());
     this.audio.addEventListener('ended', () => this.advance(true));
-    this.audio.addEventListener('volumechange', () => this.updateMute());
+    this.audio.addEventListener('volumechange', () => { this.updateMute(); this.save(); });
     document.addEventListener('visibilitychange', () => this.save());
     window.addEventListener('pagehide', () => this.save());
-    this.restore(); this.setupMediaSession();
+    this.restore(); this.updateMute(); this.setupMediaSession();
   }
   message(value) { $('playback-status').textContent = value; $('playback-status').title = value; }
   playState(playing) { $('play-toggle').textContent = playing ? 'Ⅱ' : '▶'; $('play-toggle').setAttribute('aria-label', playing ? 'Pause' : 'Play'); $('expanded-toggle').textContent = playing ? 'Pause' : 'Play'; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused'; }
-  updateMute() { $('mute').setAttribute('aria-label', this.audio.muted ? 'Unmute' : 'Mute'); $('mute').textContent = this.audio.muted || !this.audio.volume ? '⊘' : '◖'; }
+  setVolume(value) {
+    const volume = Number(value); if (!Number.isFinite(volume)) return;
+    this.audio.volume = Math.max(0, Math.min(1, volume)); this.audio.muted = false;
+    this.updateMute(); this.save();
+  }
+  toggleMute() {
+    if (this.audio.muted || this.audio.volume === 0) {
+      if (this.audio.volume === 0) this.audio.volume = this.lastAudibleVolume;
+      this.audio.muted = false;
+    } else this.audio.muted = true;
+    this.updateMute(); this.save();
+  }
+  updateMute() {
+    if (this.audio.volume > 0) this.lastAudibleVolume = this.audio.volume;
+    const off = this.audio.muted || this.audio.volume === 0;
+    const button = $('mute'); button.classList.remove('optional'); button.setAttribute('aria-label', off ? 'Unmute' : 'Mute');
+    button.setAttribute('aria-pressed', off); button.title = off ? 'Turn sound on' : 'Mute sound'; button.textContent = off ? '🔇' : '🔊';
+    $('volume').value = $('expanded-volume').value = this.audio.volume;
+    const status = $('playback-sound-status'); if (status) { status.hidden = !off; status.textContent = off ? 'Sound off · Tap the speaker' : ''; }
+  }
   async setTracks(tracks, index = 0) { if(this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
   add(track) { this.queue.tracks.push(safeTrack(track)); this.toast('Added to your queue'); this.renderQueue(); this.save(); }
   async playIndex(index, autoplay = true) {
@@ -117,11 +136,13 @@ export class MusicPlayer {
     });
     if (!this.queue.tracks.length) box.textContent = 'Play a song or add one to start your queue.';
   }
-  save() { try { localStorage.setItem('lae_playback_v2', JSON.stringify({ tracks: this.queue.tracks.slice(0, 200), index: this.queue.index, position: this.audio.currentTime || this.resumeAt, volume: this.audio.volume, shuffle: this.queue.shuffle, repeat: this.queue.repeat })); } catch {} }
+  save() { try { localStorage.setItem('lae_playback_v2', JSON.stringify({ tracks: this.queue.tracks.slice(0, 200), index: this.queue.index, position: this.audio.currentTime || this.resumeAt, volume: this.audio.volume, muted: this.audio.muted, lastAudibleVolume: this.lastAudibleVolume, shuffle: this.queue.shuffle, repeat: this.queue.repeat })); } catch {} }
   restore() {
     try { const data = JSON.parse(localStorage.getItem('lae_playback_v2')); if (!data || !Array.isArray(data.tracks)) return;
       const tracks = data.tracks.filter(t => t && /^[1-9]\d{0,15}$/.test(String(t.id))).slice(0, 200);
       this.queue.set(tracks, Number.isInteger(data.index) ? data.index : 0); this.queue.shuffle = data.shuffle === true; this.queue.repeat = ['off', 'all', 'one'].includes(data.repeat) ? data.repeat : 'off';
+      this.lastAudibleVolume = typeof data.lastAudibleVolume === 'number' && data.lastAudibleVolume > 0 && data.lastAudibleVolume <= 1 ? data.lastAudibleVolume : .8;
+      this.audio.muted = data.muted === true;
       this.audio.volume = typeof data.volume === 'number' && data.volume >= 0 && data.volume <= 1 ? data.volume : .8; $('volume').value = this.audio.volume; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻';
       if (this.queue.current) { this.resumeAt = Math.max(0, Number(data.position) || 0); this.renderTrack(this.queue.current); this.message('Press play to resume'); }
     } catch { /* A stale/corrupt browser preference must never prevent public listening. */ }
