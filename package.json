@@ -25,7 +25,9 @@
     "test:manual-bank:postgres": "node tests/manual-bank-payments-postgres.cjs",
     "test:manual-bank:browser": "node tests/manual-bank-payments-browser.cjs",
     "test:affiliate:framework": "node --test tests/affiliate-framework.test.cjs",
-    "test:affiliate:framework:postgres": "node tests/affiliate-framework-postgres.cjs && node tests/affiliate-revenue-ledger-postgres.cjs"
+    "test:affiliate:framework:postgres": "node tests/affiliate-framework-postgres.cjs && node tests/affiliate-revenue-ledger-postgres.cjs",
+    "test:guest-bank:postgres": "node tests/guest-bank-checkout-postgres.cjs",
+    "test:guest-bank:browser": "node tests/guest-bank-checkout-browser.cjs"
   },
   "engines": {
     "node": ">=20"

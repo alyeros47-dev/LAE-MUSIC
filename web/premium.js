@@ -225,6 +225,7 @@ export async function premiumPage(view, url, ctx) {
   document.querySelectorAll("[data-premium-plan]").forEach(
     (button) =>
       (button.onclick = () => {
+        if (!session.listener && manualEnabled && !session.artist) {ctx.navigate('/pay?kind=premium_listener&plan='+encodeURIComponent(button.dataset.premiumPlan)+(url.searchParams.get('ref')?'&ref='+encodeURIComponent(url.searchParams.get('ref')):''));return;}
         if (!session.listener) {
           ctx.navigate(
             "/join?role=listener&return=premium" +

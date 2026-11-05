@@ -1,6 +1,6 @@
 # Annual artist memberships — development implementation
 
-Implemented on `codex/affiliate-purchase-year`, preserving its existing work and integrating the already-deployed publishing/playback fixes. Production is unchanged. This branch also contains the earlier, unmerged affiliate proposal: this membership instruction does not approve or finalize those pending commission changes.
+Implemented on `codex/affiliate-purchase-year`, preserving its existing work and integrating the already-deployed publishing/playback fixes. Production is unchanged. The subsequent approved affiliate framework supersedes the earlier proposal: all new commission allocations are held, while historical earned records remain intact. See `AFFILIATE-REVENUE-FRAMEWORK.md`.
 
 ## Approved annual products
 
@@ -70,3 +70,7 @@ Live merchant payments, live independent royalty funding and production migratio
 The existing core PostgreSQL compatibility suite also passed all 249 checks after the package-quota fixtures were updated. Held membership payments prevent royalty deductions until review is resolved.
 
 Hosted checks also verified persistence across container replacement with the new agreement step: same account/password/audio, unchanged database secret, retained test budget and zero real provider calls. The current catalogue HTTP smoke check passes. General Chromium customer/admin journeys passed 53 accessibility audits at desktop, tablet and mobile sizes; social-sign-in and referral-demo fixtures were aligned with the existing catalogue and retained dashboard access, without changing product or commission rules.
+
+## Payment and lyrics integration supplement — November 5, 2026
+
+Authenticated manual transfers support all packages, renewals and currently priced extra generations. New customers may pay before registration through the same bank review system. Approved invoices activate only once for the matching registered email/role. Agreement acceptance remains a separate explicit step before Studio access. Each verified active annual purchase also funds 3/6/15 companion lyrics drafts; a verified extra generation funds one. These are attributed to the source purchase, respect holds/refunds and restore once on failed text requests. Historical balances remain recorded. Payment does not synthesize funded royalties or activate unapproved affiliate payouts.

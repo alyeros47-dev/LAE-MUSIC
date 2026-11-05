@@ -294,6 +294,14 @@ jobs:
         env:
           LAE_DB_TESTS: "true"
           DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
+      - run: npm run test:guest-bank:postgres
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
+      - run: npm run test:guest-bank:browser
+        env:
+          LAE_DB_TESTS: "true"
+          DATABASE_URL: postgres://postgres:lae_ci_fixture_only@127.0.0.1:5432/lae_music_ci
       - run: npm run test:affiliate:postgres
         env:
           LAE_DB_TESTS: "true"

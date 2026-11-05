@@ -1,6 +1,6 @@
 # Task 1 — manual business-bank transfers
 
-Implemented on the existing PR #27 development branch. Production has not been modified or deployed. This task does not approve the branch's earlier affiliate proposal or start Task 2.
+Implemented on the existing PR #27 development branch. Production has not been modified or deployed. Task 2 supersedes earlier affiliate proposals; all new individual commission allocations remain held pending owner-approved rules.
 
 ## Coverage
 
@@ -12,7 +12,7 @@ The channel uses the existing authenticated purchase records and fulfills every 
 
 There are 12 currently priced product/plan combinations. Gift/coin spending is unchanged; cash coin purchases have no approved cash-price catalogue or existing fulfillment contract, so this task does not invent one or open that disabled purchase route. Offline/Premium benefits continue to follow existing service capabilities and purchased entitlements.
 
-The channel uses existing artist/listener sign-in and purchase ownership. It does not implement guest checkout or change the currently unfinished pay-before-signup flow. Existing signed-in artists can proceed from the public package page to their account to pay. Existing complimentary-testing configuration is unchanged; a pending bank payment itself never grants paid benefits.
+Existing customers purchase using their normal sign-in. New artist and Premium customers can now follow `/start` or `/premium` to `/pay`, choose the product, supply their intended account email and pay before full registration. A signed HttpOnly private browser cookie retains the invoice; no provisional account or entitlement is created. Admin approval unlocks account setup using the invoice email and purchased role. After normal registration/sign-in, an idempotent claim activates the exact paid service. Guest and signed-in purchases share the same bank-reference reuse protection, evidence, finance permissions and transaction history. Original referral attribution and quoted product terms are retained. A pending bank payment never grants paid benefits. Losing the private cookie requires contacting administration with the invoice reference; do not transfer again.
 
 ## Customer process
 
@@ -32,7 +32,7 @@ Compare the claim against the actual business bank account. To approve, enter th
 
 Only the existing owner/finance roles can review. Named administrators require fresh MFA, consistent with existing financial operations. The existing shared-key owner login remains supported according to the platform's current authentication configuration. Receipt images are private to their owner and owner/finance administrators; executable documents and oversized/invalid encodings are rejected.
 
-Approval, receipt, original-currency presentment, purchased entitlement/credit, applicable referral-policy records and audit event commit in one transaction. A persistence failure rolls everything back. Concurrent/repeated approvals cannot double-grant; one bank transaction reference cannot pay another artist or Premium order, including after bank-display configuration changes. Reviewed evidence, decisions and invoice bindings are immutable.
+For signed-in purchases, approval, receipt, original-currency presentment, purchased entitlement/credit, applicable referral-policy records and audit event commit in one transaction. Guest approval verifies the receipt first; fulfillment is a separate atomic, once-only transaction after the correct account registers. No account benefits activate between these steps. A persistence failure rolls everything back. Concurrent/repeated approvals cannot double-grant; one bank transaction reference cannot pay another artist or Premium order, including after bank-display configuration changes. Reviewed evidence, decisions and invoice bindings are immutable.
 
 Task 1 bank receipts use the shared commission/attribution functions. Task 2 now supersedes the new-allocation policy: all new individual commissions are held, verified referrals remain recorded and earlier earned records retain their original rules. See `AFFILIATE-REVENUE-FRAMEWORK.md`. No payout is enabled. Incoming bank approval does not release streaming royalties, invent USD cash from NGN receipts, verify treasury conversion, execute withdrawals or send automatic refunds. Existing complaint/refund-review mechanisms remain available; actual bank refunds and royalty funding still require their respective verified financial workflows.
 
@@ -67,9 +67,15 @@ No paid music/text API calls, customer credits or real payments were used. The f
 
 ## Readiness
 
-Task 1 code is ready for review and isolated integration testing. **The official account details are now supplied and configured in the development candidate. Real bank collection still requires inspecting the configured flow, completing production configuration/recovery/migration checks and explicit deployment approval.** Guest checkout remains outside this authenticated manual-payment implementation. Task 1 hosted checks passed Platform run 42104901430 and the automatically triggered Music DNA run 42104901445. Task 2 implements the subsequently approved affiliate framework; its report supersedes the earlier unresolved affiliate scope. Production configuration/recovery verification and explicit owner approval remain required. Keep the PR draft.
+Task 1 code is ready for review and isolated integration testing. **The official account details are now supplied and configured in the development candidate. Real bank collection still requires inspecting the configured flow, completing production configuration/recovery/migration checks and explicit deployment approval.** Guest pay-before-registration integration is now implemented and verified with isolated receipts. Task 1 hosted checks passed Platform run 42104901430 and the automatically triggered Music DNA run 42104901445. Task 2 implements the subsequently approved affiliate framework; its report supersedes the earlier unresolved affiliate scope. Production configuration/recovery verification and explicit owner approval remain required. Keep the PR draft.
 
 
 ## Supplied beneficiary configuration verification
 
 The focused configuration test checks the exact owner-supplied name, ten-digit account number, bank, NGN currency, NG country and unchanged invoice window. Staging remains in test books; an explicit host-side disable still takes precedence. Existing manual-bank database and browser tests use fictional receipts and never initiate a bank transfer. No package price, allowance or commission rule changes accompany this configuration update.
+
+## Final integration supplement — November 5, 2026
+
+Migration `031-guest-bank-checkout.sql` adds immutable guest purchase/fulfillment records and owned quote bindings. It also links companion lyrics debits to verified purchase records, so purchased annual generations have their matching lyrics drafts (3/6/15) and each verified extra generation has one draft. Holds/refunds prevent spending the corresponding grant without deleting historical balances. Failed text requests restore their credit once. Existing music quotas, proposed prices, past records and customer-supplied lyrics remain unchanged.
+
+Focused commands: `test:guest-bank:postgres` covers ownership, consent, exact prices, approval-before-registration, concurrent claims, receipt reuse, paid credit holds/refunds and retained history. `test:guest-bank:browser` exercises the real local application at 390px and 1440px, including registration, agreement and Studio entry. Provider calls are forbidden in these fixtures.
