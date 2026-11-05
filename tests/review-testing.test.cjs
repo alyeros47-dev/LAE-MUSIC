@@ -188,6 +188,7 @@ test("upload preparation requires sign-in, same origin, ownership rights and val
           audioMime: "text/html",
           audioBytes: 1024,
           rightsConfirmed: true,
+          uploadCode: "A".repeat(36),
         }),
         json() {},
       });
@@ -225,7 +226,7 @@ function sonicTrial(provider) {
     if (sql.startsWith("SELECT COUNT(*)::int AS n")) return row({ n: 0 });
     if (sql.startsWith("SELECT COUNT(*)::int AS used"))
       return row({ used: used ? 1 : 0 });
-    if (sql.startsWith("SELECT id,plan FROM artist_subscriptions")) return none;
+    if (sql.startsWith("SELECT id,plan,included_generations FROM artist_subscriptions")) return none;
     if (sql.startsWith("SELECT expires_at")) return row({ active: true });
     if (sql.startsWith("INSERT INTO review_trial_usage")) {
       if (used) return none;

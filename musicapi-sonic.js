@@ -46,7 +46,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
    if(active.rows[0].n>0){await client.query('ROLLBACK');return send(res,429,{error:'Your previous song is still processing. Please wait before starting another.'}),true}
    const daily=await client.query("SELECT COUNT(*)::int AS n FROM sonic_test_tasks WHERE creator_id=$1 AND created_at>NOW()-INTERVAL '24 hours'",[user.id]);
    if(daily.rows[0].n>=5){await client.query('ROLLBACK');return send(res,429,{error:'Safety limit: 5 generation requests per account per 24 hours.'}),true}
-   const sub=await client.query("SELECT id,plan FROM artist_subscriptions WHERE artist_id=$1 AND status='paid' AND starts_at<=NOW() AND expires_at>NOW() AND NOT payment_hold ORDER BY expires_at DESC LIMIT 1 FOR UPDATE",[user.id]);
+   const sub=await client.query("SELECT id,plan,included_generations FROM artist_subscriptions WHERE artist_id=$1 AND status='paid' AND starts_at<=NOW() AND expires_at>NOW() AND NOT payment_hold ORDER BY expires_at DESC LIMIT 1 FOR UPDATE",[user.id]);
    const ref='sonic-'+require('node:crypto').randomBytes(16).toString('hex');
    const openReview=process.env.LAE_REVIEW_TEST_OPEN==='1'&&require('./lib/review-testing').enabled(process.env);
    const artistTesting=require('./lib/artist-test-access');
@@ -57,8 +57,7 @@ module.exports=async function handleMusicAPI(req,res,p,{me,pool,validOrigin}){
     try{await require('./lib/review-testing').reserve(client,user.id,ref);trial=true;}catch(error){await client.query('ROLLBACK');return send(res,error.status||503,{error:error.status?error.message:'Sandbox test allowance unavailable'}),true}
    }
    if(!trial){
-   const limits={starter:2,growth:3,professional:6};
-   const limit=limits[sub.rows[0].plan]||0;
+   const limit=require('./lib/membership-terms').allowance(sub.rows[0]).generations;
    const usage=await client.query("SELECT COUNT(*)::int AS used FROM artist_studio_usage WHERE subscription_id=$1 AND purchase_order_id IS NULL",[sub.rows[0].id]);
    let purchase=null;
    if(usage.rows[0].used>=limit){

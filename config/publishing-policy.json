@@ -1,0 +1,62 @@
+{
+  "revision": "studio-only-launch-2026-11-04",
+  "external_uploads_enabled": false,
+  "generation_record_required": true,
+  "package_allowances_status": "annual_memberships",
+  "business_description": "LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform.",
+  "business_details": [
+    "Our platform enables independent creators to generate original AI-powered music using our integrated music production studio, publish their completed songs on LAE-MUSIC, and earn revenue from eligible streaming activity.",
+    "Listeners can discover and stream music created through our platform.",
+    "LAE-MUSIC is not currently an open marketplace for conventional music recordings or externally generated music."
+  ],
+  "publishing_notice": "Only songs generated through LAE-MUSIC Studio may be published during this launch. External recordings, including songs from Suno, other AI platforms and conventional recording studios, are temporarily not accepted.",
+  "rights_notice": "AI-generated music is not automatically copyright-free or exempt from licensing requirements. Creators must hold the necessary rights and permissions for their lyrics, recordings, voices, artwork and other contributions. All releases remain subject to content moderation, complaints and takedown procedures.",
+  "own_lyrics_notice": "Creators may supply their own original lyrics and musical production instructions within LAE-MUSIC Studio, subject to our content policies. Supplying lyrics does not authorize the upload of an externally generated or recorded song.",
+  "allowances_notice": "Annual packages: Starter $6/year includes 3 generations and up to 6 tracks; Growth $10/year includes 6 generations and up to 12 tracks; Premium $20/year includes 15 generations and up to 30 tracks. Each generation produces two separate tracks with individual publishing codes. Additional-generation prices remain configurable pending approval. Existing purchased benefits are preserved.",
+  "package_names": {
+    "starter": "Starter",
+    "growth": "Growth",
+    "professional": "Premium"
+  },
+  "how_it_works": [
+    "Choose an artist package and use your artist account to access the available Studio tools.",
+    "Describe your song, or supply your own original lyrics and production instructions within the current Gospel Studio configuration.",
+    "Generate your completed song in LAE-MUSIC Studio and review the recording and its generation record.",
+    "Publish from your saved Studio release, or upload the original generated recording using its account-linked upload code. Confirm the required rights declaration.",
+    "Listeners discover and stream published music. Creators may earn revenue from eligible streaming activity under the platform's applicable terms; earnings are not guaranteed."
+  ],
+  "faqs": [
+    {
+      "question": "Can I upload a song made outside LAE-MUSIC?",
+      "answer": "Not during this launch. Recordings from Suno, other AI services or conventional recording studios are temporarily not accepted for publication, even if you own them."
+    },
+    {
+      "question": "Can I use my own lyrics and production instructions?",
+      "answer": "Yes. Bring your own original lyrics and musical direction into LAE-MUSIC Studio, subject to its current content policies, and generate the completed song there."
+    },
+    {
+      "question": "What proves that a song was generated here?",
+      "answer": "Every new publication must have a valid completed LAE-MUSIC generation record linked to the signed-in creator. Upload codes also bind the original recording to that record; an unrelated audio file cannot use the code."
+    },
+    {
+      "question": "What are the artist package prices?",
+      "answer": "Annual packages: Starter $6/year includes 3 generations and up to 6 tracks; Growth $10/year includes 6 generations and up to 12 tracks; Premium $20/year includes 15 generations and up to 30 tracks. Each generation produces two separate tracks with individual publishing codes. Additional-generation prices remain configurable pending approval. Existing purchased benefits are preserved. External recordings are temporarily not accepted."
+    },
+    {
+      "question": "Is AI music automatically copyright-free?",
+      "answer": "No. Applicable copyright and licensing requirements still apply. You must have the necessary permissions for your contributions and confirm the rights declaration before publication."
+    },
+    {
+      "question": "Are streaming earnings guaranteed?",
+      "answer": "No. Creator revenue depends on eligible streaming activity, applicable terms and financial reconciliation. Publishing a song does not guarantee income."
+    },
+    {
+      "question": "What happens to existing songs and accounts?",
+      "answer": "Existing songs, files, accounts and database records are preserved. This policy controls new publication; it does not delete the existing catalog."
+    },
+    {
+      "question": "How are inappropriate or infringing releases handled?",
+      "answer": "Existing content moderation, complaint review and takedown procedures remain in place. Use the report option on a song to submit a concern."
+    }
+  ]
+}

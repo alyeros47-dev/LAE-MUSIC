@@ -1,6 +1,8 @@
 # LAE-MUSIC
 
-Music discovery, artist tools, an AI music studio, and **LAE-MUSIC Partners & Affiliate Network** on the existing Node.js HTTP server, PostgreSQL, and Cloudflare R2 architecture. This development branch adds a shared dark interface and persistent browser player; it does not replace the backend or Android app.
+LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform. Independent creators generate music in LAE-MUSIC Studio, publish completed songs and may earn from eligible streaming activity. Listeners discover and stream those songs. During initial launch, new publications require an owned completed Studio generation; external recordings are temporarily suspended. See [the controlled publishing policy](docs/CONTROLLED-PUBLISHING.md).
+
+The platform retains the existing Node.js HTTP server, PostgreSQL, Cloudflare R2 and **LAE-MUSIC Partners & Affiliate Network** architecture. This development branch adds a shared dark interface and persistent browser player; it does not replace the backend or Android app.
 
 **Release status: draft candidate. Not launch-ready.** Live-money processing, bank payouts and automatic royalty/commission settlement remain unavailable. Reviewed staging accounts can use the prepared sandbox checkout; the committed merchant manifest is disabled. See [the audit](docs/AUDIT.md), [release status and evidence](docs/RELEASE.md), and [staging instructions](docs/DEPLOYMENT.md). The [feature/launch matrix](docs/FEATURE-STATUS.md) lists implemented behavior and remaining work.
 

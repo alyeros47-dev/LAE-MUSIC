@@ -192,3 +192,7 @@ require('./referral-demo.test.cjs');
 require('./description-studio.test.cjs');
 
 require('./artist-reference-repair.test.cjs');
+
+require('./controlled-publishing.test.cjs');
+
+require('./artist-membership.test.cjs');

@@ -181,18 +181,8 @@ async function api(p, b) {
   );
   assert.equal(cover.status, 200);
   assert.equal(cover.headers.get("content-type"), "image/png");
-  const code = crypto.randomBytes(18).toString("hex").toUpperCase();
-  await pool.query(
-    "INSERT INTO generation_records(creator_id,code_hash,model,title,lyrics,style) VALUES($1,$2,$3,$4,$5,$6)",
-    [
-      artist,
-      crypto.createHash("sha256").update(code).digest("hex"),
-      "isolated-fixture",
-      "Code verified song",
-      "Owned original fixture lyrics",
-      "Highlife",
-    ],
-  );
+  const generated=await require('/app/lae-studio-song-fixture.cjs').seedStudioSong(pool,artist,'Code verified song',audio);
+  const code=generated.uploadCode;
   const upload = {
     title: "Code verified song",
     genre: "Highlife",

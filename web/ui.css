@@ -1213,6 +1213,7 @@
     margin:12px 0
   }
   .site-footer{
+    flex-wrap:wrap;
     border-top:1px solid #272e23;
     padding:24px 42px;
     display:flex;
@@ -2199,3 +2200,7 @@ h1,h2,h3,.eyebrow,.panel p{overflow-wrap:anywhere}.page-heading>div{min-width:0}
 .song-share-action{margin-top:10px}.song-share-action button{min-height:44px}.song-row [data-song-share]{flex-shrink:0;min-height:44px}#share-song-url{width:100%;min-width:0;box-sizing:border-box}#action-content:has(#share-song-url) .row-actions{margin:16px 0}#action-content:has(#share-song-url) a,#action-content:has(#share-song-url) button{min-height:44px}@media(max-width:600px){.song-row:has([data-song-share]){flex-wrap:wrap}.song-row [data-song-share]{margin-left:auto}}
 
 .social-sign-in{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}.social-sign-in button{min-height:44px;flex:1 1 180px}.social-connections{margin-top:24px}.auth-panel input[readonly]{opacity:.85}
+
+/* Sound recovery stays reachable on phones, including a restored zero volume. */
+.player-tools #mute{display:inline-grid;width:44px;height:44px;min-width:44px;min-height:44px}
+.player-identity #playback-sound-status{display:block;color:var(--lime);font-size:10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

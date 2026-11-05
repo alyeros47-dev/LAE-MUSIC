@@ -78,7 +78,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   const order=await commerce.create(extraBuyer.id,'extra_generation_key_123',{kind:'studio_generation',plan:'starter'});assert.equal(Number(order.amount_minor),300);await settle(order);await commerce.ingest(...signed('extra_duplicate_event','payment_'+sequence));
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM studio_purchased_credits WHERE artist_id=$1',[extraBuyer.id])).rows[0].n,1);
   const subscription=(await pool.query("SELECT id FROM artist_subscriptions WHERE artist_id=$1 AND starts_at<=NOW() AND expires_at>NOW()",[extraBuyer.id])).rows[0];
-  for(let i=0;i<2;i++)await pool.query('INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)',[subscription.id,extraBuyer.id,'included_fixture_'+i]);
+  for(let i=0;i<3;i++)await pool.query('INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)',[subscription.id,extraBuyer.id,'included_fixture_'+i]);
   let providerCalls=0;const runner=sonicRunner(extraBuyer.id,async url=>{if(url.endsWith('/create')){providerCalls++;return {ok:true,status:200,json:async()=>({task_id:'paid_extra_provider_task_'+providerCalls})};}return {ok:true,status:200,json:async()=>({status:'failed'})};});
   const lyrics={title:'Paid credit fixture',lyrics:'An isolated test song proving an additional verified credit is safely reserved.',style:'Highlife guitars'};
   const created=await runner('/api/music/sonic/create',lyrics,'purchased_generation_key_123');assert.equal(created.status,200);const repeated=await runner('/api/music/sonic/create',lyrics,'purchased_generation_key_123');assert.equal(repeated.data.task_id,created.data.task_id);assert.equal(providerCalls,1);
@@ -86,7 +86,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   assert.equal((await runner('/api/music/sonic/status?id='+created.data.task_id)).data.status,'failed');assert.equal((await runner('/api/music/sonic/status?id='+created.data.task_id)).data.status,'failed');
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM artist_studio_usage WHERE purchase_order_id=$1',[order.id])).rows[0].n,0);
   const retry=await runner('/api/music/sonic/create',lyrics,'purchased_generation_retry_123');assert.equal(retry.status,200);assert.equal(providerCalls,2);
-  const allowance=(await api('/api/artist/studio-allowance',{cookie:extraBuyer.cookie})).data;assert.equal(allowance.used_generations,2);assert.equal(allowance.purchased_generations_remaining,0);
+  const allowance=(await api('/api/artist/studio-allowance',{cookie:extraBuyer.cookie})).data;assert.equal(allowance.used_generations,3);assert.equal(allowance.purchased_generations_remaining,0);
  });
  await t.test('legacy reporting cannot generate referral earnings from active or registered accounts',async()=>{
   await pool.query('UPDATE creators SET referred_by=$1 WHERE id=$2',[partner.id,buyer.id]);
