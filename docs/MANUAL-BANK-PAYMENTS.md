@@ -36,9 +36,11 @@ Approval, receipt, original-currency presentment, purchased entitlement/credit, 
 
 Task 1 bank receipts use the shared commission/attribution functions. Task 2 now supersedes the new-allocation policy: all new individual commissions are held, verified referrals remain recorded and earlier earned records retain their original rules. See `AFFILIATE-REVENUE-FRAMEWORK.md`. No payout is enabled. Incoming bank approval does not release streaming royalties, invent USD cash from NGN receipts, verify treasury conversion, execute withdrawals or send automatic refunds. Existing complaint/refund-review mechanisms remain available; actual bank refunds and royalty funding still require their respective verified financial workflows.
 
-## Official account setup — still pending
+## Official account setup — supplied for the development candidate
 
-`config/manual-bank-payments.json` is deliberately disabled with `account: null`. No bank details were invented. Supply the official bank name, business account name, account number, account currency and country. The current platform merchant scope supports Nigerian business accounts in NGN or USD. Other account currencies remain unavailable until explicitly implemented and reviewed.
+The owner supplied these official business payment instructions: **Moniepoint Microfinance Bank**, **LAE MUSIC VENTURE**, account **3008179797**, **NGN**, **Nigeria (NG)**. The development candidate now enables this complete configuration with the existing 24-hour invoice window. This is public beneficiary information, not a bank login or payment credential. Production has not been configured, merged or deployed.
+
+The current platform merchant scope supports Nigerian business accounts in NGN or USD. Other account currencies remain unavailable until explicitly implemented and reviewed.
 
 Owner-provided settings may be stored in that configuration or supplied through the host's secure `MANUAL_BANK_PAYMENTS_JSON` environment setting. The document has `enabled`, `invoice_hours` and `account` fields. The account object requires `bank_name`, `account_name`, `account_number`, `currency` and `country`. Do not put bank login credentials, PINs or authentication tokens in it. Incomplete/invalid settings keep collection disabled and hide the customer payment buttons.
 
@@ -54,7 +56,7 @@ Rehearse the migration on an isolated recovery/staging copy before any approved 
 
 ## Verification
 
-- `npm run test:manual-bank`: configuration stays closed without official details, receipt validation and owner/finance/MFA policy.
+- `npm run test:manual-bank`: complete approved beneficiary configuration, test-book isolation, explicit host disable, incomplete configuration staying closed, receipt validation and owner/finance/MFA policy.
 - `LAE_DB_TESTS=true DATABASE_URL=<guarded local lae_music_ci URL> npm run test:manual-bank:postgres`: all 12 products, exact quoted amounts, no early activation, ownership/CSRF protection, wrong amounts/currency, duplicate evidence, concurrent retries, immutable history, rejection, atomic rollback, policy-correct pending referral records and isolated live-book compatibility.
 - With the same guarded database and installed Chromium, `npm run test:manual-bank:browser`: real mobile 390px and desktop 1440px customer and admin screens, receipt upload, private image link, bank approval, $1.80 Premium activation, retained history and accessibility. External provider fetch is forbidden.
 - Existing application unit checks, membership/migration/funded-renewal checks and the 249-check PostgreSQL compatibility suite passed. The shared gateway flow retains its original presentment-before-team-booking sequence.
@@ -65,4 +67,9 @@ No paid music/text API calls, customer credits or real payments were used. The f
 
 ## Readiness
 
-Task 1 code is ready for review and isolated integration testing. **Real bank collection is not ready to enable until the official account details are supplied, the configured flow is inspected and release/migration requirements are met.** Guest checkout remains outside this authenticated manual-payment implementation. Task 1 hosted checks passed Platform run 42104901430 and the automatically triggered Music DNA run 42104901445. Task 2 implements the subsequently approved affiliate framework; its report supersedes the earlier unresolved affiliate scope. Production configuration/recovery verification and explicit owner approval remain required. Keep the PR draft.
+Task 1 code is ready for review and isolated integration testing. **The official account details are now supplied and configured in the development candidate. Real bank collection still requires inspecting the configured flow, completing production configuration/recovery/migration checks and explicit deployment approval.** Guest checkout remains outside this authenticated manual-payment implementation. Task 1 hosted checks passed Platform run 42104901430 and the automatically triggered Music DNA run 42104901445. Task 2 implements the subsequently approved affiliate framework; its report supersedes the earlier unresolved affiliate scope. Production configuration/recovery verification and explicit owner approval remain required. Keep the PR draft.
+
+
+## Supplied beneficiary configuration verification
+
+The focused configuration test checks the exact owner-supplied name, ten-digit account number, bank, NGN currency, NG country and unchanged invoice window. Staging remains in test books; an explicit host-side disable still takes precedence. Existing manual-bank database and browser tests use fictional receipts and never initiate a bank transfer. No package price, allowance or commission rule changes accompany this configuration update.

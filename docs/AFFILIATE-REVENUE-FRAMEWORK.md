@@ -41,7 +41,7 @@ Statement recognition is not cash settlement. Independent funding evidence, trea
 - `migrations/030-affiliate-participation-revenue.sql`: additive participation, pending purchases, receipt policy overlays and allocation guards. Existing migrations/checksums and earned records stay intact.
 - Affiliate access, commerce, manual/shared receipt fulfillment, Premium, funded annual renewals and statements use the new policy while preserving historical versions.
 - Customer affiliate screens explain voluntary joining and pending allocations. Obsolete commission demos/rate promises are hidden; internal historical fixtures remain clearly labelled.
-- The Task 1 bank-transfer workflow is preserved. Manual collection remains disabled until official account details are supplied.
+- The Task 1 bank-transfer workflow is preserved. Official Moniepoint beneficiary details are supplied and enabled in the development candidate; production activation remains subject to release verification and explicit approval.
 - No package price, generation allowance, paid listening duration, Music DNA, Gospel configuration, studio provider, voice feature, song file or player behavior is changed.
 
 ## Verification
@@ -62,6 +62,6 @@ Local results: 1,132 application checks passed (one existing optional skip), 249
 
 This is a reviewable implementation of the approved framework with allocations deliberately inactive. To enable new commissions, the owner must approve the individual percentages within 30%, detailed team eligibility/settlement rules, artist-package/extra-generation rules, and treatment of purchases recorded during the hold.
 
-Incoming manual payment activation does not require completing Monnify onboarding. It does require official business bank details, the existing fresh FX service for NGN instructions, an authorized bank reviewer, and approved release/configuration/migration verification. Guest pay-before-signup checkout is not included in Task 1's authenticated payment implementation. Independent royalty cash-funding verification and payouts remain separate dependencies.
+Incoming manual payment activation does not require completing Monnify onboarding. The official business bank details are supplied. It still requires the existing fresh FX service for NGN instructions, an authorized bank reviewer, and approved release/configuration/migration verification. Guest pay-before-signup checkout is not included in Task 1's authenticated payment implementation. Independent royalty cash-funding verification and payouts remain separate dependencies.
 
 Production is unchanged. Keep PR #27 draft; do not merge/deploy without explicit owner approval. Rehearse the exact additive candidate against an isolated recovery copy before a production release. Disable new bank instructions to stop collection; preserve submitted invoices and all financial history. A compatible rollback must retain the migration inventory and stop new fulfillment rather than re-enable superseded commission rules.
