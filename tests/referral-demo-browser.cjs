@@ -8,6 +8,7 @@ const AxeBuilder=require('@axe-core/playwright').default,{runtime}=require('./ru
  const demo=require('../lib/referral-demo'),report={demo:true,totals:{direct_minor:250,team_minor:0},rows:[]};
  await page.route('**/api/**',async route=>{const req=route.request(),u=new URL(req.url()),p=u.pathname,send=(body,status=200)=>route.fulfill({status,contentType:'application/json',body:JSON.stringify(body)});let data={};if(req.method()!=='GET'){writes.push(p);assert(p.startsWith('/api/platform/referral-demo/'),'No real account, provider, credit or purchase POST is allowed');data=req.postDataJSON();assert.equal(data.confirm_demo,true);}
  if(p==='/api/plans')return send({plans:require('../lib/plans'),referralDemoAvailable:true,paymentEnabled:false});
+ if(p==='/api/platform/partners/eligibility')return send({eligible:real,activation_needed:false,qualifying_purchase:real?{expires_at:'2099-01-01'}:null});
  if(p==='/api/platform/session')return send({artist:real?{id:7,display_name:'Real Partner',email:'partner@fixture.invalid'}:null,listener:null,admin:false});
  if(p==='/api/platform/capabilities')return send({affiliate_demo:true,payments:false});if(p==='/api/platform/currencies')return send(require('../lib/currency').options());if(p==='/api/platform/pricing')return send({});
  if(p==='/api/platform/referral-demo/context')return send({demo:true,referrer:'Real Partner',quote:require('../lib/partner-practice').quote(u.searchParams.get('plan'))});
