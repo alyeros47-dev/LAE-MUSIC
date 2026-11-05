@@ -16,7 +16,7 @@ The new regression assertions failed on the original code. Native-media browser 
 
 ## Repair
 
-- Keep a labelled, 44px speaker button visible on phones, tablets and desktops.
+- Keep a labelled, 44px speaker button visible on phones, tablets and desktops. New player code also works with a cached older shell: the added status span is optional, and the old class that hid the speaker is removed at runtime.
 - Show a separate “Sound off · Tap the speaker” status without hiding buffering or stream errors.
 - Treat either `muted` or zero volume as sound off. Unmute clears mute and restores the last positive volume, or the existing 80% default if an older preference has no recovery level.
 - Synchronize compact/expanded sliders after restore and either control's input. Remember explicit mute and the last positive level across reloads.

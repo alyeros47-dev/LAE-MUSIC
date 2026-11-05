@@ -70,10 +70,10 @@ export class MusicPlayer {
   updateMute() {
     if (this.audio.volume > 0) this.lastAudibleVolume = this.audio.volume;
     const off = this.audio.muted || this.audio.volume === 0;
-    const button = $('mute'); button.setAttribute('aria-label', off ? 'Unmute' : 'Mute');
+    const button = $('mute'); button.classList.remove('optional'); button.setAttribute('aria-label', off ? 'Unmute' : 'Mute');
     button.setAttribute('aria-pressed', off); button.title = off ? 'Turn sound on' : 'Mute sound'; button.textContent = off ? '🔇' : '🔊';
     $('volume').value = $('expanded-volume').value = this.audio.volume;
-    const status = $('playback-sound-status'); status.hidden = !off; status.textContent = off ? 'Sound off · Tap the speaker' : '';
+    const status = $('playback-sound-status'); if (status) { status.hidden = !off; status.textContent = off ? 'Sound off · Tap the speaker' : ''; }
   }
   async setTracks(tracks, index = 0) { if(this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
   add(track) { this.queue.tracks.push(safeTrack(track)); this.toast('Added to your queue'); this.renderQueue(); this.save(); }

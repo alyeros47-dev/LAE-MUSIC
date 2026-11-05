@@ -41,3 +41,11 @@ test('a corrupt recovery volume uses a safe default and sound hints do not hide 
  const p=new MusicPlayer({api:async()=>{throw Error('No stream is requested');},toast(){},onLike(){},onDetail(){}});p.message('Audio unavailable. Press play to retry.');p.updateMute();assert.equal(d.get('playback-status').textContent,'Audio unavailable. Press play to retry.');assert.equal(d.get('playback-sound-status').hidden,false);
  d.get('mute').onclick();assert.equal(p.audio.volume,.8);assert.equal(p.audio.muted,false);assert.equal(d.get('playback-status').textContent,'Audio unavailable. Press play to retry.');
 });
+
+test('new player code remains usable with a previously cached shell lacking the new sound-status span',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom(),lookup=document.getElementById;
+ document.getElementById=id=>id==='playback-sound-status'?null:lookup(id);
+ d.storage.set('lae_playback_v2',JSON.stringify({tracks:[{id:7,title:'Cached shell fixture'}],index:0,volume:0}));
+ const p=new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast(){},onLike(){},onDetail(){}});
+ assert.equal(d.get('mute').getAttribute('aria-label'),'Unmute');d.get('mute').onclick();assert.equal(p.audio.volume,.8);assert.equal(p.audio.muted,false);
+});
