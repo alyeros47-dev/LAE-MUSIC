@@ -27,6 +27,23 @@ test('approved Premium budget recognizes 30/35/35 once, funds artists only throu
  }
  assert.deepEqual(totals,{affiliate:54,artist:63,platform:63,gross:180});assert.equal(await finance.balance(pool,books.platform('affiliate_unallocated','test','USD')),54);assert.equal(await finance.balance(pool,books.platform('platform_income','test','USD')),63);assert.equal(await finance.balance(pool,books.platform('recognized','test','USD')),0);assert.equal(await finance.balance(pool,books.platform('commission_deferred_cost','test','USD')),0);assert.equal(await require('../lib/artist-membership').availableRoyalties(pool,artist),0);
  assert.equal((await pool.query('SELECT 1 FROM premium_commissions')).rowCount,0);assert.equal((await pool.query('SELECT 1 FROM premium_quarterly_team_sales')).rowCount,0);assert.equal((await pool.query('SELECT 1 FROM royalty_cash_releases')).rowCount,0);
+ // Adversarial cost classification leaves only seven eligible cents over an annual term.
+ // This is a rounding fixture, not a suggested charge/fee or a production price.
+ const annual=await premium.prepare(listener,key(),{plan:'annual'}),gross=Number(annual.amount_minor),aq=key(),aa=key(),ar='SYNTHETIC-ROUNDING-'+key(),begin=new Date('2025-01-01T00:00:00Z'),end=new Date(begin.getTime()+annual.days*86400000);
+ await pool.query("INSERT INTO payment_checkout_quotes(id,premium_order_id,provider,base_currency,base_minor,charge_currency,charge_minor,expires_at) VALUES($1,$2,'manual_bank_transfer','USD',$3,'USD',$3,NOW()+INTERVAL '1 day')",[aq,annual.id,gross]);
+ await pool.query("INSERT INTO premium_attempts(id,order_id,quote_id,provider,merchant_id,mode,reference,status) VALUES($1,$2,$3,'manual_bank_transfer','synthetic-ledger','test',$4,'paid')",[aa,annual.id,aq,ar]);
+ await require('../lib/transactions').transaction(pool,async db=>{
+  await db.query("INSERT INTO premium_receipts(order_id,provider,merchant_id,payment_id,mode,currency,amount_minor) VALUES($1,'manual_bank_transfer','synthetic-ledger',$2,'test','USD',$3)",[annual.id,ar,gross]);
+  await db.query("INSERT INTO premium_presentments(order_id,quote_id,attempt_id,base_currency,base_minor,charge_currency,charge_minor,usd_equivalent_minor,exchange_rate,conversion_at) VALUES($1,$2,$3,'USD',$4,'USD',$4,$4,'1',(SELECT created_at FROM payment_checkout_quotes WHERE id=$2))",[annual.id,aq,aa,gross]);
+  await finance.transfer(db,'premium:'+annual.id,'premium_verified_sale','USD',gross,books.platform('receivable','test','USD'),books.platform('deferred','test','USD'));
+ });
+ await pool.query('INSERT INTO premium_entitlements(order_id,listener_id,starts_at,expires_at) VALUES($1,$2,$3,$4)',[annual.id,listener,begin,end]);
+ await royalties.costs(key(),{order_id:annual.id,fees_minor:gross-7,tax_minor:0,evidence:'Adversarial synthetic cost classification for the seven-cent annual rounding regression only.'});
+ const small={affiliate:0,artist:0,platform:0};for(let date=new Date(begin);date<end;date.setUTCMonth(date.getUTCMonth()+1)){
+  const month=date.toISOString().slice(0,7),x=await royalties.preview(month,'test','USD');assert.deepEqual(x.issues,[]);assert(x.artist_pool_minor>=0&&x.artist_pool_minor<=x.net_minor);assert(x.platform_minor>=0);small.affiliate+=x.unallocated_affiliate_minor;small.artist+=x.artist_pool_minor;small.platform+=x.platform_minor;
+  await royalties.finalize(key(),{month,mode:'test',currency:'USD',snapshot_hash:x.snapshot_hash,review_note:'Synthetic low-cent annual ledger regression. No payment or payout.'});
+ }
+ assert.deepEqual(small,{affiliate:2,artist:2,platform:3});assert.equal(await finance.balance(pool,books.platform('affiliate_unallocated','test','USD')),56);assert.equal(await finance.balance(pool,books.platform('platform_income','test','USD')),66);assert.equal(await finance.balance(pool,books.platform('recognized','test','USD')),0);
  await assert.rejects(require('../lib/royalty-settlement').createRoyaltySettlement({pool}).release(key(),{statement_id:key()}),e=>e.status===503);
  }finally{global.fetch=fetchBefore;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 });

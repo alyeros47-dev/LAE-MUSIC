@@ -29,7 +29,7 @@ After the existing verified refund, fee and tax adjustments establish eligible r
 
 For $1.80 eligible revenue, this is exactly $0.54 reserved / $0.63 artist pool / $0.63 LAE-MUSIC. The 30% is not assigned between direct affiliates and teams. Artist packages and extra generations do not adopt this Premium revenue split.
 
-The existing integer-cent percentage rounding is retained. An indivisible final cent in the equal remaining split goes to LAE-MUSIC. Term totals are calculated first, then recognized cumulatively over the purchased listening period, avoiding repeated monthly rounding loss. Different policy versions coexist in a statement without rewriting historical terms.
+The existing integer-cent percentage rounding is retained. An indivisible final cent in the equal remaining split goes to LAE-MUSIC. Term totals are calculated first, then recognized cumulatively over the purchased listening period, avoiding repeated monthly rounding loss. Artist recognition follows the already recognized remaining revenue, so even a seven-cent eligible annual balance cannot create an artist cent or a negative platform share in a zero-revenue month. Different policy versions coexist in a statement without rewriting historical terms.
 
 Only eligible listening activity allocates the artist pool. Months without eligible streams carry an undistributed liability; they do not create an artist payment. An existing argument-order defect in that carry journal was corrected and covered with a real PostgreSQL ledger assertion. The new reserved budget has its own unallocated ledger account, never an affiliate's pending/available balance.
 
@@ -56,7 +56,7 @@ Focused commands:
 - `npm run test:affiliate:browser` — Chromium customer journeys at 390px/1440px with accessibility checks, unchecked opt-in, qualifying purchase distinction, same-email access and pending allocation copy.
 - Existing manual-bank, membership/funded-renewal, migration/upgrade and relevant core compatibility suites protect the shared payment/royalty paths.
 
-Local results: 1,131 application checks passed (one existing optional skip), 249 core PostgreSQL compatibility checks passed, 11 historical affiliate-year checks plus the retained historical regression suite passed, 10 current-framework database checks and one finalized-ledger test passed, 9 manual-bank database checks passed, historical membership migration plus 15 membership and 6 composed funding/renewal checks passed, and 11 upgrade checks passed. Both affiliate and actual manual-bank browser journeys passed at 390px/1440px with accessibility checks. Hosted CI status is recorded in the PR completion report. The complete Music DNA and voice/language audits are not manually repeated for this financial change.
+Local results: 1,132 application checks passed (one existing optional skip), 249 core PostgreSQL compatibility checks passed, 11 historical affiliate-year checks plus the retained historical regression suite passed, 10 current-framework database checks and one finalized-ledger test passed, 9 manual-bank database checks passed, historical membership migration plus 15 membership and 6 composed funding/renewal checks passed, and 11 upgrade checks passed. Both affiliate and actual manual-bank browser journeys passed at 390px/1440px with accessibility checks. Hosted CI status is recorded in the PR completion report. The complete Music DNA and voice/language audits are not manually repeated for this financial change.
 
 ## Readiness and pending decisions
 
