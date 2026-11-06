@@ -136,7 +136,7 @@ jobs:
           LAE_LIVE_PAYMENT_UI_VERIFY: "1"
         run: node scripts/verify-live-release.cjs
   existing-service-recovery-rehearsal:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one' || github.ref == 'refs/heads/codex/affiliate-purchase-year')
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_recovery_rehearsal && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/simple-receipt-payments' || github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one' || github.ref == 'refs/heads/codex/affiliate-purchase-year')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
@@ -179,7 +179,7 @@ jobs:
           LAE_VOICE_ARTIST_SHA256: "41ed3aca9f6191b932cc49cb590b2e84714d4b3b8101f2057aed8185052a4b55"
         run: node scripts/inspect-voice-profile.cjs
   existing-service-audit:
-    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one' || github.ref == 'refs/heads/codex/affiliate-purchase-year')
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/simple-receipt-payments' || github.ref == 'refs/heads/codex/premium-platform-release' || github.ref == 'refs/heads/codex/gospel-phase-one' || github.ref == 'refs/heads/codex/affiliate-purchase-year')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -347,3 +347,20 @@ jobs:
         with:
           name: browser-evidence-${{ matrix.browser }}
           path: artifacts/
+
+  pending-bank-inspection:
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/simple-receipt-payments'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - name: Read pending Premium bank payments without changing accounts
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-pending-bank.cjs
