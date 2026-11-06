@@ -40,7 +40,7 @@ async function main() {
   for (let n = 0; n < 10; n++) {
     try {
       const r = await api("/api/platform/capabilities");
-      if (r.status === 200 && r.data.public_artist_trials===false && r.data.manual_bank_payments===true && r.data.offline_listening===true) {
+      if (r.status === 200 && r.data.premium_referrals_enabled===true && r.data.public_artist_trials===false && r.data.manual_bank_payments===true && r.data.offline_listening===true) {
         ready = true;
         break;
       }
