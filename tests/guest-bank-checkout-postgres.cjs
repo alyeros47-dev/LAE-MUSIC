@@ -8,7 +8,7 @@ test('real guest bank purchase precedes registration and activates only the veri
   await pool.query("INSERT INTO currency_rate_snapshots(id,source,as_of,next_update,rates) VALUES($1,'exchangerate-api',NOW()-INTERVAL '1 minute',NOW()+INTERVAL '1 day',$2)",[key(),JSON.stringify({USD:'1',NGN:'1500'})]);
   const api=async(path,body,cookie,k=key(),headers={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),'idempotency-key':k,...headers}});return {status:r.status,data:r.json(),cookie:[r.headers['set-cookie']||[]].flat().map(x=>x.split(';')[0]).join('; '),headers:r.headers};};
   const admin=(await api('/api/admin/login',{password:'GuestBankFixtureOwner1234567'})).cookie;
-  const input={kind:'artist_subscription',plan:'starter',email:'new-artist@guest-fixture.invalid',policy_accepted:true,policy_revision:policy.revision,amount_minor:1};
+  const input={kind:'artist_subscription',plan:'starter',email:'new-artist@guest-fixture.invalid',amount_minor:1};
   let guest,other,invoice,artist,listener;
   const bootstrap=async()=>{const r=await api('/api/platform/guest-payments');assert.equal(r.status,200,JSON.stringify(r.data));assert.match(r.headers['set-cookie'].toString(),/HttpOnly; Secure; SameSite=Lax/);return r.cookie;};
   async function submit(cookie,p){const r=await api('/api/platform/guest-payments/'+p.id+'/submit',{payer_name:'Synthetic payer',transfer_reference:'CLAIM-'+key(),transferred_at:new Date().toISOString()},cookie);assert.equal(r.status,200,JSON.stringify(r.data));}
@@ -84,9 +84,10 @@ test('real guest bank purchase precedes registration and activates only the veri
   await t.test('existing accounts must sign in and malformed or unapproved products cannot create guest orders',async()=>{
    const cookie=await bootstrap();assert.equal((await api('/api/platform/guest-payments',{...input,email:input.email},cookie)).status,409);
    assert.equal((await api('/api/platform/guest-payments',{...input,kind:'studio_generation',email:'new@guest-fixture.invalid'},cookie)).status,400);
-   assert.equal((await api('/api/platform/guest-payments',{...input,policy_accepted:false,email:'new@guest-fixture.invalid'},cookie)).status,409);
+   assert.equal((await api('/api/platform/guest-payments',{...input,policy_accepted:false,email:'new@guest-fixture.invalid'},cookie)).status,201,'Refund acceptance is no longer required');
    const bad=cookie.slice(0,-1)+(cookie.endsWith('0')?'1':'0');assert.equal((await api('/api/platform/guest-payments',input,bad)).status,403);
   });
+  assert.equal((await pool.query('SELECT 1 FROM payment_policy_acceptances')).rowCount,0,'No guest payment or claim fabricates customer consent');
   assert.equal(requests,0);
  }finally{global.fetch=originalFetch;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 });

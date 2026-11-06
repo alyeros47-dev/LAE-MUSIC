@@ -14,7 +14,7 @@ test('manual bank purchases preserve prices, approved entitlement and independen
  async function account(role,name){const r=await api(role==='artist'?'/api/register':'/api/listener/register',{name,email:name+'@manual-bank.invalid',country:'Nigeria',password:'ManualBankFixture1234',confirmPassword:'ManualBankFixture1234',plan:'starter'});assert.equal(r.status,201,JSON.stringify(r.data));return {id:(r.data.user||r.data.listener).id,cookie:r.cookie};}
  const a=await account('artist','first'),b=await account('artist','second'),listener=await account('listener','listen');
  const prepare=async(owner,kind='artist_subscription',plan='starter')=>{const r=await api('/api/platform/purchases',{kind,plan},owner.cookie);assert.equal(r.status,201,JSON.stringify(r.data));return r.data.order;};
- const start=async(role,owner,order)=>{const r=await api('/api/platform/manual-payments?role='+role,{order_id:order.id,policy_accepted:true,policy_revision:policy.revision,amount_minor:1},owner.cookie);assert.equal(r.status,201,JSON.stringify(r.data));return r.data.payment;};
+ const start=async(role,owner,order)=>{const r=await api('/api/platform/manual-payments?role='+role,{order_id:order.id,amount_minor:1},owner.cookie);assert.equal(r.status,201,JSON.stringify(r.data));return r.data.payment;};
  const submit=async(role,owner,m)=>{const r=await api('/api/platform/manual-payments/'+m.id+'/submit?role='+role,{payer_name:'Fixture payer',transfer_reference:'Customer-claim-'+key(),transferred_at:new Date().toISOString()},owner.cookie);assert.equal(r.status,200,JSON.stringify(r.data));return r.data.payment;};
  const details=(m,extra={})=>({decision:'approved',receipt_verified:true,bank_reference:'BANK-ENTRY-'+key(),received_at:new Date().toISOString(),received_amount:(m.charge_minor/100).toFixed(2),currency:m.charge_currency,note:'Independently checked fixture bank receipt.',...extra});
  const approve=async(m,payload=details(m),k=key())=>api('/api/platform/admin/manual-payments/'+m.id+'/review',payload,admin,k);
@@ -76,6 +76,7 @@ test('manual bank purchases preserve prices, approved entitlement and independen
   await live.review({id:'local-fixture-owner',role:'owner',source:'shared_key'},p.id,key(),details(p));assert.equal((await pool.query('SELECT mode FROM payment_presentments WHERE order_id=$1',[o.id])).rows[0].mode,'live');assert.equal(await require('../lib/artist-membership').availableRoyalties(pool,who.id),0);
   assert.equal(require('../lib/payments/runtime').checkoutRuntime({pool,env:{NODE_ENV:'production'}}).enabled(),false);
  });
+ assert.equal((await pool.query('SELECT 1 FROM payment_policy_acceptances')).rowCount,0,'No manual bank purchase fabricates customer consent');
  assert.equal(requests,0);
  }finally{global.fetch=realFetch;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 });

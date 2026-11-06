@@ -1,5 +1,4 @@
 import {openBankPayment,bankHistory} from './manual-bank-payments.js';
-import { refundConditions } from "./financial-policy.js";
 const dateTime = (value) =>
   new Date(value).toLocaleString(undefined, {
     dateStyle: "medium",
@@ -125,13 +124,13 @@ export async function premiumPage(view, url, ctx) {
     route,
     currencyDisplay,
   } = ctx;
-  const policy = await api("/api/platform/financial-policy");
   const plans = await api("/api/platform/premium/plans"),
     complaintData = session.listener
       ? await api("/api/platform/premium/complaints")
       : { complaints: [] },
     data = session.listener ? await api("/api/platform/premium/status") : null,
     approved = plans.price_status === "approved";
+  const policy = await api("/api/platform/financial-policy");
   const manualEnabled=plans.manual_bank?.enabled===true;
   const bankData=session.listener&&plans.manual_bank?await api('/api/platform/manual-payments?role=listener'):{payments:[]};
   const bankOrders=new Set(bankData.payments.map(p=>p.listener_order_id));
@@ -169,9 +168,6 @@ export async function premiumPage(view, url, ctx) {
             )
           : "") +
         `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="${manualEnabled?'manual_bank':'checkout'}" data-premium-plan="${e(p.code)}" ${approved && (manualEnabled||plans.providers.length > 0) ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
-        notice(policy.premium) +
-        notice(policy.complaints) +
-        notice(policy.royalties) +
         currencyDisplay.info() +
         notice(
           "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
@@ -239,7 +235,7 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days * 24} hours · manual renewal only.</p><form><label>Affiliate ID, if referred<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><p>No registration reward. New verified purchases retain the original referral. The total affiliate/team budget is 30%; individual allocations remain pending until rules are approved. Refunded or disputed purchases require reconciliation.</p><button type="submit" class="button">${manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days} days · renew when needed.</p><form><label>Referral ID (optional)<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><button type="submit" class="button">${manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {
@@ -295,14 +291,10 @@ export async function premiumPage(view, url, ctx) {
                 order_id: button.dataset.premiumCheckout,
                 ...b,
               });
-              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>USD base price: ${e(amount(q.base_minor))}</p><p>Exchange rate: 1 USD = ${e(q.rate)} ${e(q.charge_currency)} · ${e(dateTime(q.conversion_at))}</p><p>Quote expires ${e(dateTime(q.expires_at))}. No money has been charged.</p><form>${refundConditions(policy, e, "listener")}<button type="submit" class="button">Create sandbox reference</button><p class="form-status" role="status"></p></form>`;
+              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>Pay by ${e(dateTime(q.expires_at))}.</p><form><button type="submit" class="button">Create sandbox reference</button><p class="form-status" role="status"></p></form>`;
               bindForm(root.querySelector("form"), async () => {
                 const payload = {
                   quote_id: q.id,
-                  policy_revision: policy.revision,
-                  policy_accepted: root.querySelector(
-                    '[name="policy_accepted"]',
-                  ).checked,
                 };
                 await api("/api/platform/premium/checkout", "POST", payload, {
                   headers: {

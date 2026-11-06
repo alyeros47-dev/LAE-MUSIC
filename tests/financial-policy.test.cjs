@@ -18,39 +18,13 @@ test("approved financial conditions protect Premium expiration, failed-credit ru
     [8, 23, 60, 121, 180, 588],
   );
 });
-test("checkout requires explicit current-policy confirmation and rejects stale or truthy client claims", () => {
-  for (const input of [
-    undefined,
-    {},
-    { policy_accepted: "true", policy_revision: policy.disclosure().revision },
-    { policy_accepted: true, policy_revision: "old" },
-  ])
-    assert.throws(
-      () => policy.confirmation(input),
-      (e) => e.status === 409,
-    );
-  assert.equal(
-    policy.confirmation({
-      policy_accepted: true,
-      policy_revision: policy.disclosure().revision,
-    }).policy_accepted,
-    true,
-  );
-  const config = require("../config/financial-policy.json"),
-    original = config.status;
-  try {
-    config.status = "draft";
-    assert.throws(
-      () =>
-        policy.confirmation({
-          policy_accepted: true,
-          policy_revision: config.revision,
-        }),
-      (e) => e.status === 503,
-    );
-  } finally {
-    config.status = original;
-  }
+test("checkout selects the approved server policy without requiring or claiming customer consent", () => {
+  for(const input of [undefined,{}, {policy_accepted:false}, {policy_accepted:'true',policy_revision:'stale'}])assert.deepEqual(policy.confirmation(input),{policy_revision:policy.disclosure().revision});
+  const config=require('../config/financial-policy.json'),original=config.status;try{config.status='draft';assert.throws(()=>policy.confirmation(),e=>e.status===503);}finally{config.status=original;}
+});
+test("the compatibility checkout hook retains the policy catalogue without inventing acceptance records",async()=>{
+ const calls=[],db={query:async(sql,args)=>{calls.push(sql);return {rows:sql.startsWith('SELECT document_hash')?[{document_hash:policy.disclosure().document_hash}]:[],rowCount:1};}};
+ await policy.accept(db,'artist','fixture-order','fixture-user');assert(calls.some(s=>s.startsWith('INSERT INTO financial_policy_catalogs')));assert(!calls.some(s=>s.includes('payment_policy_acceptances')));
 });
 test("voluntary full artist refunds require an unused future term, with no invented partial benefit valuation", () => {
   const request = {

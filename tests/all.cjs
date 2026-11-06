@@ -202,3 +202,5 @@ require('./manual-bank-payments.test.cjs');
 require('./affiliate-framework.test.cjs');
 
 require('./studio-capability-configuration.test.cjs');
+
+require('./payment-ui-copy.test.cjs');

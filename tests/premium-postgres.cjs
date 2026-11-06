@@ -199,22 +199,13 @@ module.exports = async (t, { pool }) => {
         provider: "paystack",
         currency: "USD",
       });
-      await assert.rejects(
-        service.checkout(user.id, key(), { quote_id: checkoutQuote.id }),
-        (e) => e.status === 409,
-      );
+
       assert.equal(calls, before);
       await Promise.all([
         service.checkout(user.id, key(), {
-          policy_accepted: true,
-          policy_revision: require("../lib/financial-policy").disclosure()
-            .revision,
           quote_id: checkoutQuote.id,
         }),
         service.checkout(user.id, key(), {
-          policy_accepted: true,
-          policy_revision: require("../lib/financial-policy").disclosure()
-            .revision,
           quote_id: checkoutQuote.id,
         }),
       ]);
@@ -225,8 +216,7 @@ module.exports = async (t, { pool }) => {
           [order.id],
         )
       ).rows;
-      assert.equal(consent.length, 1);
-      assert.equal(String(consent[0].account_id), String(user.id));
+      assert.equal(consent.length, 0, 'Premium checkout does not claim refund consent');
       const a = (
         await pool.query("SELECT * FROM premium_attempts WHERE order_id=$1", [
           order.id,
