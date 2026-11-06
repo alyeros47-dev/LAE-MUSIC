@@ -22,7 +22,7 @@
     "test:membership:postgres": "node tests/artist-membership-migration.cjs && node tests/artist-membership-postgres.cjs && node tests/artist-membership-integration-postgres.cjs",
     "test:membership:browser": "node tests/artist-membership-browser.cjs",
     "test:manual-bank": "node --test tests/manual-bank-payments.test.cjs",
-    "test:manual-bank:postgres": "node tests/manual-bank-receipt-migration.cjs && node tests/manual-bank-payments-postgres.cjs",
+    "test:manual-bank:postgres": "node tests/manual-bank-receipt-migration.cjs && node tests/manual-bank-payments-postgres.cjs && node tests/confirmed-premium-approval.cjs",
     "test:manual-bank:browser": "node tests/manual-bank-payments-browser.cjs",
     "test:affiliate:framework": "node --test tests/affiliate-framework.test.cjs",
     "test:affiliate:framework:postgres": "node tests/affiliate-framework-postgres.cjs && node tests/affiliate-revenue-ledger-postgres.cjs",

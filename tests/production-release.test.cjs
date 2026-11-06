@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "fd11289e70068cf9c3547506ae9efe05228509c4";
+  base = "371d4cb16a51874bb77b18f9906ea1b4f388307d";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -113,10 +113,10 @@ function fixture(
       else if (p.includes("/branches/"))
         data = {
           branch: {
-            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-still-hill-b4e5d5cs",
+            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-cold-mud-b4ng61j2",
             project_id: PROJECT,
             parent_id: SOURCE,
-            name: "lae-release-42133118674-backup",
+            name: "lae-release-42242241295-backup",
             expires_at: expiredBackup ? "2000-01-01T00:00:00Z" : "2100-01-01T00:00:00Z",
           },
         };
@@ -125,13 +125,13 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/31"))
+      if (p.endsWith("/pulls/32"))
         data = {
           merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/payment-ui-copy"))
+      else if (p.endsWith("/git/ref/heads/codex/simple-receipt-payments"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
         data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };
@@ -248,7 +248,7 @@ test("release settings retain approved media hosts and reject unexpected live-mo
   );
 });
 
-test("PR 31 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
+test("PR 32 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
   for (const [mode, options] of [["plan", {oldBackup:true}], ["plan", {expiredBackup:true}], ["plan", {movedBase:true}], ["deploy", {unmergedPR:true}]]) {
     const f=fixture(mode, options);
     await assert.rejects(f.run());

@@ -26,6 +26,21 @@ on:
         required: false
         type: string
         default: ""
+      confirmed_premium_reference:
+        description: Exact LAE reference for one independently owner-verified bank deposit
+        required: false
+        type: string
+        default: ""
+      confirmed_premium_minor:
+        description: Exact owner-confirmed NGN amount in kobo
+        required: false
+        type: string
+        default: ""
+      owner_confirmed_bank_receipt:
+        description: Owner explicitly confirmed this identified deposit in the company bank account
+        required: false
+        type: boolean
+        default: false
       recovery_backup_branch:
         description: "Optional previously created owned backup branch; requires its original workflow run ID"
         required: false
@@ -98,7 +113,7 @@ jobs:
           LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
         run: npm run test:dna
   existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/payment-ui-copy' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
+    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/simple-receipt-payments' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
@@ -364,3 +379,26 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: node scripts/inspect-pending-bank.cjs
+
+  confirm-one-premium:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'alyeros47-dev/LAE-MUSIC' && inputs.existing_service_audit && inputs.owner_confirmed_bank_receipt && inputs.confirmed_premium_reference != '' && (github.ref == 'refs/heads/codex/simple-receipt-payments' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: lae-owner-confirmed-premium-payment
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --omit=dev
+      - name: Approve only the identified owner-verified receipt through existing admin authentication
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_OWNER_CONFIRMED_BANK_RECEIPT: ${{ inputs.owner_confirmed_bank_receipt }}
+          LAE_CONFIRMED_PAYMENT_REFERENCE: ${{ inputs.confirmed_premium_reference }}
+          LAE_CONFIRMED_PAYMENT_MINOR: ${{ inputs.confirmed_premium_minor }}
+        run: node scripts/approve-confirmed-premium.cjs
