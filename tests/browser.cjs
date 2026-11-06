@@ -210,6 +210,7 @@ function wav(){const length=8000*90*2,b=Buffer.alloc(44+length);b.write('RIFF');
   assert(await page.evaluate(()=>window.__microphoneStopped));assert(await voiceSave.isDisabled());
   await page.locator('#studio-voice-consent').check();assert.equal(await voiceSave.isDisabled(),false);
   await voiceSave.click();await page.getByText('Fixture storage unavailable; training was not started.',{exact:true}).waitFor();
+  await page.waitForFunction(()=>document.getElementById('studio-save-voice')?.disabled===false); // The error message appears before the existing asynchronous profile recheck finishes.
   assert.equal(voiceTrains,0);assert.equal(await voiceSave.isDisabled(),false);assert.equal(await page.locator('#studio-voice-preview').isHidden(),false);
   voicePutFails=false;await voiceSave.click();await page.getByText('Your singing voice is ready. Select “Use my saved voice profile” to use it.',{exact:true}).waitFor();
   assert.equal(voicePuts,2);assert.equal(voiceTrains,1);assert.equal(await page.locator('#lyrics-studio-form [name=voice] option[value=custom]').isDisabled(),false);assert.equal(await page.getByLabel('Use my saved voice profile',{exact:true}).isDisabled(),false);
