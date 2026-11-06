@@ -113,10 +113,10 @@ function fixture(
       else if (p.includes("/branches/"))
         data = {
           branch: {
-            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-cold-mud-b4ng61j2",
+            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-wandering-mud-b44932au",
             project_id: PROJECT,
             parent_id: SOURCE,
-            name: "lae-release-42242241295-backup",
+            name: "lae-release-42264275595-backup",
             expires_at: expiredBackup ? "2000-01-01T00:00:00Z" : "2100-01-01T00:00:00Z",
           },
         };
