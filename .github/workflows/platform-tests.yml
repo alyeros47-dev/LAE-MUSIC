@@ -98,7 +98,7 @@ jobs:
           LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
         run: npm run test:dna
   existing-production-release:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/gospel-phase-one' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
+    if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/affiliate-purchase-year' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
@@ -128,7 +128,7 @@ jobs:
           LAE_RELEASE_COMMIT_SHA: ${{ inputs.production_commit_sha }}
           LAE_RELEASE_CI_RUN: ${{ inputs.production_ci_run }}
         run: node scripts/release-existing-service.cjs
-      - name: Verify live assets, registration, login, free allowances and original music
+      - name: Verify paid access, offline configuration, manual channel and preserved music
         if: inputs.production_release_mode == 'deploy'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}

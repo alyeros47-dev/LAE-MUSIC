@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "706ee59ec4fe07594f40e30dcfab49cd4ba0901b";
+  base = "7cb860cb6082375268326396dcd5701a2d05f090";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -48,7 +48,7 @@ function fixture(
       assert(p.startsWith("/v1/services/" + ID));
       if (opt.method === "PUT") {
         assert(
-          /\/env-vars\/(LAE_ARTIST_TEST_ACCESS|GENERATED_MEDIA_ALLOWED_HOSTS|STUDIO_RELEASE_WORKER_ENABLED)$/.test(
+          /\/env-vars\/(LAE_ARTIST_STUDIO_TESTING|OFFLINE_LICENSE_PRIVATE_KEY|GENERATED_MEDIA_ALLOWED_HOSTS|STUDIO_RELEASE_WORKER_ENABLED)$/.test(
             p,
           ),
         );
@@ -113,10 +113,10 @@ function fixture(
       else if (p.includes("/branches/"))
         data = {
           branch: {
-            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-spring-night-b4y9h9xp",
+            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-still-hill-b4e5d5cs",
             project_id: PROJECT,
             parent_id: SOURCE,
-            name: "lae-release-41141460115-backup",
+            name: "lae-release-42133118674-backup",
             expires_at: expiredBackup ? "2000-01-01T00:00:00Z" : "2100-01-01T00:00:00Z",
           },
         };
@@ -125,13 +125,13 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/12"))
+      if (p.endsWith("/pulls/27"))
         data = {
           merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/gospel-phase-one"))
+      else if (p.endsWith("/git/ref/heads/codex/affiliate-purchase-year"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
         data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };
@@ -178,7 +178,8 @@ test("production plan is read-only, preserves secrets and identifies only approv
   const f = fixture("plan"),
     r = await f.run();
   assert(f.calls.every((x) => x.method === "GET"));
-  assert.equal(r.payments_enabled, false);
+  assert.equal(r.gateway_payments_enabled, false);
+  assert.equal(r.manual_bank_payments_enabled,true);
   assert.equal(r.service_id, ID);
   assert(!JSON.stringify(r).includes("private-"));
   assert(!r.feature_keys_to_update.includes("LAE_ARTIST_TEST_ACCESS"));
@@ -190,6 +191,8 @@ test("production preparation updates individual feature keys and retains databas
   assert.equal(f.env.LAE_ARTIST_TEST_ACCESS, undefined);
   assert.equal(f.env.R2_SECRET_ACCESS_KEY, "private-r2-fixture");
   assert.equal(f.env.STUDIO_RELEASE_WORKER_ENABLED, "true");
+  assert.equal(f.env.LAE_ARTIST_STUDIO_TESTING,"0");
+  assert(require("../lib/offline-listening").signing(f.env.OFFLINE_LICENSE_PRIVATE_KEY));
   assert(!f.calls.some((x) => x.method === "POST"));
   assert(f.env.GENERATED_MEDIA_ALLOWED_HOSTS.includes("files.musicapi.ai"));
 });
@@ -245,10 +248,15 @@ test("release settings retain approved media hosts and reject unexpected live-mo
   );
 });
 
-test("PR 12 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
+test("PR 27 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
   for (const [mode, options] of [["plan", {oldBackup:true}], ["plan", {expiredBackup:true}], ["plan", {movedBase:true}], ["deploy", {unmergedPR:true}]]) {
     const f=fixture(mode, options);
     await assert.rejects(f.run());
     assert(f.calls.every(call=>call.method==="GET"));
   }
 });
+
+ test('offline preparation preserves a valid key, refuses invalid existing keys and never allows legacy free access',()=>{
+  const first=featureSettings({LAE_ARTIST_STUDIO_TESTING:'1'});assert.equal(first.LAE_ARTIST_STUDIO_TESTING,'0');assert(require('../lib/offline-listening').signing(first.OFFLINE_LICENSE_PRIVATE_KEY));
+  const second=featureSettings({...first});assert.equal(second.OFFLINE_LICENSE_PRIVATE_KEY,first.OFFLINE_LICENSE_PRIVATE_KEY);assert.throws(()=>featureSettings({OFFLINE_LICENSE_PRIVATE_KEY:'invalid-existing-material'}),/refusing to replace/);
+ });
