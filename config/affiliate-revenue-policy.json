@@ -10,9 +10,20 @@
   "premium_remaining_percent": 70,
   "artist_percent_of_remaining": 50,
   "platform_percent_of_remaining": 50,
-  "individual_premium_rates": null,
-  "team_qualification_rules": null,
+  "individual_premium_rates": {
+    "direct": 20,
+    "quarterly_team": 10
+  },
+  "team_qualification_rules": {
+    "depth": 2,
+    "period": "calendar_quarter",
+    "december_cutoff_day": 20,
+    "december_21_31_rollover": true,
+    "requires_qualifying_purchase_and_opt_in": true
+  },
   "artist_and_generation_commission_rules": null,
   "new_individual_allocations_enabled": false,
-  "payouts_enabled": false
+  "payouts_enabled": false,
+  "premium_referral_policy_revision": "premium-opt-in20-team10-2026-11-06",
+  "premium_individual_allocations_enabled": true
 }

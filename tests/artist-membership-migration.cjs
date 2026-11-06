@@ -19,7 +19,7 @@ test('membership migration preserves old purchased quotas, pending order terms a
    await db.query("UPDATE commerce_orders SET status='paid',paid_at=NOW() WHERE id=$1",[legacyExtra]);
   });
   const before=(await pool.query('SELECT * FROM commerce_orders WHERE id=$1',[order])).rows[0];
-  const migrate=require('../lib/migrations').migrate;assert.deepEqual(await migrate(pool),['028-annual-artist-memberships.sql','029-manual-bank-payments.sql','030-affiliate-participation-revenue.sql','031-guest-bank-checkout.sql','032-simple-bank-receipts.sql']);assert.deepEqual(await migrate(pool),[]);
+  const migrate=require('../lib/migrations').migrate;assert.deepEqual(await migrate(pool),['028-annual-artist-memberships.sql','029-manual-bank-payments.sql','030-affiliate-participation-revenue.sql','031-guest-bank-checkout.sql','032-simple-bank-receipts.sql','033-approved-premium-referrals.sql']);assert.deepEqual(await migrate(pool),[]);
   const after=(await pool.query('SELECT * FROM artist_subscriptions WHERE id=$1',[sub.id])).rows[0];assert.deepEqual([after.included_generations,after.publish_track_limit],[2,7]);for(const [k,v]of Object.entries(sub))assert.deepEqual(after[k],v,k);
   assert.deepEqual((await pool.query('SELECT * FROM commerce_orders WHERE id=$1',[order])).rows[0],before);
   const terms=(await pool.query('SELECT * FROM membership_order_terms WHERE order_id=$1',[order])).rows[0];assert.deepEqual([terms.included_generations,terms.publish_track_limit,terms.revision],[6,12,'legacy-preserved']);

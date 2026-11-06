@@ -357,3 +357,16 @@ test("post-migration fingerprints filter only new migration entries, preserving 
   assert.deepEqual(history.params,[['022-existing.sql']]);
   await assert.rejects(fingerprint(pool,columns,['duplicate','duplicate']),/Invalid recovery migration/);
 });
+
+test("additive policy revisions preserve all original policy documents and unfiltered business records", async () => {
+  const queries=[];
+  const columns=[{table_name:'creators',column_name:'id'},{table_name:'partner_policy_revisions',column_name:'revision'},{table_name:'partner_policy_revisions',column_name:'document'}];
+  const pool={connect:async()=>({query:async(sql,params)=>{queries.push({sql,params});return {rows:sql.includes('pg_total_relation_size')?[{bytes:'100'}]:sql.includes('AS checksum FROM')?[{rows:1,checksum:'original-document-fingerprint'}]:[]};},release(){}})};
+  await fingerprint(pool,columns,[],['original-policy']);
+  const policies=queries.find(q=>q.sql.includes('AS checksum FROM')&&q.sql.includes('public."partner_policy_revisions"'));
+  assert(policies.sql.includes('WHERE revision=ANY($1::text[])'));
+  assert(policies.sql.includes('"document"'));assert.deepEqual(policies.params,[['original-policy']]);
+  const business=queries.find(q=>q.sql.includes('AS checksum FROM')&&q.sql.includes('public."creators"'));
+  assert(!business.sql.includes('WHERE'));assert.deepEqual(business.params,[]);
+  await assert.rejects(fingerprint(pool,columns,[],['duplicate','duplicate']),/Invalid recovery policy/);
+});

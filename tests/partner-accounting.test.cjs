@@ -217,5 +217,5 @@ test("quarter history keeps Premium volume at 5 percent when combined with artis
   assert.equal(x.quarters[0].potential_reward_cents, 15000);
   assert.equal(x.quarters[0].quarter_start, "2026-12-21");
   assert.equal(x.team_reward_percent, null);
-  assert.equal(x.team_rates,null,'Current individual/team rates are held; historical source lines retain their original contracts');
+  assert.deepEqual(x.team_rates,{premium_listener:10},'Current Premium team rate is approved; historical source lines retain their original contracts');
 });

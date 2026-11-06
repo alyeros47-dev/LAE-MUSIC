@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "371d4cb16a51874bb77b18f9906ea1b4f388307d";
+  base = "0ce15f21c2aea5eea917508bdbcb33d83e2b138f";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -113,10 +113,10 @@ function fixture(
       else if (p.includes("/branches/"))
         data = {
           branch: {
-            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-cold-mud-b4ng61j2",
+            id: oldBackup ? "br-gentle-mud-b4iztfzt" : "br-wandering-mud-b44932au",
             project_id: PROJECT,
             parent_id: SOURCE,
-            name: "lae-release-42242241295-backup",
+            name: "lae-release-42264275595-backup",
             expires_at: expiredBackup ? "2000-01-01T00:00:00Z" : "2100-01-01T00:00:00Z",
           },
         };
@@ -125,13 +125,13 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/32"))
+      if (p.endsWith("/pulls/33"))
         data = {
           merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/simple-receipt-payments"))
+      else if (p.endsWith("/git/ref/heads/codex/premium-referrals-20-10"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
         data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };

@@ -40,7 +40,7 @@ async function main() {
   for (let n = 0; n < 10; n++) {
     try {
       const r = await api("/api/platform/capabilities");
-      if (r.status === 200 && r.data.public_artist_trials===false && r.data.manual_bank_payments===true && r.data.offline_listening===true) {
+      if (r.status === 200 && r.data.premium_referrals_enabled===true && r.data.public_artist_trials===false && r.data.manual_bank_payments===true && r.data.offline_listening===true) {
         ready = true;
         break;
       }
@@ -53,17 +53,25 @@ async function main() {
   check(capabilities.data.manual_bank_payments===true&&capabilities.data.guest_bank_payments===true,'manual and pre-registration bank checkout');
   check(capabilities.data.affiliate_allocations_pending===true&&capabilities.data.payouts===false,'unapproved allocations and payouts remain closed');
   check(capabilities.data.offline_listening===true,'offline listening configured');
+  const approved=require('../lib/affiliate-framework').disclosure();
+  check(capabilities.data.premium_referrals_enabled===true&&JSON.stringify(capabilities.data.affiliate_framework)===JSON.stringify(approved),'approved Premium 20/10 policy and preserved artist commission hold');
   const offline=await api('/api/platform/offline/capabilities');
   check(offline.status===200&&offline.data.enabled&&offline.data.public_key?.kty==='EC'&&!offline.data.public_key.d,'public offline verification key');
 
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js","web/artist-packages.js","web/business.js","web/financial-policy.js","web/premium.js"]) {
+    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js","web/artist-packages.js","web/business.js","web/financial-policy.js","web/premium.js","web/partner-accounting.js","web/affiliate-access.js"]) {
       const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
-      const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA,
-        {redirect:"error",signal:AbortSignal.timeout(30000)});
-      check(r.ok,"served studio asset");
-      const asset=Buffer.from(await r.arrayBuffer());
-      check(crypto.createHash("sha256").update(asset).digest("hex")===local,"exact live customer assets");
+      let asset, matches=false;
+      for(let attempt=0;attempt<6;attempt++){
+        const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA+"&attempt="+attempt,
+          {redirect:"error",signal:AbortSignal.timeout(30000)});
+        if(r.ok){asset=Buffer.from(await r.arrayBuffer());matches=crypto.createHash("sha256").update(asset).digest("hex")===local;}
+        else await r.body?.cancel();
+        if(matches)break;
+        if(attempt<5)await new Promise(resolve=>setTimeout(resolve,3000));
+      }
+      check(matches,"exact live customer assets: "+file);
+      if(file==='web/partner-accounting.js')check(asset.includes(Buffer.from('Copy Premium link'))&&asset.includes(Buffer.from('Three-Month Premium · $1.80')),'Premium referral sharing controls');
       if(focused&&file==='web/manual-bank-payments.js')check(asset.includes(Buffer.from('Send payment receipt'))&&asset.includes(Buffer.from('Approve payment'))&&!/name=\"(?:transfer_reference|transferred_at|received_amount|bank_reference)\"/.test(asset.toString('utf8')),'receipt-only customer submission and one-click administrator review');
       if(focused&&['web/app.js','web/premium.js','web/manual-bank-payments.js','web/guest-bank-checkout.js'].includes(file))check(!/policy_accepted|refundConditions\(/.test(asset.toString('utf8')),'payment UI has no refund acceptance prompt or payload');
     }
@@ -269,7 +277,7 @@ async function main() {
     JSON.stringify({
       status: "live_release_verified",
       asset_origins_verified: 2,
-      customer_assets_per_origin_verified: 17,
+      customer_assets_per_origin_verified: 19,
       music_dna_styles_verified: 70,
       music_dna_groups_verified: 14,
       customer_moods_verified: 4,
@@ -288,7 +296,8 @@ async function main() {
       paid_access_api_guards_verified:!focused,
       offline_signer_and_entitlement_guard_verified:!focused,
       offline_signer_verified:true,
-      verification_scope:focused?"payment_ui_prices_policy_and_financial_integrity":"full_customer_release",
+      premium_referrals_20_10_verified:true,
+      verification_scope:focused?"premium_referrals_payment_ui_and_financial_integrity":"full_customer_release",
       refund_acceptance_removed:focused,
       receipt_only_payment_ui_verified:focused,
       voice_training:"deferred_by_owner_pending_MusicAPI_verification",
