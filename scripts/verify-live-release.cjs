@@ -64,6 +64,7 @@ async function main() {
       check(r.ok,"served studio asset");
       const asset=Buffer.from(await r.arrayBuffer());
       check(crypto.createHash("sha256").update(asset).digest("hex")===local,"exact live customer assets");
+      if(focused&&file==='web/manual-bank-payments.js')check(asset.includes(Buffer.from('Send payment receipt'))&&asset.includes(Buffer.from('Approve payment'))&&!/name=\"(?:transfer_reference|transferred_at|received_amount|bank_reference)\"/.test(asset.toString('utf8')),'receipt-only customer submission and one-click administrator review');
       if(focused&&['web/app.js','web/premium.js','web/manual-bank-payments.js','web/guest-bank-checkout.js'].includes(file))check(!/policy_accepted|refundConditions\(/.test(asset.toString('utf8')),'payment UI has no refund acceptance prompt or payload');
     }
   }
@@ -289,6 +290,7 @@ async function main() {
       offline_signer_verified:true,
       verification_scope:focused?"payment_ui_prices_policy_and_financial_integrity":"full_customer_release",
       refund_acceptance_removed:focused,
+      receipt_only_payment_ui_verified:focused,
       voice_training:"deferred_by_owner_pending_MusicAPI_verification",
     }),
   );

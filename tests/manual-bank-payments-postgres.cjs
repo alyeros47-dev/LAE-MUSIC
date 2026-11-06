@@ -2,6 +2,7 @@
 const target=require('./ci-database.cjs').ciDatabase();
 const test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto'),{Pool}=require('pg');
 const {runtime}=require('./runtime.cjs'),policy=require('../lib/financial-policy').disclosure(),agreement=require('../lib/creator-agreement');
+const {receiptProof}=require('./bank-receipt-fixture.cjs');
 const key=()=>crypto.randomUUID(),fixture={enabled:true,invoice_hours:24,account:{bank_name:'Fixture Bank - NOT REAL',account_name:'Fixture business - NOT REAL',account_number:'0000000000',currency:'NGN',country:'NG'}};
 test('manual bank purchases preserve prices, approved entitlement and independent receipt review',async t=>{
  const control=new Pool({connectionString:target.href}),schema='manual_bank_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});
@@ -15,7 +16,7 @@ test('manual bank purchases preserve prices, approved entitlement and independen
  const a=await account('artist','first'),b=await account('artist','second'),listener=await account('listener','listen');
  const prepare=async(owner,kind='artist_subscription',plan='starter')=>{const r=await api('/api/platform/purchases',{kind,plan},owner.cookie);assert.equal(r.status,201,JSON.stringify(r.data));return r.data.order;};
  const start=async(role,owner,order)=>{const r=await api('/api/platform/manual-payments?role='+role,{order_id:order.id,amount_minor:1},owner.cookie);assert.equal(r.status,201,JSON.stringify(r.data));return r.data.payment;};
- const submit=async(role,owner,m)=>{const r=await api('/api/platform/manual-payments/'+m.id+'/submit?role='+role,{payer_name:'Fixture payer',transfer_reference:'Customer-claim-'+key(),transferred_at:new Date().toISOString()},owner.cookie);assert.equal(r.status,200,JSON.stringify(r.data));return r.data.payment;};
+ const submit=async(role,owner,m)=>{const r=await api('/api/platform/manual-payments/'+m.id+'/submit?role='+role,{payer_name:'Fixture payer',proof:receiptProof()},owner.cookie);assert.equal(r.status,200,JSON.stringify(r.data));return r.data.payment;};
  const details=(m,extra={})=>({decision:'approved',receipt_verified:true,bank_reference:'BANK-ENTRY-'+key(),received_at:new Date().toISOString(),received_amount:(m.charge_minor/100).toFixed(2),currency:m.charge_currency,note:'Independently checked fixture bank receipt.',...extra});
  const approve=async(m,payload=details(m),k=key())=>api('/api/platform/admin/manual-payments/'+m.id+'/review',payload,admin,k);
  let m;
@@ -72,9 +73,38 @@ test('manual bank purchases preserve prices, approved entitlement and independen
  });
  await t.test('manual live-book receipts work without enabling gateway live mode or releasing projected royalties',async()=>{
   const who=await account('artist','live_fixture'),o=await prepare(who),rates={snapshot:async()=> (await pool.query('SELECT * FROM currency_rate_snapshots LIMIT 1')).rows[0]},premium=require('../lib/premium-listeners').createPremium({pool,manualPaymentMode:'live'});
-  const live=require('../lib/manual-bank-payments').createManualBankPayments({pool,env:{NODE_ENV:'production'},config:fixture,rates,premium}),p=await live.start('artist',who.id,key(),{order_id:o.id,policy_accepted:true,policy_revision:policy.revision});assert.equal(p.mode,'live');await live.submit('artist',who.id,p.id,key(),{payer_name:'Synthetic live-book payer',transfer_reference:'LIVE-FIXTURE-ONLY',transferred_at:new Date().toISOString()});
+  const live=require('../lib/manual-bank-payments').createManualBankPayments({pool,env:{NODE_ENV:'production'},config:fixture,rates,premium}),p=await live.start('artist',who.id,key(),{order_id:o.id,policy_accepted:true,policy_revision:policy.revision});assert.equal(p.mode,'live');await live.submit('artist',who.id,p.id,key(),{payer_name:'Synthetic live-book payer',proof:receiptProof()});
   await live.review({id:'local-fixture-owner',role:'owner',source:'shared_key'},p.id,key(),details(p));assert.equal((await pool.query('SELECT mode FROM payment_presentments WHERE order_id=$1',[o.id])).rows[0].mode,'live');assert.equal(await require('../lib/artist-membership').availableRoyalties(pool,who.id),0);
   assert.equal(require('../lib/payments/runtime').checkoutRuntime({pool,env:{NODE_ENV:'production'}}).enabled(),false);
+ });
+ await t.test('receipt-only submission and one-click approval need no retyped bank fields and activate exactly once',async()=>{
+  const owner=await account('artist','simple'),o=await prepare(owner),p=await start('artist',owner,o),path='/api/platform/manual-payments/'+p.id+'/submit?role=artist',evidence=receiptProof('simple-approval');
+  assert.equal((await api(path,{payer_name:'Sender account name'},owner.cookie)).status,400,'A receipt is required');
+  assert.equal((await api(path,{payer_name:'',proof:evidence},owner.cookie)).status,400,'A sender name is required');
+  assert.equal((await api(path,{payer_name:'Sender',proof:'data:text/html;base64,PHNjcmlwdD4='},owner.cookie)).status,400);
+  const input={payer_name:'Sender account name',proof:evidence},submitKey=key();
+  const sent=await Promise.all([api(path,input,owner.cookie,submitKey),api(path,input,owner.cookie,submitKey)]);for(const r of sent)assert.equal(r.status,200,JSON.stringify(r.data));
+  const submitted=(await pool.query('SELECT * FROM manual_bank_submissions WHERE payment_id=$1',[p.id])).rows[0];assert.equal(submitted.transfer_reference,null);assert.equal(submitted.transferred_at,null);assert.equal(submitted.payer_name,input.payer_name);
+  assert.equal((await pool.query('SELECT 1 FROM artist_subscriptions WHERE artist_id=$1',[owner.id])).rowCount,0);
+  const queue=(await api('/api/platform/admin/manual-payments?status=submitted',undefined,admin)).data.payments;assert.equal(queue.find(x=>x.id===p.id).payer_name,input.payer_name);
+  const privateReceipt=await app.request('/api/platform/admin/manual-payments/'+p.id+'/receipt',{headers:{cookie:admin}});assert.equal(privateReceipt.status,200);assert(privateReceipt.body.equals(submitted.proof));
+  assert.equal((await api('/api/platform/manual-payments/'+p.id+'/receipt?role=artist',undefined,b.cookie)).status,404,'Receipt ownership is enforced');
+  assert.equal((await approve(p,{decision:'approved'})).status,400,'Bank verification remains mandatory');
+  assert.equal((await approve(p,{decision:'approved',receipt_verified:true,received_amount:'1.00'})).status,409,'Cannot override the expected amount');
+  const payload={decision:'approved',receipt_verified:true},results=await Promise.all([approve(p,payload),approve(p,payload)]);for(const r of results)assert.equal(r.status,200,JSON.stringify(r.data));
+  assert.equal((await pool.query('SELECT 1 FROM commerce_receipts WHERE order_id=$1',[o.id])).rowCount,1);
+  const review=(await pool.query('SELECT * FROM manual_bank_reviews WHERE payment_id=$1',[p.id])).rows[0];assert.equal(review.verification_method,'receipt_review');for(const name of ['bank_reference','bank_reference_hash','received_at'])assert.equal(review[name],null,'Do not invent '+name);assert.equal(Number(review.received_minor),p.charge_minor);assert.equal(review.receipt_hash,crypto.createHash('sha256').update(submitted.proof).digest('hex'));
+  const other=await account('artist','duplicate_image'),op=await start('artist',other,await prepare(other));await api('/api/platform/manual-payments/'+op.id+'/submit?role=artist',{payer_name:'Other sender',proof:evidence},other.cookie);
+  assert.equal((await approve(op,payload)).status,409,'The same receipt image cannot activate another purchase');assert.equal((await pool.query('SELECT 1 FROM artist_subscriptions WHERE artist_id=$1',[other.id])).rowCount,0);
+  assert.equal((await approve(op,{decision:'rejected'})).status,200,'Rejection needs no typed code or note');
+ });
+ await t.test('concurrent duplicate receipts activate only one invoice; older submissions remain reviewable',async()=>{
+  const evidence=receiptProof('concurrent-duplicate'),pending=[];
+  for(const name of ['duplicate_race_one','duplicate_race_two']){const owner=await account('artist',name),p=await start('artist',owner,await prepare(owner));await api('/api/platform/manual-payments/'+p.id+'/submit?role=artist',{payer_name:name,proof:evidence},owner.cookie);pending.push(p);}
+  const results=await Promise.all(pending.map(p=>approve(p,{decision:'approved',receipt_verified:true})));assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
+  const owner=await account('artist','old_pending'),p=await start('artist',owner,await prepare(owner));
+  await pool.query("INSERT INTO manual_bank_submissions(payment_id,payer_name,transfer_reference,transferred_at) VALUES($1,'Older sender','OLD-SUBMISSION-ONLY',NOW())",[p.id]);await pool.query("UPDATE manual_bank_payments SET status='submitted' WHERE id=$1",[p.id]);
+  assert.equal((await approve(p,{decision:'approved',receipt_verified:true})).status,200,'Do not strand pre-update submitted confirmations');
  });
  assert.equal((await pool.query('SELECT 1 FROM payment_policy_acceptances')).rowCount,0,'No manual bank purchase fabricates customer consent');
  assert.equal(requests,0);

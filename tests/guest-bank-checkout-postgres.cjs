@@ -1,5 +1,6 @@
 'use strict';
 const target=require('./ci-database.cjs').ciDatabase(),test=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto'),{Pool}=require('pg');
+const {receiptProof}=require('./bank-receipt-fixture.cjs');
 const key=()=>crypto.randomUUID(),policy=require('../lib/financial-policy').disclosure();
 test('real guest bank purchase precedes registration and activates only the verified matching account',async t=>{
  const control=new Pool({connectionString:target.href}),schema='guest_bank_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});const originalFetch=global.fetch;let requests=0;global.fetch=async()=>{requests++;throw Error('External providers and real payments forbidden');};
@@ -11,7 +12,7 @@ test('real guest bank purchase precedes registration and activates only the veri
   const input={kind:'artist_subscription',plan:'starter',email:'new-artist@guest-fixture.invalid',amount_minor:1};
   let guest,other,invoice,artist,listener;
   const bootstrap=async()=>{const r=await api('/api/platform/guest-payments');assert.equal(r.status,200,JSON.stringify(r.data));assert.match(r.headers['set-cookie'].toString(),/HttpOnly; Secure; SameSite=Lax/);return r.cookie;};
-  async function submit(cookie,p){const r=await api('/api/platform/guest-payments/'+p.id+'/submit',{payer_name:'Synthetic payer',transfer_reference:'CLAIM-'+key(),transferred_at:new Date().toISOString()},cookie);assert.equal(r.status,200,JSON.stringify(r.data));}
+  async function submit(cookie,p){const r=await api('/api/platform/guest-payments/'+p.id+'/submit',{payer_name:'Synthetic payer',proof:receiptProof()},cookie);assert.equal(r.status,200,JSON.stringify(r.data));}
   async function approve(p,reference='BANK-'+key(),extra={}){return api('/api/platform/admin/manual-payments/'+p.id+'/review',{decision:'approved',receipt_verified:true,bank_reference:reference,received_amount:(p.charge_minor/100).toFixed(2),currency:p.charge_currency,received_at:new Date().toISOString(),note:'Independently checked fictional bank receipt for local tests.',...extra},admin);}
   async function register(role,email){const r=await api(role==='artist'?'/api/register':'/api/listener/register',{name:role==='artist'?'Guest Artist':'Guest Listener',email,password:'GuestCheckoutFixture123',confirmPassword:'GuestCheckoutFixture123',country:'Nigeria',plan:'starter'});assert.equal(r.status,201,JSON.stringify(r.data));return {id:r.data.user.id,cookie:r.cookie};}
   await t.test('private signed browser capability, authoritative prices and no provisional account or early entitlement',async()=>{
@@ -48,7 +49,7 @@ test('real guest bank purchase precedes registration and activates only the veri
   });
   await t.test('Premium guest payment shares duplicate-receipt protection and activates the correct listener duration',async()=>{
    const cookie=await bootstrap(),data={...input,kind:'premium_listener',plan:'quarterly',email:'new-listener@guest-fixture.invalid'};const r=await api('/api/platform/guest-payments',data,cookie);assert.equal(r.status,201,JSON.stringify(r.data));const p=r.data.purchase.payment;assert.equal(Number(p.base_minor),180);await submit(cookie,p);
-   assert.equal((await approve(p,'BANK-ONE')).status,409);const paid=await approve(p,'BANK-TWO');assert.equal(paid.status,200,JSON.stringify(paid.data));
+   assert.equal((await approve(p,'BANK-ONE')).status,409);const paid=await api('/api/platform/admin/manual-payments/'+p.id+'/review',{decision:'approved',receipt_verified:true},admin);assert.equal(paid.status,200,JSON.stringify(paid.data));
    listener=await register('listener',data.email);const activated=await api('/api/platform/guest-payments/claim',{},cookie+'; '+listener.cookie);assert.equal(activated.status,200,JSON.stringify(activated.data));
    const ent=(await pool.query('SELECT * FROM premium_entitlements WHERE listener_id=$1',[listener.id])).rows;assert.equal(ent.length,1);assert.equal((+new Date(ent[0].expires_at)-+new Date(ent[0].starts_at))/86400000,90);
    const history=await api('/api/platform/manual-payments?role=listener',undefined,listener.cookie);assert.equal(history.data.payments[0].listener_order_id,activated.data.order_id);
