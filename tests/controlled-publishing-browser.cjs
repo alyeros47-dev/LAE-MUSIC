@@ -7,7 +7,7 @@ try{for(const width of [390,1440]){
  page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/api/**',async route=>{const req=route.request(),p=new URL(req.url()).pathname,send=x=>route.fulfill({contentType:'application/json',body:JSON.stringify(x)});
   if(!['GET','HEAD'].includes(req.method())){writes.push(p);throw Error('Business/package browsing and disabled uploads must not write data.');}
-  if(['/api/platform/business','/api/plans','/api/platform/currencies','/api/platform/pricing'].includes(p))return route.continue();
+  if(['/api/platform/business','/api/platform/financial-policy','/api/plans','/api/platform/currencies','/api/platform/pricing'].includes(p))return route.continue();
   if(p==='/api/platform/session')return send({artist:signedIn?{id:7,display_name:'Policy fixture',country:'NG'}:null,listener:null,admin:false});
   if(p==='/api/platform/capabilities')return send({payments:false});
   if(p==='/api/platform/social/providers')return send({providers:[]});
@@ -24,7 +24,7 @@ try{for(const width of [390,1440]){
  }
  await page.goto(origin+'/start?product=professional');await page.getByRole('button',{name:'Choose Premium',exact:true}).waitFor();
  assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
- const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/3 generations per year/);assert.match(packageCopy,/15 generations per year/);assert.match(packageCopy,/30 tracks/);assert(!packageCopy.includes('Professional'));
+ const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/3 music generations \/ year/);assert.match(packageCopy,/15 music generations \/ year/);assert.match(packageCopy,/Up to 30 songs \/ year/);assert(!packageCopy.includes('Professional'));
  signedIn=true;await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
  assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());assert(await page.getByLabel('Generated-song upload code',{exact:true}).getAttribute('required')!==null);
  await page.getByLabel('Generated-song upload code',{exact:true}).fill('A'.repeat(36));assert(!(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled()));

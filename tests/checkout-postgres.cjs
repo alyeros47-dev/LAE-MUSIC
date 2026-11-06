@@ -107,13 +107,13 @@ module.exports=async(t,{pool})=>{
   const restarted=createCheckoutService({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool,rates,adapters,mode:'sandbox',callbackOrigin:'https://lae.test'}),before=calls;const current=await restarted.start(artist.id,'checkout_after_crash_key_123',{policy_accepted:true,policy_revision:require('../lib/financial-policy').disclosure().revision,quote_id:x.quote.id});assert.equal(current.id,id);assert.equal(current.status,'review');assert.equal(calls,before);await assert.rejects(restarted.reconcile(artist.id,id),e=>e.status===503);assert.equal(calls,before);
  });
 
- await t.test('current financial consent is required before provider initialization and immutable owner-bound evidence survives retries',async()=>{
+ await t.test('checkout needs no refund acceptance and preserves immutable historical consent evidence',async()=>{
   const x=await fresh('flutterwave'),before=calls,policy=require('../lib/financial-policy').disclosure();
-  for(const input of [{quote_id:x.quote.id},{quote_id:x.quote.id,policy_accepted:true,policy_revision:'stale'}])await assert.rejects(service.start(artist.id,'policy_missing_'+crypto.randomUUID(),input),e=>e.status===409);
-  assert.equal(calls,before);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM payment_checkout_attempts WHERE order_id=$1',[x.order.id])).rows[0].n,0);
-  const input={quote_id:x.quote.id,policy_accepted:true,policy_revision:policy.revision};await Promise.all([service.start(artist.id,'policy_accepted_a123456',input),service.start(artist.id,'policy_accepted_b123456',input)]);
-  assert.equal(calls,before+1);const rows=(await pool.query('SELECT * FROM payment_policy_acceptances WHERE artist_order_id=$1',[x.order.id])).rows;assert.equal(rows.length,1);assert.equal(String(rows[0].account_id),String(artist.id));assert.equal(rows[0].policy_revision,policy.revision);
-  await assert.rejects(pool.query('UPDATE payment_policy_acceptances SET account_id=0 WHERE id=$1',[rows[0].id]),/append-only/);
+  const input={quote_id:x.quote.id};await Promise.all([service.start(artist.id,'policy_optional_a123456',input),service.start(artist.id,'policy_optional_b123456',input)]);
+  assert.equal(calls,before+1);assert.equal((await pool.query('SELECT 1 FROM payment_policy_acceptances WHERE artist_order_id=$1',[x.order.id])).rowCount,0);
+  // Explicit historical fixture, not a new checkout's consent claim.
+  const legacy=await fresh('flutterwave'),saved=(await pool.query('INSERT INTO payment_policy_acceptances(artist_order_id,account_id,policy_revision) VALUES($1,$2,$3) RETURNING id',[legacy.order.id,artist.id,policy.revision])).rows[0];
+  await assert.rejects(pool.query('UPDATE payment_policy_acceptances SET account_id=0 WHERE id=$1',[saved.id]),/append-only/);
   await assert.rejects(pool.query('INSERT INTO payment_policy_acceptances(artist_order_id,account_id,policy_revision) VALUES($1,0,$2)',[x.order.id,policy.revision]),/purchase owner/);
  });
 
