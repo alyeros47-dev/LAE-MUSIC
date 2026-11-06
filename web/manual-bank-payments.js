@@ -29,10 +29,13 @@ export async function openBankPayment(ctx,{role='artist',orderId,paymentId}={}){
   const cancel=root.querySelector('#bank-cancel');if(cancel)cancel.onclick=async()=>{cancel.disabled=true;try{const x=await api(base+'/'+p.id+'/cancel'+query,'POST',{}, {headers:{'Idempotency-Key':keyFor('bank-cancel:'+p.id,{id:p.id})}});clearKey('bank-cancel:'+p.id);render(root,x.payment);}catch(error){root.querySelector('#bank-status').textContent=error.message;cancel.disabled=false;}};
  };
  if(paymentId){const x=await api(base+'/'+paymentId+query);actionDialog('<h2>Loading payment…</h2>',root=>render(root,x.payment));return;}
+ let panel,status;
+ actionDialog('<h2>Bank transfer</h2><p data-bank-loading role="status">Loading bank details…</p>',root=>{panel=root;status=root.querySelector('[data-bank-loading]');});
  const data={order_id:orderId};
- const x=await api(base+query,'POST',data,{headers:{'Idempotency-Key':keyFor('bank-start:'+orderId,data)}});
- clearKey('bank-start:'+orderId);
- actionDialog('<h2>Bank transfer</h2>',root=>render(root,x.payment));
+ try{
+  const x=await api(base+query,'POST',data,{headers:{'Idempotency-Key':keyFor('bank-start:'+orderId,data)}});
+  clearKey('bank-start:'+orderId);if(status.isConnected)render(panel,x.payment);
+ }catch(error){if(status.isConnected)status.textContent=error.message;throw error;}
 }
 export async function adminBankPayments(view,intro,ctx,url){
  const {api,e,bindForm,keyFor,clearKey}=ctx,status=url.searchParams.get('status')||'submitted';
