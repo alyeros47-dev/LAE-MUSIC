@@ -15,7 +15,7 @@ function approvedPricing({ referenceValues = false } = {}) {
   };
   if (referenceValues)
     for (const p of Object.values(value.plans))
-      p.usd_minor = p.reference_ngn_minor;
+      p.usd_minor = p.reference_ngn_minor ?? p.usd_minor;
   return value;
 }
 module.exports = { approvedPricing };

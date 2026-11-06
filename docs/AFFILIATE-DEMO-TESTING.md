@@ -1,5 +1,7 @@
 # Affiliate demo testing on the existing website
 
+> Historical policy/testing record, superseded for new receipts by `AFFILIATE-REVENUE-FRAMEWORK.md` (2026-11-05). New individual commissions are held, qualification no longer expires with the subscription, and obsolete customer commission demos are hidden. Previously earned contracts remain preserved.
+
 The original frontend hid all partner practice tools unless `review_tools` was enabled. The existing backend practice service already stores isolated examples, never real payments or commissions. A dedicated `affiliate_demo` capability now exposes those tools to signed-in artist/partner accounts when a database is attached, without enabling other review tools or live finance.
 
 ## Scope and limits

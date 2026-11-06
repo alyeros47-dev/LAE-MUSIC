@@ -1,5 +1,7 @@
 # Direct commissions and quarterly team bonuses
 
+> Historical policy/testing record, superseded for new receipts by `AFFILIATE-REVENUE-FRAMEWORK.md` (2026-11-05). New individual commissions are held, qualification no longer expires with the subscription, and obsolete customer commission demos are hidden. Previously earned contracts remain preserved.
+
 Owner-confirmed on 2026-10-28, corrected the same day to distinguish Premium 5% from artist services 10%. The earlier uniform-10% draft was never deployed. This supersedes immediate second-level commission
 for newly prepared Premium Listener orders. It does not rewrite historical
 orders, receipts or commissions.

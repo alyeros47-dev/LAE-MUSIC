@@ -14,7 +14,20 @@
     "test:upgrade": "node tests/upgrade-postgres.cjs",
     "preflight": "node scripts/preflight.cjs",
     "verify:fx": "node scripts/verify-public-fx.cjs",
-    "test:email": "LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs"
+    "test:email": "LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs",
+    "test:affiliate": "node --test tests/partner-policy.test.cjs tests/partner-demo.test.cjs tests/partner-accounting.test.cjs tests/platform.test.cjs tests/premium-international.test.cjs tests/financial-policy.test.cjs tests/services.test.cjs",
+    "test:affiliate:postgres": "node tests/affiliate-purchase-year-postgres.cjs && node tests/affiliate-policy-regression-postgres.cjs && node tests/affiliate-framework-postgres.cjs && node tests/affiliate-revenue-ledger-postgres.cjs",
+    "test:affiliate:browser": "node tests/affiliate-purchase-year-browser.cjs",
+    "test:membership": "node --test tests/artist-membership.test.cjs tests/commerce.test.cjs tests/artist-access.test.cjs tests/commissions.test.cjs",
+    "test:membership:postgres": "node tests/artist-membership-migration.cjs && node tests/artist-membership-postgres.cjs && node tests/artist-membership-integration-postgres.cjs",
+    "test:membership:browser": "node tests/artist-membership-browser.cjs",
+    "test:manual-bank": "node --test tests/manual-bank-payments.test.cjs",
+    "test:manual-bank:postgres": "node tests/manual-bank-payments-postgres.cjs",
+    "test:manual-bank:browser": "node tests/manual-bank-payments-browser.cjs",
+    "test:affiliate:framework": "node --test tests/affiliate-framework.test.cjs",
+    "test:affiliate:framework:postgres": "node tests/affiliate-framework-postgres.cjs && node tests/affiliate-revenue-ledger-postgres.cjs",
+    "test:guest-bank:postgres": "node tests/guest-bank-checkout-postgres.cjs",
+    "test:guest-bank:browser": "node tests/guest-bank-checkout-browser.cjs"
   },
   "engines": {
     "node": ">=20"

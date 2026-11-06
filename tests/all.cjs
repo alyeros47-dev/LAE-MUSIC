@@ -194,3 +194,11 @@ require('./description-studio.test.cjs');
 require('./artist-reference-repair.test.cjs');
 
 require('./controlled-publishing.test.cjs');
+
+require('./artist-membership.test.cjs');
+
+require('./manual-bank-payments.test.cjs');
+
+require('./affiliate-framework.test.cjs');
+
+require('./studio-capability-configuration.test.cjs');

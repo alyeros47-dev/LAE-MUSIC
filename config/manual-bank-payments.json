@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "account": {
+    "bank_name": "Moniepoint Microfinance Bank",
+    "account_name": "LAE MUSIC VENTURE",
+    "account_number": "3008179797",
+    "currency": "NGN",
+    "country": "NG"
+  },
+  "invoice_hours": 24
+}

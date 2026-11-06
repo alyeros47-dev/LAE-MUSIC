@@ -32,8 +32,8 @@ test('provider lookup failures remain retriable and never record a successful ev
 });
 test('active package stays authoritative when a different future renewal exists',async()=>{
  const active={id:1,plan:'starter',starts_at:'2026-01-01',expires_at:'2027-01-01'};const future={id:2,plan:'professional',starts_at:'2027-01-01',expires_at:'2028-01-01',upcoming:true};const calls=[];
- const pool={query:async(sql,args)=>{calls.push({sql,args});return sql.includes('COUNT(*)')?{rows:[{n:3}]}:sql.includes('starts_at<=NOW()')?{rowCount:1,rows:[active]}:{rows:[future,{...active,upcoming:false}]};}};
- const result=await subscriptionView(pool,9,'professional');assert.equal(result.artist_features_active,true);assert.equal(result.plan,'starter');assert.equal(result.subscription.id,1);assert.equal(result.upload_limit,7);assert.deepEqual(result.upcoming_subscriptions,[future]);assert.equal(calls.find(c=>c.sql.includes('COUNT(*)')).args[1],active.starts_at);
+ const pool={query:async(sql,args)=>{calls.push({sql,args});return sql.includes('membership_generation_terms')?{rows:[{n:0}]}:sql.includes('COUNT(*)')?{rows:[{n:3}]}:sql.includes('starts_at<=NOW()')?{rowCount:1,rows:[active]}:{rows:[future,{...active,upcoming:false}]};}};
+ const result=await subscriptionView(pool,9,'professional');assert.equal(result.artist_features_active,true);assert.equal(result.plan,'starter');assert.equal(result.subscription.id,1);assert.equal(result.upload_limit,6);assert.deepEqual(result.upcoming_subscriptions,[future]);assert.equal(calls.find(c=>c.sql.includes('COUNT(*)')&&!c.sql.includes('membership_generation_terms')).args[1],active.starts_at);
 });
 test('future-only subscription does not activate access or look like an expired package',async()=>{
  const pool={query:async sql=>sql.includes('COUNT(*)')?{rows:[{n:0}]}:sql.includes('starts_at<=NOW()')?{rowCount:0,rows:[]}:{rows:[{id:2,plan:'growth',upcoming:true}]}};

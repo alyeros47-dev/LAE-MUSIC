@@ -39,7 +39,7 @@ async function main() {
   for (let n = 0; n < 10; n++) {
     try {
       const r = await api("/api/platform/capabilities");
-      if (r.status === 200) {
+      if (r.status === 200 && r.data.public_artist_trials===false && r.data.manual_bank_payments===true && r.data.offline_listening===true) {
         ready = true;
         break;
       }
@@ -47,8 +47,16 @@ async function main() {
     await new Promise((r) => setTimeout(r, 3000));
   }
   check(ready, "integrated capabilities route");
+  const capabilities=await api('/api/platform/capabilities');
+  check(capabilities.status===200&&capabilities.data.artist_access_mode==='paid_packages_only'&&capabilities.data.public_artist_trials===false,'paid artist access mode');
+  check(capabilities.data.manual_bank_payments===true&&capabilities.data.guest_bank_payments===true,'manual and pre-registration bank checkout');
+  check(capabilities.data.affiliate_allocations_pending===true&&capabilities.data.payouts===false,'unapproved allocations and payouts remain closed');
+  check(capabilities.data.offline_listening===true,'offline listening configured');
+  const offline=await api('/api/platform/offline/capabilities');
+  check(offline.status===200&&offline.data.enabled&&offline.data.public_key?.kty==='EC'&&!offline.data.public_key.d,'public offline verification key');
+
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css"]) {
+    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js"]) {
       const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
       const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA,
         {redirect:"error",signal:AbortSignal.timeout(30000)});
@@ -145,6 +153,11 @@ async function main() {
         "no fabricated paid subscription",
       );
     }
+    if(role==='artist')for(const path of ['/api/music/description/start','/api/music/sonic/create','/api/platform/studio/releases'])check((await api(path,{cookie:login.cookie,body:{}})).status===402,'unpaid creation API is protected');
+    if(role==='listener'){
+      const pair=crypto.generateKeyPairSync('ec',{namedCurve:'prime256v1'}),denied=await api('/api/platform/offline/register',{cookie:login.cookie,body:{device_id:crypto.randomUUID(),public_jwk:pair.publicKey.export({format:'jwk'})}});
+      check(denied.status===403,'unpaid listener cannot obtain offline access');
+    }
     await api(prefix + "/logout", { cookie: login.cookie, body: {} });
   }
   const catalog = await api("/api/music/tracks?limit=50");
@@ -190,9 +203,13 @@ async function main() {
   );
   check(envResponse.ok, "read-only production configuration");
   const env = inventory(await envResponse.json()),
+    signer=require('../lib/offline-listening').signing(env.OFFLINE_LICENSE_PRIVATE_KEY),
     pool = new (require("pg").Pool)(
       require("../lib/database").databaseOptions(env),
     );
+  check(signer&&signer.kid===offline.data.kid&&JSON.stringify(signer.jwk)===JSON.stringify(offline.data.public_key),'live offline key matches configured signer');
+  const challenge=Buffer.from('LAE release key-pair check: not an offline license');
+  check(crypto.verify('sha256',challenge,crypto.createPublicKey(signer.key),crypto.sign('sha256',challenge,signer.key)),'offline key-pair signing verification');
   try {
     const db = await pool.connect();
     try {
@@ -212,11 +229,11 @@ async function main() {
       );
       migrationsVerified = rows.length;
       const minimums = {
-        creators: 11,
-        listeners: 5,
-        music_tracks: 13,
-        generation_records: 16,
-        artist_voice_profiles: 3,
+        creators: 50,
+        listeners: 26,
+        music_tracks: 23,
+        generation_records: 60,
+        artist_voice_profiles: 6,
       };
       for (const [table, min] of Object.entries(minimums))
         check(
@@ -233,6 +250,8 @@ async function main() {
     } finally {
       db.release();
     }
+    const integrity=await require('../lib/release-preflight').inspectDatabase(pool);
+    check(integrity.status==='pass','migrated schema and financial integrity');
   } finally {
     await pool.end();
   }
@@ -240,7 +259,7 @@ async function main() {
     JSON.stringify({
       status: "live_release_verified",
       asset_origins_verified: 2,
-      studio_assets_per_origin_verified: 5,
+      studio_assets_per_origin_verified: 13,
       music_dna_styles_verified: 70,
       music_dna_groups_verified: 14,
       customer_moods_verified: 4,
@@ -255,7 +274,10 @@ async function main() {
       r2_writes: 0,
       payment_operations: 0,
       qa_accounts_retained_unpublished: true,
-      remaining_live_upload_voice_verification: "pending",
+      manual_bank_collection_enabled:true,
+      paid_access_api_guards_verified:true,
+      offline_signer_and_entitlement_guard_verified:true,
+      voice_training:"deferred_by_owner_pending_MusicAPI_verification",
     }),
   );
 }

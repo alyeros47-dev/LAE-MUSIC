@@ -15,7 +15,7 @@ test("approved financial conditions protect Premium expiration, failed-credit ru
     require("../lib/premium-pricing")
       .catalog()
       .plans.map((x) => x.usd_minor),
-    [8, 23, 60, 121, 588],
+    [8, 23, 60, 121, 180, 588],
   );
 });
 test("checkout requires explicit current-policy confirmation and rejects stale or truthy client claims", () => {

@@ -7,7 +7,7 @@ const finance=require('../lib/finance');
 module.exports=async function(t,{pool,origin,sonicRunner}){
  const secret='isolated-signature-fixture-not-a-credential',payments=new Map();let sequence=0;
  const adapter={verified:true,name:'isolated_fixture',merchantId:'isolated_merchant',verifyEvent:async(raw,headers)=>{const expected=crypto.createHmac('sha256',secret).update(raw).digest(),supplied=Buffer.from(headers.signature||'','hex');if(supplied.length!==expected.length||!crypto.timingSafeEqual(expected,supplied))throw Object.assign(Error('Invalid signature'),{status:401});return JSON.parse(raw);},retrievePayment:async id=>{if(!payments.has(id))throw Error('Provider lookup unavailable');return structuredClone(payments.get(id));}};
- const commerce=createCommerce({pool,adapter});
+ const commerce=createCommerce({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool,adapter});
  async function api(path,{body,cookie,key}={}){const r=await fetch(origin+path,{method:body?'POST':'GET',headers:{...(body?{'Content-Type':'application/json'}:{}),...(cookie?{Cookie:cookie}:{}),...(key?{'Idempotency-Key':key}:{})},body:body?JSON.stringify(body):undefined});return {status:r.status,data:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]};}
  async function account(name){const r=await api('/api/register',{body:{name,country:'Nigeria',email:name+'@commerce-ci.invalid',password:'CommerceFixturePassword123',confirmPassword:'CommerceFixturePassword123',plan:'starter'}});assert.equal(r.status,201);return {id:r.data.user.id,cookie:r.cookie};}
  function signed(id,paymentId){const raw=Buffer.from(JSON.stringify({id,paymentId}));return [raw,{signature:crypto.createHmac('sha256',secret).update(raw).digest('hex')}];}
@@ -21,6 +21,8 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   const referral=await api('/api/affiliate/prepare-purchase',{cookie:buyer.cookie,body:{plan:'starter',ref:String(partner.id)}});assert.equal(referral.status,200);
   const body={kind:'artist_subscription',plan:'starter',referral_token:referral.data.referral_token,amount_minor:1,paid:true};
   primaryDetails=body;
+  // Rehearse an already-prepared historical contract through the current HTTP replay.
+  await commerce.create(buyer.id,'commerce_http_create_123',body);
   const responses=await Promise.all([api('/api/platform/purchases',{cookie:buyer.cookie,body,key:'commerce_http_create_123'}),api('/api/platform/purchases',{cookie:buyer.cookie,body,key:'commerce_http_create_123'})]);
   assert(responses.every(r=>r.status===201));primary=responses[0].data.order;assert.equal(primary.id,responses[1].data.order.id);assert.equal(Number(primary.amount_minor),600);assert.equal(primary.status,'pending');assert.equal(primary.checkout_enabled,false);
   assert.equal((await api('/api/platform/purchases',{cookie:partner.cookie})).data.orders.length,0);
@@ -66,7 +68,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
  await t.test('settlement rolls back receipt, subscription, ledger and event together on persistence failure',async()=>{
   const order=await commerce.create(extraBuyer.id,'rollback_order_key_123',{kind:'artist_subscription',plan:'starter'});let failed=false;
   const faulty={query:pool.query.bind(pool),connect:async()=>{const db=await pool.connect();return {query:async(sql,args)=>{if(sql.startsWith('INSERT INTO commerce_events')&&!failed){failed=true;throw Error('Isolated evidence write failure');}return db.query(sql,args);},release:()=>db.release()};}};
-  const service=createCommerce({pool:faulty,adapter});const paymentId='rollback_payment',eventId='rollback_event';
+  const service=createCommerce({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,pool:faulty,adapter});const paymentId='rollback_payment',eventId='rollback_event';
   await assert.rejects(settle(order,{},paymentId,eventId,service),/write failure/);
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM commerce_receipts WHERE order_id=$1',[order.id])).rows[0].n,0);assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM artist_subscriptions WHERE artist_id=$1',[extraBuyer.id])).rows[0].n,0);
   assert.equal((await commerce.ingest(...signed(eventId,paymentId))).outcome,'accepted');
@@ -76,7 +78,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   const order=await commerce.create(extraBuyer.id,'extra_generation_key_123',{kind:'studio_generation',plan:'starter'});assert.equal(Number(order.amount_minor),300);await settle(order);await commerce.ingest(...signed('extra_duplicate_event','payment_'+sequence));
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM studio_purchased_credits WHERE artist_id=$1',[extraBuyer.id])).rows[0].n,1);
   const subscription=(await pool.query("SELECT id FROM artist_subscriptions WHERE artist_id=$1 AND starts_at<=NOW() AND expires_at>NOW()",[extraBuyer.id])).rows[0];
-  for(let i=0;i<2;i++)await pool.query('INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)',[subscription.id,extraBuyer.id,'included_fixture_'+i]);
+  for(let i=0;i<3;i++)await pool.query('INSERT INTO artist_studio_usage(subscription_id,artist_id,generation_reference) VALUES($1,$2,$3)',[subscription.id,extraBuyer.id,'included_fixture_'+i]);
   let providerCalls=0;const runner=sonicRunner(extraBuyer.id,async url=>{if(url.endsWith('/create')){providerCalls++;return {ok:true,status:200,json:async()=>({task_id:'paid_extra_provider_task_'+providerCalls})};}return {ok:true,status:200,json:async()=>({status:'failed'})};});
   const lyrics={title:'Paid credit fixture',lyrics:'An isolated test song proving an additional verified credit is safely reserved.',style:'Highlife guitars'};
   const created=await runner('/api/music/sonic/create',lyrics,'purchased_generation_key_123');assert.equal(created.status,200);const repeated=await runner('/api/music/sonic/create',lyrics,'purchased_generation_key_123');assert.equal(repeated.data.task_id,created.data.task_id);assert.equal(providerCalls,1);
@@ -84,7 +86,7 @@ module.exports=async function(t,{pool,origin,sonicRunner}){
   assert.equal((await runner('/api/music/sonic/status?id='+created.data.task_id)).data.status,'failed');assert.equal((await runner('/api/music/sonic/status?id='+created.data.task_id)).data.status,'failed');
   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM artist_studio_usage WHERE purchase_order_id=$1',[order.id])).rows[0].n,0);
   const retry=await runner('/api/music/sonic/create',lyrics,'purchased_generation_retry_123');assert.equal(retry.status,200);assert.equal(providerCalls,2);
-  const allowance=(await api('/api/artist/studio-allowance',{cookie:extraBuyer.cookie})).data;assert.equal(allowance.used_generations,2);assert.equal(allowance.purchased_generations_remaining,0);
+  const allowance=(await api('/api/artist/studio-allowance',{cookie:extraBuyer.cookie})).data;assert.equal(allowance.used_generations,3);assert.equal(allowance.purchased_generations_remaining,0);
  });
  await t.test('legacy reporting cannot generate referral earnings from active or registered accounts',async()=>{
   await pool.query('UPDATE creators SET referred_by=$1 WHERE id=$2',[partner.id,buyer.id]);

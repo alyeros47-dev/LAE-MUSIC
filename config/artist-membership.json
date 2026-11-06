@@ -1,0 +1,12 @@
+{
+  "revision": "annual-membership-2026-11-05",
+  "plans": {
+    "starter": {"generations": 3, "tracks": 6},
+    "growth": {"generations": 6, "tracks": 12},
+    "professional": {"generations": 15, "tracks": 30}
+  },
+  "additional_generation_prices": {
+    "approved": false,
+    "usd": {"starter": 2, "growth": 1.8, "professional": 1.5}
+  }
+}

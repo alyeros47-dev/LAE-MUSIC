@@ -226,7 +226,7 @@ function sonicTrial(provider) {
     if (sql.startsWith("SELECT COUNT(*)::int AS n")) return row({ n: 0 });
     if (sql.startsWith("SELECT COUNT(*)::int AS used"))
       return row({ used: used ? 1 : 0 });
-    if (sql.startsWith("SELECT id,plan FROM artist_subscriptions")) return none;
+    if (sql.startsWith("SELECT id,plan,included_generations FROM artist_subscriptions")) return none;
     if (sql.startsWith("SELECT expires_at")) return row({ active: true });
     if (sql.startsWith("INSERT INTO review_trial_usage")) {
       if (used) return none;

@@ -1,0 +1,18 @@
+{
+  "revision": "affiliate-opt-in-premium30-2026-11-05",
+  "registration_free": true,
+  "participation_optional": true,
+  "eligibility_expires": false,
+  "qualifying_listener_days": 90,
+  "qualifying_listener_usd_minor": 180,
+  "qualifying_artist_usd_minor": 600,
+  "premium_affiliate_and_team_percent": 30,
+  "premium_remaining_percent": 70,
+  "artist_percent_of_remaining": 50,
+  "platform_percent_of_remaining": 50,
+  "individual_premium_rates": null,
+  "team_qualification_rules": null,
+  "artist_and_generation_commission_rules": null,
+  "new_individual_allocations_enabled": false,
+  "payouts_enabled": false
+}

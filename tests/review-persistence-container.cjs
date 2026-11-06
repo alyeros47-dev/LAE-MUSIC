@@ -136,6 +136,10 @@ async function boot(name) {
     assert.equal(signup.status, 201);
     cookie = signup.cookie;
     const id = signup.data.user.id;
+    const agreement=(await api('/api/artist/agreement')).data;
+    const accepted=await api('/api/platform/membership/agreement',{method:'POST',body:{accepted:true,version:agreement.version,content_hash:agreement.content_hash}});
+    assert.equal(accepted.status,200);
+
     const audio = Buffer.from(
       fs.readFileSync("tests/fixtures/review-tone.mp3.base64", "utf8"),
       "base64",

@@ -24,7 +24,7 @@ try{for(const width of [390,1440]){
  }
  await page.goto(origin+'/start?product=professional');await page.getByRole('button',{name:'Choose Premium',exact:true}).waitFor();
  assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
- const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/under review/);assert(!packageCopy.includes('Professional'));
+ const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/3 generations per year/);assert.match(packageCopy,/15 generations per year/);assert.match(packageCopy,/30 tracks/);assert(!packageCopy.includes('Professional'));
  signedIn=true;await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
  assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());assert(await page.getByLabel('Generated-song upload code',{exact:true}).getAttribute('required')!==null);
  await page.getByLabel('Generated-song upload code',{exact:true}).fill('A'.repeat(36));assert(!(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled()));

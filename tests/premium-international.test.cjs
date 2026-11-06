@@ -23,9 +23,9 @@ test("approved USD catalog retains explicit owner approval and reproducible date
   assert.equal(String(source.rates.NGN), c.document.reference.ngn_per_usd);
   assert.deepEqual(
     c.plans.map((p) => p.amount_minor),
-    [8, 23, 60, 121, 588],
+    [8, 23, 60, 121, 180, 588],
   );
-  for (const p of c.plans)
+  for (const p of c.plans.filter(p=>c.document.plans[p.code].reference_ngn_minor!==undefined))
     assert.equal(
       p.amount_minor,
       referenceToUsd(
@@ -38,7 +38,7 @@ test("pending USD approval cannot create an order or touch the database", async 
   const pending = structuredClone(catalog().document);
   pending.status = "pending_approval";
   pending.approval = null;
-  const service = createPremium({
+  const service = createPremium({affiliatePolicyRevision:require("../lib/partner-policy").LEGACY_REVISION,
     pricing: pending,
     pool: {
       connect() {

@@ -1,5 +1,6 @@
 "use strict";
 const crypto = require("node:crypto");
+const voiceResult = require("./lib/voice-provider-result");
 const send = (r, n, o) => {
   r.writeHead(n, {
     "Content-Type": "application/json",
@@ -64,7 +65,8 @@ module.exports = async function voice(req, res, p, ctx) {
       return (
         send(res, 200, {
           status: x?.status || "none",
-          hasVoice: !!x?.persona_id,
+          hasVoice: x?.status === "ready" && !!x?.persona_id,
+          ...(x?.status === "failed" ? {failure:await voiceResult.failureFor(pool,user.id,x)} : {}),
         }),
         true
       );
@@ -105,10 +107,14 @@ module.exports = async function voice(req, res, p, ctx) {
         ]);
         const current = (
           await db.query(
-            "SELECT status FROM artist_voice_profiles WHERE creator_id=$1",
+            "SELECT status,task_id FROM artist_voice_profiles WHERE creator_id=$1",
             [user.id],
           )
         ).rows[0];
+        if(current?.status==='failed'){
+          const failure=await voiceResult.failureFor(db,user.id,current);
+          if(failure?.retry_allowed===false)throw Object.assign(Error(failure.message),{status:409,code:failure.code});
+        }
         if (
           ["training", "submitting", "verification_required", "ready"].includes(
             current?.status,
@@ -279,6 +285,10 @@ module.exports = async function voice(req, res, p, ctx) {
             true
           );
         }
+        if(x?.status==='failed'){
+          const failure=await voiceResult.failureFor(db,user.id,x);
+          if(failure?.retry_allowed===false)throw Object.assign(Error(failure.message),{status:409,code:failure.code});
+        }
         if (!x || x.status !== "uploading")
           throw Object.assign(
             Error(
@@ -388,6 +398,13 @@ module.exports = async function voice(req, res, p, ctx) {
           true
         );
       }
+      const immediate=voiceResult.result(j);
+      if(immediate.failure?.code==='voice_verification_required'){
+        await pool.query("UPDATE artist_voice_profiles SET status='failed',updated_at=NOW() WHERE creator_id=$1 AND task_id=$2",[user.id,reference]);
+        await voiceResult.recordFailure(pool,user.id,reference,immediate.failure);
+        if(local)await pool.query("UPDATE review_voice_attempts SET status='failed' WHERE reference=$1 AND artist_id=$2",[reference,user.id]);
+        return (send(res,502,{status:'failed',failure:immediate.failure,error:immediate.failure.message}),true);
+      }
       const task = String(j.task_id || j.data?.task_id || "");
       if (
         !response.ok ||
@@ -457,33 +474,30 @@ module.exports = async function voice(req, res, p, ctx) {
             }),
             true
           );
-        const id = j.data?.persona_id || j.persona_id;
-        if (id) {
-          await pool.query(
-            "UPDATE artist_voice_profiles SET persona_id=$1,status='ready' WHERE creator_id=$2",
-            [id, user.id],
-          );
-          if (local)
-            await pool.query(
-              "UPDATE review_voice_attempts SET status='ready' WHERE task_id=$1 AND artist_id=$2",
-              [x.task_id, user.id],
-            );
-          x.status = "ready";
-        } else if (j.type === "failed" || j.status === "failed") {
-          await pool.query(
-            "UPDATE artist_voice_profiles SET status='failed' WHERE creator_id=$1",
-            [user.id],
-          );
-          if (local)
-            await pool.query(
-              "UPDATE review_voice_attempts SET status='failed' WHERE task_id=$1 AND artist_id=$2",
-              [x.task_id, user.id],
-            );
-          x.status = "failed";
+        const task=voiceResult.result(j);
+        if(task.state==='ready'||task.state==='failed'){
+          const db=await pool.connect();
+          try{
+            await db.query('BEGIN');
+            await db.query('SELECT id FROM creators WHERE id=$1 FOR UPDATE',[user.id]);
+            const current=(await db.query('SELECT object_key,task_id,persona_id,status FROM artist_voice_profiles WHERE creator_id=$1',[user.id])).rows[0];
+            // A slow poll must not overwrite a newer sample or ready profile.
+            if(current?.task_id===x.task_id&&current.status==='training'){
+              if(task.state==='ready')await db.query("UPDATE artist_voice_profiles SET persona_id=$1,status='ready',updated_at=NOW() WHERE creator_id=$2 AND task_id=$3",[task.persona_id,user.id,x.task_id]);
+              else{
+                await db.query("UPDATE artist_voice_profiles SET status='failed',updated_at=NOW() WHERE creator_id=$1 AND task_id=$2",[user.id,x.task_id]);
+                await voiceResult.recordFailure(db,user.id,x.task_id,task.failure);
+              }
+              if(local)await db.query("UPDATE review_voice_attempts SET status=$1 WHERE task_id=$2 AND artist_id=$3",[task.state,x.task_id,user.id]);
+              x.status=task.state;
+              if(task.failure)x.failure=task.failure;
+            }else if(current){Object.assign(x,current);}
+            await db.query('COMMIT');
+          }catch(error){await db.query('ROLLBACK').catch(()=>{});throw error;}finally{db.release();}
         }
       }
       return (
-        send(res, 200, { status: x.status, hasVoice: x.status === "ready" }),
+        send(res, 200, { status: x.status, hasVoice: x.status === "ready", ...(x.status==='failed'?{failure:x.failure||await voiceResult.failureFor(pool,user.id,x)}:{}) }),
         true
       );
     }
@@ -492,6 +506,7 @@ module.exports = async function voice(req, res, p, ctx) {
     console.error("Voice profile request failed", e.status || 502);
     return (
       send(res, e.status || 502, {
+        ...(e.code ? {code:e.code} : {}),
         error: e.status
           ? e.message
           : "Voice service is temporarily unavailable. Your existing profile has been preserved.",

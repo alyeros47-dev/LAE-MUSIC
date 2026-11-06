@@ -40,14 +40,14 @@ async function run({method='GET',path='/api/music/sonic/status',url=path+'?id=va
   {match:'SELECT id FROM creators',result:{rowCount:1,rows:[{id:7}]}},
   {match:'SELECT COUNT(*)::int AS n FROM sonic_test_tasks',result:{rows:[{n:0}]}},
   {match:'SELECT COUNT(*)::int AS n FROM sonic_test_tasks',result:{rows:[{n:0}]}},
-  {match:'SELECT id,plan FROM artist_subscriptions',result:{rowCount:1,rows:[{id:11,plan}]}},
+  {match:'SELECT id,plan,included_generations FROM artist_subscriptions',result:{rowCount:1,rows:[{id:11,plan}]}},
   {match:'SELECT COUNT(*)::int AS used',result:{rows:[{used}]}},
   {match:'INSERT INTO artist_studio_usage'},
   {match:'INSERT INTO sonic_test_tasks'},
   {match:'COMMIT'}];
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(1,1)});assert.equal(x.status,429);assert.equal(x.network,0);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(0,5)});assert.equal(x.status,429);assert.equal(x.network,0);
- x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(),transactions:reserve(2).slice(0,6).concat([{match:'ROLLBACK'}])});assert.equal(x.status,402);assert.equal(x.network,0);
+ x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(),transactions:reserve(3).slice(0,6).concat([{match:'ROLLBACK'}])});assert.equal(x.status,402);assert.equal(x.network,0);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(),transactions:reserve().concat([{match:'BEGIN'},{match:'UPDATE sonic_test_tasks',result:{rowCount:1,rows:[{task_id:'provider_123456'}]}},{match:'UPDATE artist_studio_usage',result:{rowCount:1,rows:[{id:1}]}},{match:'COMMIT'}]),fetchImpl:async()=>({ok:true,status:200,json:async()=>({task_id:'provider_123456'})})});assert.equal(x.status,200);assert.equal(x.body.task_id,'provider_123456');assert.equal(x.network,1);
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(),transactions:reserve().concat([{match:'BEGIN'},{match:'DELETE FROM sonic_test_tasks'},{match:'DELETE FROM artist_studio_usage'},{match:'COMMIT'}]),fetchImpl:async()=>({ok:false,status:400,json:async()=>({message:'Bad song'})})});assert.equal(x.status,502);assert(x.calls.some(c=>c.sql.includes('DELETE FROM artist_studio_usage')));
  x=await run({method:'POST',path:'/api/music/sonic/create',requestBody:validSong,queries:preflight(),transactions:reserve(),fetchImpl:async()=>({ok:false,status:503,json:async()=>({message:'Provider busy'})})});assert.equal(x.status,503);assert.equal(x.body.status,'verification_required');assert(!x.calls.some(c=>c.sql.includes('DELETE FROM artist_studio_usage')));

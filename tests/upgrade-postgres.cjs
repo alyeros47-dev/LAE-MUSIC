@@ -168,7 +168,7 @@ async function seed(pool, checkpoint) {
     tables.premium_entitlements =
       "id,order_id,listener_id,starts_at,expires_at";
   }
-  if (checkpoint >= 18) {
+  if (checkpoint === 18) {
     await pool.query(
       "INSERT INTO royalty_statements(id,month,currency,mode,snapshot_hash,snapshot,review_note,gross_minor,refund_minor,tax_minor,fees_minor,commissions_minor,rounding_minor,net_minor,artist_pool_minor,platform_minor,stream_count,undistributed_minor) VALUES('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',$1,'USD','test',$2,'{}','Historical early-finalized fixture; preserve but do not release early',0,0,0,0,0,0,0,0,0,0,0)",
       [new Date().toISOString().slice(0, 7), "a".repeat(64)],
@@ -231,7 +231,7 @@ test("populated historical upgrades preserve accounts, catalog and separate curr
       await pool.query("UPDATE creators SET display_name='Changed fixture only'");
       assert.notDeepEqual(await fingerprint(pool,cols),before);
     }));
-    for (const checkpoint of [0, 7, 13, 17, 18])
+    for (const checkpoint of [0, 7, 13, 17, 18, 26])
       await t.test("upgrade from checkpoint " + checkpoint, () =>
         ownedDatabase(async (pool) => {
           await bootstrap(pool);
@@ -242,7 +242,7 @@ test("populated historical upgrades preserve accounts, catalog and separate curr
           assert.equal(applied.flat().length, migrations.length - checkpoint);
           await bootstrap(pool);
           assert.deepEqual(await migrate(pool), []);
-          if (checkpoint >= 18)
+          if (checkpoint === 18)
             await assert.rejects(
               pool.query(
                 "INSERT INTO royalty_cash_releases(statement_id,amount_minor) VALUES('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',0)",

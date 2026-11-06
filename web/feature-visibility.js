@@ -3,11 +3,14 @@ export function customerFeatures(capabilities={},browser={}){
  const review=capabilities.review_tools===true;
  return {
   checkout:capabilities.payments===true&&(capabilities.payment_mode==='live'||(review&&capabilities.payment_mode==='sandbox')),
+  purchases:capabilities.manual_bank_payments===true||(capabilities.payments===true&&(capabilities.payment_mode==='live'||(review&&capabilities.payment_mode==='sandbox'))),
+  manual_bank:capabilities.manual_bank_payments===true,
   payouts:capabilities.payouts===true,
-  premium_access:review||browser.listenerAccount===true||browser.premiumActive===true||(capabilities.payments===true&&capabilities.payment_mode==='live'),
+  premium_access:capabilities.manual_bank_payments===true||review||browser.listenerAccount===true||browser.premiumActive===true||(capabilities.payments===true&&capabilities.payment_mode==='live'),
   offline_library:browser.offline===true&&(capabilities.offline_listening===true||browser.offlineCached===true),
   review,
-  affiliate_demo:capabilities.affiliate_demo===true,
+  affiliate_demo:capabilities.affiliate_demo===true&&capabilities.affiliate_allocations_pending!==true,
+  affiliate_pending:capabilities.affiliate_allocations_pending===true,
   email:capabilities.email_delivery_enabled===true,
   music:capabilities.music_provider_configured===true,
   lyrics:capabilities.lyrics_configured===true,
