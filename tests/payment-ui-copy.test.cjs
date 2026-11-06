@@ -11,7 +11,7 @@ test('bank instructions show authoritative amount and all beneficiary/reference 
 });
 test('payment status copy stays short and distinguishes pending review, approval, rejection and expiry',async()=>{
  const {paymentMessage}=await bank;for(const status of ['awaiting_transfer','submitted','approved','rejected','cancelled']){const text=paymentMessage({status});assert(text.length>0&&text.length<110);}
- assert.match(paymentMessage({status:'submitted'}),/Waiting for bank confirmation/);assert.match(paymentMessage({status:'awaiting_transfer',expired:true}),/deadline passed/);assert.match(paymentMessage({status:'approved',guest_order_id:'fixture',guest_claimed:false}),/Finish setting up/);
+ assert.match(paymentMessage({status:'submitted'}),/Waiting for approval/);assert.match(paymentMessage({status:'awaiting_transfer',expired:true}),/deadline passed/);assert.match(paymentMessage({status:'approved',guest_order_id:'fixture',guest_claimed:false}),/Finish setting up/);
 });
 test('normal policy section retains the complete existing refund wording; other business pages stay unchanged',async()=>{
  const {businessPage}=await import(data(fs.readFileSync('web/business.js','utf8'))),policy=require('../lib/financial-policy').disclosure(),business=require('../lib/publishing-policy').disclosure();
