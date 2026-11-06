@@ -10,6 +10,7 @@ async function main() {
   )
     throw Error("Explicit live verification configuration is required");
   const ORIGIN = "https://lae-music.com";
+  const focused=process.env.LAE_LIVE_PAYMENT_UI_VERIFY==="1";
   const check = (ok, label) => {
     if (!ok) throw Error("Live verification failed: " + label);
   };
@@ -56,17 +57,25 @@ async function main() {
   check(offline.status===200&&offline.data.enabled&&offline.data.public_key?.kty==='EC'&&!offline.data.public_key.d,'public offline verification key');
 
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js"]) {
+    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js","web/artist-packages.js","web/business.js","web/financial-policy.js","web/premium.js"]) {
       const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
       const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA,
         {redirect:"error",signal:AbortSignal.timeout(30000)});
       check(r.ok,"served studio asset");
-      check(crypto.createHash("sha256").update(Buffer.from(await r.arrayBuffer())).digest("hex")===local,"exact live studio assets");
+      const asset=Buffer.from(await r.arrayBuffer());
+      check(crypto.createHash("sha256").update(asset).digest("hex")===local,"exact live customer assets");
+      if(focused&&['web/app.js','web/premium.js','web/manual-bank-payments.js','web/guest-bank-checkout.js'].includes(file))check(!/policy_accepted|refundConditions\(/.test(asset.toString('utf8')),'payment UI has no refund acceptance prompt or payload');
     }
   }
   const dnaCatalogue=await api("/api/platform/studio/dna/catalog");
   check(dnaCatalogue.status===200&&JSON.stringify(dnaCatalogue.data)===JSON.stringify(require("../lib/studio-launch").catalogue()),"exact public Music DNA catalogue and mood options");
   check(dnaCatalogue.data.styles.length===70&&dnaCatalogue.data.categories.length===14&&dnaCatalogue.data.moods.length===4,"complete studio selection inventory");
+  if(focused){
+    const policy=await api('/api/platform/financial-policy');check(policy.status===200&&JSON.stringify(policy.data)===JSON.stringify(require('../lib/financial-policy').disclosure()),'complete unchanged refund policy is available');
+    const pricing=await api('/api/platform/pricing?country=NG');check(pricing.status===200&&pricing.data.conversion_available===true&&pricing.data.display_currency==='NGN','live Naira quotes available');
+    for(const [plan,minor]of [['starter',600],['growth',1000],['professional',2000]])check(pricing.data.products['artist_subscription:'+plan]?.usd_minor===minor,'approved annual package price');
+    check(pricing.data.products['premium_listener:quarterly']?.usd_minor===180,'unchanged quarterly Premium price');
+  }
   const artistBody = {
     name: "LAE Release QA Artist",
     country: "Nigeria",
@@ -80,7 +89,7 @@ async function main() {
     plan: "starter",
   };
   artistBody.confirmPassword = artistBody.password;
-  for (const role of ["artist", "listener"]) {
+  for (const role of (focused?[]:["artist", "listener"])) {
     const prefix = role === "artist" ? "/api" : "/api/listener";
     const body = {
       ...artistBody,
@@ -168,7 +177,7 @@ async function main() {
     "existing published music",
   );
   let audio = 0;
-  for (const track of catalog.data.tracks) {
+  for (const track of (focused?catalog.data.tracks.slice(0,1):catalog.data.tracks)) {
     const stream = await api(
       "/api/music/tracks/" + encodeURIComponent(track.id) + "/stream",
     );
@@ -259,12 +268,12 @@ async function main() {
     JSON.stringify({
       status: "live_release_verified",
       asset_origins_verified: 2,
-      studio_assets_per_origin_verified: 13,
+      customer_assets_per_origin_verified: 17,
       music_dna_styles_verified: 70,
       music_dna_groups_verified: 14,
       customer_moods_verified: 4,
-      artist_registration_logout_login: true,
-      listener_registration_logout_login: true,
+      artist_registration_logout_login: !focused,
+      listener_registration_logout_login: !focused,
       free_lyrics_credits: 0,
       free_music_requests: 0,
       existing_audio_ranges_passed: audio,
@@ -273,10 +282,13 @@ async function main() {
       billed_generation_requests: 0,
       r2_writes: 0,
       payment_operations: 0,
-      qa_accounts_retained_unpublished: true,
+      qa_accounts_retained_unpublished: !focused,
       manual_bank_collection_enabled:true,
-      paid_access_api_guards_verified:true,
-      offline_signer_and_entitlement_guard_verified:true,
+      paid_access_api_guards_verified:!focused,
+      offline_signer_and_entitlement_guard_verified:!focused,
+      offline_signer_verified:true,
+      verification_scope:focused?"payment_ui_prices_policy_and_financial_integrity":"full_customer_release",
+      refund_acceptance_removed:focused,
       voice_training:"deferred_by_owner_pending_MusicAPI_verification",
     }),
   );
