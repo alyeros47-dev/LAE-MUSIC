@@ -56,6 +56,7 @@ function wav() {
     ),
     state = {
       signedIn: true,
+      legacyShell: true,
       devices: new Map(),
       challenges: new Map(),
       grants: new Map(),
@@ -103,7 +104,7 @@ function wav() {
           "Service-Worker-Allowed": "/",
           "Cache-Control": "no-cache",
         });
-        return res.end(fs.readFileSync("service-worker.js"));
+        return res.end(fs.readFileSync("service-worker.js", "utf8").replace("lae-offline-shell-v19",state.legacyShell?"lae-offline-shell-v18":"lae-offline-shell-v19"));
       }
       if (p.startsWith("/web/") && !p.includes("..")) {
         const file = path.join("web", p.slice(5));
@@ -290,6 +291,7 @@ function wav() {
     ]) {
       const label = artifactLabel(size);
       state.signedIn = true;
+      state.legacyShell = true;
       const context = await browser.newContext({
           viewport,
           reducedMotion: "reduce",
@@ -318,6 +320,11 @@ function wav() {
         await offline.save({id:'2',title:'Offline next track',artist:'Offline test artist',genre:'Highlife'});
         await render();
       });
+      // Upgrade an installed public shell while preserving paid encrypted music.
+      state.legacyShell = false;
+      await page.evaluate(async () => { const registration=await navigator.serviceWorker.getRegistration();await registration.update(); });
+      await page.waitForFunction(async () => {const names=await caches.keys();return names.includes('lae-offline-shell-v19')&&!names.includes('lae-offline-shell-v18');});
+      assert.equal(await page.evaluate(async () => (await (await import('/web/offline-app.js')).offline.rows()).length),2);
       const stored = await page.evaluate(async () => {
         const { offline } = await import("/web/offline-app.js"),
           row = (await offline.rows())[0],
@@ -552,7 +559,7 @@ function wav() {
       console.log(
         "PASS real PWA " +
           label +
-          ": encrypted storage, actual offline reload/playback, native auto-next/skip controls, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.",
+          ": encrypted storage, actual offline reload/playback, native auto-next/skip controls, installed-shell upgrade without music loss, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.",
       );
     }
     const unsupported = await browser.newContext();
