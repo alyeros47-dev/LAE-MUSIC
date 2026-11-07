@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "0ce15f21c2aea5eea917508bdbcb33d83e2b138f";
+  base = "abdb0252a412d3cbb5e0dd8776b8d53bdde8ed8b";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -125,13 +125,13 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/33"))
+      if (p.endsWith("/pulls/34"))
         data = {
           merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/premium-referrals-20-10"))
+      else if (p.endsWith("/git/ref/heads/codex/continuous-playback"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
         data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };
