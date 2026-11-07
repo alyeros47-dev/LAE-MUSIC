@@ -225,13 +225,13 @@ function wav() {
             grant_id: id,
             listener_id: "7",
             device_id: b.device_id,
-            track_id: "1",
+            track_id: String(b.payload.track_id),
             entitlement_id: "99",
             issued_ms: now,
             until_ms: now + 300000,
             asset_hash: "isolated-audio-v1",
             display_name: "Offline browser listener",
-            title: song.title,
+            title: b.payload.track_id === "2" ? "Offline next track" : song.title,
             artist: song.artist,
             artist_id: "12",
             genre: "Highlife",
@@ -310,9 +310,14 @@ function wav() {
         .waitFor();
       await page.goto(origin + "/offline");
       await page
-        .getByRole("button", { name: "Play saved song", exact: true })
+        .getByRole("button", { name: "Play saved song", exact: true }).first()
         .waitFor();
       await page.waitForFunction(() => !!navigator.serviceWorker.controller);
+      await page.evaluate(async () => {
+        const { offline, render } = await import('/web/offline-app.js');
+        await offline.save({id:'2',title:'Offline next track',artist:'Offline test artist',genre:'Highlife'});
+        await render();
+      });
       const stored = await page.evaluate(async () => {
         const { offline } = await import("/web/offline-app.js"),
           row = (await offline.rows())[0],
@@ -371,10 +376,10 @@ function wav() {
       await context.setOffline(true);
       await page.reload();
       await page
-        .getByRole("button", { name: "Play saved song", exact: true })
+        .getByRole("button", { name: "Play saved song", exact: true }).first()
         .waitFor();
       await page
-        .getByRole("button", { name: "Play saved song", exact: true })
+        .getByRole("button", { name: "Play saved song", exact: true }).first()
         .click();
       await page.waitForFunction(
         () =>
@@ -386,9 +391,19 @@ function wav() {
         {},
         { timeout: 45000 },
       );
+      await page.locator('#audio').evaluate(audio=>{audio.currentTime=audio.duration-.2;});
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Offline next track'&&!document.getElementById('audio').paused&&document.getElementById('audio').currentTime>0);
+      await page.getByRole('button',{name:'Previous track',exact:true}).click();
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Website offline fixture'&&!document.getElementById('audio').paused);
+      await page.getByRole('button',{name:'Next track',exact:true}).click();
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Offline next track'&&!document.getElementById('audio').paused);
+      await page.getByRole('button',{name:'Previous track',exact:true}).click();
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Website offline fixture'&&!document.getElementById('audio').paused);
       await page.evaluate(async () => {
-        const { player } = await import("/web/offline-app.js");
+        const { player, offline } = await import('/web/offline-app.js');
         player.audio.pause();
+        if(offline.urls.size!==1)throw Error('Old offline audio URLs were not released');
+        await offline.remove('2',false);
       });
       assert(
         await page.evaluate(() =>
@@ -459,7 +474,7 @@ function wav() {
       await context.setOffline(true);
       await page.clock.fastForward(360000);
       await page
-        .getByRole("button", { name: "Play saved song", exact: true })
+        .getByRole("button", { name: "Play saved song", exact: true }).first()
         .click();
       await page.waitForFunction(() => document.getElementById("audio").paused);
       await page
@@ -489,7 +504,7 @@ function wav() {
       assert(rollback);
       await context.setOffline(false);
       await page
-        .getByRole("button", { name: "Play saved song", exact: true })
+        .getByRole("button", { name: "Play saved song", exact: true }).first()
         .click();
       await page.waitForFunction(
         () => !document.getElementById("audio").paused,
@@ -497,7 +512,7 @@ function wav() {
       const other = await context.newPage();
       await other.goto(origin + "/offline");
       await other
-        .getByRole("button", { name: "Play saved song", exact: true })
+        .getByRole("button", { name: "Play saved song", exact: true }).first()
         .waitFor();
       await other.evaluate(async () => {
         const { offline } = await import("/web/offline-app.js");
@@ -537,7 +552,7 @@ function wav() {
       console.log(
         "PASS real PWA " +
           label +
-          ": encrypted storage, actual offline reload/playback, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.",
+          ": encrypted storage, actual offline reload/playback, native auto-next/skip controls, expiry, clock guard, cipher/key protection, exactly-once sync and cross-tab/account cleanup.",
       );
     }
     const unsupported = await browser.newContext();

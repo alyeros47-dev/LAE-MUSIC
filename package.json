@@ -8,6 +8,8 @@
     "test": "node scripts/check-music-dna.cjs && node scripts/check-lae-integrity.cjs && node scripts/check-sonic-workflow.cjs && node scripts/test-sonic-handler.cjs && node tests/all.cjs",
     "test:dna": "node scripts/test-music-dna.cjs",
     "test:browser": "node scripts/test-browsers.cjs",
+    "test:player": "node --test tests/player.test.cjs",
+    "test:player:browser": "node tests/continuous-playback-browser.cjs && node tests/player-sound-browser.cjs",
     "test:browser:all": "LAE_TEST_BROWSERS=chromium,firefox,webkit node scripts/test-browsers.cjs",
     "test:http": "LAE_NETWORK_TESTS=1 node tests/http.test.cjs",
     "test:postgres": "node tests/postgres.cjs && node tests/description-studio-postgres.cjs && node tests/open-studio-postgres.cjs",
