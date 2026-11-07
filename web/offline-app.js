@@ -35,7 +35,7 @@ const offline = new OfflineLibrary({ api, toast }),
     onDetail: () => {},
   });
 offline.bind(player);
-player.sourceProvider = (track) => offline.media(track);
+player.sourceProvider = (track) => { offline.release(); return offline.media(track); };
 for (const b of document.querySelectorAll("[data-close]"))
   b.onclick = () => b.closest("dialog").close();
 node("global-search").onsubmit = (e) => {

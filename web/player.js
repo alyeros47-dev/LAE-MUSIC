@@ -9,11 +9,13 @@ export class PlaybackQueue {
   next(ended = false, random = Math.random) {
     if (!this.tracks.length) return -1;
     if (ended && this.repeat === 'one') return this.index;
-    if (this.index >= 0) this.history.push(this.index);
-    if (this.shuffle && this.tracks.length > 1) { const n = Math.floor(random() * (this.tracks.length - 1)); this.index = n >= this.index ? n + 1 : n; }
-    else if (this.index + 1 < this.tracks.length) this.index++;
-    else if (this.repeat === 'all' || !ended) this.index = 0;
+    let next;
+    if (this.shuffle && this.tracks.length > 1) { const n = Math.floor(random() * (this.tracks.length - 1)); next = n >= this.index ? n + 1 : n; }
+    else if (this.index + 1 < this.tracks.length) next = this.index + 1;
+    else if (this.repeat === 'all' || !ended) next = 0;
     else return -1;
+    if (this.index >= 0) this.history.push(this.index);
+    this.index = next;
     return this.index;
   }
   previous() { if (this.history.length) this.index = this.history.pop(); else if (this.tracks.length) this.index = (this.index - 1 + this.tracks.length) % this.tracks.length; return this.index; }
@@ -27,7 +29,7 @@ export class MusicPlayer {
     this.lastAudibleVolume = 0.8; this.audio.volume = 0.8;
     $('play-toggle').onclick = () => this.toggle(); $('expanded-toggle').onclick = () => this.toggle();
     $('expanded-previous').onclick=()=>$('previous').click(); $('expanded-next').onclick=()=>$('next').click();
-    $('next').onclick = () => this.advance(); $('previous').onclick = () => { if (this.audio.currentTime > 3) this.audio.currentTime = 0; else this.playIndex(this.queue.previous()); };
+    $('next').onclick = () => this.advance(); $('previous').onclick = () => this.playIndex(this.queue.previous());
     $('shuffle').onclick = () => { this.queue.shuffle = !this.queue.shuffle; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); this.save(); };
     $('repeat').onclick = () => { this.queue.repeat = { off: 'all', all: 'one', one: 'off' }[this.queue.repeat]; $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻'; $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); this.save(); };
     $('expanded-volume').oninput=e=>this.setVolume(e.target.value);

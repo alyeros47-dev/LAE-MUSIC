@@ -59,11 +59,11 @@ async function main() {
   check(offline.status===200&&offline.data.enabled&&offline.data.public_key?.kty==='EC'&&!offline.data.public_key.d,'public offline verification key');
 
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
-    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js","web/artist-packages.js","web/business.js","web/financial-policy.js","web/premium.js","web/partner-accounting.js","web/affiliate-access.js"]) {
+    for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js","web/artist-packages.js","web/business.js","web/financial-policy.js","web/premium.js","web/partner-accounting.js","web/affiliate-access.js","web/player.js","web/index.html"]) {
       const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
       let asset, matches=false;
       for(let attempt=0;attempt<6;attempt++){
-        const r = await fetch(origin+"/"+file+"?release="+process.env.GITHUB_SHA+"&attempt="+attempt,
+        const r = await fetch(origin+(file==="web/index.html"?"/":"/"+file)+"?release="+process.env.GITHUB_SHA+"&attempt="+attempt,
           {redirect:"error",signal:AbortSignal.timeout(30000)});
         if(r.ok){asset=Buffer.from(await r.arrayBuffer());matches=crypto.createHash("sha256").update(asset).digest("hex")===local;}
         else await r.body?.cancel();
@@ -277,7 +277,7 @@ async function main() {
     JSON.stringify({
       status: "live_release_verified",
       asset_origins_verified: 2,
-      customer_assets_per_origin_verified: 19,
+      customer_assets_per_origin_verified: 21,
       music_dna_styles_verified: 70,
       music_dna_groups_verified: 14,
       customer_moods_verified: 4,
@@ -297,7 +297,8 @@ async function main() {
       offline_signer_and_entitlement_guard_verified:!focused,
       offline_signer_verified:true,
       premium_referrals_20_10_verified:true,
-      verification_scope:focused?"premium_referrals_payment_ui_and_financial_integrity":"full_customer_release",
+      player_assets_verified:true,
+      verification_scope:focused?"continuous_player_assets_and_preserved_financial_integrity":"full_customer_release",
       refund_acceptance_removed:focused,
       receipt_only_payment_ui_verified:focused,
       voice_training:"deferred_by_owner_pending_MusicAPI_verification",
