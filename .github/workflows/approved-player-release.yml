@@ -1,0 +1,47 @@
+name: Owner-approved player deployment
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  guarded-player-release:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-player-release-34]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    concurrency:
+      group: lae-existing-production-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Verify production release guards
+        run: node --test tests/production-release.test.cjs tests/player-release-inputs.test.cjs
+      - name: Resolve the approved merge and successful candidate checks
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/player-release-inputs.cjs
+      - name: Deploy the approved player to the existing Render service
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          LAE_RELEASE_MODE: deploy
+          LAE_RELEASE_CANDIDATE_SHA: ${{ steps.release.outputs.candidate }}
+          LAE_RELEASE_COMMIT_SHA: ${{ steps.release.outputs.commit }}
+          LAE_RELEASE_CI_RUN: ${{ steps.release.outputs.ci_run }}
+        run: node scripts/release-existing-service.cjs
+      - name: Verify the live player and preserved services
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_LIVE_RELEASE_VERIFY: '1'
+          LAE_LIVE_PAYMENT_UI_VERIFY: '1'
+        run: node scripts/verify-live-release.cjs
