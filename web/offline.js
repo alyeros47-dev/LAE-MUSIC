@@ -497,6 +497,7 @@ export class OfflineLibrary {
     });
   }
   async revalidate() {
+    this.player?.clearPrepared?.();
     return this.lock("cache", async () => {
       if (
         !navigator.onLine ||
@@ -570,10 +571,15 @@ export class OfflineLibrary {
     new Uint8Array(plain).fill(0);
     const url = URL.createObjectURL(blob);
     this.urls.add(url);
-    return { url, offline: true, grant: p };
+    return { url, offline: true, grant: p,
+      release: () => { URL.revokeObjectURL(url); this.urls.delete(url); },
+      validate: () => {
+        if (this.owner !== owner || this.device?.device_id !== device.device_id || !this.allowed || this.device.allowed === false || !this.urls.has(url) || this.clock() >= p.until_ms)
+          throw Error("Reconnect to renew or verify your Premium offline access.");
+      },
+    };
   }
   async source(track, online) {
-    this.release();
     if (track.offline || !navigator.onLine) return this.media(track);
     try {
       return await online();
@@ -584,6 +590,7 @@ export class OfflineLibrary {
     }
   }
   halt() {
+    this.player?.clearPrepared?.();
     this.play = null;
     if (this.player?.currentSourceOffline) {
       this.player.audio.pause();
@@ -598,6 +605,7 @@ export class OfflineLibrary {
     this.urls.clear();
   }
   async remove(track, notify = true) {
+    this.player?.clearPrepared?.();
     if (!this.owner) return;
     if (navigator.onLine && this.device)
       await this.api("/api/platform/offline/remove", "POST", {

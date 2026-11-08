@@ -215,3 +215,9 @@ test("free ad breaks respect Premium, volume and user pause without generating p
   });
   for (let i = 0; i < 5; i++) assert.equal(await premium.beforeAdvance(), true);
 });
+
+test('an upcoming disabled ad decision is prepared once and does not introduce an asynchronous song-boundary gap', async()=>{
+ const fs=require('node:fs'),{ListeningAds}=await import('data:text/javascript;base64,'+fs.readFileSync('web/listening-ads.js').toString('base64'));
+ let calls=0;const ads=new ListeningAds({api:async()=>{calls++;return {configured:false,ad:null};}});
+ assert.equal(ads.beforeAdvance(),true);assert.equal(ads.beforeAdvance(),true);ads.prepare();await new Promise(resolve=>setImmediate(resolve));ads.prepare();assert.equal(calls,1);assert.equal(ads.beforeAdvance(),true);assert.equal(ads.active,false);
+});

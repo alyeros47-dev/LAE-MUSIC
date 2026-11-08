@@ -18,19 +18,25 @@ export class ListeningAds {
     this.completed = 0;
     this.active = false;
   }
-  async beforeAdvance() {
+  prepare() {
+    if (this.premium() || this.completed < 2 || this.preparing || this.prepared) return;
+    this.preparing = this.api("/api/platform/listening-ad").then(value => { this.prepared = value; }).catch(() => {}).finally(() => { this.preparing = null; });
+  }
+  beforeAdvance() {
     if (this.premium()) {
       this.completed = 0;
       return true;
     }
     this.completed++;
     if (this.completed < 3) return true;
-    let r;
-    try {
-      r = await this.api("/api/platform/listening-ad");
-    } catch {
-      return true;
-    }
+    if (this.prepared) { const r = this.prepared; this.prepared = null; return this.playAd(r); }
+    return this.loadAd();
+  }
+  async loadAd() {
+    if (this.preparing) { await this.preparing; if (this.prepared) { const r=this.prepared;this.prepared=null;return this.playAd(r); } }
+    try { return this.playAd(await this.api("/api/platform/listening-ad")); } catch { return true; }
+  }
+  playAd(r) {
     if (!r.ad || r.premium || this.premium()) return true;
     let u;
     try {
