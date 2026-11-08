@@ -1,4 +1,4 @@
-name: Owner-approved player deployment
+name: Owner-approved branding deployment
 on:
   push:
     branches: [main]
@@ -7,8 +7,8 @@ permissions:
   actions: read
   pull-requests: read
 jobs:
-  guarded-player-release:
-    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-player-release-34]')
+  guarded-branding-release:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-brand-release-35]')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     concurrency:
@@ -29,7 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/player-release-inputs.cjs
-      - name: Deploy the approved player to the existing Render service
+      - name: Deploy the approved branding to the existing Render service
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
@@ -39,9 +39,10 @@ jobs:
           LAE_RELEASE_COMMIT_SHA: ${{ steps.release.outputs.commit }}
           LAE_RELEASE_CI_RUN: ${{ steps.release.outputs.ci_run }}
         run: node scripts/release-existing-service.cjs
-      - name: Verify the live player and preserved services
+      - name: Verify the live branding and preserved services
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           LAE_LIVE_RELEASE_VERIFY: '1'
           LAE_LIVE_PAYMENT_UI_VERIFY: '1'
+          LAE_LIVE_BRANDING_VERIFY: '1'
         run: node scripts/verify-live-release.cjs
