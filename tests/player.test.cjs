@@ -123,3 +123,21 @@ test('pausing a pending source change prevents a stale offline source from being
  const p=new MusicPlayer({api:async url=>url.includes('/1/')?{url:'https://storage.test/1.mp3'}:new Promise(resolve=>{finish=resolve;}),toast(){},onLike(){},onDetail(){}});
  await p.setTracks([{id:1},{id:2}]);const pending=p.advance(true);assert(p.loading);await p.toggle();assert.equal(p.audio.paused,true);assert.equal(p.audio.getAttribute('src'),null);assert.equal(p.streamFailed,true);finish({url:'https://storage.test/2.mp3'});await pending;assert.equal(p.audio.paused,true);assert.equal(p.audio.getAttribute('src'),null);
 });
+
+test('a preview takes audio focus without changing the main source, queue, position or volume',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom(),p=new MusicPlayer({api:async()=>({url:'https://storage.test/original.mp3'}),toast(){},onLike(){},onDetail(){}}),preview=new Element('preview');
+ document.querySelectorAll=()=>[p.audio,preview];p.focusId='fixture';p.focusStamp=0;
+ await p.setTracks([{id:7,title:'Original recording'}]);p.audio.currentTime=24;p.setVolume(1);
+ await preview.play();p.focusPlayback(preview);
+ assert(p.audio.paused);assert(!preview.paused);assert.equal(p.audio.src,'https://storage.test/original.mp3');assert.equal(p.audio.currentTime,24);assert.equal(p.audio.volume,1);assert.equal(p.queue.current.id,'7');
+ // Navigation may detach the preview while its native audio is still running.
+ document.querySelectorAll=()=>[p.audio];await p.audio.play();p.focusPlayback(p.audio);assert(preview.paused);assert(!p.audio.paused);assert.equal(p.audio.currentTime,24);
+ const claim=JSON.parse(d.storage.get('lae_audio_focus_v1'));assert.deepEqual(Object.keys(claim).sort(),['at','owner']);
+});
+test('an ad taking audio focus preserves its queue transition; an external preview pauses it deliberately',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();const p=new MusicPlayer({api:async()=>({url:'https://storage.test/original.mp3'}),toast(){},onLike(){},onDetail(){}}),ad=new Element('detached-ad'),preview=new Element('preview');
+ document.querySelectorAll=()=>[p.audio,preview];p.focusId='fixture';p.focusStamp=0;
+ await p.setTracks([{id:7}]);p.advertiser={active:true,audio:ad};const request=p.request;
+ await ad.play();p.focusPlayback(ad);assert.equal(p.request,request);assert(p.audio.paused);assert(!ad.paused);
+ await preview.play();p.focusPlayback(preview);assert(ad.paused);assert.equal(p.advertiser.userPaused,true);assert(p.request>request);assert(!preview.paused);
+});

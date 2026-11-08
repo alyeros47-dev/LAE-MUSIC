@@ -53,7 +53,49 @@ export class MusicPlayer {
     this.audio.addEventListener('volumechange', () => { this.updateMute(); this.save(); });
     document.addEventListener('visibilitychange', () => { this.save(); if (!this.audio.paused) this.prepareNext(); });
     window.addEventListener('pagehide', () => this.save());
-    this.restore(); this.updateMute(); this.setupMediaSession();
+    this.restore(); this.updateMute(); this.setupMediaSession(); this.setupAudioFocus();
+  }
+  setupAudioFocus() {
+    if (typeof HTMLMediaElement === 'undefined' || !document.querySelectorAll) return;
+    this.focusId=crypto.randomUUID(); this.focusStamp=0;
+    document.addEventListener('play',event=>{
+      const media=event.target;
+      // Silent decorative video must not interrupt a listener's music.
+      if(media instanceof HTMLMediaElement && !(media.tagName==='VIDEO'&&media.muted))this.focusPlayback(media);
+    },true);
+    const receive=data=>{
+      if(data?.owner===this.focusId || typeof data?.owner!=='string' || !Number.isFinite(data?.at) || data.at<=this.focusStamp)return;
+      this.focusStamp=data.at; this.pauseOtherMedia(null);
+    };
+    try { this.focusChannel=new BroadcastChannel('lae-audio-focus-v1'); this.focusChannel.onmessage=event=>receive(event.data); } catch {}
+    window.addEventListener('storage',event=>{
+      if(event.key==='lae_audio_focus_v1'&&event.newValue)try{receive(JSON.parse(event.newValue));}catch{}
+    });
+  }
+  pauseOtherMedia(keep) {
+    const ad=this.advertiser?.active?this.advertiser.audio:null;
+    if(keep!==this.audio){
+      // An advertisement is part of the current queue transition. Preserve its
+      // request so the next song still starts when the advertisement finishes.
+      if(keep===ad && keep){if(!this.audio.paused)this.audio.pause();}
+      else this.pause();
+    }
+    // Remember the active preview even if navigation removed its HTML element.
+    if(ad&&ad!==keep&&!ad.paused){this.advertiser.userPaused=true;ad.pause();}
+    const mediaSources=new Set([this.focusMedia,...document.querySelectorAll('audio,video')]);
+    for(const media of mediaSources)if(media&&media!==keep&&media!==this.audio&&!media.paused)media.pause();
+    this.focusMedia=keep;
+  }
+  focusPlayback(media, starting=false) {
+    if(!this.focusId || !media || (media.paused&&!starting))return;
+    this.pauseOtherMedia(media);
+    const at=Math.max(this.focusStamp+.001,performance.timeOrigin+performance.now());
+    this.focusStamp=at;
+    const claim={owner:this.focusId,at};
+    try{this.focusChannel?.postMessage(claim);}catch{}
+    // Storage events also cover browsers without BroadcastChannel. No song,
+    // account, recording or signed media address is shared between tabs.
+    try{localStorage.setItem('lae_audio_focus_v1',JSON.stringify(claim));}catch{}
   }
   message(value) { $('playback-status').textContent = value; $('playback-status').title = value; }
   playState(playing) { $('play-toggle').textContent = playing ? 'Ⅱ' : '▶'; $('play-toggle').setAttribute('aria-label', playing ? 'Pause' : 'Play'); $('expanded-toggle').textContent = playing ? 'Pause' : 'Play'; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused'; }
@@ -90,7 +132,7 @@ export class MusicPlayer {
       data.validate?.();
       const url = new URL(data.url); if (!(data.offline===true&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
       this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
-      if (autoplay) await this.audio.play();
+      if (autoplay) { this.focusPlayback(this.audio,true); await this.audio.play(); }
     } catch (error) {
       if (request !== this.request || error.name === 'AbortError') return;
       if(error.name!=='NotAllowedError'){this.audio.pause();this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;prepared?.data.release?.();}
@@ -104,7 +146,7 @@ export class MusicPlayer {
     if(this.loading){this.pause();return;}
     if (!this.audio.paused) { this.pause(); return; }
     if (this.streamFailed || !this.audio.getAttribute('src')) { this.resumeAt = this.audio.currentTime || this.resumeAt; await this.playIndex(this.queue.index); return; }
-    try { if(this.beforeResume)await this.beforeResume();await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
+    try { if(this.beforeResume)await this.beforeResume();this.focusPlayback(this.audio,true);await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
   }
   async advance(ended = false) { if(this.advertiser?.active||this.advancing||(ended&&this.userPaused))return;this.advancing=true;try{const request=this.request;let autoplay=true;if(ended&&this.advertiser){const decision=this.advertiser.beforeAdvance();autoplay=(decision&&typeof decision.then==='function'?await decision:decision)!==false;}if(request!==this.request)return;const planned=this.nextPrepared(), index = this.queue.next(ended, planned?()=>planned.random:Math.random); if (index < 0) { this.playState(false); this.message('You’ve reached the end of your queue'); this.save(); } else await this.playIndex(index,autoplay,ended,planned);}finally{this.advancing=false;} }
   pause() { const loading=this.loading;this.loading=null;this.userPaused=true; this.request++; this.controller?.abort(); this.audio.pause();if(loading){this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;this.streamFailed=true;} this.playState(false); }
