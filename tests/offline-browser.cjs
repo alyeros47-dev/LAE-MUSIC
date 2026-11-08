@@ -50,6 +50,8 @@ function wav() {
   return b;
 }
 (async () => {
+  const shellName=fs.readFileSync('service-worker.js','utf8').match(/const OFFLINE_CACHE='([^']+)'/)[1];
+  const previousShell='lae-offline-shell-v'+(Number(shellName.split('-v').pop())-1);
   const audio = wav(),
     key = signing(
       crypto.generateKeyPairSync("ec", { namedCurve: "prime256v1" }).privateKey,
@@ -104,7 +106,7 @@ function wav() {
           "Service-Worker-Allowed": "/",
           "Cache-Control": "no-cache",
         });
-        return res.end(fs.readFileSync("service-worker.js", "utf8").replace("lae-offline-shell-v19",state.legacyShell?"lae-offline-shell-v18":"lae-offline-shell-v19"));
+        return res.end(fs.readFileSync("service-worker.js", "utf8").replace(shellName,state.legacyShell?previousShell:shellName));
       }
       if (p.startsWith("/web/") && !p.includes("..")) {
         const file = path.join("web", p.slice(5));
@@ -116,6 +118,7 @@ function wav() {
                 ".js": "application/javascript",
                 ".css": "text/css",
                 ".svg": "image/svg+xml",
+                ".png": "image/png",
                 ".webmanifest": "application/manifest+json",
               }[ext] || "application/octet-stream",
           });
@@ -323,7 +326,7 @@ function wav() {
       // Upgrade an installed public shell while preserving paid encrypted music.
       state.legacyShell = false;
       await page.evaluate(async () => { const registration=await navigator.serviceWorker.getRegistration();await registration.update(); });
-      await page.waitForFunction(async () => {const names=await caches.keys();return names.includes('lae-offline-shell-v19')&&!names.includes('lae-offline-shell-v18');});
+      await page.waitForFunction(async ({current,previous}) => {const names=await caches.keys();return names.includes(current)&&!names.includes(previous);},{current:shellName,previous:previousShell});
       assert.equal(await page.evaluate(async () => (await (await import('/web/offline-app.js')).offline.rows()).length),2);
       const stored = await page.evaluate(async () => {
         const { offline } = await import("/web/offline-app.js"),
