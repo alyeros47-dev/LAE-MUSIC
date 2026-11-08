@@ -404,16 +404,20 @@ function wav() {
       await page.locator('#audio').evaluate(audio=>{audio.currentTime=audio.duration-.2;});
       await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Offline next track'&&!document.getElementById('audio').paused&&document.getElementById('audio').currentTime>0);
       await page.getByRole('button',{name:'Previous track',exact:true}).click();
-      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Website offline fixture'&&!document.getElementById('audio').paused);
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Website offline fixture'&&!document.getElementById('audio').paused&&document.getElementById('audio').currentTime>0);
       await page.getByRole('button',{name:'Next track',exact:true}).click();
-      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Offline next track'&&!document.getElementById('audio').paused);
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Offline next track'&&!document.getElementById('audio').paused&&document.getElementById('audio').currentTime>0);
       await page.getByRole('button',{name:'Previous track',exact:true}).click();
-      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Website offline fixture'&&!document.getElementById('audio').paused);
+      await page.waitForFunction(()=>document.getElementById('player-title').textContent==='Website offline fixture'&&!document.getElementById('audio').paused&&document.getElementById('audio').currentTime>0);
       await page.evaluate(async () => {
         const { player, offline } = await import('/web/offline-app.js');
-        player.audio.pause();
-        if(offline.urls.size!==1)throw Error('Old offline audio URLs were not released');
+        player.pause();
+        const owned=new Set([player.audio.src,player.prepared?.data?.url].filter(Boolean));
+        if(!offline.urls.has(player.audio.src)||[...offline.urls].some(url=>!owned.has(url)))
+          throw Error('A discarded offline audio URL was retained');
         await offline.remove('2',false);
+        if(offline.urls.size!==1||!offline.urls.has(player.audio.src))
+          throw Error('Removing the upcoming song did not release its prepared audio');
       });
       assert(
         await page.evaluate(() =>
@@ -513,6 +517,9 @@ function wav() {
       });
       assert(rollback);
       await context.setOffline(false);
+      // Re-establish verified access through the normal UI after the clock test.
+      await page.getByRole('button',{name:'Verify & sync online',exact:true}).click();
+      await page.waitForFunction(()=>!document.getElementById('offline-sync').disabled);
       await page
         .getByRole("button", { name: "Play saved song", exact: true }).first()
         .click();
