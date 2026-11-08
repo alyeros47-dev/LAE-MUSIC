@@ -13,13 +13,17 @@ test('payment status copy stays short and distinguishes pending review, approval
  const {paymentMessage}=await bank;for(const status of ['awaiting_transfer','submitted','approved','rejected','cancelled']){const text=paymentMessage({status});assert(text.length>0&&text.length<110);}
  assert.match(paymentMessage({status:'submitted'}),/Waiting for approval/);assert.match(paymentMessage({status:'awaiting_transfer',expired:true}),/deadline passed/);assert.match(paymentMessage({status:'approved',guest_order_id:'fixture',guest_claimed:false}),/Finish setting up/);
 });
-test('normal policy section retains the complete existing refund wording; other business pages stay unchanged',async()=>{
- const {businessPage}=await import(data(fs.readFileSync('web/business.js','utf8'))),policy=require('../lib/financial-policy').disclosure(),business=require('../lib/publishing-policy').disclosure();
- for(const path of ['/publishing-policy','/about','/faq','/how-it-works']){let html='';const reads=[];await businessPage({set:x=>{html=x;}},new URL(path,'https://lae.test'),{api:async p=>{reads.push(p);return p==='/api/platform/business'?business:policy;},e,heading:()=>'',buttonLink:()=>''});
- if(path==='/publishing-policy'){for(const key of ['complaints','royalties','artist','premium','studio','currency'])assert(html.includes(e(policy[key])),key);assert(html.includes('id="refunds"'));}
- else {assert(!reads.includes('/api/platform/financial-policy'));assert(!html.includes('id="refunds"'));}
- if(path==='/how-it-works'){assert(html.includes('two separate tracks'));assert(html.includes('half of the remaining 70%'));}else assert(!html.includes('<h2>Your artist membership</h2>'));
+test('normal policy section retains the complete refund wording through the public information API',async()=>{
+ const app=await require('./runtime.cjs').runtime(),policy=require('../lib/financial-policy').disclosure();
+ for(const path of ['/publishing-policy','/about','/faq','/how-it-works']){
+  const result=await app.request('/api/platform/business?page='+encodeURIComponent(path));assert.equal(result.status,200);const {html}=result.json();
+  const initial=await app.request(path);assert(initial.text.includes(html),'initial page and public API agree');
+  if(path==='/publishing-policy'){for(const key of ['complaints','royalties','artist','premium','studio','currency'])assert(html.includes(e(policy[key])),key);assert(html.includes('id="refunds"'));}
+  else assert(!html.includes('id="refunds"'));
+  if(path==='/how-it-works'){assert(html.includes('two separate tracks'));assert(html.includes('50% of the remaining 70%'));}
  }
+ assert.deepEqual((await app.request('/api/platform/financial-policy')).json(),policy);
+
 });
 
 test('payment screens contain no refund notice, checkbox or fabricated acceptance payload',()=>{for(const file of ['web/app.js','web/premium.js','web/guest-bank-checkout.js','web/manual-bank-payments.js','web/financial-policy.js']){const s=fs.readFileSync(file,'utf8');if(!file.endsWith('financial-policy.js'))assert(!s.includes('refundConditions('),file);assert(!s.includes('policy_accepted'),file);}});

@@ -1,4 +1,4 @@
-name: Owner-approved background-audio deployment
+name: Owner-approved public-information deployment
 on:
   push:
     branches: [main]
@@ -8,7 +8,7 @@ permissions:
   pull-requests: read
 jobs:
   guarded-audio-release:
-    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-audio-release-36]')
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-search-release-37]')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     concurrency:
@@ -29,7 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/player-release-inputs.cjs
-      - name: Deploy the approved audio repair to the existing Render service
+      - name: Deploy the approved public-information update to the existing Render service
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
@@ -39,11 +39,12 @@ jobs:
           LAE_RELEASE_COMMIT_SHA: ${{ steps.release.outputs.commit }}
           LAE_RELEASE_CI_RUN: ${{ steps.release.outputs.ci_run }}
         run: node scripts/release-existing-service.cjs
-      - name: Verify the live audio repair and preserved services
+      - name: Verify the live public-information update and preserved services
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           LAE_LIVE_RELEASE_VERIFY: '1'
           LAE_LIVE_PAYMENT_UI_VERIFY: '1'
           LAE_LIVE_BRANDING_VERIFY: '1'
           LAE_LIVE_BACKGROUND_AUDIO_VERIFY: '1'
+          LAE_LIVE_PUBLIC_INFORMATION_VERIFY: '1'
         run: node scripts/verify-live-release.cjs

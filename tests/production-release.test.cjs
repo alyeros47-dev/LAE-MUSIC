@@ -11,7 +11,7 @@ const {
 const candidate = "a".repeat(40),
   commit = "b".repeat(40),
   tree = "c".repeat(40),
-  base = "d66e6da9ca30b109568eaa95c4c04e438321a935";
+  base = "1c396d07d00cd199be82d64879026ce95718f58c";
 const SOURCE = "br-flat-darkness-b42js8ma",
   PROJECT = "restless-brook-43273058";
 function fixture(
@@ -125,13 +125,13 @@ function fixture(
     } else {
       assert.equal(u.hostname, "api.github.com");
       assert.equal(opt.method, "GET");
-      if (p.endsWith("/pulls/36"))
+      if (p.endsWith("/pulls/37"))
         data = {
           merged: !unmergedPR,
           merge_commit_sha: commit,
           head: { sha: candidate },
         };
-      else if (p.endsWith("/git/ref/heads/codex/background-audio-playback"))
+      else if (p.endsWith("/git/ref/heads/codex/public-information-search"))
         data = { object: { sha: candidate } };
       else if (p.endsWith("/git/ref/heads/main"))
         data = { object: { sha: mode === "deploy" ? commit : movedBase ? "e".repeat(40) : base } };
@@ -248,7 +248,7 @@ test("release settings retain approved media hosts and reject unexpected live-mo
   );
 });
 
-test("PR 36 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
+test("PR 37 release refuses the prior or expired backup, moved main and an unmerged candidate before mutations", async () => {
   for (const [mode, options] of [["plan", {oldBackup:true}], ["plan", {expiredBackup:true}], ["plan", {movedBase:true}], ["deploy", {unmergedPR:true}]]) {
     const f=fixture(mode, options);
     await assert.rejects(f.run());
