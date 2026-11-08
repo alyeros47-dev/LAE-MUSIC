@@ -62,7 +62,9 @@ async function main() {
 
   for (const origin of [ORIGIN, "https://lae-music.onrender.com"]) {
     for (const file of ["web/app.js","web/description-studio.js","web/music-dna.js","web/studio-engine.js","web/feature-visibility.js","web/ui.css","web/guest-bank-checkout.js","web/manual-bank-payments.js","web/artist-membership.js","web/offline-app.js","web/offline.js","web/offline-protocol.js","service-worker.js","web/artist-packages.js","web/business.js","web/financial-policy.js","web/premium.js","web/partner-accounting.js","web/affiliate-access.js","web/player.js","web/index.html",...(branding?["web/lae-logo-wide.png","web/lae-logo-square.png","web/manifest.webmanifest"]:[]),...(background?["web/listening-ads.js"]:[])]) {
-      const local = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+      const source=fs.readFileSync(file);
+      const expected=file==="web/index.html"?require("../lib/public-information").renderShell(source.toString(),new URL(origin+"/"),{}).html:source;
+      const local = crypto.createHash("sha256").update(expected).digest("hex");
       let asset, matches=false;
       for(let attempt=0;attempt<6;attempt++){
         const r = await fetch(origin+(file==="web/index.html"?"/":"/"+file)+"?release="+process.env.GITHUB_SHA+"&attempt="+attempt,

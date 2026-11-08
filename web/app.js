@@ -2,7 +2,7 @@ import {guestBankCheckoutPage} from './guest-bank-checkout.js';
 import {openBankPayment,bankHistory,adminBankPayments} from './manual-bank-payments.js';
 import {membershipPage,creatorAgreementPage} from './artist-membership.js';
 import {affiliateEntry} from './affiliate-access.js';
-import {businessPage} from './business.js';
+import {businessPage,publicContentPaths,syncPublicMetadata,hasInitialPublicInformation,clearPublicMetadata} from './business.js';
 import {mountDescriptionStudio,ownerDescriptionStudio} from './description-studio.js';
 import {referralDemoPage,referralDemoReport} from './referral-demo.js';
 import {artistPackageEntry,artistPackageLink,artistPackagesPage,artistPackageLabel,artistPackageBenefits} from './artist-packages.js';
@@ -602,6 +602,12 @@ window.addEventListener('popstate',()=>route(true));
 window.addEventListener('hashchange',()=>{captureAccountLink();captureOperatorInvite();route();});
 async function route(focus=false){
   const token=++routeVersion,url=new URL(location.href),view={active:()=>token===routeVersion,set:html=>{if(token!==routeVersion)return false;$('page').innerHTML='<div class="page-content">'+html+'</div>';currencyDisplay.paint();hideInactiveFeatures($('page'),visibleFeatures);return true;}};
+  if(publicContentPaths.includes(url.pathname)){
+    document.querySelectorAll('.sidebar nav a').forEach(a=>a.removeAttribute('aria-current'));
+    try{await businessPage(view,url,{api});}catch(error){if(view.active()&&!hasInitialPublicInformation(url)){clearPublicMetadata(url);view.set(empty('Information unavailable',error.message));}}
+    if(view.active()&&focus){window.scrollTo({top:0,behavior:'instant'});$('page').focus({preventScroll:true});}return;
+  }
+  void syncPublicMetadata(url,{api,active:view.active}).catch(()=>{});
   view.set('<div class="skeleton-page" aria-label="Loading page"><div></div><div></div></div>');
   if(url.pathname==='/listener/account')activeAuthRole='listener';
   if(url.pathname==='/account'&&['artist','listener'].includes(url.searchParams.get('role'))){activeAuthRole=url.searchParams.get('role');try{sessionStorage.setItem('lae_active_role',activeAuthRole);}catch{}}
@@ -615,6 +621,7 @@ async function route(focus=false){
   if(packageEntry)document.title='Artist packages | LAE-MUSIC';
   if(!sessionVerified && ['/account','/studio','/workspace','/library','/partners','/admin/console'].includes(url.pathname)){sessionUnavailable(view);return;}
   try{const screens={'/pay':(view,url)=>guestBankCheckoutPage(view,url,{api,e,session,heading,notice,buttonLink,bindForm,keyFor,clearKey,navigate,refreshSession,route,actionDialog,readFile}),'/creator-agreement':view=>creatorAgreementPage(view,{api,e,heading}),...Object.fromEntries(['/about','/about-us','/business','/how-it-works','/publishing-policy','/faq'].map(path=>[path,(view,url)=>businessPage(view,url,{api,e,heading,notice,buttonLink})])),'/referral-demo':(view,url)=>visibleFeatures.affiliate_pending?view.set(heading('AFFILIATE FRAMEWORK','New commission allocations await approval.','Verified referral purchases remain recorded. No individual percentages or team qualification rules have been finalized.')):session.artist_testing_open?navigate(session.artist?'/studio':'/join?role=artist&mode=register'):referralDemoPage(view,url,{api,e,money,heading,notice,buttonLink,bindForm,navigate,keyFor,clearKey,toast,table}),'/offline':view=>offlinePage(view,{offline,player,toast,route:()=>route(true),refresh:refreshSession}),'/premium':(view,url)=>premiumPage(view,url,{api,e,session,heading,notice,buttonLink,bindForm,keyFor,clearKey,toast,route,date,currencyDisplay,navigate,actionDialog,refreshSession,readFile}),'/admin/enroll':(view,url)=>operatorEnrollmentPage(view,url,{api,e,heading,notice,bindForm,refreshSession,navigate,toast}),'/recover':(view,url)=>recoveryPage(view,url,accountSecurityContext()),'/verify-email':(view,url)=>recoveryPage(view,url,accountSecurityContext()),'/':discover,'/index.html':discover,'/discover':discover,'/artists':artists,'/library':library,'/workspace':workspace,'/studio':studio,'/partners':partners,'/account':account,'/join':join,'/admin/console':adminPage};if(packageEntry)await artistPackagesPage(view,url,{api,e,heading,notice,currencyDisplay,navigate,session,manualBank:visibleFeatures.manual_bank});else await (screens[url.pathname]||discover)(view,url);}catch(error){if(view.active())view.set(empty(error.status===401?'Sign in to continue':'This page is taking a moment',error.message,error.status===401?buttonLink('/join','Sign in'):'<button class="button secondary" id="page-retry">Try again</button>',error.status!==401));if($('page-retry'))$('page-retry').onclick=()=>route();}
+  if(view.active())void syncPublicMetadata(url,{api,active:view.active}).catch(()=>{});
   if(view.active()&&focus){window.scrollTo({top:0,behavior:'instant'});$('page').focus({preventScroll:true});}
 }
 premiumTracker=new PremiumListeningTracker({api,audio:document.getElementById('audio'),listener:()=>session.listener});

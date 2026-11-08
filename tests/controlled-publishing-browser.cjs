@@ -15,15 +15,17 @@ try{for(const width of [390,1440]){
   if(p==='/api/music/status')return send({uploadsEnabled:true,studioOnlyPublishing:true,externalUploadsEnabled:false});
   return send({});
  });
- for(const [path,title]of [['/about','About LAE-MUSIC'],['/how-it-works','How LAE-MUSIC works'],['/publishing-policy','Studio-only publishing policy'],['/faq','Frequently asked questions']]){
+ for(const [path,title]of [['/about','About LAE-MUSIC'],['/how-it-works','How LAE-MUSIC works'],['/publishing-policy','LAE-MUSIC publishing policy'],['/faq','Frequently asked questions']]){
   await page.goto(origin+path);await page.getByRole('heading',{name:title,exact:true}).waitFor();
-  assert(await page.getByText('LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform.',{exact:true}).isVisible());
-  assert(await page.getByText(/AI-generated music is not automatically copyright-free/).isVisible());
-  assert(await page.getByText(/Only songs generated through LAE-MUSIC Studio may be published during this launch/).isVisible());
+  if(path==='/about')assert(await page.getByText('LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform.',{exact:true}).isVisible());
+  if(path==='/how-it-works'||path==='/publishing-policy')assert(await page.getByText(/AI-generated music is not automatically copyright-free/).first().isVisible());
+  if(path==='/publishing-policy')assert(await page.getByText(/Only songs generated through LAE-MUSIC Studio may be published during this launch/).isVisible());
+  if(path==='/faq'){await page.getByText('Is AI music automatically copyright-free?',{exact:true}).click();assert(await page.getByText(/Applicable copyright and licensing requirements still apply/).isVisible());}
+  assert(await page.getByRole('link',{name:'Publishing policy',exact:true}).first().isVisible());
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual((await new AxeBuilder({page}).analyze()).violations,[]);
  }
- await page.goto(origin+'/start?product=professional');await page.getByRole('button',{name:'Choose Premium',exact:true}).waitFor();
- assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
+ await page.goto(origin+'/start?product=professional&ref=42');await page.getByRole('button',{name:'Choose Premium',exact:true}).waitFor();
+ assert.equal(new URL(page.url()).searchParams.get('ref'),'42');assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
  const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/3 music generations \/ year/);assert.match(packageCopy,/15 music generations \/ year/);assert.match(packageCopy,/Up to 30 songs \/ year/);assert(!packageCopy.includes('Professional'));
  signedIn=true;await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
  assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());assert(await page.getByLabel('Generated-song upload code',{exact:true}).getAttribute('required')!==null);
