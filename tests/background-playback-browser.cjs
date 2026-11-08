@@ -7,6 +7,20 @@ function tone(){const rate=8000,count=rate*6,b=Buffer.alloc(44+count*2);b.write(
  if(engine!=='chromium'){console.log('Native hidden-window coverage runs in Chromium; existing native foreground playback tests cover '+engine+'.');return;}
  const app=await runtime(),audio=tone(),server=http.createServer(async(req,res)=>{const r=await app.request(req.url);res.writeHead(r.status,r.headers);res.end(r.body);});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;let browser,xvfb,chrome,profile;
+ async function closeChrome(){
+  // connectOverCDP.close() may disconnect before the external process exits.
+  // Close native Chrome first, wait for it, then remove its temporary profile.
+  const child=chrome;chrome=null;
+  if(browser){
+   try{const session=await browser.newBrowserCDPSession();await session.send('Browser.close');}catch{}
+   await browser.close();browser=null;
+  }
+  if(child&&child.exitCode===null&&child.signalCode===null)await new Promise(resolve=>{
+   const timer=setTimeout(()=>child.kill('SIGKILL'),5000);
+   child.once('exit',()=>{clearTimeout(timer);resolve();});child.kill('SIGTERM');
+  });
+  if(profile){await fs.promises.rm(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});profile=null;}
+ }
  try{
   let display=process.env.DISPLAY;
   if(!display){
@@ -62,6 +76,6 @@ function tone(){const rate=8000,count=rate*6,b=Buffer.alloc(44+count*2);b.write(
    assert.equal(requests.filter(p=>p==='/api/music/tracks/2/stream').length,1,'prepared source must be reused');
    assert.equal(requests.filter(p=>p==='/api/music/tracks/3/stream').length,1);
    console.log('PASS '+engine+' '+role+': native background playback across two track endings, prepared-source reuse and explicit media-session pause/resume; document.hidden='+hidden);
-  }finally{await browser?.close();browser=null;chrome?.kill();chrome=null;fs.rmSync(profile,{recursive:true,force:true});profile=null;}
- }}finally{if(browser)await browser.close();chrome?.kill();if(profile)fs.rmSync(profile,{recursive:true,force:true});xvfb?.kill();await new Promise(r=>server.close(r));}
+  }finally{await closeChrome();}
+ }}finally{await closeChrome();xvfb?.kill();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
