@@ -70,3 +70,56 @@ test('automatic transitions request fresh offline sources and fail closed when t
 test('reaching the end does not add a false previous-track history entry',async()=>{
  const {PlaybackQueue}=await modulePromise,q=new PlaybackQueue();q.set([{id:1},{id:2}]);q.next(true);assert.equal(q.next(true),-1);assert.equal(q.previous(),0);assert.equal(q.current.id,'1');
 });
+
+const settle=()=>new Promise(resolve=>setImmediate(resolve));
+test('a prepared next song starts synchronously on ended without clearing native audio or waiting on the network',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom(),calls=[];
+ const p=new MusicPlayer({api:async url=>{calls.push(url);return {url:'https://storage.test/'+url.split('/')[4]+'.mp3'};},toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1,title:'One'},{id:2,title:'Two'}]);p.audio.duration=60;p.audio.dispatchEvent(new Event('loadedmetadata'));await settle();assert.equal(p.prepared.data.url,'https://storage.test/2.mp3');
+ let pauses=0,loads=0;p.audio.pause=()=>{pauses++;};p.audio.load=()=>{loads++;};p.audio.ended=true;p.audio.paused=true;
+ p.audio.dispatchEvent(new Event('ended'));
+ assert.equal(p.queue.current.id,'2');assert.equal(p.audio.src,'https://storage.test/2.mp3');assert.equal(p.audio.paused,false);assert.equal(pauses,0);assert.equal(loads,0);assert.equal(calls.filter(x=>x.endsWith('/stream')).length,2);assert(!calls.some(x=>x.endsWith('/play')));
+ await settle();assert(!d.storage.get('lae_playback_v2').includes('storage.test'));
+});
+test('slow preparation keeps the current audio source and media session until the next source is ready',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();let next;
+ const p=new MusicPlayer({api:async url=>url.includes('/1/')?{url:'https://storage.test/1.mp3'}:new Promise(resolve=>{next=resolve;}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);const end=p.advance(true);assert.equal(p.audio.src,'https://storage.test/1.mp3');next({url:'https://storage.test/2.mp3'});await end;assert.equal(p.audio.src,'https://storage.test/2.mp3');
+});
+test('a deliberate pause during an asynchronous song transition cancels its pending autoplay',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();let resolve;
+ const p=new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);p.advertiser={beforeAdvance:()=>new Promise(r=>{resolve=r;})};const end=p.advance(true);p.pause();resolve(true);await end;assert.equal(p.queue.current.id,'1');assert.equal(p.audio.paused,true);
+});
+test('offline preloading releases old blobs only after switching, and rejects a prepared expired grant',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();let valid=true,serial=0;const released=[];
+ const p=new MusicPlayer({api:async()=>{throw Error('No online media');},toast(){},onLike(){},onDetail(){}});
+ p.sourceProvider=async track=>{if(!valid)throw Error('Offline access expired');const id=++serial;return {url:'blob:https://lae.test/'+id,offline:true,release:()=>released.push(id),validate:()=>{if(!valid)throw Error('Expired grant');}};};
+ await p.setTracks([{id:1,offline:true},{id:2,offline:true},{id:3,offline:true}]);p.audio.duration=60;p.audio.dispatchEvent(new Event('loadedmetadata'));await settle();assert.deepEqual(released,[]);await p.advance(true);assert.equal(p.queue.current.id,'2');assert.deepEqual(released,[1]);
+ p.audio.dispatchEvent(new Event('loadedmetadata'));await settle();valid=false;await p.advance(true);assert.equal(p.audio.paused,true);assert.equal(p.audio.getAttribute('src'),null);assert.equal(p.streamFailed,true);assert(released.includes(3));assert(released.includes(2));
+});
+test('queue edits discard prepared audio and shuffle consumes the exact prepared choice',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();const releases=[];
+ const p=new MusicPlayer({api:async url=>({url:'https://storage.test/'+url.split('/')[4]+'.mp3',release:()=>releases.push(url)}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2},{id:3}]);p.queue.shuffle=true;p.audio.duration=60;p.audio.dispatchEvent(new Event('loadedmetadata'));await settle();const expected=p.prepared.index;await p.advance(true);assert.equal(p.queue.index,expected);
+ p.audio.dispatchEvent(new Event('loadedmetadata'));await settle();const old=p.prepared.data.url;p.queue.set([{id:9},{id:10}]);await p.playIndex(0);assert.equal(p.audio.src,'https://storage.test/9.mp3');assert(!p.audio.src.includes(old));assert(releases.length>=2);
+});
+test('a cancelled or superseded preparation releases its late offline blob instead of selecting it',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();let finish;const released=[];
+ const p=new MusicPlayer({api:async()=>({url:'https://storage.test/live.mp3'}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);p.sourceProvider=async(track,online,options)=>options?.preparing?new Promise(resolve=>{finish=resolve;}):online();p.audio.duration=60;p.prepareNext();await settle();p.clearPrepared();finish({url:'blob:https://lae.test/late',offline:true,release:()=>released.push('late')});await settle();assert.deepEqual(released,['late']);assert.equal(p.audio.src,'https://storage.test/live.mp3');
+});
+test('failed speculative preparation waits before retrying and never interrupts the current song',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();let calls=0;
+ const p=new MusicPlayer({api:async()=>({url:'https://storage.test/current.mp3'}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);p.sourceProvider=async()=>{calls++;throw Error('Temporary network outage');};p.audio.duration=60;p.prepareNext();await settle();p.prepareNext();await settle();assert.equal(calls,1);assert.equal(p.audio.paused,false);assert.equal(p.audio.src,'https://storage.test/current.mp3');
+});
+test('an explicitly paused player does not advance if an ended callback was already queued',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom();const p=new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);p.pause();await p.advance(true);assert.equal(p.queue.current.id,'1');assert.equal(p.audio.paused,true);assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Play');await p.toggle();await p.advance(true);assert.equal(p.queue.current.id,'2');
+});
+test('pausing a pending source change prevents a stale offline source from being resumed under the new selection',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();let finish;
+ const p=new MusicPlayer({api:async url=>url.includes('/1/')?{url:'https://storage.test/1.mp3'}:new Promise(resolve=>{finish=resolve;}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);const pending=p.advance(true);assert(p.loading);await p.toggle();assert.equal(p.audio.paused,true);assert.equal(p.audio.getAttribute('src'),null);assert.equal(p.streamFailed,true);finish({url:'https://storage.test/2.mp3'});await pending;assert.equal(p.audio.paused,true);assert.equal(p.audio.getAttribute('src'),null);
+});

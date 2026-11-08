@@ -26,7 +26,7 @@ export class MusicPlayer {
   constructor({ api, toast, onLike, onDetail }) {
     this.api = api; this.toast = toast; this.onLike = onLike; this.onDetail = onDetail;
     this.queue = new PlaybackQueue(); this.audio = $('audio'); this.request = 0; this.controller = null; this.counted = false; this.playRecordKey=null; this.listened = 0; this.lastTime = 0; this.resumeAt = 0;
-    this.lastAudibleVolume = 0.8; this.audio.volume = 0.8;
+    this.lastAudibleVolume = 0.8; this.audio.volume = 0.8; this.audio.preload = 'auto';
     $('play-toggle').onclick = () => this.toggle(); $('expanded-toggle').onclick = () => this.toggle();
     $('expanded-previous').onclick=()=>$('previous').click(); $('expanded-next').onclick=()=>$('next').click();
     $('next').onclick = () => this.advance(); $('previous').onclick = () => this.playIndex(this.queue.previous());
@@ -42,16 +42,16 @@ export class MusicPlayer {
     $('queue-toggle').onclick = () => this.openQueue(); $('expanded-queue').onclick = () => { $('expanded-player').close(); this.openQueue(); };
     $('player-like').onclick = () => this.queue.current && this.onLike(this.queue.current);
     $('queue-clear').onclick = () => { const t = this.queue.current; if (t) this.queue.set([t]); this.renderQueue(); this.save(); };
-    this.audio.addEventListener('play', () => { this.playState(true); this.message(''); });
-    this.audio.addEventListener('pause', () => { this.playState(false); this.save(); });
+    this.audio.addEventListener('play', () => { this.userPaused=false; this.playState(true); this.message(''); });
+    this.audio.addEventListener('pause', () => { if (!this.audio.ended || !this.nextPrepared()) this.playState(false); this.save(); });
     this.audio.addEventListener('waiting', () => this.message('Buffering…'));
-    this.audio.addEventListener('playing', () => this.message(''));
+    this.audio.addEventListener('playing', () => { this.message(''); this.prepareNext(); });
     this.audio.addEventListener('error', () => { this.playState(false); this.message('Audio unavailable. Press play to retry.'); this.streamFailed = true; });
-    this.audio.addEventListener('loadedmetadata', () => { $('duration').textContent = time(this.audio.duration);$('expanded-duration').textContent=time(this.audio.duration);$('expanded-seek').disabled=!Number.isFinite(this.audio.duration)||this.audio.duration<=0; $('seek').disabled = !Number.isFinite(this.audio.duration) || this.audio.duration <= 0; if (this.resumeAt && Number.isFinite(this.audio.duration)) this.audio.currentTime = Math.min(this.resumeAt, Math.max(0, this.audio.duration - 1)); this.resumeAt = 0; });
+    this.audio.addEventListener('loadedmetadata', () => { $('duration').textContent = time(this.audio.duration);$('expanded-duration').textContent=time(this.audio.duration);$('expanded-seek').disabled=!Number.isFinite(this.audio.duration)||this.audio.duration<=0; $('seek').disabled = !Number.isFinite(this.audio.duration) || this.audio.duration <= 0; if (this.resumeAt && Number.isFinite(this.audio.duration)) this.audio.currentTime = Math.min(this.resumeAt, Math.max(0, this.audio.duration - 1)); this.resumeAt = 0; this.prepareNext(); });
     this.audio.addEventListener('timeupdate', () => this.timeUpdate());
     this.audio.addEventListener('ended', () => this.advance(true));
     this.audio.addEventListener('volumechange', () => { this.updateMute(); this.save(); });
-    document.addEventListener('visibilitychange', () => this.save());
+    document.addEventListener('visibilitychange', () => { this.save(); if (!this.audio.paused) this.prepareNext(); });
     window.addEventListener('pagehide', () => this.save());
     this.restore(); this.updateMute(); this.setupMediaSession();
   }
@@ -79,31 +79,60 @@ export class MusicPlayer {
   }
   async setTracks(tracks, index = 0) { if(this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
   add(track) { this.queue.tracks.push(safeTrack(track)); this.toast('Added to your queue'); this.renderQueue(); this.save(); }
-  async playIndex(index, autoplay = true) {
+  async playIndex(index, autoplay = true, continuous = false, planned = null) {
     if (this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}if (index < 0 || index >= this.queue.tracks.length) return;
-    const request = ++this.request; this.controller?.abort(); this.controller = new AbortController();
-    this.currentSourceOffline=false;this.queue.index = index; this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.streamFailed = false; this.counted = false; this.playRecordKey=crypto.randomUUID(); this.listened = 0; this.lastTime = 0;
+    const prepared=planned?.index===index?planned:this.nextPrepared(index), request = ++this.request; this.clearPrepared(prepared); this.loading=request; this.controller?.abort(); this.controller = new AbortController();
+    this.currentSourceOffline=false;this.queue.index = index; if (!continuous) { this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); } this.streamFailed = false; this.counted = false; this.playRecordKey=crypto.randomUUID(); this.listened = 0; this.lastTime = 0;
     const track = this.queue.current; this.renderTrack(track); this.renderQueue(); this.message('Preparing your music…'); this.save();
     try {
-      const online=()=>this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`, 'GET', undefined, { signal: this.controller.signal });const data = this.sourceProvider?await this.sourceProvider(track,online):await online();
-      if (request !== this.request) return;
+      const online=()=>this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`, 'GET', undefined, { signal: this.controller.signal });const data = prepared ? prepared.data : this.sourceProvider?await this.sourceProvider(track,online):await online();
+      if (request !== this.request) { data.release?.(); return; }
+      data.validate?.();
       const url = new URL(data.url); if (!(data.offline===true&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
-      this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; this.audio.load(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
+      this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
       if (autoplay) await this.audio.play();
     } catch (error) {
       if (request !== this.request || error.name === 'AbortError') return;
+      if(error.name!=='NotAllowedError'){this.audio.pause();this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;prepared?.data.release?.();}
       this.playState(false); this.streamFailed = error.name !== 'NotAllowedError';
       this.message(error.name === 'NotAllowedError' ? 'Press play to start listening' : 'Unable to play. Press play to retry.'); this.toast(error.message || 'Playback unavailable', true);
-    }
+    } finally { if(this.loading===request)this.loading=null; }
   }
   async toggle() {
     if(this.advertiser?.active)return this.advertiser.toggle();
     if (!this.queue.current) return;
-    if (!this.audio.paused) { this.audio.pause(); return; }
+    if(this.loading){this.pause();return;}
+    if (!this.audio.paused) { this.pause(); return; }
     if (this.streamFailed || !this.audio.getAttribute('src')) { this.resumeAt = this.audio.currentTime || this.resumeAt; await this.playIndex(this.queue.index); return; }
     try { if(this.beforeResume)await this.beforeResume();await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
   }
-  async advance(ended = false) { if(this.advertiser?.active||this.advancing)return;this.advancing=true;try{let autoplay=true;if(ended&&this.advertiser)autoplay=(await this.advertiser.beforeAdvance())!==false;const index = this.queue.next(ended); if (index < 0) { this.playState(false); this.message('You’ve reached the end of your queue'); this.save(); } else await this.playIndex(index,autoplay);}finally{this.advancing=false;} }
+  async advance(ended = false) { if(this.advertiser?.active||this.advancing||(ended&&this.userPaused))return;this.advancing=true;try{const request=this.request;let autoplay=true;if(ended&&this.advertiser){const decision=this.advertiser.beforeAdvance();autoplay=(decision&&typeof decision.then==='function'?await decision:decision)!==false;}if(request!==this.request)return;const planned=this.nextPrepared(), index = this.queue.next(ended, planned?()=>planned.random:Math.random); if (index < 0) { this.playState(false); this.message('You’ve reached the end of your queue'); this.save(); } else await this.playIndex(index,autoplay,ended,planned);}finally{this.advancing=false;} }
+  pause() { const loading=this.loading;this.loading=null;this.userPaused=true; this.request++; this.controller?.abort(); this.audio.pause();if(loading){this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;this.streamFailed=true;} this.playState(false); }
+  queueIdentity() { return JSON.stringify([this.queue.index,this.queue.shuffle,this.queue.repeat,this.queue.tracks.map(t=>[t.id,t.offline===true])]); }
+  nextPrepared(index) {
+    const p=this.prepared;
+    if(!p?.data || p.identity!==this.queueIdentity() || (index!==undefined&&p.index!==index) || Date.now()-p.created>120000)return null;
+    try { p.data.validate?.(); return p; } catch { this.clearPrepared(); return null; }
+  }
+  clearPrepared(keep=null) {
+    const old=this.prepared; this.prepared=null;
+    if(old&&old!==keep){old.controller.abort();old.data?.release?.();}
+  }
+  prepareNext() {
+    if(this.audio.paused || !Number.isFinite(this.audio.duration) || this.audio.duration-this.audio.currentTime>90)return;
+    this.advertiser?.prepare?.();
+    const identity=this.queueIdentity();
+    if(this.prepareRetry?.identity===identity && Date.now()<this.prepareRetry.until)return;
+    if(this.prepared?.identity===identity && Date.now()-this.prepared.created<120000)return;
+    this.clearPrepared();
+    const random=Math.random(),copy=new PlaybackQueue();copy.set(this.queue.tracks,this.queue.index);copy.shuffle=this.queue.shuffle;copy.repeat=this.queue.repeat;
+    const index=copy.next(true,()=>random); if(index<0)return;
+    const track=this.queue.tracks[index],controller=new AbortController(),p={identity,index,random,controller,created:Date.now(),data:null};this.prepared=p;
+    const online=()=>this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`,'GET',undefined,{signal:controller.signal});
+    Promise.resolve().then(()=>this.sourceProvider?this.sourceProvider(track,online,{preparing:true}):online()).then(data=>{
+      if(this.prepared!==p || controller.signal.aborted){data.release?.();return;}p.data=data;
+    }).catch(()=>{if(this.prepared===p){this.clearPrepared();this.prepareRetry={identity,until:Date.now()+10000};}});
+  }
   renderTrack(track) {
     $('player').hidden = false; document.body.classList.add('has-player');
     $('player-title').textContent = track.title; $('player-artist').textContent = track.artist; $('player-artist').href = track.artist_id ? '/artists?id=' + track.artist_id : '/artists';
@@ -115,6 +144,7 @@ export class MusicPlayer {
     if ('mediaSession' in navigator && 'MediaMetadata' in window) navigator.mediaSession.metadata = new MediaMetadata({ title: track.title, artist: track.artist, album: 'LAE-MUSIC', artwork: [{ src: new URL(cover(track), location.origin).href }] });
   }
   timeUpdate() {
+    this.prepareNext();
     $('expanded-elapsed').textContent=time(this.audio.currentTime);$('expanded-seek').value=this.audio.duration?Math.round(this.audio.currentTime/this.audio.duration*1000):0;
     $('elapsed').textContent = time(this.audio.currentTime); $('seek').value = this.audio.duration ? Math.round(this.audio.currentTime / this.audio.duration * 1000) : 0;
     const delta = this.audio.currentTime - this.lastTime; if (!this.audio.paused && delta > 0 && delta < 2) this.listened += delta; this.lastTime = this.audio.currentTime;
@@ -151,6 +181,6 @@ export class MusicPlayer {
   }
   setupMediaSession() {
     if (!('mediaSession' in navigator)) return;
-    for (const [action, handler] of Object.entries({ play: () => { if(this.audio.paused)this.toggle(); }, pause: () => this.audio.pause(), nexttrack: () => this.advance(), previoustrack: () => this.playIndex(this.queue.previous()), seekto: event => { if (Number.isFinite(event.seekTime)) this.audio.currentTime = event.seekTime; }, seekbackward: event => { this.audio.currentTime = Math.max(0, this.audio.currentTime - (event.seekOffset || 10)); }, seekforward: event => { if (Number.isFinite(this.audio.duration)) this.audio.currentTime = Math.min(this.audio.duration, this.audio.currentTime + (event.seekOffset || 10)); } })) { try { navigator.mediaSession.setActionHandler(action, handler); } catch {} }
+    for (const [action, handler] of Object.entries({ play: () => { if(this.audio.paused)this.toggle(); }, pause: () => this.pause(), nexttrack: () => this.advance(), previoustrack: () => this.playIndex(this.queue.previous()), seekto: event => { if (Number.isFinite(event.seekTime)) this.audio.currentTime = event.seekTime; }, seekbackward: event => { this.audio.currentTime = Math.max(0, this.audio.currentTime - (event.seekOffset || 10)); }, seekforward: event => { if (Number.isFinite(this.audio.duration)) this.audio.currentTime = Math.min(this.audio.duration, this.audio.currentTime + (event.seekOffset || 10)); } })) { try { navigator.mediaSession.setActionHandler(action, handler); } catch {} }
   }
 }
