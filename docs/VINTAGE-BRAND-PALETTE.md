@@ -1,6 +1,6 @@
-# Glossy black and amber draft — original logo files pending
+# Approved glossy black, amber and original logos
 
-The interface uses a near-black canvas, neutral graphite panels, bright amber-gold accents and white/silver text. Main actions have a light metallic sheen; secondary actions have restrained graphite gloss. Typography, dimensions, spacing, content and application logic stay intact.
+The interface uses a near-black background, neutral graphite panels, bright amber accents and white/silver text. Main actions have a bright metallic sheen; secondary actions have restrained graphite gloss. Existing navigation, wording, forms and application behaviour are preserved.
 
 | Use | Colour |
 | --- | --- |
@@ -11,20 +11,29 @@ The interface uses a near-black canvas, neutral graphite panels, bright amber-go
 | Main text | `#f8faff` |
 | Secondary text | `#b9c0ce` |
 
-The existing `--lime` name remains for compatibility; it now holds bright amber. Added finish rules use only background, border colour, shadow and text colour. Existing red error treatments and artist images remain intact. Browser/app theme colours match the background. Public offline-shell cache v20 refreshes appearance without deleting encrypted songs or device keys; the existing offline test derives cache versions dynamically.
+The existing `--lime` variable name remains for compatibility; it now contains bright amber. Error styling and artist artwork are retained. Browser and installed-app theme colours match the background.
 
-## Verification
+## Original approved logos
 
-- Existing base CSS is identical after colour literals are removed. Added finish rules contain paint-only properties.
-- Actual browser bounding rectangles match the current production layout at 1440px and 393px for the hero, headline, actions, sidebar, topbar and footer.
-- Full-page accessibility checks, including a temporary fixture of input, textarea, select and primary/secondary/danger actions, passed at both widths. This fixture is not part of the website or screenshots.
-- Contrast ratios: main text 19.40:1, secondary text 10.25:1, amber links 11.62:1, primary label against the darkest gradient stop 10.17:1, placeholders 8.89:1 and input boundaries 3.79:1.
-- Native guest/Premium automatic playback and skip controls passed at 320/393/1440px. Mute/volume recovery passed at 320/360/393/1440px.
-- Existing offline upgrade/encryption/expiry checks passed before this paint revision; their code and behaviour are unchanged. No payment, membership, commission or database logic was modified, and unrelated backend tests were not repeated.
-- HTML body is unchanged; app-manifest settings differ only in appearance colours. No paid providers, customer credits, production writes or deployment.
+Both PNG files were extracted byte-for-byte from `LAE-MUSIC_Approved_Two_Logos.zip`. They have not been regenerated, cropped or recoloured.
 
-## Logo and preview status
+- `web/lae-logo-wide.png` (2048 × 682): main sidebar wordmark, including the phone navigation drawer. SHA-256: `e59e058b753000e99e4472d7a76a9d248b4527e5d3413b1631a74fc5d9f25452`.
+- `web/lae-logo-square.png` (1254 × 1254): home music feature, favicon, app icon and notification image. SHA-256: `add5a5e7d34250eb15f8db13357fe1034cc8ba42dbf87657847d4618933ce574`.
 
-The supplied logo pictures are visible in the conversation, but their original image files are unavailable in the execution workspace. Existing logo assets have not been redrawn or substituted. Install the supplied wide and compact logos once their exact files arrive, preferably together in a ZIP.
+Images use contain sizing to preserve the complete artwork. The wordmark uses the existing header/spacing reservation; the music feature stays inside its existing box. On phones the decorative feature is smaller and sits beside the main action, without covering it. Old SVG assets remain available for compatibility and the monochrome notification badge.
 
-Preview screenshots: `artifacts/glossy-black-amber-1440.png` and `artifacts/glossy-black-amber-393.png`. These isolated colour previews use sample API responses and the existing logo; they do not show a changed live catalogue. Production remains unchanged. This draft is not complete for deployment while original logo assets remain missing.
+Only the two new public image routes were added to the static whitelist. Public shell cache v20 includes both logos; cache upgrade logic, encrypted song storage and device keys are unchanged. The original PNGs total about 3.3 MB and are cached with the public offline shell.
+
+## Focused verification
+
+- `LAE_CHROMIUM_PATH=/usr/bin/chromium node tests/branding-browser.cjs`: passed. Actual GET/HEAD image delivery, exact file bytes/dimensions, manifest/favicon references, decoded images, complete feature placement, unobscured action, no horizontal overflow and accessible home navigation at 320/393/768/1024/1440px. Full-page Axe checks passed at 393/1440px. Added to the existing browser CI runner.
+- Isolated baseline comparison: hero, headline, actions, sidebar, topbar and footer bounding rectangles match production exactly at 1440/393px. Navigation starts less than one pixel from its previous position. Additional form/button contrast checks passed at both widths.
+- `LAE_CHROMIUM_PATH=/usr/bin/chromium npm run test:player:browser`: passed. Native guest/Premium automatic playback, next/back and saved song lists at 320/393/1440px; mute/volume recovery at 320/360/393/1440px.
+- `LAE_CHROMIUM_PATH=/usr/bin/chromium node tests/offline-browser.cjs`: passed. Desktop/mobile real service-worker installation and shell upgrade, retained encrypted songs, offline reload/playback, next/back, expiry, clock safeguards, key protection, sync, cross-tab cleanup and two Axe audits.
+- Both PNG hashes match the uploaded ZIP. JavaScript syntax and `git diff --check` passed.
+
+No Studio, account, payment, membership, commission, database or music-provider behaviour changed. No paid API calls or customer credits were used. Browser fixture updates only allow the new images to load with the correct MIME type.
+
+## Review status
+
+Preview screenshots: `artifacts/approved-brand-1440.png` and `artifacts/approved-brand-393.png`. These isolated previews use an empty catalogue fixture; they do not represent a changed live catalogue. The branding update is ready for review in Draft PR #35. Production remains unchanged; merge/deployment requires the owner's approval.

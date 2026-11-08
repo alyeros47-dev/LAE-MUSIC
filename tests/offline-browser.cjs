@@ -118,6 +118,7 @@ function wav() {
                 ".js": "application/javascript",
                 ".css": "text/css",
                 ".svg": "image/svg+xml",
+                ".png": "image/png",
                 ".webmanifest": "application/manifest+json",
               }[ext] || "application/octet-stream",
           });
