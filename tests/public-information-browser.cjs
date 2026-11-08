@@ -30,11 +30,16 @@ const AxeBuilder=require('@axe-core/playwright').default,{runtime}=require('./ru
   // Public copy survives unavailable account/configuration APIs on a direct load.
   await page.route('**/api/**',route=>route.abort('failed'));await page.goto(origin+'/affiliate-program');await page.getByRole('heading',{name:'LAE-MUSIC affiliate program',exact:true}).waitFor();assert(await page.getByText('Approved Premium commissions',{exact:true}).isVisible());
   await page.unroute('**/api/**');
-  // Direct public pages contain their useful content even before application scripts run.
-  await page.goto(origin+'/about');await page.getByRole('heading',{name:'About LAE-MUSIC',exact:true}).waitFor();
-  fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/'+artifactLabel('public-information-'+width)+'.png'});
-  await page.getByRole('navigation',{name:'Public information'}).getByRole('link',{name:'Affiliate program',exact:true}).click();await page.getByRole('heading',{name:'LAE-MUSIC affiliate program',exact:true}).waitFor();await page.screenshot({path:'artifacts/'+artifactLabel('public-affiliate-'+width)+'.png'});await page.getByRole('link',{name:'Open partner dashboard',exact:true}).click();await page.waitForURL('**/partners');await page.waitForFunction(()=>!document.querySelector('link[rel="canonical"]')&&document.querySelector('meta[name="robots"]').content==='noindex,follow');assert.equal(await page.getByRole('heading',{name:'About LAE-MUSIC',exact:true}).count(),0);
+  await page.getByRole('link',{name:'Open partner dashboard',exact:true}).click();await page.waitForURL('**/partners');await page.waitForFunction(()=>!document.querySelector('link[rel="canonical"]')&&document.querySelector('meta[name="robots"]').content==='noindex,follow');assert.equal(await page.getByRole('heading',{name:'About LAE-MUSIC',exact:true}).count(),0);
   assert.deepEqual(violations,[]);assert.deepEqual(errors,[]);assert.deepEqual(writes,[]);assert.deepEqual(await page.evaluate(()=>window.cspViolations),[]);
+  // WebKit's screenshot tool injects "body {}" to sync animations. Capture evidence
+  // only after asserting the complete customer journey has no CSP violations.
+  fs.mkdirSync('artifacts',{recursive:true});
+  await page.goto(origin+'/about');await page.getByRole('heading',{name:'About LAE-MUSIC',exact:true}).waitFor();
+  await page.screenshot({path:'artifacts/'+artifactLabel('public-information-'+width)+'.png'});
+  await page.getByRole('navigation',{name:'Public information'}).getByRole('link',{name:'Affiliate program',exact:true}).click();
+  await page.getByRole('heading',{name:'LAE-MUSIC affiliate program',exact:true}).waitFor();
+  await page.screenshot({path:'artifacts/'+artifactLabel('public-affiliate-'+width)+'.png'});
   await context.close();console.log('PASS '+width+'px: seven no-JavaScript public pages, linked public navigation, metadata/schema parity, unavailable-account fallback, ten focused page audits across both widths; no writes.');
  }}finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

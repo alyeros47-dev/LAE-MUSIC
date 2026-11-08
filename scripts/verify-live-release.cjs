@@ -13,6 +13,8 @@ async function main() {
   const focused=process.env.LAE_LIVE_PAYMENT_UI_VERIFY==="1";
   const branding=process.env.LAE_LIVE_BRANDING_VERIFY==="1";
   const background=process.env.LAE_LIVE_BACKGROUND_AUDIO_VERIFY==="1";
+  const publicInformation=process.env.LAE_LIVE_PUBLIC_INFORMATION_VERIFY==="1";
+  let publicPagesVerified=0;
   const check = (ok, label) => {
     if (!ok) throw Error("Live verification failed: " + label);
   };
@@ -78,6 +80,21 @@ async function main() {
       if(file==='web/partner-accounting.js')check(asset.includes(Buffer.from('Copy Premium link'))&&asset.includes(Buffer.from('Three-Month Premium · $1.80')),'Premium referral sharing controls');
       if(focused&&file==='web/manual-bank-payments.js')check(asset.includes(Buffer.from('Send payment receipt'))&&asset.includes(Buffer.from('Approve payment'))&&!/name=\"(?:transfer_reference|transferred_at|received_amount|bank_reference)\"/.test(asset.toString('utf8')),'receipt-only customer submission and one-click administrator review');
       if(focused&&['web/app.js','web/premium.js','web/manual-bank-payments.js','web/guest-bank-checkout.js'].includes(file))check(!/policy_accepted|refundConditions\(/.test(asset.toString('utf8')),'payment UI has no refund acceptance prompt or payload');
+    }
+  }
+  if(publicInformation){
+    const info=require('../lib/public-information'),shell=fs.readFileSync('web/index.html','utf8');
+    for(const origin of [ORIGIN,"https://lae-music.onrender.com"]){
+      for(const path of info.PATHS){
+        const response=await fetch(origin+path,{redirect:'error',signal:AbortSignal.timeout(30000)});
+        check(response.ok&&!response.headers.get('x-robots-tag')?.includes('noindex'),'indexable public page '+path);
+        check(await response.text()===info.renderShell(shell,new URL(origin+path),{}).html,'exact public copy and search metadata '+path);
+        publicPagesVerified++;
+      }
+      for(const [path,expected]of [['/robots.txt',info.robots({})],['/sitemap.xml',info.sitemap()]]){
+        const response=await fetch(origin+path,{redirect:'error',signal:AbortSignal.timeout(30000)});
+        check(response.ok&&await response.text()===expected,'live search discovery '+path);
+      }
     }
   }
   const dnaCatalogue=await api("/api/platform/studio/dna/catalog");
@@ -282,6 +299,7 @@ async function main() {
       status: "live_release_verified",
       asset_origins_verified: 2,
       customer_assets_per_origin_verified:21+(branding?3:0)+(background?1:0),
+      public_information_pages_verified:publicPagesVerified,
       background_audio_customer_assets_verified:background,
       approved_original_logo_assets_verified:branding,
       music_dna_styles_verified: 70,
@@ -304,7 +322,7 @@ async function main() {
       offline_signer_verified:true,
       premium_referrals_20_10_verified:true,
       player_assets_verified:true,
-      verification_scope:focused?(background?"background_audio_assets_and_preserved_financial_integrity":branding?"approved_branding_assets_and_preserved_financial_integrity":"continuous_player_assets_and_preserved_financial_integrity"):"full_customer_release",
+      verification_scope:publicInformation?"public_information_and_preserved_financial_integrity":focused?(background?"background_audio_assets_and_preserved_financial_integrity":branding?"approved_branding_assets_and_preserved_financial_integrity":"continuous_player_assets_and_preserved_financial_integrity"):"full_customer_release",
       refund_acceptance_removed:focused,
       receipt_only_payment_ui_verified:focused,
       voice_training:"deferred_by_owner_pending_MusicAPI_verification",

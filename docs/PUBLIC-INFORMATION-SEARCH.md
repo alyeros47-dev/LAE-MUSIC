@@ -1,6 +1,6 @@
 # Public information and Google Search visibility
 
-Status: implemented on `codex/public-information-search`; not merged or deployed. Owner approval is required before production deployment. No Google submission was made.
+Status: implemented on `codex/public-information-search`. The owner approved merge and deployment; the guarded release verifies the final candidate and live pages. No Google submission was made.
 
 ## Inspection
 
@@ -51,6 +51,7 @@ The guide also shows the approved $1.80 revenue illustration: $0.54 affiliate/te
 - `LAE_CHROMIUM_PATH=/usr/bin/chromium node tests/public-information-browser.cjs`: passed at 393/1440px. Seven information/pricing pages readable without JavaScript; public in-app links and metadata/schema updates; unavailable-account fallback; no overflow; ten focused accessibility audits; correct metadata cleanup when entering the partner account page; no writes.
 - `LAE_CHROMIUM_PATH=/usr/bin/chromium node tests/controlled-publishing-browser.cjs`: passed at 390/1440px. Public copy and accessibility, existing three package cards, referral parameter preservation and the unchanged code-required upload form.
 - `LAE_CHROMIUM_PATH=/usr/bin/chromium node tests/offline-browser.cjs`: public-shell upgrade and encrypted offline-library retention/expiry/sync checks. No paid providers or customer credits used.
+- Final release checks also cover the existing package-first referral browser journey, full policy route/API parity and the 12 guarded release tests. Browser security assertions run before screenshots because WebKit’s screenshot tool injects its own animation-sync CSS; no customer CSP violation is ignored and the application CSP is unchanged. Exact public HTML, sitemap and robots checks run on both live domains after deployment.
 - New public-information tests are registered with the existing unit/browser CI runners. JavaScript syntax and `git diff --check` passed. No broad Music DNA audit or paid generation tests were repeated.
 
 Preview images are local artifacts, not a changed live website: `artifacts/public-information-393.png`, `artifacts/public-information-1440.png`, `artifacts/public-affiliate-393.png`, `artifacts/public-affiliate-1440.png`.
