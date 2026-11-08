@@ -1,30 +1,30 @@
-# Vintage colour draft — original logo files pending
+# Glossy black and amber draft — original logo files pending
 
-The owner requested a colour and logo update while preserving the current layout, settings and working features. This draft changes the public interface from green to warm charcoal/espresso surfaces, antique-gold accents and ivory text. Typography, geometry, content, buttons, links and application logic are unchanged.
+The interface uses a near-black canvas, neutral graphite panels, bright amber-gold accents and white/silver text. Main actions have a light metallic sheen; secondary actions have restrained graphite gloss. Typography, dimensions, spacing, content and application logic stay intact.
 
 | Use | Colour |
 | --- | --- |
-| Page background | `#151210` |
-| Main panels | `#1f1b18` |
-| Raised surfaces | `#2a2420` |
-| Primary accent | `#e2bf7b` |
-| Main text | `#f6eedf` |
-| Secondary text | `#c0b5a5` |
+| Page background | `#050609` |
+| Main panels | `#101217` |
+| Raised surfaces | `#191c23` |
+| Primary accent | `#ffc238` |
+| Main text | `#f8faff` |
+| Secondary text | `#b9c0ce` |
 
-The existing `--lime` variable name remains for compatibility; its value is antique gold. Existing red error treatments and artist images remain intact. Browser/app theme colours follow the page background. Public offline-shell cache v20 refreshes the appearance without deleting encrypted songs or device keys. The offline test derives the current/prior shell names so future appearance-only releases do not depend on hardcoded cache versions.
+The existing `--lime` name remains for compatibility; it now holds bright amber. Added finish rules use only background, border colour, shadow and text colour. Existing red error treatments and artist images remain intact. Browser/app theme colours match the background. Public offline-shell cache v20 refreshes appearance without deleting encrypted songs or device keys; the existing offline test derives cache versions dynamically.
 
 ## Verification
 
-- Removing colour literals from the before/after CSS produces identical content: selectors, sizes, positions, spacing and layout rules are unchanged.
-- HTML body bytes are unchanged. App-manifest settings are unchanged except background/theme colours. No server, Studio, payment, membership, referral or royalty code is modified.
-- Contrast ratios: main text 16.18:1, secondary text 8.46:1, gold links 9.75:1, primary-button label 9.82:1, form labels 14.16:1, placeholders 7.30:1 and input boundaries 3.66:1.
-- Existing Chromium customer journeys passed 53 accessibility audits at desktop, tablet and mobile sizes, using mocked payment/media services.
-- Native automatic playback and skip controls passed for guests and Premium at 320/393/1440px. Existing mute/volume recovery passed at four widths.
-- Actual encrypted PWA tests passed at desktop/mobile, including installed-shell upgrade with two saved songs, offline progression, skip controls, access expiry, clock checks, exactly-once sync and account cleanup.
-- No paid provider calls, customer credit use, production writes or deployment.
+- Existing base CSS is identical after colour literals are removed. Added finish rules contain paint-only properties.
+- Actual browser bounding rectangles match the current production layout at 1440px and 393px for the hero, headline, actions, sidebar, topbar and footer.
+- Full-page accessibility checks, including a temporary fixture of input, textarea, select and primary/secondary/danger actions, passed at both widths. This fixture is not part of the website or screenshots.
+- Contrast ratios: main text 19.40:1, secondary text 10.25:1, amber links 11.62:1, primary label against the darkest gradient stop 10.17:1, placeholders 8.89:1 and input boundaries 3.79:1.
+- Native guest/Premium automatic playback and skip controls passed at 320/393/1440px. Mute/volume recovery passed at 320/360/393/1440px.
+- Existing offline upgrade/encryption/expiry checks passed before this paint revision; their code and behaviour are unchanged. No payment, membership, commission or database logic was modified, and unrelated backend tests were not repeated.
+- HTML body is unchanged; app-manifest settings differ only in appearance colours. No paid providers, customer credits, production writes or deployment.
 
-## Remaining logo work
+## Logo and preview status
 
-Both supplied logo pictures are visible in the conversation, but their downloadable image files are not present in the execution workspace. They have not been redrawn or substituted. Exact source files are required before installing the wide wordmark and compact branding. Existing logo/placeholder assets remain in this draft until those files arrive. Request both originals in a ZIP to preserve the exact artwork.
+The supplied logo pictures are visible in the conversation, but their original image files are unavailable in the execution workspace. Existing logo assets have not been redrawn or substituted. Install the supplied wide and compact logos once their exact files arrive, preferably together in a ZIP.
 
-Local preview screenshots: `artifacts/vintage-palette-1440.png` and `artifacts/vintage-palette-393.png`. These previews show the colour draft with the existing logo. Production remains unchanged; this draft is not complete for deployment while the original logo assets are missing.
+Preview screenshots: `artifacts/glossy-black-amber-1440.png` and `artifacts/glossy-black-amber-393.png`. These isolated colour previews use sample API responses and the existing logo; they do not show a changed live catalogue. Production remains unchanged. This draft is not complete for deployment while original logo assets remain missing.
