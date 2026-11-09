@@ -14,6 +14,7 @@ async function main() {
   const branding=process.env.LAE_LIVE_BRANDING_VERIFY==="1";
   const background=process.env.LAE_LIVE_BACKGROUND_AUDIO_VERIFY==="1";
   const publicInformation=process.env.LAE_LIVE_PUBLIC_INFORMATION_VERIFY==="1";
+  const audioClarity=process.env.LAE_LIVE_AUDIO_CLARITY_VERIFY==="1";
   let publicPagesVerified=0;
   const check = (ok, label) => {
     if (!ok) throw Error("Live verification failed: " + label);
@@ -300,6 +301,7 @@ async function main() {
       asset_origins_verified: 2,
       customer_assets_per_origin_verified:21+(branding?3:0)+(background?1:0),
       public_information_pages_verified:publicPagesVerified,
+      playback_quality_customer_assets_verified:audioClarity,
       background_audio_customer_assets_verified:background,
       approved_original_logo_assets_verified:branding,
       music_dna_styles_verified: 70,
@@ -322,7 +324,7 @@ async function main() {
       offline_signer_verified:true,
       premium_referrals_20_10_verified:true,
       player_assets_verified:true,
-      verification_scope:publicInformation?"public_information_and_preserved_financial_integrity":focused?(background?"background_audio_assets_and_preserved_financial_integrity":branding?"approved_branding_assets_and_preserved_financial_integrity":"continuous_player_assets_and_preserved_financial_integrity"):"full_customer_release",
+      verification_scope:audioClarity?"playback_quality_and_preserved_financial_integrity":publicInformation?"public_information_and_preserved_financial_integrity":focused?(background?"background_audio_assets_and_preserved_financial_integrity":branding?"approved_branding_assets_and_preserved_financial_integrity":"continuous_player_assets_and_preserved_financial_integrity"):"full_customer_release",
       refund_acceptance_removed:focused,
       receipt_only_payment_ui_verified:focused,
       voice_training:"deferred_by_owner_pending_MusicAPI_verification",
