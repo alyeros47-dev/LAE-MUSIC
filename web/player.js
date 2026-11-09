@@ -2,6 +2,11 @@ const $ = id => document.getElementById(id);
 export const time = seconds => Number.isFinite(seconds) && seconds >= 0 ? Math.floor(seconds / 60) + ':' + String(Math.floor(seconds % 60)).padStart(2, '0') : '0:00';
 const cover = track => track?.id ? `/api/music/tracks/${encodeURIComponent(track.id)}/cover-image` : '/web/artwork.svg';
 const safeTrack = t => ({ id: String(t.id), title: String(t.title || 'Untitled'), artist: String(t.artist || 'Independent artist'), artist_id: t.artist_id ? String(t.artist_id) : '', genre: String(t.genre || ''),...(t.offline===true?{offline:true}:{}) });
+// Keep normal listening levels unchanged; reserve 1.4 dB of native output
+// headroom at the top of the slider for decoded MP3 inter-sample peaks.
+const outputCeiling=.85;
+const outputVolume=level=>level<=.8?level:.8+(level-.8)*.25;
+const controlVolume=level=>Math.round((level<=.8?level:.8+(level-.8)*4)*100)/100;
 export class PlaybackQueue {
   constructor() { this.tracks = []; this.index = -1; this.shuffle = false; this.repeat = 'off'; this.history = []; }
   set(tracks, index = 0) { this.tracks = tracks.map(safeTrack); this.index = this.tracks.length ? Math.max(0, Math.min(index, this.tracks.length - 1)) : -1; this.history = []; }
@@ -53,13 +58,55 @@ export class MusicPlayer {
     this.audio.addEventListener('volumechange', () => { this.updateMute(); this.save(); });
     document.addEventListener('visibilitychange', () => { this.save(); if (!this.audio.paused) this.prepareNext(); });
     window.addEventListener('pagehide', () => this.save());
-    this.restore(); this.updateMute(); this.setupMediaSession();
+    this.restore(); this.updateMute(); this.setupMediaSession(); this.setupAudioFocus();
+  }
+  setupAudioFocus() {
+    if (typeof HTMLMediaElement === 'undefined' || !document.querySelectorAll) return;
+    this.focusId=crypto.randomUUID(); this.focusStamp=0;
+    document.addEventListener('play',event=>{
+      const media=event.target;
+      // Silent decorative video must not interrupt a listener's music.
+      if(media instanceof HTMLMediaElement && !(media.tagName==='VIDEO'&&media.muted))this.focusPlayback(media);
+    },true);
+    const receive=data=>{
+      if(data?.owner===this.focusId || typeof data?.owner!=='string' || !Number.isFinite(data?.at) || data.at<=this.focusStamp)return;
+      this.focusStamp=data.at; this.pauseOtherMedia(null);
+    };
+    try { this.focusChannel=new BroadcastChannel('lae-audio-focus-v1'); this.focusChannel.onmessage=event=>receive(event.data); } catch {}
+    window.addEventListener('storage',event=>{
+      if(event.key==='lae_audio_focus_v1'&&event.newValue)try{receive(JSON.parse(event.newValue));}catch{}
+    });
+  }
+  pauseOtherMedia(keep) {
+    const ad=this.advertiser?.active?this.advertiser.audio:null;
+    if(keep!==this.audio){
+      // An advertisement is part of the current queue transition. Preserve its
+      // request so the next song still starts when the advertisement finishes.
+      if(keep===ad && keep){if(!this.audio.paused)this.audio.pause();}
+      else this.pause();
+    }
+    // Remember the active preview even if navigation removed its HTML element.
+    if(ad&&ad!==keep&&!ad.paused){this.advertiser.userPaused=true;ad.pause();}
+    const mediaSources=new Set([this.focusMedia,...document.querySelectorAll('audio,video')]);
+    for(const media of mediaSources)if(media&&media!==keep&&media!==this.audio&&!media.paused)media.pause();
+    this.focusMedia=keep;
+  }
+  focusPlayback(media, starting=false) {
+    if(!this.focusId || !media || (media.paused&&!starting))return;
+    this.pauseOtherMedia(media);
+    const at=Math.max(this.focusStamp+.001,performance.timeOrigin+performance.now());
+    this.focusStamp=at;
+    const claim={owner:this.focusId,at};
+    try{this.focusChannel?.postMessage(claim);}catch{}
+    // Storage events also cover browsers without BroadcastChannel. No song,
+    // account, recording or signed media address is shared between tabs.
+    try{localStorage.setItem('lae_audio_focus_v1',JSON.stringify(claim));}catch{}
   }
   message(value) { $('playback-status').textContent = value; $('playback-status').title = value; }
   playState(playing) { $('play-toggle').textContent = playing ? 'Ⅱ' : '▶'; $('play-toggle').setAttribute('aria-label', playing ? 'Pause' : 'Play'); $('expanded-toggle').textContent = playing ? 'Pause' : 'Play'; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused'; }
   setVolume(value) {
     const volume = Number(value); if (!Number.isFinite(volume)) return;
-    this.audio.volume = Math.max(0, Math.min(1, volume)); this.audio.muted = false;
+    this.audio.volume = outputVolume(Math.max(0, Math.min(1, volume))); this.audio.muted = false;
     this.updateMute(); this.save();
   }
   toggleMute() {
@@ -70,11 +117,12 @@ export class MusicPlayer {
     this.updateMute(); this.save();
   }
   updateMute() {
+    if(this.audio.volume>outputCeiling)this.audio.volume=outputCeiling;
     if (this.audio.volume > 0) this.lastAudibleVolume = this.audio.volume;
     const off = this.audio.muted || this.audio.volume === 0;
     const button = $('mute'); button.classList.remove('optional'); button.setAttribute('aria-label', off ? 'Unmute' : 'Mute');
     button.setAttribute('aria-pressed', off); button.title = off ? 'Turn sound on' : 'Mute sound'; button.textContent = off ? '🔇' : '🔊';
-    $('volume').value = $('expanded-volume').value = this.audio.volume;
+    $('volume').value = $('expanded-volume').value = controlVolume(this.audio.volume);
     const status = $('playback-sound-status'); if (status) { status.hidden = !off; status.textContent = off ? 'Sound off · Tap the speaker' : ''; }
   }
   async setTracks(tracks, index = 0) { if(this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
@@ -90,7 +138,7 @@ export class MusicPlayer {
       data.validate?.();
       const url = new URL(data.url); if (!(data.offline===true&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
       this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
-      if (autoplay) await this.audio.play();
+      if (autoplay) { this.focusPlayback(this.audio,true); await this.audio.play(); }
     } catch (error) {
       if (request !== this.request || error.name === 'AbortError') return;
       if(error.name!=='NotAllowedError'){this.audio.pause();this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;prepared?.data.release?.();}
@@ -104,7 +152,7 @@ export class MusicPlayer {
     if(this.loading){this.pause();return;}
     if (!this.audio.paused) { this.pause(); return; }
     if (this.streamFailed || !this.audio.getAttribute('src')) { this.resumeAt = this.audio.currentTime || this.resumeAt; await this.playIndex(this.queue.index); return; }
-    try { if(this.beforeResume)await this.beforeResume();await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
+    try { if(this.beforeResume)await this.beforeResume();this.focusPlayback(this.audio,true);await this.audio.play(); } catch (error) { this.message('Press play to retry'); this.toast(error.message, true); }
   }
   async advance(ended = false) { if(this.advertiser?.active||this.advancing||(ended&&this.userPaused))return;this.advancing=true;try{const request=this.request;let autoplay=true;if(ended&&this.advertiser){const decision=this.advertiser.beforeAdvance();autoplay=(decision&&typeof decision.then==='function'?await decision:decision)!==false;}if(request!==this.request)return;const planned=this.nextPrepared(), index = this.queue.next(ended, planned?()=>planned.random:Math.random); if (index < 0) { this.playState(false); this.message('You’ve reached the end of your queue'); this.save(); } else await this.playIndex(index,autoplay,ended,planned);}finally{this.advancing=false;} }
   pause() { const loading=this.loading;this.loading=null;this.userPaused=true; this.request++; this.controller?.abort(); this.audio.pause();if(loading){this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;this.streamFailed=true;} this.playState(false); }
@@ -173,9 +221,9 @@ export class MusicPlayer {
     try { const data = JSON.parse(localStorage.getItem('lae_playback_v2')); if (!data || !Array.isArray(data.tracks)) return;
       const tracks = data.tracks.filter(t => t && /^[1-9]\d{0,15}$/.test(String(t.id))).slice(0, 200);
       this.queue.set(tracks, Number.isInteger(data.index) ? data.index : 0); this.queue.shuffle = data.shuffle === true; this.queue.repeat = ['off', 'all', 'one'].includes(data.repeat) ? data.repeat : 'off';
-      this.lastAudibleVolume = typeof data.lastAudibleVolume === 'number' && data.lastAudibleVolume > 0 && data.lastAudibleVolume <= 1 ? data.lastAudibleVolume : .8;
+      this.lastAudibleVolume = typeof data.lastAudibleVolume === 'number' && data.lastAudibleVolume > 0 && data.lastAudibleVolume <= 1 ? Math.min(data.lastAudibleVolume,outputCeiling) : .8;
       this.audio.muted = data.muted === true;
-      this.audio.volume = typeof data.volume === 'number' && data.volume >= 0 && data.volume <= 1 ? data.volume : .8; $('volume').value = this.audio.volume; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻';
+      this.audio.volume = typeof data.volume === 'number' && data.volume >= 0 && data.volume <= 1 ? Math.min(data.volume,outputCeiling) : .8; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻';
       if (this.queue.current) { this.resumeAt = Math.max(0, Number(data.position) || 0); this.renderTrack(this.queue.current); this.message('Press play to resume'); }
     } catch { /* A stale/corrupt browser preference must never prevent public listening. */ }
   }
