@@ -2,6 +2,11 @@ const $ = id => document.getElementById(id);
 export const time = seconds => Number.isFinite(seconds) && seconds >= 0 ? Math.floor(seconds / 60) + ':' + String(Math.floor(seconds % 60)).padStart(2, '0') : '0:00';
 const cover = track => track?.id ? `/api/music/tracks/${encodeURIComponent(track.id)}/cover-image` : '/web/artwork.svg';
 const safeTrack = t => ({ id: String(t.id), title: String(t.title || 'Untitled'), artist: String(t.artist || 'Independent artist'), artist_id: t.artist_id ? String(t.artist_id) : '', genre: String(t.genre || ''),...(t.offline===true?{offline:true}:{}) });
+// Keep normal listening levels unchanged; reserve 1.4 dB of native output
+// headroom at the top of the slider for decoded MP3 inter-sample peaks.
+const outputCeiling=.85;
+const outputVolume=level=>level<=.8?level:.8+(level-.8)*.25;
+const controlVolume=level=>Math.round((level<=.8?level:.8+(level-.8)*4)*100)/100;
 export class PlaybackQueue {
   constructor() { this.tracks = []; this.index = -1; this.shuffle = false; this.repeat = 'off'; this.history = []; }
   set(tracks, index = 0) { this.tracks = tracks.map(safeTrack); this.index = this.tracks.length ? Math.max(0, Math.min(index, this.tracks.length - 1)) : -1; this.history = []; }
@@ -101,7 +106,7 @@ export class MusicPlayer {
   playState(playing) { $('play-toggle').textContent = playing ? 'Ⅱ' : '▶'; $('play-toggle').setAttribute('aria-label', playing ? 'Pause' : 'Play'); $('expanded-toggle').textContent = playing ? 'Pause' : 'Play'; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused'; }
   setVolume(value) {
     const volume = Number(value); if (!Number.isFinite(volume)) return;
-    this.audio.volume = Math.max(0, Math.min(1, volume)); this.audio.muted = false;
+    this.audio.volume = outputVolume(Math.max(0, Math.min(1, volume))); this.audio.muted = false;
     this.updateMute(); this.save();
   }
   toggleMute() {
@@ -112,11 +117,12 @@ export class MusicPlayer {
     this.updateMute(); this.save();
   }
   updateMute() {
+    if(this.audio.volume>outputCeiling)this.audio.volume=outputCeiling;
     if (this.audio.volume > 0) this.lastAudibleVolume = this.audio.volume;
     const off = this.audio.muted || this.audio.volume === 0;
     const button = $('mute'); button.classList.remove('optional'); button.setAttribute('aria-label', off ? 'Unmute' : 'Mute');
     button.setAttribute('aria-pressed', off); button.title = off ? 'Turn sound on' : 'Mute sound'; button.textContent = off ? '🔇' : '🔊';
-    $('volume').value = $('expanded-volume').value = this.audio.volume;
+    $('volume').value = $('expanded-volume').value = controlVolume(this.audio.volume);
     const status = $('playback-sound-status'); if (status) { status.hidden = !off; status.textContent = off ? 'Sound off · Tap the speaker' : ''; }
   }
   async setTracks(tracks, index = 0) { if(this.advertiser?.active){this.toast('Your music resumes after the advertisement');return;}this.resumeAt = 0; this.queue.set(tracks, index); return this.playIndex(this.queue.index); }
@@ -215,9 +221,9 @@ export class MusicPlayer {
     try { const data = JSON.parse(localStorage.getItem('lae_playback_v2')); if (!data || !Array.isArray(data.tracks)) return;
       const tracks = data.tracks.filter(t => t && /^[1-9]\d{0,15}$/.test(String(t.id))).slice(0, 200);
       this.queue.set(tracks, Number.isInteger(data.index) ? data.index : 0); this.queue.shuffle = data.shuffle === true; this.queue.repeat = ['off', 'all', 'one'].includes(data.repeat) ? data.repeat : 'off';
-      this.lastAudibleVolume = typeof data.lastAudibleVolume === 'number' && data.lastAudibleVolume > 0 && data.lastAudibleVolume <= 1 ? data.lastAudibleVolume : .8;
+      this.lastAudibleVolume = typeof data.lastAudibleVolume === 'number' && data.lastAudibleVolume > 0 && data.lastAudibleVolume <= 1 ? Math.min(data.lastAudibleVolume,outputCeiling) : .8;
       this.audio.muted = data.muted === true;
-      this.audio.volume = typeof data.volume === 'number' && data.volume >= 0 && data.volume <= 1 ? data.volume : .8; $('volume').value = this.audio.volume; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻';
+      this.audio.volume = typeof data.volume === 'number' && data.volume >= 0 && data.volume <= 1 ? Math.min(data.volume,outputCeiling) : .8; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻';
       if (this.queue.current) { this.resumeAt = Math.max(0, Number(data.position) || 0); this.renderTrack(this.queue.current); this.message('Press play to resume'); }
     } catch { /* A stale/corrupt browser preference must never prevent public listening. */ }
   }

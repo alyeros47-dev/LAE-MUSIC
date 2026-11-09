@@ -129,7 +129,7 @@ test('a preview takes audio focus without changing the main source, queue, posit
  document.querySelectorAll=()=>[p.audio,preview];p.focusId='fixture';p.focusStamp=0;
  await p.setTracks([{id:7,title:'Original recording'}]);p.audio.currentTime=24;p.setVolume(1);
  await preview.play();p.focusPlayback(preview);
- assert(p.audio.paused);assert(!preview.paused);assert.equal(p.audio.src,'https://storage.test/original.mp3');assert.equal(p.audio.currentTime,24);assert.equal(p.audio.volume,1);assert.equal(p.queue.current.id,'7');
+ assert(p.audio.paused);assert(!preview.paused);assert.equal(p.audio.src,'https://storage.test/original.mp3');assert.equal(p.audio.currentTime,24);assert.equal(p.audio.volume,.85);assert.equal(p.queue.current.id,'7');
  // Navigation may detach the preview while its native audio is still running.
  document.querySelectorAll=()=>[p.audio];await p.audio.play();p.focusPlayback(p.audio);assert(preview.paused);assert(!p.audio.paused);assert.equal(p.audio.currentTime,24);
  const claim=JSON.parse(d.storage.get('lae_audio_focus_v1'));assert.deepEqual(Object.keys(claim).sort(),['at','owner']);
@@ -140,4 +140,14 @@ test('an ad taking audio focus preserves its queue transition; an external previ
  await p.setTracks([{id:7}]);p.advertiser={active:true,audio:ad};const request=p.request;
  await ad.play();p.focusPlayback(ad);assert.equal(p.request,request);assert(p.audio.paused);assert(!ad.paused);
  await preview.play();p.focusPlayback(preview);assert(ad.paused);assert.equal(p.advertiser.userPaused,true);assert(p.request>request);assert(!preview.paused);
+});
+test('maximum volume reserves native headroom while controls, legacy preferences and normal levels remain usable',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom(),make=()=>new MusicPlayer({api:async()=>({url:'https://storage.test/original.mp3'}),toast(){},onLike(){},onDetail(){}});
+ d.storage.set('lae_playback_v2',JSON.stringify({tracks:[],volume:1,lastAudibleVolume:1}));const p=make();assert.equal(p.audio.volume,.85);assert.equal(Number(d.get('volume').value),1);assert.equal(Number(d.get('expanded-volume').value),1);
+ for(const [selected,output]of [[0,0],[.27,.27],[.8,.8],[.9,.825],[1,.85],[99,.85]]){p.setVolume(selected);assert(Math.abs(p.audio.volume-output)<.000001);assert.equal(Number(d.get('volume').value),Math.min(selected,1));}
+ p.toggleMute();p.toggleMute();assert.equal(p.audio.volume,.85);p.save();const restored=make();assert.equal(restored.audio.volume,.85);assert.equal(Number(d.get('expanded-volume').value),1);assert(restored.audio.paused);
+ // An external native-volume change must not bypass the output ceiling.
+ restored.audio.volume=1;restored.updateMute();assert.equal(restored.audio.volume,.85);
+ // The inspected source's +0.4 dB true peak has about 1 dB of output margin.
+ assert(20*Math.log10(restored.audio.volume)+.4 < -1);
 });
