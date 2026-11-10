@@ -32,16 +32,17 @@ function tone(){
   await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');
   // Wait for the app's native play handler, not the OS media-agent getter:
   // Firefox can report a paused Media Session while its audio is playing.
-  await page.waitForFunction(()=>document.getElementById('play-toggle').getAttribute('aria-label')==='Pause'&&!document.getElementById('audio').paused);
   // A stale native pause event must not mark a running successor/session paused.
-  // Read and dispatch in the same task, before shortening the six-second
-  // fixture. Separate driver calls can accidentally observe a natural ending.
-  const stalePause=await page.locator('#audio').evaluate(a=>{
+  // Readiness, dispatch and snapshot must share one task: a driver round trip
+  // after the readiness check can otherwise cross a short fixture's ending.
+  const stalePause=await (await page.waitForFunction(()=>{
+   const a=document.getElementById('audio');
    const state=()=>({paused:a.paused,control:document.getElementById('play-toggle').getAttribute('aria-label')});
    const before=state();
+   if(before.paused||before.control!=='Pause')return false;
    a.dispatchEvent(new Event('pause'));
    return {before,after:state()};
-  });
+  })).jsonValue();
   assert.deepEqual(stalePause,{before:{paused:false,control:'Pause'},after:{paused:false,control:'Pause'}});
   await finish();await playing('Playback song 2');await finish();await playing('Playback song 3');
   await page.getByRole('button',{name:'Previous track',exact:true}).click();await playing('Playback song 2');
