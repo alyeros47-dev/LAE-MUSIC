@@ -1,4 +1,4 @@
-name: Owner-approved playback-quality deployment
+name: Owner-approved continuous-playback deployment
 on:
   push:
     branches: [main]
@@ -8,7 +8,7 @@ permissions:
   pull-requests: read
 jobs:
   guarded-audio-release:
-    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-audio-clarity-release-38]')
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-continuous-playback-release-39]')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     concurrency:
@@ -29,7 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/player-release-inputs.cjs
-      - name: Deploy the approved playback-quality repair to the existing Render service
+      - name: Deploy the approved continuous-playback repair to the existing Render service
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
@@ -39,7 +39,7 @@ jobs:
           LAE_RELEASE_COMMIT_SHA: ${{ steps.release.outputs.commit }}
           LAE_RELEASE_CI_RUN: ${{ steps.release.outputs.ci_run }}
         run: node scripts/release-existing-service.cjs
-      - name: Verify the live playback-quality repair and preserved services
+      - name: Verify the live continuous-playback repair and preserved services
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           LAE_LIVE_RELEASE_VERIFY: '1'

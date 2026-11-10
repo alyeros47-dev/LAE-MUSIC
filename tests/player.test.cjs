@@ -151,3 +151,33 @@ test('maximum volume reserves native headroom while controls, legacy preferences
  // The inspected source's +0.4 dB true peak has about 1 dB of output margin.
  assert(20*Math.log10(restored.audio.volume)+.4 < -1);
 });
+
+test('continuous listening is the default, migrates the former default, and preserves a deliberately chosen stop mode',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom(),make=()=>new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast(){},onLike(){},onDetail(){}});
+ let p=make();assert.equal(p.queue.repeat,'all');assert.equal(d.get('repeat').getAttribute('aria-label'),'Repeat all');
+ d.storage.set('lae_playback_v2',JSON.stringify({tracks:[{id:1}],repeat:'off'}));p=make();assert.equal(p.queue.repeat,'all');
+ d.get('repeat').onclick();assert.equal(p.queue.repeat,'one');d.get('repeat').onclick();assert.equal(p.queue.repeat,'off');
+ p=make();assert.equal(p.queue.repeat,'off');assert.equal(p.repeatExplicit,true);
+});
+test('a long song prepares its successor immediately and a buffered source survives a long screen-off interval',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();const calls=[],p=new MusicPlayer({api:async url=>{calls.push(url);return {url:'https://storage.test/'+url.split('/')[4]+'.mp3'};},toast(){},onLike(){},onDetail(){}});
+ p.bufferNext=async(_track,data)=>({...data,url:'blob:https://lae.test/ready-next',buffered:true});
+ await p.setTracks([{id:1},{id:2}]);p.audio.duration=420;p.audio.dispatchEvent(new Event('playing'));await settle();
+ assert(p.prepared?.data?.buffered);assert.equal(calls.length,2);const oldNow=Date.now;
+ try{Date.now=()=>oldNow()+6*60000;assert(p.nextPrepared());p.audio.dispatchEvent(new Event('ended'));assert.equal(p.audio.src,'blob:https://lae.test/ready-next');assert.equal(p.audio.paused,false);assert.equal(p.queue.current.id,'2');assert.equal(calls.length,2);}finally{Date.now=oldNow;}
+});
+test('continuous mode wraps repeatedly but never overrides an explicit Pause',async()=>{
+ const {MusicPlayer}=await modulePromise;dom();const p=new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);for(let n=0;n<8;n++){await p.advance(true);assert.equal(p.queue.current.id,n%2===0?'2':'1');assert.equal(p.audio.paused,false);}p.pause();await p.advance(true);assert.equal(p.queue.current.id,'1');assert(p.audio.paused);
+});
+test('online prebuffering retains exact bytes, validates lengths, revokes memory once, and never persists the media address',async()=>{
+ const {MusicPlayer}=await modulePromise,originalFetch=global.fetch,originalMedia=global.HTMLMediaElement,bytes=Buffer.from('original audio bytes'),controller=new AbortController();let releases=0;
+ const p=Object.create(MusicPlayer.prototype),source={url:'https://storage.test/original.mp3',release:()=>releases++};
+ global.HTMLMediaElement=class {};
+ try{
+  global.fetch=async(path,options)=>{assert.equal(path,'/api/music/tracks/7/audio');assert.equal(options.cache,'no-store');return new Response(bytes,{headers:{'Content-Type':'audio/mpeg','Content-Length':String(bytes.length)}});};
+  const data=await p.bufferNext({id:7},source,controller.signal);assert(data.buffered);assert.deepEqual(Buffer.from(await (await originalFetch(data.url)).arrayBuffer()),bytes);data.validate();data.release();data.release();assert.equal(releases,1);assert.throws(()=>data.validate());await assert.rejects(originalFetch(data.url));
+  global.fetch=async()=>new Response(bytes,{headers:{'Content-Type':'audio/mpeg','Content-Length':String(bytes.length+1)}});assert.equal(await p.bufferNext({id:7},source,controller.signal),source);
+  controller.abort();await assert.rejects(p.bufferNext({id:7},source,controller.signal));
+ }finally{global.fetch=originalFetch;if(originalMedia===undefined)delete global.HTMLMediaElement;else global.HTMLMediaElement=originalMedia;}
+});
