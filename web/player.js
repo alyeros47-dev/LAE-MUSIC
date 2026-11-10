@@ -48,7 +48,13 @@ export class MusicPlayer {
     $('player-like').onclick = () => this.queue.current && this.onLike(this.queue.current);
     $('queue-clear').onclick = () => { const t = this.queue.current; if (t) this.queue.set([t]); this.renderQueue(); this.save(); };
     this.audio.addEventListener('play', () => { this.userPaused=false; this.playState(true); this.message(''); });
-    this.audio.addEventListener('pause', () => { if (!this.audio.ended || !this.nextPrepared()) this.playState(false); this.save(); });
+    this.audio.addEventListener('pause', () => {
+      // A queued pause can belong to the previous source. Natural endings are
+      // resolved by advance(), including when the next source is not ready yet.
+      if (!this.audio.paused) return;
+      if (!this.audio.ended || this.userPaused) this.playState(false);
+      this.save();
+    });
     this.audio.addEventListener('waiting', () => this.message('Buffering…'));
     this.audio.addEventListener('playing', () => { this.message(''); this.prepareNext(); });
     this.audio.addEventListener('error', () => { this.playState(false); this.message('Audio unavailable. Press play to retry.'); this.streamFailed = true; });
@@ -139,6 +145,7 @@ export class MusicPlayer {
       const url = new URL(data.url); if (!((data.offline===true||data.buffered===true)&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
       this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
       if (autoplay) { this.focusPlayback(this.audio,true); await this.audio.play(); }
+      else this.playState(false);
     } catch (error) {
       if (request !== this.request || error.name === 'AbortError') return;
       if(error.name!=='NotAllowedError'){this.audio.pause();this.audio.removeAttribute('src');this.audio.load();this.currentSource?.release?.();this.currentSource=null;prepared?.data.release?.();}
