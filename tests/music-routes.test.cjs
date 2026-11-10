@@ -50,6 +50,6 @@ test('next-song audio buffering serves only published originals to all listeners
  const audio=Buffer.from('same-original-audio');
  for(const status of ['published','pending_upload','removed']){
   let reads=0,fetches=0;const call=load({member:null,pool:{query:async(sql,args)=>{assert.match(sql,/^SELECT \* FROM music_tracks/);assert.equal(args[0],12);reads++;return {rowCount:1,rows:[{id:12,status,audio_key:'music/7/original.mp3',audio_mime:'audio/mpeg',audio_bytes:audio.length}]};}},fetcher:async(_url,init)=>{fetches++;assert.equal(init.method,'GET');return new Response(audio,{headers:{'Content-Type':'audio/mpeg','Content-Length':String(audio.length)}});}});
-  const response=await call('/api/music/tracks/12/audio');assert.equal(response.status,status==='published'?200:404);assert.equal(reads,1);assert.equal(fetches,status==='published'?1:0);if(status==='published')assert.deepEqual(response.body,audio);
+  const response=await call('/api/music/tracks/12/audio?url=https://untrusted.invalid/ignored');assert.equal(response.status,status==='published'?200:404);assert.equal(reads,1);assert.equal(fetches,status==='published'?1:0);if(status==='published')assert.deepEqual(response.body,audio);
  }
 });

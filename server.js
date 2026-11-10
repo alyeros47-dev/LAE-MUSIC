@@ -103,7 +103,7 @@ function create({pool,me,authAdmin}){
  if(act==='play'&&req.method==='POST'){if(!rateLimit('play:'+id+':'+(req.clientAddress||req.socket.remoteAddress),60000))return send(res,200,{ok:true,counted:false}),true;await pool.query('UPDATE music_tracks SET plays=plays+1 WHERE id=$1',[id]);return send(res,200,{ok:true,counted:true}),true;}
  if(act==='cover'&&req.method==='GET'){if(!t.cover_key)return send(res,404,{error:'No cover'}),true;return send(res,200,{url:await signed(t.cover_key,'get',3600)}),true;}
  if(act==='cover-image'&&req.method==='GET'){if(!t.cover_key)return send(res,404,{error:'No cover'}),true;const source=await fetch(await signed(t.cover_key,'get',300),{signal:AbortSignal.timeout(15000)});if(!source.ok)return send(res,502,{error:'Artwork unavailable in storage'}),true;const bytes=Buffer.from(await source.arrayBuffer());if(bytes.length>MAX_ART)return send(res,413,{error:'Artwork too large'}),true;res.writeHead(200,{'Content-Type':t.cover_mime||'image/jpeg','Cache-Control':'private, max-age=300','X-Content-Type-Options':'nosniff'});res.end(bytes);return true;}
- if(act==='audio'&&['GET','HEAD'].includes(req.method)){await require('./lib/public-audio').relay(req,res,{url:await signed(t.audio_key,'get',300),track:t,fetcher:fetch});return true;}
+ if(act==='audio'&&['GET','HEAD'].includes(req.method)){await require('./lib/public-audio').relay(req,res,{url:await signed(t.audio_key,req.method==='HEAD'?'head':'get',300),track:t,fetcher:fetch});return true;}
  if(act==='stream'&&req.method==='GET')return send(res,200,{url:await signed(t.audio_key,'get',3600)}),true;
  }
  if(p==='/api/music/upload/file'&&req.method==='PUT'){
