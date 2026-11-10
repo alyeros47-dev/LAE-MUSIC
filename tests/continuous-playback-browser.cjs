@@ -29,14 +29,20 @@ function tone(){
   await page.route('**/fixture-tone.wav',route=>route.fulfill({contentType:'audio/wav',body:audio}));
   const playing=async title=>page.waitForFunction(title=>{const a=document.getElementById('audio');return document.getElementById('player-title').textContent===title&&!a.paused&&a.currentTime>0;},title);
   const finish=async()=>{await page.locator('#audio').evaluate(a=>{a.currentTime=a.duration-.15;});};
-  await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');await finish();await playing('Playback song 2');
+  await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');
   // play() changes native paused synchronously; its play event updates the
   // Media Session in a later task. Wait for that event before testing staleness.
   await page.waitForFunction(()=>navigator.mediaSession.playbackState==='playing'&&!document.getElementById('audio').paused);
   // A stale native pause event must not mark a running successor/session paused.
-  await page.locator('#audio').evaluate(a=>a.dispatchEvent(new Event('pause')));
-  assert.equal(await page.evaluate(()=>navigator.mediaSession.playbackState),'playing');
-  await finish();await playing('Playback song 3');
+  // Read and dispatch in the same task, before shortening the six-second
+  // fixture. Separate driver calls can accidentally observe a natural ending.
+  const stalePause=await page.locator('#audio').evaluate(a=>{
+   const before={paused:a.paused,session:navigator.mediaSession.playbackState};
+   a.dispatchEvent(new Event('pause'));
+   return {before,after:{paused:a.paused,session:navigator.mediaSession.playbackState}};
+  });
+  assert.deepEqual(stalePause,{before:{paused:false,session:'playing'},after:{paused:false,session:'playing'}});
+  await finish();await playing('Playback song 2');await finish();await playing('Playback song 3');
   await page.getByRole('button',{name:'Previous track',exact:true}).click();await playing('Playback song 2');
   for(const label of ['Previous track','Next track']){const b=page.getByRole('button',{name:label,exact:true});assert(await b.isVisible());if(width<700){const box=await b.boundingBox();assert(box.width>=44&&box.height>=44);}}
   await page.getByRole('button',{name:'Next track',exact:true}).click();await playing('Playback song 3');await page.locator('#audio').evaluate(a=>{a.currentTime=4;});await page.getByRole('button',{name:'Previous track',exact:true}).click();await playing('Playback song 2');
