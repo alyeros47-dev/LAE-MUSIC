@@ -30,6 +30,9 @@ function tone(){
   const playing=async title=>page.waitForFunction(title=>{const a=document.getElementById('audio');return document.getElementById('player-title').textContent===title&&!a.paused&&a.currentTime>0;},title);
   const finish=async()=>{await page.locator('#audio').evaluate(a=>{a.currentTime=a.duration-.15;});};
   await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');await finish();await playing('Playback song 2');
+  // play() changes native paused synchronously; its play event updates the
+  // Media Session in a later task. Wait for that event before testing staleness.
+  await page.waitForFunction(()=>navigator.mediaSession.playbackState==='playing'&&!document.getElementById('audio').paused);
   // A stale native pause event must not mark a running successor/session paused.
   await page.locator('#audio').evaluate(a=>a.dispatchEvent(new Event('pause')));
   assert.equal(await page.evaluate(()=>navigator.mediaSession.playbackState),'playing');

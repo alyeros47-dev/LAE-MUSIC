@@ -6,7 +6,7 @@ function fixture({badPR=false,pending=false,badHead=false,unmerged=false,wrongWo
  const calls=[];
  return {calls,run:extra=>resolve({repository:repo,ref:'refs/heads/main',event:'push',commit,token:'synthetic-fixture-only',fetcher:async(url,opt)=>{
   calls.push({url,opt});assert.equal(opt.redirect,'error');
-  const body=url.endsWith('/pulls/39')?{merged:!unmerged,merge_commit_sha:badPR?'c'.repeat(40):commit,head:{sha:head,ref:'codex/continuous-native-playback',repo:{full_name:repo}}}:{workflow_runs:[{id:123456789,workflow_id:wrongWorkflow?400603251:395852891,head_sha:badHead?'c'.repeat(40):head,event:'pull_request',status:pending?'in_progress':'completed',conclusion:pending?null:'success'}]};
+  const body=url.endsWith('/pulls/40')?{merged:!unmerged,merge_commit_sha:badPR?'c'.repeat(40):commit,head:{sha:head,ref:'codex/player-pause-event-state',repo:{full_name:repo}}}:{workflow_runs:[{id:123456789,workflow_id:wrongWorkflow?400603251:395852891,head_sha:badHead?'c'.repeat(40):head,event:'pull_request',status:pending?'in_progress':'completed',conclusion:pending?null:'success'}]};
   return new Response(JSON.stringify(body),{status:200});
  },...extra})};
 }

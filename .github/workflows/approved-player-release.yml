@@ -8,7 +8,7 @@ permissions:
   pull-requests: read
 jobs:
   guarded-audio-release:
-    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-continuous-playback-release-39]')
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[lae-playback-state-release-40]')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     concurrency:
