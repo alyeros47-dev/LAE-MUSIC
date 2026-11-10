@@ -7,6 +7,7 @@ require('./platform.test.cjs');
 require('./public-information.test.cjs');
 require('./router.test.cjs');
 require('./player.test.cjs');
+require('./public-audio.test.cjs');
 require('./uploads.test.cjs');
 require('./sonic-idempotency.test.cjs');
 require('./gifts.test.cjs');

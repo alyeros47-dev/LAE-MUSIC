@@ -6,11 +6,11 @@ function fixture({badPR=false,pending=false,badHead=false,unmerged=false,wrongWo
  const calls=[];
  return {calls,run:extra=>resolve({repository:repo,ref:'refs/heads/main',event:'push',commit,token:'synthetic-fixture-only',fetcher:async(url,opt)=>{
   calls.push({url,opt});assert.equal(opt.redirect,'error');
-  const body=url.endsWith('/pulls/38')?{merged:!unmerged,merge_commit_sha:badPR?'c'.repeat(40):commit,head:{sha:head,ref:'codex/playback-source-isolation',repo:{full_name:repo}}}:{workflow_runs:[{id:123456789,workflow_id:wrongWorkflow?400603251:395852891,head_sha:badHead?'c'.repeat(40):head,event:'pull_request',status:pending?'in_progress':'completed',conclusion:pending?null:'success'}]};
+  const body=url.endsWith('/pulls/39')?{merged:!unmerged,merge_commit_sha:badPR?'c'.repeat(40):commit,head:{sha:head,ref:'codex/continuous-native-playback',repo:{full_name:repo}}}:{workflow_runs:[{id:123456789,workflow_id:wrongWorkflow?400603251:395852891,head_sha:badHead?'c'.repeat(40):head,event:'pull_request',status:pending?'in_progress':'completed',conclusion:pending?null:'success'}]};
   return new Response(JSON.stringify(body),{status:200});
  },...extra})};
 }
-test('approved playback-quality merge resolves exact successful candidate without production API calls',async()=>{
+test('approved continuous-playback merge resolves exact successful candidate without production API calls',async()=>{
  const f=fixture(),r=await f.run();assert.deepEqual(r,{candidate:head,commit,ci_run:'123456789'});assert.equal(f.calls.length,2);assert(f.calls.every(x=>x.url.startsWith('https://api.github.com/repos/'+repo+'/')));assert(!JSON.stringify(r).includes('synthetic'));
 });
 test('wrong event, repository, ref or commit stops before external calls',async()=>{

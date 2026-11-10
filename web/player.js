@@ -30,13 +30,13 @@ export class PlaybackQueue {
 export class MusicPlayer {
   constructor({ api, toast, onLike, onDetail }) {
     this.api = api; this.toast = toast; this.onLike = onLike; this.onDetail = onDetail;
-    this.queue = new PlaybackQueue(); this.audio = $('audio'); this.request = 0; this.controller = null; this.counted = false; this.playRecordKey=null; this.listened = 0; this.lastTime = 0; this.resumeAt = 0;
+    this.queue = new PlaybackQueue(); this.queue.repeat='all'; this.repeatExplicit=false; this.audio = $('audio'); this.request = 0; this.controller = null; this.counted = false; this.playRecordKey=null; this.listened = 0; this.lastTime = 0; this.resumeAt = 0;
     this.lastAudibleVolume = 0.8; this.audio.volume = 0.8; this.audio.preload = 'auto';
     $('play-toggle').onclick = () => this.toggle(); $('expanded-toggle').onclick = () => this.toggle();
     $('expanded-previous').onclick=()=>$('previous').click(); $('expanded-next').onclick=()=>$('next').click();
     $('next').onclick = () => this.advance(); $('previous').onclick = () => this.playIndex(this.queue.previous());
     $('shuffle').onclick = () => { this.queue.shuffle = !this.queue.shuffle; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); this.save(); };
-    $('repeat').onclick = () => { this.queue.repeat = { off: 'all', all: 'one', one: 'off' }[this.queue.repeat]; $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻'; $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); this.save(); };
+    $('repeat').onclick = () => { this.repeatExplicit=true; this.queue.repeat = { off: 'all', all: 'one', one: 'off' }[this.queue.repeat]; $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻'; $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); this.save(); };
     $('expanded-volume').oninput=e=>this.setVolume(e.target.value);
     $('expanded-seek').oninput=e=>{if(Number.isFinite(this.audio.duration)&&this.audio.duration>0){this.audio.currentTime=this.audio.duration*Number(e.target.value)/1000;this.lastTime=this.audio.currentTime;}};
     $('volume').oninput = e => this.setVolume(e.target.value);
@@ -58,7 +58,7 @@ export class MusicPlayer {
     this.audio.addEventListener('volumechange', () => { this.updateMute(); this.save(); });
     document.addEventListener('visibilitychange', () => { this.save(); if (!this.audio.paused) this.prepareNext(); });
     window.addEventListener('pagehide', () => this.save());
-    this.restore(); this.updateMute(); this.setupMediaSession(); this.setupAudioFocus();
+    this.restore(); $('repeat').setAttribute('aria-pressed',this.queue.repeat!=='off'); $('repeat').setAttribute('aria-label','Repeat '+this.queue.repeat); this.updateMute(); this.setupMediaSession(); this.setupAudioFocus();
   }
   setupAudioFocus() {
     if (typeof HTMLMediaElement === 'undefined' || !document.querySelectorAll) return;
@@ -136,7 +136,7 @@ export class MusicPlayer {
       const online=()=>this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`, 'GET', undefined, { signal: this.controller.signal });const data = prepared ? prepared.data : this.sourceProvider?await this.sourceProvider(track,online):await online();
       if (request !== this.request) { data.release?.(); return; }
       data.validate?.();
-      const url = new URL(data.url); if (!(data.offline===true&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
+      const url = new URL(data.url); if (!((data.offline===true||data.buffered===true)&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
       this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
       if (autoplay) { this.focusPlayback(this.audio,true); await this.audio.play(); }
     } catch (error) {
@@ -159,7 +159,7 @@ export class MusicPlayer {
   queueIdentity() { return JSON.stringify([this.queue.index,this.queue.shuffle,this.queue.repeat,this.queue.tracks.map(t=>[t.id,t.offline===true])]); }
   nextPrepared(index) {
     const p=this.prepared;
-    if(!p?.data || p.identity!==this.queueIdentity() || (index!==undefined&&p.index!==index) || Date.now()-p.created>120000)return null;
+    if(!p?.data || p.identity!==this.queueIdentity() || (index!==undefined&&p.index!==index) || (!p.data.buffered&&!p.data.offline&&Date.now()-p.created>1800000))return null;
     try { p.data.validate?.(); return p; } catch { this.clearPrepared(); return null; }
   }
   clearPrepared(keep=null) {
@@ -167,19 +167,32 @@ export class MusicPlayer {
     if(old&&old!==keep){old.controller.abort();old.data?.release?.();}
   }
   prepareNext() {
-    if(this.audio.paused || !Number.isFinite(this.audio.duration) || this.audio.duration-this.audio.currentTime>90)return;
+    if(this.audio.paused)return;
     this.advertiser?.prepare?.();
     const identity=this.queueIdentity();
     if(this.prepareRetry?.identity===identity && Date.now()<this.prepareRetry.until)return;
-    if(this.prepared?.identity===identity && Date.now()-this.prepared.created<120000)return;
+    if(this.prepared?.identity===identity && (this.prepared.data?.buffered||this.prepared.data?.offline||Date.now()-this.prepared.created<1800000))return;
     this.clearPrepared();
     const random=Math.random(),copy=new PlaybackQueue();copy.set(this.queue.tracks,this.queue.index);copy.shuffle=this.queue.shuffle;copy.repeat=this.queue.repeat;
     const index=copy.next(true,()=>random); if(index<0)return;
     const track=this.queue.tracks[index],controller=new AbortController(),p={identity,index,random,controller,created:Date.now(),data:null};this.prepared=p;
     const online=()=>this.api(`/api/music/tracks/${encodeURIComponent(track.id)}/stream`,'GET',undefined,{signal:controller.signal});
-    Promise.resolve().then(()=>this.sourceProvider?this.sourceProvider(track,online,{preparing:true}):online()).then(data=>{
+    Promise.resolve().then(()=>this.sourceProvider?this.sourceProvider(track,online,{preparing:true}):online()).then(data=>this.bufferNext(track,data,controller.signal)).then(data=>{
       if(this.prepared!==p || controller.signal.aborted){data.release?.();return;}p.data=data;
     }).catch(()=>{if(this.prepared===p){this.clearPrepared();this.prepareRetry={identity,until:Date.now()+10000};}});
+  }
+  async bufferNext(track,data,signal) {
+    if(data.offline||typeof HTMLMediaElement==='undefined'||typeof URL.createObjectURL!=='function')return data;
+    try{
+      const response=await fetch('/api/music/tracks/'+encodeURIComponent(track.id)+'/audio',{signal,cache:'no-store',credentials:'same-origin'});
+      if(!response.ok||!['audio/mpeg','audio/mp4'].includes(response.headers.get('content-type')?.split(';')[0])){await response.body?.cancel();throw Error('Audio buffering unavailable');}
+      const length=response.headers.get('content-length');
+      if(!length||!/^\d+$/.test(length)||Number(length)<1||Number(length)>30*1024*1024){await response.body?.cancel();throw Error('Invalid audio size');}
+      const blob=await response.blob();if(blob.size!==Number(length))throw Error('Incomplete audio');
+      if(signal.aborted)throw new DOMException('Buffering cancelled','AbortError');
+      const url=URL.createObjectURL(blob);let released=false;
+      return {...data,url,buffered:true,release:()=>{if(!released){released=true;URL.revokeObjectURL(url);data.release?.();}},validate:()=>{if(released)throw Error('Audio buffer was released');data.validate?.();}};
+    }catch(error){if(signal.aborted){data.release?.();throw error;}return data;}
   }
   renderTrack(track) {
     $('player').hidden = false; document.body.classList.add('has-player');
@@ -216,11 +229,11 @@ export class MusicPlayer {
     });
     if (!this.queue.tracks.length) box.textContent = 'Play a song or add one to start your queue.';
   }
-  save() { try { localStorage.setItem('lae_playback_v2', JSON.stringify({ tracks: this.queue.tracks.slice(0, 200), index: this.queue.index, position: this.audio.currentTime || this.resumeAt, volume: this.audio.volume, muted: this.audio.muted, lastAudibleVolume: this.lastAudibleVolume, shuffle: this.queue.shuffle, repeat: this.queue.repeat })); } catch {} }
+  save() { try { localStorage.setItem('lae_playback_v2', JSON.stringify({ tracks: this.queue.tracks.slice(0, 200), index: this.queue.index, position: this.audio.currentTime || this.resumeAt, volume: this.audio.volume, muted: this.audio.muted, lastAudibleVolume: this.lastAudibleVolume, shuffle: this.queue.shuffle, repeat: this.queue.repeat, repeatExplicit:this.repeatExplicit })); } catch {} }
   restore() {
     try { const data = JSON.parse(localStorage.getItem('lae_playback_v2')); if (!data || !Array.isArray(data.tracks)) return;
       const tracks = data.tracks.filter(t => t && /^[1-9]\d{0,15}$/.test(String(t.id))).slice(0, 200);
-      this.queue.set(tracks, Number.isInteger(data.index) ? data.index : 0); this.queue.shuffle = data.shuffle === true; this.queue.repeat = ['off', 'all', 'one'].includes(data.repeat) ? data.repeat : 'off';
+      this.queue.set(tracks, Number.isInteger(data.index) ? data.index : 0); this.queue.shuffle = data.shuffle === true; this.repeatExplicit=data.repeatExplicit===true; this.queue.repeat = this.repeatExplicit&&['off','all','one'].includes(data.repeat)?data.repeat:data.repeat==='one'?'one':'all';
       this.lastAudibleVolume = typeof data.lastAudibleVolume === 'number' && data.lastAudibleVolume > 0 && data.lastAudibleVolume <= 1 ? Math.min(data.lastAudibleVolume,outputCeiling) : .8;
       this.audio.muted = data.muted === true;
       this.audio.volume = typeof data.volume === 'number' && data.volume >= 0 && data.volume <= 1 ? Math.min(data.volume,outputCeiling) : .8; $('shuffle').setAttribute('aria-pressed', this.queue.shuffle); $('repeat').setAttribute('aria-pressed', this.queue.repeat !== 'off'); $('repeat').setAttribute('aria-label', 'Repeat ' + this.queue.repeat); $('repeat').textContent = this.queue.repeat === 'one' ? '↻¹' : '↻';
