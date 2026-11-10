@@ -72,8 +72,12 @@ test('reaching the end does not add a false previous-track history entry',async(
 });
 
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
-test('an unbuffered natural ending keeps the media session playing until the next source resolves',async()=>{
+test('an unbuffered natural ending keeps the media session playing until the next source resolves',async t=>{
  const {MusicPlayer}=await modulePromise,d=dom();let finish;
+ const previous=Object.getOwnPropertyDescriptor(navigator,'mediaSession');
+ const session={playbackState:'none',setActionHandler(){}};
+ Object.defineProperty(navigator,'mediaSession',{configurable:true,value:session});
+ t.after(()=>{if(previous)Object.defineProperty(navigator,'mediaSession',previous);else delete navigator.mediaSession;});
  const p=new MusicPlayer({api:async url=>url.includes('/3/')?new Promise(resolve=>{finish=resolve;}):{url:'https://storage.test/'+url.split('/')[4]+'.mp3'},toast(){},onLike(){},onDetail(){}});
  await p.setTracks([{id:1},{id:2},{id:3}]);await p.advance(true);
  assert.equal(p.queue.current.id,'2');assert.equal(p.nextPrepared(),null);
@@ -81,13 +85,16 @@ test('an unbuffered natural ending keeps the media session playing until the nex
  // successor unprepared; this is still a continuing queue, not a user pause.
  p.audio.ended=true;p.audio.paused=true;p.audio.dispatchEvent(new Event('pause'));
  assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Pause');
+ assert.equal(session.playbackState,'playing');
  p.audio.dispatchEvent(new Event('ended'));assert.equal(p.queue.current.id,'3');
  finish({url:'https://storage.test/3.mp3'});await settle();
  assert.equal(p.audio.paused,false);assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Pause');
  // A pause event already queued for the previous source must not undo play.
  p.audio.ended=false;p.audio.dispatchEvent(new Event('pause'));
  assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Pause');
+ assert.equal(session.playbackState,'playing');
  p.pause();assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Play');
+ assert.equal(session.playbackState,'paused');
 });
 test('a natural queue ending and a rejected automatic play still report paused accurately',async()=>{
  const {MusicPlayer}=await modulePromise,d=dom(),messages=[];
