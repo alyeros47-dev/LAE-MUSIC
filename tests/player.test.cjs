@@ -72,6 +72,46 @@ test('reaching the end does not add a false previous-track history entry',async(
 });
 
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
+test('an unbuffered natural ending keeps the media session playing until the next source resolves',async t=>{
+ const {MusicPlayer}=await modulePromise,d=dom();let finish;
+ const previous=Object.getOwnPropertyDescriptor(navigator,'mediaSession');
+ const session={playbackState:'none',setActionHandler(){}};
+ Object.defineProperty(navigator,'mediaSession',{configurable:true,value:session});
+ t.after(()=>{if(previous)Object.defineProperty(navigator,'mediaSession',previous);else delete navigator.mediaSession;});
+ const p=new MusicPlayer({api:async url=>url.includes('/3/')?new Promise(resolve=>{finish=resolve;}):{url:'https://storage.test/'+url.split('/')[4]+'.mp3'},toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2},{id:3}]);await p.advance(true);
+ assert.equal(p.queue.current.id,'2');assert.equal(p.nextPrepared(),null);
+ // Native media emits pause before ended. A background fetch can leave the
+ // successor unprepared; this is still a continuing queue, not a user pause.
+ p.audio.ended=true;p.audio.paused=true;p.audio.dispatchEvent(new Event('pause'));
+ assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Pause');
+ assert.equal(session.playbackState,'playing');
+ p.audio.dispatchEvent(new Event('ended'));assert.equal(p.queue.current.id,'3');
+ finish({url:'https://storage.test/3.mp3'});await settle();
+ assert.equal(p.audio.paused,false);assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Pause');
+ // A pause event already queued for the previous source must not undo play.
+ p.audio.ended=false;p.audio.dispatchEvent(new Event('pause'));
+ assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Pause');
+ assert.equal(session.playbackState,'playing');
+ p.pause();assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Play');
+ assert.equal(session.playbackState,'paused');
+});
+test('a natural queue ending and a rejected automatic play still report paused accurately',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom(),messages=[];
+ const p=new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast:m=>messages.push(m),onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);p.queue.repeat='off';p.audio.play=async()=>{throw new DOMException('Background playback denied','NotAllowedError');};
+ p.audio.ended=true;p.audio.paused=true;p.audio.dispatchEvent(new Event('pause'));await p.advance(true);
+ assert.equal(p.queue.current.id,'2');assert.equal(p.audio.getAttribute('src'),'https://storage.test/song.mp3');assert.equal(p.streamFailed,false);
+ assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Play');assert.match(d.get('playback-status').textContent,/Press play/);assert.equal(messages.length,1);
+ await p.advance(true);assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Play');assert.match(d.get('playback-status').textContent,/end of your queue/);
+});
+test('a transition that explicitly declines autoplay leaves the loaded successor paused',async()=>{
+ const {MusicPlayer}=await modulePromise,d=dom();
+ const p=new MusicPlayer({api:async()=>({url:'https://storage.test/song.mp3'}),toast(){},onLike(){},onDetail(){}});
+ await p.setTracks([{id:1},{id:2}]);p.advertiser={beforeAdvance:()=>false};
+ p.audio.ended=true;p.audio.paused=true;p.audio.dispatchEvent(new Event('pause'));await p.advance(true);
+ assert.equal(p.queue.current.id,'2');assert.equal(p.audio.paused,true);assert.equal(d.get('play-toggle').getAttribute('aria-label'),'Play');
+});
 test('a prepared next song starts synchronously on ended without clearing native audio or waiting on the network',async()=>{
  const {MusicPlayer}=await modulePromise,d=dom(),calls=[];
  const p=new MusicPlayer({api:async url=>{calls.push(url);return {url:'https://storage.test/'+url.split('/')[4]+'.mp3'};},toast(){},onLike(){},onDetail(){}});

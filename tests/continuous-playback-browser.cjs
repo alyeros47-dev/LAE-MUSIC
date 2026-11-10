@@ -29,7 +29,23 @@ function tone(){
   await page.route('**/fixture-tone.wav',route=>route.fulfill({contentType:'audio/wav',body:audio}));
   const playing=async title=>page.waitForFunction(title=>{const a=document.getElementById('audio');return document.getElementById('player-title').textContent===title&&!a.paused&&a.currentTime>0;},title);
   const finish=async()=>{await page.locator('#audio').evaluate(a=>{a.currentTime=a.duration-.15;});};
-  await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');await finish();await playing('Playback song 2');
+  await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');
+  // Wait for the app's native play handler, not the OS media-agent getter:
+  // Firefox can report a paused Media Session while its audio is playing.
+  // A stale native pause event must not mark a running successor/session paused.
+  // Readiness, dispatch and snapshot must share one task: a driver round trip
+  // after the readiness check can otherwise cross a short fixture's ending.
+  const stalePause=await (await page.waitForFunction(()=>{
+   const a=document.getElementById('audio');
+   const state=()=>({paused:a.paused,control:document.getElementById('play-toggle').getAttribute('aria-label')});
+   const before=state();
+   if(before.paused||before.control!=='Pause')return false;
+   a.dispatchEvent(new Event('pause'));
+   return {before,after:state()};
+  })).jsonValue();
+  assert.deepEqual(stalePause,{before:{paused:false,control:'Pause'},after:{paused:false,control:'Pause'}});
+  await finish();await playing('Playback song 2');await finish();await playing('Playback song 3');
+  await page.getByRole('button',{name:'Previous track',exact:true}).click();await playing('Playback song 2');
   for(const label of ['Previous track','Next track']){const b=page.getByRole('button',{name:label,exact:true});assert(await b.isVisible());if(width<700){const box=await b.boundingBox();assert(box.width>=44&&box.height>=44);}}
   await page.getByRole('button',{name:'Next track',exact:true}).click();await playing('Playback song 3');await page.locator('#audio').evaluate(a=>{a.currentTime=4;});await page.getByRole('button',{name:'Previous track',exact:true}).click();await playing('Playback song 2');
   await page.getByRole('button',{name:'Expand music player',exact:true}).click();await page.getByRole('button',{name:'Next track in expanded player',exact:true}).click();await playing('Playback song 3');await page.getByRole('button',{name:'Previous track in expanded player',exact:true}).click();await playing('Playback song 2');await page.keyboard.press('Escape');
