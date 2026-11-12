@@ -234,8 +234,9 @@ async function boot(name) {
     assert.equal(state.data.artist.promotion, true);
     assert.equal(state.data.artist.owner_unlimited, false);
     assert.equal(
+      // This legacy staging handler retains its separate two-request sandbox quota.
       (await api("/api/artist/studio-allowance")).data.remaining_generations,
-      1,
+      2,
     );
     assert.equal(
       (await api("/api/artist/subscription")).data.artist_features_active,
