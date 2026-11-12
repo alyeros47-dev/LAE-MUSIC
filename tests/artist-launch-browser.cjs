@@ -25,6 +25,10 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
    if(p==='/api/platform/listening-ad')return send({ad:null});
    if(p==='/api/platform/offline/capabilities')return send({enabled:false});
    if(p==='/api/platform/payments/capabilities')return send({enabled:false,manual_bank:{enabled:true}});
+   if(p==='/api/platform/purchases')return send({orders:[]});
+   if(p==='/api/platform/payments/checkouts')return send({checkouts:[]});
+   if(p==='/api/platform/payments/refunds')return send({cases:[]});
+   if(p==='/api/platform/manual-payments')return send({payments:[]});
    if(p==='/api/register'){assert.equal(actor,'anonymous');actor='promotion';return send({user:{id:7}},201);}
    if(p==='/api/music/upload/start'){uploadStart=req.postDataJSON();return send({id:11},201);}
    if(p==='/api/music/upload/file'||p==='/api/music/upload/finish')return send({ok:true,status:'published'});
@@ -34,6 +38,8 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
   assert(await page.locator('#generate-lyrics').isEnabled(),'owner lyrics button accepts an unlimited wallet');
   assert(await page.locator('#studio-form button[type=submit]').isEnabled(),'owner music button accepts an unlimited allowance');
   assert(await page.getByText('Unlimited',{exact:true}).count()>=2);
+  await page.goto(origin+'/workspace?tab=purchases');await page.getByRole('heading',{name:'Every purchase, in view.',exact:true}).waitFor();
+  assert(await page.getByRole('heading',{name:'Owner — unlimited',exact:true}).isVisible());assert(await page.locator('#prepare-generation-purchase').isDisabled());
   await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
   assert.equal(await page.locator('[name=uploadCode]').evaluate(el=>el.required),false);
   await page.locator('[name=title]').fill('Eligible owner recording');await page.locator('[name=genre]').fill('Gospel Praise');
@@ -43,6 +49,8 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
   actor='promotion';await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
   assert.equal(await page.locator('[name=uploadCode]').evaluate(el=>el.required),true);assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
   await page.locator('[name=uploadCode]').fill('A'.repeat(36));assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isEnabled());
+  await page.goto(origin+'/workspace?tab=purchases');await page.getByRole('heading',{name:'Every purchase, in view.',exact:true}).waitFor();
+  assert(await page.getByRole('heading',{name:'Free generation',exact:true}).isVisible());assert(await page.locator('#prepare-generation-purchase').isDisabled());
   await page.goto(origin+'/studio?artist=1');await page.locator('#studio-form').waitFor();assert(await page.locator('#studio-form button[type=submit]').isEnabled());
   remaining=0;await page.reload();await page.locator('#studio-form').waitFor();assert(await page.locator('#studio-form button[type=submit]').isDisabled());
   actor='anonymous';remaining=1;await page.goto(origin+'/start?product=starter&ref=9');await page.getByRole('link',{name:'Try one free generation',exact:true}).waitFor();
