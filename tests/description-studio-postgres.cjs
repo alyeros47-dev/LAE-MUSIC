@@ -5,7 +5,7 @@ const {ciDatabase}=require('./ci-database.cjs'),{runtime}=require('./runtime.cjs
 const {create}=require('../lib/description-studio'),{output,clone}=require('./studio-lab-fixtures.cjs');
 (async()=>{const pool=new Pool({connectionString:ciDatabase().href});let calls=0,actor=null,owner=null,payload;
  try{
-  await runtime({pool,env:{NODE_ENV:'test',ADMIN_KEY:'isolated-description-fixture-key',OPENAI_API_KEY:'',MUSICAPI_API_KEY:'',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
+  await runtime({pool,env:{NODE_ENV:'test',ADMIN_KEY:'isolated-description-fixture-key',OPENAI_API_KEY:'',MUSICAPI_API_KEY:'',STUDIO_RELEASE_WORKER_ENABLED:'false'}});await require('./artist-launch-fixture.cjs').filledPromotion(pool);
   const uid=crypto.randomUUID(),artist=(await pool.query("INSERT INTO creators(display_name,email,password_salt,password_hash,plan,membership_status) VALUES('Description fixture',$1,'ci-salt','ci-hash','starter','pending_payment') RETURNING id",['description-'+uid+'@ci.invalid'])).rows[0].id;
   await pool.query('INSERT INTO generation_wallets(creator_id,credits) VALUES($1,3)',[artist]);
   const makeCore=({store})=>({run:async(input,reference)=>{calls++;assert(input.brief.length>1200);assert.equal(input.previous_question,'Which musician do you mean?');assert.equal(input.answer,'The Nigerian singer and songwriter.');const hold=await store.reserve(reference,'interpret',.02);await store.record(hold.id,{id:'fixture-response',model:'gpt-6.1-sol',service_tier:'default',usage:{input_tokens:100,output_tokens:100}},.0012);await store.research(reference,[{tool:'fixture-only',fee_usd:0}]);return {...clone(output),detailed_style:'Complete arrangement. '.repeat(100),provider_style:output.provider_style,audio_ready:true};}});

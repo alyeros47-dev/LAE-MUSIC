@@ -3,7 +3,7 @@
 const target=require('./ci-database.cjs').ciDatabase(),assert=require('node:assert/strict'),crypto=require('node:crypto'),{Pool}=require('pg');
 const credits=require('../lib/credits'),quality=require('../lib/lyrics-originality');
 (async()=>{const pool=new Pool({connectionString:target.href,ssl:false});let checks=0;try{
- await require('./legacy-bootstrap.cjs').bootstrap(pool);await require('../lib/migrations').migrate(pool);assert.equal((await pool.query('SELECT COUNT(*)::int n FROM generation_records')).rows[0].n,0,'Originality test requires a fresh disposable database, not a reused lyric corpus.');checks++;
+ await require('./legacy-bootstrap.cjs').bootstrap(pool);await require('../lib/migrations').migrate(pool);await require('./artist-launch-fixture.cjs').filledPromotion(pool);assert.equal((await pool.query('SELECT COUNT(*)::int n FROM generation_records')).rows[0].n,0,'Originality test requires a fresh disposable database, not a reused lyric corpus.');checks++;
  const artists=[];for(let i=0;i<2;i++){const a=(await pool.query("INSERT INTO creators(display_name,email,password_salt,password_hash) VALUES('Originality QA',$1,'qa-salt','qa-hash') RETURNING id",['originality-'+crypto.randomUUID()+'@example.invalid'])).rows[0].id;artists.push(a);await pool.query('INSERT INTO generation_wallets(creator_id,credits) VALUES($1,3)',[a]);}
  const payload={idea:'Remembering patient family kindness',lyricsType:'thanksgiving'},keys=artists.map(()=>crypto.randomUUID());
  const reserved=await Promise.all(artists.map((id,i)=>credits.reserveLyrics(pool,id,keys[i],payload)));checks++;

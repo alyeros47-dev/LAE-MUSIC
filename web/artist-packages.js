@@ -27,6 +27,7 @@ export function artistPackageLink(url, plan) {
 export function artistPackageEntry(url, session = {}) {
   if(url.searchParams.get('return')==='bank-payment')return false;
   if(session.artist_testing_open===true)return false;
+  if(session.artist_promotion_open===true&&url.pathname==='/join')return false;
   if (url.hash === '#signin' || url.searchParams.get('social') === 'complete') return false;
   if (['/start', '/get-started'].includes(url.pathname)) return true;
   if (url.pathname !== '/join' || ['signin', 'login'].includes(url.searchParams.get('mode'))) return false;
@@ -49,6 +50,7 @@ export async function artistPackagesPage(view, url, { api, e, heading, notice, c
   const chosen = selected ? `${label(selected)} · $${catalogue.plans[selected].usd} USD / year` : 'Choose the artist package that fits your music.';
   if (!view.set(heading('ARTIST PACKAGES', 'Choose your artist package.', 'Choose a yearly plan.') +
     (url.searchParams.get('demo')==='1'?notice('Demo referral link. Use demo funds only; no real package or commission is created.',true):'') +
+    (session.artist_promotion_open&&!session.artist?`<section class="notice"><p>First 200 new artists: one free generation makes two tracks. Publish both without a package.</p><a class="button" data-nav href="/join?role=artist&amp;mode=register${ref?'&amp;ref='+e(ref):''}">Try one free generation</a></section>`:'') +
     (ref ? `<p>Referred by partner ${e(ref)}.</p>` : '') +
     (invalidRef ? notice('This referral reference is invalid. Ask the partner for a corrected link before paying.', true) : '') +
     (invalidProduct ? notice('This package was not found. The available artist packages are shown below.', true) : '') +

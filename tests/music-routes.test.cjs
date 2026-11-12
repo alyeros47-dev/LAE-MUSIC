@@ -4,6 +4,7 @@ const source=fs.readFileSync('server.js','utf8'),start=source.indexOf('const mus
 const PLANS=require('../lib/plans');
 function provenance(sql,args=[]){
  const row=x=>({rowCount:1,rows:[x]});
+ if(sql.startsWith('SELECT 1 FROM artist_owner_access')||sql.startsWith('SELECT 1 FROM artist_free_music_usage'))return {rowCount:0,rows:[]};
  if(sql.startsWith('SELECT id FROM generation_records'))return row({id:19});
  if(sql.startsWith('SELECT r.result'))return row({result:{generation_id:'19',task_id:'task_fixture_123',clip_id:'clip_fixture_123',audio_sha256:'a'.repeat(64)}});
  if(sql.startsWith('SELECT task_id FROM sonic_test_tasks'))return row({task_id:args[0]});
@@ -23,6 +24,7 @@ test('reserving an interrupted upload verifies existing audio before skipping it
   const row=x=>({rowCount:1,rows:[x]});
   const pool={query:async(sql,args=[])=>{
    queries.push(sql);
+   if(sql.startsWith('SELECT 1 FROM artist_owner_access')||sql.startsWith('SELECT 1 FROM artist_free_music_usage'))return {rowCount:0,rows:[]};
    if(['BEGIN','COMMIT','ROLLBACK'].includes(sql)||sql.startsWith('SELECT id FROM creators')||sql.startsWith('UPDATE music_tracks'))return row({id:7});
    if(sql.startsWith('SELECT expires_at'))return row({expires_at:'2099-01-01'});
    if(sql.includes('membership_generation_terms'))return row({n:0});if(sql.startsWith('SELECT COUNT(*)'))return row({n:sql.includes('$3::bigint')?6:7});
