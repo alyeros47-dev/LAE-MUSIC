@@ -2,7 +2,7 @@ name: Premium offline access verification
 on:
   push:
     branches: [codex/premium-offline-access]
-    paths: [scripts/inspect-premium-access.cjs]
+    paths: [scripts/inspect-premium-access.cjs, scripts/reconcile-premium-access.cjs]
 permissions:
   contents: read
 jobs:
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --omit=dev
-      - name: Read payment activation without changing production
+      - name: Reconcile only the exact purchase independently confirmed paid by Monnify
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: node scripts/inspect-premium-access.cjs
+        run: node scripts/reconcile-premium-access.cjs
