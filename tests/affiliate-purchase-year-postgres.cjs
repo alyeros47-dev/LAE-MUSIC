@@ -25,6 +25,7 @@ test('purchase-qualified affiliate year, linked roles, versioned commissions and
   const options={affiliatePolicyRevision:policy.PURCHASE_YEAR_REVISION,pool,rates,adapters:{paystack:adapter},callbackOrigin:'https://lae.test'};
   const premium=createPremium(options),checkout=createCheckoutService({...options,mode:'sandbox',merchantCountry:'NG'});
   const app=await runtime({pool,premiumService:premium,paymentService:checkout,env:{NODE_ENV:'test',ADMIN_KEY:'affiliate-year-local-admin',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
+  await require('./artist-launch-fixture.cjs').filledPromotion(pool);
   const api=async(path,body,cookie)=>{
    const r=await app.request(path,{method:body===undefined?'GET':'POST',body,remoteAddress:'192.0.2.'+(1+(++sequence)%200),headers:{...(cookie?{cookie}:{}),'idempotency-key':key()}});
    return {status:r.status,data:r.json(),cookie:[r.headers['set-cookie']||[]].flat().map(c=>c.split(';')[0]).join('; ')};
