@@ -6,9 +6,9 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
  const app=await runtime(),server=http.createServer(async(req,res)=>{const r=await app.request(req.url);res.writeHead(r.status,r.headers);res.end(r.body);});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port,browser=await launchBrowser();
  try{for(const width of [390,1440]){
-  const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage(),errors=[];let actor='owner',open=true,remaining=1,uploadStart=null;
-  page.on('pageerror',e=>errors.push(e.message));
-  const visit=async path=>{await page.goto(origin+path);await page.waitForLoadState('networkidle');};
+  const context=await browser.newContext({viewport:{width,height:1000},serviceWorkers:'block'}),page=await context.newPage(),errors=[];let actor='owner',open=true,remaining=1,uploadStart=null;
+  let phase='startup';page.on('pageerror',e=>errors.push({phase,message:e.message,stack:e.stack}));
+  const visit=async path=>{phase=path;await page.goto(origin+path);await page.waitForLoadState('networkidle');};
   await page.route('**/api/**',async route=>{
    const req=route.request(),p=new URL(req.url()).pathname,send=(x,status=200)=>route.fulfill({status,contentType:'application/json',body:JSON.stringify(x)});
    const owner=actor==='owner',promotion=actor==='promotion',artist=actor==='anonymous'?null:{id:7,display_name:'Fixture artist',email:'artist@launch.invalid',owner_unlimited:owner,promotion};
@@ -45,7 +45,7 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
   assert.equal(await page.locator('[name=uploadCode]').evaluate(el=>el.required),false);
   await page.locator('[name=title]').fill('Eligible owner recording');await page.locator('[name=genre]').fill('Gospel Praise');
   await page.locator('[name=audio]').setInputFiles({name:'owner-original.mp3',mimeType:'audio/mpeg',buffer:Buffer.concat([Buffer.from('ID3'),Buffer.alloc(2045)])});
-  await page.locator('[name=rights]').check();await page.getByRole('button',{name:'Upload & publish',exact:true}).click();await page.waitForURL(/tab=catalog/);await page.waitForLoadState('networkidle');
+  await page.locator('[name=rights]').check();await page.getByRole('button',{name:'Upload & publish',exact:true}).click();await page.waitForURL(/tab=catalog/);await page.getByRole('heading',{name:'Your music catalog',exact:true}).waitFor();
   assert.equal(uploadStart.uploadCode,'');assert.equal(uploadStart.rightsConfirmed,true);assert.equal(Object.hasOwn(uploadStart,'owner_unlimited'),false);
   actor='promotion';await visit('/workspace?tab=upload');await page.locator('#upload-form').waitFor();
   assert.equal(await page.locator('[name=uploadCode]').evaluate(el=>el.required),true);assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
@@ -59,7 +59,7 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
   assert.equal(new URL(page.url()).searchParams.get('ref'),'9');
   await page.locator('#auth-form [name=name]').fill('New promotional artist');await page.locator('#auth-form [name=email]').fill('new@launch.invalid');await page.locator('#auth-form [name=country]').fill('Nigeria');
   await page.locator('#auth-form [name=password]').fill('LaunchBrowserFixture123');await page.locator('#auth-form [name=confirmPassword]').fill('LaunchBrowserFixture123');
-  await page.getByRole('button',{name:'Create free account ↗',exact:true}).click();await page.waitForURL(/\/workspace/);await page.waitForLoadState('networkidle');
+  await page.getByRole('button',{name:'Create free account ↗',exact:true}).click();await page.waitForURL(/\/workspace/);await page.getByRole('heading',{name:'Room for your next release.',exact:true}).waitFor();
   actor='anonymous';open=false;await visit('/join?role=artist&mode=register');await page.getByRole('heading',{name:'Choose your artist package.',exact:true}).waitFor();
   assert.equal(await page.getByRole('link',{name:'Try one free generation',exact:true}).count(),0);
   assert.deepEqual(errors,[]);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await context.close();

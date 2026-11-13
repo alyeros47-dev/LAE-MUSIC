@@ -11,6 +11,7 @@ test('voice failures preserve recordings, release no song credits and reject dup
   await runtime({pool,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
   async function artist(name){const id=(await pool.query("INSERT INTO creators(display_name,email,password_salt,password_hash,plan) VALUES($1,$2,'fixture-salt','fixture-password-hash','starter') RETURNING id",[name,name+'@voice-ci.invalid'])).rows[0].id;await pool.query("INSERT INTO artist_subscriptions(artist_id,plan,amount_cents,payment_reference,status,starts_at,expires_at) VALUES($1,'starter',600,$2,'paid',NOW()-INTERVAL '1 day',NOW()+INTERVAL '1 year')",[id,'voice-only-fixture-'+id]);return id;}
   const a=await artist('voice-owner'),b=await artist('voice-other');
+  const initialUsage={};for(const table of ['generation_ledger','artist_studio_usage','studio_purchased_credits'])initialUsage[table]=(await pool.query('SELECT COUNT(*)::int AS n FROM '+table)).rows[0].n;
   await require('./voice-production-postgres.cjs')(t,{pool,artist:a,other:b});
   process.env.MUSICAPI_API_KEY='voice-ci-provider-fixture';
   let owner=b,requests=0;
@@ -31,7 +32,7 @@ test('voice failures preserve recordings, release no song credits and reject dup
    const upload=await api('/api/voice/upload',{type:'audio/wav',bytes:11520044,consent:true});assert.equal(upload.status,409);assert.equal(upload.data.code,'voice_verification_required');
    assert.equal((await api('/api/voice/train',{})).status,409);
    assert.deepEqual((await pool.query('SELECT * FROM artist_voice_profiles WHERE creator_id=$1',[b])).rows,before);assert.equal(requests,priorRequests);
-   for(const table of ['generation_ledger','artist_studio_usage','studio_purchased_credits'])assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM '+table)).rows[0].n,0);
+   for(const table of ['generation_ledger','artist_studio_usage','studio_purchased_credits'])assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM '+table)).rows[0].n,initialUsage[table]);
   });
   await t.test('another artist keeps their existing ready voice and cannot read this failure',async()=>{
    owner=a;const r=await api('/api/voice/profile');assert.equal(r.data.status,'ready');assert.equal(r.data.hasVoice,true);assert(!r.data.failure);

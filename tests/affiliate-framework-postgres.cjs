@@ -7,6 +7,7 @@ test('free voluntary lasting affiliates, original referral renewals and unalloca
  const control=new Pool({connectionString:target.href}),schema='affiliate_framework_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});const originalFetch=global.fetch;let providerCalls=0;global.fetch=async()=>{providerCalls++;throw Error('External paid providers are forbidden in framework fixtures');};
  try{
  const app=await runtime({pool,premiumService:require('../lib/premium-listeners').createPremium({pool,affiliatePolicyRevision:framework.REVISION,manualPaymentMode:'test'}),env:{NODE_ENV:'test',ADMIN_KEY:'FrameworkBankFixtureAdmin123456',MANUAL_BANK_PAYMENTS_JSON:JSON.stringify(bank),STUDIO_RELEASE_WORKER_ENABLED:'false'}});
+ await require('./artist-launch-fixture.cjs').filledPromotion(pool);
  await pool.query("INSERT INTO currency_rate_snapshots(id,source,as_of,next_update,rates) VALUES($1,'exchangerate-api',NOW()-INTERVAL '1 minute',NOW()+INTERVAL '1 day',$2)",[key(),JSON.stringify({USD:'1',NGN:'1500'})]);
  const api=async(path,body,cookie,k=key(),headers={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),'idempotency-key':k,...headers}});return {status:r.status,data:r.json(),cookie:[r.headers['set-cookie']||[]].flat().map(c=>c.split(';')[0]).join('; ')};};
  const admin=(await api('/api/admin/login',{password:'FrameworkBankFixtureAdmin123456'})).cookie;

@@ -3,6 +3,7 @@
 const assert = require("node:assert/strict"),
   crypto = require("node:crypto");
 module.exports = async (t, { pool }) => {
+  await require('./artist-launch-fixture.cjs').filledPromotion(pool);
   const credits = require("../lib/credits"),
     dna = require("../lib/music-dna"),
     e = dna.createEngine(require("./music-dna-fixture.cjs").catalogue());
