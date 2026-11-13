@@ -8,6 +8,7 @@ test('historical artist and Premium gateway contracts survive affiliate policy u
  const pool=new Pool({connectionString:target.href,ssl:false,options:'-c search_path='+schema});
  try{
   await require('./runtime.cjs').runtime({pool,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});
+  await require('./artist-launch-fixture.cjs').filledPromotion(pool);
   await require('./premium-postgres.cjs')(t,{pool});
   await require('./premium-international-postgres.cjs')(t,{pool});
   await require('./checkout-postgres.cjs')(t,{pool});
