@@ -1,0 +1,23 @@
+name: Premium offline access verification
+on:
+  push:
+    branches: [codex/premium-offline-access]
+    paths: [scripts/inspect-premium-access.cjs]
+permissions:
+  contents: read
+jobs:
+  existing-paid-access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Read payment activation without changing production
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-premium-access.cjs
