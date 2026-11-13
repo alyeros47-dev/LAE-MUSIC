@@ -124,11 +124,39 @@ export async function premiumPage(view, url, ctx) {
     route,
     currencyDisplay,
   } = ctx;
+  const payment = url.searchParams.get("payment");
+  const returned = payment && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(payment);
+  if (payment && !returned) {
+    view.set(heading("PREMIUM LISTENING", "Check your payment link.", "Use the original payment link. You do not need to pay again.") + buttonLink("/premium", "View my Premium"));
+    return;
+  }
+  if (returned && !session.listener) {
+    view.set(heading("PREMIUM LISTENING", "Sign in to use your Premium.", "Use the email selected for this payment. You do not need to pay again.") + buttonLink("/join?role=listener&mode=signin&return=premium&payment=" + encodeURIComponent(payment), "Sign in to my paid account"));
+    return;
+  }
+  let returnedStatus = null;
+  if (returned) {
+    returnedStatus = await api("/api/platform/premium/status");
+    const confirmed = value => value.orders.some(order => order.attempt_id === payment && order.verified_at);
+    let error;
+    if (!confirmed(returnedStatus)) {
+      view.set(heading("PREMIUM LISTENING", "Checking your payment…", "You do not need to pay again."));
+      try { returnedStatus = await api("/api/platform/premium/verify", "POST", {attempt_id: payment}); }
+      catch (failure) { error = failure; returnedStatus = await api("/api/platform/premium/status"); }
+    }
+    if (!confirmed(returnedStatus)) {
+      const wrongAccount = error?.status === 404;
+      view.set(heading("PREMIUM LISTENING", wrongAccount ? "Use the account that paid." : "Your payment is not confirmed yet.", wrongAccount ? "Sign in with the email selected for this payment. You do not need to pay again." : "Keep your payment reference. You do not need to pay again.") + (wrongAccount ? buttonLink("/account?role=listener", "Open My account") : '<button class="button" id="premium-return-check">Check payment again</button>'));
+      if (document.getElementById("premium-return-check")) document.getElementById("premium-return-check").onclick = () => route(true);
+      return;
+    }
+    await ctx.refreshSession();
+  }
   const plans = await api("/api/platform/premium/plans"),
     complaintData = session.listener
       ? await api("/api/platform/premium/complaints")
       : { complaints: [] },
-    data = session.listener ? await api("/api/platform/premium/status") : null,
+    data = session.listener ? returnedStatus || await api("/api/platform/premium/status") : null,
     approved = plans.price_status === "approved";
   const policy = await api("/api/platform/financial-policy");
   const manualEnabled=plans.manual_bank?.enabled===true;

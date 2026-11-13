@@ -391,6 +391,7 @@ export class OfflineLibrary {
           trust,
           payload,
         });
+        this.toast("Saved in your LAE-MUSIC offline library");
         return;
       }
       if (old) {
