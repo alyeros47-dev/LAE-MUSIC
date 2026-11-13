@@ -1,0 +1,19 @@
+// Owner-only acceptance checkout. No public provider activation or manual payment success switch.
+export async function monnifyAdmin(view,intro,{api,e,bindForm,keyFor,clearKey}){
+ const state=await api('/api/platform/admin/monnify/status');
+ if(!view.set(intro+`<section class="panel"><h2>Monnify payment test</h2><p>${e(state.notice)}</p><form id="monnify-test"><label>Existing account email<input name="email" type="email" autocomplete="off" required></label><label>Account<select name="role"><option value="listener">Listener</option><option value="artist">Artist</option></select></label><label>Purchase<select name="product"><option value="monthly">One-month Premium listening</option><option value="quarterly">Three-month Premium listening</option><option value="starter">Starter artist membership</option><option value="growth">Growth artist membership</option><option value="professional">Premium artist membership</option><option value="extra_starter">Extra generation · Starter</option><option value="extra_growth">Extra generation · Growth</option><option value="extra_professional">Extra generation · Premium</option></select></label><label class="check"><input name="confirm_real_payment" type="checkbox" required><span>This opens a real payment. Check the amount before paying.</span></label><button class="button" type="submit">Prepare payment</button><p class="form-status" role="status"></p></form><div id="monnify-result" aria-live="polite"></div></section>`))return;
+ const form=document.getElementById('monnify-test'),result=document.getElementById('monnify-result');
+ if(!state.configured){for(const control of form.elements)control.disabled=true;return;}
+ bindForm(form,async data=>{
+  const artist=(['starter','growth','professional'].includes(data.product)||data.product.startsWith('extra_'));
+  if(artist!==(data.role==='artist'))throw Error('Choose a purchase for the selected account type.');
+  const input={email:data.email,role:data.role,confirm_real_payment:form.elements.confirm_real_payment.checked,...(artist?{kind:data.product.startsWith('extra_')?'studio_generation':'artist_subscription',plan:data.product.replace(/^extra_/,'')}:{plan:data.product})};
+  const payment=await api('/api/platform/admin/monnify/checkout','POST',input,{headers:{'Idempotency-Key':keyFor('monnify-test',input)}});
+  const c=payment.checkout;
+  const amount=new Intl.NumberFormat(undefined,{style:'currency',currency:payment.charge_currency}).format(payment.charge_minor/100);
+  let safeUrl=null;try{const u=new URL(c.checkout_url);if(u.protocol==='https:'&&!u.username&&!u.password&&!u.port&&['sdk.monnify.com','checkout.monnify.com'].includes(u.hostname))safeUrl=u.href;}catch{}
+  result.innerHTML=`<h3>${e(amount)}</h3><p>${e(c.reference||'')}</p><p>${e(c.notice||payment.notice)}</p>${safeUrl?`<a class="button" href="${e(safeUrl)}" target="_blank" rel="noopener noreferrer">Open Monnify payment</a>`:''}<button class="button secondary" id="monnify-check">Check payment</button><p id="monnify-status" role="status"></p>`;
+  const check=document.getElementById('monnify-check'),status=document.getElementById('monnify-status');
+  check.onclick=async()=>{check.disabled=true;status.textContent='Checking payment…';try{const r=await api('/api/platform/admin/monnify/verify','POST',{role:input.role,attempt_id:c.id});const paid=r.status==='paid'||r.checkout?.status==='paid'||r.active===true;status.textContent=paid?'Payment verified. The purchased service is active.':'Payment is not confirmed yet. Keep this reference and check again.';if(paid)clearKey('monnify-test');}catch(error){status.textContent=error.message;}finally{check.disabled=false;}};
+ });
+}
