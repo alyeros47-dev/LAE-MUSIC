@@ -6,7 +6,7 @@ const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
 test('one email/password safely connects listener, artist and partner access',{skip:process.env.LAE_DB_TESTS!=='true'},async t=>{
  const target=require('./ci-database.cjs').ciDatabase(),control=new Pool({connectionString:target.href}),schema='lae_account_roles_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});
  const delivered=[],accounts=createAccountSecurity({pool,mailer:{enabled:()=>true,send:async x=>delivered.push(x)},emailKey:'ab'.repeat(32),publicOrigin:'https://lae.test'});
- try{const app=await runtime({pool,accountService:accounts,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});accounts.stop();
+ try{const app=await runtime({pool,accountService:accounts,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});accounts.stop();await require('./artist-launch-fixture.cjs').filledPromotion(pool);
  const cookies=headers=>(Array.isArray(headers)?headers:headers?[headers]:[]).map(c=>c.split(';')[0]).join('; ');
  async function api(path,body,cookie,extra={}){const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),...extra}});return {status:r.status,data:r.json(),cookie:cookies(r.headers['set-cookie']),raw:r};}
  let serial=0;const initialPassword='CurrentAccountPassword123';

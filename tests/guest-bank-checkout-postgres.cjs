@@ -35,6 +35,7 @@ test('real guest bank purchase precedes registration and activates only the veri
    const queue=await api('/api/platform/admin/manual-payments?status=approved',undefined,admin);assert.equal(queue.status,200);assert.equal(queue.data.payments[0].customer_email,input.email);
   });
   await t.test('registration followed by concurrent claim activates one annual membership and preserves bank history',async()=>{
+   await require('./artist-launch-fixture.cjs').filledPromotion(pool);
    artist=await register('artist',input.email);const wrong=await register('artist','other-account@guest-fixture.invalid');
    assert.equal((await api('/api/platform/guest-payments/claim',{},guest+'; '+wrong.cookie)).status,403);
    const cookie=guest+'; '+artist.cookie,id=key(),r=await Promise.all([api('/api/platform/guest-payments/claim',{},cookie,id),api('/api/platform/guest-payments/claim',{},cookie,id)]);for(const x of r)assert.equal(x.status,200,JSON.stringify(x.data));assert.equal(r[0].data.order_id,r[1].data.order_id);

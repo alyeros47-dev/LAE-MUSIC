@@ -13,6 +13,7 @@ class MockPool {
     const row = value => ({ rowCount: 1, rows: [value] }), none = () => ({ rowCount: 0, rows: [] });
     if (['BEGIN','COMMIT','ROLLBACK'].includes(sql) || sql.startsWith('SELECT pg_advisory') || sql.startsWith('CREATE TABLE IF NOT EXISTS platform_migrations')) return none();
     if (sql.startsWith('SELECT 1 FROM royalty_recovery_holds')) return none();
+    if (sql==='SELECT 1 FROM artist_owner_access WHERE artist_id=$1') return none();
     if (sql.startsWith('SELECT 1 FROM affiliate_subscription_commissions')) return none();
     if (sql.startsWith('SELECT id FROM creators')) return row({ id: args[0] });
     if (sql.startsWith('SELECT checksum FROM platform_migrations')) return this.state.migration[args[0]] ? row({ checksum: this.state.migration[args[0]] }) : none();

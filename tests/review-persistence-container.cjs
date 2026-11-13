@@ -230,13 +230,17 @@ async function boot(name) {
     assert(Buffer.from(await r.arrayBuffer()).equals(audio.subarray(0, 64)));
     const state = await api("/api/platform/session");
     assert.equal(state.data.review_environment, "persistent_review");
+    phase = "retained promotional access";
+    assert.equal(state.data.artist.promotion, true);
+    assert.equal(state.data.artist.owner_unlimited, false);
     assert.equal(
+      // This legacy staging handler retains its separate two-request sandbox quota.
       (await api("/api/artist/studio-allowance")).data.remaining_generations,
       2,
     );
     assert.equal(
       (await api("/api/artist/subscription")).data.artist_features_active,
-      false,
+      true,
     );
     console.log(
       JSON.stringify({

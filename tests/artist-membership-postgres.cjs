@@ -8,7 +8,7 @@ test('annual artist membership, consent, generation terms and funded royalty ren
  const control=new Pool({connectionString:target.href}),schema='membership_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});
  let external=0;const oldFetch=global.fetch;global.fetch=async()=>{external++;throw Error('Membership tests never contact a real provider.');};
  try{
-  const app=await runtime({pool,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}}),payments=new Map();
+  const app=await runtime({pool,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}}),payments=new Map();await require('./artist-launch-fixture.cjs').filledPromotion(pool);
   const adapter={verified:true,name:'membership_fixture',merchantId:'local_fixture',verifyEvent:async raw=>JSON.parse(raw),retrievePayment:async id=>payments.get(id)};
   const commerce=createCommerce({pool,adapter}),membership=createMembership({pool,commerce}),a=agreement.disclosure();
   const api=async(path,body,cookie,requestKey=key(),headers={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),'idempotency-key':requestKey,...headers}});return {status:r.status,data:()=>r.json(),cookie:(Array.isArray(r.headers['set-cookie'])?r.headers['set-cookie']:[r.headers['set-cookie']]).filter(Boolean).map(s=>s.split(';')[0]).join('; ')};};

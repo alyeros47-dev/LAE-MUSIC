@@ -68,7 +68,7 @@ test('uploaded audio must match the exact generated recording authorized by the 
 });
 test('artist plan and annual quotas apply even when a generated-song code exists',async()=>{
  let active=false,count=0;
- const db={query:async(sql)=>{if(sql.includes('artist_subscriptions'))return {rowCount:active?1:0,rows:active?[{id:3,plan:'starter',starts_at:new Date()}]:[]};if(sql.includes('membership_generation_terms'))return {rows:[{n:0}]};if(sql.includes('COUNT(*)'))return {rows:[{n:count}]};throw Error(sql);}};
+ const db={query:async(sql)=>{if(sql.startsWith('SELECT 1 FROM artist_owner_access'))return {rowCount:0,rows:[]};if(sql.includes('artist_subscriptions'))return {rowCount:active?1:0,rows:active?[{id:3,plan:'starter',starts_at:new Date()}]:[]};if(sql.includes('membership_generation_terms'))return {rows:[{n:0}]};if(sql.includes('COUNT(*)'))return {rows:[{n:count}]};throw Error(sql);}};
  await assert.rejects(codes.requirePlan(db,7),e=>e.status===403);active=true;await codes.requirePlan(db,7);count=require('../lib/plans').starter.uploads;await assert.rejects(codes.requirePlan(db,7),e=>e.status===409);
 });
 test('actual lyrics route rejects hidden departments before reserving or calling the provider',async()=>{
