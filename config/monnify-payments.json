@@ -1,0 +1,7 @@
+{
+  "public_enabled": false,
+  "live_acceptance_confirmed": false,
+  "successful_payment_reference": "",
+  "approved_currencies": ["NGN"],
+  "payment_methods": ["CARD", "ACCOUNT_TRANSFER"]
+}

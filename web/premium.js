@@ -148,7 +148,7 @@ export async function premiumPage(view, url, ctx) {
           }).resolvedOptions().maximumFractionDigits,
     );
   const record = (o) =>
-    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">Open sandbox checkout ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
+    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">${o.mode==='live'?'Open payment page':'Open sandbox checkout'} ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
     !view.set(
       heading(
@@ -174,7 +174,7 @@ export async function premiumPage(view, url, ctx) {
         ) +
         notice(
           manualEnabled?"Pay by bank transfer. Your selected pass activates after an administrator verifies receipt.":plans.providers.length
-            ? "Sandbox checkout only. Test payments never create withdrawable artist earnings."
+            ? (plans.live_payments?"Pay securely with Monnify. Access starts after payment is verified.":"Sandbox checkout only. Test payments never create withdrawable artist earnings.")
             : "Payment checkout is unavailable until merchant accounts and supported currencies are verified.",
           true,
         ) +
@@ -235,7 +235,7 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days} days · renew when needed.</p><form><label>Referral ID (optional)<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><button type="submit" class="button">${manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days} days · renew when needed.</p><form><label>Referral ID (optional)<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><button type="submit" class="button">${plans.live_payments?'Continue to payment':manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {
@@ -249,7 +249,7 @@ export async function premiumPage(view, url, ctx) {
               });
               clearKey("premium-order");
               document.getElementById("action-dialog").close();
-              if(manualEnabled)await openBankPayment(ctx,{role:'listener',orderId:savedOrder.id});else route(true);
+              if(manualEnabled&&!plans.live_payments)await openBankPayment(ctx,{role:'listener',orderId:savedOrder.id});else route(true);
             }),
         );
       }),
@@ -258,7 +258,7 @@ export async function premiumPage(view, url, ctx) {
     (button) =>
       (button.onclick = () =>
         ctx.actionDialog(
-          `<h2>Your payment options.</h2><form><label>Provider<select name="provider" aria-label="Provider">${plans.providers.map((p) => `<option value="${e(p.id)}">${e(p.id)}</option>`).join("")}</select></label><label>Payment currency<select name="currency" aria-label="Payment currency"></select></label><p class="payment-alternative"></p><button type="submit" class="button">Review final payment amount</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Your payment options.</h2><form><label>Provider<select name="provider" aria-label="Provider">${plans.providers.map((p) => `<option value="${e(p.id)}">${e(p.id==='monnify'?'Monnify':p.id)}</option>`).join("")}</select></label><label>Payment currency<select name="currency" aria-label="Payment currency"></select></label><p class="payment-alternative"></p><button type="submit" class="button">Review final payment amount</button><p class="form-status" role="status"></p></form>`,
           (root) => {
             const form = root.querySelector("form"),
               provider = form.elements.provider,
@@ -291,7 +291,7 @@ export async function premiumPage(view, url, ctx) {
                 order_id: button.dataset.premiumCheckout,
                 ...b,
               });
-              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>Pay by ${e(dateTime(q.expires_at))}.</p><form><button type="submit" class="button">Create sandbox reference</button><p class="form-status" role="status"></p></form>`;
+              root.innerHTML = `<h2>Confirm your final payment amount.</h2><p class="price">${e(amount(q.charge_minor, q.charge_currency))}</p><p>Pay by ${e(dateTime(q.expires_at))}.</p><form><button type="submit" class="button">${plans.live_payments?'Continue to payment':'Create sandbox reference'}</button><p class="form-status" role="status"></p></form>`;
               bindForm(root.querySelector("form"), async () => {
                 const payload = {
                   quote_id: q.id,

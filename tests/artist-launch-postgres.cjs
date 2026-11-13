@@ -22,7 +22,7 @@ test('owner snapshot and first-200 artist launch promotion',async t=>{
   const owner=await insert('legacy_owner'),otherOwner=await insert('legacy_other');
   await pool.query("INSERT INTO artist_subscriptions(artist_id,plan,amount_cents,payment_reference,status,starts_at,expires_at) VALUES($1,'starter',600,'expired-owner-fixture','paid',NOW()-INTERVAL '2 years',NOW()-INTERVAL '1 year')",[owner]);
   await pool.query('INSERT INTO generation_wallets(creator_id,credits) VALUES($1,8)',[owner]);
-  assert.deepEqual(await migrate(pool),['034-owner-access-artist-launch.sql']);
+  assert.deepEqual(await migrate(pool),['034-owner-access-artist-launch.sql','035-monnify-checkout.sql']);
   global.fetch=async(url,opt={})=>{
    storageCalls++;const u=new URL(url);assert(u.hostname.endsWith('.r2.cloudflarestorage.com'),'No real external calls are allowed');const k=decodeURIComponent(u.pathname.split('/').slice(2).join('/'));
    if(opt.method==='PUT'){let bytes;if(Buffer.isBuffer(opt.body))bytes=opt.body;else{const chunks=[];for await(const part of opt.body)chunks.push(Buffer.from(part));bytes=Buffer.concat(chunks);}objects.set(k,{bytes,mime:opt.headers['Content-Type']});return new Response('');}
