@@ -48,6 +48,17 @@ test('Monnify isolated database integration; mocked network does not prove live 
    const pcheck=await api('/api/platform/admin/monnify/verify',{role:'listener',attempt_id:first.checkout.id},admin);assert([200,429].includes(pcheck.status),JSON.stringify(pcheck.data));
    assert.equal((await api('/api/platform/premium/status',undefined,listener.cookie)).data.active,true);
   });
+  await t.test('a verified Monnify receipt enables real offline grants and media only for its paid listener',async()=>{
+   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'prime256v1'}),device=crypto.generateKeyPairSync('ec',{namedCurve:'prime256v1'}),deviceId=key(),bytes=Buffer.from('ID3-Monnify offline fixture');
+   const offline=require('../lib/offline-listening').createOffline({pool,signingKey:pair.privateKey,mediaSource:async()=>({bytes,mime:'audio/mpeg'})});
+   await assert.rejects(offline.register(stranger.id,key(),{device_id:key(),public_jwk:device.publicKey.export({format:'jwk'})}),e=>e.status===403);
+   await offline.register(listener.id,key(),{device_id:deviceId,public_jwk:device.publicKey.export({format:'jwk'})});
+   const track=(await pool.query("INSERT INTO music_tracks(creator_id,title,genre,audio_key,audio_mime,audio_bytes,status,published_at) VALUES($1,'Paid offline fixture','Gospel','monnify-fixture.mp3','audio/mpeg',$2,'published',NOW()) RETURNING id",[artist.id,bytes.length])).rows[0];
+   const challenge=await offline.challenge(listener.id,{device_id:deviceId,action:'grant'}),payload={track_id:String(track.id)},signature=crypto.sign('sha256',Buffer.from(require('../web/offline-protocol').message(deviceId,challenge.nonce,'grant',payload)),{key:device.privateKey,dsaEncoding:'ieee-p1363'}).toString('base64url');
+   const grant=await offline.grant(listener.id,key(),{device_id:deviceId,nonce:challenge.nonce,payload,signature}),grantId=JSON.parse(Buffer.from(grant.token.payload,'base64url')).grant_id;
+   await assert.rejects(offline.media(stranger.id,{grant_id:grantId,media_ticket:grant.media_ticket}),e=>e.status===403);
+   assert.deepEqual((await offline.media(listener.id,{grant_id:grantId,media_ticket:grant.media_ticket})).bytes,bytes);
+  });
   await t.test('every listener duration preserves the approved USD price and paid time',async()=>{
    for(const plan of require('../lib/premium-pricing').catalog().plans){const p=await start('listener',listener,{plan:plan.code});assert.equal(Number(p.checkout.base_minor),plan.usd_minor);assert.equal(Number(p.charge_minor),plan.usd_minor*1500);paid(p.checkout);const r=await webhook(p.checkout);assert.equal(r.status,200,JSON.stringify(r.data));const term=(await pool.query('SELECT EXTRACT(EPOCH FROM expires_at-starts_at) AS seconds FROM premium_entitlements WHERE order_id=$1',[p.order_id])).rows[0];assert.equal(Number(term.seconds),plan.days*86400);}
   });

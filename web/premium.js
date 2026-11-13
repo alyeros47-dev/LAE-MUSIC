@@ -124,11 +124,39 @@ export async function premiumPage(view, url, ctx) {
     route,
     currencyDisplay,
   } = ctx;
+  const payment = url.searchParams.get("payment");
+  const returnToPayment = payment && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(payment);
+  if (payment && !returnToPayment) {
+    view.set(heading("PREMIUM LISTENING", "Check your payment link.", "Use the original payment link. You do not need to pay again.") + buttonLink("/premium", "View my Premium"));
+    return;
+  }
+  if (returnToPayment && !session.listener) {
+    view.set(heading("PREMIUM LISTENING", "Sign in to use your Premium.", "Use the listener account selected for this payment. Your admin sign-in is separate. You do not need to pay again.") + buttonLink("/join?role=listener&mode=signin&return=premium&payment=" + encodeURIComponent(payment), "Sign in to my paid account"));
+    return;
+  }
+  let returnedStatus = null;
+  if (returnToPayment) {
+    returnedStatus = await api("/api/platform/premium/status");
+    const hasReceipt = value => value.orders.some(order => order.attempt_id === payment && order.verified_at);
+    let error = null;
+    if (!hasReceipt(returnedStatus)) {
+      view.set(heading("PREMIUM LISTENING", "Checking your payment…", "Keep this page open. You do not need to pay again."));
+      try { returnedStatus = await api("/api/platform/premium/verify", "POST", {attempt_id: payment}); }
+      catch (failure) { error = failure; returnedStatus = await api("/api/platform/premium/status"); }
+    }
+    if (!hasReceipt(returnedStatus)) {
+      const wrongAccount = error?.status === 404;
+      view.set(heading("PREMIUM LISTENING", wrongAccount ? "Use the account that paid." : "Your payment is being checked.", wrongAccount ? "Sign in to the listener account selected for this payment. You do not need to pay again." : "Payment is not confirmed yet. Keep your payment reference. You do not need to pay again.") + (wrongAccount ? buttonLink("/account?role=listener", "Open My account") : '<button class="button" id="premium-return-check">Check payment again</button>'));
+      if (document.getElementById("premium-return-check")) document.getElementById("premium-return-check").onclick = () => route(true);
+      return;
+    }
+    await ctx.refreshSession();
+  }
   const plans = await api("/api/platform/premium/plans"),
     complaintData = session.listener
       ? await api("/api/platform/premium/complaints")
       : { complaints: [] },
-    data = session.listener ? await api("/api/platform/premium/status") : null,
+    data = session.listener ? returnedStatus || await api("/api/platform/premium/status") : null,
     approved = plans.price_status === "approved";
   const policy = await api("/api/platform/financial-policy");
   const manualEnabled=plans.manual_bank?.enabled===true;
@@ -148,7 +176,7 @@ export async function premiumPage(view, url, ctx) {
           }).resolvedOptions().maximumFractionDigits,
     );
   const record = (o) =>
-    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">${o.mode==='live'?'Open payment page':'Open sandbox checkout'} ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
+    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">${o.mode==='live'?'Open payment page':'Open sandbox checkout'} ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" ${o.provider === "monnify" ? "" : 'data-feature="checkout"'} data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
     !view.set(
       heading(
@@ -160,13 +188,14 @@ export async function premiumPage(view, url, ctx) {
         notice(
           "Public streaming, playlists and favorites remain available. Premium does not grant commercial or public-performance rights.",
         ) +
-        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights <span data-feature="offline_save">· in-app offline listening on supported browsers</span> · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
+        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p><div class="row-actions"><a class="button" data-feature="offline_save" href="/discover" data-nav>Save songs offline</a>${buttonLink("/offline", "Open offline library", true)}</div><p data-feature="offline_save">Open a song and choose Save offline. Find saved songs in your Offline library.</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights <span data-feature="offline_save">· in-app offline listening on supported browsers</span> · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
         (!approved
           ? notice(
               "USD price proposal awaiting approval. These proposed prices are not available for purchase.",
               true,
             )
           : "") +
+        (data?.active ? '<details><summary>Renew or change your plan</summary>' : "") +
         `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="${manualEnabled?'manual_bank':'checkout'}" data-premium-plan="${e(p.code)}" ${approved && (manualEnabled||plans.providers.length > 0) ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
         currencyDisplay.info() +
         notice(
@@ -178,6 +207,7 @@ export async function premiumPage(view, url, ctx) {
             : "Payment checkout is unavailable until merchant accounts and supported currencies are verified.",
           true,
         ) +
+        (data?.active ? "</details>" : "") +
         (data
           ? heading("YOUR PREMIUM", "Your subscriptions and purchase records") +
             data.orders.map(record).join("") +
