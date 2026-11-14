@@ -21,10 +21,20 @@ on:
         description: "Owner-requested Gmail verification: SMTP connection or one isolated listener reset round-trip"
         required: false
         type: choice
-        options: ["", smtp, roundtrip, trace]
+        options: ["", smtp, roundtrip, trace, artist-lookup]
         default: ""
       reset_recipient_sha256:
         description: "SHA-256 of the one owner-reported reset email; no plaintext recipient or token"
+        required: false
+        type: string
+        default: ""
+      artist_name_sha256:
+        description: "Digest of one owner-requested artist name; no broad account listing"
+        required: false
+        type: string
+        default: ""
+      lookup_public_key:
+        description: "Public encryption key for returning the artist lookup privately"
         required: false
         type: string
         default: ""
@@ -94,7 +104,7 @@ jobs:
       - if: inputs.password_email_check == 'roundtrip'
         run: npx playwright install --with-deps chromium
       - name: Verify only the configured Gmail sender and the requested recovery flow
-        if: inputs.password_email_check != 'trace'
+        if: inputs.password_email_check != 'trace' && inputs.password_email_check != 'artist-lookup'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           LAE_GMAIL_VERIFY_MODE: ${{ inputs.password_email_check }}
@@ -107,3 +117,12 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           LAE_RESET_TARGET_SHA256: ${{ inputs.reset_recipient_sha256 }}
         run: node scripts/trace-reset-delivery.cjs
+      - if: inputs.password_email_check == 'artist-lookup'
+        run: node tests/artist-access-lookup.test.cjs
+      - name: Read the requested artist and return only a session-encrypted result
+        if: inputs.password_email_check == 'artist-lookup'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_ARTIST_NAME_SHA256: ${{ inputs.artist_name_sha256 }}
+          LAE_LOOKUP_PUBLIC_KEY: ${{ inputs.lookup_public_key }}
+        run: node scripts/lookup-artist-access.cjs
