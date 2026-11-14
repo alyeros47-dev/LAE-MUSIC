@@ -29,9 +29,15 @@ async function verify({key,mode,fetcher=fetch,createTransport,runRoundtrip=round
  const report={mode,success:false,existing_customer_passwords_changed:0,paid_provider_calls:0};
  async function get(suffix){const r=await fetcher('https://api.render.com/v1/services/'+SERVICE+suffix,{headers:{Authorization:'Bearer '+key},redirect:'error',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Render read unavailable');return r.json();}
  const service=await get('');if(service.id!==SERVICE||service.repo?.replace(/\.git$/,'')!=='https://github.com/alyeros47-dev/LAE-MUSIC'||service.serviceDetails?.url!=='https://lae-music.onrender.com')throw Error('Unexpected service');
- const env=inventory(await get('/env-vars'));report.saved_app_password_present=!!env.SMTP_PASSWORD;
- if(env.SMTP_HOST!=='smtp.gmail.com'||String(env.SMTP_PORT)!=='465'||env.SMTP_USER!=='laemusic067@gmail.com'||env.SMTP_FROM!==env.SMTP_USER||env.ACCOUNT_EMAIL_ORIGIN!==ORIGIN)throw Error('Gmail sender settings mismatch');
- let transport;const mailer=require('../lib/account-email').emailRuntime({env:{...env,ACCOUNT_EMAIL_ENABLED:'true'},createTransport:options=>{transport=(createTransport||require('nodemailer').createTransport)(options);return transport;}});if(!mailer.enabled())throw Error('Email configuration incomplete');
+ const rows=[];let cursor='';for(let n=0;n<10;n++){const page=await get('/env-vars?limit=100'+(cursor?'&cursor='+encodeURIComponent(cursor):''));if(!Array.isArray(page))throw Error('Invalid environment inventory');rows.push(...page);if(page.length<100)break;cursor=page.at(-1)?.cursor;if(!cursor)throw Error('Incomplete environment inventory');}
+ const env=inventory(rows);
+ // Render injects NODE_ENV=production at runtime for native Node services;
+ // this documented default is absent from the user-defined env-var API.
+ if(!env.NODE_ENV&&[service.serviceDetails?.env,service.serviceDetails?.runtime].includes('node'))env.NODE_ENV='production';
+ report.saved_app_password_present=!!env.SMTP_PASSWORD;
+ report.settings_present=Object.fromEntries(['SMTP_USER','SMTP_PASSWORD','SMTP_HOST','SMTP_FROM','ACCOUNT_EMAIL_KEY','ACCOUNT_EMAIL_ORIGIN'].map(k=>[k,!!env[k]]));
+ if(env.SMTP_HOST!=='smtp.gmail.com'||String(env.SMTP_PORT)!=='465'||env.SMTP_USER!=='laemusic067@gmail.com'||env.SMTP_FROM!==env.SMTP_USER||env.ACCOUNT_EMAIL_ORIGIN!==ORIGIN){report.failed_stage='gmail_sender_settings';return report;}
+ let transport;const mailer=require('../lib/account-email').emailRuntime({env:{...env,ACCOUNT_EMAIL_ENABLED:'true'},createTransport:options=>{transport=(createTransport||require('nodemailer').createTransport)(options);return transport;}});if(!mailer.enabled()){report.failed_stage='email_configuration';return report;}
  try{await transport.verify();report.smtp_authenticated=true;}catch(e){report.smtp_authenticated=false;report.smtp_error=['EAUTH','ETIMEDOUT','ECONNECTION','ESOCKET','EDNS'].includes(e.code)?e.code:'SMTP_CONNECTION_FAILED';return report;}
  finally{transport?.close?.();}
  if(mode==='smtp'){report.success=true;return report;}

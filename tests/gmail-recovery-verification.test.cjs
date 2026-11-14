@@ -1,9 +1,14 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),{verify,checkedLink}=require('../scripts/verify-gmail-recovery.cjs');
 const env={NODE_ENV:'production',ACCOUNT_EMAIL_ENABLED:'false',ACCOUNT_EMAIL_PROVIDER:'smtp',ACCOUNT_EMAIL_ORIGIN:'https://lae-music.com',ACCOUNT_EMAIL_KEY:'ab'.repeat(32),SMTP_HOST:'smtp.gmail.com',SMTP_PORT:'465',SMTP_USER:'laemusic067@gmail.com',SMTP_FROM:'laemusic067@gmail.com',SMTP_PASSWORD:'private-fixture-app-password'};
-const get=async url=>Response.json(url.endsWith('/env-vars')?Object.entries(env).map(([key,value])=>({envVar:{key,value}})):{id:'srv-db84s7m89jmc73c7l9rg',repo:'https://github.com/alyeros47-dev/LAE-MUSIC',serviceDetails:{url:'https://lae-music.onrender.com'}});
+const get=async url=>Response.json(url.includes('/env-vars')?Object.entries(env).map(([key,value])=>({envVar:{key,value}})):{id:'srv-db84s7m89jmc73c7l9rg',repo:'https://github.com/alyeros47-dev/LAE-MUSIC',serviceDetails:{url:'https://lae-music.onrender.com',env:'node'}});
 test('SMTP-only verification uses actual application TLS settings without sending, enabling or resetting accounts',async()=>{
  let calls=0;const r=await verify({key:'private-render',mode:'smtp',fetcher:get,createTransport:options=>{assert.equal(options.host,'smtp.gmail.com');assert.equal(options.secure,true);assert.equal(options.tls.rejectUnauthorized,true);assert.equal(options.auth.pass,env.SMTP_PASSWORD);return {verify:async()=>{calls++;},close(){}};},runRoundtrip(){throw Error('Must not create or reset any account');}});assert(r.success);assert.equal(calls,1);assert.equal(r.existing_customer_passwords_changed,0);const output=JSON.stringify(r);for(const value of ['private-render',env.SMTP_PASSWORD,env.ACCOUNT_EMAIL_KEY])assert(!output.includes(value));assert.equal(env.ACCOUNT_EMAIL_ENABLED,'false');
 });
 test('failed SMTP authentication reports only a safe error class, never raw provider errors',async()=>{const r=await verify({key:'fixture',mode:'smtp',fetcher:get,createTransport:()=>({verify:async()=>{throw Object.assign(Error('private-provider-error '+env.SMTP_PASSWORD),{code:'EAUTH'});}})});assert.equal(r.success,false);assert.equal(r.smtp_error,'EAUTH');assert(!JSON.stringify(r).includes(env.SMTP_PASSWORD));});
 test('mailbox links are restricted to the LAE-MUSIC listener recovery route',()=>{assert(checkedLink('https://lae-music.com/recover#token='+'a'.repeat(64)+'&role=listener'));for(const url of ['https://evil.test/recover#token='+'a'.repeat(64)+'&role=listener','https://lae-music.com/recover?token=private','https://lae-music.com/recover#token='+'a'.repeat(64)+'&role=artist'])assert.throws(()=>checkedLink(url));});
+
+test('native Node runtime defaults are honored without mistaking the missing user-defined NODE_ENV for missing SMTP credentials',async()=>{
+ const saved=env.NODE_ENV;delete env.NODE_ENV;
+ try{const r=await verify({key:'fixture',mode:'smtp',fetcher:get,createTransport:()=>({verify:async()=>true})});assert(r.success);assert(r.settings_present.SMTP_PASSWORD);}finally{env.NODE_ENV=saved;}
+});
