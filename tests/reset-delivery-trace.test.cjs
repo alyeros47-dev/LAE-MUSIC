@@ -1,0 +1,8 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),{trace}=require('../scripts/trace-reset-delivery.cjs');
+test('recipient trace is read-only and reports delivery metadata without identities or tokens',async()=>{
+ const calls=[],privateKey='private-render-key',target='a'.repeat(64),env={DATABASE_URL:'postgres://fixture:private-password@127.0.0.1/test'};
+ const r=await trace({key:privateKey,target,fetcher:async url=>Response.json(url.includes('/env-vars')?Object.entries(env).map(([key,value])=>({envVar:{key,value}})):{id:'srv-db84s7m89jmc73c7l9rg',repo:'https://github.com/alyeros47-dev/LAE-MUSIC',serviceDetails:{url:'https://lae-music.onrender.com'}}),dbFactory:()=>({connect:async()=>({query:async(sql,args)=>{calls.push(sql);if(sql.startsWith('SELECT id FROM creators'))return {rowCount:1,rows:[{id:12345}]};if(sql.startsWith('SELECT t.created_at'))return {rowCount:1,rows:[{email_status:'sent',delivery_state:'accepted'}]};return {rowCount:0,rows:[]};},release(){}}),end:async()=>{}})});
+ assert.equal(r.matched_accounts,1);assert.equal(r.roles.artist.reset_requests[0].email_status,'sent');assert(calls.every(q=>/^(BEGIN READ ONLY|SET LOCAL|SELECT|ROLLBACK)/.test(q)));assert.equal(calls.at(-1),'ROLLBACK');const output=JSON.stringify(r);for(const value of [privateKey,env.DATABASE_URL,'12345',target,'token_hash','sealed_payload','password_hash'])assert(!output.includes(value));
+});
+test('missing or malformed recipient identifiers are refused before network access',async()=>{for(const target of ['',null,'known@example.invalid','a'.repeat(63)])await assert.rejects(trace({key:'fixture',target,fetcher(){throw Error('Must not connect');}}),/digest/);});
