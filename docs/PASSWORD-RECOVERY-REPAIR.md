@@ -41,12 +41,29 @@ messages still need it. `NODE_ENV` must be `production` (or `staging` on staging
 No provider purchase, new external account, production setting or production
 password has been changed by this repair.
 
-The current Render connector can inspect the service and logs but cannot read
-its environment variables or the external Neon database. The execution workspace
-has no Render API key, database credential, SMTP credential or inbox connection.
-GitHub also refuses repository-secret listing for the current integration. This
-limits verification of existing production identities and provider configuration;
-it is not evidence that those credentials or identities do not exist.
+## Read-only live account check
+
+The bounded read-only account audit passed in GitHub Actions run
+[43617249364](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/43617249364).
+It used the existing secured Render management credential only inside the runner,
+then queried the existing database in a read-only transaction. It returned only
+configuration booleans and aggregate counts. Production writes: **zero**.
+
+- 51 artist profiles and 27 listener profiles remain present.
+- No credentials fail the existing password-format checks.
+- No stored emails fail the existing email-normalization checks.
+- Three linked artist/listener pairs have consistent credentials.
+- One successful account sign-in was recorded within the previous 24 hours.
+- No account-security limits above the login threshold are currently active.
+- No password reset emails were queued, accepted by the transport or left uncertain.
+- `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_HOST`, `SMTP_FROM` and `ACCOUNT_EMAIL_KEY`
+  are missing. Email activation and its HTTPS origin are also unset.
+
+These results rule out an empty account database, a shared credential-format
+mismatch, linked-credential inconsistency and the inspected account-level login
+limits. They do **not** establish that a specific supplied password is correct,
+or prove the cause of the reported unsuccessful logins. No passwords or existing
+accounts were reset, replaced, merged or deleted.
 
 ## Verification and remaining checks
 
@@ -64,6 +81,11 @@ Verify expiry/replay with controlled test tokens, not by exposing live tokens.
 The cause of the reported rejection of all existing production logins remains
 unconfirmed. The current login endpoint returns the expected generic unauthorized
 response for an unregistered diagnostic address. Original stored-password format
-is compatible in the isolated regression checks. A specific affected account or
-read-only production database access is still needed to establish the live cause.
+is compatible in the isolated regression checks. An identified affected account and owner-coordinated sign-in/recovery test
+are still needed to establish the live cause.
 Do not label account recovery complete until the real inbox and sign-in test passes.
+
+Local verification passed: 19 PostgreSQL recovery/security checks, 16 linked-role
+checks, 9 email/security units, 5 login units, 4 actual-library SMTP/TLS checks,
+2 read-only-audit units and browser journeys at 390px and 1440px. No paid provider
+calls or production customer-data changes were made.
