@@ -160,7 +160,7 @@ export async function premiumPage(view, url, ctx) {
     approved = plans.price_status === "approved";
   const policy = await api("/api/platform/financial-policy");
   const manualEnabled=plans.manual_bank?.enabled===true;
-  const bankData=session.listener&&plans.manual_bank?await api('/api/platform/manual-payments?role=listener'):{payments:[]};
+  const bankData=session.listener&&manualEnabled?await api('/api/platform/manual-payments?role=listener'):{payments:[]};
   const bankOrders=new Set(bankData.payments.map(p=>p.listener_order_id));
   const amount = (n, currency = "USD") =>
     new Intl.NumberFormat(undefined, {
@@ -176,7 +176,7 @@ export async function premiumPage(view, url, ctx) {
           }).resolvedOptions().maximumFractionDigits,
     );
   const record = (o) =>
-    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">${o.mode==='live'?'Open payment page':'Open sandbox checkout'} ↗</a>` : ""}${o.attempt_id ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
+    `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url && o.provider!=="manual_bank_transfer" ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">${o.mode==='live'?'Open payment page':'Open sandbox checkout'} ↗</a>` : ""}${o.attempt_id && o.provider!=="manual_bank_transfer" ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : o.provider!=="manual_bank_transfer" && approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
     !view.set(
       heading(
@@ -252,7 +252,7 @@ export async function premiumPage(view, url, ctx) {
         if (!session.listener && manualEnabled && !session.artist) {ctx.navigate('/pay?kind=premium_listener&plan='+encodeURIComponent(button.dataset.premiumPlan)+(url.searchParams.get('ref')?'&ref='+encodeURIComponent(url.searchParams.get('ref')):''));return;}
         if (!session.listener) {
           ctx.navigate(
-            "/join?role=listener&return=premium" +
+            "/join?role=listener&return=premium&checkout_start=1&plan="+encodeURIComponent(button.dataset.premiumPlan) +
               (url.searchParams.get("ref")
                 ? "&ref=" + encodeURIComponent(url.searchParams.get("ref"))
                 : ""),
@@ -357,6 +357,7 @@ export async function premiumPage(view, url, ctx) {
         }
       }),
   );
+  if(plans.live_payments&&session.listener&&url.searchParams.get('checkout_start')==='1'){const plan=url.searchParams.get('plan');url.searchParams.delete('checkout_start');history.replaceState({},'',url.pathname+url.search);if(plans.plans.some(p=>p.code===plan))document.querySelector('[data-premium-plan="'+plan+'"]')?.click();}
 }
 export async function artistRoyaltiesPage(view, url, intro, ctx) {
   const { api, e, heading, notice, table, bindForm, date } = ctx,
