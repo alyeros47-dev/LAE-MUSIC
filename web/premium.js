@@ -201,7 +201,7 @@ export async function premiumPage(view, url, ctx) {
           "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
         ) +
         notice(
-          manualEnabled?"Pay by bank transfer. Your selected pass activates after an administrator verifies receipt.":plans.providers.length
+          plans.live_payments?"Pay securely with Monnify. Access starts after payment is verified.":manualEnabled?"Pay by bank transfer. Your selected pass activates after an administrator verifies receipt.":plans.providers.length
             ? (plans.live_payments?"Pay securely with Monnify. Access starts after payment is verified.":"Sandbox checkout only. Test payments never create withdrawable artist earnings.")
             : "Payment checkout is unavailable until merchant accounts and supported currencies are verified.",
           true,
@@ -277,7 +277,7 @@ export async function premiumPage(view, url, ctx) {
               });
               clearKey("premium-order");
               document.getElementById("action-dialog").close();
-              if(manualEnabled&&!plans.live_payments)await openBankPayment(ctx,{role:'listener',orderId:savedOrder.id});else route(true);
+              if(manualEnabled&&!plans.live_payments)await openBankPayment(ctx,{role:'listener',orderId:savedOrder.id});else{await route(true);if(plans.live_payments)document.querySelector('[data-premium-checkout="'+savedOrder.id+'"]')?.click();}
             }),
         );
       }),
