@@ -65,6 +65,19 @@ scope is password recovery only; existing login behavior and passwords are
 preserved. The completed read-only audit above is retained as evidence, not as
 an ongoing account-access investigation.
 
+## Gmail sender selected by the owner
+
+The owner selected `laemusic067@gmail.com` for password-reset messages. The
+existing Render service now has the Gmail host (`smtp.gmail.com`), TLS port 465,
+sender, SMTP username, HTTPS reset origin, provider selection and a new dedicated
+account-email encryption key saved securely. Sending remains explicitly disabled.
+No unrelated environment variables were replaced and no secrets were committed.
+
+The owner must create a Google app password for this Gmail account and save it as
+`SMTP_PASSWORD` directly in Render. A normal Gmail password is not suitable.
+Once saved, enable delivery, deploy the tested recovery code and verify one real
+inbox receipt followed by reset and sign-in. These live steps are still pending.
+
 ## Verification and remaining checks
 
 Focused tests use disposable local PostgreSQL, existing account handlers, the
