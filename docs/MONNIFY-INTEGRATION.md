@@ -1,4 +1,4 @@
-# Monnify payments — private acceptance candidate
+# Monnify payments — approved public checkout
 
 Monnify is added alongside existing manual bank transfers and reviewed sandbox
 Paystack/Flutterwave integrations. It reuses the current immutable USD product
@@ -15,8 +15,10 @@ The four existing Render variables are read on the server only:
 origin; the Monnify runtime defaults to `https://lae-music.com`.
 
 Credentials alone never open public checkout. The versioned
-`config/monnify-payments.json` stays closed in this candidate. Public activation
-requires reviewed live-acceptance flags and an exact successful payment reference;
+`config/monnify-payments.json` records the owner-approved public activation after
+the real one-month Premium payment was independently verified with Monnify and
+reconciled through the existing server verification API on 13 November 2026.
+Public activation requires reviewed live-acceptance flags and an exact successful payment reference;
 new public quotes/checkouts also require a corresponding verified live database
 receipt for this Monnify contract. No environment-only bypass exists.
 
@@ -49,7 +51,21 @@ for already started payments. Manual bank transfers remain available.
 - No payout API, refund API, recurring debit mandate or card-storage feature is
   added. This gateway integration does not mark provider receivables as settled cash.
 
-## One controlled real payment (still required)
+## Live acceptance and customer activation
+
+The real NGN 810.28 payment has a verified live receipt and active listener term.
+No additional live charge is needed for this release. Both Premium and artist
+checkout returns now verify the owned purchase automatically before displaying
+active benefits. Artist checkout references also survive normal sign-in.
+
+Authenticated webhook handling is implemented and tested with signed fixtures.
+Delivery from the live Monnify dashboard has not been independently confirmed.
+The merchant webhook setting must point to the URL above; no dashboard credential
+or webhook-setting API is connected to this development environment. Customer
+return verification works independently of webhook delivery. Manual bank
+transfers remain available, and other reviewed sandbox integrations are retained.
+
+## Controlled checks for future gateway changes
 
 After an approved deployment with the public gate closed, sign into the existing
 owner administrator and open `/admin/console?section=monnify`. Named owners must
@@ -79,6 +95,12 @@ approved. Account emails are not embedded in customer-facing source or this guid
   duplicate fulfilment protection and verified-receipt activation gate.
 - `node tests/monnify-browser.cjs`: actual owner interface at phone/desktop widths,
   exact amount, hosted checkout link, server verification and public hiding.
+- `node tests/monnify-public-browser.cjs`: actual customer checkout on phone and
+  desktop for listeners and artists, pending-payment protection and automatic
+  server-verified activation on hosted return. Provider responses are fixtures.
+- `node tests/offline-persistence-browser.cjs`: encrypted saving and native MP3
+  playback, including three-track wraparound and two-track B → A → B continuation
+  in the main app and after a fully offline reload.
 - Existing checkout, Premium, administrator, request protection, manual payments,
   refund and financial-policy tests remain relevant shared regression checks.
 

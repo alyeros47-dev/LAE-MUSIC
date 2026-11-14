@@ -45,12 +45,13 @@ test('base URLs and test credentials cannot masquerade as live credentials; erro
  for(const changes of [{baseUrl:'https://attacker.invalid'},{baseUrl:'https://api.monnify.com/api/v1'},{apiKey:'MK_TEST_fixture'},{contractCode:'bad'},{secretKey:''}]){const f=fixture(changes);assert.equal(f.api.configured,false);await assert.rejects(f.api.retrievePayment(reference),e=>e.status===503&&!e.message.includes(secret));}
  const f=fixture({fetchImpl:async()=>{throw Error(secret);}});await assert.rejects(f.api.retrievePayment(reference),e=>e.status===502&&!e.message.includes(secret));
 });
-test('public runtime stays disabled when only live credentials are configured',()=>{
+test('approved public checkout requires configured server credentials and an approved receipt reference',()=>{
  const env={NODE_ENV:'production',MONNIFY_API_KEY:key,MONNIFY_SECRET_KEY:secret,MONNIFY_CONTRACT_CODE:contract,MONNIFY_BASE_URL:'https://api.monnify.com'};
  const {checkoutRuntime,premiumRuntime}=require('../lib/payments/runtime');const pool={query(){throw Error('No query');}};
- assert.equal(checkoutRuntime({pool,env}).enabled(),false);assert.deepEqual(premiumRuntime({pool,env}).capabilities().providers,[]);
- const policy=require('../config/monnify-payments.json');assert.equal(policy.public_enabled,false);assert.equal(policy.live_acceptance_confirmed,false);
- assert.equal(require('../lib/payments/monnify-runtime').approved({...policy,public_enabled:true,live_acceptance_confirmed:true}),false);
+ assert.equal(checkoutRuntime({pool,env}).enabled(),true);assert.deepEqual(premiumRuntime({pool,env}).capabilities().providers,[{id:'monnify',currencies:['NGN']}]);
+ assert.equal(checkoutRuntime({pool,env:{NODE_ENV:'production'}}).enabled(),false);assert.deepEqual(premiumRuntime({pool,env:{NODE_ENV:'production'}}).capabilities().providers,[]);
+ const policy=require('../config/monnify-payments.json');assert.equal(policy.public_enabled,true);assert.equal(policy.live_acceptance_confirmed,true);
+ const {approved}=require('../lib/payments/monnify-runtime');assert(approved(policy));for(const changes of [{public_enabled:false},{live_acceptance_confirmed:false},{successful_payment_reference:''}])assert.equal(approved({...policy,...changes}),false);
 });
 test('public acceptance requires an actual verified receipt, not just configuration flags',async()=>{
  const {proof}=require('../lib/payments/monnify-runtime'),policy={public_enabled:true,live_acceptance_confirmed:true,successful_payment_reference:reference};

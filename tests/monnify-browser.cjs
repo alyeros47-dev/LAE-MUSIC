@@ -4,7 +4,7 @@ const assert=require('node:assert/strict'),crypto=require('node:crypto'),http=re
 const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engine.cjs');
 (async()=>{
  const control=new Pool({connectionString:target.href}),schema='monnify_ui_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});
- const original=global.fetch;let browser,server,initiations=0,paid=false,transaction;
+ const original=global.fetch,policy=require('../config/monnify-payments.json'),savedPolicy={...policy};Object.assign(policy,{public_enabled:false,live_acceptance_confirmed:false,successful_payment_reference:''});let browser,server,initiations=0,paid=false,transaction;
  global.fetch=async(url,options={})=>{assert(String(url).startsWith('https://api.monnify.com/api/'));let body;
   if(url.endsWith('/auth/login'))body={accessToken:'fixture_access_token',expiresIn:3600};
   else if(url.endsWith('/init-transaction')){initiations++;transaction={...JSON.parse(options.body),transactionReference:'MNFY|ui|'+initiations};body={...transaction,checkoutUrl:'https://sdk.monnify.com/checkout/fixture'};}
@@ -25,5 +25,5 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
    paid=true;await page.getByRole('button',{name:'Check payment',exact:true}).click();await page.getByText('Payment verified. The purchased service is active.',{exact:true}).waitFor();assert.equal((await pool.query('SELECT 1 FROM premium_entitlements')).rowCount,width===390?1:2);assert.deepEqual(errors,[]);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));console.log('PASS private Monnify checkout, exact NGN total and independently verified mock activation at '+width);await context.close();
   }
   const publicPage=await browser.newPage();await publicPage.goto(origin+'/premium');await publicPage.getByRole('heading',{name:/Premium/}).first().waitFor();assert.equal(await publicPage.getByRole('link',{name:'Open Monnify payment',exact:true}).count(),0);console.log('PASS Monnify remains unavailable to public visitors. No real payment or real API request.');
- }finally{global.fetch=original;await browser?.close();if(server)await new Promise(r=>server.close(r));await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
+ }finally{Object.assign(policy,savedPolicy);global.fetch=original;await browser?.close();if(server)await new Promise(r=>server.close(r));await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

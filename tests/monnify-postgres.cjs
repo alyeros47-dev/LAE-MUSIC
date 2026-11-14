@@ -6,7 +6,7 @@ const {runtime}=require('./runtime.cjs'),key=()=>crypto.randomUUID();
 const secret='monnify_disposable_fixture_secret',env={NODE_ENV:'test',ADMIN_KEY:'MonnifyFixtureOwnerKeyOnly12345',STUDIO_RELEASE_WORKER_ENABLED:'false',MONNIFY_API_KEY:'MK_PROD_fixture_not_real',MONNIFY_SECRET_KEY:secret,MONNIFY_CONTRACT_CODE:'1000000001',MONNIFY_BASE_URL:'https://api.monnify.com'};
 test('Monnify isolated database integration; mocked network does not prove live acceptance',async t=>{
  const control=new Pool({connectionString:target.href}),schema='monnify_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema,max:24});
- const original=global.fetch,transactions=new Map();let initiations=0,serial=0;
+ const original=global.fetch,transactions=new Map(),policy=require('../config/monnify-payments.json'),savedPolicy={...policy};Object.assign(policy,{public_enabled:false,live_acceptance_confirmed:false,successful_payment_reference:''});let initiations=0,serial=0;
  global.fetch=async(url,options={})=>{
   assert(String(url).startsWith('https://api.monnify.com/api/'),'External providers forbidden');let body;
   if(url.endsWith('/auth/login'))body={accessToken:'fixture_access_token',expiresIn:3600};
@@ -17,7 +17,7 @@ test('Monnify isolated database integration; mocked network does not prove live 
   return Response.json({requestSuccessful:true,responseCode:'0',responseBody:body});
  };
  try{
-  const app=await runtime({pool,env});await require('./artist-launch-fixture.cjs').filledPromotion(pool);
+  let app=await runtime({pool,env});await require('./artist-launch-fixture.cjs').filledPromotion(pool);
   await pool.query("INSERT INTO currency_rate_snapshots(id,source,as_of,next_update,rates) VALUES($1,'exchangerate-api',NOW()-INTERVAL '1 minute',NOW()+INTERVAL '1 day',$2)",[key(),JSON.stringify({USD:'1',NGN:'1500'})]);
   const api=async(path,body,cookie,k=key(),headers={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),'idempotency-key':k,'content-type':'application/json',...headers}});return {status:r.status,data:r.json(),cookie:[r.headers['set-cookie']||[]].flat().map(x=>x.split(';')[0]).join('; ')};};
   const login=await api('/api/admin/login',{password:env.ADMIN_KEY});assert.equal(login.status,200);const admin=login.cookie;
@@ -57,10 +57,22 @@ test('Monnify isolated database integration; mocked network does not prove live 
    }
    assert.equal((await require('../lib/commerce').createCommerce({pool}).report()).summary.discrepancies,0);
   });
-  await t.test('receipt gate accepts only independently fulfilled test fixture receipt; production gate stays closed',async()=>{
-   const policy={public_enabled:true,live_acceptance_confirmed:true,successful_payment_reference:first.checkout.reference};await require('../lib/payments/monnify-runtime').proof(pool,{merchantId:env.MONNIFY_CONTRACT_CODE},policy)();
+  await t.test('approved public customer checkout is bound to the independently verified merchant receipt',async()=>{
+   Object.assign(policy,{public_enabled:true,live_acceptance_confirmed:true,successful_payment_reference:first.checkout.reference});await require('../lib/payments/monnify-runtime').proof(pool,{merchantId:env.MONNIFY_CONTRACT_CODE},policy)();
    await assert.rejects(require('../lib/payments/monnify-runtime').proof(pool,{merchantId:'9999999999'},policy)(),e=>e.status===503);
-   assert.equal(require('../config/monnify-payments.json').public_enabled,false);
+   app=await runtime({pool,env});
+   assert((await api('/api/platform/payments/capabilities')).data.providers.some(x=>x.id==='monnify'));
+   assert((await api('/api/platform/premium/plans')).data.live_payments);
+   const order=await api('/api/platform/premium/orders',{plan:'quarterly'},listener.cookie);assert.equal(order.status,201,JSON.stringify(order.data));
+   const quote=await api('/api/platform/premium/quote',{order_id:order.data.id,provider:'monnify',currency:'NGN'},listener.cookie);assert.equal(quote.status,200,JSON.stringify(quote.data));
+   const checkout=await api('/api/platform/premium/checkout',{quote_id:quote.data.id},listener.cookie);assert.equal(checkout.status,200,JSON.stringify(checkout.data));assert.equal(checkout.data.checkout_status,'ready');
+   assert.equal((await pool.query('SELECT 1 FROM premium_receipts WHERE order_id=$1',[order.data.id])).rowCount,0);
+   paid(checkout.data);const verified=await api('/api/platform/premium/verify',{attempt_id:checkout.data.attempt_id},listener.cookie);assert.equal(verified.status,200,JSON.stringify(verified.data));assert(verified.data.active);
+   assert.equal((await pool.query('SELECT 1 FROM premium_receipts WHERE order_id=$1',[order.data.id])).rowCount,1);
+   const purchase=await api('/api/platform/purchases',{kind:'studio_generation',plan:'starter'},artist.cookie);assert.equal(purchase.status,201,JSON.stringify(purchase.data));
+   const artistQuote=await api('/api/platform/payments/quote',{order_id:purchase.data.order.id,provider:'monnify',currency:'NGN'},artist.cookie);assert.equal(artistQuote.status,201,JSON.stringify(artistQuote.data));
+   const artistPay=await api('/api/platform/checkout',{quote_id:artistQuote.data.quote.id},artist.cookie);assert.equal(artistPay.status,202,JSON.stringify(artistPay.data));paid(artistPay.data.checkout);
+   const artistVerified=await api('/api/platform/payments/checkouts/'+artistPay.data.checkout.id+'/verify',{},artist.cookie);assert.equal(artistVerified.status,200,JSON.stringify(artistVerified.data));assert.equal(artistVerified.data.checkout.status,'paid');
   });
- }finally{global.fetch=original;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
+ }finally{Object.assign(policy,savedPolicy);global.fetch=original;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 });

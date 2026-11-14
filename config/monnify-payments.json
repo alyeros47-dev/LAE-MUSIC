@@ -1,7 +1,7 @@
 {
-  "public_enabled": false,
-  "live_acceptance_confirmed": false,
-  "successful_payment_reference": "",
+  "public_enabled": true,
+  "live_acceptance_confirmed": true,
+  "successful_payment_reference": "laep-6213b4f8e4932442cda65caef5edf2b96967",
   "approved_currencies": ["NGN"],
   "payment_methods": ["CARD", "ACCOUNT_TRANSFER"]
 }
