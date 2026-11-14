@@ -8,7 +8,7 @@ test('manual bank purchases preserve prices, approved entitlement and independen
  const control=new Pool({connectionString:target.href}),schema='manual_bank_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});
  const realFetch=global.fetch;let requests=0;global.fetch=async()=>{requests++;throw Error('Paid providers and external requests are forbidden in this fixture');};
  try{
- const app=await runtime({pool,env:{NODE_ENV:'test',ADMIN_KEY:'ManualBankFixtureAdminOnly12345',MANUAL_BANK_PAYMENTS_JSON:JSON.stringify(fixture),STUDIO_RELEASE_WORKER_ENABLED:'false'}});
+ const app=await runtime({pool,customerPaymentPolicy:{manual_bank_visible:true},env:{NODE_ENV:'test',ADMIN_KEY:'ManualBankFixtureAdminOnly12345',MANUAL_BANK_PAYMENTS_JSON:JSON.stringify(fixture),STUDIO_RELEASE_WORKER_ENABLED:'false'}});
  await pool.query("INSERT INTO currency_rate_snapshots(id,source,as_of,next_update,rates) VALUES($1,'exchangerate-api',NOW()-INTERVAL '1 minute',NOW()+INTERVAL '1 day',$2)",[key(),JSON.stringify({USD:'1',NGN:'1500'})]);
  const api=async(path,body,cookie,k=key(),headers={})=>{const r=await app.request(path,{method:body===undefined?'GET':'POST',body,headers:{...(cookie?{cookie}:{}),'idempotency-key':k,...headers}});return {status:r.status,data:r.json(),cookie:[r.headers['set-cookie']||[]].flat().map(x=>x.split(';')[0]).join('; ')};};
  const login=await api('/api/admin/login',{password:'ManualBankFixtureAdminOnly12345'});assert.equal(login.status,200,JSON.stringify(login.data));const admin=login.cookie;
@@ -52,7 +52,7 @@ test('manual bank purchases preserve prices, approved entitlement and independen
  await t.test('rejection, history, protected images and disabled configuration retain all records',async()=>{
   const o=await prepare(b),p=await start('artist',b,o);await submit('artist',b,p);assert.equal((await approve(p,{decision:'rejected',note:'No matching cleared bank receipt was found.'})).status,200);assert.equal((await pool.query('SELECT 1 FROM commerce_receipts WHERE order_id=$1',[o.id])).rowCount,0);
   assert.equal((await api('/api/platform/manual-payments/'+p.id+'?role=artist',undefined,b.cookie)).data.payment.status,'rejected');assert.equal((await api('/api/platform/manual-payments?role=artist',undefined,b.cookie)).data.payments.length,2);
-  const closed=await runtime({pool,env:{NODE_ENV:'test',MANUAL_BANK_PAYMENTS_JSON:'{"enabled":true}'}});const c=await closed.request('/api/platform/manual-payments/capabilities');assert.equal(c.json().enabled,false);
+  const closed=await runtime({pool,customerPaymentPolicy:{manual_bank_visible:true},env:{NODE_ENV:'test',MANUAL_BANK_PAYMENTS_JSON:'{"enabled":true}'}});const c=await closed.request('/api/platform/manual-payments/capabilities');assert.equal(c.json().enabled,false);
   assert.equal((await api('/api/platform/admin/manual-payments?status=approved',undefined,admin)).data.payments.length,12);
  });
  await t.test('a persistence failure rolls back approval, entitlement, receipt and ledger together',async()=>{

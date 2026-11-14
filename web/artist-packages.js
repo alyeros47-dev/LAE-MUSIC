@@ -24,7 +24,8 @@ export function artistPackageLink(url, plan) {
   return '/start' + (query.size ? '?' + query : '');
 }
 
-export function artistPackageEntry(url, session = {}) {
+export function artistPackageEntry(url, session = {}, {onlineCheckout=false}={}) {
+  if(onlineCheckout&&url.pathname==='/join'&&url.searchParams.get('return')==='monnify')return false;
   if(url.searchParams.get('return')==='bank-payment')return false;
   if(session.artist_testing_open===true)return false;
   if(session.artist_promotion_open===true&&url.pathname==='/join')return false;
@@ -37,13 +38,19 @@ export function artistPackageEntry(url, session = {}) {
   return role === 'artist' && url.searchParams.get('mode') === 'register' && !session.artist && !session.listener && !session.review_test_access;
 }
 
-export async function artistPackagesPage(view, url, { api, e, heading, notice, currencyDisplay, session={}, manualBank=false }) {
+export async function artistPackagesPage(view, url, { api, e, heading, notice, currencyDisplay, session={}, manualBank=false, onlineCheckout=false }) {
   const catalogue = await api('/api/plans');
   if (!ARTIST_PACKAGES.every(name => Number.isFinite(catalogue.plans?.[name]?.usd) && catalogue.plans[name].usd > 0)) {
     throw Error('Artist package prices are unavailable. Please try again.');
   }
   const ref = packageReferral(url), requested = url.searchParams.get('product');
   const selected = ARTIST_PACKAGES.includes(requested) ? requested : '';
+  const monnifyLink=plan=>{
+    const query=new URLSearchParams({product:plan,return:'monnify'});if(ref)query.set('ref',ref);
+    if(session.artist)return '/workspace?tab=plans&checkout_start=1&'+query;
+    if(session.listener)return '/account?tab=roles&role=listener&'+query;
+    return '/join?role=artist&mode=signin&'+query;
+  };
   const invalidRef = url.searchParams.has('ref') && !ref;
   const invalidProduct = url.searchParams.has('product') && !selected;
   const label = artistPackageLabel;
@@ -57,11 +64,12 @@ export async function artistPackagesPage(view, url, { api, e, heading, notice, c
     `<div class="price-grid">${ARTIST_PACKAGES.map(name => {
       const plan = catalogue.plans[name];
       return `<article class="price-card ${selected === name ? 'featured' : ''}" aria-labelledby="package-${name}"><span class="eyebrow">ANNUAL ARTIST PACKAGE</span><h2 id="package-${name}">${label(name)}</h2><div class="price">$${e(plan.usd)}<small> / year</small></div>${currencyDisplay.markup('artist_subscription', name)}${artistPackageBenefits(plan,e)}<button class="button ${selected === name ? '' : 'secondary'}" data-package="${name}" aria-pressed="${selected === name}">Choose ${label(name)}</button></article>`;
-    }).join('')}</div>${currencyDisplay.info()}<p><a href="/how-it-works" data-nav>How it works</a></p><section class="panel" id="package-next-step" tabindex="-1"><span class="eyebrow">YOUR NEXT STEP</span><p id="package-selection">${e(chosen)}</p>${manualBank&&!session.artist&&!session.listener?'<h2>Pay by bank transfer.</h2><p>See the amount and bank details, then pay.</p><a class="button" id="bank-guest-payment" data-nav href="/pay?kind=artist_subscription&amp;plan='+e(selected||'starter')+(ref?'&amp;ref='+e(ref):'')+'">Continue to bank payment</a>':manualBank&&session.artist?'<h2>Bank transfer is available.</h2><p>Continue with your selected package.</p><a class="button" id="bank-account-payment" data-nav href="/workspace?tab=plans'+(ref?'&amp;ref='+e(ref):'')+'">Continue in my artist account</a>':'<h2>Payment is currently unavailable.</h2><p>You can compare packages now. You have not been charged, and no artist account has been created. Account setup in this purchase flow will open only after a verified payment.</p>'}${catalogue.referralDemoAvailable?`<p>Test the referral journey without real money or paid studio access.</p><a class="button" id="try-demo-payment" data-nav href="${e(demoLink(url,selected||'starter'))}">Try demo payment</a>`:''}</section>`)) return;
+    }).join('')}</div>${currencyDisplay.info()}<p><a href="/how-it-works" data-nav>How it works</a></p><section class="panel" id="package-next-step" tabindex="-1"><span class="eyebrow">YOUR NEXT STEP</span><p id="package-selection">${e(chosen)}</p>${onlineCheckout?'<h2>Pay with Monnify.</h2><p>'+(session.artist?'Continue with your selected package.':'Sign in or create your account to pay securely.')+'</p><a class="button" id="monnify-package-payment" data-nav href="'+e(monnifyLink(selected||'starter'))+'">Continue with Monnify</a>':manualBank&&!session.artist&&!session.listener?'<h2>Pay by bank transfer.</h2><p>See the amount and bank details, then pay.</p><a class="button" id="bank-guest-payment" data-nav href="/pay?kind=artist_subscription&amp;plan='+e(selected||'starter')+(ref?'&amp;ref='+e(ref):'')+'">Continue to bank payment</a>':manualBank&&session.artist?'<h2>Bank transfer is available.</h2><p>Continue with your selected package.</p><a class="button" id="bank-account-payment" data-nav href="/workspace?tab=plans'+(ref?'&amp;ref='+e(ref):'')+'">Continue in my artist account</a>':'<h2>Payment is currently unavailable.</h2><p>You can compare packages now. You have not been charged, and no artist account has been created. Account setup in this purchase flow will open only after a verified payment.</p>'}${!onlineCheckout&&catalogue.referralDemoAvailable?`<p>Test the referral journey without real money or paid studio access.</p><a class="button" id="try-demo-payment" data-nav href="${e(demoLink(url,selected||'starter'))}">Try demo payment</a>`:''}</section>`)) return;
   document.querySelectorAll('[data-package]').forEach(button => {
     button.onclick = () => {
       const name = button.dataset.package;
       history.replaceState({}, '', artistPackageLink(url, name));
+      const monnify=document.getElementById('monnify-package-payment');if(monnify)monnify.href=monnifyLink(name);
       const guestBank=document.getElementById('bank-guest-payment');if(guestBank)guestBank.href='/pay?kind=artist_subscription&plan='+name+(ref?'&ref='+ref:'');
       const demo=document.getElementById('try-demo-payment');if(demo)demo.href=demoLink(url,name);
       document.querySelectorAll('[data-package]').forEach(choice => {

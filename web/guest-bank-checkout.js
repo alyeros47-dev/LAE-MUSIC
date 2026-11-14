@@ -4,6 +4,22 @@ export async function guestBankCheckoutPage(view,url,ctx){
  const {api,e,heading,notice,buttonLink,bindForm,keyFor,clearKey,navigate,session,refreshSession,route}=ctx;
  const state=await api('/api/platform/guest-payments');if(!view.active())return;
  const purchase=state.purchase;
+ if(state.capabilities?.customer_visible===false){
+  const old= purchase?.payment;
+  if(old&&!purchase.claimed&&!['cancelled','rejected'].includes(old.status)){
+   const user=session[purchase.role],matching=user?.email?.toLowerCase()===purchase.email;
+   if(old.status==='approved'&&matching){
+    view.set(heading('PAYMENT CONFIRMED','Opening your purchased account…',''));
+    const input={};await api('/api/platform/guest-payments/claim','POST',input,{headers:{'Idempotency-Key':keyFor('guest-payment-claim',input)}});clearKey('guest-payment-claim');await refreshSession();navigate(purchase.role==='artist'?'/workspace?tab=membership':'/premium');return;
+   }
+   const ready=old.status==='approved';
+   view.set(heading('YOUR PAYMENT',ready?'Your purchase is confirmed.':'Your existing payment is being reviewed.','You do not need to pay again.')+(ready?buttonLink('/join?role='+purchase.role+'&mode=register&return=bank-payment','Finish account setup')+buttonLink('/join?role='+purchase.role+'&mode=signin&return=bank-payment','Sign in to my paid account',true):'<button class="button" id="existing-payment-refresh">Check payment status</button>'));
+   const refresh=document.getElementById('existing-payment-refresh');if(refresh)refresh.onclick=()=>route();return;
+  }
+  if(purchase?.claimed){navigate(purchase.role==='artist'?'/workspace':'/premium');return;}
+  const kind=url.searchParams.get('kind')||purchase?.kind,plan=url.searchParams.get('plan')||purchase?.plan,ref=url.searchParams.get('ref');
+  const target=new URL(kind==='premium_listener'?'/premium':'/start',location.origin);if(plan)target.searchParams.set(kind==='premium_listener'?'plan':'product',plan);if(ref)target.searchParams.set('ref',ref);navigate(target.pathname+target.search);return;
+ }
  if(purchase?.payment){
   const p=purchase.payment,user=session[purchase.role];
   const activate=async()=>{const input={};await api('/api/platform/guest-payments/claim','POST',input,{headers:{'Idempotency-Key':keyFor('guest-payment-claim',input)}});clearKey('guest-payment-claim');await refreshSession();navigate(purchase.role==='artist'?'/workspace?tab=membership':'/premium');};
