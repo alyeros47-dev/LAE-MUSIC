@@ -143,7 +143,12 @@ export class MusicPlayer {
       if (request !== this.request) { data.release?.(); return; }
       data.validate?.();
       const url = new URL(data.url); if (!((data.offline===true||data.buffered===true)&&url.protocol==='blob:'&&url.origin===location.origin)&&url.protocol !== 'https:' && !(url.origin === location.origin && url.protocol === 'http:')) throw Error('The stream address is unavailable.');
-      this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href; const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
+      this.currentSourceOffline=data.offline===true;document.dispatchEvent(new CustomEvent('playbacksource',{detail:{offline:this.currentSourceOffline,grant:data.grant,track}}));this.audio.src = url.href;
+      // Firefox can leave an ended MP3 decoder stalled when switching offline
+      // blob sources. Reset its loader before starting the next saved song.
+      // Chromium keeps its existing uninterrupted background transition.
+      if(continuous&&data.offline===true&&typeof this.audio.mozCaptureStream==='function')this.audio.load();
+      const previous=this.currentSource; this.currentSource=data; if(previous!==data)previous?.release?.(); this.message(autoplay ? 'Loading audio…' : 'Ready when you are');
       if (autoplay) { this.focusPlayback(this.audio,true); await this.audio.play(); }
       else this.playState(false);
     } catch (error) {
