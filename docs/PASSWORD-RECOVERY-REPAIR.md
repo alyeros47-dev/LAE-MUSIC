@@ -59,11 +59,11 @@ configuration booleans and aggregate counts. Production writes: **zero**.
 - `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_HOST`, `SMTP_FROM` and `ACCOUNT_EMAIL_KEY`
   are missing. Email activation and its HTTPS origin are also unset.
 
-These results rule out an empty account database, a shared credential-format
-mismatch, linked-credential inconsistency and the inspected account-level login
-limits. They do **not** establish that a specific supplied password is correct,
-or prove the cause of the reported unsuccessful logins. No passwords or existing
-accounts were reset, replaced, merged or deleted.
+The owner has clarified that the rejected passwords may have been mixed up.
+The request to investigate a separate login failure is withdrawn. The remaining
+scope is password recovery only; existing login behavior and passwords are
+preserved. The completed read-only audit above is retained as evidence, not as
+an ongoing account-access investigation.
 
 ## Verification and remaining checks
 
@@ -78,14 +78,12 @@ follow the link and set a private new password, then confirm normal sign-in.
 Never put the password, reset link, API key or outbox payload in chat or logs.
 Verify expiry/replay with controlled test tokens, not by exposing live tokens.
 
-The cause of the reported rejection of all existing production logins remains
-unconfirmed. The current login endpoint returns the expected generic unauthorized
-response for an unregistered diagnostic address. Original stored-password format
-is compatible in the isolated regression checks. An identified affected account and owner-coordinated sign-in/recovery test
-are still needed to establish the live cause.
-Do not label account recovery complete until the real inbox and sign-in test passes.
+No separate login-failure diagnosis is required. The remaining live acceptance
+check is receiving a real reset email, following its single-use link and signing
+in with the newly chosen password. Do not label recovery complete until that
+check passes.
 
 Local verification passed: 19 PostgreSQL recovery/security checks, 16 linked-role
 checks, 9 email/security units, 5 login units, 4 actual-library SMTP/TLS checks,
-2 read-only-audit units and browser journeys at 390px and 1440px. No paid provider
+browser journeys at 390px and 1440px. No paid provider
 calls or production customer-data changes were made.
