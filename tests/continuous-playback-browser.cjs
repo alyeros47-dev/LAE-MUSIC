@@ -27,7 +27,7 @@ function tone(){
    return send({});
   });
   await page.route('**/fixture-tone.wav',route=>route.fulfill({contentType:'audio/wav',body:audio}));
-  const playing=async title=>page.waitForFunction(title=>{const a=document.getElementById('audio');return document.getElementById('player-title').textContent===title&&!a.paused&&a.currentTime>0;},title);
+  const playing=async title=>page.waitForFunction(title=>{const a=document.getElementById('audio');return document.getElementById('player-title').textContent===title&&!a.paused&&!a.ended&&a.readyState>=2&&Number.isFinite(a.duration)&&a.duration>0&&a.currentTime>0;},title);
   const finish=async()=>{await page.locator('#audio').evaluate(a=>{a.currentTime=a.duration-.15;});};
   await page.goto(origin+'/');await page.getByRole('button',{name:'Play Playback song 1',exact:true}).click();await playing('Playback song 1');
   // Wait for the app's native play handler, not the OS media-agent getter:
