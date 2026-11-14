@@ -1,0 +1,28 @@
+'use strict';
+// Actual UI + PostgreSQL + account/password handlers. The isolated mailbox is a
+// fixture: this cannot establish production SMTP delivery or inbox receipt.
+const assert=require('node:assert/strict'),http=require('node:http'),crypto=require('node:crypto'),{Pool}=require('pg');
+const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engine.cjs'),{createAccountSecurity}=require('../lib/account-security'),{hashPassword}=require('../lib/passwords');
+const target=require('./ci-database.cjs').ciDatabase();
+(async()=>{
+ const control=new Pool({connectionString:target.href}),schema='recovery_browser_'+crypto.randomBytes(5).toString('hex');await control.query('CREATE SCHEMA '+schema);const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema}),messages=[];let enabled=true,server,browser;
+ const accounts=createAccountSecurity({pool,mailer:{enabled:()=>enabled,send:async m=>messages.push(m)},emailKey:'ab'.repeat(32),publicOrigin:'https://lae.test'});
+ try{
+  const app=await runtime({pool,accountService:accounts,env:{NODE_ENV:'test',STUDIO_RELEASE_WORKER_ENABLED:'false'}});accounts.stop();
+  await pool.query("INSERT INTO currency_rate_snapshots(id,source,as_of,next_update,rates) VALUES($1,'exchangerate-api',NOW(),NOW()+INTERVAL '1 day',$2)",[crypto.randomUUID(),JSON.stringify({USD:'1',NGN:'1500'})]);
+  server=http.createServer(async(req,res)=>{const chunks=[];for await(const c of req)chunks.push(c);const bytes=Buffer.concat(chunks),r=await app.request(req.url,{method:req.method,headers:req.headers,...(bytes.length?{body:bytes}:{})});res.writeHead(r.status,r.headers);res.end(r.body);});await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;browser=await launchBrowser();
+  for(const width of [390,1440]){
+   enabled=true;const email='artist-'+width+'@recovery-browser.invalid',password='OriginalBrowserPassword123',next='RecoveredBrowserPassword123',credential=await hashPassword(password);await pool.query("INSERT INTO creators(display_name,email,password_salt,password_hash,country) VALUES('Recovery Artist',$1,$2,$3,'Nigeria')",[email,credential.salt,credential.hash]);
+   const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+   await page.goto(origin+'/join');await page.getByRole('link',{name:'Forgot your password?',exact:true}).click();await page.locator('#account-recovery-form').waitFor();assert.equal(await page.locator('[name=role]').count(),0);await page.getByLabel('Email address',{exact:true}).fill(email);await page.getByRole('button',{name:'Request reset link',exact:true}).click();await page.getByText('If an account matches, a password-reset link will be sent. Check your email.',{exact:true}).waitFor();
+   assert(await accounts.deliverOne());const link=new URL(messages.at(-1).url);assert.equal(link.search,'');assert.equal(new URLSearchParams(link.hash.slice(1)).get('role'),'artist');
+   // Follow the fixture mailbox link to the isolated test origin.
+   await page.goto(origin+link.pathname+link.hash);await page.getByRole('heading',{name:'Choose a new password.',exact:true}).waitFor();assert(!page.url().includes('token='));await page.getByLabel('New password',{exact:true}).fill(next);await page.getByLabel('Confirm new password',{exact:true}).fill('DifferentPassword123');await page.getByRole('button',{name:'Save new password',exact:true}).click();await page.getByText(/^Passwords do not match\./).waitFor();await page.getByLabel('Confirm new password',{exact:true}).fill(next);await page.getByRole('button',{name:'Save new password',exact:true}).click();await page.getByRole('heading',{name:'Password updated.',exact:true}).waitFor();
+   await page.getByRole('link',{name:'Sign in securely ↗',exact:true}).click();await page.locator('#auth-form').waitFor();await page.locator('#auth-form [name=email]').fill(email);await page.locator('#auth-form [name=password]').fill(next);const response=page.waitForResponse(r=>r.url().endsWith('/api/platform/account/login'));await page.locator('#auth-form button[type=submit]').click();assert.equal((await response).status(),200);await page.waitForFunction(()=>document.getElementById('account-label')?.textContent.includes('Recovery Artist'));
+   await page.goto(origin+link.pathname+link.hash);await page.getByLabel('New password',{exact:true}).fill('ReusedPassword123');await page.getByLabel('Confirm new password',{exact:true}).fill('ReusedPassword123');await page.getByRole('button',{name:'Save new password',exact:true}).click();await page.getByText('This account link is invalid or expired. Request a new link.',{exact:true}).waitFor();
+   // The entry remains discoverable when production delivery needs setup, and
+   // the UI does not falsely claim that a message was sent.
+   enabled=false;await page.goto(origin+'/join');await page.getByRole('link',{name:'Forgot your password?',exact:true}).click();await page.getByText('Password recovery is temporarily unavailable. You can still sign in with your existing password.',{exact:true}).waitFor();assert(await page.locator('#account-recovery-form').isHidden());assert.deepEqual(errors,[]);await context.close();console.log('PASS actual recovery form -> fixture email -> one-use reset -> new-password login at '+width);
+  }
+ }finally{accounts.stop();await browser?.close();if(server)await new Promise(r=>server.close(r));await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

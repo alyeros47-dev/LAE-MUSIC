@@ -17,6 +17,12 @@ on:
         required: false
         type: string
         default: ""
+      password_email_check:
+        description: "Owner-requested Gmail verification: SMTP connection or one isolated listener reset round-trip"
+        required: false
+        type: choice
+        options: ["", smtp, roundtrip]
+        default: ""
 permissions:
   contents: read
 jobs:
@@ -63,3 +69,27 @@ jobs:
           LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
           LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
+
+  password-email:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/account-password-recovery' && inputs.password_email_check != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    concurrency:
+      group: lae-password-recovery-live-test
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: node tests/gmail-recovery-verification.test.cjs
+      - if: inputs.password_email_check == 'roundtrip'
+        run: npx playwright install --with-deps chromium
+      - name: Verify only the configured Gmail sender and the requested recovery flow
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_GMAIL_VERIFY_MODE: ${{ inputs.password_email_check }}
+        run: node scripts/verify-gmail-recovery.cjs
