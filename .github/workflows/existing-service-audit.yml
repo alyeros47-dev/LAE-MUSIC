@@ -63,3 +63,21 @@ jobs:
           LAE_RECOVERY_BACKUP_BRANCH: ${{ inputs.recovery_backup_branch }}
           LAE_RECOVERY_BACKUP_RUN: ${{ inputs.recovery_backup_run }}
         run: node scripts/rehearse-existing-recovery.cjs
+
+  account-access:
+    if: ${{ !inputs.isolated_recovery && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/account-password-recovery' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - run: node tests/account-access-inspection.test.cjs
+      - name: Inspect email settings and aggregate account health without changing production
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-account-access.cjs
