@@ -141,7 +141,7 @@ const AxeBuilder=require('@axe-core/playwright').default;
   listenerSignedIn=false;
 
   await page.goto(origin+'/recover');await page.locator('#account-recovery-form').waitFor({state:'attached'});assert(await page.locator('#account-recovery-form').isHidden());
-  await page.goto(origin+'/join');await page.locator('#auth-form').waitFor();assert(await page.locator('a[href^="/recover"]').isHidden());
+  await page.goto(origin+'/join');await page.locator('#auth-form').waitFor();assert(await page.locator('a[href^="/recover"]').isVisible());
   fs.mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/gospel-phase-one-'+viewport.width+'.png',fullPage:true});results.push({width:viewport.width,groups:14,styles:70,own_lyrics_dna:true,own_lyrics_custom:true,rights_gate:true,upload_code:true,upload_audio_and_cover:true,upload_access_gates:true,upload_mocked_publish:true,draft_restored:true,axe_violations:0,inactive_customer_features_hidden:true,historical_premium_records_preserved:true});await context.close();
  }}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
  console.log(JSON.stringify({status:'passed',viewports:results,paid_calls:0}));
