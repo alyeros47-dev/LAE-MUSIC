@@ -15,3 +15,8 @@ test('invalid, expired and payment-return links cannot restore stale checkout co
  const payment=new URL('https://lae.test/premium?payment=receipt');rememberReferral(payment,s,2000);assert.equal(payment.searchParams.has('ref'),false);
  const expired=new URL('https://lae.test/join');rememberReferral(expired,s,86402000);assert.equal(expired.searchParams.has('ref'),false);
 });
+
+test('free partner registration and explicit promotion entry do not become paid checkout',async()=>{
+ const {rememberReferral,checkoutDestination}=await load();for(const link of ['https://lae.test/start?product=growth&ref=42','https://lae.test/premium?plan=quarterly&ref=42']){const s=memory();rememberReferral(new URL(link),s,1000);const partner=new URL('https://lae.test/join?role=partner&mode=register');rememberReferral(partner,s,2000);assert.equal(partner.searchParams.get('role'),'partner');assert.equal(partner.searchParams.has('return'),false);assert.equal(checkoutDestination(partner,{}),null);}
+ const s=memory();rememberReferral(new URL('https://lae.test/start?product=growth&ref=42'),s,1000);const promo=new URL('https://lae.test/join?role=artist&return=artist-promotion');rememberReferral(promo,s,2000);assert.equal(checkoutDestination(promo,{}),null);
+});

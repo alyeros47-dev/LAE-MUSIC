@@ -23,11 +23,11 @@ export function rememberReferral(url,storage,now=Date.now()){
  if(!url.searchParams.has('ref'))url.searchParams.set('ref',saved.ref);
  if(url.searchParams.has('compare'))return;
  const role=url.searchParams.get('role');
- if(saved.kind==='artist'&&(path==='/start'||path==='/get-started'||path==='/workspace'||path==='/account'||auth&&role!=='listener'&&url.searchParams.get('return')!=='premium')){
+ if(saved.kind==='artist'&&(path==='/start'||path==='/get-started'||path==='/workspace'||path==='/account'||auth&&(!role||role==='artist')&&url.searchParams.get('return')!=='premium')){
   if(!url.searchParams.has('product'))url.searchParams.set('product',saved.product);
   if(auth&&!url.searchParams.has('return')){url.searchParams.set('return','monnify');url.searchParams.set('role','artist');}
  }
- if(saved.kind==='listener'&&(path==='/premium'||auth&&role!=='artist'&&url.searchParams.get('return')!=='monnify')){
+ if(saved.kind==='listener'&&(path==='/premium'||auth&&(!role||role==='listener')&&url.searchParams.get('return')!=='monnify')){
   if(!url.searchParams.has('plan'))url.searchParams.set('plan',saved.plan);
   if(auth&&!url.searchParams.has('return')){url.searchParams.set('return','premium');url.searchParams.set('role','listener');url.searchParams.set('checkout_start','1');}
  }
