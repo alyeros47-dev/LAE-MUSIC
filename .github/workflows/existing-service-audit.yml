@@ -21,7 +21,7 @@ on:
         description: "Owner-requested Gmail verification: SMTP connection or one isolated listener reset round-trip"
         required: false
         type: choice
-        options: ["", smtp, roundtrip]
+        options: ["", smtp, roundtrip, affiliate-trace]
         default: ""
 permissions:
   contents: read
@@ -93,3 +93,20 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           LAE_GMAIL_VERIFY_MODE: ${{ inputs.password_email_check }}
         run: node scripts/verify-gmail-recovery.cjs
+
+  referral-payment-trace:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/referral-commission-trace' && inputs.password_email_check == 'affiliate-trace'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Read recent verified Premium referrals without changing records
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/trace-premium-referrals.cjs
