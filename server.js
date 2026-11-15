@@ -310,7 +310,11 @@ if(p==='/api/demo/activate'&&req.method==='POST')return json(res,503,{error:'Leg
  const b=await body(req,1500),plan=String(b.plan||''),ref=String(b.ref||'');
  if(!PLANS[plan])return json(res,400,{error:'Invalid artist package'});
  if(!/^[1-9][0-9]{0,15}$/.test(ref)||Number(ref)===Number(u.id))return json(res,400,{error:'Invalid referring account'});
- const effectiveRef=await require('./lib/registration-referral').resolve(pool,{artistId:u.id,email:u.email,ref,mode:require('./lib/affiliate-access').modeForEnv(process.env)});
+ const sponsor=(await pool.query('SELECT id,email FROM creators WHERE id=$1',[ref])).rows[0];
+ if(!sponsor||sponsor.email.trim().toLowerCase()===u.email.trim().toLowerCase())return json(res,400,{error:'Use a valid referral code from another member.'});
+ // Purchase snapshots enforce established attribution under their own policy.
+ // Keep historical contract intent semantics intact.
+ const effectiveRef=sponsor.id;
  const token=crypto.randomBytes(32).toString('hex');
  await pool.query("DELETE FROM affiliate_product_intents WHERE buyer_id=$1 AND consumed_at IS NULL AND expires_at<NOW()-INTERVAL '1 day' AND NOT EXISTS(SELECT 1 FROM commerce_orders o WHERE o.referral_intent_id=affiliate_product_intents.id)",[u.id]);await pool.query("INSERT INTO affiliate_product_intents(buyer_id,referrer_id,plan,token_hash,expires_at) VALUES($1,$2,$3,$4,NOW()+INTERVAL '30 minutes')",[u.id,effectiveRef,plan,hash(token)]);
  return json(res,200,{plan,amount_usd:PLANS[plan].usd,referrer_id:String(effectiveRef),referral_token:token,expires_in_seconds:1800,payment_enabled:false,notice:'Referral intent recorded. This is not a payment or commission. A verified payment integration must securely submit this token for settlement.'});

@@ -26,7 +26,7 @@ Prices, package allowances, Monnify verification, financial allocation rules and
 - All six listener links select the correct plan; existing-account sign-in keeps the plan.
 - Registration and verified referral attribution resist replacement, including during role connection; invalid/self referrals fail; optional manual codes work.
 
-Additional focused suites cover purchase-context expiry, social return destinations, authentication and role ownership, migration preservation, existing 20% direct / 10% quarterly team calculations, refunds, link/code copying, accessibility, package comparison and Monnify-only customer entry at mobile and desktop widths.
+A separate 40-check checkout/refund regression suite preserves historical contract handling. Additional focused suites cover purchase-context expiry, social return destinations, authentication and role ownership, migration preservation, existing 20% direct / 10% quarterly team calculations, refunds, link/code copying, accessibility, package comparison and Monnify-only customer entry at mobile and desktop widths.
 
 Hosted checks: `.github/workflows/referral-journey-tests.yml`. No production data or settings are changed by these tests. No actual purchase, music-generation request or customer credit is consumed. Fixture payment success is not evidence of a new live payment.
 

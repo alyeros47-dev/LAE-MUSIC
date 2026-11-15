@@ -25,7 +25,7 @@ try{for(const width of [390,1440]){
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual((await new AxeBuilder({page}).analyze()).violations,[]);
  }
  await page.goto(origin+'/start?product=professional&ref=42');await page.getByRole('button',{name:'Choose Premium',exact:true}).waitFor();
- assert.equal(new URL(page.url()).searchParams.get('ref'),'42');assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
+ assert.equal(new URL(page.url()).searchParams.get('ref'),'42');assert.equal(await page.locator('[data-package]').count(),1);await page.getByRole('link',{name:'See other artist packages',exact:true}).click();await page.locator('[data-package=starter]').waitFor();assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
  const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/3 music generations \/ year/);assert.match(packageCopy,/15 music generations \/ year/);assert.match(packageCopy,/Up to 30 songs \/ year/);assert(!packageCopy.includes('Professional'));
  signedIn=true;await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
  assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());assert(await page.getByLabel('Generated-song upload code',{exact:true}).getAttribute('required')!==null);
