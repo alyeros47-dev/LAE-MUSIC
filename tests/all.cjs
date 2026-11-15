@@ -211,3 +211,5 @@ require('./studio-capability-configuration.test.cjs');
 require('./payment-ui-copy.test.cjs');
 
 require('./player-release-inputs.test.cjs');
+
+require('./referral-context.test.cjs');
