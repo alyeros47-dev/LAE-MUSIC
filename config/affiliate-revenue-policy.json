@@ -24,7 +24,8 @@
   "artist_and_generation_commission_rules": {
     "artist_packages": {
       "direct": 20,
-      "quarterly_team": 10
+      "quarterly_team": 0,
+      "indirect_reward": "creator_milestones"
     },
     "extra_generations": null
   },
@@ -32,10 +33,28 @@
   "payouts_enabled": false,
   "premium_referral_policy_revision": "premium-opt-in20-team10-2026-11-06",
   "premium_individual_allocations_enabled": true,
-  "artist_package_referral_policy_revision": "artist-packages-direct20-team10-2026-11-15",
+  "artist_package_referral_policy_revision": "artist-direct20-creator-milestones-2026-11-15",
   "artist_package_individual_allocations_enabled": true,
   "individual_artist_package_rates": {
     "direct": 20,
-    "quarterly_team": 10
-  }
+    "quarterly_team": 0
+  },
+  "previous_artist_package_referral_policy_revision": "artist-packages-direct20-team10-2026-11-15",
+  "creator_milestones": [
+    {
+      "stage": 1,
+      "additional_creators": 1000,
+      "reward_usd_minor": 90000
+    },
+    {
+      "stage": 2,
+      "additional_creators": 10000,
+      "reward_usd_minor": 900000
+    },
+    {
+      "stage": 3,
+      "additional_creators": 100000,
+      "reward_usd_minor": 9000000
+    }
+  ]
 }

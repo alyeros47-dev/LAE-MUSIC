@@ -1,21 +1,27 @@
-# Artist-package referral commissions
+# Artist direct commissions and creator milestones
 
-Approval: 20% direct and 10% quarterly team commission for Starter, Growth and Premium artist memberships. Internal Premium plan ID remains `professional`.
+Final approval: artist packages retain 20% direct commission. New artist indirect percentage rewards are replaced by creator milestones. Internal Premium artist plan ID remains `professional`.
 
-| Annual package | Price | Direct (20%) | Team (10%) |
+| Annual artist package | Price | Direct commission |
+| --- | --- | --- |
+| Starter | $6 | $1.20 |
+| Growth | $10 | $2.00 |
+| Premium | $20 | $4.00 |
+
+Only verified artist-package purchases under the new receipt policy qualify a creator, exactly once, for the eligible affiliate two referral steps above. Package changes and renewals do not add a person again. Explicitly linked listener and artist roles share the creator identity. Listener-only purchases never enter creator milestone progress.
+
+| Milestone | Additional creators | Cumulative creators | Reward |
 | --- | --- | --- | --- |
-| Starter | $6 | $1.20 | $0.60 |
-| Growth | $10 | $2.00 | $1.00 |
-| Premium | $20 | $4.00 | $2.00 |
+| 1 | 1,000 | 1,000 | $900 |
+| 2 | 10,000 | 11,000 | $9,000 |
+| 3 | 100,000 | 111,000 | $90,000 |
 
-The direct referrer earns after a verified qualifying payment. Team commission belongs only to the eligible referrer exactly two steps above the buyer, calculated quarterly using the existing calendar and December 20 cutoff. It is not an immediate second-level commission or automatic bank payout. Existing qualification, voluntary participation, refund and funding controls remain in force.
+Consumed creator qualification records belong to one award only. Unique creator, stage and ledger references plus a transaction lock prevent duplicate counts and awards. Database guards verify purchase evidence, exact ancestry, reward amount, prior stages and distinct members. Refunded or disputed purchases cannot complete an award; a later dispute marks an existing award for review without rewriting earned history.
 
-Verified renewals retain original attribution, including funded royalty-balance renewals. Earlier paid receipts and earned commissions are preserved; this change does not backfill previously held purchases. An unpaid older quote keeps its original snapshot, while a newly verified artist purchase receives the approved receipt policy.
+Rewards are recorded as pending obligations in separate live/test ledger accounts. They are not bank payments or automatically withdrawable funds. Existing verified-funding and payout controls remain in force. No automatic payout route is introduced.
 
-Premium Listening retains its existing rules. Additional-generation commissions remain held. Prices, annual allowances, royalties, Studio, payment verification and account access are unchanged.
+Premium Listening remains 20% direct and 10% quarterly indirect with its current eligibility, calendar and December cutoff. Earlier artist team earnings, paid receipts, account balances, prices and allowances are preserved. Additional-generation commissions remain held.
 
-Migration: `037-approved-artist-package-referrals.sql`. Product-specific receipt policy: `artist-packages-direct20-team10-2026-11-15`.
+Migrations 037 and 038 are additive. The active artist receipt policy is `artist-direct20-creator-milestones-2026-11-15`. Historical receipts are not backfilled or rewritten. Existing unpaid quote retries keep their original snapshots; a newly verified artist purchase receives the current policy.
 
-Verification uses disposable PostgreSQL, synthetic payment receipts and a local browser. No production financial records, paid music calls or customer credits are used. The focused CI workflow covers all three products, exact-once fulfillment, original referral attribution, quarterly statements, old records and the existing Premium policy.
-
-Deployment requires owner approval. These changes have not been merged or deployed.
+Verification uses disposable PostgreSQL and provider fixtures. Scale tests exercise all 111,000 distinct creator qualifications, all three rewards, a mixed 6,000-listener/4,000-creator network, account-role deduplication, refunds and concurrent award attempts. Browser checks cover all artist packages and the existing partner dashboard. No paid music generation, real test payment or customer-credit consumption is required.

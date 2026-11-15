@@ -9,6 +9,9 @@ on:
       - 'lib/subscriptions.js'
       - 'migrations/037-approved-artist-package-referrals.sql'
       - 'tests/artist-package-commissions*.cjs'
+      - 'tests/creator-milestones*.cjs'
+      - 'lib/creator-milestones.js'
+      - 'migrations/038-creator-milestone-rewards.sql'
       - '.github/workflows/artist-commission-tests.yml'
   workflow_dispatch:
 permissions:
@@ -36,8 +39,8 @@ jobs:
           node-version: '22'
       - run: npm ci
       - name: Artist rates, preserved contracts and shared commission checks
-        run: node --test tests/artist-package-commissions.test.cjs tests/commerce.test.cjs tests/affiliate-framework.test.cjs tests/partner-policy.test.cjs tests/partner-statements.test.cjs tests/partner-accounting.test.cjs tests/commissions.test.cjs tests/services.test.cjs tests/public-information.test.cjs tests/controlled-publishing.test.cjs
+        run: node --test tests/creator-milestones.test.cjs tests/artist-package-commissions.test.cjs tests/commerce.test.cjs tests/affiliate-framework.test.cjs tests/partner-policy.test.cjs tests/partner-statements.test.cjs tests/partner-accounting.test.cjs tests/commissions.test.cjs tests/services.test.cjs tests/public-information.test.cjs tests/controlled-publishing.test.cjs
       - name: Verified purchases, renewals, depth two, quarterly close and Premium regression
-        run: node tests/artist-package-commissions-postgres.cjs && node tests/affiliate-framework-postgres.cjs && node tests/premium-referrals-postgres.cjs
+        run: node tests/creator-milestones-postgres.cjs && node tests/artist-package-commissions-postgres.cjs && node tests/affiliate-framework-postgres.cjs && node tests/premium-referrals-postgres.cjs
       - name: Preserve existing membership and payment records during migration
         run: node tests/artist-membership-migration.cjs && node tests/manual-bank-receipt-migration.cjs

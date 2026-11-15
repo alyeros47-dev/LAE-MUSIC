@@ -217,3 +217,5 @@ require('./referral-context.test.cjs');
 require('./monnify-reconciliation.test.cjs');
 
 require('./artist-package-commissions.test.cjs');
+
+require('./creator-milestones.test.cjs');
