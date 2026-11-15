@@ -175,6 +175,8 @@ export async function premiumPage(view, url, ctx) {
             currency,
           }).resolvedOptions().maximumFractionDigits,
     );
+  const selectedPlan=plans.plans.find(p=>p.code===url.searchParams.get('plan'));
+  const focused=!!url.searchParams.get('ref')&&!!selectedPlan&&!url.searchParams.has('compare');
   const record = (o) =>
     `<article class="panel"><span class="eyebrow">${o.verified_at ? "VERIFIED · " + e(o.mode) : "PURCHASE RECORD"}</span><h2>${e(o.plan)} · ${e(amount(o.amount_minor, o.currency))}</h2>${o.charge_currency ? `<p>Original charge: ${e(amount(o.charge_minor, o.charge_currency))}</p>` : ""}${o.verified_at ? `<p>Payment received ${e(dateTime(o.verified_at))} · Ordinary complaint deadline ${e(dateTime(new Date(Date.parse(o.verified_at)+7*86400000)))}. Verified incidents and protected exceptions remain reviewable.</p>` : ""}${o.verified_at ? `<button class="button secondary" data-complaint="${e(o.id)}">Submit a payment complaint</button>` : ""}${manualEnabled&&!o.attempt_id&&!o.verified_at?`<button class="button secondary" data-bank-order="${e(o.id)}">Pay by bank transfer</button>`:""}${o.reference ? `<p class="code-link">${e(o.reference)}</p>` : ""}${o.checkout_url && o.provider!=="manual_bank_transfer" ? `<a data-feature="checkout" class="button" href="${e(o.checkout_url)}" target="_blank" rel="noopener noreferrer">${o.mode==='live'?'Open payment page':'Open sandbox checkout'} ↗</a>` : ""}${o.attempt_id && o.provider!=="manual_bank_transfer" ? `<button class="button secondary" data-feature="checkout" data-premium-verify="${e(o.attempt_id)}">Check original payment</button>` : o.provider!=="manual_bank_transfer" && approved && plans.providers.length > 0 && o.currency === "USD" ? `<button class="button secondary" data-feature="checkout" data-premium-checkout="${e(o.id)}">Review payment options</button>` : ""}</article>`;
   if (
@@ -188,14 +190,15 @@ export async function premiumPage(view, url, ctx) {
         notice(
           "Public streaming, playlists and favorites remain available. Premium does not grant commercial or public-performance rights.",
         ) +
-        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights <span data-feature="offline_save">· in-app offline listening on supported browsers</span> · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&return=premium" + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
+        `<section class="panel premium-status"><span class="eyebrow">${data?.active ? "PREMIUM ACTIVE" : "YOUR LISTENING CHOICE"}</span><h2>${data?.active ? "Welcome to Premium." : "Your music stays yours."}</h2>${data?.active ? `<span class="badge">Premium</span><p>Activated ${e(dateTime(data.current.starts_at))} · Expires ${e(dateTime(data.current.expires_at))}</p>` : "<p>Choose a fixed-term pass. Verified renewals preserve your remaining cover.</p>"}<p>Ad-free playback without advertising interruptions · Premium badge · listening insights <span data-feature="offline_save">· in-app offline listening on supported browsers</span> · support for artists through eligible streams.</p>${data ? `<span class="badge">${e(data.activity.premium_streams)} qualifying Premium plays this month</span>` : buttonLink("/join?role=listener&mode=register&return=premium&checkout_start=1&plan="+encodeURIComponent(selectedPlan?.code||'quarterly') + (url.searchParams.get("ref") ? "&ref=" + encodeURIComponent(url.searchParams.get("ref")) : ""), "Create a free listener account", true)}</section>` +
         (!approved
           ? notice(
               "USD price proposal awaiting approval. These proposed prices are not available for purchase.",
               true,
             )
           : "") +
-        `<div class="price-grid premium-prices">${plans.plans.map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="${manualEnabled?'manual_bank':'checkout'}" data-premium-plan="${e(p.code)}" ${approved && (manualEnabled||plans.providers.length > 0) ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
+        `<div class="price-grid premium-prices">${(focused?[selectedPlan]:plans.plans).map((p) => `<article class="price-card ${p.code === (url.searchParams.get("plan")||"monthly") ? "featured" : ""}"><span class="eyebrow">${p.days} ${p.days === 1 ? "DAY" : "DAYS"}</span><h3>${e(p.name)}</h3><div class="price">${e(amount(p.amount_minor))}</div>${currencyDisplay.markup("premium_listener", p.code)}<p>${approved ? "Fixed USD base price." : "Proposed USD base price."} A fixed term with clear start and end dates.</p><button class="button secondary" data-feature="${manualEnabled?'manual_bank':'checkout'}" data-premium-plan="${e(p.code)}" ${approved && (manualEnabled||plans.providers.length > 0) ? "" : "hidden"}>Review ${e(p.name)}</button></article>`).join("")}</div>` +
+        (focused?buttonLink('/premium?compare=1&plan='+encodeURIComponent(selectedPlan.code)+'&ref='+encodeURIComponent(url.searchParams.get('ref')),'See other listening plans',true):'') +
         currencyDisplay.info() +
         notice(
           "USD is our standard currency. Choose your country and preferred display currency above. Local prices are estimates; the final supported payment currency and amount are shown before confirmation. Automatic renewal is off.",
@@ -252,7 +255,7 @@ export async function premiumPage(view, url, ctx) {
         if (!session.listener && manualEnabled && !session.artist) {ctx.navigate('/pay?kind=premium_listener&plan='+encodeURIComponent(button.dataset.premiumPlan)+(url.searchParams.get('ref')?'&ref='+encodeURIComponent(url.searchParams.get('ref')):''));return;}
         if (!session.listener) {
           ctx.navigate(
-            "/join?role=listener&return=premium&checkout_start=1&plan="+encodeURIComponent(button.dataset.premiumPlan) +
+            (session.artist?"/account?tab=roles&role=artist&return=premium&checkout_start=1&plan=":"/join?role=listener&return=premium&checkout_start=1&plan=")+encodeURIComponent(button.dataset.premiumPlan) +
               (url.searchParams.get("ref")
                 ? "&ref=" + encodeURIComponent(url.searchParams.get("ref"))
                 : ""),
@@ -263,12 +266,12 @@ export async function premiumPage(view, url, ctx) {
           (p) => p.code === button.dataset.premiumPlan,
         );
         ctx.actionDialog(
-          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days} days · renew when needed.</p><form><label>Referral ID (optional)<input name="referrer_id" inputmode="numeric" value="${e(url.searchParams.get("ref") || "")}"></label><button type="submit" class="button">${plans.live_payments?'Continue to payment':manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
+          `<h2>Review ${e(p.name)}.</h2><p>${e(amount(p.amount_minor))} base · ${p.days} days · renew when needed.</p><form>${url.searchParams.get('ref')?'<p>Referral added automatically.</p>':'<label>Referral code (optional)<input name="referrer_id" inputmode="numeric" pattern="[1-9][0-9]{0,15}" maxlength="16"></label>'}<button type="submit" class="button">${plans.live_payments?'Continue to payment':manualEnabled?'Continue to bank payment':'Save unpaid Premium record'}</button><p class="form-status" role="status"></p></form>`,
           (root) =>
             bindForm(root.querySelector("form"), async (b) => {
               const payload = {
                 plan: p.code,
-                referrer_id: b.referrer_id || null,
+                referrer_id: url.searchParams.get('ref') || b.referrer_id || null,
               };
               const savedOrder=await api("/api/platform/premium/orders", "POST", payload, {
                 headers: {
