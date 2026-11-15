@@ -44,9 +44,9 @@ jobs:
           node-version: '22'
       - run: npm ci
       - name: Focused unit and security checks
-        run: node tests/referral-context.test.cjs && node tests/social-auth.test.cjs && node tests/artist-packages.test.cjs && node tests/commerce.test.cjs && node tests/premium-international.test.cjs && node tests/account-security.test.cjs && node tests/account-login.test.cjs && node tests/partner-accounting.test.cjs
+        run: node tests/referral-context.test.cjs && node tests/social-auth.test.cjs && node tests/artist-packages.test.cjs && node tests/commerce.test.cjs && node tests/premium-international.test.cjs && node tests/account-security.test.cjs && node tests/account-login.test.cjs && node tests/partner-accounting.test.cjs && node tests/platform.test.cjs && node tests/services.test.cjs
       - name: Attribution, account roles and commission regression checks
         run: node tests/registration-referral-migration.cjs && node tests/account-roles-postgres.cjs && node tests/social-auth-postgres.cjs && node tests/premium-referrals-postgres.cjs
       - run: npx playwright install --with-deps chromium
       - name: Real UI and PostgreSQL with fixture-only Monnify
-        run: node tests/referral-journey-browser.cjs && node tests/premium-referrals-browser.cjs && node tests/artist-packages-browser.cjs && node tests/customer-payment-visibility-browser.cjs
+        run: node tests/referral-journey-browser.cjs && node tests/premium-referrals-browser.cjs && node tests/artist-packages-browser.cjs && node tests/customer-payment-visibility-browser.cjs && node tests/artist-launch-browser.cjs
