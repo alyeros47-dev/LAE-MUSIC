@@ -9,13 +9,15 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
  try{for(const width of [390,1440]){
   const context=await browser.newContext({viewport:{width,height:1100},reducedMotion:'reduce'}),page=await context.newPage(),errors=[],writes=[];
-  let identity='guest',eligible=false,registered=false,activated=false;
+  let identity='guest',eligible=false,registered=false,activated=false,milestonesAvailable=true;
   page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/api/**',async route=>{
    const req=route.request(),url=new URL(req.url()),p=url.pathname,send=x=>route.fulfill({contentType:'application/json',body:JSON.stringify(x)});
    if(!['GET','HEAD'].includes(req.method())){writes.push(p);assert(['/api/platform/partners/activate','/api/platform/partners/participation'].includes(p));assert.equal(req.postDataJSON().participating,true);assert(req.headers()['idempotency-key']);registered=true;if(p.endsWith('/activate'))activated=true;return send({ok:true,artist_id:7});}
    if(p==='/api/platform/session')return send({artist:identity==='artist'||activated?{id:7,display_name:'Fixture Partner'}:null,listener:identity==='listener'?{id:8,display_name:'Fixture Listener'}:null,admin:false});
    if(p==='/api/platform/partners/eligibility')return send({eligible:eligible&&registered,qualified:eligible,registered,eligibility_expires:false,qualifying_purchase:eligible?{expires_at:null}:null});
+   if(p==='/api/platform/partners/creator-milestones'&&!milestonesAvailable)return send({});
+   if(p==='/api/platform/partners/creator-milestones')return send({total_indirect_downlines:10000,indirect_premium_listeners:6000,verified_indirect_paying_creators:4000,progress:{stage:2,count:3000,target:10000,reward_minor:900000,complete:false},rewards:[{stage:1,amount_minor:90000,review_required:false}],rewards_earned_minor:90000});
    if(p==='/api/platform/partners/accounting')return send(require('./partner-accounting-browser-fixture.cjs').fixture());
    if(p==='/api/affiliate/product-links')return send({links:{premium:origin+'/premium?plan=quarterly&ref=7',starter:origin+'/start?ref=7&product=starter'}});
    if(p==='/api/affiliate/earnings')return send({totals:[],history:[]});
@@ -40,11 +42,14 @@ const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engi
   await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Join affiliate program for free',exact:true}).click();
   await page.getByRole('heading',{name:'Your sharing links',exact:true}).waitFor();
   assert(await page.getByRole('button',{name:'Copy Premium link',exact:true}).isVisible());
+  assert(await page.getByRole('heading',{name:'Creator milestones',exact:true}).isVisible());
+  assert(await page.getByText('Milestone 2: 3000 / 10000 creators',{exact:false}).isVisible());
   assert(await page.getByText('Full statements and earlier records',{exact:true}).isVisible());
   assert.equal(await page.getByText('New Premium Listener purchases and renewals: 20% direct',{exact:false}).count(),0);
   assert.deepEqual(writes,['/api/platform/partners/participation','/api/platform/partners/activate']);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual((await new AxeBuilder({page}).analyze()).violations,[]);
+  milestonesAvailable=false;await page.reload();await page.getByRole('heading',{name:'Your sharing links',exact:true}).waitFor();assert(await page.getByText('Creator progress could not be loaded. Please refresh.',{exact:true}).isVisible());assert(await page.getByRole('button',{name:'Copy Premium link',exact:true}).isVisible());
   assert.deepEqual(errors,[]);await context.close();
   console.log('Free voluntary opt-in, purchase qualification, approved Premium sharing and same-email access passed at '+width);
  }}finally{await browser.close();await new Promise(r=>server.close(r));}
