@@ -1,0 +1,37 @@
+name: Focused Monnify payment confirmation
+on:
+  pull_request:
+    paths:
+      - 'lib/payments/monnify-reconciliation.js'
+      - 'lib/platform.js'
+      - 'tests/monnify-reconciliation*.cjs'
+      - '.github/workflows/monnify-confirmation-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  payment-confirmation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: confirmation_fixture_only
+          POSTGRES_DB: lae_music_ci
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U postgres -d lae_music_ci" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      LAE_DB_TESTS: 'true'
+      DATABASE_URL: postgres://postgres:confirmation_fixture_only@127.0.0.1:5432/lae_music_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Payment verification, retry and authorization checks
+        run: node tests/monnify-reconciliation.test.cjs && node tests/monnify.test.cjs && node tests/platform.test.cjs
+      - name: Missed callbacks, exact-once activation and real accounting query
+        run: node tests/monnify-reconciliation-postgres.cjs && node tests/monnify-postgres.cjs
