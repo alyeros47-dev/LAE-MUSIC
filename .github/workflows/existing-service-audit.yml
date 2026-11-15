@@ -21,7 +21,7 @@ on:
         description: "Owner-requested Gmail verification: SMTP connection or one isolated listener reset round-trip"
         required: false
         type: choice
-        options: ["", smtp, roundtrip, affiliate-trace]
+        options: ["", smtp, roundtrip, affiliate-trace, affiliate-reconcile]
         default: ""
 permissions:
   contents: read
@@ -110,3 +110,24 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: node scripts/trace-premium-referrals.cjs
+
+  reconcile-identified-payment:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/referral-commission-trace' && inputs.password_email_check == 'affiliate-reconcile'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: lae-identified-premium-payment-reconciliation
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Verify and reconcile the exact existing paid checkout without a new charge
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          LAE_RECONCILE_IDENTIFIED_PAYMENT: 'true'
+        run: node scripts/reconcile-confirmed-referral-payment.cjs
