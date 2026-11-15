@@ -269,6 +269,18 @@ export function bindStudioWorkflow({
       ) ||
       !by("studio-voice-consent").checked;
   };
+  function sampleReadyMessage() {
+    if (voiceProfile.failure?.retry_allowed === false)
+      return voiceProfile.failure.message;
+    if (["submitting", "training"].includes(voiceProfile.status))
+      return "Your previous voice profile is still processing. Your new recording is only a local preview. Check voice profile before saving again.";
+    if (voiceProfile.status === "verification_required")
+      return "Your previous voice request needs verification. Your new recording is only a local preview. Check voice profile; do not submit it again yet.";
+    return "Your singing sample is ready for local preview. " +
+      (storageReady
+        ? "Confirm consent to save and train."
+        : "Voice saving is unavailable because secure storage or the music provider is not configured. Your recording stays on this device.");
+  }
   function clearSample() {
     if (previewURL) URL.revokeObjectURL(previewURL);
     previewURL = null;
@@ -308,12 +320,7 @@ export function bindStudioWorkflow({
     useSample(
       new Blob([file], { type: type === "audio/x-wav" ? "audio/wav" : type }),
     );
-    if(voiceProfile.failure?.retry_allowed===false){voiceStatus.textContent=voiceProfile.failure.message;return;}
-    voiceStatus.textContent =
-      "Local sample ready to preview. " +
-      (storageReady
-        ? "Confirm your consent before saving."
-        : "Uploading and training remain pending safe storage verification.");
+    voiceStatus.textContent = sampleReadyMessage();
   };
   function endCapture() {
     captureVersion++;
@@ -384,11 +391,7 @@ export function bindStudioWorkflow({
             return;
           }
           useSample(pcmWav(data, rate));
-          voiceStatus.textContent =
-            "Your singing sample is ready for local preview. " +
-            (storageReady
-              ? "Confirm consent to save and train."
-              : "Upload and training remain pending safe storage verification.");
+          voiceStatus.textContent = sampleReadyMessage();
         }
       };
       processor.onaudioprocess = (event) => {
