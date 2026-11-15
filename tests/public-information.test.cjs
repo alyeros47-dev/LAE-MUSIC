@@ -17,7 +17,7 @@ test('public prices, allowances, affiliate eligibility and approved rates match 
  const plans=require('../lib/publishing-policy').packages(),artist=publicInfo.page('/how-it-works').html,affiliate=publicInfo.page('/affiliate-program').html,config=require('../lib/affiliate-framework').disclosure();
  for(const p of Object.values(plans)){assert(artist.includes(p.name+' — $'+p.usd+'/year: '+p.studioGenerations+' music generations, up to '+p.uploads+' tracks.'));}
  assert.equal(config.premium_individual_allocations_enabled,true);assert.equal(config.individual_premium_rates.direct,20);assert.equal(config.individual_premium_rates.quarterly_team,10);
- for(const text of ['20% direct','10% quarterly','$0.36','$0.18','$0.90','two referral steps','December 20','December 21–31','Bank payouts are not enabled yet','Artist-package and extra-generation rates remain unapproved'])assert(affiliate.includes(text),text);
+ for(const text of ['20% direct','10% quarterly','$0.36','$0.18','$0.90','two referral steps','December 20','December 21–31','Bank payouts are not enabled yet','Artist packages pay 20% directly and a 10% quarterly team bonus','Extra-generation commissions still await approval'])assert(affiliate.includes(text),text);
  assert(!/15%|25%|historical Premium.*5%|guaranteed income\./.test(affiliate.replace('not guaranteed income.','')));
  const pricing=require('../lib/premium-pricing').catalog();for(const p of pricing.plans)assert(publicInfo.page('/premium').html.includes('$'+(p.usd_minor/100).toFixed(2)+' for '+p.days));
  assert(artist.includes('seven full UTC days'));assert(artist.includes('your allocation is $10'));assert(artist.includes('remain')||artist.includes('stay online'));

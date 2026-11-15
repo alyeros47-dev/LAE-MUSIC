@@ -1,0 +1,43 @@
+name: Focused artist-package commissions
+on:
+  pull_request:
+    paths:
+      - 'config/affiliate-revenue-policy.json'
+      - 'lib/affiliate-*.js'
+      - 'lib/partner-*.js'
+      - 'lib/commerce.js'
+      - 'lib/subscriptions.js'
+      - 'migrations/037-approved-artist-package-referrals.sql'
+      - 'tests/artist-package-commissions*.cjs'
+      - '.github/workflows/artist-commission-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  artist-commissions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: artist_commission_fixture_only
+          POSTGRES_DB: lae_music_ci
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U postgres -d lae_music_ci" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      LAE_DB_TESTS: 'true'
+      DATABASE_URL: postgres://postgres:artist_commission_fixture_only@127.0.0.1:5432/lae_music_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Artist rates, preserved contracts and shared commission checks
+        run: node --test tests/artist-package-commissions.test.cjs tests/commerce.test.cjs tests/affiliate-framework.test.cjs tests/partner-policy.test.cjs tests/partner-statements.test.cjs tests/partner-accounting.test.cjs tests/commissions.test.cjs tests/services.test.cjs tests/public-information.test.cjs tests/controlled-publishing.test.cjs
+      - name: Verified purchases, renewals, depth two, quarterly close and Premium regression
+        run: node tests/artist-package-commissions-postgres.cjs && node tests/affiliate-framework-postgres.cjs && node tests/premium-referrals-postgres.cjs
+      - name: Preserve existing membership and payment records during migration
+        run: node tests/artist-membership-migration.cjs && node tests/manual-bank-receipt-migration.cjs
