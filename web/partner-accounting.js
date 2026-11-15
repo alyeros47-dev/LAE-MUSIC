@@ -196,7 +196,7 @@ export function bindPartnerCopies(root,toast){
 }
 
 export function creatorMilestonePanel(x,{e,money,metric,notice}){
- if(!x||x.unavailable)return notice('Creator progress could not be loaded. Please refresh.');
+ if(!x||x.unavailable||!x.progress||!Array.isArray(x.rewards))return notice('Creator progress could not be loaded. Please refresh.');
  const p=x.progress;
  return `<section class="panel" aria-label="Creator milestones"><h2>Creator milestones</h2><div class="metrics">${metric('INDIRECT MEMBERS',e(x.total_indirect_downlines),'All members two steps below you')}${metric('PREMIUM LISTENERS',e(x.indirect_premium_listeners),'Their listening rewards stay separate')}${metric('PAYING CREATORS',e(x.verified_indirect_paying_creators),'Each qualifying creator counts once')}${metric('CREATOR REWARDS EARNED',money(x.rewards_earned_minor),'Bank payments are separate')}</div><p>${p.complete?'All three milestones earned.':`Milestone ${e(p.stage)}: ${e(p.count)} / ${e(p.target)} creators · ${money(p.reward_minor)}`}</p><p>First 1,000 creators: $900. Next 10,000: $9,000. Next 100,000: $90,000.</p>${x.rewards.some(r=>r.review_required)?'<p>A reward needs payment review.</p>':''}</section>`;
 }
