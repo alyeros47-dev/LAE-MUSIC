@@ -1,0 +1,38 @@
+[
+  {
+    "scenario": "royalties",
+    "synthetic_question": "Can I earn money as an LAE-MUSIC artist? Please explain your 50/50 royalty-sharing policy.",
+    "answer": "Yes—you can earn royalties by publishing your original LAE-MUSIC Studio tracks and attracting qualifying streams.\n\nOur 50/50 policy splits eligible revenue after approved deductions: 50% goes to the artist royalty pool and 50% to LAE-MUSIC. The artist pool is distributed among eligible artists according to qualifying streams.\n\nDeductions include refunds, taxes, payment fees and applicable affiliate/team allocations. For Premium listening, the approved affiliate/team allocation is 30% before the remaining eligible revenue is split equally.\n\nThe percentage is defined, but your earnings vary with eligible revenue and streams—not a guaranteed salary or fixed per-stream payment. You can share your published songs and follow earnings in our artist workspace.",
+    "escalation": false
+  },
+  {
+    "scenario": "company",
+    "synthetic_question": "Why should I join LAE-MUSIC? What benefits do you offer, and how do I get started?",
+    "answer": "With LAE-MUSIC, you can create music, discover independent artists and earn through eligible activity. I’m our AI assistant.\n\n• Create: Turn your original ideas or lyrics into music in our Studio, publish completed tracks and share them.\n• Earn: Our artist royalty pool receives 50% of eligible revenue after approved deductions; LAE-MUSIC receives 50%. The pool is distributed by qualifying streams, so earnings vary.\n• Listen: Discover songs and make playlists. Premium adds ad-free and in-app offline listening.\n• Refer: Eligible customers can voluntarily earn approved referral rewards.\n\nTo start, choose an artist package to create, or open Discover/create a listener account to listen. Which interests you most?",
+    "escalation": false
+  },
+  {
+    "scenario": "packages",
+    "synthetic_question": "What are your three yearly artist packages and allowances, and how do I publish the songs I generate?",
+    "answer": "Our three yearly artist packages let you create and publish Studio music:\n• Starter: $6/year — 3 generations, up to 6 tracks.\n• Growth: $10/year — 6 generations, up to 12 tracks.\n• Premium: $20/year — 15 generations, up to 30 tracks.\n\nEach generation produces two tracks, each with its own one-use publishing code. Accept our Music Creator Agreement before creating or publishing.\n\nTo publish, choose the matching generated track and upload action, use its correct code, add song details and artwork, confirm your distribution rights, then select Upload & publish. The account, generation record, code and audio must match. During launch, only LAE-MUSIC Studio-generated songs are accepted.",
+    "escalation": false
+  },
+  {
+    "scenario": "premium",
+    "synthetic_question": "What does your Three-Month Premium Listening plan cost, and what benefits does it include?",
+    "answer": "Our Three-Month Premium Listening plan costs $1.80 USD for 90 days. It gives you ad-free playback and in-app offline listening on supported browsers, so you can save songs inside LAE-MUSIC and listen without an internet connection.\n\nOffline saves stay on the device and browser where you saved them; they aren’t MP3 downloads. This listening plan does not include artist Studio generations.\n\nTo subscribe, open Premium listening and choose Three-Month Premium. Your final local-currency price, conversion and any fees appear at checkout.",
+    "escalation": false
+  },
+  {
+    "scenario": "commissions",
+    "synthetic_question": "What are your approved Premium listener and artist referral commissions and creator milestone rewards?",
+    "answer": "You can earn referral rewards from verified qualifying purchases through our free, voluntary affiliate program.\n\n• Premium listening: 20% direct commission, plus 10% team performance on eligible purchases exactly two referral steps below, reviewed quarterly. December 20 closes the final quarter; December 21–31 sales roll into January–March.\n• Artist packages: 20% direct commission. No percentage-based indirect artist commission; creator milestones apply instead.\n• Creator milestones: $900 for the first 1,000 qualifying creators; $9,000 for the next 10,000 additional creators; $90,000 for the next 100,000 additional creators.\n\nMilestones count unique, verified paying creators exactly two referral steps below—not listener-only purchases, renewals or previously counted creators.\n\nActive qualification requires a verified qualifying artist package or at least Three-Month Premium ($1.80). Join Partners network and share your product referral link. Clicks or signups alone do not earn commission. Extra-generation commission rules are not finalized.",
+    "escalation": false
+  },
+  {
+    "scenario": "payment",
+    "synthetic_question": "My Monnify payment succeeded but access is still missing. I already checked the paying account and refreshed. Can you verify it?",
+    "answer": "I’m our AI support representative, so I can’t verify your Monnify transaction or activate access. Since you’ve already checked the paying account and refreshed, this needs a private payment review by our human WhatsApp support. You don’t need to repeat those checks or pay again. Use the app’s WhatsApp button to contact our representative, and keep your payment reference ready for them. Please don’t send receipt images, card details, bank login details or passwords here.",
+    "escalation": true
+  }
+]
