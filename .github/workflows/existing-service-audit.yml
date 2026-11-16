@@ -2,6 +2,11 @@ name: Read existing LAE-MUSIC integration requirements
 on:
   workflow_dispatch:
     inputs:
+      voice_acceptance_run:
+        description: "One authorized Jane Esther voice test: max 5 training + 20 music credits, no paid retry"
+        required: false
+        type: boolean
+        default: false
       voice_owned_check:
         description: "Read-only Jane Esther recording and waveform check; no training or generation"
         required: false
@@ -36,6 +41,71 @@ on:
 permissions:
   contents: read
 jobs:
+  owned-voice-acceptance:
+    if: inputs.voice_acceptance_run && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    concurrency:
+      group: lae-pr53-owned-voice-25-credit-test
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: voice_ci_only
+          POSTGRES_DB: lae_music_ci
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      LAE_VOICE_ACCEPTANCE: '25'
+      LAE_DB_TESTS: 'true'
+      DATABASE_URL: postgres://postgres:voice_ci_only@127.0.0.1:5432/lae_music_ci
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Verify one-use budget, owned recording and existing voice handler before spending
+        run: |
+          node --test tests/voice-acceptance-budget.test.cjs tests/owned-voice-inspection.test.cjs tests/voice-production.test.cjs tests/voice-sample.test.cjs
+          node scripts/accept-owned-voice.cjs --local-preflight
+      - name: Confirm the current saved recording without paid provider requests
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-owned-voice.cjs
+      - name: Ensure the real audio decoder is available
+        run: |
+          command -v ffmpeg
+          command -v ffprobe
+      - run: npx playwright install --with-deps chromium
+      - name: Reserve the dated one-use provider budget without spending
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/accept-owned-voice.cjs --claim
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lae-pr53-jane-esther-voice25-20261116
+          path: voice-acceptance-results/claim.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: One real training and, only if ready, one personal-voice generation
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/accept-owned-voice.cjs
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owned-voice-test-journal-${{ github.run_id }}
+          path: voice-acceptance-results/*.json
+          if-no-files-found: ignore
+          retention-days: 30
   owned-voice-preflight:
     if: inputs.voice_owned_check && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
     runs-on: ubuntu-latest
