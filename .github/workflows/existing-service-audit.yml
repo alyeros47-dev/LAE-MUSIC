@@ -2,6 +2,16 @@ name: Read existing LAE-MUSIC integration requirements
 on:
   workflow_dispatch:
     inputs:
+      voice_reset:
+        description: "Owner-requested deletion of the selected rejected voice profile and private samples; no training"
+        required: false
+        type: boolean
+        default: false
+      voice_reset_task_lookup:
+        description: "SHA-256 of the previously failed provider task ID; prevents deleting a newer recording"
+        required: false
+        type: string
+        default: ""
       voice_account_lookup:
         description: "SHA-256 digest of the owner-selected public artist name; never submit a recording fingerprint or credentials"
         required: false
@@ -51,6 +61,26 @@ on:
 permissions:
   contents: read
 jobs:
+  reset-rejected-voice:
+    if: inputs.voice_reset && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: lae-owner-requested-voice-reset
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - run: node tests/reset-rejected-voice.test.cjs
+      - name: Clear only the selected terminally failed voice and private voice samples
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/reset-rejected-voice.cjs
   owned-voice-acceptance:
     if: inputs.voice_acceptance_run && inputs.voice_export_consent && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
     runs-on: ubuntu-latest
