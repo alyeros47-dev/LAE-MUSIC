@@ -16,6 +16,8 @@ The owner relayed MusicAPI support's confirmation: `/api/v1/sonic/create-voice` 
 
 ## Verification
 
+**Latest result:** the owner selected and authorized the recording for a controlled real test. One MusicAPI voice-training task was submitted and rejected again with `didnt_say_verification_phrase` / `invalid_input`; no persona was returned. Music generation was not attempted, customer credits were untouched, and production SQL writes were zero. MusicAPI reports that the training refund was processed. See [OWNED-VOICE-ACCEPTANCE.md](OWNED-VOICE-ACCEPTANCE.md) for the current evidence and deployment blocker; the earlier pending-consent wording below is historical.
+
 The managed coding environment failed to start. Changes are made on the existing branch through GitHub; focused hosted checks cover voice handler/sample validation, legacy failure recovery, consent and ownership, fresh replacement, duplicate submission, temporary URL GETs, disposable PostgreSQL locks and desktop/Android Chrome emulation. Provider and microphone responses in those checks are fixtures.
 
 The branch-only read-only diagnostic retrieves up to three existing failed provider task IDs for the owner's support request and probes a small prefix of failed samples using the same production signer. It never logs a signed audio URL, credentials or the recording; it does not create/train a profile, generate music, modify production data or consume provider credits.
