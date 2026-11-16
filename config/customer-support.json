@@ -1,0 +1,14 @@
+{
+  "revision": "support-2026-11-16-v1",
+  "model": "gpt-6.1-sol",
+  "daily_request_limit": 120,
+  "daily_token_limit": 600000,
+  "client_daily_limit": 20,
+  "ip_ten_minute_limit": 8,
+  "message_chars": 1000,
+  "reply_chars": 1800,
+  "output_tokens": 1200,
+  "conversation_turns": 6,
+  "conversation_seconds": 1800,
+  "suggestions": ["How do I create an account?", "How do I buy Premium?", "How do I save songs offline?", "How do I create and publish a song?", "Where is my referral link?"]
+}
