@@ -280,7 +280,7 @@ export function bindStudioWorkflow({
       return "Your previous voice request needs verification. Your new recording is only a local preview. Check voice profile; do not submit it again yet.";
     return "Your singing sample is ready for local preview. " +
       (storageReady
-        ? "Confirm consent to save and train."
+        ? "Use only your own clear voice, without music, another voice or reverb. Confirm consent to save and train."
         : "Voice saving is unavailable because secure storage or the music provider is not configured. Your recording stays on this device.");
   }
   function clearSample() {

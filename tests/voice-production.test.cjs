@@ -39,6 +39,7 @@ function fixture() {
     training = 0,
     stored = 0,
     rejectStorage = false,
+    readStatus = 206,
     taskReply={persona_id:"owned_persona_fixture"},
     taskHttp=200,
     trainingReply=null;
@@ -59,6 +60,7 @@ function fixture() {
           task_id: args[0],
           status: "submitting",
         });
+      if (sql.includes("status='uploading',task_id=NULL")) {const current=profiles.get(args[0]);if(current?.task_id===args[1])Object.assign(current,{status:'uploading',task_id:null});}
       if (sql.includes("status='training'"))
         Object.assign(profiles.get(args[1]), {
           task_id: args[0],
@@ -126,6 +128,7 @@ function fixture() {
     }
     if (url.startsWith("https://storage.fixture/get/")) {
       assert.equal(opt.method,"GET");assert.equal(opt.credentials,"omit");assert(!opt.headers.Authorization);
+      if(readStatus!==206)return new Response(null,{status:readStatus});
       const prefix=Buffer.alloc(64);prefix.write("RIFF");prefix.write("WAVE",8);
       return new Response(prefix,{status:206,headers:{"content-range":"bytes 0-63/"+stored}});
     }
@@ -161,6 +164,7 @@ function fixture() {
     set origin(x) {
       origin = x;
     },
+    set readStatus(value){readStatus=value;},
     set rejectStorage(x) {
       rejectStorage = x;
     },
@@ -350,7 +354,7 @@ const verificationFailure={type:'failed',error:'didnt_say_verification_phrase',r
 test('actual verification-phrase rejection is explained, retained and blocks blind paid training until a fresh consented upload',async()=>{
  const f=fixture();f.profiles.set(7,{object_key:'voice-profiles/7/preserved-sample.wav',task_id:'voice_task_fixture_123',status:'training'});f.taskReply=verificationFailure;
  await withUpstream(f,async()=>{
-  const first=await f.request('/api/voice/status');assert.equal(first.status,200);assert.equal(first.data.status,'failed');assert.equal(first.data.hasVoice,false);assert.equal(first.data.failure.code,'voice_sample_rejected');assert.equal(first.data.failure.retry_allowed,false);assert.equal(first.data.failure.provider_refund_processed,true);assert.equal(first.data.failure.can_replace_sample,true);assert.match(first.data.failure.message,/No separate verification phrase is needed/);
+  const first=await f.request('/api/voice/status');assert.equal(first.status,200);assert.equal(first.data.status,'failed');assert.equal(first.data.hasVoice,false);assert.equal(first.data.failure.code,'voice_sample_rejected');assert.equal(first.data.failure.retry_allowed,false);assert.equal(first.data.failure.provider_refund_processed,true);assert.equal(first.data.failure.can_replace_sample,true);assert.match(first.data.failure.message,/Record your own voice alone/);assert.doesNotMatch(first.data.failure.message,/requires a separate spoken/);
   const before={...f.profiles.get(7)};
   const second=await f.request('/api/voice/profile');assert.deepEqual(second.data.failure,first.data.failure);assert.equal(f.failures.size,1);
   const upload=await f.request('/api/voice/upload','POST',{type:'audio/wav',bytes:11520044,consent:false});assert.equal(upload.status,400);
@@ -391,4 +395,16 @@ test('legacy rejection is normalized without altering its audit; a fresh consent
   assert.equal((await f.request(prepared.data.url,'PUT',bytes,{'content-type':'audio/wav'})).status,200);
   assert.equal((await f.request('/api/voice/train','POST',{})).data.status,'training');assert.equal((await f.request('/api/voice/train','POST',{})).data.status,'training');assert.equal(f.training,1);assert.deepEqual(f.failures.get('7:'+task),old);
  });
+});
+
+test('an inaccessible provider-read URL restores uploading and never submits paid training',async()=>{
+ const f=fixture(),bytes=await audio();await withUpstream(f,async()=>{
+  const p=await f.request('/api/voice/upload','POST',{type:'audio/wav',bytes:bytes.length,consent:true});assert.equal((await f.request(p.data.url,'PUT',bytes,{'content-type':'audio/wav'})).status,200);
+  f.readStatus=403;const train=await f.request('/api/voice/train','POST',{});assert.equal(train.status,400);assert.match(train.data.error,/cannot be read without signing in/);assert.equal(f.training,0);assert.equal(f.profiles.get(7).status,'uploading');assert.equal(f.profiles.get(7).task_id,null);
+ });
+});
+
+test('non-retryable invalid audio permits a new sample without permitting the failed request again',()=>{
+ const {result}=require('../lib/voice-provider-result');for(const message of ['voices_sound_different','Voice cloning failed']){const r=result({type:'failed',reason_code:'invalid_input',retriable:false,message});assert.equal(r.failure.can_replace_sample,true);assert.equal(r.failure.retry_allowed,false);assert.equal(r.failure.code,'voice_sample_rejected');}
+ const moderation=result({type:'forbidden',reason_code:'moderation',retriable:false});assert(!moderation.failure.can_replace_sample);
 });
