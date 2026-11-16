@@ -25,6 +25,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   focused:
+    if: ${{ !inputs.configure_contact }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     services:
@@ -59,14 +60,26 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: node scripts/verify-customer-support.cjs text
-      - if: github.event_name == 'workflow_dispatch' && inputs.configure_contact
-        name: Configure only the approved support contact
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          SUPPORT_WHATSAPP_NUMBER: ${{ inputs.whatsapp_number }}
-        run: node scripts/verify-customer-support.cjs contact
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: customer-support-browser-checks
           path: artifacts/customer-support-*.png
+
+  contact:
+    if: github.event_name == 'workflow_dispatch' && inputs.configure_contact && !inputs.real_text_check
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Configure only the approved support contact
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          SUPPORT_WHATSAPP_NUMBER: ${{ inputs.whatsapp_number }}
+        run: node scripts/verify-customer-support.cjs contact
