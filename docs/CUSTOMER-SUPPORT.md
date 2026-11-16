@@ -1,6 +1,6 @@
 # LAE-MUSIC customer support
 
-The Help button adds a public AI guide beside the existing player. It never reads customer account/payment records or changes accounts, credits, subscriptions, referrals, royalties or voice profiles. Account-specific problems go to a representative. Human support availability depends on staffing; AI assistance is subject to provider availability and usage limits.
+The Help button adds a public AI guide beside the existing player. It never reads customer account/payment records or changes accounts, credits, subscriptions, referrals, royalties or voice profiles. The chatbot first helps in the conversation. Only unresolved issues or issues requiring private investigation receive a representative handoff. Contact details and a human-support shortcut are absent from the initial interface, public configuration and ordinary replies. Asking for a contact alone prompts the customer to describe the issue. Human support availability depends on staffing; AI assistance is subject to provider availability and usage limits.
 
 ## Settings and current information
 
@@ -12,7 +12,7 @@ Owner: **Admin → Customer support**. Set the official WhatsApp number with its
 
 Messages are limited to 1,000 characters and six recent conversation turns, expire after 30 minutes, and are bound to an opaque HttpOnly visitor cookie. Common secrets, links, long numbers and emails are removed before the provider call. Customers are warned not to submit private information. Responses use `store:false`; provider processing and retention policies still apply. Conversation/cache contents use authenticated encryption; no plaintext transcripts or personal account identifiers are logged. Expired cached ciphertext is cleared during the next support request. Anonymous hashed usage records remain for cost accounting. Secrets/key rotation invalidates old conversations.
 
-Global daily request/token reservations are serialized in PostgreSQL. Visitor and IP throttles also apply. Uncertain requests retain their token reservation; idempotency prevents repeat charges on retries. There is no automatic paid retry, research call, music generation or customer-credit deduction. Usage shows actual model tokens when available, and reserved ceilings otherwise. Token limits are not a fixed dollar-price guarantee. Errors/limits retain public guides and the WhatsApp handoff. Only user clicks open WhatsApp; a deterministic topic summary requires explicit opt-in and contains no transcript or account/payment details.
+Global daily request/token reservations are serialized in PostgreSQL. Visitor and IP throttles also apply. Uncertain requests retain their token reservation; idempotency prevents repeat charges on retries. There is no automatic paid retry, research call, music generation or customer-credit deduction. Usage shows actual model tokens when available, and reserved ceilings otherwise. Token limits are not a fixed dollar-price guarantee. When AI cannot answer, errors/limits retain public guides and an escalation handoff. Browser connection errors ask for a retry without revealing a contact. Only user clicks open WhatsApp; a deterministic topic summary requires explicit opt-in and contains no transcript or account/payment details.
 
 ## Verification and release
 
