@@ -38,7 +38,7 @@ jobs:
       - run: npm ci
       - name: Focused free voice, URL, waveform and adapter checks
         run: |
-          node --test tests/voice-sample.test.cjs tests/voice-production.test.cjs tests/voice-diagnostic.test.cjs tests/voice-launch-inspection.test.cjs tests/studio-workflow.test.cjs
+          node --test tests/voice-sample.test.cjs tests/voice-production.test.cjs tests/voice-diagnostic.test.cjs tests/voice-launch-inspection.test.cjs tests/studio-workflow.test.cjs tests/voice-acceptance-budget.test.cjs tests/owned-voice-inspection.test.cjs
           node scripts/test-sonic-handler.cjs
           node --input-type=module --check < web/studio-workflow.js
       - name: Disposable PostgreSQL voice checks
@@ -46,6 +46,11 @@ jobs:
           LAE_DB_TESTS: 'true'
           DATABASE_URL: postgres://postgres:voice_ci_only@127.0.0.1:5432/lae_music_ci
         run: node tests/voice-failure-postgres.cjs
+      - name: Verify the controlled runner with a disposable database and synthetic account only
+        env:
+          LAE_DB_TESTS: 'true'
+          DATABASE_URL: postgres://postgres:voice_ci_only@127.0.0.1:5432/lae_music_ci
+        run: node -e "require('./scripts/accept-owned-voice.cjs').localPool(process.env.GITHUB_RUN_ID).then(x=>x.close()).catch(()=>process.exitCode=1)"
       - run: npx playwright install --with-deps chromium
       - name: Desktop and Android Chrome emulation with microphone/provider fixtures
         run: node tests/voice-recorder-browser.cjs

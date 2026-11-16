@@ -2,13 +2,23 @@ name: Read existing LAE-MUSIC integration requirements
 on:
   workflow_dispatch:
     inputs:
+      voice_account_lookup:
+        description: "SHA-256 digest of the owner-selected public artist name; never submit a recording fingerprint or credentials"
+        required: false
+        type: string
+        default: ""
+      voice_export_consent:
+        description: "Confirm only after the recording owner explicitly agrees to send their sample to MusicAPI for this test"
+        required: false
+        type: boolean
+        default: false
       voice_acceptance_run:
-        description: "One authorized Jane Esther voice test: max 5 training + 20 music credits, no paid retry"
+        description: "One authorized owner-selected voice test: max 5 training + 20 music credits, no paid retry"
         required: false
         type: boolean
         default: false
       voice_owned_check:
-        description: "Read-only Jane Esther recording and waveform check; no training or generation"
+        description: "Read-only owner-selected recording and waveform check; no training or generation"
         required: false
         type: boolean
         default: false
@@ -42,7 +52,7 @@ permissions:
   contents: read
 jobs:
   owned-voice-acceptance:
-    if: inputs.voice_acceptance_run && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
+    if: inputs.voice_acceptance_run && inputs.voice_export_consent && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
     runs-on: ubuntu-latest
     timeout-minutes: 28
     concurrency:
@@ -61,6 +71,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       LAE_VOICE_ACCEPTANCE: '25'
+      LAE_VOICE_EXPORT_CONSENT: 'confirmed'
       LAE_DB_TESTS: 'true'
       DATABASE_URL: postgres://postgres:voice_ci_only@127.0.0.1:5432/lae_music_ci
     steps:
@@ -78,7 +89,7 @@ jobs:
       - name: Confirm the current saved recording without paid provider requests
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: node scripts/inspect-owned-voice.cjs
+        run: node scripts/accept-owned-voice.cjs --external-preflight
       - name: Ensure the real audio decoder is available
         run: |
           command -v ffmpeg
@@ -90,7 +101,7 @@ jobs:
         run: node scripts/accept-owned-voice.cjs --claim
       - uses: actions/upload-artifact@v4
         with:
-          name: lae-pr53-jane-esther-voice25-20261116
+          name: lae-pr53-owned-voice25-20261116
           path: voice-acceptance-results/claim.json
           if-no-files-found: error
           retention-days: 30

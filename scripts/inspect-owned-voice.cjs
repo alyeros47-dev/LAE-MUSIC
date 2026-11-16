@@ -1,7 +1,7 @@
 'use strict';
 // Owner-selected account; production database is read-only. Audio stays in memory.
 const crypto=require('node:crypto'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
-const SERVICE='srv-db84s7m89jmc73c7l9rg',ACCOUNT='Jane Esther';
+const SERVICE='srv-db84s7m89jmc73c7l9rg';
 const {serviceValid,inventory}=require('./audit-existing-service.cjs');
 function signer(){
  const source=fs.readFileSync(path.join(__dirname,'../server.js'),'utf8');
@@ -24,15 +24,16 @@ async function boundedAudio(url,fetcher=fetch){
  try{while(true){const p=await reader.read();if(p.done)break;length+=p.value.length;if(length>12000000)throw Error('Saved sample exceeds 12 MB.');parts.push(Buffer.from(p.value));}}finally{await reader.cancel().catch(()=>{});}
  const bytes=Buffer.concat(parts);if(bytes.length<10000)throw Error('Saved sample is too short.');return bytes;
 }
-async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch,dbFactory=o=>new(require('pg').Pool)(o)}={}){
+async function inspect({key=process.env.RENDER_API_KEY,accountName=null,fetcher=fetch,dbFactory=o=>new(require('pg').Pool)(o)}={}){
  if(!key)throw Error('Render read access unavailable.');
  async function get(url){const r=await fetcher(url,{method:'GET',headers:{Authorization:'Bearer '+key},redirect:'error',signal:AbortSignal.timeout(25000)});if(!r.ok)throw Error('Read-only Render access failed.');return r.json();}
  const service=await get('https://api.render.com/v1/services/'+SERVICE);if(service.id!==SERVICE||!serviceValid(service))throw Error('Wrong production service.');
  const env=inventory(await get('https://api.render.com/v1/services/'+SERVICE+'/env-vars?limit=100'));
  const pool=dbFactory({...require('../lib/database').databaseOptions(env),max:1});let db,row;
  try{db=await pool.connect();await db.query('BEGIN READ ONLY');await db.query("SET LOCAL statement_timeout='15s'");
-  const name=ACCOUNT.toLowerCase();const rows=(await db.query("SELECT c.id,c.display_name,v.object_key,v.task_id,v.status,v.updated_at FROM creators c LEFT JOIN artist_voice_profiles v ON v.creator_id=c.id WHERE lower(regexp_replace(btrim(c.display_name),'\\s+',' ','g'))=$1 OR lower(regexp_replace(btrim(c.display_name),'\\s+',' ','g')) LIKE $2 ORDER BY c.id LIMIT 4",[name,name+' %'])).rows;
-  if(rows.length!==1)throw Error('Jane Esther account lookup was missing or ambiguous.');row=rows[0];
+  const lookup=accountName?crypto.createHash('sha256').update(accountName.trim().replace(/\s+/g,' ').toLowerCase()).digest('hex'):require('../lib/voice-acceptance-budget').target().lookup_sha256;
+  const rows=(await db.query("SELECT c.id,c.display_name,v.object_key,v.task_id,v.status,v.updated_at FROM creators c LEFT JOIN artist_voice_profiles v ON v.creator_id=c.id WHERE encode(sha256(convert_to(lower(regexp_replace(btrim(c.display_name),'\\s+',' ','g')),'UTF8')),'hex')=$1 ORDER BY c.id LIMIT 4",[lookup])).rows;
+  if(rows.length!==1)throw Error('Owner-selected voice account lookup was missing or ambiguous.');row=rows[0];
   if(!row.object_key||!['failed','uploading','ready'].includes(row.status))throw Error('Account has no saved recording, or its previous request is still unresolved.');
   if(!new RegExp('^voice-profiles/'+row.id+'/[a-f0-9-]{36}\\.wav$').test(row.object_key))throw Error('Saved recording is not an owned recorder WAV.');
   await db.query('COMMIT');
@@ -46,5 +47,5 @@ async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch,dbFactory=o
  // Private state is returned only to the controlled runner, never serialized.
  return {report,bytes,row,store,presign,env};
 }
-module.exports={ACCOUNT,SERVICE,signer,waveform,boundedAudio,inspect};
-if(require.main===module)inspect().then(x=>console.log(JSON.stringify(x.report,null,2))).catch(e=>{console.error(/^(Jane Esther account lookup|Account has no saved recording|Saved recording is not an owned|Saved recording failed complete|Recording is silent)/.test(e.message)?e.message:'Owned voice preflight could not complete. No paid request was made.');process.exitCode=1;});
+module.exports={SERVICE,signer,waveform,boundedAudio,inspect};
+if(require.main===module)inspect().then(x=>console.log(JSON.stringify({matched:true,saved_recording_accessible:x.report.sample_url_accessible,wav_format_valid:true,not_silent:x.report.not_silent,not_heavily_clipped:x.report.not_heavily_clipped,production_database_writes:0,provider_paid_requests:0},null,2))).catch(e=>{console.error(/^(Owner-selected voice account lookup|Account has no saved recording|Saved recording is not an owned|Saved recording failed complete|Recording is silent)/.test(e.message)?e.message:'Owned voice preflight could not complete. No paid request was made.');process.exitCode=1;});
