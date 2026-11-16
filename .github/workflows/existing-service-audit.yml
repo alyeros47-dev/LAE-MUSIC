@@ -2,6 +2,11 @@ name: Read existing LAE-MUSIC integration requirements
 on:
   workflow_dispatch:
     inputs:
+      voice_owned_check:
+        description: "Read-only Jane Esther recording and waveform check; no training or generation"
+        required: false
+        type: boolean
+        default: false
       voice_profile_check:
         description: "Read-only voice configuration and existing task inspection; no training or generation"
         required: false
@@ -31,6 +36,23 @@ on:
 permissions:
   contents: read
 jobs:
+  owned-voice-preflight:
+    if: inputs.voice_owned_check && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - run: node tests/owned-voice-inspection.test.cjs
+      - name: Inspect only the owner-selected saved recording without paid operations
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-owned-voice.cjs
   voice-launch-inspection:
     if: inputs.voice_profile_check && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/voice-profile-launch-repair'
     runs-on: ubuntu-latest
