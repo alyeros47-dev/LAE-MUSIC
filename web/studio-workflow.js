@@ -262,7 +262,7 @@ export function bindStudioWorkflow({
     save.disabled =
       !storageReady ||
       savingVoice ||
-      voiceProfile.failure?.retry_allowed === false ||
+      (voiceProfile.failure?.retry_allowed === false && !voiceProfile.failure.can_replace_sample) ||
       !sample ||
       ["training", "submitting", "verification_required"].includes(
         voiceProfile.status,
@@ -270,7 +270,9 @@ export function bindStudioWorkflow({
       !by("studio-voice-consent").checked;
   };
   function sampleReadyMessage() {
-    if (voiceProfile.failure?.retry_allowed === false)
+    if (voiceProfile.failure?.can_replace_sample)
+      return "Your new sample is ready to preview. Confirm it is your voice alone, with no music or reverb, then save it.";
+    if ((voiceProfile.failure?.retry_allowed === false && !voiceProfile.failure.can_replace_sample))
       return voiceProfile.failure.message;
     if (["submitting", "training"].includes(voiceProfile.status))
       return "Your previous voice profile is still processing. Your new recording is only a local preview. Check voice profile before saving again.";
@@ -409,7 +411,7 @@ export function bindStudioWorkflow({
         const second = Math.floor(count / rate);
         if (second !== shownSecond) {
           shownSecond = second;
-          voiceStatus.textContent = "Recording " + Math.floor(second / 60) + ":" + String(second % 60).padStart(2, "0") + " / 4:00. Sing alone clearly; keep this page open. Press Stop recording when finished.";
+          voiceStatus.textContent = "Recording " + Math.floor(second / 60) + ":" + String(second % 60).padStart(2, "0") + " / 4:00. Sing alone, without music or reverb; keep this page open. Press Stop recording when finished.";
         }
         if (count >= maxSamples) finish();
       };
@@ -417,7 +419,7 @@ export function bindStudioWorkflow({
       processor.connect(context.destination); // output stays silent; capture input only.
       stop.disabled = false;
       voiceStatus.textContent =
-        "Recording your singing voice locally, up to four minutes. Sing alone for at least 15 seconds, then press Stop recording.";
+        "Recording your singing voice locally, up to four minutes. Use only your voice, with no music, second voice or reverb. Sing for at least 15 seconds, then press Stop recording.";
       timer = setTimeout(() => finish?.(), VOICE_RECORDING_SECONDS * 1000);
     } catch {
       if (ticket !== captureVersion) return;
@@ -491,7 +493,7 @@ export function bindStudioWorkflow({
     if (!storageReady || !sample || !by("studio-voice-consent").checked) return;
     if (
       savingVoice ||
-      voiceProfile.failure?.retry_allowed === false ||
+      (voiceProfile.failure?.retry_allowed === false && !voiceProfile.failure.can_replace_sample) ||
       ["submitting", "training", "verification_required"].includes(
         voiceProfile.status,
       )

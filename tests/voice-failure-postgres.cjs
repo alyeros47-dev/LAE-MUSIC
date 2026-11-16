@@ -22,20 +22,23 @@ test('voice failures preserve recordings, release no song credits and reject dup
   await pool.query("INSERT INTO artist_voice_profiles(creator_id,object_key,task_id,status) VALUES($1,$2,$3,'training')",[b,objectKey,taskId]);
   await t.test('concurrent status polling books the exact failed task once and retains its safe explanation',async()=>{
    const responses=await Promise.all([api('/api/voice/status'),api('/api/voice/status')]);
-   for(const r of responses){assert.equal(r.status,200);assert.equal(r.data.status,'failed');assert.equal(r.data.failure.code,'voice_verification_required');assert.equal(r.data.failure.retry_allowed,false);assert.equal(r.data.failure.provider_refund_processed,true);}
+   for(const r of responses){assert.equal(r.status,200);assert.equal(r.data.status,'failed');assert.equal(r.data.failure.code,'voice_sample_rejected');assert.equal(r.data.failure.retry_allowed,false);assert.equal(r.data.failure.provider_refund_processed,true);}
    const rows=(await pool.query("SELECT details FROM platform_audit WHERE action='voice.training.failure' AND actor_id=$1",[String(b)])).rows;assert.equal(rows.length,1);assert.equal(rows[0].details.provider_reason,'didnt_say_verification_phrase');
   });
   await t.test('reload, save and direct train requests preserve the original sample and never call create-voice',async()=>{
    const before=(await pool.query('SELECT * FROM artist_voice_profiles WHERE creator_id=$1',[b])).rows;
    const priorRequests=requests;
-   assert.equal((await api('/api/voice/profile')).data.failure.code,'voice_verification_required');
-   const upload=await api('/api/voice/upload',{type:'audio/wav',bytes:11520044,consent:true});assert.equal(upload.status,409);assert.equal(upload.data.code,'voice_verification_required');
+   assert.equal((await api('/api/voice/profile')).data.failure.code,'voice_sample_rejected');
+   const upload=await api('/api/voice/upload',{type:'audio/wav',bytes:11520044,consent:false});assert.equal(upload.status,400);
    assert.equal((await api('/api/voice/train',{})).status,409);
    assert.deepEqual((await pool.query('SELECT * FROM artist_voice_profiles WHERE creator_id=$1',[b])).rows,before);assert.equal(requests,priorRequests);
    for(const table of ['generation_ledger','artist_studio_usage','studio_purchased_credits'])assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM '+table)).rows[0].n,initialUsage[table]);
   });
   await t.test('another artist keeps their existing ready voice and cannot read this failure',async()=>{
    owner=a;const r=await api('/api/voice/profile');assert.equal(r.data.status,'ready');assert.equal(r.data.hasVoice,true);assert(!r.data.failure);
+  });
+  await t.test('a failed recording can be replaced only after explicit fresh consent without provider submission',async()=>{
+   owner=b;const previous=requests;const r=await api('/api/voice/upload',{type:'audio/wav',bytes:240044,consent:true});assert.equal(r.status,200);const row=(await pool.query('SELECT object_key,task_id,status FROM artist_voice_profiles WHERE creator_id=$1',[b])).rows[0];assert.equal(row.status,'uploading');assert.equal(row.task_id,null);assert.notEqual(row.object_key,objectKey);assert.equal(requests,previous);assert.equal((await pool.query("SELECT COUNT(*)::int AS n FROM platform_audit WHERE action='voice.training.failure' AND actor_id=$1",[String(b)])).rows[0].n,1);
   });
  }finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.MUSICAPI_API_KEY;else process.env.MUSICAPI_API_KEY=oldKey;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
 });

@@ -1,44 +1,27 @@
-# Voice launch repair — November 15, 2026
+# Voice repair — current status, November 16, 2026
 
-## Decision: blocked; do not merge or deploy as a working voice repair
+## MusicAPI support clarification supersedes the earlier diagnosis
 
-The confirmed code defect is misleading feedback: finishing a new microphone recording replaced an existing non-retryable provider failure with a message telling the artist to confirm consent and save. Save correctly remained locked against repeating the rejected paid training request. The same local-preview message also hid processing, uncertain submission and missing-configuration explanations.
+The owner relayed MusicAPI support's confirmation: `/api/v1/sonic/create-voice` accepts a single `audio_url` and optional webhook. It does **not** require a separate verification phrase, ID or second recording. `didnt_say_verification_phrase` can mean the supplied audio was rejected. Earlier notes interpreting it as a missing challenge workflow are superseded.
 
-This branch preserves those explanations after microphone capture and file selection. It also recognizes HTTP-200 `forbidden`/explicit `reason_code` task failures instead of leaving them indefinitely in training. It does not remove provider verification, charge another training request, replace a saved sample, change existing ready profiles or alter music/credit rules.
+## Prepared repair on Draft PR #53
 
-The current artist account has not yet been identified, so the read-only evidence below establishes a real blocked path, not a confirmed account-specific diagnosis for the latest report.
+- Explain the rejection without requesting an invented phrase. Existing immutable failure audits are normalized when read, without rewriting financial records or erasing historical evidence.
+- Keep failed training non-retryable. A user can explicitly select/record and consent to a fresh replacement sample; that prepares a new upload, not an automatic retry. Existing ready/training/uncertain profiles remain protected.
+- Preserve recordings in storage; replacement does not delete the old object. Preserve account ownership, same-origin upload and explicit boolean consent.
+- Validate complete PCM WAV headers, data length, duration (>10 seconds and up to 240), byte rate, channels and the 12 MB limit. MP3 checks validate the file signature, not intelligibility or a complete codec decode.
+- Before any paid training request, sign the original account-owned storage key for two hours and verify a bounded public GET of the exact URL, without login, cookies or an Authorization header. Require HTTPS, MP3/WAV pathname suffix, matching stored byte length and audio signature. Signed query parameters preserve private storage while allowing the provider to fetch the one sample.
+- Failed URL checks return the reservation to uploading without calling MusicAPI. Uncertain provider responses stay reserved for reconciliation.
+- Show clean solo recording instructions: no music, second voice or reverb. Acoustic quality, voice likeness and human ownership cannot be certified from a format check.
 
-## Live evidence
+## Verification
 
-[Read-only diagnostic run](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/43761911905) succeeded. Render service identity was checked before configuration access. Only configuration-presence flags and redacted task metadata were reported; no secrets, owner emails, task IDs or sample URLs were printed.
+The managed coding environment failed to start. Changes are made on the existing branch through GitHub; focused hosted checks cover voice handler/sample validation, legacy failure recovery, consent and ownership, fresh replacement, duplicate submission, temporary URL GETs, disposable PostgreSQL locks and desktop/Android Chrome emulation. Provider and microphone responses in those checks are fixtures.
 
-- The configured MusicAPI key authenticates against its read-only credits endpoint; credits are available.
-- All required R2 settings are present. This does not certify a fresh real upload.
-- Production has four ready profiles, one failed profile and one uploading profile. Existing ready-task lookups returned personas; no new profile was trained.
-- The existing failed task still returns `didnt_say_verification_phrase`, without a persona. Its saved audit has `retry_allowed: false`.
-- Zero production writes, sample downloads, new training requests or music-generation requests were made. No paid provider or customer credits were spent.
+The branch-only read-only diagnostic retrieves up to three existing failed provider task IDs for the owner's support request and probes a small prefix of failed samples using the same production signer. It never logs a signed audio URL, credentials or the recording; it does not create/train a profile, generate music, modify production data or consume provider credits.
 
-## Provider capability and blocker
+Do **not** merge or deploy as fully repaired until the hosted checks pass and one specifically identified, owned and consented real recording creates a ready persona and successfully generates music. Real account/sample identity and consent have been requested; no other customer's sample is to be used as a substitute.
 
-The actual integration uses **MusicAPI.ai**, at `api.musicapi.ai`.
+The earlier read-only evidence remains [run 43761911905](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/43761911905): credentials authenticated, storage settings present, four ready profiles, one failed profile, one uploading profile. This is historical evidence, not a newly successful training test. The failed task contained no separate phrase to display.
 
-- [Create voice](https://docs.musicapi.ai/create-voice) supports an owned MP3/WAV via `POST /api/v1/sonic/create-voice`, then task polling for `persona_id`. Published training cost is 5 credits. Voice samples must be clear solo vocals, over ten seconds, with the documented supported duration/format bounds.
-- [Music instructions](https://docs.musicapi.ai/sonic-instructions) and the existing adapter use `persona_music` and the artist-owned ready `persona_id`. A generation costs 20 credits and returns two songs. The backend refuses a requested unavailable personal voice rather than silently generating a standard voice.
-- [FAQ](https://docs.musicapi.ai/faq) distinguishes own-audio voice creation from personas based on provider-generated song clips. The latter is not a substitute for a customer's recording. It also warns that own-audio personas may become unavailable.
-- The [API changelog](https://docs.musicapi.ai/doc-9411955) recognizes `didnt_say_verification_phrase` as a rejected input. The published create-voice contract does not document obtaining a challenge phrase or submitting a separate verification recording.
-
-**Required next step:** MusicAPI must supply/enable its supported voice-ownership verification workflow, or resolve the rejection on this route. The support request in [VOICE-VERIFICATION-FAILURE.md](VOICE-VERIFICATION-FAILURE.md) can be forwarded without credentials or a recording. No support message was sent automatically. Do not invent a phrase, bypass verification or reuse another provider's API contract. If MusicAPI cannot support the workflow, selecting another voice service and integrating its documented verification would be separate work.
-
-Once the supported contract is available, complete one explicitly consented, owned-sample training and personal-voice generation. Current published estimate: **25 provider credits** (5 training + 20 for two tracks), subject to account terms. This test has not been run because repeating the known rejection cannot establish success.
-
-## Focused checks
-
-- `node --test tests/voice-production.test.cjs tests/voice-diagnostic.test.cjs tests/voice-launch-inspection.test.cjs tests/studio-workflow.test.cjs`: four test files passed, covering consent, authorization, formats/size bounds, four-minute WAV integrity, storage failure, profile ownership, once-only training, terminal/uncertain failures and diagnostic redaction.
-- `LAE_DB_TESTS=true DATABASE_URL=<disposable-local-database> node tests/voice-failure-postgres.cjs`: five checks passed, including real row locks, concurrent polling, durable failure records, retained samples/ready profiles and unchanged song credits.
-- `LAE_CHROMIUM_PATH=/usr/bin/chromium node tests/voice-recorder-browser.cjs`: desktop and Android Chrome emulation passed. Simulated PCM input produced a complete four-minute 11.52 MB WAV and used the loopback upload fixture. New-recording and file-selection failure-message regressions passed, with no duplicate training requests or page errors.
-- `node scripts/test-sonic-handler.cjs`: 31 mocked adapter checks passed, including server-selected owned personas, unavailable personal-voice rejection, quotas/reservations and refunds.
-- `git diff --check`: passed.
-
-Provider training/generation and microphone input in automated tests are fixtures. Physical Android microphone behavior, a fresh real R2 upload, current end-to-end profile creation, successful personal-voice music generation and human voice likeness remain **not verified**. API authentication and older ready profiles do not prove the failing workflow is repaired.
-
-Production remains unchanged. Keep this work in a draft PR until the provider blocker is resolved and the real workflow passes.
+No current physical Android test, fresh successful real training or personal-voice generation has yet been demonstrated. No deployment or paid request is authorized automatically by a successful mock or read-only check. The owner's present instruction allows the controlled real test and subsequent deployment only after critical success; no new purchase or bulk paid tests are planned.
