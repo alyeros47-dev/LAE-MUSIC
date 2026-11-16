@@ -31,13 +31,7 @@ async function inspect({key=process.env.RENDER_API_KEY,artistHash=process.env.LA
   }
  }
  report.profiles.push(item);}
- const historical=(await db.query("SELECT DISTINCT resource AS task_id FROM platform_audit WHERE action='voice.training.failure' AND resource ~ '^[A-Za-z0-9_-]{8,128}
- await db.query('COMMIT');return report;
- }catch(error){if(db)await db.query('ROLLBACK').catch(()=>{});throw error;}finally{db?.release();await pool.end();}
-}
-module.exports={inspect};
-if(require.main===module)inspect().then(r=>console.log(JSON.stringify(r,null,2))).catch(()=>{console.error('Read-only voice configuration inspection could not complete. No voice sample or production data was changed.');process.exitCode=1;});
- AND resource NOT LIKE 'voice-%' ORDER BY resource LIMIT 3")).rows;
+ const historical=(await db.query("SELECT DISTINCT resource AS task_id FROM platform_audit WHERE action='voice.training.failure' AND resource ~ '^[A-Za-z0-9_-]{8,128}$' AND resource NOT LIKE 'voice-%' ORDER BY resource LIMIT 3")).rows;
  report.failed_task_ids=[...new Set(report.failed_task_ids.concat(historical.map(r=>r.task_id)))].slice(0,3);
  await db.query('COMMIT');return report;
  }catch(error){if(db)await db.query('ROLLBACK').catch(()=>{});throw error;}finally{db?.release();await pool.end();}
