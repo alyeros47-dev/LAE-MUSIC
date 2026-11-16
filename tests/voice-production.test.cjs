@@ -408,3 +408,10 @@ test('non-retryable invalid audio permits a new sample without permitting the fa
  const {result}=require('../lib/voice-provider-result');for(const message of ['voices_sound_different','Voice cloning failed']){const r=result({type:'failed',reason_code:'invalid_input',retriable:false,message});assert.equal(r.failure.can_replace_sample,true);assert.equal(r.failure.retry_allowed,false);assert.equal(r.failure.code,'voice_sample_rejected');}
  const moderation=result({type:'forbidden',reason_code:'moderation',retriable:false});assert(!moderation.failure.can_replace_sample);
 });
+
+test('an ambiguous provider error does not unlock another paid training request',async()=>{
+ const f=fixture(),bytes=await audio();f.trainingReply={type:'api_error',error:'Unexpected upstream response'};await withUpstream(f,async()=>{
+  const p=await f.request('/api/voice/upload','POST',{type:'audio/wav',bytes:bytes.length,consent:true});await f.request(p.data.url,'PUT',bytes,{'content-type':'audio/wav'});
+  const r=await f.request('/api/voice/train','POST',{});assert.equal(r.status,503);assert.equal(r.data.status,'verification_required');assert.equal((await f.request('/api/voice/train','POST',{})).status,409);assert.equal(f.training,1);
+ });
+});

@@ -403,7 +403,7 @@ module.exports = async function voice(req, res, p, ctx) {
         );
       }
       const immediate=voiceResult.result(j);
-      if(immediate.state==='failed'){
+      if(immediate.failure?.code==='voice_sample_rejected'){
         await pool.query("UPDATE artist_voice_profiles SET status='failed',updated_at=NOW() WHERE creator_id=$1 AND task_id=$2",[user.id,reference]);
         await voiceResult.recordFailure(pool,user.id,reference,immediate.failure);
         if(local)await pool.query("UPDATE review_voice_attempts SET status='failed' WHERE reference=$1 AND artist_id=$2",[reference,user.id]);
