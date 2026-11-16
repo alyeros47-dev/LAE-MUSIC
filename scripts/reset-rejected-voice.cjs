@@ -32,7 +32,7 @@ async function reset({key=process.env.RENDER_API_KEY,lookup,expectedTaskHash,onS
  onStage('service_identity');
  const service=await get('https://api.render.com/v1/services/'+SERVICE,key);if(service.id!==SERVICE||!serviceValid(service))throw Error('Cleanup refused: wrong service.');
  onStage('server_configuration');
- const env=inventory(await get('https://api.render.com/v1/services/'+SERVICE+'/env-vars?limit=100'));
+ const env=inventory(await get('https://api.render.com/v1/services/'+SERVICE+'/env-vars?limit=100',key));
  const store={account:env.R2_ACCOUNT_ID,key:env.R2_ACCESS_KEY_ID,secret:env.R2_SECRET_ACCESS_KEY,bucket:env.R2_BUCKET};if(Object.values(store).some(x=>!x)||!env.MUSICAPI_API_KEY)throw Error('Cleanup storage/provider configuration unavailable.');
  const pool=dbFactory({...require('../lib/database').databaseOptions(env),max:1});let db;
  try{
