@@ -33,3 +33,12 @@ test('provider rejection falls back with human contact and no paid retry',async(
 test('human request makes no provider request',async()=>{const h=harness(),a=await h.ask('I want a human representative');assert.equal(h.seen.length,0);assert(a.escalate);assert.equal(a.whatsapp_number,settings.whatsapp_number);});
 test('daily limit prevents provider spend',async()=>{const h=harness();for(let i=0;i<8;i++)h.pool.requests.set(crypto.randomUUID(),{state:'pending'});const a=await h.ask('How do I buy Premium?');assert.equal(h.seen.length,0);assert.equal(a.ai,false);assert(a.escalate);});
 test('nonowner admin cannot read or mutate support settings',async()=>{const h=harness();await assert.rejects(h.s.handle({method:'POST',adminPrincipal:{role:'finance'}},response(),new URL('http://test/api/platform/admin/support'),{admin(){},body:async()=>({}),json(){}}),e=>e.status===403);});
+test('public support and assets work without sign-in; cross-origin chat is rejected',async()=>{
+ const app=await require('./runtime.cjs').runtime({env:{SUPPORT_WHATSAPP_NUMBER:'+2347040728318'}});
+ const r=await app.request('/api/support/config');assert.equal(r.status,200);const publicConfig=r.json();assert.equal(publicConfig.whatsapp_number,'2347040728318');assert(!Object.hasOwn(publicConfig,'model'));assert(!Object.hasOwn(publicConfig,'daily_token_limit'));
+ for(const asset of ['/web/customer-support.js','/web/customer-support.css','/web/customer-support-admin.js'])assert.equal((await app.request(asset)).status,200);
+ const foreign=await app.request('/api/support/chat',{method:'POST',headers:{origin:'https://other.example','sec-fetch-site':'cross-site'},body:{message:'hello'}});assert.equal(foreign.status,403);
+ const own=await app.request('/api/support/chat',{method:'POST',headers:{origin:'http://lae.test'},body:{message:'How do I save offline?'}});assert.equal(own.status,200);assert.equal(own.json().ai,false);assert.equal(own.json().whatsapp_number,'2347040728318');
+ const admin=await app.request('/api/platform/admin/support');assert.equal(admin.status,401);
+});
+test('invented financial figures are rejected, approved prices are allowed',()=>{assert.throws(()=>support.checked({answer:'You earn 99% and get $500 per play.',article_ids:['commissions'],topic:'commissions'},kb));assert.doesNotThrow(()=>support.checked({answer:'Starter costs $6/year and includes 3 generations. Artist direct commission is 20%.',article_ids:['packages','commissions'],topic:'packages'},kb));});
