@@ -1,5 +1,5 @@
 {
-  "revision": "support-2026-11-16-v1",
+  "revision": "support-official-guidance-2026-11-16-v2",
   "model": "gpt-6.1-sol",
   "daily_request_limit": 120,
   "daily_token_limit": 600000,
