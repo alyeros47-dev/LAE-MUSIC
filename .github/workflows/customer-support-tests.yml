@@ -50,7 +50,7 @@ jobs:
       - run: npm ci
       - run: node tests/customer-support.test.cjs
       - run: node tests/customer-support-postgres.cjs
-      - run: node --test tests/platform.test.cjs tests/player.test.cjs tests/admin-auth.test.cjs
+      - run: node --test tests/platform.test.cjs tests/player.test.cjs tests/admin-security.test.cjs
       - run: npx playwright install --with-deps chromium
       - run: node tests/customer-support-browser.cjs
       - run: node tests/continuous-playback-browser.cjs
