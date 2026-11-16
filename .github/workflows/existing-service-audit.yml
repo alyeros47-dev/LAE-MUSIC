@@ -92,6 +92,10 @@ jobs:
         run: node scripts/accept-owned-voice.cjs --external-preflight
       - name: Ensure the real audio decoder is available
         run: |
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install --yes ffmpeg
+          fi
           command -v ffmpeg
           command -v ffprobe
       - run: npx playwright install --with-deps chromium
