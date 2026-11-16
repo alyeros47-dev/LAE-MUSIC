@@ -1,7 +1,7 @@
 // Independent from the music player and route rendering. No account data is read.
 const root=document.createElement('aside');
 root.id='customer-support';root.setAttribute('aria-label','LAE-MUSIC support');
-root.innerHTML=`<button class="support-launch button" aria-label="Open customer support" aria-expanded="false">Help</button>
+root.innerHTML=`<button class="support-launch button" aria-label="Open customer support" aria-expanded="false"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11a8 8 0 0 1-8 8H7l-5 3 1.5-6A8 8 0 0 1 3 5a8 8 0 0 1 10-2 8 8 0 0 1 8 8Z"/><path d="M7 10h10M7 14h6"/></svg> Help</button>
 <section class="support-window" role="dialog" aria-label="Customer support" hidden>
 <header><div><strong>LAE-MUSIC support</strong><small>AI guide · Human help available</small></div><button type="button" class="support-min" aria-label="Minimize support">−</button><button type="button" class="support-close" aria-label="Close support">×</button></header>
 <div class="support-messages" role="log" aria-live="polite" aria-label="Support conversation"></div>
