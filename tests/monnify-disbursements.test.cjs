@@ -39,3 +39,16 @@ test('signed payout webhooks identify the existing reference without confirming 
 test('malformed or unknown provider states do not invent a successful transfer',()=>{assert.throws(()=>normalized({reference:'unmatched'}));assert.equal(normalized({reference,amount:1,status:'UNRECOGNIZED'}).status,'unknown');});
 
 test('a success or reversal label without complete transfer identity stays unconfirmed',()=>{for(const status of ['SUCCESS','COMPLETED','REVERSED'])assert.equal(normalized({reference,amount:1,status}).status,'unknown');});
+test('funding reads the actual merchant settlement, not a payment-success flag or webhook claim',async()=>{
+ const paymentRef='laep-'+'c'.repeat(32),oid='10000000-0000-4000-8000-000000000001',qid='10000000-0000-4000-8000-000000000002',calls=[];let settlementState='SUCCESS';
+ const api=create({apiKey:'MK_TEST_fixture_key',secretKey:secret,contractCode:'1000000001',baseUrl:'https://sandbox.monnify.com',mode:'test',fetchImpl:async(url,o)=>{
+  calls.push({url,method:o.method});let d;
+  if(url.endsWith('/auth/login'))d={accessToken:'fixture-token',expiresIn:3600};
+  else if(url.includes('/transactions/query?'))d={paymentReference:paymentRef,transactionReference:'MNFY|fixture|001'};
+  else if(url.includes('/api/v2/transactions/'))d={paymentReference:paymentRef,transactionReference:'MNFY|fixture|001',currency:'NGN',amountPaid:'2700.00',paymentStatus:'PAID',metaData:{lae_order_id:oid,lae_quote_id:qid}};
+  else if(url.includes('/settlement-detail?'))d={transaction:{paymentReference:paymentRef,transactionReference:'MNFY|fixture|001',currency:'NGN',amountPaid:'2700.00',settlementAmount:'2690.00'},beneficiaries:[{beneficiaryType:'MERCHANT_CONTRACT',beneficiaryCode:'1000000001',beneficiaryIncome:'2690.00',settlementStatus:settlementState,settlementInformation:{settlementReference:'settlement-fixture',settledDate:'17/11/2026',settlementAmount:'2690.00'}}]};else throw Error('Unexpected endpoint');
+  return Response.json({requestSuccessful:true,responseCode:'0',responseBody:d});
+ }});
+ const proof=await api.settlement(paymentRef);assert.equal(proof.settled,true);assert.equal(proof.receivedMinor,269000);assert.equal(proof.paidMinor,270000);assert.equal(proof.orderId,oid);assert.equal(proof.currency,'NGN');assert(calls.every(c=>c.method==='GET'||c.url.endsWith('/auth/login')));
+ settlementState='PENDING';await assert.rejects(api.settlement(paymentRef),e=>e.status===409);
+});

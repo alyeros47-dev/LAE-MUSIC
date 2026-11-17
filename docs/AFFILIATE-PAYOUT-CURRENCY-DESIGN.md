@@ -1,8 +1,8 @@
 # Affiliate payouts: transaction-time currency design
 
-Status: proposed for owner review, 17 November 2026. **Not approved for production.**
+Status: owner approved future transaction-time commission currency, ₦5,000 NGN / $4 USD minimums, on-request withdrawals and the existing 3% charge. Real transfers remain disabled pending merchant setup and verified testing.
 
-The owner approved a $4 minimum and retained the existing 3% withdrawal charge. The owner did **not** approve converting USD commissions at the exchange rate on withdrawal day, and requires approval of the final design before financial deployment. No payout schedule has been approved.
+Historical USD balances and fixed-dollar milestone rewards must remain unchanged pending reconciliation and a separately approved funding/conversion rule. Existing subscription payments and automatic access are preserved.
 
 ## Recommended rule for future purchase commissions
 
@@ -45,14 +45,14 @@ The quarterly calculator must group each source currency and policy version sepa
 
 Historical USD liabilities retain their USD identity until that process is approved. This proposal does not claim that a new accounting label alone settles them.
 
-## The $4 minimum needs a currency interpretation
+## Approved minimums and schedule
 
-The approved amount is $4, but the new payable balance would be NGN. Two rules are possible; neither should be silently selected:
-
-- **Recommended for review:** assess the $4 threshold using each commission's original-purchase USD reference, while paying only its fixed NGN amount. Consumed references follow the original commission lots through partial withdrawals. Explain clearly that this is an original-rate threshold, not a promise that the payout is worth $4 at today's market rate.
-- Alternatively, approve a fixed NGN minimum for the NGN wallet. The owner must supply that amount.
-
-The current live code still has only a technical minimum of one minor unit ($0.01 or ₦0.01). The development draft records the owner's $4 decision, but it is not activated. No new minimum has been applied to existing live requests.
+- NGN affiliate withdrawals: ₦5,000 minimum (500,000 kobo).
+- USD affiliate withdrawals: $4 minimum (400 cents).
+- The existing 3% withdrawal charge is unchanged.
+- Customers may request verified available commissions at any time. Financial administrators review the request; a review approval is not a bank payment.
+- Currencies stay separate; there is no withdrawal-day FX calculation or cross-currency threshold conversion.
+- Monnify's NGN route cannot send a USD withdrawal. An unsupported-currency request cannot silently become a Naira transfer.
 
 ## Fixed-dollar creator rewards
 
@@ -112,19 +112,19 @@ The account's Monnify dashboard must confirm approval of third-party disbursemen
 ## What exists in development
 
 - A separate, default-disabled Monnify disbursement adapter supports bank listing/name enquiry, wallet balance, transfer initiation, OTP authorization, status retrieval and signed payout-event identification. It does not alter the collection adapter.
-- **19 mocked adapter tests passed**; **9 existing Monnify collection tests passed**. These are not real sandbox payout proof.
-- The initial USD/current-rate schema and funding drafts were removed from the executable migrations/source paths and preserved outside the repository. They will not be applied during startup or deployment. The replacement original-currency ledger design must be approved and tested first.
-- No payout endpoint, funded-balance release or live-send switch has been activated. No financial deployment occurred.
+- The mocked adapter and existing collection checks run in the payout workflows. These are not real sandbox payout proof.
+- The initial USD/current-rate schema and funding drafts were removed from the executable migrations/source paths and preserved outside the repository. They will not be applied during startup or deployment. The approved replacement is migration 040 and its original-currency withdrawal checks.
+- Live sending remains disabled. Database-connected endpoints and workers must pass the financial and regression checks before deployment.
 
-## Decisions still needed
+## External activation and separate decisions still needed
 
-1. Approve the future transaction-currency obligation design and its integer rounding behavior.
-2. Approve how the $4 minimum is interpreted for fixed NGN balances, or supply a fixed NGN minimum.
-3. Confirm payout schedule. Keep administrator review unless an automatic schedule is separately approved.
-4. Approve the historical USD migration process before any conversion, and a funding/currency rule for fixed-dollar creator milestones.
-5. Confirm Monnify disbursement activation and provide the missing wallet/sandbox configuration securely.
+1. Monnify must confirm third-party disbursement approval and authorized server IPs.
+2. Configure and fund the actual Monnify payout wallet; configure dedicated sandbox credentials/wallet securely.
+3. Pass a real supported sandbox payout and then an explicitly controlled live payout before enabling real transfers. Mocked protocol tests are not that proof.
+4. Approve any historical USD migration before conversion. No automatic migration is implemented.
+5. Approve a separate funding/conversion rule for creator milestones and any international/USD payout provider.
 
-**Real affiliate payouts are not ready.** No migration, transfer or deployment should be represented as approved while these decisions and real sandbox verification remain outstanding.
+**Real-money transfers remain disabled.** The reviewed implementation records future original-currency commissions, verifies cash settlement/funding, reserves only available funds, handles administrator review and provider outcomes, and separates historical USD references from withdrawable balances. Actual release readiness is reported in PR checks and the deployment report.
 
 ## Official provider references
 

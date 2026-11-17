@@ -1,0 +1,24 @@
+'use strict';
+const assert=require('node:assert/strict'),http=require('node:http');
+const {runtime}=require('./runtime.cjs'),{launchBrowser}=require('./browser-engine.cjs');
+(async()=>{
+ const app=await runtime(),browser=await launchBrowser(),server=http.createServer(async(req,res)=>{const r=await app.request(req.url);res.writeHead(r.status,r.headers);res.end(r.body);});await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
+ try{for(const width of [390,1440]){
+  const context=await browser.newContext({viewport:{width,height:1000},serviceWorkers:'block',...(width<700?{isMobile:true,hasTouch:true}:{})}),page=await context.newPage(),writes=[],errors=[];let requests=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/api/**',async route=>{const req=route.request(),p=new URL(req.url()).pathname,send=x=>route.fulfill({json:x});if(req.method()==='POST')writes.push({path:p,body:req.postDataJSON()});
+   if(p==='/api/platform/session')return send({artist:{id:7,display_name:'Payout fixture',email:'fixture@payout.invalid'},listener:null,admin:false});
+   if(p==='/api/platform/affiliate-payouts')return send({minimums:{NGN:500000,USD:400},withdrawal_fee_percent:3,schedule:'on_request',admin_review_required:true,bank_verification_available:true,live_transfers_enabled:false,usd_transfers_supported:false,notice:'Bank transfers await merchant approval and a verified payout test.',balances:{NGN:{pending_minor:10000,available_minor:600000,withdrawable_minor:600000,reserved_minor:requests.length?500000:0},USD:{pending_minor:0,available_minor:0,withdrawable_minor:0,reserved_minor:0}},requests});
+   if(p==='/api/platform/affiliate-payouts/banks')return send({banks:[{code:'058',name:'Fixture Bank'}]});
+   if(p==='/api/platform/affiliate-payouts/bank')return send({id:'10000000-0000-4000-8000-000000000001',account_name:'Fixture Customer',bank_code:'058',last_four:'6789'});
+   if(p==='/api/platform/affiliate-payouts/request'){const b=req.postDataJSON();assert.equal(b.currency,'NGN');assert.equal(b.amount_minor,500000);assert.equal(b.account_confirmed,true);assert.equal(b.bank_id,'10000000-0000-4000-8000-000000000001');requests=[{id:'1',currency:'NGN',gross_minor:500000,fee_minor:15000,net_minor:485000,state:'awaiting_review',reference:'isolated-withdrawal',created_at:new Date().toISOString()}];return send({id:'1',state:'awaiting_review',funds_sent:false});}
+   if(p==='/api/support/config')return send({available:false,suggestions:[]});
+   if(p==='/api/platform/social/providers')return send({providers:[]});
+   const r=await app.request(req.url().slice(origin.length));return route.fulfill({status:r.status,headers:r.headers,body:r.body});
+  });
+  await page.goto(origin+'/partners?tab=finance');await page.getByRole('heading',{name:'Your commissions & withdrawals'}).waitFor();assert(await page.getByText('Minimum ₦5,000 or $4. Withdrawal charge: 3%.',{exact:true}).isVisible());
+  await page.locator('#affiliate-withdraw [name=amount]').fill('5000');await page.locator('#affiliate-withdraw [name=confirmed]').check();await page.locator('#affiliate-withdraw button').click();await page.getByText('Check your bank account name first.',{exact:true}).waitFor();assert.equal(writes.filter(x=>x.path.endsWith('/request')).length,0);
+  await page.locator('#affiliate-bank [name=account_number]').fill('0123456789');await page.getByRole('button',{name:'Check account name',exact:true}).click();await page.getByText('Fixture Customer · account ending 6789. Check this name before requesting a withdrawal.',{exact:true}).waitFor();
+  assert.equal(await page.locator('#affiliate-withdraw [name=confirmed]').isChecked(),false);await page.locator('#affiliate-withdraw [name=confirmed]').check();const preview=await page.locator('#affiliate-withdraw-preview').textContent();assert(preview.includes('150.00')&&preview.includes('4,850.00'));await page.getByRole('button',{name:'Request review',exact:true}).click();await page.getByRole('cell',{name:'Awaiting review',exact:true}).waitFor();
+  assert.equal(writes.filter(x=>x.path.endsWith('/request')).length,1);assert(!writes.some(x=>x.path.endsWith('/submit')));assert(!writes.some(x=>x.path.includes('checkout')||x.path.includes('generate')));assert.deepEqual(errors,[]);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await context.close();console.log('PASS '+width+'px: verified bank name, exact original-currency amount/fee, request review, no bank transfer or unrelated purchase.');
+ }}finally{await browser.close();await new Promise(r=>server.close(r));}
+})().catch(e=>{console.error(e);process.exitCode=1;});

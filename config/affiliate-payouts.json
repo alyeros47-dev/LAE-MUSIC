@@ -4,8 +4,12 @@
   "merchant_disbursements_confirmed": false,
   "sandbox_verified": false,
   "minimum_usd_minor": 400,
-  "schedule": null,
+  "schedule": "on_request",
   "usd_ngn_conversion_approved": false,
   "admin_review_required": true,
-  "currency_policy_status": "awaiting_approval_of_transaction_time_currency_design"
+  "currency_policy_status": "approved_future_transaction_currency",
+  "minimum_ngn_minor": 500000,
+  "future_native_commissions": true,
+  "auto_funding_enabled": true,
+  "controlled_live_test_verified": false
 }
