@@ -30,7 +30,7 @@ async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch}={}){
     if(found.ok&&typeof found.data?.transactionReference==='string'){
      const settlement=await query('/api/v1/settlement-detail?transactionReference='+encodeURIComponent(found.data.transactionReference),bearer);
      item.existing_settlement_read_verified=settlement.ok;item.settlement_http_status=settlement.http;
-     if(settlement.ok){const d=settlement.data;item.settlement_response_shape=Array.isArray(d)?{array:true,keys:Object.keys(d[0]||{})}:{array:false,keys:Object.keys(d||{}),nested:Object.fromEntries(Object.entries(d||{}).filter(([,v])=>v&&typeof v==='object').map(([k,v])=>[k,Object.keys(Array.isArray(v)?v[0]||{}:v)]))};}
+     if(settlement.ok){const d=settlement.data;item.settlement_states=Array.isArray(d?.beneficiaries)?d.beneficiaries.map(b=>({type:/^[A-Z_]{1,30}$/.test(b.beneficiaryType||'')?b.beneficiaryType:'unknown',status:/^[A-Z_]{1,30}$/.test(b.settlementStatus||'')?b.settlementStatus:'unknown',information_keys:Object.keys(b.settlementInformation||{})})):[];item.settlement_response_shape=Array.isArray(d)?{array:true,keys:Object.keys(d[0]||{})}:{array:false,keys:Object.keys(d||{}),nested:Object.fromEntries(Object.entries(d||{}).filter(([,v])=>v&&typeof v==='object').map(([k,v])=>[k,Object.keys(Array.isArray(v)?v[0]||{}:v)]))};}
     }
    }
   }catch{item.read_check_incomplete=true;}
