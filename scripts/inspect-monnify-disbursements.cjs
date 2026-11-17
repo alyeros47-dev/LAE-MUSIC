@@ -1,0 +1,32 @@
+'use strict';
+// Read-only merchant readiness. Login obtains a token; every merchant operation
+// below is GET. Never initiates, authorizes, refunds or reverses a transfer.
+const {serviceValid,inventory}=require('./audit-existing-service.cjs');
+const SERVICE='srv-db84s7m89jmc73c7l9rg';
+async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch}={}){
+ if(!key)throw Error('Render read access is unavailable.');
+ async function render(suffix){const r=await fetcher('https://api.render.com/v1/services/'+SERVICE+suffix,{headers:{Authorization:'Bearer '+key},redirect:'error',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Render read unavailable');return r.json();}
+ const raw=await render(''),service=raw.service||raw;
+ if(service.id!==SERVICE||!serviceValid(service))throw Error('Unexpected service');
+ const env=inventory(await render('/env-vars?limit=100'));
+ const report={production_writes:0,transfer_requests:0,merchant_authorization:'requires_provider_confirmation',live:{},sandbox:{},payout_minimum_configured:!!env.AFFILIATE_MIN_WITHDRAWAL_USD_MINOR,payout_schedule_configured:!!env.AFFILIATE_PAYOUT_SCHEDULE};
+ for(const mode of ['live','sandbox']){
+  const prefix=mode==='live'?'MONNIFY_':'MONNIFY_SANDBOX_',base=mode==='live'?'https://api.monnify.com':'https://sandbox.monnify.com';
+  const apiKey=env[prefix+'API_KEY'],secret=env[prefix+'SECRET_KEY'],contract=env[prefix+'CONTRACT_CODE'],wallet=env[prefix+'DISBURSEMENT_SOURCE_ACCOUNT']||env[prefix+'WALLET_ACCOUNT_NUMBER'];
+  const item=report[mode];item.credentials_configured=!!(apiKey&&secret&&contract);item.wallet_configured=/^\d{10}$/.test(wallet||'');
+  if(!item.credentials_configured)continue;
+  if(mode==='live'&&/^MK_TEST_/i.test(apiKey)||mode==='sandbox'&&!/^MK_TEST_/i.test(apiKey)){item.credential_mode_valid=false;continue;}
+  item.credential_mode_valid=true;
+  async function query(path,auth,method='GET'){const r=await fetcher(base+path,{method,headers:{Authorization:auth,Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(15000)});let body;try{body=await r.json();}catch{return {ok:false,http:r.status};}return {ok:r.ok&&body?.requestSuccessful===true&&String(body?.responseCode)==='0',http:r.status,data:body?.responseBody};}
+  try{
+   const auth=await query('/api/v1/auth/login','Basic '+Buffer.from(apiKey+':'+secret).toString('base64'),'POST');item.authentication_verified=auth.ok&&typeof auth.data?.accessToken==='string';if(!item.authentication_verified)continue;
+   const bearer='Bearer '+auth.data.accessToken;
+   const listing=await query('/api/v2/disbursements/single/transactions?pageNo=0&pageSize=1',bearer);item.transfer_listing_accessible=listing.ok;item.listing_http_status=listing.http;
+   if(item.wallet_configured){const balance=await query('/api/v2/disbursements/wallet-balance?accountNumber='+encodeURIComponent(wallet),bearer);item.wallet_read_verified=balance.ok;item.wallet_http_status=balance.http;item.wallet_has_funds=balance.ok&&Number(balance.data?.availableBalance)>0;}
+   item.live_transfer_permission_proven=false;
+  }catch{item.read_check_incomplete=true;}
+ }
+ return report;
+}
+module.exports={inspect};
+if(require.main===module)inspect().then(x=>console.log(JSON.stringify(x))).catch(()=>{console.error('Read-only merchant inspection could not complete. No money movement was attempted.');process.exitCode=1;});
