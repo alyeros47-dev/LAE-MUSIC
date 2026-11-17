@@ -24,6 +24,15 @@ async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch}={}){
    const listing=await query('/api/v2/disbursements/single/transactions?pageNo=0&pageSize=1',bearer);item.transfer_listing_accessible=listing.ok;item.listing_http_status=listing.http;
    if(item.wallet_configured){const balance=await query('/api/v2/disbursements/wallet-balance?accountNumber='+encodeURIComponent(wallet),bearer);item.wallet_read_verified=balance.ok;item.wallet_http_status=balance.http;item.wallet_has_funds=balance.ok&&Number(balance.data?.availableBalance)>0;}
    item.live_transfer_permission_proven=false;
+   if(mode==='live'){
+    const ref=require('../config/monnify-payments.json').successful_payment_reference;
+    const found=await query('/api/v1/merchant/transactions/query?paymentReference='+encodeURIComponent(ref),bearer);
+    if(found.ok&&typeof found.data?.transactionReference==='string'){
+     const settlement=await query('/api/v1/settlement-detail?transactionReference='+encodeURIComponent(found.data.transactionReference),bearer);
+     item.existing_settlement_read_verified=settlement.ok;item.settlement_http_status=settlement.http;
+     if(settlement.ok){const d=settlement.data;item.settlement_response_shape=Array.isArray(d)?{array:true,keys:Object.keys(d[0]||{})}:{array:false,keys:Object.keys(d||{}),nested:Object.fromEntries(Object.entries(d||{}).filter(([,v])=>v&&typeof v==='object').map(([k,v])=>[k,Object.keys(Array.isArray(v)?v[0]||{}:v)]))};}
+    }
+   }
   }catch{item.read_check_incomplete=true;}
  }
  return report;
