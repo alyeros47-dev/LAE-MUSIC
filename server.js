@@ -119,7 +119,7 @@ function create({pool,me,authAdmin}){
  if(!key)return send(res,400,{error:'No cover expected for this song'}),true;
  const length=Number(req.headers['content-length']);
  if(!Number.isSafeInteger(length)||length<1||length>max||(kind==='audio'&&length!==t.audio_bytes))return send(res,413,{error:'File size does not match upload details'}),true;
- if(req.headers['content-type']!==expected)return send(res,415,{error:'File format does not match upload details'}),true;
+ if(kind==='audio'?!require('./lib/upload-resume').sameAudioFormat(req.headers['content-type'],expected):req.headers['content-type']!==expected)return send(res,415,{error:'File format does not match upload details'}),true;
  const st=getStore();if(!st)return send(res,503,{error:'Cloudflare storage not configured'}),true;
  const uploadBody=kind==='audio'?await require('./lib/music-upload-codes').verifiedUploadBody({pool,artistId:u.id,trackId:id,input:req,length}):req;
  let upstream;

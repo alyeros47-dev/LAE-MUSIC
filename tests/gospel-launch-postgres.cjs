@@ -78,7 +78,7 @@ const codes=require('../lib/music-upload-codes');
   assert.equal((await pool.query('SELECT COUNT(*)::int n FROM music_tracks WHERE creator_id=$1 AND audio_key=$2',[a,data.audioKey])).rows[0].n,1);checks++;
   await assert.rejects(resume.checkCode(pool,String(BigInt(a)+99999n),token.uploadCode),e=>e.status===404);checks++;
   await assert.rejects(start({...data,audioBytes:audio.length+1}),e=>e.status===409);assert.equal((await resume.checkCode(pool,a,token.uploadCode)).resumable,true);checks++;
-  await assert.rejects(start({...data,coverMime:'image/jpeg'}),e=>e.status===409);checks++;
+  const changedCover={...data,coverMime:'image/jpeg',coverKey:'isolated/resume-'+crypto.randomUUID()+'.jpg'};assert.equal(String((await start(changedCover)).id),String(id));const draft=(await pool.query('SELECT audio_key,audio_bytes,cover_mime,cover_key FROM music_tracks WHERE id=$1',[id])).rows[0];assert.equal(draft.audio_key,data.audioKey);assert.equal(Number(draft.audio_bytes),audio.length);assert.equal(draft.cover_mime,'image/jpeg');assert.equal(draft.cover_key,changedCover.coverKey);checks++;
   await assert.rejects(codes.verifiedUploadBody({pool,artistId:a,trackId:id,length:audio.length,input:require('node:stream').Readable.from([Buffer.alloc(audio.length,9)])}),e=>e.status===400);checks++;
   const beforeUsage=(await pool.query('SELECT COUNT(*)::int n FROM artist_studio_usage WHERE artist_id=$1',[a])).rows[0].n;
   const quota=require('../lib/plans').starter.uploads,current=(await pool.query("SELECT COUNT(*)::int n FROM music_tracks WHERE creator_id=$1 AND status IN ('published','pending_upload')",[a])).rows[0].n;
