@@ -1,0 +1,11 @@
+{
+  "revision": "affiliate-payouts-prelaunch-2026-11-17",
+  "enabled": false,
+  "merchant_disbursements_confirmed": false,
+  "sandbox_verified": false,
+  "minimum_usd_minor": 400,
+  "schedule": null,
+  "usd_ngn_conversion_approved": false,
+  "admin_review_required": true,
+  "currency_policy_status": "awaiting_approval_of_transaction_time_currency_design"
+}

@@ -1,0 +1,19 @@
+name: Monnify payout adapter checks
+on:
+  pull_request:
+    paths: ['lib/payments/monnify-disbursements.js', 'config/affiliate-payouts.json', 'tests/monnify-disbursements.test.cjs', '.github/workflows/monnify-payout-tests.yml']
+permissions:
+  contents: read
+jobs:
+  adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Isolated provider protocol and unchanged collection; no real transfers
+        run: node tests/monnify-disbursements.test.cjs && node tests/monnify.test.cjs
