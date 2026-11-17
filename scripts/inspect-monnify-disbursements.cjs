@@ -9,7 +9,7 @@ async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch}={}){
  const raw=await render(''),service=raw.service||raw;
  if(service.id!==SERVICE||!serviceValid(service))throw Error('Unexpected service');
  const env=inventory(await render('/env-vars?limit=100'));
- const report={production_writes:0,transfer_requests:0,merchant_authorization:'requires_provider_confirmation',live:{},sandbox:{},payout_minimum_configured:!!env.AFFILIATE_MIN_WITHDRAWAL_USD_MINOR,payout_schedule_configured:!!env.AFFILIATE_PAYOUT_SCHEDULE};
+ const report={production_writes:0,transfer_requests:0,merchant_authorization:'requires_provider_confirmation',live:{},sandbox:{},approved_minimums:require('../config/affiliate-payouts.json').minimum_ngn_minor===500000&&require('../config/affiliate-payouts.json').minimum_usd_minor===400,payout_schedule:require('../config/affiliate-payouts.json').schedule};
  for(const mode of ['live','sandbox']){
   const prefix=mode==='live'?'MONNIFY_':'MONNIFY_SANDBOX_',base=mode==='live'?'https://api.monnify.com':'https://sandbox.monnify.com';
   const apiKey=env[prefix+'API_KEY'],secret=env[prefix+'SECRET_KEY'],contract=env[prefix+'CONTRACT_CODE'],wallet=env[prefix+'DISBURSEMENT_SOURCE_ACCOUNT']||env[prefix+'WALLET_ACCOUNT_NUMBER'];
@@ -30,6 +30,7 @@ async function inspect({key=process.env.RENDER_API_KEY,fetcher=fetch}={}){
     if(found.ok&&typeof found.data?.transactionReference==='string'){
      const settlement=await query('/api/v1/settlement-detail?transactionReference='+encodeURIComponent(found.data.transactionReference),bearer);
      item.existing_settlement_read_verified=settlement.ok;item.settlement_http_status=settlement.http;
+     try{const proof=await require('../lib/payments/monnify-disbursements').create({apiKey,secretKey:secret,contractCode:contract,baseUrl:base,mode:'live',fetchImpl:fetcher}).settlement(ref);item.merchant_settlement_binding_verified=proof.settled===true;}catch{item.merchant_settlement_binding_verified=false;}
      if(settlement.ok){const d=settlement.data;item.settlement_states=Array.isArray(d?.beneficiaries)?d.beneficiaries.map(b=>({type:/^[A-Z_]{1,30}$/.test(b.beneficiaryType||'')?b.beneficiaryType:'unknown',status:/^[A-Z_]{1,30}$/.test(b.settlementStatus||'')?b.settlementStatus:'unknown',information_keys:Object.keys(b.settlementInformation||{})})):[];item.settlement_response_shape=Array.isArray(d)?{array:true,keys:Object.keys(d[0]||{})}:{array:false,keys:Object.keys(d||{}),nested:Object.fromEntries(Object.entries(d||{}).filter(([,v])=>v&&typeof v==='object').map(([k,v])=>[k,Object.keys(Array.isArray(v)?v[0]||{}:v)]))};}
     }
    }
