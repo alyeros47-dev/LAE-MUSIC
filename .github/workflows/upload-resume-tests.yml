@@ -1,0 +1,34 @@
+name: Focused publishing resume checks
+on:
+  pull_request:
+    paths: ['server.js', 'lib/upload-resume.js', 'lib/music-upload-codes.js', 'lib/upload-publication.js', 'tests/upload-resume*', 'tests/controlled-publishing-postgres.cjs', 'tests/gospel-launch-postgres.cjs', '.github/workflows/upload-resume-tests.yml']
+permissions:
+  contents: read
+jobs:
+  publishing-resume:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: lae_ci
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: lae_music_ci
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U lae_ci -d lae_music_ci" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      LAE_DB_TESTS: 'true'
+      DATABASE_URL: postgres://lae_ci:local-test-only@127.0.0.1:5432/lae_music_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --check server.js
+      - run: node tests/upload-resume.test.cjs && node tests/music-routes.test.cjs && node tests/uploads.test.cjs && node tests/controlled-publishing.test.cjs
+      - run: node tests/gospel-launch-postgres.cjs && node tests/controlled-publishing-postgres.cjs
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/upload-resume-browser.cjs

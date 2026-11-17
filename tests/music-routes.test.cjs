@@ -33,7 +33,7 @@ test('reserving an interrupted upload verifies existing audio before skipping it
    if(sql.startsWith('SELECT result FROM platform_requests')||sql.startsWith('SELECT r.result FROM platform_requests'))return row({result:{generation_id:'19',task_id:'task_resume_123',clip_id:'clip_resume_123',audio_sha256:crypto.createHash('sha256').update(audio).digest('hex')}});
    if(sql.startsWith('SELECT task_id FROM sonic_test_tasks'))return row({task_id:args[0]});
    if(sql.startsWith('SELECT 1 FROM artist_test_generations'))return {rowCount:0,rows:[]};
-   if(sql.startsWith('SELECT id,status,audio_mime'))return row({id:12,status:'pending_upload',audio_mime:'audio/mpeg',audio_bytes:audio.length,cover_mime:'image/png'});
+   if(sql.startsWith('SELECT id,status,audio_mime'))return row({id:12,status:'pending_upload',audio_mime:'audio/mpeg',audio_bytes:audio.length,audio_key:'music/7/original.mp3',cover_mime:'image/png'});
    if(sql.startsWith('SELECT audio_key,audio_bytes'))return row({audio_key:'music/7/original.mp3',audio_bytes:audio.length,audio_mime:'audio/mpeg'});
    if(sql.startsWith('SELECT id FROM generation_records'))return row({id:19});
    throw Error('Unexpected resume query: '+sql);
