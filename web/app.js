@@ -528,6 +528,7 @@ async function partnerPracticePage(view){
  bindForm($('partner-practice-form'),async b=>{await api('/api/platform/partners/practice','POST',{plan:b.plan,reference:b.reference,confirm_demo:b.confirm_demo==='on'});toast('Demo transaction recorded. Real balances are unchanged.');route();});
 }
 async function partners(view,url) {
+  if(url.searchParams.get('tab')==='finance'&&url.searchParams.get('records')==='historical'&&session.artist)return financePage(view,heading('YOUR EARNED FUNDS','Your earlier earnings records','Existing balances remain separate. No automatic currency conversion.'));
   if(url.searchParams.get('tab')==='finance'&&session.artist)return affiliateFinancePage(view,{api,e,money,heading,notice,table,date,bindForm,keyFor,clearKey,toast,route,buttonLink});
   if(!await affiliateEntry(view,{api,session,heading,notice,buttonLink,bindForm,refreshSession,navigate,e,date,keyFor,clearKey}))return;
   if(visibleFeatures.affiliate_demo&&url.searchParams.get('mode')==='demo'&&session.artist){if(url.searchParams.get('tab')==='link-sales')await referralDemoReport(view,{api,e,money,heading,notice,buttonLink,table});else if(url.searchParams.get('tab')==='records')await partnerPracticePage(view);else await partnerDemoPage(view,{api,e,money,heading,notice,table,buttonLink,bindForm});return;}

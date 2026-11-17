@@ -101,7 +101,7 @@ Read-only GitHub workflow runs [44144558381](https://github.com/alyeros47-dev/LA
 
 - Existing live credentials authenticate successfully.
 - Authenticated transfer-history retrieval succeeds.
-- An existing payment's settlement-detail endpoint is readable. Its response has transaction and beneficiary settlement fields. No customer information, secret or account number was printed.
+- An existing payment's settlement-detail endpoint is readable. Its response has transaction and beneficiary settlement fields. The complete adapter proof rejected the settled amount evidence for this receipt; it did not release funds. Reconcile the amount fields with Monnify before relying on this receipt for funding. No customer information, secret or account number was printed. Read-only run: [44194219293](https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/44194219293).
 - Application payout source wallet is **not configured** under the inspected payout wallet variables.
 - Dedicated sandbox credentials/wallet are **not configured**.
 - No merchant setting was changed, no production record was updated, and no transfer, refund or authorization request was sent.
@@ -114,12 +114,12 @@ The account's Monnify dashboard must confirm approval of third-party disbursemen
 - A separate, default-disabled Monnify disbursement adapter supports bank listing/name enquiry, wallet balance, transfer initiation, OTP authorization, status retrieval and signed payout-event identification. It does not alter the collection adapter.
 - The mocked adapter and existing collection checks run in the payout workflows. These are not real sandbox payout proof.
 - The initial USD/current-rate schema and funding drafts were removed from the executable migrations/source paths and preserved outside the repository. They will not be applied during startup or deployment. The approved replacement is migration 040 and its original-currency withdrawal checks.
-- Live sending remains disabled. Database-connected endpoints and workers must pass the financial and regression checks before deployment.
+- Live sending remains disabled. Database-connected endpoints and workers are covered by the PostgreSQL lifecycle checks and focused regressions. Final release results are recorded in PR #58; mocked provider responses do not prove bank acceptance.
 
 ## External activation and separate decisions still needed
 
 1. Monnify must confirm third-party disbursement approval and authorized server IPs.
-2. Configure and fund the actual Monnify payout wallet; configure dedicated sandbox credentials/wallet securely.
+2. Configure and fund the actual Monnify payout wallet; configure dedicated sandbox credentials/wallet securely. Resolve the existing settlement amount-evidence discrepancy without guessing an amount or weakening the funding check.
 3. Pass a real supported sandbox payout and then an explicitly controlled live payout before enabling real transfers. Mocked protocol tests are not that proof.
 4. Approve any historical USD migration before conversion. No automatic migration is implemented.
 5. Approve a separate funding/conversion rule for creator milestones and any international/USD payout provider.
@@ -140,3 +140,5 @@ The additive migration leaves existing records and customer checkout intact. Rea
 If a production problem is found, preserve migration 040 and its checksum, tables and journals. A schema-aware rollback can disable `future_native_commissions` and `auto_funding_enabled` together with all transfer flags. Purchase outbox records remain pending for recovery, and already submitted payouts must continue read-only reconciliation. Do not roll back or delete financial records, or deploy an older binary that rejects migration 040 as unknown.
 
 Before activation, set the approved source wallet account in Render, fund it, obtain Monnify third-party transfer and static outbound-IP authorization, confirm merchant OTP delivery, then use dedicated sandbox credentials for a controlled isolated test. Next obtain authorization for an exact live amount and recipient. Confirm that bank receipt against the provider transfer status before enabling public sending. No automatic change to payment collection or subscription approval is involved.
+
+Earlier earnings remain accessible from the affiliate withdrawal page through “Other earnings and historical records” (`/partners?tab=finance&records=historical`). This opens the preserved ledger rather than returning to the new wallet.
