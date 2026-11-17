@@ -58,6 +58,7 @@ test('original-currency commissions and database-connected withdrawals',{skip:pr
    const a=await artist({recipient:leader,trackingFailure:true});assert.equal(a.earning,undefined);assert.equal((await pool.query('SELECT status FROM commerce_orders WHERE id=$1',[a.id])).rows[0].status,'paid');assert.equal((await pool.query('SELECT state FROM affiliate_native_outbox WHERE order_id=$1',[a.id])).rows[0].state,'pending');await native.retryPending(pool);await native.retryPending(pool);assert.equal((await pool.query('SELECT 1 FROM affiliate_native_earnings WHERE order_id=$1',[a.id])).rowCount,1);assert.equal((await pool.query('SELECT state FROM affiliate_native_outbox WHERE order_id=$1',[a.id])).rows[0].state,'complete');
   });
   await t.test('Premium 10% team reserves retain original NGN currency and finalize only after their existing quarter',async()=>{
+   await require('../lib/premium-pricing').recordApproval(pool,require('../lib/premium-pricing').catalog());
    const quarter=require('../lib/partner-policy').periodForSale(new Date()),end=new Date(Date.parse(require('../lib/partner-policy').period(quarter).end)+1000);
    for(let i=0;i<2;i++)await transaction(pool,async db=>{
     const oid=key(),qid=key(),aid=key(),ref='laep-'+key().replaceAll('-',''),fx=key(),l=(await db.query("INSERT INTO listeners(display_name,email,password_salt,password_hash) VALUES('Premium fixture',$1,'fixture','fixture') RETURNING id",['team-'+(++serial)+'@native.invalid'])).rows[0].id;
