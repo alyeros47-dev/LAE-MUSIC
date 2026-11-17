@@ -4,7 +4,7 @@ Status: owner approved future transaction-time commission currency, ₦5,000 NGN
 
 Historical USD balances and fixed-dollar milestone rewards must remain unchanged pending reconciliation and a separately approved funding/conversion rule. Existing subscription payments and automatic access are preserved.
 
-## Recommended rule for future purchase commissions
+## Approved rule for future purchase commissions
 
 At the existing server-verified payment event, keep the actual payment currency and charge amount, the original USD product price, the immutable checkout conversion evidence and the existing referral/policy snapshot.
 
@@ -58,11 +58,11 @@ Historical USD liabilities retain their USD identity until that process is appro
 
 The $900 / $9,000 / $90,000 milestones are fixed-dollar rewards, not percentages of one payment. They cannot inherit one purchase's exchange rate automatically because each award contains many creators and payment dates.
 
-Preserve the promised USD reward and keep it pending until a separately approved, verified funding and currency-lock rule exists. One possible future rule would fix a recipient-currency amount when the award is earned, but the owner must approve that rule and funding source before implementation. Do not reduce a milestone or silently convert it using an arbitrary rate.
+Preserve the promised USD reward and keep it pending until a separately approved, verified funding and currency-lock rule exists. Recommended separate rule: fund the exact USD award from a designated LAE-MUSIC reward reserve and pay through an approved USD route. If NGN payment is preferred, obtain explicit approval and the recipient’s agreement for one documented conversion at award funding, prefund that exact NGN amount and append a unique linked journal that prevents the USD award also being spent. Do not recalculate at withdrawal, use the artist royalty pool, or activate this proposal without approval. Do not reduce a milestone or silently convert it using an arbitrary rate.
 
 ## Nigerian and international affiliates
 
-- Commission currency follows the verified payment, not the affiliate's nationality. A Monnify NGN purchase creates an NGN commission under the proposed rule.
+- Commission currency follows the verified payment, not the affiliate's nationality. A Monnify NGN purchase creates an NGN commission under the approved rule.
 - A recipient using a supported Nigerian bank account can use the future NGN disbursement route after name verification and the required funding/review checks.
 - Monnify's current integration does not provide USD or foreign-bank disbursement. International affiliates without an eligible Nigerian account must retain separate balances until an appropriate international payout route and its terms are approved.
 - If another gateway later genuinely receives USD or another currency, retain that original currency in a separate wallet. Do not assume it can be sent through Monnify's NGN transfer API.
@@ -132,3 +132,11 @@ The account's Monnify dashboard must confirm approval of third-party disbursemen
 - [Going live](https://developers.monnify.com/docs/live): the separate disbursement, settlement and webhook setup.
 - [Official Monnify SDK disbursement service](https://github.com/Monnify/monnify-laravel/blob/main/src/Services/DisbursementService.php): current API routes.
 - [Official Monnify SDK verification service](https://github.com/Monnify/monnify-laravel/blob/main/src/Services/VerificationService.php): v2 bank-account validation.
+
+## Safe release and rollback
+
+The additive migration leaves existing records and customer checkout intact. Real-transfer flags remain false in `config/affiliate-payouts.json`. Keep `enabled`, `merchant_disbursements_confirmed`, `sandbox_verified` and `controlled_live_test_verified` false until their respective evidence is recorded; credentials alone cannot enable a transfer. Do not enable all four merely to investigate setup.
+
+If a production problem is found, preserve migration 040 and its checksum, tables and journals. A schema-aware rollback can disable `future_native_commissions` and `auto_funding_enabled` together with all transfer flags. Purchase outbox records remain pending for recovery, and already submitted payouts must continue read-only reconciliation. Do not roll back or delete financial records, or deploy an older binary that rejects migration 040 as unknown.
+
+Before activation, set the approved source wallet account in Render, fund it, obtain Monnify third-party transfer and static outbound-IP authorization, confirm merchant OTP delivery, then use dedicated sandbox credentials for a controlled isolated test. Next obtain authorization for an exact live amount and recipient. Confirm that bank receipt against the provider transfer status before enabling public sending. No automatic change to payment collection or subscription approval is involved.
