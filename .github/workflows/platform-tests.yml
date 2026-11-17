@@ -112,6 +112,22 @@ jobs:
           LAE_DNA_SHARED: ${{ needs.change-scope.outputs.shared }}
           LAE_DNA_METADATA: ${{ needs.change-scope.outputs.metadata }}
         run: npm run test:dna
+  monnify-disbursement-readiness:
+    if: github.event_name == 'workflow_dispatch' && inputs.existing_service_audit && github.repository == 'alyeros47-dev/LAE-MUSIC' && github.ref == 'refs/heads/codex/affiliate-launch-clarity'
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Read merchant readiness without sending money or changing settings
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-monnify-disbursements.cjs
+
   existing-production-release:
     if: github.event_name == 'workflow_dispatch' && inputs.production_release_mode != '' && github.repository == 'alyeros47-dev/LAE-MUSIC' && (github.ref == 'refs/heads/codex/continuous-native-playback' || (inputs.production_release_mode == 'deploy' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
