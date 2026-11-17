@@ -7,7 +7,7 @@ const key=()=>crypto.randomUUID();
 test('controlled publishing enforces generated ownership and exact audio without losing existing records',async t=>{
  const control=new Pool({connectionString:target.href,ssl:false}),schema='controlled_publishing_'+crypto.randomBytes(6).toString('hex');await control.query('CREATE SCHEMA '+schema);
  const pool=new Pool({connectionString:target.href,ssl:false,options:'-c search_path='+schema}),originalFetch=global.fetch;
- const objects=new Map();let storageCalls=0;
+ const objects=new Map();let storageCalls=0,onFullAudioRead=null;
  const audio=Buffer.alloc(2048);audio.write('ID3');
  const env={NODE_ENV:'test',R2_ACCOUNT_ID:'a'.repeat(32),R2_ACCESS_KEY_ID:'isolated-key',R2_SECRET_ACCESS_KEY:'isolated-secret',R2_BUCKET:'controlled-publishing-fixture',STUDIO_RELEASE_WORKER_ENABLED:'false'};
  try{
@@ -16,6 +16,7 @@ test('controlled publishing enforces generated ownership and exact audio without
    if(options.method==='PUT'){let bytes;if(Buffer.isBuffer(options.body))bytes=options.body;else{const chunks=[];for await(const chunk of options.body)chunks.push(Buffer.from(chunk));bytes=Buffer.concat(chunks);}objects.set(objectKey,{bytes,mime:options.headers['Content-Type']});return new Response('');}
    const object=objects.get(objectKey);if(!object)return new Response('',{status:404});
    let bytes=object.bytes;const range=options.headers?.Range;if(range){const m=range.match(/bytes=(\d+)-(\d+)/);bytes=bytes.subarray(Number(m[1]),Number(m[2])+1);}
+   if(!options.method&&!range&&onFullAudioRead){const callback=onFullAudioRead;onFullAudioRead=null;await callback();}
    return new Response(options.method==='HEAD'?null:bytes,{status:range?206:200,headers:{'Content-Type':object.mime,'Content-Length':String(options.method==='HEAD'?object.bytes.length:bytes.length)}});
   };
   const app=await runtime({pool,env});
@@ -41,10 +42,11 @@ test('controlled publishing enforces generated ownership and exact audio without
    assert.equal((await pool.query('SELECT used_at FROM generation_records WHERE id=$1',[permit.generation_id])).rows[0].used_at,null);assert.equal(storageCalls,0);
   });
   await t.test('the valid generated recording publishes; replacement audio is blocked before storage and the code remains resumable',async()=>{
-   const start=await api('/api/music/upload/start',{...input,uploadCode:permit.uploadCode,coverMime:'image/png',coverBytes:32},a.cookie);assert.equal(start.status,201,JSON.stringify(start.data));trackId=start.data.id;
-   const beforeCalls=storageCalls;const wrong=await api(start.data.audioUrl,Buffer.alloc(audio.length,7),a.cookie,'PUT');assert.equal(wrong.status,400);assert.equal(storageCalls,beforeCalls);
+   const start=await api('/api/music/upload/start',{...input,uploadCode:permit.uploadCode,audioMime:'audio/mp4',audioBytes:audio.length+128,coverMime:'image/png',coverBytes:32},a.cookie);assert.equal(start.status,201,JSON.stringify(start.data));trackId=start.data.id;
+   const beforeCalls=storageCalls;const wrong=await api(start.data.audioUrl,Buffer.alloc(audio.length+128,7),a.cookie,'PUT',{'content-type':'audio/mp4'});assert.equal(wrong.status,400);assert.equal(storageCalls,beforeCalls);
    const pending=await api('/api/generation/code/check',{code:permit.uploadCode},a.cookie);assert.equal(pending.data.resumable,true);
-   const stored=await api(start.data.audioUrl,audio,a.cookie,'PUT');assert.equal(stored.status,200,JSON.stringify(stored.data));
+   const firstDeclaration=(await pool.query('SELECT audio_key FROM music_tracks WHERE id=$1',[trackId])).rows[0];const corrected=await api('/api/music/upload/start',{...input,uploadCode:permit.uploadCode,coverMime:'image/png',coverBytes:32},a.cookie);assert.equal(corrected.status,201,JSON.stringify(corrected.data));assert.equal(String(corrected.data.id),String(trackId));const correctDeclaration=(await pool.query('SELECT audio_key,audio_mime,audio_bytes FROM music_tracks WHERE id=$1',[trackId])).rows[0];assert.notEqual(correctDeclaration.audio_key,firstDeclaration.audio_key);assert.equal(correctDeclaration.audio_mime,'audio/mpeg');assert.equal(Number(correctDeclaration.audio_bytes),audio.length);
+   const stored=await api(corrected.data.audioUrl,audio,a.cookie,'PUT');assert.equal(stored.status,200,JSON.stringify(stored.data));
    // Reproduce an interrupted PNG-artwork upload followed by a JPEG retry on a phone.
    const beforeDraft=(await pool.query('SELECT audio_key,cover_key FROM music_tracks WHERE id=$1',[trackId])).rows[0],walletBefore=(await pool.query('SELECT * FROM generation_wallets WHERE creator_id=$1',[a.id])).rows;
    const jpeg=Buffer.alloc(32);jpeg[0]=255;jpeg[1]=216;jpeg[2]=255;
@@ -53,6 +55,10 @@ test('controlled publishing enforces generated ownership and exact audio without
    const wrongCover=await api(resumed.data.coverUrl,jpeg,a.cookie,'PUT',{'content-type':'image/png'});assert.equal(wrongCover.status,415);
    const cover=await api(resumed.data.coverUrl,jpeg,a.cookie,'PUT',{'content-type':'image/jpeg'});assert.equal(cover.status,200,JSON.stringify(cover.data));assert.equal(objects.get(afterDraft.cover_key).mime,'image/jpeg');
    assert.deepEqual((await pool.query('SELECT * FROM generation_wallets WHERE creator_id=$1',[a.id])).rows,walletBefore);assert.equal((await api('/api/generation/code/check',{code:permit.uploadCode},a.cookie)).data.resumable,true);
+   // A concurrent retry must not publish files that were never checked.
+   onFullAudioRead=async()=>{const changed=await api('/api/music/upload/start',{...input,uploadCode:permit.uploadCode,coverMime:'image/webp',coverBytes:32},a.cookie);assert.equal(changed.status,201,JSON.stringify(changed.data));};
+   const raced=await api('/api/music/upload/finish',{id:trackId},a.cookie);assert.equal(raced.status,409,JSON.stringify(raced.data));assert.match(raced.data.error,/changed while/);assert.equal((await pool.query('SELECT status FROM music_tracks WHERE id=$1',[trackId])).rows[0].status,'pending_upload');
+   const finalRetry=await api('/api/music/upload/start',{...input,uploadCode:permit.uploadCode,coverMime:'image/jpeg',coverBytes:jpeg.length},a.cookie);assert.equal(finalRetry.status,201,JSON.stringify(finalRetry.data));assert.equal((await api(finalRetry.data.coverUrl,jpeg,a.cookie,'PUT',{'content-type':'image/jpeg'})).status,200);
    const finished=await api('/api/music/upload/finish',{id:trackId},a.cookie);assert.equal(finished.status,200,JSON.stringify(finished.data));
    assert.equal((await api('/api/music/upload/finish',{id:trackId},a.cookie)).data.already_published,true);
    const row=(await pool.query('SELECT t.status,t.rights_confirmed_at,g.creator_id FROM music_tracks t JOIN generation_records g ON g.generated_track_id=t.id WHERE t.id=$1',[trackId])).rows[0];assert.equal((await pool.query('SELECT COUNT(*)::int n FROM listener_notifications WHERE track_id=$1 AND listener_id=$2',[trackId,follower.data.user.id])).rows[0].n,1);assert.equal(row.status,'published');assert(row.rights_confirmed_at);assert.equal(String(row.creator_id),String(a.id));
