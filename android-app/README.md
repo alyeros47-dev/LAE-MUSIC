@@ -31,3 +31,11 @@ The GitHub Android workflow uploads the inspection APK, unit/lint reports, and e
 ## Boundaries
 
 No Studio, lyrics generation, voice recording, artist upload, publishing, affiliate management, payment credentials or private API keys are included. The website, backend business rules, package prices and royalty/commission calculations are untouched. No Android purchase, Play publication or production website deployment is authorized by this preview.
+
+## Preferences and Play preparation (0.3 preview)
+
+First launch asks Gospel, Secular or Both, with multiple Gospel categories or All Gospel. Profile lets each listener change choices or reset local recommendations. `MusicTaxonomy.kt` accepts explicit metadata and conservative legacy labels; ambiguous genres are shown only in Both. `DiscoveryRepository.kt` keeps encrypted recommendation summaries scoped to each listener/guest. `DiscoveryRanking.kt` combines actual duration/completion, repeat listening, skips and confirmed social/save actions, with a capped low-exposure exploration slot. It neither records payable streams nor modifies the existing Media3 playback engine. Ranking is local to the device, not global/cross-device analytics.
+
+This iteration installs separately as `com.laemusic.listener.preview.preferences` (“LAE-MUSIC Preferences Preview”), keeping the owner's previously tested APK and saved songs intact. Earlier preview signing keys were ephemeral, so replacing that installation safely cannot be promised. Production remains `com.laemusic.listener`.
+
+Current Play preparation and blockers: [release/GOOGLE-PLAY-READINESS.md](release/GOOGLE-PLAY-READINESS.md). Build an unsigned, minified review bundle with `./gradlew :app:bundleRelease`. Configure the four owner upload-signing variables only in a trusted environment for an upload-signed bundle. No release keystore, billing product or publication is created automatically. Store assets and draft listing/privacy/Data Safety documents are prepared; they are not evidence that Play Billing, deletion, moderation or Console setup is complete.

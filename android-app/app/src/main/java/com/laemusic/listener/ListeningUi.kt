@@ -48,6 +48,7 @@ internal val AppBackground=Color(0xFF090911)
 internal val Panel=Color(0xFF191923)
 @Composable fun ListeningApp(model:ListeningViewModel) {
     val s by model.state.collectAsStateWithLifecycle()
+    if(s.preferences==null || s.editingPreferences){ MusicPreferencesScreen(s.preferences,model::choosePreferences,if(s.preferences!=null)model::cancelPreferences else null);return }
     val snack=remember {SnackbarHostState()}
     val immersive=s.tab==Destination.DISCOVER && !s.explore
     LaunchedEffect(s.message){s.message?.let {snack.showSnackbar(it);model.message(null)}}
@@ -95,7 +96,7 @@ internal val Panel=Color(0xFF191923)
     }}
 }
 @Composable private fun Discover(s:ListeningState,model:ListeningViewModel) {
-    if(s.tracks.isEmpty()){EmptyState(if(s.loading)"Loading your music…" else "No songs found","Search another title or refresh the catalogue."){model.refresh()};return}
+    if(s.tracks.isEmpty()){EmptyState(if(s.discoveryLoading || s.loading)"Loading your music…" else "No matching songs yet",if(s.personalizedDiscovery)"Try All Gospel or change your music choices." else "Search another title or refresh the catalogue."){if(s.personalizedDiscovery)model.editPreferences() else model.refresh()};return}
     val pager=rememberPagerState(pageCount={s.tracks.size});var syncing by remember {mutableStateOf(false)}
     LaunchedEffect(s.current,s.tracks.size){val i=s.tracks.indexOfFirst {it.id==s.current};if(i>=0 && i!=pager.currentPage && !pager.isScrollInProgress){syncing=true;pager.scrollToPage(i);syncing=false}}
     LaunchedEffect(pager.settledPage,s.playerReady,s.tracks.size){val song=s.tracks.getOrNull(pager.settledPage);if(song!=null && !syncing && s.playerReady && song.id!=s.current)model.playFeed(song);if(pager.settledPage>=s.tracks.size-5)model.nextPage()}
@@ -138,7 +139,7 @@ internal val Panel=Color(0xFF191923)
             verticalArrangement=Arrangement.spacedBy(7.dp)){
             if(song.genre.isNotBlank())Surface(color=Color.White.copy(alpha=.16f),shape=RoundedCornerShape(8.dp)){
                 Row(Modifier.padding(horizontal=9.dp,vertical=5.dp),verticalAlignment=Alignment.CenterVertically){
-                    Icon(Icons.Rounded.MusicNote,null,Modifier.size(14.dp));Spacer(Modifier.width(4.dp));Text(song.genre,fontSize=12.sp,maxLines=1)
+                    Icon(Icons.Rounded.MusicNote,null,Modifier.size(14.dp));Spacer(Modifier.width(4.dp));Text(song.displayGenre,fontSize=12.sp,maxLines=1)
                 }
             }
             Text(song.title,fontSize=25.sp,lineHeight=29.sp,fontWeight=FontWeight.Bold,maxLines=2,overflow=TextOverflow.Ellipsis)
@@ -179,6 +180,10 @@ internal val Panel=Color(0xFF191923)
 }}
 @Composable private fun Profile(s:ListeningState,model:ListeningViewModel){val context=LocalContext.current;Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),verticalArrangement=Arrangement.spacedBy(20.dp)){
     Text("Profile",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
+    TextButton(onClick=model::editPreferences,modifier=Modifier.testTag("edit-music-preferences")){Text("Music preferences")}
+    TextButton(onClick=model::showPersonalizedDiscovery){Text("Discover for you")}
+    TextButton(onClick=model::resetRecommendations){Text("Reset recommendations")}
+    Text("Music choices and recommendations stay on this device, separately for each account.",fontSize=12.sp,color=Color.LightGray)
     if(s.user==null){Text("Use your existing LAE-MUSIC listening account.");Button(onClick={model.show("login")}){Text("Sign in")}}else{
         Text(s.user.optString("display_name"),style=MaterialTheme.typography.headlineSmall);Text(s.user.optString("email"),color=Color.LightGray)
         ListItem(headlineContent={Text(if(s.premium?.optBoolean("active")==true)"Premium listening is active" else "Free listening")},supportingContent={Text("Your access is checked with LAE-MUSIC.")},leadingContent={Icon(Icons.Rounded.Verified,null)})

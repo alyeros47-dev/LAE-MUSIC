@@ -28,3 +28,7 @@ Required before any app purchase or publication:
 See the Android Actions run and final development report for executed results. Source implementation is not proof of physical-device playback, existing-account sign-in, real premium offline delivery or Google Play purchase synchronization. Do not label the application production-ready while these gates remain incomplete.
 
 The preview uses debug signing. Repeated CI builds need a stable protected preview signing key to install updates over the same app without uninstalling; CI's default ephemeral debug keys are not release credentials. Never ask owners to uninstall and lose downloads merely to work around a signing mismatch.
+
+## 18 November 2026 update
+
+Owner reports the installed APK played in the background/with the screen locked for about one hour. Preserve this evidence and the original service implementation. The new preference preview is a separate install, with local ranking and conservative metadata filtering. See [the dated Play audit](../release/GOOGLE-PLAY-READINESS.md) for prepared files, account setup, exact remaining implementation gates and submission status. Google Play is not ready for submission merely because an unsigned AAB builds successfully.

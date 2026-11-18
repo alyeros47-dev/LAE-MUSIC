@@ -15,7 +15,7 @@ adb install -r apk/app-debug.apk
 adb install -r testapk/app-debug-androidTest.apk
 run_case() {
   local test_case="$1" output="$2"
-  adb shell am instrument -w -r -e class "$test_case" com.laemusic.listener.preview.test/androidx.test.runner.AndroidJUnitRunner > "evidence/$output.txt"
+  adb shell am instrument -w -r -e class "$test_case" com.laemusic.listener.preview.preferences.test/androidx.test.runner.AndroidJUnitRunner > "evidence/$output.txt"
   cat "evidence/$output.txt"
   python3 - "evidence/$output.txt" <<'PYTEST'
 import re,sys
@@ -26,11 +26,11 @@ PYTEST
 }
 failed=0
 run_case com.laemusic.listener.NativeListeningTest native-listening || failed=1
-for screen in discover home explore; do
-  adb pull "/sdcard/Android/data/com.laemusic.listener.preview/files/$screen.png" "evidence/$screen-fixture.png" || true
+for screen in discover home explore preferences; do
+  adb pull "/sdcard/Android/data/com.laemusic.listener.preview.preferences/files/$screen.png" "evidence/$screen-fixture.png" || true
 done
 if run_case 'com.laemusic.listener.OfflinePersistenceTest#prepare' offline-before-reboot; then
-adb shell am force-stop com.laemusic.listener.preview
+adb shell am force-stop com.laemusic.listener.preview.preferences
 adb reboot
 adb wait-for-device
 for i in $(seq 1 90); do
@@ -43,13 +43,16 @@ run_case 'com.laemusic.listener.OfflinePersistenceTest#verifyAfterReboot' offlin
 else
   failed=1
 fi
+# Capture actual views at a store-compatible phone ratio, without cropping or fabricating UI.
+adb shell wm size 1080x1920
+adb shell wm density 420
 # Read-only screenshots of all three screens using actual published music.
 # The test pauses immediately after loading; no purchase or qualifying stream.
-adb shell pm clear com.laemusic.listener.preview
-adb shell pm grant com.laemusic.listener.preview android.permission.POST_NOTIFICATIONS
+adb shell pm clear com.laemusic.listener.preview.preferences
+adb shell pm grant com.laemusic.listener.preview.preferences android.permission.POST_NOTIFICATIONS
 run_case com.laemusic.listener.GuestDesignScreensTest public-design-screens || failed=1
-for screen in discover home explore; do
-  adb pull "/sdcard/Android/data/com.laemusic.listener.preview/files/$screen-public.png" "evidence/$screen-public.png" || true
+for screen in discover home explore preferences; do
+  adb pull "/sdcard/Android/data/com.laemusic.listener.preview.preferences/files/$screen-public.png" "evidence/$screen-public.png" || true
 done
-adb shell am force-stop com.laemusic.listener.preview
+adb shell am force-stop com.laemusic.listener.preview.preferences
 exit "$failed"

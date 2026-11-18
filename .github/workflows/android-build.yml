@@ -25,7 +25,13 @@ jobs:
           cache-read-only: false
       - name: Tests, lint and inspection APKs
         working-directory: android-app
-        run: gradle --no-daemon :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
+        run: gradle --no-daemon :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lae-unsigned-play-review-bundle
+          path: |
+            android-app/app/build/outputs/bundle/release/app-release.aab
+            android-app/app/build/outputs/mapping/release/mapping.txt
       - uses: actions/upload-artifact@v4
         with:
           name: lae-music-listening-preview

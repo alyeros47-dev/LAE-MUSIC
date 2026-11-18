@@ -38,9 +38,9 @@ class NativeListeningTest {
     private val context get()=instrumentation.targetContext
     private var scenario:ActivityScenario<MainActivity>?=null
     private val likes=AtomicInteger(2);private var liked=false;private var following=false;private val posts=mutableListOf<String>()
-    private fun fixture(seconds:Int=120):AppGraph {
+    private fun fixture(seconds:Int=120,onboarding:Boolean=false):AppGraph {
         val start=if(seconds==6)100 else 0
-        val tracks=JSONArray((1..4).map {Song((it+start).toString(),"Test song $it","Test artist","90","Gospel praise","Synthetic Android test catalogue").json()})
+        val tracks=JSONArray((1..4).map {Song((it+start).toString(),"Test song $it","Test artist","90",if(onboarding)listOf("Gospel praise","Worship","Secular Afrobeats","Afrwn")[it-1] else "Gospel praise","Synthetic Android test catalogue").json()})
         val client=OkHttpClient.Builder().addInterceptor {chain->
             val request=chain.request();val path=request.url.encodedPath
             if(request.method=="POST")synchronized(posts){posts.add(path)}
@@ -69,7 +69,9 @@ class NativeListeningTest {
             }
             Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("fixture").addHeader("Set-Cookie",if(path=="/api/listener/login")"listener_session=isolated-test-cookie; Path=/; Secure; HttpOnly" else "fixture=present; Path=/; Secure").body(body.toString().toResponseBody("application/json".toMediaType())).build()
         }.build()
+        instrumentation.runOnMainSync {context.graph.discovery.close()}
         val graph=AppGraph(context,client);graph.session.clear();graph.secure.put("queue",null);graph.secure.put("queue-feed",null);graph.secure.put("feed-page",null);UiDevice.getInstance(instrumentation).wakeUp();UiDevice.getInstance(instrumentation).pressMenu();(context.applicationContext as LaeApplication).graph=graph
+        instrumentation.runOnMainSync {graph.secure.put("discovery.preferences:guest",null);graph.secure.put("discovery.evidence:guest",null);graph.session.signedIn(JSONObject().put("id","reset-fixture"));graph.discovery.switchAccount();graph.session.clear();graph.discovery.switchAccount();if(!onboarding)graph.discovery.choose(ListeningPreferences(MusicChoice.BOTH));graph.secure.put("discovery.preferences:7",ListeningPreferences(MusicChoice.BOTH).json().toString())}
         Coil.setImageLoader(ImageLoader.Builder(context).okHttpClient(client).build())
         return graph
     }
@@ -77,41 +79,46 @@ class NativeListeningTest {
         compose.mainClock.advanceTimeByFrame();compose.waitForIdle();instrumentation.waitForIdleSync();Thread.sleep(500)
         UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),name))
     }
-    @After fun cleanup(){scenario?.close();context.stopService(android.content.Intent(context,MusicPlaybackService::class.java));instrumentation.waitForIdleSync()}
+    @After fun cleanup(){scenario?.close();instrumentation.runOnMainSync {context.graph.discovery.close()};context.stopService(android.content.Intent(context,MusicPlaybackService::class.java));instrumentation.waitForIdleSync()}
     @Test fun fiveDestinationsVerticalFeedAndRealSocialRequests() {
         fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
-        compose.waitUntil(30000){compose.onAllNodesWithText("Test song 1").fetchSemanticsNodes().isNotEmpty()}
+        compose.waitUntil(30000){context.graph.discovery.songs.value.isNotEmpty()}
+        val firstId=context.graph.discovery.songs.value.first().id
+        val nextId=context.graph.discovery.songs.value[1].id
+        compose.waitUntil(15000){compose.onAllNodesWithTag("feed-$firstId").fetchSemanticsNodes().isNotEmpty()}
         // Discover is both a top feed tab and a bottom destination.
         for(label in listOf("Home","Discover","My Music","Downloads","Profile"))compose.onAllNodesWithText(label).onLast().assertExists()
-        fun action(description:String)=compose.onNode(hasContentDescription(description) and hasAnyAncestor(hasTestTag("feed-1")))
-        compose.waitUntil(15000){compose.onAllNodes(hasText("2") and hasAnyAncestor(hasTestTag("feed-1"))).fetchSemanticsNodes().isNotEmpty()}
+        fun action(description:String)=compose.onNode(hasContentDescription(description) and hasAnyAncestor(hasTestTag("feed-$firstId")))
+        compose.waitUntil(15000){compose.onAllNodes(hasText("2") and hasAnyAncestor(hasTestTag("feed-$firstId"))).fetchSemanticsNodes().isNotEmpty()}
         action("Like song").performClick()
         compose.onNode(hasSetTextAction() and hasText("Email address")).performTextInput("listener@test.invalid")
         compose.onNode(hasSetTextAction() and hasText("Password")).performTextInput("SyntheticPassword123")
         compose.onNodeWithText("Sign in",useUnmergedTree=true).performScrollTo().performClick()
         compose.waitUntil(15000){context.graph.session.owner=="7"}
         action("Like song").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/song-like")}}
-        compose.waitUntil(15000){compose.onAllNodes(hasText("3") and hasAnyAncestor(hasTestTag("feed-1"))).fetchSemanticsNodes().isNotEmpty()}
+        compose.waitUntil(15000){compose.onAllNodes(hasText("3") and hasAnyAncestor(hasTestTag("feed-$firstId"))).fetchSemanticsNodes().isNotEmpty()}
         action("Follow artist").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/favorites")}}
-        compose.waitUntil(15000){compose.onAllNodes(hasContentDescription("Unfollow artist") and hasAnyAncestor(hasTestTag("feed-1"))).fetchSemanticsNodes().isNotEmpty()}
+        compose.waitUntil(15000){compose.onAllNodes(hasContentDescription("Unfollow artist") and hasAnyAncestor(hasTestTag("feed-$firstId"))).fetchSemanticsNodes().isNotEmpty()}
         action("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};compose.onNodeWithContentDescription("Close comments").performClick()
         compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isEmpty()}
-        compose.onNodeWithTag("feed-1").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.72f),androidx.compose.ui.geometry.Offset(center.x,height*.25f))};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-2").assertIsDisplayed();true}.getOrDefault(false)}
+        compose.onNodeWithTag("feed-$firstId").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.72f),androidx.compose.ui.geometry.Offset(center.x,height*.25f))};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-$nextId").assertIsDisplayed();true}.getOrDefault(false)}
         val root=compose.onRoot().fetchSemanticsNode().boundsInRoot
-        val feed=compose.onNodeWithTag("feed-2").fetchSemanticsNode().boundsInRoot
+        val feed=compose.onNodeWithTag("feed-$nextId").fetchSemanticsNode().boundsInRoot
         assertTrue("Discover artwork must extend behind the header and bottom navigation",feed.height>=root.height*.9f)
-        compose.onNodeWithTag("feed-2").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.25f),androidx.compose.ui.geometry.Offset(center.x,height*.72f))}
-        compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-1").assertIsDisplayed();true}.getOrDefault(false)}
+        compose.onNodeWithTag("feed-$nextId").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.25f),androidx.compose.ui.geometry.Offset(center.x,height*.72f))}
+        compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-$firstId").assertIsDisplayed();true}.getOrDefault(false)}
         capture("discover.png")
         assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic")}})
     }
     @Test fun homeAndExploreRemainSeparateAndKeepTheCurrentPlayer() {
         fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
-        compose.waitUntil(30000){compose.onAllNodesWithTag("feed-1").fetchSemanticsNodes().isNotEmpty()}
+        compose.waitUntil(30000){context.graph.discovery.songs.value.isNotEmpty()}
+        val firstId=context.graph.discovery.songs.value.first().id
+        compose.waitUntil(15000){compose.onAllNodesWithTag("feed-$firstId").fetchSemanticsNodes().isNotEmpty()}
         val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
         val player=future.get(30,TimeUnit.SECONDS)
         try {
-            compose.waitUntil(15000){var playing=false;instrumentation.runOnMainSync {playing=player.currentMediaItem?.mediaId=="1" && player.isPlaying};playing}
+            compose.waitUntil(15000){var playing=false;instrumentation.runOnMainSync {playing=player.currentMediaItem?.mediaId==firstId && player.isPlaying};playing}
             compose.onNodeWithTag("bottom-nav-Home").performClick()
             compose.onNodeWithTag("home-screen").assertExists()
             compose.waitUntil(15000){compose.onAllNodesWithTag("featured-song").fetchSemanticsNodes().isNotEmpty()}
@@ -126,9 +133,9 @@ class NativeListeningTest {
             compose.onNodeWithText("Featured artists").assertExists()
             compose.onAllNodesWithTag("featured-song").assertCountEquals(0)
             capture("explore.png")
-            instrumentation.runOnMainSync {assertEquals("1",player.currentMediaItem?.mediaId);assertTrue(player.isPlaying)}
+            instrumentation.runOnMainSync {assertEquals(firstId,player.currentMediaItem?.mediaId);assertTrue(player.isPlaying)}
             compose.onNodeWithTag("top-tab-Discover").performClick()
-            compose.onNodeWithTag("feed-1").assertIsDisplayed()
+            compose.onNodeWithTag("feed-$firstId").assertIsDisplayed()
             compose.onAllNodesWithTag("explore-screen").assertCountEquals(0)
         } finally {instrumentation.runOnMainSync {player.release()}}
     }
@@ -138,11 +145,42 @@ class NativeListeningTest {
         val player=future.get(30,TimeUnit.SECONDS);val transitions=AtomicInteger(0)
         instrumentation.runOnMainSync {
             player.addListener(object:Player.Listener {override fun onMediaItemTransition(item:androidx.media3.common.MediaItem?,reason:Int){transitions.incrementAndGet()}})
-            player.setMediaItems((1..4).map {Song((it+100).toString(),"Test song $it","Test artist","90").item()});player.repeatMode=Player.REPEAT_MODE_ALL;player.prepare();player.play()
+            player.setMediaItems((1..4).map {Song((it+100).toString(),"Test song $it","Test artist","90","Gospel praise").item()});player.repeatMode=Player.REPEAT_MODE_ALL;player.prepare();player.play()
         }
         Thread.sleep(2000);UiDevice.getInstance(instrumentation).pressHome();UiDevice.getInstance(instrumentation).sleep();Thread.sleep(65000)
         instrumentation.runOnMainSync {assertTrue("The service must cross at least eight track boundaries with the screen locked",transitions.get()>=8);assertTrue(player.isPlaying);player.stop();player.release()}
         UiDevice.getInstance(instrumentation).wakeUp();UiDevice.getInstance(instrumentation).pressMenu();assertFalse(synchronized(posts){posts.any {it.endsWith("/play") || it.endsWith("/heartbeat")}})
+    }
+    @Test fun firstTimeChoicesPersistAndFilterTheNativeDiscoveryQueue() {
+        fixture(onboarding=true);scenario=ActivityScenario.launch(MainActivity::class.java)
+        compose.onNodeWithTag("music-preferences").assertIsDisplayed()
+        compose.onNodeWithTag("save-music-preferences").assertIsNotEnabled()
+        compose.onNodeWithTag("music-choice-GOSPEL").performClick()
+        compose.onNodeWithTag("gospel-PRAISE").performClick()
+        compose.onNodeWithTag("gospel-WORSHIP").performClick()
+        capture("preferences.png")
+        compose.onNodeWithTag("save-music-preferences").performScrollTo().performClick()
+        compose.waitUntil(30000){context.graph.discovery.songs.value.size==2}
+        assertEquals(setOf("1","2"),context.graph.discovery.songs.value.map {it.id}.toSet())
+        val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
+        val player=future.get(30,TimeUnit.SECONDS)
+        try {
+            compose.waitUntil(15000){var ready=false;instrumentation.runOnMainSync {ready=player.mediaItemCount==2};ready}
+            instrumentation.runOnMainSync {assertEquals(setOf("1","2"),(0 until player.mediaItemCount).map {player.getMediaItemAt(it).mediaId}.toSet())}
+            scenario!!.recreate();compose.onAllNodesWithTag("music-preferences").assertCountEquals(0)
+            compose.onNodeWithTag("bottom-nav-Profile").performClick();compose.onNodeWithTag("edit-music-preferences").performClick()
+            compose.onNodeWithTag("music-choice-SECULAR").performClick();compose.onNodeWithTag("save-music-preferences").performScrollTo().performClick()
+            compose.waitUntil(15000){context.graph.discovery.songs.value.map {it.id}==listOf("3")}
+            instrumentation.runOnMainSync {assertEquals("3",player.currentMediaItem?.mediaId);assertEquals(1,player.mediaItemCount)}
+            // An unrelated listener on the same phone must make their own choices.
+            instrumentation.runOnMainSync {context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount()}
+            compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isNotEmpty()}
+            assertNull(context.graph.discovery.preferences.value)
+            instrumentation.runOnMainSync {context.graph.session.clear();context.graph.discovery.switchAccount()}
+            compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isEmpty()}
+            assertEquals(MusicChoice.SECULAR,context.graph.discovery.preferences.value!!.choice)
+        } finally {instrumentation.runOnMainSync {player.stop();player.release()}}
+        assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic") || it.endsWith("/play")}})
     }
     companion object {
         fun wav(seconds:Int=3):ByteArray {val samples=8000*seconds;val pcm=ByteArray(samples*2);val b=ByteBuffer.allocate(44+pcm.size).order(ByteOrder.LITTLE_ENDIAN);b.put("RIFF".toByteArray()).putInt(36+pcm.size).put("WAVEfmt ".toByteArray()).putInt(16).putShort(1).putShort(1).putInt(8000).putInt(16000).putShort(2).putShort(16).put("data".toByteArray()).putInt(pcm.size).put(pcm);return b.array()}

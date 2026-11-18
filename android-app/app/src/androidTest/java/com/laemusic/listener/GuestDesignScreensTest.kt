@@ -27,6 +27,10 @@ class GuestDesignScreensTest {
         // loaded. This visual check must never manufacture a payable stream.
         val scenario=ActivityScenario.launch(MainActivity::class.java)
         try {
+            compose.mainClock.advanceTimeByFrame();compose.waitForIdle();instrumentation.waitForIdleSync();Thread.sleep(500)
+            UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),"preferences-public.png"))
+            compose.onNodeWithTag("music-choice-BOTH").performClick()
+            compose.onNodeWithTag("save-music-preferences").performScrollTo().performClick()
             compose.waitUntil(30000){var loaded=false;instrumentation.runOnMainSync {loaded=player.currentMediaItem!=null;if(loaded)player.pause()};loaded}
             lateinit var model:ListeningViewModel
             scenario.onActivity {model=androidx.lifecycle.ViewModelProvider(it)[ListeningViewModel::class.java]}

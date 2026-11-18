@@ -12,5 +12,6 @@ class AppGraph(context: Context, transport:okhttp3.OkHttpClient?=null) {
     val session = SessionStore(secure)
     val api = LaeApi(session,transport)
     val offline = OfflineRepository(context, api, secure)
+    val discovery = DiscoveryRepository(context.applicationContext,api,secure)
 }
 val Context.graph: AppGraph get() = (applicationContext as LaeApplication).graph

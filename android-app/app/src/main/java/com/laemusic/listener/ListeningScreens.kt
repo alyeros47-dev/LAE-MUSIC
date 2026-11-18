@@ -95,7 +95,7 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
 
 @Composable internal fun HomeScreen(s:ListeningState,model:ListeningViewModel) {
     val heroes=s.featuredSongs.ifEmpty {s.releases.take(4)}
-    val recommendations=listeningRecommendations(s.releases,s.popular,s.likes,s.history)
+    val recommendations=s.recommendations.take(12)
     LazyColumn(Modifier.fillMaxSize().testTag("home-screen"),contentPadding=PaddingValues(start=14.dp,end=14.dp,bottom=18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
         item {HomeShortcuts(model)}
         if(heroes.isNotEmpty())item {FeaturedSongs(heroes,s,model,s.featuredSongs.isNotEmpty())}
@@ -118,7 +118,7 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
 @Composable private fun HomeShortcuts(model:ListeningViewModel) {
     LazyRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){
         item {Shortcut("Home",true){model.select(Destination.HOME)}}
-        item {Shortcut("Discover",false){model.select(Destination.DISCOVER);model.explore(false)}}
+        item {Shortcut("Discover",false){model.showPersonalizedDiscovery()}}
         item {Shortcut("Playlists",false){model.select(Destination.MUSIC)}}
         item {Shortcut("Premium",false){model.show("premium")}}
     }
