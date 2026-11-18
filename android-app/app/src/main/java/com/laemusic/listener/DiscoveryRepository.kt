@@ -22,6 +22,7 @@ import java.util.UUID
 class DiscoveryRepository(private val context:Context,private val api:LaeApi,private val secure:SecureStore) {
     private val scope=CoroutineScope(SupervisorJob()+Dispatchers.Main.immediate)
     private val loading=Mutex();private val persist=Mutex()
+    private val pendingEvidence=java.util.concurrent.ConcurrentHashMap<String,String>()
     private val revisions=java.util.concurrent.ConcurrentHashMap<String,Long>();private val revision=java.util.concurrent.atomic.AtomicLong()
     private var owner=api.session.owner ?: "guest"
     private val mutablePreferences=MutableStateFlow(readPreferences(owner))
@@ -37,7 +38,7 @@ class DiscoveryRepository(private val context:Context,private val api:LaeApi,pri
     private var windowError=false;private var lastFailure=0L
     private fun preferenceKey(who:String)="discovery.preferences:$who"
     private fun readPreferences(who:String)=secure.get(preferenceKey(who))?.let {runCatching {ListeningPreferences.from(JSONObject(it))}.getOrNull()}
-    private fun readEvidence(who:String):MutableMap<String,SongEvidence> = secure.get("discovery.evidence:$who")?.let {raw->runCatching {val x=JSONObject(raw);x.keys().asSequence().associateWith {SongEvidence.from(x.getJSONObject(it))}.toMutableMap()}.getOrNull()} ?: mutableMapOf()
+    private fun readEvidence(who:String):MutableMap<String,SongEvidence> = (pendingEvidence[who] ?: secure.get("discovery.evidence:$who"))?.let {raw->runCatching {val x=JSONObject(raw);x.keys().asSequence().associateWith {SongEvidence.from(x.getJSONObject(it))}.toMutableMap()}.getOrNull()} ?: mutableMapOf()
     fun switchAccount() {
         val next=api.session.owner ?: "guest";if(next==owner)return
         finish(false);persistEvidence();owner=next;evidence=readEvidence(owner);mutablePreferences.value=readPreferences(owner)
@@ -62,8 +63,8 @@ class DiscoveryRepository(private val context:Context,private val api:LaeApi,pri
         val who=owner;val snapshot=evidence.toMutableMap()
         window?.let {w->snapshot[w.songId]=w.finish(snapshot[w.songId] ?: SongEvidence(),System.currentTimeMillis(),false,windowError)}
         val data=JSONObject().also {x->snapshot.forEach {(id,e)->x.put(id,e.json())}}.toString()
-        val stamp=revision.incrementAndGet();revisions[who]=stamp
-        scope.launch(Dispatchers.IO){persist.withLock {if(revisions[who]==stamp)secure.put("discovery.evidence:$who",data)}}
+        val stamp=revision.incrementAndGet();revisions[who]=stamp;pendingEvidence[who]=data
+        scope.launch(Dispatchers.IO){persist.withLock {if(revisions[who]==stamp){secure.put("discovery.evidence:$who",data);pendingEvidence.remove(who,data)}}}
     }
     fun catalogue(id:String)=pool[id]
     private fun rerank() {
@@ -99,12 +100,13 @@ class DiscoveryRepository(private val context:Context,private val api:LaeApi,pri
     fun personalizeQueue(){queueVersion++;personalized=true;secure.put("discovery.queue-owner",owner);secure.put("queue-feed","false");observe()}
     fun customQueue(){queueVersion++;personalized=false;secure.put("discovery.queue-owner",null)}
     fun observe() {
-        if(controller!=null || connecting)return
+        if(!scope.isActive || controller!=null || connecting)return
         connecting=true
         val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
         future.addListener({
             connecting=false
             runCatching {future.get()}.onSuccess {p->
+                if(!scope.isActive){p.release();return@onSuccess}
                 controller=p
                 p.addListener(object:Player.Listener {
                     override fun onMediaItemTransition(item:MediaItem?,reason:Int){
@@ -122,6 +124,7 @@ class DiscoveryRepository(private val context:Context,private val api:LaeApi,pri
                         if(item!=null && p.isPlaying && mutablePreferences.value!=null){
                             if(window?.songId!=item.mediaId){finish(false);window=DiscoveryListeningWindow(item.mediaId,p.duration.takeIf {it!=C.TIME_UNSET} ?: 0);change(item.mediaId){it.copy(exposures=it.exposures+1)}}
                         }
+                        window?.duration(p.duration)
                         window?.sample(SystemClock.elapsedRealtime(),p.currentPosition,p.isPlaying)
                         if(++seconds%30==0)persistEvidence()
                         delay(1000)

@@ -26,12 +26,15 @@ jobs:
       - name: Tests, lint and inspection APKs
         working-directory: android-app
         run: gradle --no-daemon :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
+      - name: Inspect release bundle and native page alignment
+        run: python3 android-app/scripts/inspect-release-bundle.py android-app/app/build/outputs/bundle/release/app-release.aab > android-app/release-binary-review.json
       - uses: actions/upload-artifact@v4
         with:
           name: lae-unsigned-play-review-bundle
           path: |
             android-app/app/build/outputs/bundle/release/app-release.aab
             android-app/app/build/outputs/mapping/release/mapping.txt
+            android-app/release-binary-review.json
       - uses: actions/upload-artifact@v4
         with:
           name: lae-music-listening-preview
@@ -48,6 +51,10 @@ jobs:
             android-app/app/build/reports/tests/
             android-app/app/build/reports/lint-results-debug.*
   device-checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [35, 36]
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -70,9 +77,16 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      - name: Install Android test image with bounded download retries
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            if sdkmanager --install "system-images;android-${{ matrix.api }};google_apis;x86_64"; then exit 0; fi
+          done
+          exit 1
       - uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: ${{ matrix.api }}
           arch: x86_64
           target: google_apis
           profile: pixel_6
@@ -82,5 +96,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: android-device-evidence
+          name: android-device-evidence-api-${{ matrix.api }}
           path: evidence/

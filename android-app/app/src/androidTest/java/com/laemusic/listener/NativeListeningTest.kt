@@ -176,7 +176,7 @@ class NativeListeningTest {
             instrumentation.runOnMainSync {context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount()}
             compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isNotEmpty()}
             assertNull(context.graph.discovery.preferences.value)
-            instrumentation.runOnMainSync {context.graph.session.clear();context.graph.discovery.switchAccount()}
+            instrumentation.runOnMainSync {context.graph.discovery.liked("private-song",true);context.graph.session.clear();context.graph.discovery.switchAccount();assertFalse(context.graph.discovery.evidenceSnapshot()["private-song"]?.liked==true);context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount();assertTrue(context.graph.discovery.evidenceSnapshot()["private-song"]?.liked==true);context.graph.session.clear();context.graph.discovery.switchAccount()}
             compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isEmpty()}
             assertEquals(MusicChoice.SECULAR,context.graph.discovery.preferences.value!!.choice)
         } finally {instrumentation.runOnMainSync {player.stop();player.release()}}

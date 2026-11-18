@@ -65,6 +65,10 @@ class DiscoveryTest {
         assertEquals(0,window(500).finish(SongEvidence(),100000,true).starts)
         assertEquals(0,window(50000).finish(SongEvidence(),100000,true).skips)
     }
+    @Test fun durationDiscoveredAfterStartCanStillMeasureCompletion(){
+        val w=window(110000,0);w.duration(-1);assertEquals(0,w.durationMs);w.duration(120000)
+        assertEquals(1,w.finish(SongEvidence(),200000,false).completed)
+    }
     @Test fun longSleepOrNetworkStallDoesNotBecomeListening(){
         val w=DiscoveryListeningWindow("1",120000);w.sample(0,0,true);w.sample(60000,60000,true);assertEquals(0,w.listenedMs)
         w.sample(61000,60000,true);assertEquals(0,w.listenedMs)

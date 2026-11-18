@@ -15,7 +15,9 @@ data class SongEvidence(
 }
 
 /** Actual elapsed/position progress only; never connected to financial stream accounting. */
-class DiscoveryListeningWindow(val songId:String,val durationMs:Long) {
+class DiscoveryListeningWindow(val songId:String,durationMs:Long) {
+    var durationMs=durationMs;private set
+    fun duration(value:Long){if(value>0)durationMs=value}
     var listenedMs=0L;private set
     private var at:Long?=null;private var position=0L;private var wasPlaying=false
     fun sample(now:Long,newPosition:Long,playing:Boolean) {

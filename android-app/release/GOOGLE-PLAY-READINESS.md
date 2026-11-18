@@ -49,3 +49,7 @@ The owner's installed `com.laemusic.listener.preview` build remains valid. It wa
 - [Store asset requirements](https://support.google.com/googleplay/android-developer/answer/9866151), [user-data policy](https://support.google.com/googleplay/android-developer/answer/10144311), [account deletion](https://support.google.com/googleplay/android-developer/answer/13327111), [UGC moderation/blocking](https://support.google.com/googleplay/android-developer/answer/9876937).
 
 Recheck policy/Console requirements against the final signed release; this dated audit is not Google approval.
+
+## Binary review procedure
+
+Run `python3 scripts/inspect-release-bundle.py app/build/outputs/bundle/release/app-release.aab` after building. The app includes the transitive Compose `libandroidx.graphics.path.so`; it is **not** a native-library-free bundle. Inspect all packaged ABIs and every 64-bit ELF LOAD alignment, then run the official bundletool `validate` and inspect the manifest/BundleConfig. The reviewed library has 16 KB ELF alignment. Check generated APK ZIP alignment separately with Android build-tools (`zipalign -c -P 16 -v 4`) and test a 16 KB Android device/emulator before release; ELF alignment alone is not an end-to-end runtime certification. Never mistake an unsigned AAB for a signed production upload.
