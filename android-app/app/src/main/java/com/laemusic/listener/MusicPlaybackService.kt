@@ -47,7 +47,7 @@ class MusicPlaybackService:MediaSessionService() {
     private val tick=object:Runnable {override fun run(){
         if(::player.isInitialized) {
             val playing=player.isPlaying
-            if(playing && isOffline() && offlineGrant!=null && !runCatching {graph.offline.clock()<offlineGrant!!.getLong("until_ms")}.getOrDefault(false)) {
+            if(playing && isOffline() && offlineGrant!=null && !runCatching {graph.session.owner?.let {graph.offline.allowed(it)}==true && graph.offline.clock()<offlineGrant!!.getLong("until_ms")}.getOrDefault(false)) {
                 player.stop();player.prepare() // Reopening reports the licence error and discards prefetched audio.
             }
             meter.tick(SystemClock.elapsedRealtime(),player.currentPosition,playing)

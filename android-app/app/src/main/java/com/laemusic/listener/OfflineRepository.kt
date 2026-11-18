@@ -40,7 +40,7 @@ class OfflineRepository(private val context:Context, val api:LaeApi, private val
         val key=ks.getCertificate(alias(owner)+".proof").publicKey as ECPublicKey
         fun coord(v:java.math.BigInteger)=OfflineProtocol.encode(v.toByteArray().let { bytes -> ByteArray(32).also { a -> val start=(bytes.size-32).coerceAtLeast(0);bytes.copyInto(a,32-(bytes.size-start),start) } })
         val jwk=JSONObject().put("kty","EC").put("crv","P-256").put("x",coord(key.w.affineX)).put("y",coord(key.w.affineY))
-        api.json("/api/platform/offline/register",JSONObject().put("device_id",device(owner)).put("public_jwk",jwk).put("label","LAE-MUSIC Android · ${android.os.Build.MODEL.take(40)}"),"android-register-${device(owner)}")
+        try { api.json("/api/platform/offline/register",JSONObject().put("device_id",device(owner)).put("public_jwk",jwk).put("label","LAE-MUSIC Android · ${android.os.Build.MODEL.take(40)}"),"android-register-${device(owner)}") } catch(e:ApiException) { if(e.status in listOf(403,404))deny(owner);throw e }
     }
     private fun anchor(server:Long) { secure.put("offline-clock",JSONObject().put("server",server).put("wall",System.currentTimeMillis()).put("elapsed",SystemClock.elapsedRealtime()).put("boot",Settings.Global.getInt(context.contentResolver,Settings.Global.BOOT_COUNT,-1)).toString()) }
     fun clock():Long {
@@ -58,7 +58,13 @@ class OfflineRepository(private val context:Context, val api:LaeApi, private val
         val signature=Signature.getInstance("SHA256withECDSA").apply {initSign(signing(owner));update(OfflineProtocol.canonical(message).toByteArray())}.sign()
         return JSONObject().put("device_id",device(owner)).put("nonce",c.getString("nonce")).put("payload",payload).put("signature",OfflineProtocol.encode(OfflineProtocol.derToRaw(signature)))
     }
+    fun allowed(owner:String)=secure.get("offline-denied:$owner")!="true"
+    fun deny(owner:String){secure.put("offline-denied:$owner","true")}
     fun verify(owner:String,licence:JSONObject):JSONObject {
+        require(allowed(owner)) {"Reconnect to renew Premium access. Your saved songs have not been deleted."}
+        return validateToken(owner,licence)
+    }
+    private fun validateToken(owner:String,licence:JSONObject):JSONObject {
         require(api.session.owner==owner) {"Sign in to the account that saved this song"}
         val token=licence.getJSONObject("token");val key=secure.get("offline-key:"+token.getString("kid"))?.let(::JSONObject) ?: error("Reconnect to verify the offline signing key")
         val valid=Signature.getInstance("SHA256withECDSA").run {initVerify(OfflineProtocol.publicKey(key));update(token.getString("payload").toByteArray());verify(OfflineProtocol.rawToDer(OfflineProtocol.decode(token.getString("signature"))))};require(valid) {"The offline licence could not be verified"}
@@ -68,13 +74,13 @@ class OfflineRepository(private val context:Context, val api:LaeApi, private val
         return p
     }
     suspend fun grant(owner:String,song:Song,includeMedia:Boolean):JSONObject {
-        val r=api.json("/api/platform/offline/grant",proof(owner,"grant",JSONObject().put("track_id",song.id).put("include_media",includeMedia)),LaeApi.key());anchor(r.getLong("server_ms"));secure.put("offline-key:"+r.getJSONObject("token").getString("kid"),r.getJSONObject("public_key").toString());verify(owner,r);return r
+        try {val r=api.json("/api/platform/offline/grant",proof(owner,"grant",JSONObject().put("track_id",song.id).put("include_media",includeMedia)),LaeApi.key());anchor(r.getLong("server_ms"));secure.put("offline-key:"+r.getJSONObject("token").getString("kid"),r.getJSONObject("public_key").toString());validateToken(owner,r);secure.put("offline-denied:$owner",null);return r}catch(e:ApiException){if(e.status==403 || e.status==404 && e.message.orEmpty().contains("device",ignoreCase=true))deny(owner);if(e.status==404 && !e.message.orEmpty().contains("device",ignoreCase=true))db.unavailable(owner,song.id);throw e}
     }
     fun file(owner:String,track:String,part:Boolean=false)=File(root,"$owner-$track.lae"+(if(part)".part" else ""))
     fun binding(owner:String,song:Song,p:JSONObject)="$owner:${song.id}:${p.getString("asset_hash")}"
     suspend fun enqueue(song:Song) = withContext(Dispatchers.IO) {
         val owner=api.session.owner ?: error("Sign in to save songs")
-        val premium=api.json("/api/platform/premium/status");require(premium.optBoolean("active")) {"Premium listening is required to save songs"}
+        val premium=api.json("/api/platform/premium/status");if(!premium.optBoolean("active"))deny(owner);require(premium.optBoolean("active")) {"Premium listening is required to save songs"}
         val rows=db.rows(owner);require(rows.none {it.song.id==song.id && it.status in listOf("ready","queued","downloading")}) {"This song is already saved or being downloaded"};require(rows.count { it.song.id!=song.id }<100) {"Your offline library is full"}
         require(rows.sumOf { if(it.file.isNotEmpty())File(it.file).length() else 0L }<262144000) {"Free some offline storage before saving more music"}
         val request=OneTimeWorkRequestBuilder<OfflineDownloadWorker>().setInputData(workDataOf("owner" to owner,"song" to song.json().toString())).setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresStorageNotLow(true).build()).addTag("account:$owner").build()

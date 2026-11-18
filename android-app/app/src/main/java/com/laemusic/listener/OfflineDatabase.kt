@@ -30,6 +30,10 @@ class OfflineDatabase(context: Context) : SQLiteOpenHelper(context, "listening.d
         val value=ContentValues().apply {put("licence",licence.toString())}
         writableDatabase.update("downloads",value,"owner=? AND track=? AND status='ready'",arrayOf(owner,track))
     }
+    @Synchronized fun unavailable(owner:String,track:String) {
+        val value=ContentValues().apply {put("status","unavailable");put("error","This song is no longer available. Other saved songs are unchanged.")}
+        writableDatabase.update("downloads",value,"owner=? AND track=?",arrayOf(owner,track))
+    }
     @Synchronized fun remove(owner: String, track: String) { writableDatabase.delete("downloads","owner=? AND track=?",arrayOf(owner,track)) }
     @Synchronized fun event(device: String, event: JSONObject) {
         val db=writableDatabase;db.beginTransaction();try {

@@ -64,10 +64,12 @@ class ListeningViewModel(app:Application):AndroidViewModel(app) {
         val items=(if(queue.any {it.id==song.id})queue else listOf(song)+queue).distinctBy {it.id}
         if(offline) {val owner=graph.session.owner ?: return;runCatching {val row=state.value.downloads.find {it.song.id==song.id} ?: error("Save this song first");graph.offline.verify(owner,row.licence!!)}.onFailure {message(it.message);return}}
         val existing=(0 until p.mediaItemCount).indexOfFirst {p.getMediaItemAt(it).mediaId==song.id}
-        if(existing>=0 && playerOffline()==offline) {if(p.currentMediaItem?.mediaId!=song.id)p.seekToDefaultPosition(existing)} else p.setMediaItems(items.map {it.item(offline,graph.session.owner.orEmpty())},items.indexOfFirst {it.id==song.id},0)
+        val sameQueue=(0 until p.mediaItemCount).map {p.getMediaItemAt(it).mediaId}==items.map {it.id}
+        if(existing>=0 && playerOffline()==offline && sameQueue) {if(p.currentMediaItem?.mediaId!=song.id)p.seekToDefaultPosition(existing)} else p.setMediaItems(items.map {it.item(offline,graph.session.owner.orEmpty())},items.indexOfFirst {it.id==song.id},0)
         p.prepare();p.play();engagement(song)
     }
     fun open(song:Song,queue:List<Song> =state.value.tracks,offline:Boolean=false){update {it.copy(tab=Destination.DISCOVER,explore=false,tracks=(if(offline)queue else queue+it.tracks).distinctBy {s->s.id})};play(song,queue,offline)}
+    fun playFeed(song:Song){play(song,offline=playerOffline())}
     fun toggle(){controller?.let {if(it.isPlaying)it.pause() else {if(it.playbackState==Player.STATE_IDLE)it.prepare();it.play()}}}
     fun next(){controller?.seekToNextMediaItem()}
     fun previous(){controller?.seekToPrevious()}
@@ -87,7 +89,7 @@ class ListeningViewModel(app:Application):AndroidViewModel(app) {
     fun reportSong(song:Song,reason:String){action {graph.api.json("/api/music/tracks/${song.id}/report",JSONObject().put("reason",reason).put("details","Reported from the Android listening app"));message("Song sent for review.");dismiss()}}
     fun login(email:String,password:String,connectArtist:Boolean=false){action {graph.api.login(email,password,connectArtist);update {it.copy(user=graph.session.user)};dismiss();refresh()}}
     fun logout(){controller?.stop();graph.session.owner?.let {WorkManager.getInstance(getApplication()).cancelAllWorkByTag("account:$it")};action {runCatching {graph.api.json("/api/listener/logout",JSONObject())};graph.session.clear();update {it.copy(user=null,premium=null,downloads=emptyList(),likes=emptyList(),history=emptyList(),playlists=emptyList())}}}
-    fun premium(){if(graph.session.owner!=null)action {val x=graph.api.json("/api/platform/premium/status");update {it.copy(premium=x)}}}
+    fun premium(){if(graph.session.owner!=null)action {val x=graph.api.json("/api/platform/premium/status");if(!x.optBoolean("active"))graph.session.owner?.let {graph.offline.deny(it)};update {it.copy(premium=x)}}}
     fun library(){if(graph.session.owner!=null)action {val x=graph.api.json("/api/platform/library");update {it.copy(likes=x.songs("likes"),history=x.songs("history"),playlists=x.getJSONArray("playlists").objects())}}}
     fun createPlaylist(name:String){if(!signedIn())return;action {graph.api.json("/api/listener/playlists",JSONObject().put("name",name),LaeApi.key());library();message("Playlist created.")}}
     fun addToPlaylist(song:Song,id:String){action {graph.api.json("/api/listener/playlist/tracks",JSONObject().put("playlistId",id).put("trackId",song.id).put("action","add"));message("Song added to your playlist.");dismiss()}}

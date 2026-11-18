@@ -85,7 +85,7 @@ private val Purple=Color(0xFFAB7CFF)
     if(s.tracks.isEmpty()){EmptyState(if(s.loading)"Loading your music…" else "No songs found","Search another title or refresh the catalogue."){model.refresh()};return}
     val pager=rememberPagerState(pageCount={s.tracks.size});var syncing by remember {mutableStateOf(false)}
     LaunchedEffect(s.current,s.tracks.size){val i=s.tracks.indexOfFirst {it.id==s.current};if(i>=0 && i!=pager.currentPage && !pager.isScrollInProgress){syncing=true;pager.scrollToPage(i);syncing=false}}
-    LaunchedEffect(pager.settledPage,s.playerReady,s.tracks.size){val song=s.tracks.getOrNull(pager.settledPage);if(song!=null && !syncing && s.playerReady && song.id!=s.current)model.play(song);if(pager.settledPage>=s.tracks.size-5)model.nextPage()}
+    LaunchedEffect(pager.settledPage,s.playerReady,s.tracks.size){val song=s.tracks.getOrNull(pager.settledPage);if(song!=null && !syncing && s.playerReady && song.id!=s.current)model.playFeed(song);if(pager.settledPage>=s.tracks.size-5)model.nextPage()}
     VerticalPager(pager,Modifier.fillMaxSize(),beyondViewportPageCount=1,key={s.tracks[it].id}){index->val song=s.tracks[index];FeedCard(song,s,model)}
 }
 @Composable private fun FeedCard(song:Song,s:ListeningState,model:ListeningViewModel) {

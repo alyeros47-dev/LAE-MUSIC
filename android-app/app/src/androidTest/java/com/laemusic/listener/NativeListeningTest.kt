@@ -75,7 +75,8 @@ class NativeListeningTest {
     @Test fun fiveDestinationsVerticalFeedAndRealSocialRequests() {
         fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
         compose.waitUntil(30000){compose.onAllNodesWithText("Test song 1").fetchSemanticsNodes().isNotEmpty()}
-        for(label in listOf("Home","Discover","My Music","Downloads","Profile"))compose.onNodeWithText(label).assertExists()
+        // Discover is both a top feed tab and a bottom destination.
+        for(label in listOf("Home","Discover","My Music","Downloads","Profile"))compose.onAllNodesWithText(label).onLast().assertExists()
         compose.onNodeWithContentDescription("Like song").performClick()
         compose.onNode(hasSetTextAction() and hasText("Email address")).performTextInput("listener@test.invalid")
         compose.onNode(hasSetTextAction() and hasText("Password")).performTextInput("SyntheticPassword123")
