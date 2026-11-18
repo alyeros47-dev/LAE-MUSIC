@@ -7,6 +7,8 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -148,7 +150,7 @@ private val Purple=Color(0xFFAB7CFF)
     }}
     item{TextButton(onClick={model.refreshDownloads()}){Text("Refresh offline access")}}
 }}
-@Composable private fun Profile(s:ListeningState,model:ListeningViewModel){val context=LocalContext.current;Column(Modifier.fillMaxSize().padding(24.dp),verticalArrangement=Arrangement.spacedBy(20.dp)){
+@Composable private fun Profile(s:ListeningState,model:ListeningViewModel){val context=LocalContext.current;Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),verticalArrangement=Arrangement.spacedBy(20.dp)){
     Text("Profile",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
     if(s.user==null){Text("Use your existing LAE-MUSIC listening account.");Button(onClick={model.show("login")}){Text("Sign in")}}else{
         Text(s.user.optString("display_name"),style=MaterialTheme.typography.headlineSmall);Text(s.user.optString("email"),color=Color.LightGray)
@@ -156,12 +158,13 @@ private val Purple=Color(0xFFAB7CFF)
         Text("Listening settings",style=MaterialTheme.typography.titleLarge);Row(verticalAlignment=Alignment.CenterVertically){Text("Continuous play",Modifier.weight(1f));Switch(s.continuous,model::continuous)};Row(verticalAlignment=Alignment.CenterVertically){Text("Data saving",Modifier.weight(1f));Switch(s.dataSaver,model::dataSaver)};Text("Data saving turns off upcoming audio preloads. Headphone and Bluetooth controls follow Android settings.",fontSize=13.sp,color=Color.LightGray)
         TextButton(onClick={model.show("premium")}){Text("Subscription details")}
         TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/account/subscriptions")))}){Text("Manage Google Play subscriptions")}
+        TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/account?role=listener")))}){Text("Manage account") }
         TextButton(onClick=model::logout){Text("Sign out")}
     }
-    Spacer(Modifier.weight(1f));Row {TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/privacy")))}){Text("Privacy")};TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/terms")))}){Text("Terms")}}
+    Spacer(Modifier.height(12.dp));Row {TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/about")))}){Text("About LAE-MUSIC")};TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/publishing-policy")))}){Text("Publishing policy")}}
 }}
 @Composable private fun SearchSheet(s:ListeningState,model:ListeningViewModel){var query by remember{mutableStateOf(s.query)};Column(Modifier.padding(bottom=30.dp),verticalArrangement=Arrangement.spacedBy(16.dp)){Text("Search music",style=MaterialTheme.typography.headlineSmall);OutlinedTextField(query,{query=it},label={Text("Song, artist or genre")},singleLine=true,modifier=Modifier.fillMaxWidth());Button(onClick={model.search(query);model.explore(true);model.select(Destination.DISCOVER);model.dismiss()},modifier=Modifier.fillMaxWidth()){Text("Search")}}}
-@Composable private fun LoginSheet(s:ListeningState,model:ListeningViewModel){var email by remember{mutableStateOf("")};var password by remember{mutableStateOf("")};var show by remember{mutableStateOf(false)};var connectArtist by remember{mutableStateOf(false)};val context=LocalContext.current;Column(Modifier.padding(bottom=26.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
+@Composable private fun LoginSheet(s:ListeningState,model:ListeningViewModel){var email by remember{mutableStateOf("")};var password by remember{mutableStateOf("")};var show by remember{mutableStateOf(false)};var connectArtist by remember{mutableStateOf(false)};val context=LocalContext.current;Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom=26.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
     Text("Welcome back.",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold);Text("Sign in with your LAE-MUSIC listening account.",fontSize=14.sp)
     OutlinedTextField(email,{email=it},label={Text("Email address")},singleLine=true,keyboardOptions=androidx.compose.foundation.text.KeyboardOptions(keyboardType=androidx.compose.ui.text.input.KeyboardType.Email),modifier=Modifier.fillMaxWidth())
     OutlinedTextField(password,{password=it},label={Text("Password")},singleLine=true,keyboardOptions=androidx.compose.foundation.text.KeyboardOptions(keyboardType=androidx.compose.ui.text.input.KeyboardType.Password),visualTransformation=if(show)VisualTransformation.None else PasswordVisualTransformation(),trailingIcon={IconButton(onClick={show=!show}){Icon(if(show)Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,if(show)"Hide password" else "Show password")}},modifier=Modifier.fillMaxWidth())
