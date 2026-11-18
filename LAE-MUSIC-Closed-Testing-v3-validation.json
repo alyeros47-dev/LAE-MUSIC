@@ -1,0 +1,18 @@
+{
+  "source_commit": "bc1a68da22f8551a0095bb7628d2d37927ae2d9d",
+  "ci_run": 44276739178,
+  "source_unsigned_sha256": "36649746cada542c98f18e43a72c00e2afb6a745f80d69b37cfea0e801b60dfc",
+  "signed_bundle_sha256": "4f4dbe55f4cd7162ee5ab842809e1d93d110747631a369dd91735a48d3fae55e",
+  "signed_bundle_bytes": 9057523,
+  "all_original_entries_byte_identical": true,
+  "strict_signature_verified": true,
+  "upload_key_backed_up_to_owner_controlled_secret_store": false,
+  "play_console_first_upload_confirmed_by_owner": true,
+  "bundletool_apk_generation": "PASS",
+  "generated_release_apk_signature": "PASS",
+  "generated_release_apk_16kb_zip_alignment": "PASS",
+  "modified_dex_signature_rejected": "PASS",
+  "real_play_console_upload": "NOT VERIFIED",
+  "google_play_closed_track_published": false,
+  "live_purchases_enabled": false
+}

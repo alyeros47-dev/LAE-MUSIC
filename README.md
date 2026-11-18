@@ -23,3 +23,13 @@ Verified CI: https://github.com/alyeros47-dev/LAE-MUSIC/actions/runs/44276739178
 APK SHA256: `43830f57b2bf789c1aaf4f132f82e61fce6202690b598a27c7ae5354079be2e9`.
 
 This is an owner inspection APK. Play purchases remain disabled. Google Play Console, signing, billing/deletion/moderation integration and policy/metadata review remain release requirements. The live website, existing payments and tested playback engine were not changed. This download branch is not merged into production.
+
+## Signed Google Play draft upload — 18 November 2026
+
+[Download the signed AAB](https://raw.githubusercontent.com/alyeros47-dev/LAE-MUSIC/android-preview-downloads/LAE-MUSIC-Closed-Testing-v3.aab) · [Upload instructions and remaining release gates](LAE-MUSIC-CLOSED-TESTING-GUIDE.md) · [Public upload certificate](LAE-MUSIC-Upload-Certificate.pem) · [Validation receipt](LAE-MUSIC-Closed-Testing-v3-validation.json)
+
+Package `com.laemusic.listener`, version code `3`, version name `0.3.0-preview`, target API 36. SHA-256: `4f4dbe55f4cd7162ee5ab842809e1d93d110747631a369dd91735a48d3fae55e`.
+
+The existing CI-tested release bundle was signed with a dedicated upload key; all original application entries remain byte-identical. Fresh strict signature, bundletool/APK-generation and 16 KB alignment checks passed. Existing 28 unit tests and seven device tests each on Android 15/16 are reused for unchanged application code.
+
+**Ready for draft AAB upload, not a declaration that the closed test has been published or is policy-approved.** Google-managed app signing, required app-content/compliance work and review, and 12 eligible testers' continuous opt-in are still required. Google Play purchases remain disabled. An owner-controlled upload-key backup also remains outstanding; private key/passwords are excluded from this branch. See the guide. The original APK downloads and live website are unchanged.
