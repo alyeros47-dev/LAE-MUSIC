@@ -2,8 +2,6 @@ name: Android listening app
 on:
   push:
     paths: ['android-app/**', '.github/workflows/android-build.yml']
-  pull_request:
-    paths: ['android-app/**', '.github/workflows/android-build.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,6 +16,8 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
       - uses: gradle/actions/setup-gradle@v4
         with:
