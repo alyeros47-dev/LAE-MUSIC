@@ -37,6 +37,7 @@ class NativeListeningTest {
     private val instrumentation=InstrumentationRegistry.getInstrumentation()
     private val context get()=instrumentation.targetContext
     private var scenario:ActivityScenario<MainActivity>?=null
+    @Volatile private var delayLikes=false
     private val likes=AtomicInteger(2);private var liked=false;private var following=false;private val posts=mutableListOf<String>()
     private fun fixture(seconds:Int=120,onboarding:Boolean=false):AppGraph {
         val start=if(seconds==6)100 else 0
@@ -44,6 +45,7 @@ class NativeListeningTest {
         val client=OkHttpClient.Builder().addInterceptor {chain->
             val request=chain.request();val path=request.url.encodedPath
             if(request.method=="POST")synchronized(posts){posts.add(path)}
+            if(path=="/api/listener/song-like" && delayLikes)Thread.sleep(1500)
             if(path=="/api/music/artist-follow")return@addInterceptor Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(404).message("Not deployed").body("{}".toResponseBody("application/json".toMediaType())).build()
             if(path.endsWith("/audio"))return@addInterceptor Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("test audio").body(wav(seconds).toResponseBody("audio/wav".toMediaType())).build()
             if(path.endsWith("cover-image") || path=="/api/artist/photo") {
@@ -179,6 +181,16 @@ class NativeListeningTest {
             instrumentation.runOnMainSync {context.graph.discovery.liked("private-song",true);context.graph.session.clear();context.graph.discovery.switchAccount();assertFalse(context.graph.discovery.evidenceSnapshot()["private-song"]?.liked==true);context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount();assertTrue(context.graph.discovery.evidenceSnapshot()["private-song"]?.liked==true);context.graph.session.clear();context.graph.discovery.switchAccount()}
             compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isEmpty()}
             assertEquals(MusicChoice.SECULAR,context.graph.discovery.preferences.value!!.choice)
+            // A slow response from the old account must not train the guest account.
+            delayLikes=true
+            scenario!!.onActivity {activity->
+                context.graph.session.signedIn(JSONObject().put("id","7"));context.graph.discovery.switchAccount()
+                androidx.lifecycle.ViewModelProvider(activity)[ListeningViewModel::class.java].like(Song("1","Song","Artist","90","Gospel praise"))
+            }
+            compose.waitUntil(10000){synchronized(posts){posts.contains("/api/listener/song-like")}}
+            instrumentation.runOnMainSync {context.graph.session.clear();context.graph.discovery.switchAccount()}
+            Thread.sleep(2500)
+            instrumentation.runOnMainSync {assertFalse(context.graph.discovery.evidenceSnapshot()["1"]?.liked==true)}
         } finally {instrumentation.runOnMainSync {player.stop();player.release()}}
         assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic") || it.endsWith("/play")}})
     }
