@@ -23,6 +23,7 @@ class OfflinePersistenceTest {
     @Test fun verifyAfterReboot() {
         val g=AppGraph(context,OkHttpClient.Builder().addInterceptor {throw java.io.IOException("Network disabled for the reboot test")}.build())
         (context.applicationContext as LaeApplication).graph=g
+        coil.Coil.setImageLoader(coil.ImageLoader.Builder(context).okHttpClient(g.api.client).build())
         val owner="7777777";assertEquals(owner,g.session.owner)
         val row=g.offline.db.rows(owner).first {it.song.id=="9999999"};val p=g.offline.verify(owner,row.licence!!)
         ProtectedAudio.Reader(java.io.File(row.file),g.offline.mediaKey(owner),g.offline.binding(owner,row.song,p)).use {r->val bytes=ByteArray(44);assertEquals(44,r.read(0,bytes,0,44));assertEquals("RIFF",String(bytes.copyOfRange(0,4)))}

@@ -38,8 +38,13 @@ class LaeApi(val session: SessionStore, transport:OkHttpClient?=null) {
         } else session.signedIn(json("/api/listener/login",credentials).getJSONObject("user"))
     }
     suspend fun engagement(song: Song): Engagement {
-        val x = json("/api/listener/song-engagement?trackId=${song.id}"); val f = json("/api/music/artist-follow?artistId=${song.artistId}")
-        return Engagement(x.optInt("likes"), x.optInt("comments"), x.optBoolean("liked"), f.optBoolean("following"))
+        val x = json("/api/listener/song-engagement?trackId=${song.id}")
+        // The deployed platform already exposes the listener's saved artists.
+        // Guest engagement must not depend on an authenticated follow lookup.
+        val following = if (session.owner == null) false else runCatching {
+            json("/api/listener/favorites").getJSONArray("artists").objects().any { it.optString("id") == song.artistId }
+        }.getOrDefault(false)
+        return Engagement(x.optInt("likes"), x.optInt("comments"), x.optBoolean("liked"), following)
     }
     companion object { fun enc(s: String): String = URLEncoder.encode(s, "UTF-8"); fun key() = UUID.randomUUID().toString() }
 }

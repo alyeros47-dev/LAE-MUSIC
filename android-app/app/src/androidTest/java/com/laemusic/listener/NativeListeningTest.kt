@@ -61,7 +61,7 @@ class NativeListeningTest {
                 "/api/listener/song-engagement"->JSONObject().put("likes",likes.get()).put("comments",1).put("liked",liked)
                 "/api/music/artist-follow"->JSONObject().put("following",following)
                 "/api/listener/song-like"->{liked=JSONObject(request.body!!.let { b->val buffer=okio.Buffer();b.writeTo(buffer);buffer.readUtf8() }).getBoolean("liked");likes.set(if(liked)3 else 2);JSONObject().put("ok",true)}
-                "/api/listener/favorites"->{following=true;JSONObject().put("ok",true)}
+                "/api/listener/favorites"->if(request.method=="GET")JSONObject().put("artists",JSONArray().also {if(following)it.put(JSONObject().put("id","90").put("name","Test artist"))}) else {following=true;JSONObject().put("ok",true)}
                 "/api/listener/comments"->if(request.method=="GET")JSONObject().put("comments",JSONArray().put(JSONObject().put("id","1").put("author","Test listener").put("body","A test comment"))) else JSONObject().put("message","Comment published")
                 else->JSONObject().put("ok",true)
             }
