@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -93,7 +94,7 @@ private val Purple=Color(0xFFAB7CFF)
 @Composable private fun FeedCard(song:Song,s:ListeningState,model:ListeningViewModel) {
     val context=LocalContext.current;var portrait by remember(song.id){mutableStateOf(false)};val e=s.engagements[song.id]
     LaunchedEffect(song.id){model.engagement(song)}
-    Box(Modifier.fillMaxSize().background(Color(0xFF100B1B))){
+    Box(Modifier.fillMaxSize().testTag("feed-${song.id}").background(Color(0xFF100B1B))){
         AsyncImage(song.artwork,null,Modifier.fillMaxSize().blur(32.dp),contentScale=ContentScale.Crop,alpha=.45f)
         AsyncImage(song.artwork,"Artwork for ${song.title}",Modifier.fillMaxSize(),contentScale=if(portrait)ContentScale.Crop else ContentScale.Fit,onSuccess={portrait=it.result.drawable.intrinsicHeight.toFloat()/it.result.drawable.intrinsicWidth.coerceAtLeast(1)>1.35f})
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.04f),Color.Transparent,Color.Black.copy(alpha=.35f),Color.Black.copy(alpha=.96f)))))

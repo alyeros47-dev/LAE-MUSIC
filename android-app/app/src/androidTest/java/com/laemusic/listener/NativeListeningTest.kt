@@ -77,15 +77,17 @@ class NativeListeningTest {
         compose.waitUntil(30000){compose.onAllNodesWithText("Test song 1").fetchSemanticsNodes().isNotEmpty()}
         // Discover is both a top feed tab and a bottom destination.
         for(label in listOf("Home","Discover","My Music","Downloads","Profile"))compose.onAllNodesWithText(label).onLast().assertExists()
-        compose.onNodeWithContentDescription("Like song").performClick()
+        fun action(description:String)=compose.onNode(hasContentDescription(description) and hasAnyAncestor(hasTestTag("feed-1")))
+        action("Like song").performClick()
         compose.onNode(hasSetTextAction() and hasText("Email address")).performTextInput("listener@test.invalid")
         compose.onNode(hasSetTextAction() and hasText("Password")).performTextInput("SyntheticPassword123")
-        compose.onNodeWithText("Sign in",useUnmergedTree=true).performClick()
+        compose.onNodeWithText("Sign in",useUnmergedTree=true).performScrollTo().performClick()
         compose.waitUntil(15000){context.graph.session.owner=="7"}
-        compose.onNodeWithContentDescription("Like song").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/song-like")}}
-        compose.onNodeWithContentDescription("Follow artist").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/favorites")}}
-        compose.onNodeWithContentDescription("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};UiDevice.getInstance(instrumentation).pressBack()
-        compose.onRoot().performTouchInput {swipeUp()};compose.waitUntil(15000){compose.onAllNodesWithText("Test song 2").fetchSemanticsNodes().isNotEmpty()}
+        action("Like song").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/song-like")}}
+        action("Follow artist").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/favorites")}}
+        action("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};UiDevice.getInstance(instrumentation).pressBack()
+        compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isEmpty()}
+        compose.onNodeWithTag("feed-1").performTouchInput {swipeUp()};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-2").assertIsDisplayed();true}.getOrDefault(false)}
         val screenshot=File(context.getExternalFilesDir(null),"discover.png");UiDevice.getInstance(instrumentation).takeScreenshot(screenshot)
         assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic")}})
     }

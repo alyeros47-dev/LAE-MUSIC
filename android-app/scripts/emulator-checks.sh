@@ -24,9 +24,10 @@ assert re.search(r"OK \([0-9]+ tests?\)",text), "Android instrumentation did not
 assert not re.search(r"FAILURES!!!|INSTRUMENTATION_FAILED|Process crashed",text)
 PYTEST
 }
-run_case com.laemusic.listener.NativeListeningTest native-listening
-adb pull /sdcard/Android/data/com.laemusic.listener.preview/files/discover.png evidence/discover-fixture.png
-run_case 'com.laemusic.listener.OfflinePersistenceTest#prepare' offline-before-reboot
+failed=0
+run_case com.laemusic.listener.NativeListeningTest native-listening || failed=1
+adb pull /sdcard/Android/data/com.laemusic.listener.preview/files/discover.png evidence/discover-fixture.png || true
+if run_case 'com.laemusic.listener.OfflinePersistenceTest#prepare' offline-before-reboot; then
 adb shell am force-stop com.laemusic.listener.preview
 adb reboot
 adb wait-for-device
@@ -36,7 +37,10 @@ for i in $(seq 1 90); do
 done
 [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ]
 adb shell input keyevent 82
-run_case 'com.laemusic.listener.OfflinePersistenceTest#verifyAfterReboot' offline-after-reboot
+run_case 'com.laemusic.listener.OfflinePersistenceTest#verifyAfterReboot' offline-after-reboot || failed=1
+else
+  failed=1
+fi
 # One short guest smoke check of the real public catalogue. No purchase, paid
 # generation or qualifying 30-second stream is initiated.
 adb shell pm clear com.laemusic.listener.preview
@@ -47,3 +51,4 @@ adb shell screencap -p /sdcard/lae-catalogue.png
 adb pull /sdcard/lae-catalogue.png evidence/discover-public-catalogue.png
 adb shell dumpsys media_session > evidence/media-session-smoke.txt
 adb shell am force-stop com.laemusic.listener.preview
+exit "$failed"
