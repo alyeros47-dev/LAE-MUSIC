@@ -32,7 +32,11 @@ class GuestDesignScreensTest {
             scenario.onActivity {model=androidx.lifecycle.ViewModelProvider(it)[ListeningViewModel::class.java]}
             fun artwork(url:String){kotlinx.coroutines.runBlocking {coil.Coil.imageLoader(context).execute(coil.request.ImageRequest.Builder(context).data(url).build())};compose.waitForIdle()}
             model.state.value.tracks.firstOrNull()?.let {artwork(it.artwork)}
-            fun capture(name:String){UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),name))}
+            fun capture(name:String){
+                compose.mainClock.advanceTimeByFrame();compose.waitForIdle();instrumentation.waitForIdleSync()
+                Thread.sleep(500) // UiDevice captures SurfaceFlinger, after the Compose frame is presented.
+                UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),name))
+            }
             capture("discover-public.png")
             compose.onNodeWithTag("bottom-nav-Home").performClick()
             compose.waitUntil(15000){compose.onAllNodesWithTag("featured-song").fetchSemanticsNodes().isNotEmpty()}

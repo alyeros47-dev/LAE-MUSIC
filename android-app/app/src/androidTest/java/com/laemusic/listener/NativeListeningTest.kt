@@ -73,6 +73,10 @@ class NativeListeningTest {
         Coil.setImageLoader(ImageLoader.Builder(context).okHttpClient(client).build())
         return graph
     }
+    private fun capture(name:String){
+        compose.mainClock.advanceTimeByFrame();compose.waitForIdle();instrumentation.waitForIdleSync();Thread.sleep(500)
+        UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),name))
+    }
     @After fun cleanup(){scenario?.close();context.stopService(android.content.Intent(context,MusicPlaybackService::class.java));instrumentation.waitForIdleSync()}
     @Test fun fiveDestinationsVerticalFeedAndRealSocialRequests() {
         fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
@@ -98,7 +102,7 @@ class NativeListeningTest {
         assertTrue("Discover artwork must extend behind the header and bottom navigation",feed.height>=root.height*.9f)
         compose.onNodeWithTag("feed-2").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.25f),androidx.compose.ui.geometry.Offset(center.x,height*.72f))}
         compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-1").assertIsDisplayed();true}.getOrDefault(false)}
-        val screenshot=File(context.getExternalFilesDir(null),"discover.png");UiDevice.getInstance(instrumentation).takeScreenshot(screenshot)
+        capture("discover.png")
         assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic")}})
     }
     @Test fun homeAndExploreRemainSeparateAndKeepTheCurrentPlayer() {
@@ -114,14 +118,14 @@ class NativeListeningTest {
             compose.onNodeWithTag("home-screen").performScrollToNode(hasText("Recently played"))
             compose.onNodeWithTag("home-screen").performScrollToNode(hasText("Recommended music"))
             compose.onNodeWithTag("home-screen").performScrollToIndex(0)
-            UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),"home.png"))
+            capture("home.png")
             compose.onNodeWithTag("bottom-nav-Discover").performClick()
             compose.onNodeWithTag("top-tab-Explore").performClick()
             compose.onNodeWithTag("explore-screen").assertExists()
             compose.onNodeWithText("Browse by category").assertExists()
             compose.onNodeWithText("Featured artists").assertExists()
             compose.onAllNodesWithTag("featured-song").assertCountEquals(0)
-            UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),"explore.png"))
+            capture("explore.png")
             instrumentation.runOnMainSync {assertEquals("1",player.currentMediaItem?.mediaId);assertTrue(player.isPlaying)}
             compose.onNodeWithTag("top-tab-Discover").performClick()
             compose.onNodeWithTag("feed-1").assertIsDisplayed()
