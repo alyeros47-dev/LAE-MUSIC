@@ -39,7 +39,8 @@ class NativeListeningTest {
     private var scenario:ActivityScenario<MainActivity>?=null
     private val likes=AtomicInteger(2);private var liked=false;private var following=false;private val posts=mutableListOf<String>()
     private fun fixture(seconds:Int=120):AppGraph {
-        val tracks=JSONArray((1..4).map {Song(it.toString(),"Test song $it","Test artist","90","Gospel praise","Synthetic Android test catalogue").json()})
+        val start=if(seconds==6)100 else 0
+        val tracks=JSONArray((1..4).map {Song((it+start).toString(),"Test song $it","Test artist","90","Gospel praise","Synthetic Android test catalogue").json()})
         val client=OkHttpClient.Builder().addInterceptor {chain->
             val request=chain.request();val path=request.url.encodedPath
             if(request.method=="POST")synchronized(posts){posts.add(path)}
@@ -54,7 +55,7 @@ class NativeListeningTest {
             val body=when(path){
                 "/api/platform/session"->JSONObject()
                 "/api/platform/discover"->JSONObject().put("tracks",tracks).put("genres",JSONArray().put(JSONObject().put("genre","Gospel praise"))).put("artists",JSONArray()).put("next_cursor",JSONObject.NULL)
-                "/api/platform/editorial"->JSONObject().put("featured_artists",JSONArray())
+                "/api/platform/editorial"->JSONObject().put("featured_tracks",tracks).put("featured_artists",JSONArray().put(JSONObject().put("id","90").put("display_name","Test artist")))
                 "/api/listener/login"->JSONObject().put("user",JSONObject().put("id","7").put("display_name","Test listener").put("email","listener@test.invalid"))
                 "/api/platform/premium/status"->JSONObject().put("active",false)
                 "/api/platform/library"->JSONObject().put("likes",tracks).put("history",JSONArray()).put("playlists",JSONArray())
@@ -92,8 +93,40 @@ class NativeListeningTest {
         action("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};UiDevice.getInstance(instrumentation).pressBack()
         compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isEmpty()}
         compose.onNodeWithTag("feed-1").performTouchInput {swipeUp()};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-2").assertIsDisplayed();true}.getOrDefault(false)}
+        val root=compose.onRoot().fetchSemanticsNode().boundsInRoot
+        val feed=compose.onNodeWithTag("feed-2").fetchSemanticsNode().boundsInRoot
+        assertTrue("Discover artwork must extend behind the header and bottom navigation",feed.height>=root.height*.9f)
+        compose.onNodeWithTag("feed-2").performTouchInput {swipeDown()}
+        compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-1").assertIsDisplayed();true}.getOrDefault(false)}
         val screenshot=File(context.getExternalFilesDir(null),"discover.png");UiDevice.getInstance(instrumentation).takeScreenshot(screenshot)
         assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic")}})
+    }
+    @Test fun homeAndExploreRemainSeparateAndKeepTheCurrentPlayer() {
+        fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
+        compose.waitUntil(30000){compose.onAllNodesWithTag("feed-1").fetchSemanticsNodes().isNotEmpty()}
+        val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
+        val player=future.get(30,TimeUnit.SECONDS)
+        try {
+            compose.waitUntil(15000){var playing=false;instrumentation.runOnMainSync {playing=player.currentMediaItem?.mediaId=="1" && player.isPlaying};playing}
+            compose.onNodeWithTag("bottom-nav-Home").performClick()
+            compose.onNodeWithTag("home-screen").assertExists()
+            compose.waitUntil(15000){compose.onAllNodesWithTag("featured-song").fetchSemanticsNodes().isNotEmpty()}
+            compose.onNodeWithTag("home-screen").performScrollToNode(hasText("Recently played"))
+            compose.onNodeWithTag("home-screen").performScrollToNode(hasText("Recommended music"))
+            compose.onNodeWithTag("home-screen").performScrollToIndex(0)
+            UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),"home.png"))
+            compose.onNodeWithTag("bottom-nav-Discover").performClick()
+            compose.onNodeWithTag("top-tab-Explore").performClick()
+            compose.onNodeWithTag("explore-screen").assertExists()
+            compose.onNodeWithText("Browse by category").assertExists()
+            compose.onNodeWithText("Featured artists").assertExists()
+            compose.onAllNodesWithTag("featured-song").assertCountEquals(0)
+            UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),"explore.png"))
+            instrumentation.runOnMainSync {assertEquals("1",player.currentMediaItem?.mediaId);assertTrue(player.isPlaying)}
+            compose.onNodeWithTag("top-tab-Discover").performClick()
+            compose.onNodeWithTag("feed-1").assertIsDisplayed()
+            compose.onAllNodesWithTag("explore-screen").assertCountEquals(0)
+        } finally {instrumentation.runOnMainSync {player.release()}}
     }
     @Test fun screenLockedPlaybackContinuesAcrossSeveralTracks() {
         fixture(6);scenario=ActivityScenario.launch(MainActivity::class.java)
@@ -101,7 +134,7 @@ class NativeListeningTest {
         val player=future.get(30,TimeUnit.SECONDS);val transitions=AtomicInteger(0)
         instrumentation.runOnMainSync {
             player.addListener(object:Player.Listener {override fun onMediaItemTransition(item:androidx.media3.common.MediaItem?,reason:Int){transitions.incrementAndGet()}})
-            player.setMediaItems((1..4).map {Song(it.toString(),"Test song $it","Test artist","90").item()});player.repeatMode=Player.REPEAT_MODE_ALL;player.prepare();player.play()
+            player.setMediaItems((1..4).map {Song((it+100).toString(),"Test song $it","Test artist","90").item()});player.repeatMode=Player.REPEAT_MODE_ALL;player.prepare();player.play()
         }
         Thread.sleep(2000);UiDevice.getInstance(instrumentation).pressHome();UiDevice.getInstance(instrumentation).sleep();Thread.sleep(65000)
         instrumentation.runOnMainSync {assertTrue("The service must cross at least eight track boundaries with the screen locked",transitions.get()>=8);assertTrue(player.isPlaying);player.stop();player.release()}

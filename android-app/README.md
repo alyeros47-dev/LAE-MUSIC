@@ -6,7 +6,7 @@ Native Kotlin / Jetpack Compose listening application. The existing website and 
 
 ## Architecture
 
-- Compose: full-screen vertical Discover pager, portrait artwork with undistorted square fallback, Discover/Explore tabs, and exactly Home / Discover / My Music / Downloads / Profile.
+- Compose: portrait artwork extends behind Discover’s header, playback and five-destination navigation overlays. Home has its own featured-song carousel and music shelves. Explore is a separate category/artist/trending view under the Discover/Explore tabs. Existing square artwork remains undistorted. See `docs/APPROVED-UI-REFERENCES.md`.
 - One Media3 ExoPlayer in a foreground `MediaSessionService`: complete queues, automatic transitions, system notification/lock-screen controls, audio focus, noisy-headphone handling, network retries and bounded upcoming-stream buffering. The Activity never owns track transitions.
 - Existing HTTPS APIs at `https://lae-music.com` (the existing Render service also serves `lae-music.onrender.com`). Real catalogue, artist pictures, likes, comments, follows, sharing, playlists, history and listener accounts. No production sample songs or fake engagement.
 - Android Keystore-protected session cookies. Existing artist users can explicitly connect listening through the existing role-link API; no new email, paid artist permission or creator tools are introduced.

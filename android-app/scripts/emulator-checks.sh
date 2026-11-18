@@ -26,7 +26,9 @@ PYTEST
 }
 failed=0
 run_case com.laemusic.listener.NativeListeningTest native-listening || failed=1
-adb pull /sdcard/Android/data/com.laemusic.listener.preview/files/discover.png evidence/discover-fixture.png || true
+for screen in discover home explore; do
+  adb pull "/sdcard/Android/data/com.laemusic.listener.preview/files/$screen.png" "evidence/$screen-fixture.png" || true
+done
 if run_case 'com.laemusic.listener.OfflinePersistenceTest#prepare' offline-before-reboot; then
 adb shell am force-stop com.laemusic.listener.preview
 adb reboot
@@ -41,14 +43,13 @@ run_case 'com.laemusic.listener.OfflinePersistenceTest#verifyAfterReboot' offlin
 else
   failed=1
 fi
-# One short guest smoke check of the real public catalogue. No purchase, paid
-# generation or qualifying 30-second stream is initiated.
+# Read-only screenshots of all three screens using actual published music.
+# The test pauses immediately after loading; no purchase or qualifying stream.
 adb shell pm clear com.laemusic.listener.preview
 adb shell pm grant com.laemusic.listener.preview android.permission.POST_NOTIFICATIONS
-adb shell am start -W -n com.laemusic.listener.preview/com.laemusic.listener.MainActivity
-sleep 12
-adb shell screencap -p /sdcard/lae-catalogue.png
-adb pull /sdcard/lae-catalogue.png evidence/discover-public-catalogue.png
-adb shell dumpsys media_session > evidence/media-session-smoke.txt
+run_case com.laemusic.listener.GuestDesignScreensTest public-design-screens || failed=1
+for screen in discover home explore; do
+  adb pull "/sdcard/Android/data/com.laemusic.listener.preview/files/$screen-public.png" "evidence/$screen-public.png" || true
+done
 adb shell am force-stop com.laemusic.listener.preview
 exit "$failed"

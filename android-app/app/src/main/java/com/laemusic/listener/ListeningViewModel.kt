@@ -17,6 +17,7 @@ import org.json.JSONObject
 enum class Destination(val title:String) { HOME("Home"), DISCOVER("Discover"), MUSIC("My Music"), DOWNLOADS("Downloads"), PROFILE("Profile") }
 data class ListeningState(
     val tab:Destination=Destination.DISCOVER,val explore:Boolean=false,val tracks:List<Song> = emptyList(),val genres:List<String> = emptyList(),val artists:List<JSONObject> = emptyList(),
+    val releases:List<Song> = emptyList(),val results:List<Song> = emptyList(),val featuredSongs:List<Song> = emptyList(),val collectionTitle:String="",
     val query:String="",val genre:String="",val loading:Boolean=true,val message:String?=null,val current:String?=null,val playing:Boolean=false,val buffering:Boolean=false,val position:Long=0,val duration:Long=0,
     val user:JSONObject?=null,val premium:JSONObject?=null,val likes:List<Song> = emptyList(),val history:List<Song> = emptyList(),val playlists:List<JSONObject> = emptyList(),val downloads:List<SavedSong> = emptyList(),val engagements:Map<String,Engagement> = emptyMap(),val comments:List<JSONObject> = emptyList(),val sheet:String?=null,val selected:Song?=null,val artistSongs:List<Song> = emptyList(),val dataSaver:Boolean=false,val continuous:Boolean=true,val hasMore:Boolean=false,val playerReady:Boolean=false,val popular:List<Song> = emptyList(),val featuredArtists:List<JSONObject> = emptyList(),val busy:Boolean=false
 )
@@ -43,7 +44,7 @@ class ListeningViewModel(app:Application):AndroidViewModel(app) {
     fun message(s:String?){update {it.copy(message=s)}}
     fun select(tab:Destination){update {it.copy(tab=tab)};if(tab==Destination.MUSIC)library();if(tab==Destination.DOWNLOADS){loadDownloads();action {graph.offline.refresh();loadDownloads()}};if(tab==Destination.PROFILE)premium()}
     fun explore(value:Boolean){update {it.copy(explore=value)}}
-    fun refresh(){loadCatalog(false);action {val popular=graph.api.discover(sort="popular");val editorial=graph.api.json("/api/platform/editorial");update {it.copy(popular=popular.songs,featuredArtists=editorial.optJSONArray("featured_artists")?.objects().orEmpty())}};if(graph.session.owner!=null){premium();library();loadDownloads()}}
+    fun refresh(){loadCatalog(false);action {val popular=graph.api.discover(sort="popular");val editorial=graph.api.json("/api/platform/editorial");update {it.copy(popular=popular.songs,featuredSongs=editorial.songs("featured_tracks"),featuredArtists=editorial.optJSONArray("featured_artists")?.objects().orEmpty())}};if(graph.session.owner!=null){premium();library();loadDownloads()}}
     fun search(query:String,genre:String=""){update {it.copy(query=query.trim(),genre=genre)};loadCatalog(false)}
     fun nextPage(){if(cursor!=null && !loadingPage)loadCatalog(true)}
     private fun loadCatalog(append:Boolean) {
@@ -52,8 +53,8 @@ class ListeningViewModel(app:Application):AndroidViewModel(app) {
         viewModelScope.launch {try {
             val s=state.value;val page=graph.api.discover(s.query,s.genre,cursor=if(append)cursor else null)
             if(request!=queryVersion)return@launch
-            cursor=page.cursor;if(!append)graph.secure.put("feed-page",JSONObject().put("cursor",page.cursor).put("query",s.query).put("genre",s.genre).toString());val tracks=(if(append)state.value.tracks+page.songs else page.songs).distinctBy {it.id}
-            update {it.copy(tracks=tracks,genres=page.genres,artists=page.artists,loading=false,hasMore=page.cursor!=null)}
+            cursor=page.cursor;if(!append)graph.secure.put("feed-page",JSONObject().put("cursor",page.cursor).put("query",s.query).put("genre",s.genre).toString());val tracks=(if(append)state.value.tracks+page.songs else page.songs).distinctBy {it.id};val results=(if(append)state.value.results+page.songs else page.songs).distinctBy {it.id}
+            update {it.copy(tracks=tracks,results=results,releases=if(!append && s.query.isEmpty() && s.genre.isEmpty())page.songs else it.releases,genres=page.genres,artists=page.artists,loading=false,hasMore=page.cursor!=null)}
             // Append without replacing the playing item or changing its position.
             if(append && !playerOffline())controller?.let {p-> val ids=(0 until p.mediaItemCount).map {p.getMediaItemAt(it).mediaId}.toSet();p.addMediaItems(page.songs.filterNot {it.id in ids}.map {it.item()})}
         } catch(e:Exception){if(request==queryVersion)update {it.copy(loading=false,message=error(e))}}finally{if(request==queryVersion)loadingPage=false}}
@@ -78,6 +79,7 @@ class ListeningViewModel(app:Application):AndroidViewModel(app) {
     fun like(song:Song){if(!signedIn())return;action {val liked=state.value.engagements[song.id]?.liked==true;graph.api.json("/api/listener/song-like",JSONObject().put("trackId",song.id).put("liked",!liked));engagement(song)}}
     fun follow(song:Song){if(!signedIn())return;action {val followed=state.value.engagements[song.id]?.following==true;graph.api.json("/api/listener/favorites",JSONObject().put("artistId",song.artistId).put("action",if(followed)"remove" else "add"));val value=graph.api.engagement(song);val ids=state.value.tracks.filter {it.artistId==song.artistId}.map {it.id}.toSet();update {it.copy(engagements=it.engagements.mapValues {entry->if(entry.key in ids)entry.value.copy(following=value.following) else entry.value}+(song.id to value))}}}
     fun show(sheet:String,song:Song?=null){update {it.copy(sheet=sheet,selected=song,comments=emptyList())};if(sheet=="comments" && song!=null)action {val x=graph.api.json("/api/listener/comments?trackId=${song.id}");update {it.copy(comments=x.getJSONArray("comments").objects())}};if(sheet=="artist" && song!=null)action {val x=graph.api.json("/api/music/artist?id=${song.artistId}");update {it.copy(artistSongs=x.songs())}};if(sheet=="premium")premium()}
+    fun collection(title:String,songs:List<Song>){update {it.copy(sheet="collection",collectionTitle=title,artistSongs=songs)}}
     fun dismiss(){update {it.copy(sheet=null)}}
     fun comment(song:Song,text:String){if(!signedIn())return;action {val x=graph.api.json("/api/listener/comments",JSONObject().put("trackId",song.id).put("comment",text));message(x.optString("message"));show("comments",song);engagement(song)}}
     fun reportComment(id:String){if(!signedIn())return;action {graph.api.json("/api/listener/comment-report",JSONObject().put("commentId",id).put("reason","Please review this comment"));message("Comment sent for review.")}}

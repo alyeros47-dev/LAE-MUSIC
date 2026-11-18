@@ -43,43 +43,53 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
-private val Purple=Color(0xFFAB7CFF)
+internal val Purple=Color(0xFFA332FF)
+internal val AppBackground=Color(0xFF090911)
+internal val Panel=Color(0xFF191923)
 @Composable fun ListeningApp(model:ListeningViewModel) {
-    val s by model.state.collectAsStateWithLifecycle();val snack=remember {SnackbarHostState()};val context=LocalContext.current
+    val s by model.state.collectAsStateWithLifecycle()
+    val snack=remember {SnackbarHostState()}
+    val immersive=s.tab==Destination.DISCOVER && !s.explore
     LaunchedEffect(s.message){s.message?.let {snack.showSnackbar(it);model.message(null)}}
-    Scaffold(containerColor=Color(0xFF09080F),snackbarHost={SnackbarHost(snack)},topBar={Column(Modifier.statusBarsPadding()){
-        Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal=16.dp),verticalAlignment=Alignment.CenterVertically){
-            Image(painterResource(R.drawable.lae_logo_wide),"LAE-MUSIC",Modifier.width(156.dp).height(48.dp),contentScale=ContentScale.Fit)
-            Spacer(Modifier.weight(1f));IconButton(onClick={model.show("search")}){Icon(Icons.Rounded.Search,"Search music")}
-            FilledTonalButton(onClick={model.show("premium")},contentPadding=PaddingValues(horizontal=14.dp)){Text("Premium",fontSize=13.sp)}
+    Scaffold(
+        containerColor=AppBackground,
+        snackbarHost={SnackbarHost(snack)},
+        topBar={if(!immersive)Column(Modifier.statusBarsPadding()){
+            BrandHeader(model)
+            if(s.tab==Destination.DISCOVER)DiscoveryTabs(s,model)
+        }},
+        bottomBar={ListeningNavigation(s,model,immersive)}
+    ){padding->
+        if(immersive)Box(Modifier.fillMaxSize()){
+            Discover(s,model)
+            Column(Modifier.fillMaxWidth().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.72f),Color.Transparent))).statusBarsPadding()){
+                BrandHeader(model)
+                DiscoveryTabs(s,model)
+            }
+        } else Column(Modifier.padding(padding).fillMaxSize()){
+            Box(Modifier.weight(1f)){when(s.tab){
+                Destination.HOME->HomeScreen(s,model)
+                Destination.DISCOVER->ExploreScreen(s,model)
+                Destination.MUSIC->MyMusic(s,model)
+                Destination.DOWNLOADS->Downloads(s,model)
+                Destination.PROFILE->Profile(s,model)
+            }}
+            if(s.current!=null)MiniPlayer(s,model)
         }
-        if(s.tab==Destination.DISCOVER)Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center){
-            TextButton(onClick={model.explore(false)}){Text("Discover",fontWeight=if(!s.explore)FontWeight.Bold else FontWeight.Normal,color=if(!s.explore)Color.White else Color.Gray)}
-            TextButton(onClick={model.explore(true)}){Text("Explore",fontWeight=if(s.explore)FontWeight.Bold else FontWeight.Normal,color=if(s.explore)Color.White else Color.Gray)}
-        }
-    }},bottomBar={NavigationBar(containerColor=Color(0xFF110E19),tonalElevation=0.dp){
-        val icons=listOf(Icons.Rounded.Home,Icons.Rounded.AutoAwesome,Icons.Rounded.LibraryMusic,Icons.Rounded.Download,Icons.Rounded.Person)
-        Destination.entries.forEachIndexed {i,d->NavigationBarItem(selected=s.tab==d,onClick={model.select(d)},icon={Icon(icons[i],d.title)},label={Text(d.title,fontSize=11.sp)},colors=NavigationBarItemDefaults.colors(indicatorColor=Purple.copy(alpha=.18f),selectedIconColor=Purple,selectedTextColor=Color.White))}
-    }}){padding->Column(Modifier.padding(padding).fillMaxSize()){
-        Box(Modifier.weight(1f)){when(s.tab){
-            Destination.DISCOVER->if(s.explore)Browse(s,model,true) else Discover(s,model)
-            Destination.HOME->Browse(s,model,false)
-            Destination.MUSIC->MyMusic(s,model)
-            Destination.DOWNLOADS->Downloads(s,model)
-            Destination.PROFILE->Profile(s,model)
-        }}
-        if(s.tab!=Destination.DISCOVER || s.explore)if(s.current!=null)MiniPlayer(s,model)
-    }}
+    }
     s.sheet?.let {sheet->ModalBottomSheet(onDismissRequest=model::dismiss,containerColor=Color(0xFF17131F)){
         Box(Modifier.padding(horizontal=20.dp).navigationBarsPadding().imePadding()){when(sheet){
             "search"->SearchSheet(s,model)
+            "categories"->CategorySheet(s,model)
+            "artists"->ArtistSheet(s,model)
+            "collection"->Column {Text(s.collectionTitle,style=MaterialTheme.typography.headlineSmall);SongList(s.artistSongs){model.play(it,s.artistSongs);model.dismiss()} }
             "login"->LoginSheet(s,model)
             "premium"->PremiumSheet(s)
             "comments"->s.selected?.let {Comments(s,model,it)}
             "artist"->Column {Text(s.selected?.artist.orEmpty(),style=MaterialTheme.typography.headlineSmall);SongList(s.artistSongs){model.play(it,s.artistSongs)} }
             "playlist"->SongList(s.artistSongs){model.open(it,s.artistSongs);model.dismiss()}
             "save"->Column(Modifier.padding(bottom=28.dp)){Text("Add to playlist",style=MaterialTheme.typography.headlineSmall);if(s.playlists.isEmpty())Text("Create a playlist in My Music first.");s.playlists.forEach {p->TextButton(onClick={s.selected?.let {model.addToPlaylist(it,p.optString("id"))}}){Text(p.optString("name"))}}}
-            "more"->s.selected?.let {song->Column(Modifier.padding(bottom=28.dp)){Text(song.title,style=MaterialTheme.typography.titleLarge);ActionRow(Icons.Rounded.Download,"Save offline"){model.save(song);model.dismiss()};ActionRow(Icons.AutoMirrored.Rounded.PlaylistAdd,"Add to playlist"){model.choosePlaylist(song)};ActionRow(Icons.Rounded.Flag,"Report this song"){model.show("report",song)}}}
+            "more"->s.selected?.let {song->Column(Modifier.padding(bottom=28.dp)){Text(song.title,style=MaterialTheme.typography.titleLarge);Row {IconButton(onClick=model::previous){Icon(Icons.Rounded.SkipPrevious,"Previous song")};IconButton(onClick=model::toggle){Icon(if(s.playing)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,if(s.playing)"Pause" else "Play")};IconButton(onClick=model::next){Icon(Icons.Rounded.SkipNext,"Next song")}};ActionRow(Icons.Rounded.Download,"Save offline"){model.save(song);model.dismiss()};ActionRow(Icons.AutoMirrored.Rounded.PlaylistAdd,"Add to playlist"){model.choosePlaylist(song)};ActionRow(Icons.Rounded.Flag,"Report this song"){model.show("report",song)}}}
             "report"->s.selected?.let {song->var reason by remember {mutableStateOf("")};Column(Modifier.padding(bottom=24.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){Text("Report song",style=MaterialTheme.typography.titleLarge);OutlinedTextField(reason,{reason=it},label={Text("What should we review?")},modifier=Modifier.fillMaxWidth());Button(onClick={model.reportSong(song,reason)},enabled=reason.trim().length>=5 && !s.busy){Text("Send for review")}}}
         }}
     }}
@@ -92,47 +102,63 @@ private val Purple=Color(0xFFAB7CFF)
     VerticalPager(pager,Modifier.fillMaxSize(),beyondViewportPageCount=1,key={s.tracks[it].id}){index->val song=s.tracks[index];FeedCard(song,s,model)}
 }
 @Composable private fun FeedCard(song:Song,s:ListeningState,model:ListeningViewModel) {
-    val context=LocalContext.current;var portrait by remember(song.id){mutableStateOf(false)};val e=s.engagements[song.id]
+    val context=LocalContext.current
+    var portrait by remember(song.id){mutableStateOf(false)}
+    val engagement=s.engagements[song.id]
     LaunchedEffect(song.id){model.engagement(song)}
     Box(Modifier.fillMaxSize().testTag("feed-${song.id}").background(Color(0xFF100B1B))){
-        AsyncImage(song.artwork,null,Modifier.fillMaxSize().blur(32.dp),contentScale=ContentScale.Crop,alpha=.45f)
-        AsyncImage(song.artwork,"Artwork for ${song.title}",Modifier.fillMaxSize(),contentScale=if(portrait)ContentScale.Crop else ContentScale.Fit,onSuccess={portrait=it.result.drawable.intrinsicHeight.toFloat()/it.result.drawable.intrinsicWidth.coerceAtLeast(1)>1.35f})
-        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.04f),Color.Transparent,Color.Black.copy(alpha=.35f),Color.Black.copy(alpha=.96f)))))
-        if(s.buffering && s.current==song.id)CircularProgressIndicator(Modifier.align(Alignment.Center).size(34.dp),color=Purple,strokeWidth=3.dp)
-        Column(Modifier.align(Alignment.CenterEnd).padding(end=8.dp).width(60.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(14.dp)){
+        AsyncImage(song.artwork,null,Modifier.fillMaxSize().blur(32.dp),contentScale=ContentScale.Crop,alpha=.55f)
+        AsyncImage(song.artwork,"Artwork for ${song.title}",Modifier.fillMaxSize(),
+            contentScale=if(portrait)ContentScale.Crop else ContentScale.Fit,
+            onSuccess={portrait=it.result.drawable.intrinsicHeight.toFloat()/it.result.drawable.intrinsicWidth.coerceAtLeast(1)>1.35f})
+        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.22f),Color.Transparent,Color.Black.copy(alpha=.12f),Color.Black.copy(alpha=.94f)))))
+        if(s.buffering && s.current==song.id)CircularProgressIndicator(Modifier.align(Alignment.Center).size(30.dp),color=Purple,strokeWidth=2.dp)
+        Column(Modifier.align(Alignment.CenterEnd).padding(top=78.dp,bottom=70.dp,end=10.dp).width(58.dp),
+            horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(12.dp)){
             Box(Modifier.height(66.dp),contentAlignment=Alignment.TopCenter){
-                AsyncImage("${BuildConfig.API_ORIGIN}/api/artist/photo?id=${song.artistId}","View ${song.artist}'s profile",Modifier.size(46.dp).clip(CircleShape).background(Purple.copy(alpha=.3f)).clickable {model.show("artist",song)},contentScale=ContentScale.Crop,error=painterResource(R.drawable.lae_logo_square))
-                FilledIconButton(onClick={model.follow(song)},modifier=Modifier.align(Alignment.BottomCenter).size(26.dp),colors=IconButtonDefaults.filledIconButtonColors(containerColor=Purple)){Icon(if(e?.following==true)Icons.Rounded.Check else Icons.Rounded.Add,if(e?.following==true)"Unfollow artist" else "Follow artist",Modifier.size(17.dp))}
+                AsyncImage("${BuildConfig.API_ORIGIN}/api/artist/photo?id=${song.artistId}","View ${song.artist}'s profile",
+                    Modifier.size(49.dp).clip(CircleShape).background(Purple.copy(alpha=.35f)).clickable {model.show("artist",song)},
+                    contentScale=ContentScale.Crop,error=painterResource(R.drawable.lae_logo_square))
+                FilledIconButton(onClick={model.follow(song)},modifier=Modifier.align(Alignment.BottomCenter).size(28.dp),
+                    colors=IconButtonDefaults.filledIconButtonColors(containerColor=Purple)){
+                    Icon(if(engagement?.following==true)Icons.Rounded.Check else Icons.Rounded.Add,
+                        if(engagement?.following==true)"Unfollow artist" else "Follow artist",Modifier.size(19.dp))
+                }
             }
-            FeedAction(if(e?.liked==true)Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,e?.likes?.toString() ?: "—","Like song",if(e?.liked==true)Color(0xFFFF6CA9) else Color.White){model.like(song)}
-            FeedAction(Icons.AutoMirrored.Rounded.Chat,e?.comments?.toString() ?: "—","Open comments"){model.show("comments",song)}
-            FeedAction(Icons.Rounded.Share,"Share","Share song"){context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT,"${song.title} — ${song.artist}\n${song.shareUrl}"),"Share LAE-MUSIC"))}
-            IconButton(onClick={model.show("more",song)}){Icon(Icons.Rounded.MoreHoriz,"More song options",tint=Color.White)}
+            FeedAction(if(engagement?.liked==true)Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                engagement?.likes?.toString() ?: "—","Like song",if(engagement?.liked==true)Color(0xFFFF3470) else Color.White){model.like(song)}
+            FeedAction(Icons.AutoMirrored.Rounded.Chat,engagement?.comments?.toString() ?: "—","Open comments"){model.show("comments",song)}
+            FeedAction(Icons.Rounded.Share,"Share","Share song"){
+                context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT,"${song.title} — ${song.artist}\n${song.shareUrl}"),"Share LAE-MUSIC"))
+            }
+            IconButton(onClick={model.show("more",song)}){Icon(Icons.Rounded.MoreHoriz,"More song options",tint=Color.White,modifier=Modifier.size(30.dp))}
         }
-        Column(Modifier.align(Alignment.BottomStart).padding(start=20.dp,end=80.dp,bottom=120.dp),verticalArrangement=Arrangement.spacedBy(7.dp)){
-            Text(song.artist,Modifier.clickable {model.show("artist",song)},fontWeight=FontWeight.SemiBold,fontSize=16.sp,color=Color(0xFFDDD0FF),maxLines=1,overflow=TextOverflow.Ellipsis)
-            Text(song.title,fontSize=29.sp,lineHeight=32.sp,fontWeight=FontWeight.Bold,maxLines=2,overflow=TextOverflow.Ellipsis)
-            if(song.genre.isNotBlank())Text(song.genre,fontSize=12.sp,color=Color.White.copy(alpha=.85f))
-            if(song.description.isNotBlank())Text(song.description,fontSize=13.sp,maxLines=2,overflow=TextOverflow.Ellipsis,color=Color(0xFFDDD9E4))
+        Column(Modifier.align(Alignment.BottomStart).navigationBarsPadding().padding(start=20.dp,end=88.dp,bottom=176.dp),
+            verticalArrangement=Arrangement.spacedBy(7.dp)){
+            if(song.genre.isNotBlank())Surface(color=Color.White.copy(alpha=.16f),shape=RoundedCornerShape(8.dp)){
+                Row(Modifier.padding(horizontal=9.dp,vertical=5.dp),verticalAlignment=Alignment.CenterVertically){
+                    Icon(Icons.Rounded.MusicNote,null,Modifier.size(14.dp));Spacer(Modifier.width(4.dp));Text(song.genre,fontSize=12.sp,maxLines=1)
+                }
+            }
+            Text(song.title,fontSize=25.sp,lineHeight=29.sp,fontWeight=FontWeight.Bold,maxLines=2,overflow=TextOverflow.Ellipsis)
+            Text(song.artist,Modifier.clickable {model.show("artist",song)},fontSize=17.sp,color=Color(0xFFE3DCEB),maxLines=1,overflow=TextOverflow.Ellipsis)
+            if(song.description.isNotBlank())Text(song.description,fontSize=13.sp,lineHeight=18.sp,maxLines=2,overflow=TextOverflow.Ellipsis,color=Color(0xFFDDD9E4))
         }
-        Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(start=16.dp,end=16.dp,bottom=10.dp)){
-            Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically){Text(time(s.position),fontSize=11.sp,color=Color.LightGray);Slider(value=if(s.duration>0)(s.position.toFloat()/s.duration).coerceIn(0f,1f) else 0f,onValueChange=model::seek,modifier=Modifier.weight(1f).height(30.dp));Text(time(s.duration),fontSize=11.sp,color=Color.LightGray)}
-            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center,verticalAlignment=Alignment.CenterVertically){IconButton(onClick=model::previous){Icon(Icons.Rounded.SkipPrevious,"Previous song")};FilledIconButton(onClick=model::toggle,modifier=Modifier.size(52.dp),colors=IconButtonDefaults.filledIconButtonColors(containerColor=Purple)){Icon(if(s.playing)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,if(s.playing)"Pause" else "Play")};IconButton(onClick=model::next){Icon(Icons.Rounded.SkipNext,"Next song")}}
+        Row(Modifier.align(Alignment.BottomCenter).fillMaxWidth().navigationBarsPadding().padding(start=12.dp,end=17.dp,bottom=93.dp),
+            verticalAlignment=Alignment.CenterVertically){
+            IconButton(onClick=model::toggle){Icon(if(s.playing)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,if(s.playing)"Pause" else "Play",Modifier.size(29.dp))}
+            SlimSeek(s,model,Modifier.weight(1f).padding(horizontal=5.dp))
+            Text("${time(s.position)} / ${time(s.duration)}",fontSize=10.sp,color=Color(0xFFE3DFE8))
         }
     }
 }
-@Composable private fun FeedAction(icon:ImageVector,label:String,description:String,color:Color=Color.White,onClick:()->Unit){Column(horizontalAlignment=Alignment.CenterHorizontally){IconButton(onClick=onClick,modifier=Modifier.size(46.dp)){Icon(icon,description,tint=color,modifier=Modifier.size(30.dp))};Text(label,fontSize=11.sp,fontWeight=FontWeight.Medium)}}
-@Composable private fun Browse(s:ListeningState,model:ListeningViewModel,explore:Boolean){LazyColumn(Modifier.fillMaxSize(),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(18.dp)){
-    item{Text(if(explore)"Find your next favourite." else "Your sound. Your space.",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)}
-    if(explore){item{LazyRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){item{FilterChip(selected=s.genre.isEmpty(),onClick={model.search(s.query)},label={Text("All music")})};items(s.genres){genre->FilterChip(selected=s.genre==genre,onClick={model.search(s.query,genre)},label={Text(genre)})}}}}
-    if(s.history.isNotEmpty() && !explore){item{SectionTitle("Recently played")};items(s.history.take(5),key={"history:"+it.id}){SongRow(it){model.open(it,s.history)}}}
-    if(s.featuredArtists.isNotEmpty()){item{SectionTitle("Featured artists")};item{LazyRow(horizontalArrangement=Arrangement.spacedBy(16.dp)){items(s.featuredArtists){artist->Column(Modifier.width(100.dp).clickable {model.artist(artist.optString("id"))},horizontalAlignment=Alignment.CenterHorizontally){AsyncImage("${BuildConfig.API_ORIGIN}/api/artist/photo?id=${artist.optString("id")}",artist.optString("display_name"),Modifier.size(80.dp).clip(CircleShape),contentScale=ContentScale.Crop,error=painterResource(R.drawable.lae_logo_square));Text(artist.optString("display_name"),fontSize=12.sp,maxLines=2)}}}}}
-    if(s.popular.isNotEmpty()){item{SectionTitle("Trending songs")};item{LazyRow(horizontalArrangement=Arrangement.spacedBy(14.dp)){items(s.popular.take(10)){song->Column(Modifier.width(150.dp).clickable {model.open(song,s.popular)}){AsyncImage(song.artwork,song.title,Modifier.size(150.dp).clip(RoundedCornerShape(14.dp)),contentScale=ContentScale.Crop);Text(song.title,fontWeight=FontWeight.SemiBold,maxLines=1,overflow=TextOverflow.Ellipsis);Text(song.artist,fontSize=12.sp,color=Color.LightGray,maxLines=1)}}}}}
-    item{SectionTitle(if(s.query.isNotBlank())"Search results" else "Recently released")}
-    if(s.loading)item{CircularProgressIndicator()}
-    items(s.tracks,key={"track:"+it.id}){SongRow(it){model.open(it)}}
-    if(s.hasMore)item{TextButton(onClick=model::nextPage){Text("Load more music")}}
-}}
+@Composable private fun FeedAction(icon:ImageVector,label:String,description:String,color:Color=Color.White,onClick:()->Unit){
+    Column(horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(1.dp)){
+        IconButton(onClick=onClick,modifier=Modifier.size(43.dp)){Icon(icon,description,tint=color,modifier=Modifier.size(32.dp))}
+        Text(label,fontSize=12.sp,color=Color.White,fontWeight=FontWeight.Medium)
+    }
+}
 @Composable private fun MyMusic(s:ListeningState,model:ListeningViewModel){if(s.user==null){EmptyState("Your music, together.","Sign in to find your liked songs, playlists and listening history."){model.show("login")};return};var playlist by remember{mutableStateOf("")};LazyColumn(Modifier.fillMaxSize(),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
     item{Text("My Music",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)}
     item{SectionTitle("Playlists");Row(verticalAlignment=Alignment.CenterVertically){OutlinedTextField(playlist,{playlist=it},label={Text("New playlist")},singleLine=true,modifier=Modifier.weight(1f));IconButton(onClick={model.createPlaylist(playlist);playlist=""},enabled=playlist.trim().isNotEmpty()){Icon(Icons.Rounded.Add,"Create playlist")}}}
@@ -164,7 +190,7 @@ private val Purple=Color(0xFFAB7CFF)
     }
     Spacer(Modifier.height(12.dp));Row {TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/about")))}){Text("About LAE-MUSIC")};TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("${BuildConfig.API_ORIGIN}/publishing-policy")))}){Text("Publishing policy")}}
 }}
-@Composable private fun SearchSheet(s:ListeningState,model:ListeningViewModel){var query by remember{mutableStateOf(s.query)};Column(Modifier.padding(bottom=30.dp),verticalArrangement=Arrangement.spacedBy(16.dp)){Text("Search music",style=MaterialTheme.typography.headlineSmall);OutlinedTextField(query,{query=it},label={Text("Song, artist or genre")},singleLine=true,modifier=Modifier.fillMaxWidth());Button(onClick={model.search(query);model.explore(true);model.select(Destination.DISCOVER);model.dismiss()},modifier=Modifier.fillMaxWidth()){Text("Search")}}}
+@Composable private fun SearchSheet(s:ListeningState,model:ListeningViewModel){var query by remember{mutableStateOf(s.query)};Column(Modifier.padding(bottom=30.dp),verticalArrangement=Arrangement.spacedBy(16.dp)){Text("Search music",style=MaterialTheme.typography.headlineSmall);OutlinedTextField(query,{query=it},label={Text("Song or artist")},singleLine=true,modifier=Modifier.fillMaxWidth());Button(onClick={model.search(query);model.explore(true);model.select(Destination.DISCOVER);model.dismiss()},modifier=Modifier.fillMaxWidth()){Text("Search")}}}
 @Composable private fun LoginSheet(s:ListeningState,model:ListeningViewModel){var email by remember{mutableStateOf("")};var password by remember{mutableStateOf("")};var show by remember{mutableStateOf(false)};var connectArtist by remember{mutableStateOf(false)};val context=LocalContext.current;Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom=26.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
     Text("Welcome back.",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold);Text("Sign in with your LAE-MUSIC listening account.",fontSize=14.sp)
     OutlinedTextField(email,{email=it},label={Text("Email address")},singleLine=true,keyboardOptions=androidx.compose.foundation.text.KeyboardOptions(keyboardType=androidx.compose.ui.text.input.KeyboardType.Email),modifier=Modifier.fillMaxWidth())
@@ -183,10 +209,28 @@ private val Purple=Color(0xFFAB7CFF)
     Text("Comments",style=MaterialTheme.typography.headlineSmall);LazyColumn(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(12.dp),contentPadding=PaddingValues(vertical=16.dp)){if(s.comments.isEmpty())item{Text("No comments yet.",color=Color.Gray)};items(s.comments){c->Row {Column(Modifier.weight(1f)){Text(c.optString("author"),fontWeight=FontWeight.Bold,fontSize=13.sp);Text(c.optString("body"),fontSize=14.sp)};IconButton(onClick={model.reportComment(c.optString("id"))}){Icon(Icons.Rounded.Flag,"Report comment",Modifier.size(18.dp))}}}}
     Row(Modifier.padding(bottom=16.dp),verticalAlignment=Alignment.CenterVertically){OutlinedTextField(text,{text=it.take(1000)},label={Text("Add a comment")},modifier=Modifier.weight(1f),maxLines=3);IconButton(onClick={model.comment(song,text);text=""},enabled=text.trim().isNotEmpty() && !s.busy){Icon(Icons.AutoMirrored.Rounded.Send,"Post comment")}}
 }}
-@Composable private fun MiniPlayer(s:ListeningState,model:ListeningViewModel){val song=(s.tracks+s.downloads.map{it.song}).find {it.id==s.current};Row(Modifier.fillMaxWidth().background(Color(0xFF211A30)).padding(horizontal=12.dp,vertical=6.dp),verticalAlignment=Alignment.CenterVertically){Column(Modifier.weight(1f).clickable {model.select(Destination.DISCOVER);model.explore(false)}){Text(song?.title ?: "Now playing",maxLines=1,fontWeight=FontWeight.SemiBold);Text(song?.artist.orEmpty(),fontSize=12.sp,color=Color.LightGray)};IconButton(onClick=model::toggle){Icon(if(s.playing)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,if(s.playing)"Pause" else "Play")};IconButton(onClick=model::next){Icon(Icons.Rounded.SkipNext,"Next song")}}}
+@Composable private fun MiniPlayer(s:ListeningState,model:ListeningViewModel){
+    val song=(s.tracks+s.downloads.map{it.song}).find {it.id==s.current}
+    Surface(Modifier.fillMaxWidth().padding(horizontal=12.dp,vertical=8.dp).testTag("mini-player"),
+        color=Panel,shape=RoundedCornerShape(18.dp),border=androidx.compose.foundation.BorderStroke(1.dp,Color.White.copy(alpha=.16f))){
+        Row(Modifier.padding(9.dp),verticalAlignment=Alignment.CenterVertically){
+            if(song!=null)AsyncImage(song.artwork,null,Modifier.size(52.dp).clip(RoundedCornerShape(10.dp)).clickable {model.select(Destination.DISCOVER);model.explore(false)},contentScale=ContentScale.Crop)
+            Column(Modifier.weight(1f).padding(horizontal=11.dp).clickable {model.select(Destination.DISCOVER);model.explore(false)}){
+                Text(song?.title ?: "Now playing",fontSize=13.sp,maxLines=1,overflow=TextOverflow.Ellipsis,fontWeight=FontWeight.SemiBold)
+                Text(song?.artist.orEmpty(),fontSize=11.sp,color=Color.LightGray,maxLines=1)
+                LinearProgressIndicator(progress={if(s.duration>0)(s.position.toFloat()/s.duration).coerceIn(0f,1f) else 0f},
+                    modifier=Modifier.fillMaxWidth().padding(top=8.dp).height(3.dp),color=Purple,trackColor=Color.White.copy(alpha=.15f),drawStopIndicator={})
+            }
+            FilledIconButton(onClick=model::toggle,modifier=Modifier.size(39.dp),colors=IconButtonDefaults.filledIconButtonColors(containerColor=Purple)){
+                Icon(if(s.playing)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,if(s.playing)"Pause" else "Play")
+            }
+            IconButton(onClick=model::next){Icon(Icons.Rounded.SkipNext,"Next song")}
+        }
+    }
+}
 @Composable private fun SongRow(song:Song,onClick:()->Unit){Row(Modifier.fillMaxWidth().clickable(onClick=onClick).padding(vertical=6.dp),verticalAlignment=Alignment.CenterVertically){AsyncImage(song.artwork,null,Modifier.size(54.dp).clip(RoundedCornerShape(9.dp)).background(Color(0xFF2A203A)),contentScale=ContentScale.Crop);Column(Modifier.weight(1f).padding(horizontal=12.dp)){Text(song.title,maxLines=1,overflow=TextOverflow.Ellipsis,fontWeight=FontWeight.SemiBold);Text(song.artist,maxLines=1,color=Color.LightGray,fontSize=13.sp)};Icon(Icons.Rounded.PlayArrow,"Play ${song.title}",tint=Purple)}}
 @Composable private fun SongList(songs:List<Song>,click:(Song)->Unit){LazyColumn(Modifier.fillMaxWidth().heightIn(max=480.dp),contentPadding=PaddingValues(bottom=24.dp)){items(songs){SongRow(it){click(it)}}}}
 @Composable private fun ActionRow(icon:ImageVector,label:String,action:()->Unit){Row(Modifier.fillMaxWidth().clickable(onClick=action).padding(vertical=18.dp),verticalAlignment=Alignment.CenterVertically){Icon(icon,null,Modifier.padding(end=14.dp));Text(label)}}
 @Composable private fun SectionTitle(text:String){Text(text,style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)}
 @Composable private fun EmptyState(title:String,detail:String,action:()->Unit){Column(Modifier.fillMaxSize().padding(28.dp),verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally){Icon(Icons.Rounded.MusicNote,null,tint=Purple,modifier=Modifier.size(50.dp));Text(title,style=MaterialTheme.typography.headlineSmall,modifier=Modifier.padding(vertical=16.dp));Text(detail,color=Color.LightGray);TextButton(onClick=action){Text("Continue")}}}
-private fun time(ms:Long):String {val sec=ms.coerceAtLeast(0)/1000;return "${sec/60}:${(sec%60).toString().padStart(2,'0')}"}
+internal fun time(ms:Long):String {val sec=ms.coerceAtLeast(0)/1000;return "${sec/60}:${(sec%60).toString().padStart(2,'0')}"}

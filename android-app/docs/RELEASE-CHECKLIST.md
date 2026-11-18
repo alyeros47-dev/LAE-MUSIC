@@ -2,7 +2,7 @@
 
 ## Owner inspection
 
-The current build is an internal listening preview. Validate the Discover composition against the owner's final image, which was not attached to the Android instruction. Implemented from the written description; exact visual-reference acceptance is pending.
+The current build is an internal listening preview. The owner supplied three approved references: the woman worshipping for immersive Discover, the featured-song banner for Home, and the categories/artists view for Explore. Implementation follows this mapping; final owner acceptance of the native rendering remains pending. See APPROVED-UI-REFERENCES.md.
 
 - Verify real account sign-in (including previously linked artist/listener accounts), social actions and playlists with two owner-controlled listener accounts.
 - Confirm actual Premium access with the already-paid listener account; no new payment is necessary.
