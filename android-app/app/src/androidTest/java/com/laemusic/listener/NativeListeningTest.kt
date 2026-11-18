@@ -67,7 +67,7 @@ class NativeListeningTest {
             }
             Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("fixture").addHeader("Set-Cookie",if(path=="/api/listener/login")"listener_session=isolated-test-cookie; Path=/; Secure; HttpOnly" else "fixture=present; Path=/; Secure").body(body.toString().toResponseBody("application/json".toMediaType())).build()
         }.build()
-        val graph=AppGraph(context,client);graph.session.clear();(context.applicationContext as LaeApplication).graph=graph
+        val graph=AppGraph(context,client);graph.session.clear();graph.secure.put("queue",null);graph.secure.put("queue-feed",null);graph.secure.put("feed-page",null);UiDevice.getInstance(instrumentation).wakeUp();UiDevice.getInstance(instrumentation).pressMenu();(context.applicationContext as LaeApplication).graph=graph
         Coil.setImageLoader(ImageLoader.Builder(context).okHttpClient(client).build())
         return graph
     }
@@ -98,7 +98,7 @@ class NativeListeningTest {
         }
         Thread.sleep(2000);UiDevice.getInstance(instrumentation).pressHome();UiDevice.getInstance(instrumentation).sleep();Thread.sleep(65000)
         instrumentation.runOnMainSync {assertTrue("The service must cross at least eight track boundaries with the screen locked",transitions.get()>=8);assertTrue(player.isPlaying);player.stop();player.release()}
-        UiDevice.getInstance(instrumentation).wakeUp();assertFalse(synchronized(posts){posts.any {it.endsWith("/play") || it.endsWith("/heartbeat")}})
+        UiDevice.getInstance(instrumentation).wakeUp();UiDevice.getInstance(instrumentation).pressMenu();assertFalse(synchronized(posts){posts.any {it.endsWith("/play") || it.endsWith("/heartbeat")}})
     }
     companion object {
         fun wav(seconds:Int=3):ByteArray {val samples=8000*seconds;val pcm=ByteArray(samples*2);val b=ByteBuffer.allocate(44+pcm.size).order(ByteOrder.LITTLE_ENDIAN);b.put("RIFF".toByteArray()).putInt(36+pcm.size).put("WAVEfmt ".toByteArray()).putInt(16).putShort(1).putShort(1).putInt(8000).putInt(16000).putShort(2).putShort(16).put("data".toByteArray()).putInt(pcm.size).put(pcm);return b.array()}

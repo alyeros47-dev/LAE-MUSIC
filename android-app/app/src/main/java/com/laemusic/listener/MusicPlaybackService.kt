@@ -35,6 +35,7 @@ class MusicPlaybackService:MediaSessionService() {
     private var generation=0L
     private var meter=ListeningMeter()
     private var playbackId:String?=null
+    private var ineligibleOwner:String?=null
     private var sequence=0
     private var pendingBeat:JSONObject?=null
     private var reported=false
@@ -46,9 +47,12 @@ class MusicPlaybackService:MediaSessionService() {
     private val tick=object:Runnable {override fun run(){
         if(::player.isInitialized) {
             val playing=player.isPlaying
+            if(playing && isOffline() && offlineGrant!=null && !runCatching {graph.offline.clock()<offlineGrant!!.getLong("until_ms")}.getOrDefault(false)) {
+                player.stop();player.prepare() // Reopening reports the licence error and discards prefetched audio.
+            }
             meter.tick(SystemClock.elapsedRealtime(),player.currentPosition,playing)
             if(playing && meter.listenedMs>=30000 && !reported) {reported=true;reportQualified()}
-            if(++seconds%10==0) {if(playing && !isOffline())heartbeat();persist()}
+            if(++seconds%10==0) {if(playing && !isOffline()){startAccounting();heartbeat()};persist()}
         }
         handler.postDelayed(this,1000)
     }}
@@ -65,7 +69,7 @@ class MusicPlaybackService:MediaSessionService() {
         }
         player.addListener(object:Player.Listener {
             override fun onMediaItemTransition(item:MediaItem?,reason:Int) {
-                generation++;meter=ListeningMeter();playbackId=null;sequence=0;pendingBeat=null;reported=false;offlineGrant=null;retries=0
+                generation++;meter=ListeningMeter();playbackId=null;ineligibleOwner=null;sequence=0;pendingBeat=null;reported=false;offlineGrant=null;retries=0
                 started=runCatching {graph.offline.clock()}.getOrDefault(System.currentTimeMillis())
                 player.setWakeMode(if(isOffline())C.WAKE_MODE_LOCAL else C.WAKE_MODE_NETWORK)
                 if(isOffline()) {val owner=graph.session.owner;offlineGrant=owner?.let {graph.offline.db.rows(it).find {r->r.song.id==item?.mediaId}?.licence}?.let {runCatching {graph.offline.verify(owner!!,it)}.getOrNull()}}
@@ -86,12 +90,12 @@ class MusicPlaybackService:MediaSessionService() {
         restore();handler.post(tick)
     }
     private fun startAccounting() {
-        if(isOffline() || graph.session.owner==null || playbackId!=null)return
+        if(isOffline() || graph.session.owner==null || graph.session.owner==ineligibleOwner || playbackId!=null)return
         val current=generation;val song=player.currentMediaItem?.mediaId ?: return
         scope.launch {telemetry.withLock {
             if(current!=generation || playbackId!=null)return@withLock
             val result=runCatching {graph.api.json("/api/platform/premium/playback",JSONObject().put("track_id",song))}.getOrNull()
-            if(current==generation && result?.optBoolean("eligible")==true) {playbackId=result.getString("id");sequence=0}
+            if(current==generation && result!=null) {if(result.optBoolean("eligible")){playbackId=result.getString("id");sequence=0}else ineligibleOwner=graph.session.owner}
         }}
     }
     private fun heartbeat() {
@@ -146,8 +150,9 @@ class MusicPlaybackService:MediaSessionService() {
     private fun persist() {
         if(player.mediaItemCount==0)return
         val items=JSONArray()
-        for(i in 0 until minOf(player.mediaItemCount,200)) {val m=player.getMediaItemAt(i);items.put(JSONObject().put("id",m.mediaId).put("title",m.mediaMetadata.title).put("artist",m.mediaMetadata.artist).put("artist_id",m.mediaMetadata.extras?.getString("artistId")).put("offline",m.localConfiguration?.uri?.scheme=="lae-offline"))}
-        graph.secure.put("queue",JSONObject().put("items",items).put("index",player.currentMediaItemIndex).put("position",player.currentPosition).put("owner",graph.session.owner).toString())
+        val first=(player.currentMediaItemIndex-25).coerceAtLeast(0)
+        for(i in first until minOf(player.mediaItemCount,first+200)) {val m=player.getMediaItemAt(i);items.put(JSONObject().put("id",m.mediaId).put("title",m.mediaMetadata.title).put("artist",m.mediaMetadata.artist).put("artist_id",m.mediaMetadata.extras?.getString("artistId")).put("offline",m.localConfiguration?.uri?.scheme=="lae-offline"))}
+        graph.secure.put("queue",JSONObject().put("items",items).put("index",player.currentMediaItemIndex-first).put("position",player.currentPosition).put("owner",graph.session.owner).toString())
     }
     private fun restore() {runCatching {
         val saved=graph.secure.get("queue")?.let(::JSONObject) ?: return
