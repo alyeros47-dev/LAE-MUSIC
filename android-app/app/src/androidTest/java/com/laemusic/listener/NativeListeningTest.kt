@@ -173,6 +173,7 @@ class NativeListeningTest {
             compose.onNodeWithTag("bottom-nav-Profile").performClick();compose.onNodeWithTag("edit-music-preferences").performClick()
             compose.onNodeWithTag("music-choice-SECULAR").performClick();compose.onNodeWithTag("save-music-preferences").performScrollTo().performClick()
             compose.waitUntil(15000){context.graph.discovery.songs.value.map {it.id}==listOf("3")}
+            compose.waitUntil(15000){var changed=false;instrumentation.runOnMainSync {changed=player.currentMediaItem?.mediaId=="3" && player.mediaItemCount==1};changed}
             instrumentation.runOnMainSync {assertEquals("3",player.currentMediaItem?.mediaId);assertEquals(1,player.mediaItemCount)}
             // An unrelated listener on the same phone must make their own choices.
             instrumentation.runOnMainSync {context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount()}
