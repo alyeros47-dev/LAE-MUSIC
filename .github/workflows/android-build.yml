@@ -1,15 +1,16 @@
-name: Android build
+name: Android listening app
 on:
   push:
-    paths:
-      - 'android-app/**'
-      - '.github/workflows/android-build.yml'
+    paths: ['android-app/**', '.github/workflows/android-build.yml']
+  pull_request:
+    paths: ['android-app/**', '.github/workflows/android-build.yml']
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -17,20 +18,62 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
-      - name: Install Android SDK
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
-      - name: Install Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.9'
-      - name: Run Android unit tests
+          gradle-version: '8.11.1'
+      - name: Tests, lint and inspection APKs
         working-directory: android-app
-        run: gradle --no-daemon :app:testDebugUnitTest
-      - name: Compile debug APK
-        working-directory: android-app
-        run: gradle --no-daemon :app:assembleDebug
-      - name: Upload test APK
-        uses: actions/upload-artifact@v4
+        run: gradle --no-daemon :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
+      - uses: actions/upload-artifact@v4
         with:
-          name: lae-music-debug-apk
+          name: lae-music-listening-preview
           path: android-app/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lae-android-instrumentation
+          path: android-app/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-unit-and-lint-results
+          path: |
+            android-app/app/build/reports/tests/
+            android-app/app/build/reports/lint-results-debug.*
+  device-checks:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/download-artifact@v4
+        with:
+          name: lae-music-listening-preview
+          path: apk
+      - uses: actions/download-artifact@v4
+        with:
+          name: lae-android-instrumentation
+          path: testapk
+      - name: Enable KVM for the disposable Android test device
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: bash android-app/scripts/emulator-checks.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-device-evidence
+          path: evidence/
