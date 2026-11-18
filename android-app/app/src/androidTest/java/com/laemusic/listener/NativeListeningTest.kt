@@ -90,13 +90,13 @@ class NativeListeningTest {
         compose.waitUntil(15000){compose.onAllNodes(hasText("3") and hasAnyAncestor(hasTestTag("feed-1"))).fetchSemanticsNodes().isNotEmpty()}
         action("Follow artist").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/favorites")}}
         compose.waitUntil(15000){compose.onAllNodes(hasContentDescription("Unfollow artist") and hasAnyAncestor(hasTestTag("feed-1"))).fetchSemanticsNodes().isNotEmpty()}
-        action("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};UiDevice.getInstance(instrumentation).pressBack()
+        action("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};compose.onNodeWithContentDescription("Close comments").performClick()
         compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isEmpty()}
-        compose.onNodeWithTag("feed-1").performTouchInput {swipeUp()};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-2").assertIsDisplayed();true}.getOrDefault(false)}
+        compose.onNodeWithTag("feed-1").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.72f),androidx.compose.ui.geometry.Offset(center.x,height*.25f))};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-2").assertIsDisplayed();true}.getOrDefault(false)}
         val root=compose.onRoot().fetchSemanticsNode().boundsInRoot
         val feed=compose.onNodeWithTag("feed-2").fetchSemanticsNode().boundsInRoot
         assertTrue("Discover artwork must extend behind the header and bottom navigation",feed.height>=root.height*.9f)
-        compose.onNodeWithTag("feed-2").performTouchInput {swipeDown()}
+        compose.onNodeWithTag("feed-2").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.25f),androidx.compose.ui.geometry.Offset(center.x,height*.72f))}
         compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-1").assertIsDisplayed();true}.getOrDefault(false)}
         val screenshot=File(context.getExternalFilesDir(null),"discover.png");UiDevice.getInstance(instrumentation).takeScreenshot(screenshot)
         assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic")}})

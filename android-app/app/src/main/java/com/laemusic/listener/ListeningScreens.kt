@@ -45,7 +45,7 @@ import java.util.Locale
         }
         IconButton(onClick={model.show("search")}){Icon(Icons.Rounded.Search,"Search music",Modifier.size(25.dp))}
         Button(onClick={model.show("premium")},shape=RoundedCornerShape(10.dp),contentPadding=PaddingValues(horizontal=10.dp,vertical=5.dp),
-            colors=ButtonDefaults.buttonColors(containerColor=Purple),modifier=Modifier.height(33.dp)){
+            colors=ButtonDefaults.buttonColors(containerColor=Purple,contentColor=Color.White),modifier=Modifier.height(33.dp)){
             Icon(Icons.Rounded.WorkspacePremium,null,Modifier.size(15.dp));Spacer(Modifier.width(3.dp));Text("Premium",fontSize=11.sp,fontWeight=FontWeight.SemiBold)
         }
     }
@@ -96,7 +96,7 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
 @Composable internal fun HomeScreen(s:ListeningState,model:ListeningViewModel) {
     val heroes=s.featuredSongs.ifEmpty {s.releases.take(4)}
     val recommendations=listeningRecommendations(s.releases,s.popular,s.likes,s.history)
-    LazyColumn(Modifier.fillMaxSize().testTag("home-screen"),contentPadding=PaddingValues(start=14.dp,end=14.dp,bottom=18.dp),verticalArrangement=Arrangement.spacedBy(21.dp)){
+    LazyColumn(Modifier.fillMaxSize().testTag("home-screen"),contentPadding=PaddingValues(start=14.dp,end=14.dp,bottom=18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
         item {HomeShortcuts(model)}
         if(heroes.isNotEmpty())item {FeaturedSongs(heroes,s,model,s.featuredSongs.isNotEmpty())}
         else if(s.loading)item {CircularProgressIndicator(Modifier.padding(24.dp),color=Purple)}
@@ -124,13 +124,13 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
     }
 }
 @Composable private fun Shortcut(title:String,active:Boolean,click:()->Unit){
-    Surface(onClick=click,color=if(active)Purple else Panel,shape=CircleShape){Text(title,Modifier.padding(horizontal=18.dp,vertical=11.dp),fontSize=13.sp,fontWeight=FontWeight.SemiBold)}
+    Surface(onClick=click,color=if(active)Purple else Panel,shape=CircleShape){Text(title,Modifier.padding(horizontal=18.dp,vertical=8.dp),fontSize=13.sp,fontWeight=FontWeight.SemiBold)}
 }
 @Composable private fun FeaturedSongs(songs:List<Song>,s:ListeningState,model:ListeningViewModel,curated:Boolean) {
     val pager=rememberPagerState(pageCount={songs.size})
     Column(verticalArrangement=Arrangement.spacedBy(9.dp)){
         HorizontalPager(pager,key={songs[it].id},pageSpacing=10.dp){index->val song=songs[index]
-            Box(Modifier.fillMaxWidth().aspectRatio(1.65f).clip(RoundedCornerShape(19.dp)).background(Panel).testTag("featured-song").clickable {model.play(song,songs)}){
+            Box(Modifier.fillMaxWidth().aspectRatio(1.8f).clip(RoundedCornerShape(19.dp)).background(Panel).testTag("featured-song").clickable {model.play(song,songs)}){
                 AsyncImage(song.artwork,"Featured artwork for ${song.title}",Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
                 Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha=.32f),Color.Transparent,Color.Black.copy(alpha=.85f)))))
                 Row(Modifier.align(Alignment.TopStart).fillMaxWidth().padding(13.dp),verticalAlignment=Alignment.CenterVertically){
@@ -157,11 +157,11 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
     val artists=s.featuredArtists.ifEmpty {s.artists}
     val trending=s.popular.filter {s.genre.isEmpty() || it.genre==s.genre}
     val filtered=s.query.isNotBlank() || s.genre.isNotEmpty()
-    LazyColumn(Modifier.fillMaxSize().testTag("explore-screen"),contentPadding=PaddingValues(start=14.dp,end=14.dp,top=14.dp,bottom=22.dp),verticalArrangement=Arrangement.spacedBy(19.dp)){
+    LazyColumn(Modifier.fillMaxSize().testTag("explore-screen"),contentPadding=PaddingValues(start=14.dp,end=14.dp,top=14.dp,bottom=22.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
         item {Row(verticalAlignment=Alignment.CenterVertically){Column(Modifier.weight(1f)){
             Text("Discover music",fontSize=25.sp,fontWeight=FontWeight.Bold)
             Text("Find songs and artists you love.",fontSize=12.sp,color=Color(0xFFB9B3C4))
-        };FilledIconButton(onClick={model.show("categories")},colors=IconButtonDefaults.filledIconButtonColors(containerColor=Purple)){Icon(Icons.Rounded.Tune,"Filter music")}}}
+        };FilledIconButton(onClick={model.show("categories")},colors=IconButtonDefaults.filledIconButtonColors(containerColor=Purple,contentColor=Color.White)){Icon(Icons.Rounded.Tune,"Filter music")}}}
         if(s.genres.isNotEmpty()){
             item {ShelfHeading("Browse by category"){model.show("categories")}}
             item {LazyRow(horizontalArrangement=Arrangement.spacedBy(9.dp)){items(s.genres,key={it}){CategoryCard(it,s.genre==it){model.search("",it)}}}}
@@ -190,15 +190,18 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
 }
 
 @Composable private fun SongCards(songs:List<Song>,s:ListeningState,model:ListeningViewModel){
-    LazyRow(horizontalArrangement=Arrangement.spacedBy(10.dp)){
-        items(songs.take(12),key={it.id}){song->Column(Modifier.width(137.dp).clickable {model.play(song,songs)}){
-            Box(Modifier.fillMaxWidth().height(157.dp).clip(RoundedCornerShape(14.dp)).background(Panel)){
-                AsyncImage(song.artwork,song.title,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
-                Icon(Icons.Rounded.PlayCircle,"Play ${song.title}",Modifier.align(Alignment.BottomEnd).padding(8.dp).size(27.dp),tint=Color.White)
-            }
-            Text(song.title,Modifier.padding(top=6.dp),fontSize=12.sp,fontWeight=FontWeight.SemiBold,maxLines=1,overflow=TextOverflow.Ellipsis)
-            Text(song.artist,fontSize=10.sp,color=Color(0xFFAAA4B5),maxLines=1,overflow=TextOverflow.Ellipsis)
-        }}
+    BoxWithConstraints(Modifier.fillMaxWidth()){
+        val cardWidth=(maxWidth-20.dp)/3
+        LazyRow(horizontalArrangement=Arrangement.spacedBy(10.dp)){
+            items(songs.take(12),key={it.id}){song->Column(Modifier.width(cardWidth).clickable {model.play(song,songs)}){
+                Box(Modifier.fillMaxWidth().height(cardWidth*1.15f).clip(RoundedCornerShape(14.dp)).background(Panel)){
+                    AsyncImage(song.artwork,song.title,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+                    Icon(Icons.Rounded.PlayCircle,"Play ${song.title}",Modifier.align(Alignment.BottomEnd).padding(8.dp).size(27.dp),tint=Color.White)
+                }
+                Text(song.title,Modifier.padding(top=6.dp),fontSize=12.sp,fontWeight=FontWeight.SemiBold,maxLines=1,overflow=TextOverflow.Ellipsis)
+                Text(song.artist,fontSize=10.sp,color=Color(0xFFAAA4B5),maxLines=1,overflow=TextOverflow.Ellipsis)
+            }}
+        }
     }
 }
 @Composable private fun ListeningSongRow(song:Song,queue:List<Song>,s:ListeningState,model:ListeningViewModel){
@@ -215,7 +218,7 @@ internal fun listeningRecommendations(releases:List<Song>,popular:List<Song>,lik
 @Composable private fun ShelfHeading(title:String,action:(()->Unit)?=null){
     Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically){
         Text(title,Modifier.weight(1f),fontSize=19.sp,fontWeight=FontWeight.Bold)
-        if(action!=null)TextButton(onClick=action,contentPadding=PaddingValues(horizontal=2.dp)){Text("See all",color=Purple,fontSize=12.sp)}
+        if(action!=null)TextButton(onClick=action,modifier=Modifier.height(34.dp),contentPadding=PaddingValues(horizontal=2.dp)){Text("See all",color=Purple,fontSize=12.sp)}
     }
 }
 private fun categoryLook(genre:String):Pair<ImageVector,List<Color>> = when {
@@ -228,17 +231,17 @@ private fun categoryLook(genre:String):Pair<ImageVector,List<Color>> = when {
 }
 @Composable private fun CategoryCard(genre:String,selected:Boolean,click:()->Unit){
     val (icon,colors)=categoryLook(genre)
-    Column(Modifier.width(88.dp).height(95.dp).clip(RoundedCornerShape(14.dp)).background(Brush.verticalGradient(colors))
+    Column(Modifier.width(72.dp).height(82.dp).clip(RoundedCornerShape(14.dp)).background(Brush.verticalGradient(colors))
         .border(if(selected)2.dp else 0.dp,if(selected)Color.White else Color.Transparent,RoundedCornerShape(14.dp)).clickable(onClick=click).padding(9.dp),
         horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.Center){
-        Icon(icon,null,Modifier.size(28.dp));Spacer(Modifier.height(6.dp));Text(genre,fontSize=11.sp,lineHeight=13.sp,fontWeight=FontWeight.SemiBold,maxLines=2,overflow=TextOverflow.Ellipsis,textAlign=androidx.compose.ui.text.style.TextAlign.Center)
+        Icon(icon,null,Modifier.size(28.dp));Spacer(Modifier.height(4.dp));Text(genre,fontSize=11.sp,lineHeight=13.sp,fontWeight=FontWeight.SemiBold,maxLines=2,overflow=TextOverflow.Ellipsis,textAlign=androidx.compose.ui.text.style.TextAlign.Center)
     }
 }
 private fun artistName(artist:JSONObject)=artist.optString("display_name").ifBlank {artist.optString("name")}
 @Composable private fun ArtistShelf(artists:List<JSONObject>,model:ListeningViewModel){
-    LazyRow(horizontalArrangement=Arrangement.spacedBy(13.dp)){
-        items(artists,key={it.optString("id")}){artist->Column(Modifier.width(70.dp).clickable {model.artist(artist.optString("id"))},horizontalAlignment=Alignment.CenterHorizontally){
-            ArtistPicture(artist,Modifier.size(66.dp));Text(artistName(artist),Modifier.padding(top=6.dp),fontSize=11.sp,lineHeight=13.sp,maxLines=2,textAlign=androidx.compose.ui.text.style.TextAlign.Center)
+    LazyRow(horizontalArrangement=Arrangement.spacedBy(10.dp)){
+        items(artists,key={it.optString("id")}){artist->Column(Modifier.width(64.dp).clickable {model.artist(artist.optString("id"))},horizontalAlignment=Alignment.CenterHorizontally){
+            ArtistPicture(artist,Modifier.size(58.dp));Text(artistName(artist),Modifier.padding(top=6.dp),fontSize=11.sp,lineHeight=13.sp,maxLines=2,textAlign=androidx.compose.ui.text.style.TextAlign.Center)
         }}
     }
 }

@@ -42,7 +42,7 @@ class ListeningViewModel(app:Application):AndroidViewModel(app) {
     private fun playerOffline()=controller?.currentMediaItem?.mediaMetadata?.extras?.getBoolean("offline")==true
     private fun update(f:(ListeningState)->ListeningState){mutable.value=f(mutable.value)}
     fun message(s:String?){update {it.copy(message=s)}}
-    fun select(tab:Destination){update {it.copy(tab=tab)};if(tab==Destination.MUSIC)library();if(tab==Destination.DOWNLOADS){loadDownloads();action {graph.offline.refresh();loadDownloads()}};if(tab==Destination.PROFILE)premium()}
+    fun select(tab:Destination){update {it.copy(tab=tab)};if(tab==Destination.MUSIC || tab==Destination.HOME)library();if(tab==Destination.DOWNLOADS){loadDownloads();action {graph.offline.refresh();loadDownloads()}};if(tab==Destination.PROFILE)premium()}
     fun explore(value:Boolean){update {it.copy(explore=value)}}
     fun refresh(){loadCatalog(false);action {val popular=graph.api.discover(sort="popular");val editorial=graph.api.json("/api/platform/editorial");update {it.copy(popular=popular.songs,featuredSongs=editorial.songs("featured_tracks"),featuredArtists=editorial.optJSONArray("featured_artists")?.objects().orEmpty())}};if(graph.session.owner!=null){premium();library();loadDownloads()}}
     fun search(query:String,genre:String=""){update {it.copy(query=query.trim(),genre=genre)};loadCatalog(false)}

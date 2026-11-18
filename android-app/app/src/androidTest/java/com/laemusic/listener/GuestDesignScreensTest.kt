@@ -38,6 +38,7 @@ class GuestDesignScreensTest {
             compose.waitUntil(15000){compose.onAllNodesWithTag("featured-song").fetchSemanticsNodes().isNotEmpty()}
             compose.waitUntil(15000){model.state.value.popular.isNotEmpty()}
             model.state.value.let {state->(state.featuredSongs.ifEmpty {state.releases}).firstOrNull()?.let {artwork(it.artwork)}}
+            model.state.value.popular.take(3).forEach {artwork(it.artwork)}
             capture("home-public.png")
             compose.onNodeWithTag("bottom-nav-Discover").performClick()
             compose.onNodeWithTag("top-tab-Explore").performClick()
