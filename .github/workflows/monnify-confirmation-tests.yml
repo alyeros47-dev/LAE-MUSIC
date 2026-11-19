@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'lib/payments/monnify-reconciliation.js'
+      - 'lib/background-job.js'
+      - 'tests/background-job.test.cjs'
       - 'lib/platform.js'
       - 'tests/monnify-reconciliation*.cjs'
       - '.github/workflows/monnify-confirmation-tests.yml'
