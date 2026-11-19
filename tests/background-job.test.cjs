@@ -31,8 +31,17 @@ test('transient failures back off and a recovered empty queue returns to idle ca
 });
 test('pending payment verification keeps minute retries and never initiates a payment',async()=>{
  const c=clock();let candidate=false,queries=0,verifications=0;
- const worker=require('../lib/payments/monnify-reconciliation').create({pool:{query:async()=>{queries++;return {rows:candidate?[{id:'attempt',listener_id:7}]:[]};}},enabled:()=>true,
+ const {create,PENDING}=require('../lib/payments/monnify-reconciliation');
+ const worker=create({pool:{query:async sql=>{if(sql===PENDING)return {rows:[{pending:candidate}]};queries++;return {rows:candidate?[{id:'attempt',listener_id:7}]:[]};}},enabled:()=>true,
   verify:async(id,attempt)=>{assert.equal(id,7);assert.equal(attempt,'attempt');verifications++;throw Object.assign(Error('pending'),{status:409});},setTimer:c.setTimer,clearTimer:c.clearTimer,now:c.now});
  worker.start();await c.advance(0);assert.equal(queries,1);assert(c.next()>60000);
  candidate=true;worker.wake();await c.advance(0);assert.equal(verifications,1);assert.equal(c.next(),60000);await c.advance(60000);assert.equal(verifications,2);worker.stop();
+});
+test('a payment in its verification cooldown retains minute retries rather than sleeping as an empty queue',async()=>{
+ const c=clock(),{create,PENDING}=require('../lib/payments/monnify-reconciliation');let due=false,pending=true,verifications=0;
+ const worker=create({pool:{query:async sql=>sql===PENDING?{rows:[{pending}]}:{rows:due?[{id:'cooldown',listener_id:9}]:[]}},enabled:()=>true,now:c.now,setTimer:c.setTimer,clearTimer:c.clearTimer,
+  verify:async()=>{verifications++;pending=false;due=false;}});
+ worker.start();await c.advance(0);assert.equal(verifications,0);assert.equal(c.next(),60000);
+ worker.wake();await c.advance(0);assert.equal(c.next(),60000);due=true;await c.advance(60000);assert.equal(verifications,1);
+ await c.advance(60000);assert(c.next()>60000);worker.stop();
 });
