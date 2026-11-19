@@ -1,6 +1,6 @@
 'use strict';
 // Incident-only, read-only diagnostic. Never imports server.js or changes provider settings.
-const {inventory,serviceValid}=require('./audit-existing-service');
+const {inventory,serviceValid}=require('./audit-existing-service.cjs');
 const {normalizedHost}=require('../lib/neon-recovery-inspection');
 const SERVICE='srv-db84s7m89jmc73c7l9rg',WORKSPACE='tea-das55rjbc2fs739ccegg';
 const PROJECT='restless-brook-43273058',BRANCH='br-flat-darkness-b42js8ma';

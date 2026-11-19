@@ -1,6 +1,6 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict');
-const {diagnose}=require('../scripts/diagnose-database-quota');
+const {diagnose}=require('../scripts/diagnose-database-quota.cjs');
 const SERVICE='srv-db84s7m89jmc73c7l9rg',PROJECT='restless-brook-43273058',BRANCH='br-flat-darkness-b42js8ma';
 function fixture(wrong=false){const calls=[];const privateValue='fixture-private-value';const fetcher=async(url,options)=>{calls.push({url,method:options.method});let data;
  if(url.endsWith('/env-vars'))data=[{envVar:{key:'DATABASE_URL',value:'postgresql://test:'+privateValue+'@ep-fixture-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require'}},{envVar:{key:'NEON_API_KEY',value:privateValue}}];
