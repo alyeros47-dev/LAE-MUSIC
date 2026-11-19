@@ -21,4 +21,4 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-        run: node scripts/diagnose-database-quota.cjs
+        run: node scripts/diagnose-database-quota.cjs --history
