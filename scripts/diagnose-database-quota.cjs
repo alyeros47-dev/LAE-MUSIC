@@ -13,7 +13,14 @@ async function diagnose({renderKey,neonKey,includeHistory=false,fetcher=fetch,db
  const render=(p)=>get('https://api.render.com/v1',p,renderKey);
  const service=await render('/services/'+SERVICE);
  if(!serviceValid(service)||service.ownerId!==WORKSPACE||service.branch!=='main')throw Error('production_identity_not_matched');
- const env=inventory(await render('/services/'+SERVICE+'/env-vars'));
+ const envRows=[];let envCursor='';
+ for(let page=0;page<20;page++){
+  const rows=await render('/services/'+SERVICE+'/env-vars?limit=100'+(envCursor?'&cursor='+encodeURIComponent(envCursor):''));
+  if(!Array.isArray(rows))throw Error('environment_inventory_invalid');envRows.push(...rows);
+  if(rows.length<100||!rows.at(-1).cursor)break;
+  const next=rows.at(-1).cursor;if(next===envCursor||page===19)throw Error('environment_inventory_incomplete');envCursor=next;
+ }
+ const env=inventory(envRows);
  let db;try{db=new URL(env.DATABASE_URL);}catch{throw Error('database_identity_not_matched');}
  if(!['postgres:','postgresql:'].includes(db.protocol)||!db.hostname.endsWith('.neon.tech'))throw Error('database_identity_not_matched');
  const key=neonKey||env.NEON_API_KEY;
@@ -33,6 +40,10 @@ async function diagnose({renderKey,neonKey,includeHistory=false,fetcher=fetch,db
  report.quota=Object.fromEntries(metrics.map(k=>{const used=k==='logical_size_bytes'?branch.logical_size:project[k],limit=project.settings?.quota?.[k];return[k,{operational_usage:Number.isFinite(used)?used:null,explicit_project_limit:Number.isFinite(limit)?limit:null,explicit_limit_reached:Number.isFinite(limit)&&limit>0&&Number.isFinite(used)?used>=limit:null}];}));
  report.endpoint={current_state:bound[0].current_state,pending_state:bound[0].pending_state||null,disabled:bound[0].disabled,suspended_at:bound[0].suspended_at,autoscaling_min_cu:bound[0].autoscaling_limit_min_cu,autoscaling_max_cu:bound[0].autoscaling_limit_max_cu,suspend_timeout_seconds:bound[0].suspend_timeout_seconds};
  if(includeHistory){
+  const groupRows=await render('/env-groups?ownerId='+WORKSPACE+'&limit=100');
+  const groups=Array.isArray(groupRows)?groupRows:[];
+  const linkedGroups=groups.map(g=>g.envGroup||g).filter(g=>g.serviceLinks?.some(s=>s.id===SERVICE));
+  report.configuration_coverage={direct_environment_variables:envRows.length,linked_environment_groups:linkedGroups.length,group_list_complete:Array.isArray(groupRows)&&groupRows.length<100,only_direct_variables_used_for_capabilities:true};
   // Render native Node services supply NODE_ENV=production at runtime unless overridden.
   const runtimeEnv={...env,NODE_ENV:env.NODE_ENV===undefined?'production':env.NODE_ENV};
   // Pure capability calculation only: this injected transport cannot send email.
