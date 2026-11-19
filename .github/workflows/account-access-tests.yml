@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'lib/account-*.js'
+      - 'lib/background-job.js'
+      - 'tests/background-job*.cjs'
       - 'lib/passwords.js'
       - 'web/account-security.js'
       - 'tests/account-recovery-*.cjs'
@@ -35,6 +37,6 @@ jobs:
       - run: npm ci
       - run: node tests/account-security.test.cjs && node tests/account-login.test.cjs
       - run: LAE_EMAIL_TESTS=1 node tests/smtp.test.cjs
-      - run: node tests/account-recovery-postgres.cjs && node tests/account-roles-postgres.cjs
+      - run: node tests/background-job-postgres.cjs && node tests/account-recovery-postgres.cjs && node tests/account-roles-postgres.cjs
       - run: npx playwright install --with-deps chromium
       - run: node tests/account-recovery-browser.cjs
