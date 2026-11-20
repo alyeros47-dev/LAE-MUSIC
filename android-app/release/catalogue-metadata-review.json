@@ -1,0 +1,151 @@
+{
+  "checked_at_utc": "2026-11-18T08:58:05.720343+00:00",
+  "public_songs": 19,
+  "genre_counts": {
+    "Worship": 3,
+    "Reggae/Gospel": 1,
+    "Praise": 1,
+    "Afrwn": 1,
+    "Gospel praise": 1,
+    "Afrobeats": 4,
+    "Secular": 1,
+    "Gospel & Worship": 7
+  },
+  "missing_explicit_family": 19,
+  "missing_explicit_categories": 19,
+  "songs": [
+    {
+      "id": "28",
+      "title": "Holy! Holy! Holy!",
+      "artist": "Lady Jane",
+      "artist_id": "57",
+      "genre": "Worship"
+    },
+    {
+      "id": "27",
+      "title": "Holy! Holy! Holy!",
+      "artist": "Lady Jane",
+      "artist_id": "57",
+      "genre": "Worship"
+    },
+    {
+      "id": "24",
+      "title": "Safe Within Your Keeping",
+      "artist": "Joshua Womplu",
+      "artist_id": "49",
+      "genre": "Reggae/Gospel"
+    },
+    {
+      "id": "23",
+      "title": "Victory over defeat",
+      "artist": "Frankco",
+      "artist_id": "61",
+      "genre": "Praise"
+    },
+    {
+      "id": "21",
+      "title": "Na you I give first place",
+      "artist": "Adriel Kinah",
+      "artist_id": "53",
+      "genre": "Worship"
+    },
+    {
+      "id": "20",
+      "title": "Catch the Colour",
+      "artist": "JoJo Party",
+      "artist_id": "72",
+      "genre": "Afrwn"
+    },
+    {
+      "id": "19",
+      "title": "MABOKO LIKOLO",
+      "artist": "Wokie Passawe",
+      "artist_id": "68",
+      "genre": "Gospel praise"
+    },
+    {
+      "id": "18",
+      "title": "KÒ SÍ BRAKE",
+      "artist": "JoJo Party",
+      "artist_id": "72",
+      "genre": "Afrobeats"
+    },
+    {
+      "id": "17",
+      "title": "No Dull Moment",
+      "artist": "JoJo Party",
+      "artist_id": "72",
+      "genre": "Afrobeats"
+    },
+    {
+      "id": "16",
+      "title": "My Pocket Don Get Voice",
+      "artist": "Grace Music",
+      "artist_id": "65",
+      "genre": "Afrobeats"
+    },
+    {
+      "id": "15",
+      "title": "As How Now",
+      "artist": "Grace Music",
+      "artist_id": "65",
+      "genre": "Afrobeats"
+    },
+    {
+      "id": "14",
+      "title": "Ada M, Jee Nke Ọma",
+      "artist": "Lady Jane",
+      "artist_id": "57",
+      "genre": "Secular"
+    },
+    {
+      "id": "13",
+      "title": "One Voice Many Praise",
+      "artist": "Helena Williams",
+      "artist_id": "50",
+      "genre": "Gospel & Worship"
+    },
+    {
+      "id": "12",
+      "title": "KAI NE DUKA",
+      "artist": "Frank4Chriat",
+      "artist_id": "1",
+      "genre": "Gospel & Worship"
+    },
+    {
+      "id": "11",
+      "title": "Anointed By The Spirit.",
+      "artist": "Shekinah Glory",
+      "artist_id": "46",
+      "genre": "Gospel & Worship"
+    },
+    {
+      "id": "10",
+      "title": "Ògo tó yẹ Ọ,",
+      "artist": "Shekinah Glory",
+      "artist_id": "46",
+      "genre": "Gospel & Worship"
+    },
+    {
+      "id": "9",
+      "title": "Na You Dey Do Am",
+      "artist": "Shekinah Glory",
+      "artist_id": "46",
+      "genre": "Gospel & Worship"
+    },
+    {
+      "id": "7",
+      "title": "Omiiko gi",
+      "artist": "Jane Esther Noah",
+      "artist_id": "3",
+      "genre": "Gospel & Worship"
+    },
+    {
+      "id": "6",
+      "title": "From My heart",
+      "artist": "Frank4Chriat",
+      "artist_id": "1",
+      "genre": "Gospel & Worship"
+    }
+  ]
+}
