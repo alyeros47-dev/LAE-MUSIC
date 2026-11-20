@@ -1,0 +1,72 @@
+name: Focused voice-profile repair verification
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'artist-voice.js'
+      - 'lib/voice-*.js'
+      - 'web/studio-workflow.js'
+      - 'tests/voice-*.cjs'
+      - 'scripts/inspect-voice-launch.cjs'
+      - '.github/workflows/voice-profile-repair.yml'
+permissions:
+  contents: read
+concurrency:
+  group: voice-profile-repair-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  voice:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.head_ref == 'codex/voice-profile-launch-repair'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: voice_ci_only
+          POSTGRES_DB: lae_music_ci
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Focused free voice, URL, waveform and adapter checks
+        run: |
+          node --test tests/voice-sample.test.cjs tests/voice-production.test.cjs tests/voice-diagnostic.test.cjs tests/voice-launch-inspection.test.cjs tests/studio-workflow.test.cjs tests/voice-acceptance-budget.test.cjs tests/owned-voice-inspection.test.cjs
+          node scripts/test-sonic-handler.cjs
+          node --input-type=module --check < web/studio-workflow.js
+      - name: Disposable PostgreSQL voice checks
+        env:
+          LAE_DB_TESTS: 'true'
+          DATABASE_URL: postgres://postgres:voice_ci_only@127.0.0.1:5432/lae_music_ci
+        run: node tests/voice-failure-postgres.cjs
+      - name: Verify the controlled runner with a disposable database and synthetic account only
+        env:
+          LAE_DB_TESTS: 'true'
+          DATABASE_URL: postgres://postgres:voice_ci_only@127.0.0.1:5432/lae_music_ci
+        run: node -e "require('./scripts/accept-owned-voice.cjs').localPool(process.env.GITHUB_RUN_ID).then(x=>x.close()).catch(()=>process.exitCode=1)"
+      - run: npx playwright install --with-deps chromium
+      - name: Desktop and Android Chrome emulation with microphone/provider fixtures
+        run: node tests/voice-recorder-browser.cjs
+  existing-sample:
+    if: github.repository == 'alyeros47-dev/LAE-MUSIC' && github.head_ref == 'codex/voice-profile-launch-repair' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --omit=dev
+      - name: Read existing configuration, failed task IDs and bounded sample prefix only
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: node scripts/inspect-voice-launch.cjs

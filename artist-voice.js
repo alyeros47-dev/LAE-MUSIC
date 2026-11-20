@@ -80,7 +80,7 @@ module.exports = async function voice(req, res, p, ctx) {
               ? "wav"
               : null;
       if (
-        !b.consent ||
+        b.consent !== true ||
         !ext ||
         !Number.isInteger(b.bytes) ||
         b.bytes < 10000 ||
@@ -113,7 +113,7 @@ module.exports = async function voice(req, res, p, ctx) {
         ).rows[0];
         if(current?.status==='failed'){
           const failure=await voiceResult.failureFor(db,user.id,current);
-          if(failure?.retry_allowed===false)throw Object.assign(Error(failure.message),{status:409,code:failure.code});
+          if(failure?.retry_allowed===false&&!failure.can_replace_sample)throw Object.assign(Error(failure.message),{status:409,code:failure.code});
         }
         if (
           ["training", "submitting", "verification_required", "ready"].includes(
@@ -179,12 +179,12 @@ module.exports = async function voice(req, res, p, ctx) {
       const bytes = Buffer.concat(chunks);
       if (
         size < 10000 ||
-        !require("./lib/review-voice").validAudio(bytes, mime)
+        !require("./lib/voice-sample").validAudio(bytes, mime)
       )
         return (
           send(res, 400, {
             error:
-              "Use a valid MP3 or WAV sample. WAV recordings must contain at least ten seconds of audio.",
+              "Use a valid MP3 or WAV sample. WAV recordings must be longer than ten seconds and no longer than four minutes.",
           }),
           true
         );
@@ -262,7 +262,7 @@ module.exports = async function voice(req, res, p, ctx) {
         );
       if (local) await require("./lib/review-voice").init(pool);
       const db = await pool.connect();
-      let x, reference, store;
+      let x, reference, store, infoLength;
       try {
         await db.query("BEGIN");
         await db.query("SELECT id FROM creators WHERE id=$1 FOR UPDATE", [
@@ -315,6 +315,7 @@ module.exports = async function voice(req, res, p, ctx) {
             Error("Voice sample must be valid MP3/WAV under 12 MB"),
             { status: 400 },
           );
+        infoLength = info.ContentLength;
         reference = "voice-" + crypto.randomUUID();
         if (local) {
           const count = (
@@ -351,6 +352,9 @@ module.exports = async function voice(req, res, p, ctx) {
         audio_url = local
           ? await local.readURL(x.object_key)
           : await presign(store, x.object_key, "get", 7200);
+        await require("./lib/voice-sample").verifyReadURL(audio_url, {
+          expectedBytes: infoLength,
+        });
         if (local)
           require("./lib/review-testing").authorizeProvider(
             user.id,
@@ -399,7 +403,7 @@ module.exports = async function voice(req, res, p, ctx) {
         );
       }
       const immediate=voiceResult.result(j);
-      if(immediate.failure?.code==='voice_verification_required'){
+      if(immediate.failure?.code==='voice_sample_rejected'){
         await pool.query("UPDATE artist_voice_profiles SET status='failed',updated_at=NOW() WHERE creator_id=$1 AND task_id=$2",[user.id,reference]);
         await voiceResult.recordFailure(pool,user.id,reference,immediate.failure);
         if(local)await pool.query("UPDATE review_voice_attempts SET status='failed' WHERE reference=$1 AND artist_id=$2",[reference,user.id]);

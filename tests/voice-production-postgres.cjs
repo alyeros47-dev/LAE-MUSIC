@@ -72,6 +72,9 @@ module.exports = async (t, { pool, artist, other }) => {
           stored = opt.body.length;
           return new Response("");
         }
+        if (url.startsWith("https://voice-storage.fixture/get/")) {
+          assert.equal(opt.credentials,"omit");return new Response(bytes.subarray(0,64),{status:206,headers:{"content-range":"bytes 0-63/"+stored}});
+        }
         if (url.endsWith("/create-voice")) {
           trains++;
           return Response.json({ task_id: "postgres_voice_task_123" });
