@@ -1,5 +1,6 @@
 'use strict';
 require('./background-job.test.cjs');
+require('./community-campaigns.test.cjs');
 require('./ci-database.test.cjs');
 require('./financial-policy.test.cjs');
 require('./settlement-policy.test.cjs');
