@@ -16,7 +16,7 @@ test('campaign configuration remains owner-only using existing role permissions'
 });
 test('without configuration both pages stay safe, separate and free of registration',async()=>{
  const app=require('./runtime.cjs');const service=await app.runtime();
- for(const [slug,title] of [['creator-network','Creator Support Network'],['gospel-creators','LAE-MUSIC Official']]){
+ for(const [slug,title] of [['creator-network','CREATOR SUPPORT NETWORK'],['gospel-creators','LAE MUSIC CREATORS']]){
   const r=await service.request('/join/'+slug);assert.equal(r.status,200);assert(r.text.includes(title));assert(r.text.includes('Invitations are not open yet'));assert(!r.text.includes('<form'));assert(!r.text.includes('/web/app.js'));assert(!r.text.includes('data-pixel='));assert(!r.text.includes('chat.whatsapp.com/'));assert.equal(r.headers['cache-control'],'no-store');
   const head=await service.request('/join/'+slug,{method:'HEAD'});assert.equal(head.status,200);assert.equal(head.body.length,0);
  }

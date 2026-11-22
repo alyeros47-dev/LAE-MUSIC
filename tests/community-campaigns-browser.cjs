@@ -22,7 +22,7 @@ class CampaignFixture extends AccountPool{
   for(const width of [360,390,1440]){
    const context=await browser.newContext({viewport:{width,height:900}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.goto(origin+'/join/creator-network');assert(await page.getByRole('button',{name:'Join WhatsApp Group'}).isDisabled());assert.equal(await page.locator('form').count(),0);
-   await page.goto(origin+'/join/gospel-creators');assert(await page.getByText('LAE-MUSIC Official',{exact:true}).isVisible());await page.reload();assert.equal(await page.locator('h1').count(),1);
+   await page.goto(origin+'/join/gospel-creators');assert(await page.getByText('LAE MUSIC CREATORS',{exact:true}).isVisible());await page.reload();assert.equal(await page.locator('h1').count(),1);
    await context.close();
   }
   const owner=await browser.newContext({viewport:{width:1440,height:1000}}),admin=await owner.newPage();
@@ -39,7 +39,7 @@ class CampaignFixture extends AccountPool{
    await page.route('https://connect.facebook.net/**',r=>{metaRequests++;return r.fulfill({contentType:'application/javascript',body:'/* intercepted Meta fixture; no live advertising request */'});});
    let destination='';
    await page.route('**/join/*/whatsapp?*',async route=>{const response=await route.fetch({maxRedirects:0});assert.equal(response.status(),303);destination=response.headers().location;await route.fulfill({status:200,contentType:'text/html',body:'<h1>Redirect verified without contacting WhatsApp</h1>'});});
-   for(const [slug,identity,link] of [['creator-network','Creator Support Network','CreatorFixture123456789'],['gospel-creators','LAE-MUSIC Official','OfficialFixture123456789']]){
+   for(const [slug,identity,link] of [['creator-network','CREATOR SUPPORT NETWORK','CreatorFixture123456789'],['gospel-creators','LAE MUSIC CREATORS','OfficialFixture123456789']]){
     await page.goto(origin+'/join/'+slug+'?utm_source=facebook&utm_campaign='+slug+'&fbclid=not-for-reporting');await page.reload();
     assert(await page.getByText(identity,{exact:true}).isVisible());assert.equal(await page.locator('form').count(),0);assert.equal(await page.locator('#audio').count(),0);
     const cta=page.getByRole('link',{name:'Join WhatsApp Group'});assert(await cta.isVisible());assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));

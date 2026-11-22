@@ -7,15 +7,26 @@ const target=require('./ci-database.cjs').ciDatabase();
  const pool=new Pool({connectionString:target.href,options:'-c search_path='+schema});
  try{
   await pool.query(fs.readFileSync('migrations/041-community-campaigns.sql','utf8'));
+  const seeds=(await pool.query('SELECT slug,invitation_url FROM community_campaign_settings ORDER BY slug')).rows;
+  assert.deepEqual(seeds,[{slug:'creator-network',invitation_url:'https://chat.whatsapp.com/GTeZsnKj3A29Gk4Ov6t4om'},{slug:'gospel-creators',invitation_url:'https://chat.whatsapp.com/BBOcpcVT1GD7ozQXyDVSaj'}]);
+  const seeded=createCampaigns({pool,env:{CAMPAIGN_TOKEN_KEY:'seed-fixture-only'}});
+  for(const expected of seeds){
+   const landing=await request('/join/'+expected.slug,{},seeded);
+   const click=landing.text.match(/href="(\/join\/[^" ]+\/whatsapp\?t=[^"]+)"/)[1];
+   assert.equal((await request(click,{},seeded)).headers.location,expected.invitation_url,'Owner-supplied group must match the correct campaign');
+  }
+  await pool.query('TRUNCATE community_campaign_daily,community_campaign_clicks');
+  // Test the missing-configuration path separately from the approved seed links.
+  await pool.query("UPDATE community_campaign_settings SET invitation_url=''");
   await pool.query('CREATE TABLE platform_audit(actor_type TEXT,actor_id TEXT,action TEXT,resource TEXT,details JSONB)');
   let now=Date.now();const service=createCampaigns({pool,env:{CAMPAIGN_TOKEN_KEY:'local-fixture-only'},now:()=>now});
   const first='https://chat.whatsapp.com/CreatorFixture123456789',second='https://chat.whatsapp.com/OfficialFixture123456789';
   const before=await service.report();assert(before.campaigns.every(c=>c.warning&&c.invitation_url===''));
   await service.save({slug:'creator-network',invitation_url:first,pixel_id:'123456789012345'},'fixture-owner');
   await service.save({slug:'gospel-creators',invitation_url:second},'fixture-owner');
-  async function request(path,options={}){
+  async function request(path,options={},instance=service){
    const headers={};let status,text='';const res={setHeader(k,v){headers[k.toLowerCase()]=v;},writeHead(s,h={}){status=s;for(const[k,v]of Object.entries(h))headers[k.toLowerCase()]=v;},end(value){text=String(value||'');}};
-   await service.handle({method:options.method||'GET',headers:options.headers||{}},res,new URL(path,'https://lae.test'),{json:(r,s,x)=>{status=s;text=JSON.stringify(x);}});return {status,headers,text};
+   await instance.handle({method:options.method||'GET',headers:options.headers||{}},res,new URL(path,'https://lae.test'),{json:(r,s,x)=>{status=s;text=JSON.stringify(x);}});return {status,headers,text};
   }
   const a=await request('/join/creator-network?utm_source=facebook&utm_campaign=creators&fbclid=private');
   const b=await request('/join/gospel-creators?utm_source=instagram&utm_campaign=official');

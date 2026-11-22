@@ -6,10 +6,10 @@ This change adds only community invitation pages, owner settings and campaign me
 
 | Campaign | Public route | Required group invitation |
 | --- | --- | --- |
-| Creator Support Network | `/join/creator-network` | Creator Support Network WhatsApp group |
-| LAE-MUSIC Official | `/join/gospel-creators` | LAE-MUSIC Official WhatsApp group |
+| CREATOR SUPPORT NETWORK | `/join/creator-network` | `https://chat.whatsapp.com/GTeZsnKj3A29Gk4Ov6t4om` |
+| LAE MUSIC CREATORS | `/join/gospel-creators` | `https://chat.whatsapp.com/BBOcpcVT1GD7ozQXyDVSaj` |
 
-An owner signs in normally, then opens **Admin → WhatsApp communities** (`/admin/console?section=campaigns`). Paste each real `https://chat.whatsapp.com/…` invitation into its own field and save. No imaginary invitation is preconfigured. An optional Meta Pixel ID is configured separately per community. Blank invitation links disable the join button and show a short unavailable message to visitors; the owner sees an explicit configuration warning. Changing or clearing a group link needs no restart. Other application instances refresh their settings cache within 60 seconds.
+An owner signs in normally, then opens **Admin → WhatsApp communities** (`/admin/console?section=campaigns`). The migration preconfigures the two real group invitations supplied by the owner on 22 November 2026. To change a link, paste the replacement `https://chat.whatsapp.com/…` invitation into its own field and save. No imaginary invitation is preconfigured. An optional Meta Pixel ID is configured separately per community. Blank invitation links disable the join button and show a short unavailable message to visitors; the owner sees an explicit configuration warning. Changing or clearing a group link needs no restart. Other application instances refresh their settings cache within 60 seconds.
 
 The pages use the existing LAE-MUSIC colours, typography and a compressed copy of the existing logo. They do not load the application shell, player, Studio, chat widget, registration or checkout. The existing site and its navigation are unchanged except for the new owner administration tab.
 
@@ -42,6 +42,6 @@ LAE_DB_TESTS=true DATABASE_URL=postgres://lae_ci:local-test-only@127.0.0.1:5432/
 
 The focused GitHub workflow supplies disposable PostgreSQL and Chromium and uploads layout screenshots. Synthetic group links in tests are intercepted fixtures, never published destinations or contacted WhatsApp groups.
 
-Before deployment, provide both real invitations, review screenshots and pass the focused checks. Use the existing production deployment process; startup applies the additive migration. Then configure both links, open and refresh both public routes on mobile/desktop, check destinations and separated totals, and confirm the existing homepage/catalogue still work before starting advertising. Do not start advertisements while either configuration warning remains.
+Before deployment, verify the two owner-supplied invitation mappings, review screenshots and pass the focused checks. Use the existing production deployment process; startup applies the additive migration. Then configure both links, open and refresh both public routes on mobile/desktop, check destinations and separated totals, and confirm the existing homepage/catalogue still work before starting advertising. Do not start advertisements while either configuration warning remains.
 
 For rollback, retain the additive tables and statistics and revert the application code. Do not restore an older release without the new migration file: this repository intentionally refuses unknown migration history. No production deployment is performed as part of preparing these pages.

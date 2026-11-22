@@ -18,3 +18,9 @@ CREATE TABLE community_campaign_clicks (
  expires_at TIMESTAMPTZ NOT NULL
 );
 CREATE INDEX community_campaign_clicks_expiry ON community_campaign_clicks(expires_at);
+
+-- Actual group invitations supplied by the owner on 22 November 2026.
+-- These are initial settings only; the owner can replace or clear them in Admin.
+INSERT INTO community_campaign_settings(slug,invitation_url) VALUES
+ ('creator-network','https://chat.whatsapp.com/GTeZsnKj3A29Gk4Ov6t4om'),
+ ('gospel-creators','https://chat.whatsapp.com/BBOcpcVT1GD7ozQXyDVSaj');
