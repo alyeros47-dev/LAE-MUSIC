@@ -3,6 +3,11 @@
 .community-logo{display:block;width:240px;max-width:85%;height:auto;margin:0 auto 34px;object-fit:contain}
 .community-eyebrow{color:var(--lime);font-size:15px;font-weight:700;margin-bottom:12px}
 .community-tag{display:inline-block;color:var(--muted);font-size:10px;letter-spacing:.2em;margin-bottom:20px}
+.community-label{color:var(--muted);font-size:15px;margin-bottom:20px}
+.community-details{color:var(--muted);font-size:16px;line-height:1.65;margin-bottom:26px}
+.community-details p{margin-bottom:20px}
+.community-details strong{color:var(--text)}
+.community-details h2{color:var(--text);font-size:22px;line-height:1.3;margin:28px 0 14px}
 .community-card h1{font-size:clamp(30px,6.7vw,44px);line-height:1.13;letter-spacing:-.04em;max-width:540px;margin:0 auto 22px;text-wrap:balance}
 .community-description{color:var(--muted);font-size:17px;line-height:1.7;margin-bottom:30px}
 .community-join{display:flex;align-items:center;justify-content:center;gap:15px;width:100%;min-height:58px;padding:16px 18px;border:1px solid #ffe095;border-radius:15px;background:linear-gradient(#fff0b1,#ffc238);color:#14100a;font-weight:750;font-size:17px;box-shadow:0 5px 30px #ffc2381a}
