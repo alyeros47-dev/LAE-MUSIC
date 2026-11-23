@@ -29,7 +29,10 @@
     "test:affiliate:framework": "node --test tests/affiliate-framework.test.cjs",
     "test:affiliate:framework:postgres": "node tests/affiliate-framework-postgres.cjs && node tests/affiliate-revenue-ledger-postgres.cjs && node tests/premium-referrals-postgres.cjs",
     "test:guest-bank:postgres": "node tests/guest-bank-checkout-postgres.cjs",
-    "test:guest-bank:browser": "node tests/guest-bank-checkout-browser.cjs"
+    "test:guest-bank:browser": "node tests/guest-bank-checkout-browser.cjs",
+    "test:campaigns": "node --test tests/community-campaigns.test.cjs",
+    "test:campaigns:postgres": "node tests/community-campaigns-postgres.cjs",
+    "test:campaigns:browser": "node tests/community-campaigns-browser.cjs"
   },
   "engines": {
     "node": ">=20"
