@@ -54,8 +54,23 @@ test('external memberships: real database and Monnify adapter; all provider/stor
    await pool.query("UPDATE external_upload_memberships SET expires_at=NOW()-INTERVAL '1 day',starts_at=NOW()-INTERVAL '366 days' WHERE artist_id=$1 AND plan='starter'",[other.id]);assert.equal((await external.status(pool,other.id)).active_subscription,null);
    assert.equal((await pool.query("SELECT COUNT(*)::int AS n FROM music_tracks WHERE creator_id=$1 AND status='published'",[other.id])).rows[0].n,10);
    assert.deepEqual((await pool.query('SELECT capacity,allocated FROM artist_launch_campaign')).rows[0],{capacity:200,allocated:200});
-   assert.equal((await api('/api/platform/payments/checkouts/'+purchase.checkout.id+'/verify',{},buyer.cookie)).status,200);
+   assert.equal((await f.payments.reconcile(buyer.id,purchase.checkout.id)).status,'paid');
    const accounting=await require('../lib/partner-accounting').create({pool}).overview(direct.id,{mode:'test'});assert(accounting.rollup.direct.recorded_commission_minor>=200);
+  });
+  await t.test('refund holds and independently retrieved fixture refunds revoke only the external purchase and reverse it once',async()=>{
+   const refunds=require('../lib/payments/refunds').createRefunds({pool,ensure(){},account:()=>({...f.adapter,retrieveRefund:async()=>({merchantId:f.adapter.merchantId,mode:'test',currency:'NGN',amountMinor:Number(purchase.checkout.charge_minor),status:'processed',completed:true})})});
+   await refunds.request(buyer.id,purchase.order.id,uuid(),{reason:'Fixture payment requires independent refund review'});
+   assert.equal((await external.status(pool,buyer.id)).active_subscription,null);
+   const native=(await pool.query('SELECT * FROM affiliate_native_earnings WHERE order_id=$1',[purchase.order.id])).rows[0];assert.equal(await require('../lib/affiliate-native').eligible(pool,native),false);
+   assert.equal((await refunds.report()).find(r=>r.order_id===purchase.order.id).service_used,true);
+   await refunds.verify(purchase.order.id,uuid(),{refund_id:'777777'});await refunds.verify(purchase.order.id,uuid(),{refund_id:'777777'});
+   assert.equal((await pool.query('SELECT status FROM external_upload_memberships WHERE order_id=$1',[purchase.order.id])).rows[0].status,'refunded');
+   assert.equal((await pool.query('SELECT status FROM external_upload_commissions WHERE order_id=$1',[purchase.order.id])).rows[0].status,'reversed');
+   assert.equal((await pool.query('SELECT status FROM affiliate_native_earnings WHERE order_id=$1',[purchase.order.id])).rows[0].status,'reversed');
+   assert.equal((await pool.query('SELECT COUNT(*)::int AS n FROM payment_product_reversals WHERE order_id=$1',[purchase.order.id])).rows[0].n,1);
+   assert.equal((await pool.query("SELECT COUNT(*)::int AS n FROM music_tracks WHERE creator_id=$1 AND status='published'",[buyer.id])).rows[0].n,1);
+   assert.equal((await pool.query("SELECT COUNT(*)::int AS n FROM artist_subscriptions WHERE artist_id=$1 AND status='paid'",[buyer.id])).rows[0].n,1);
+
   });
  }finally{await f.close();}
 });

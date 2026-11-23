@@ -6,6 +6,7 @@ test('external purchases preserve all Studio prices and grant upload slots only'
  assert.deepEqual(['starter','growth','professional'].map(p=>commerce.quote('artist_subscription',p).amount_minor),[600,1000,2000]);
  assert.deepEqual(Object.values(require('../lib/plans')).map(p=>[p.studioGenerations,p.uploads]),[[3,6],[6,12],[15,30]]);
  assert.equal(require('../lib/artist-launch-access').LIMIT,200);
+ for(const plan of ['constructor','__proto__','unknown'])assert.throws(()=>external.quote(plan),e=>e.status===400);
 });
 test('rights documents are encrypted in object storage and tampering cannot be approved as readable proof',async()=>{
  const {createStorage}=require('../lib/external-rights');let saved;

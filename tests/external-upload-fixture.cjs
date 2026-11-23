@@ -16,7 +16,7 @@ async function fixture(){
   }
   assert.equal(u.hostname,'sandbox.monnify.com','Only fixture Monnify/R2 requests are allowed');let data;
   if(u.pathname.endsWith('/auth/login'))data={accessToken:'fixture-token',expiresIn:3600};
-  else if(u.pathname.endsWith('/init-transaction')){const input=JSON.parse(options.body);data={paymentReference:input.paymentReference,transactionReference:'fixture-'+uuid(),checkoutUrl:'https://sandbox.sdk.monnify.com/checkout/test'};transactions.set(input.paymentReference,{...input,...data,paymentStatus:'PENDING',amountPaid:'0.00',currency:'NGN'});}
+  else if(u.pathname.endsWith('/init-transaction')){const input=JSON.parse(options.body);data={paymentReference:input.paymentReference,transactionReference:'MNFY|fixture-'+uuid(),checkoutUrl:'https://sandbox.sdk.monnify.com/checkout/test'};transactions.set(input.paymentReference,{...input,...data,paymentStatus:'PENDING',amountPaid:'0.00',currency:'NGN'});}
   else if(u.pathname.includes('/transactions/query')){const p=transactions.get(u.searchParams.get('paymentReference'));data=p?{paymentReference:p.paymentReference,transactionReference:p.transactionReference}:{};}
   else if(u.pathname.includes('/api/v2/transactions/'))data=[...transactions.values()].find(p=>p.transactionReference===decodeURIComponent(u.pathname.split('/').pop()))||{};
   else throw Error('Unmocked fixture request');
@@ -39,6 +39,6 @@ async function fixture(){
  async function buy(user,plan='starter',kind='external_upload_subscription'){const p=await prepare(user,plan,kind);const verifiedPayment=await verified(p);assert.equal(verifiedPayment.result.outcome,'accepted',JSON.stringify(verifiedPayment.result));return {...p,...verifiedPayment};}
  async function upload(user,code,title,bytes){const hash=crypto.createHash('sha256').update(bytes).digest('hex');const start=await api('/api/music/upload/start',{uploadCode:code,title,genre:'Afrobeat',description:'Original external recording',audioMime:'audio/mpeg',audioBytes:bytes.length,coverBytes:null,rightsConfirmed:true,audioSha256:hash},user.cookie);if(start.status!==201)return start;const put=await api(start.data().audioUrl,bytes,user.cookie,uuid(),'PUT',{'content-type':'audio/mpeg','content-length':String(bytes.length)});if(put.status!==200)return put;return api('/api/music/upload/finish',{id:start.data().id},user.cookie);}
  async function close(){global.fetch=originalFetch;await pool.end();await control.query('DROP SCHEMA '+schema+' CASCADE');await control.end();}
- return {pool,app,env,objects,transactions,payments,api,register,prepare,verified,buy,upload,close,uuid};
+ return {pool,app,env,objects,transactions,payments,adapter,api,register,prepare,verified,buy,upload,close,uuid};
 }
 module.exports={fixture};
