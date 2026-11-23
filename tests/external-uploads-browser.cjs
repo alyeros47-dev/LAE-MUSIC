@@ -1,0 +1,37 @@
+'use strict';
+const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs');
+const {launchBrowser}=require('./browser-engine.cjs'),AxeBuilder=require('@axe-core/playwright').default;
+(async()=>{
+ const f=await require('./external-upload-fixture.cjs').fixture(),browser=await launchBrowser();
+ const server=http.createServer(async(req,res)=>{try{const chunks=[];for await(const chunk of req)chunks.push(chunk);const r=await f.app.request(req.url,{method:req.method,headers:req.headers,body:Buffer.concat(chunks)});res.writeHead(r.status,r.headers);res.end(r.body);}catch(error){res.writeHead(500);res.end(error.message);}});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
+ try{
+  const sponsor=await f.register('Browser External Sponsor');await f.buy(sponsor);await require('../lib/affiliate-access').setParticipation(f.pool,sponsor.id,{mode:'test',participating:true});
+  const context=await browser.newContext({viewport:{width:390,height:900}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await context.addInitScript(()=>localStorage.setItem('lae_listening_preferences_v1',JSON.stringify({version:1,selections:[]})));
+  await page.goto(origin+'/external-upload-packages?plan=growth&ref='+sponsor.id);await page.getByRole('heading',{name:'Upload music made elsewhere.'}).waitFor();
+  for(const text of ['$5','$10','$20','10 external songs','30 external songs','100 external songs'])assert(await page.getByText(text,{exact:false}).count()>0);
+  await page.getByRole('button',{name:'Choose Growth',exact:true}).click();await page.locator('#auth-form').waitFor();assert(page.url().includes('return=external'));assert(page.url().includes('plan=growth'));
+  const form=page.locator('#auth-form');await form.locator('[name=name]').fill('Browser External Buyer');await form.locator('[name=email]').fill('browser-external-buyer@external-ci.invalid');await form.locator('[name=password]').fill('BrowserExternalFixture123');await form.locator('[name=confirmPassword]').fill('BrowserExternalFixture123');await form.locator('button[type="submit"],button:not([type])').last().click();
+  await page.waitForURL('**/workspace?tab=purchases');await page.getByRole('heading',{name:'Every purchase, in view.'}).waitFor();
+  const buyer=(await f.pool.query("SELECT id FROM creators WHERE email='browser-external-buyer@external-ci.invalid'")).rows[0],order=(await f.pool.query("SELECT * FROM commerce_orders WHERE artist_id=$1 AND kind='external_upload_subscription' ORDER BY created_at DESC LIMIT 1",[buyer.id])).rows[0];assert(order);assert.equal(order.plan,'growth');assert.equal(Number(order.amount_minor),1000);
+  const quote=await f.payments.prepare(buyer.id,{order_id:order.id,provider:'monnify',currency:'NGN'}),checkout=await f.payments.start(buyer.id,f.uuid(),{quote_id:quote.id});await f.verified({order,checkout});
+  await page.goto(origin+'/workspace?tab=purchases&checkout='+checkout.id);await page.getByRole('heading',{name:'Your external upload package is active'}).waitFor();await page.getByRole('link',{name:'Generate an upload code',exact:true}).click();
+  await page.getByRole('heading',{name:'Your external uploads',exact:true}).waitFor();
+  const agreement=page.locator('#external-agreement');if(await agreement.count()){await agreement.locator('[name=accepted]').check();await agreement.getByRole('button',{name:'Accept agreement',exact:true}).click();await page.waitForFunction(()=>!document.getElementById('external-agreement'));}
+  await page.getByRole('button',{name:'Generate Upload Code',exact:true}).click();await page.getByRole('link',{name:'Upload song',exact:true}).last().waitFor();
+  const code=await page.getByRole('textbox',{name:'External song upload code',exact:true}).inputValue();assert(/^EX-[A-F0-9]{36}$/.test(code));await page.getByRole('link',{name:'Upload song',exact:true}).last().click();await page.locator('#upload-form').waitFor();
+  const upload=page.locator('#upload-form'),audio=Buffer.alloc(1600,2);audio.write('ID3');await upload.locator('[name=title]').fill('External browser original');await upload.locator('[name=genre]').fill('Gospel Praise');await upload.locator('[name=audio]').setInputFiles({name:'original.mp3',mimeType:'audio/mpeg',buffer:audio});await upload.locator('[name=rights]').check();await upload.getByRole('button',{name:'Upload & publish',exact:true}).click();
+  await page.waitForURL('**/workspace?tab=catalog');await page.getByText('External browser original',{exact:true}).waitFor();
+  assert.equal(Number((await f.pool.query('SELECT COUNT(*) AS n FROM external_upload_codes WHERE artist_id=$1 AND consumed_at IS NOT NULL',[buyer.id])).rows[0].n),1);
+  assert.equal((await f.pool.query('SELECT COUNT(*)::int AS n FROM artist_subscriptions WHERE artist_id=$1',[buyer.id])).rows[0].n,0);
+  assert.equal((await f.pool.query('SELECT direct_referrer_id FROM commerce_order_referral_snapshots WHERE order_id=$1',[order.id])).rows[0].direct_referrer_id,String(sponsor.id));
+  await page.goto(origin+'/workspace?tab=external');await page.getByRole('heading',{name:'Your external uploads',exact:true}).waitFor();
+  const proof=page.locator('#external-rights-document');await proof.locator('[name=document]').setInputFiles({name:'Commercial license.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7\nBrowser rights evidence fixture')});await proof.getByRole('button',{name:'Send for review',exact:true}).click();await page.getByText('Commercial license.pdf · pending',{exact:true}).waitFor();
+  fs.mkdirSync('artifacts',{recursive:true});for(const width of [390,1440]){await page.setViewportSize({width,height:950});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));const axe=await new AxeBuilder({page}).include('#page').analyze();assert.deepEqual(axe.violations,[]);await page.screenshot({path:'artifacts/external-dashboard-'+width+'.png',fullPage:true});}
+  const admin=await browser.newContext({viewport:{width:1440,height:1000}}),operator=await admin.newPage(),login=await f.api('/api/admin/login',{password:f.env.ADMIN_KEY});await admin.addCookies(login.cookie.split('; ').filter(x=>x.includes('=')).map(c=>({name:c.split('=')[0],value:c.slice(c.indexOf('=')+1),url:origin})));
+  await operator.goto(origin+'/admin/console?section=external-rights');await operator.getByRole('heading',{name:'External music rights',exact:true}).waitFor();const review=operator.locator('[data-document-review]').first();await review.locator('[name=note]').fill('Verified fixture commercial distribution rights');await review.getByRole('button',{name:'Save review',exact:true}).click();await operator.getByText(/Commercial license.pdf · approved/).waitFor();
+  await page.reload();await page.getByText('Rights documents approved. Normal settlement and withdrawal checks still apply.',{exact:true}).waitFor();
+  assert.deepEqual(errors,[]);await admin.close();await context.close();console.log('PASS real browser + PostgreSQL: selected external plan/referral → signup → verified fixture Monnify purchase → separate active upload membership → creator consent → one code → file upload/publication → private rights proof → administrator review; responsive and accessible. No real provider requests.');
+ }finally{await browser.close();await new Promise(r=>server.close(r));await f.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

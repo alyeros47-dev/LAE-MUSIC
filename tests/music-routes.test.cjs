@@ -23,6 +23,7 @@ test('reserving an interrupted upload verifies existing audio before skipping it
   const queries=[],network=[];
   const row=x=>({rowCount:1,rows:[x]});
   const pool={query:async(sql,args=[])=>{
+   if(sql.startsWith('SELECT * FROM external_upload_codes'))return {rowCount:0,rows:[]};
    queries.push(sql);
    if(sql.startsWith('SELECT 1 FROM artist_owner_access')||sql.startsWith('SELECT 1 FROM artist_free_music_usage'))return {rowCount:0,rows:[]};
    if(['BEGIN','COMMIT','ROLLBACK'].includes(sql)||sql.startsWith('SELECT id FROM creators')||sql.startsWith('UPDATE music_tracks'))return row({id:7});

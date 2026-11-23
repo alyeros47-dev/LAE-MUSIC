@@ -25,6 +25,7 @@ export function artistPackageLink(url, plan) {
 }
 
 export function artistPackageEntry(url, session = {}, {onlineCheckout=false}={}) {
+  if(url.pathname==='/join'&&url.searchParams.get('return')==='external'&&ARTIST_PACKAGES.includes(url.searchParams.get('plan')))return false;
   if(onlineCheckout&&url.pathname==='/join'&&url.searchParams.get('return')==='monnify')return false;
   if(url.searchParams.get('return')==='bank-payment')return false;
   if(session.artist_testing_open===true)return false;
