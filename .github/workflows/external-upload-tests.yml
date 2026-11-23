@@ -1,7 +1,5 @@
 name: External upload membership checks
 on:
-  push:
-    branches: [codex/external-upload-memberships]
   pull_request:
     paths: ['lib/external-*', 'config/external-upload-packages.json', 'migrations/042-external-upload-memberships.sql', 'tests/external-*', 'web/external-uploads.js', '.github/workflows/external-upload-tests.yml']
 permissions:

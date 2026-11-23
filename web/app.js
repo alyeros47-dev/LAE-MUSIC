@@ -204,7 +204,7 @@ async function workspace(view, url) {
   if(tab==='finance'){navigate('/partners?tab=finance');return;}
   if (!requireAccount(view)) return;
   if(tab==='purchases')return purchasesPage(view,heading('YOUR ACCOUNT','Your purchases.','Your transaction records remain available independently of artist production access.'));
-  if(tab==='upload'){const ext=await api('/api/platform/external-uploads');if(!ext.active_subscription&&!await requireArtistPackage(view))return;}
+  if(tab==='upload'){const ext=await api('/api/platform/external-uploads').catch(()=>({active_subscription:null}));if(!ext.active_subscription&&!await requireArtistPackage(view))return;}
   const intro = heading('YOUR ARTIST WORKSPACE', 'Make your next move, ' + session.artist.display_name.split(' ')[0] + '.', 'Your music. Your audience. Your next chapter.', buttonLink('/workspace?tab=upload', '＋ Upload music')) + workspaceTabs(tab);
   if(tab==='external')return externalUploadsPage(view,url,intro,{api,e,session,heading,notice,bindForm,keyFor,clearKey,date,navigate,toast,readFile});
   if(tab==='membership')return membershipPage(view,intro,{api,e,notice,bindForm,keyFor,clearKey,date,money,navigate,manualBank:visibleFeatures.manual_bank,onlineCheckout:visibleFeatures.checkout});

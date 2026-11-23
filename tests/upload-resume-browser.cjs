@@ -7,6 +7,7 @@ try{for(const width of [390,1440])for(const stored of [true,false]){
  await page.route('**/api/**',async route=>{const req=route.request(),p=new URL(req.url()).pathname,send=(x,status=200)=>route.fulfill({status,json:x});
   if(req.method()!=='GET')writes.push({path:p,method:req.method(),type:req.headers()['content-type'],body:req.method()==='POST'?req.postDataJSON():null});
   if(p==='/api/platform/session')return send({artist:{id:7,display_name:'Publishing fixture',email:'fixture@publishing.invalid'},listener:null,admin:false});
+  if(p==='/api/platform/external-uploads')return send({active_subscription:null});
   if(p==='/api/artist/subscription')return send({artist_features_active:true,agreement_required:false,plan:'starter',upload_limit:6,uploads_used:1});
   if(p==='/api/music/status')return send({uploadsEnabled:true});
   if(p==='/api/platform/artist-overview')return send({tracks:[],activity:[],stats:{published:0,plays:0,followers:0}});
