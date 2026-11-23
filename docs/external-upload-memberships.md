@@ -16,7 +16,7 @@ Studio packages remain Starter USD 6 (3 generations/6 tracks), Growth USD 10 (6/
 
 ## Customer workflow
 
-Open `/external-upload-packages`, or **Artist workspace → External uploads**. Review the selected external plan, register/sign in if needed, then use the existing Purchases checkout. Referral and plan context survive registration; established referral relationships take precedence. Verified payment displays the active membership, remaining song allowance and expiry.
+Open `/external-upload-packages`, or **Artist workspace → External uploads**. Review the selected external plan, register/sign in if needed, then use the existing Purchases checkout. Referral and plan context survive registration, sign-in and adding artist access to an existing listener account; established referral relationships take precedence. Verified payment displays the active membership, remaining song allowance and expiry.
 
 The Music Creator Agreement is versioned to include the approved external packages and rights requirements; existing consent history is retained. Accept the current agreement before new creation or publication. **Generate Upload Code** issues a unique, account-linked `EX-…` code. Creating a code does not consume an upload. Saved unused/pending codes remain accessible in the owner's dashboard. Choose **Upload song**, enter the title/category, choose MP3/M4A audio (existing 30 MB limit) and optional artwork (existing 3 MB limit), and accept the external rights declaration. Each code binds one recording checksum; it cannot publish a different account's file. Interrupted uploads can resume using the same file and code, with fresh object keys isolating older in-flight writes. Use a new code to choose a different recording before publication.
 
