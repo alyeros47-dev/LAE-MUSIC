@@ -19,7 +19,7 @@ try{for(const width of [390,1440]){
   await page.goto(origin+path);await page.getByRole('heading',{name:title,exact:true}).waitFor();
   if(path==='/about')assert(await page.getByText('LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform.',{exact:true}).isVisible());
   if(path==='/how-it-works'||path==='/publishing-policy')assert(await page.getByText(/AI-generated music is not automatically copyright-free/).first().isVisible());
-  if(path==='/publishing-policy')assert(await page.getByText(/Only songs generated through LAE-MUSIC Studio may be published during this launch/).isVisible());
+  if(path==='/publishing-policy')assert(await page.getByText(/eligible externally generated AI music with a separate external-upload package/).isVisible());
   if(path==='/faq'){await page.getByText('Is AI music automatically copyright-free?',{exact:true}).click();assert(await page.getByText(/Applicable copyright and licensing requirements still apply/).isVisible());}
   assert(await page.getByRole('link',{name:'Publishing policy',exact:true}).first().isVisible());
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual((await new AxeBuilder({page}).analyze()).violations,[]);
@@ -28,9 +28,9 @@ try{for(const width of [390,1440]){
  assert.equal(new URL(page.url()).searchParams.get('ref'),'42');assert.equal(await page.locator('[data-package]').count(),1);await page.getByRole('link',{name:'See other artist packages',exact:true}).click();await page.locator('[data-package=starter]').waitFor();assert.equal(await page.locator('[data-package]').count(),3);assert(await page.getByRole('heading',{name:'Premium',exact:true}).isVisible());
  const packageCopy=await page.locator('.price-grid').innerText();assert(!/\d+ (annual upload|included music|external upload|included generation)|per additional generation|undefined/i.test(packageCopy));assert.match(packageCopy,/3 music generations \/ year/);assert.match(packageCopy,/15 music generations \/ year/);assert.match(packageCopy,/Up to 30 songs \/ year/);assert(!packageCopy.includes('Professional'));
  signedIn=true;await page.goto(origin+'/workspace?tab=upload');await page.locator('#upload-form').waitFor();
- assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());assert(await page.getByLabel('Generated-song upload code',{exact:true}).getAttribute('required')!==null);
- await page.getByLabel('Generated-song upload code',{exact:true}).fill('A'.repeat(36));assert(!(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled()));
- await page.getByLabel('Generated-song upload code',{exact:true}).fill('');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
+ assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());assert(await page.getByLabel('Song upload code',{exact:true}).getAttribute('required')!==null);
+ await page.getByLabel('Song upload code',{exact:true}).fill('A'.repeat(36));assert(!(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled()));
+ await page.getByLabel('Song upload code',{exact:true}).fill('');assert(await page.getByRole('button',{name:'Upload & publish',exact:true}).isDisabled());
  assert.deepEqual(writes,[]);assert.deepEqual(errors,[]);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  await context.close();console.log('Business copy, package names/prices, reviewed allowances and code-required upload UI passed at '+width);
 }}finally{await browser.close();await new Promise(r=>server.close(r));}})().catch(e=>{console.error(e);process.exitCode=1;});
