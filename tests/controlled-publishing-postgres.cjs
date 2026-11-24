@@ -28,7 +28,7 @@ test('controlled publishing enforces generated ownership and exact audio without
   const input={title:'Studio original',genre:'Gospel Praise',description:'Original Studio song',audioMime:'audio/mpeg',audioBytes:audio.length,rightsConfirmed:true};
   let permit,trackId;
   await t.test('active paid packages and forged flags cannot authorize a code-free external upload',async()=>{
-   for(const extra of [{},{generated:true,studioOnly:false,source:'studio',generation_id:1,externalUploadsEnabled:true,plan:'professional'}]){const r=await api('/api/music/upload/start',{...input,...extra},a.cookie);assert.equal(r.status,403,JSON.stringify(r.data));assert.match(r.data.error,/Only songs generated through LAE-MUSIC Studio/);}
+   for(const extra of [{},{generated:true,studioOnly:false,source:'studio',generation_id:1,externalUploadsEnabled:true,plan:'professional'}]){const r=await api('/api/music/upload/start',{...input,...extra},a.cookie);assert.equal(r.status,403,JSON.stringify(r.data));assert.match(r.data.error,/separate external-upload package and its account-linked codes/);}
    assert.equal(storageCalls,0);assert.equal((await pool.query("SELECT COUNT(*)::int AS n FROM music_tracks WHERE status='pending_upload'")).rows[0].n,0);
   });
   await t.test('fake, foreign and lyrics-only codes cannot reserve a song or consume a valid authorization',async()=>{

@@ -38,6 +38,8 @@ class MockPool {
     if (sql.startsWith('INSERT INTO generation_ledger')) {const entry={id:this.state.credits.length+1,creator_id:args[0],delta:sql.includes('VALUES($1,-1')?-1:1,reason:args[1],reference:args[2]};this.state.credits.push(entry);return row(entry);}
     if (sql.startsWith('UPDATE generation_ledger SET reason=')) {const entry=this.state.credits.find(c=>c.reference===args[0]&&c.creator_id===args[1]&&c.reason==='lyrics_generation_reserved');if(!entry)return none();entry.reason=sql.includes("reason='lyrics_generation_refunded'")?'lyrics_generation_refunded':'lyrics_generation';return row(entry);}
     if (sql.startsWith('INSERT INTO generation_records')) {this.state.records.push(args);return row({id:this.state.records.length});}
+    if(sql.startsWith('SELECT * FROM external_upload_codes WHERE artist_id='))return none();
+    if(sql.startsWith('SELECT 1 FROM external_upload_codes WHERE artist_id='))return none();
     throw Error('Unexpected SQL in behavioral mock: '+sql);
   }
 }

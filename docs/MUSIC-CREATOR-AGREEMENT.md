@@ -1,10 +1,10 @@
 # LAE-MUSIC Music Creator Agreement
 
-Version: 2026-11-05-v1
+Version: 2026-11-23-v2
 
 ## Your membership
 
-LAE-MUSIC provides AI-powered music creation, streaming and creator monetization services. Annual artist packages are Starter ($6: 3 generations, up to 6 tracks), Growth ($10: 6 generations, up to 12 tracks) and Premium ($20: 15 generations, up to 30 tracks). Each generation is intended to produce two separate tracks, each with its own account-linked, one-time publishing code. Provider failures remain subject to the existing credit-restoration and review procedures. Additional generation prices must be approved and shown before purchase.
+LAE-MUSIC provides AI-powered music creation, streaming and creator monetization services. Annual Studio artist packages are Starter ($6: 3 generations, up to 6 tracks), Growth ($10: 6 generations, up to 12 tracks) and Premium ($20: 15 generations, up to 30 tracks). Each generation is intended to produce two separate tracks, each with its own account-linked, one-time publishing code. Provider failures remain subject to the existing credit-restoration and review procedures. Additional generation prices must be approved and shown before purchase.
 
 ## Your creative contributions
 
@@ -12,7 +12,7 @@ You may supply original lyrics and production instructions. You must own or have
 
 ## Publishing and platform permission
 
-Only recordings generated through LAE-MUSIC Studio may be newly published during this launch. Each publication must be linked to your completed generation record. When you publish, you authorize LAE-MUSIC to store, display, stream and distribute that recording and its associated artwork and metadata through the platform to provide its services. This permission does not transfer ownership of your contributions. Releases remain subject to existing moderation, copyright complaints and takedown procedures.
+Studio recordings must be linked to your completed generation record and account-linked publishing code. Eligible music made with external AI services may be published under a separate annual external-upload package: Starter ($5: 10 songs), Growth ($10: 30 songs), or Premium ($20: 100 songs). These packages include no Studio generations. Each external song requires its own account-linked code and an explicit distribution and monetization rights declaration. Supporting rights documents must be approved before royalty withdrawal. External service licenses must permit the intended use. When you publish, you authorize LAE-MUSIC to store, display, stream and distribute that recording and its associated artwork and metadata through the platform to provide its services. This permission does not transfer ownership of your contributions. Releases remain subject to existing moderation, copyright complaints and takedown procedures.
 
 ## Renewal and expiry
 

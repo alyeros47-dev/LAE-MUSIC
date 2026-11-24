@@ -19,7 +19,7 @@ try{for(const width of [390,1440]){
   await page.goto(origin+path);await page.getByRole('heading',{name:title,exact:true}).waitFor();
   if(path==='/about')assert(await page.getByText('LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform.',{exact:true}).isVisible());
   if(path==='/how-it-works'||path==='/publishing-policy')assert(await page.getByText(/AI-generated music is not automatically copyright-free/).first().isVisible());
-  if(path==='/publishing-policy')assert(await page.getByText(/Only songs generated through LAE-MUSIC Studio may be published during this launch/).isVisible());
+  if(path==='/publishing-policy')assert(await page.getByText(/eligible externally generated AI music with a separate external-upload package/).isVisible());
   if(path==='/faq'){await page.getByText('Is AI music automatically copyright-free?',{exact:true}).click();assert(await page.getByText(/Applicable copyright and licensing requirements still apply/).isVisible());}
   assert(await page.getByRole('link',{name:'Publishing policy',exact:true}).first().isVisible());
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual((await new AxeBuilder({page}).analyze()).violations,[]);

@@ -1,17 +1,17 @@
 {
-  "revision": "studio-only-launch-2026-11-04",
-  "external_uploads_enabled": false,
+  "revision": "studio-and-external-memberships-2026-11-23",
+  "external_uploads_enabled": true,
   "generation_record_required": true,
   "package_allowances_status": "annual_memberships",
   "business_description": "LAE-MUSIC is an AI-powered music creation, streaming and creator monetization platform.",
   "business_details": [
     "Our platform enables independent creators to generate original AI-powered music using our integrated music production studio, publish their completed songs on LAE-MUSIC, and earn revenue from eligible streaming activity.",
-    "Listeners can discover and stream music created through our platform.",
-    "LAE-MUSIC is not currently an open marketplace for conventional music recordings or externally generated music."
+    "Listeners can discover and stream eligible music published on LAE-MUSIC.",
+    "Creators may also publish eligible music made with external AI services using a separate annual external-upload package and account-linked upload codes."
   ],
-  "publishing_notice": "Only songs generated through LAE-MUSIC Studio may be published during this launch. External recordings, including songs from Suno, other AI platforms and conventional recording studios, are temporarily not accepted.",
+  "publishing_notice": "Publish your LAE-MUSIC Studio recordings with their generation codes, or eligible externally generated AI music with a separate external-upload package and its account-linked codes.",
   "rights_notice": "AI-generated music is not automatically copyright-free or exempt from licensing requirements. Creators must hold the necessary rights and permissions for their lyrics, recordings, voices, artwork and other contributions. All releases remain subject to content moderation, complaints and takedown procedures.",
-  "own_lyrics_notice": "Creators may supply their own original lyrics and musical production instructions within LAE-MUSIC Studio, subject to our content policies. Supplying lyrics does not authorize the upload of an externally generated or recorded song.",
+  "own_lyrics_notice": "Creators may supply their own original lyrics and production instructions in LAE-MUSIC Studio, subject to our content policies. External recordings require a separate external-upload entitlement.",
   "allowances_notice": "Annual packages: Starter $6/year includes 3 generations and up to 6 tracks; Growth $10/year includes 6 generations and up to 12 tracks; Premium $20/year includes 15 generations and up to 30 tracks. Each generation produces two separate tracks with individual publishing codes. Additional-generation prices remain configurable pending approval. Existing purchased benefits are preserved.",
   "package_names": {
     "starter": "Starter",
@@ -23,12 +23,13 @@
     "Describe your song, or supply your own original lyrics and production instructions within the current Gospel Studio configuration.",
     "Generate your completed song in LAE-MUSIC Studio and review the recording and its generation record.",
     "Publish from your saved Studio release, or upload the original generated recording using its account-linked upload code. Confirm the required rights declaration.",
+    "For music made with external AI services, choose a separate external-upload package, generate an account-linked code, and upload your eligible recording. Supporting rights documents need approval before royalty withdrawal.",
     "Listeners discover and stream published music. Creators may earn revenue from eligible streaming activity under the platform's applicable terms; earnings are not guaranteed."
   ],
   "faqs": [
     {
       "question": "Can I upload a song made outside LAE-MUSIC?",
-      "answer": "Not during this launch. Recordings from Suno, other AI services or conventional recording studios are temporarily not accepted for publication, even if you own them."
+      "answer": "Yes. Eligible music from Suno and other AI music services needs a separate annual external-upload package: Starter $5 for 10 songs, Growth $10 for 30 songs, or Premium $20 for 100 songs. Confirm your distribution and monetization rights. Rights documents must be approved before royalty withdrawal."
     },
     {
       "question": "Can I use my own lyrics and production instructions?",
@@ -36,11 +37,11 @@
     },
     {
       "question": "What proves that a song was generated here?",
-      "answer": "Every new publication must have a valid completed LAE-MUSIC generation record linked to the signed-in creator. Upload codes also bind the original recording to that record; an unrelated audio file cannot use the code."
+      "answer": "Studio releases retain their completed generation records and original-audio checks. External releases use separate account-linked upload codes, verified upload-package allowances and rights declarations."
     },
     {
       "question": "What are the artist package prices?",
-      "answer": "Annual packages: Starter $6/year includes 3 generations and up to 6 tracks; Growth $10/year includes 6 generations and up to 12 tracks; Premium $20/year includes 15 generations and up to 30 tracks. Each generation produces two separate tracks with individual publishing codes. Additional-generation prices remain configurable pending approval. Existing purchased benefits are preserved. External recordings are temporarily not accepted."
+      "answer": "Annual packages: Starter $6/year includes 3 generations and up to 6 tracks; Growth $10/year includes 6 generations and up to 12 tracks; Premium $20/year includes 15 generations and up to 30 tracks. Each generation produces two separate tracks with individual publishing codes. Additional-generation prices remain configurable pending approval. Existing purchased benefits are preserved. External-upload packages are sold separately and do not include Studio generations."
     },
     {
       "question": "Is AI music automatically copyright-free?",
@@ -58,5 +59,6 @@
       "question": "How are inappropriate or infringing releases handled?",
       "answer": "Existing content moderation, complaint review and takedown procedures remain in place. Use the report option on a song to submit a concern."
     }
-  ]
+  ],
+  "external_upload_membership_required": true
 }

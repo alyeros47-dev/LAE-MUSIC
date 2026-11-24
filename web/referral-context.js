@@ -13,15 +13,17 @@ export function rememberReferral(url,storage,now=Date.now()){
   saved={...(saved?.ref===incoming?saved:{}),ref:incoming,at:now};
  }
  if(!saved)return;
+ if((url.pathname==='/external-upload-packages'||url.searchParams.get('return')==='external')&&artists.has(url.searchParams.get('plan')))Object.assign(saved,{kind:'external',plan:url.searchParams.get('plan'),product:null});
  const product=url.searchParams.get('product'),plan=url.searchParams.get('plan');
  if(artists.has(product))Object.assign(saved,{kind:'artist',product,plan:null});
  if(url.pathname==='/premium'&&listeners.has(plan)||url.searchParams.get('return')==='premium'&&listeners.has(plan))Object.assign(saved,{kind:'listener',plan,product:null});
  try{storage.setItem(KEY,JSON.stringify(saved));}catch{}
  const path=url.pathname,auth=path==='/join';
- const relevant=auth||['/start','/get-started','/premium'].includes(path)||path==='/account'&&url.searchParams.get('tab')==='roles'||path==='/workspace'&&url.searchParams.get('tab')==='plans';
+ const relevant=path==='/external-upload-packages'||auth||['/start','/get-started','/premium'].includes(path)||path==='/account'&&url.searchParams.get('tab')==='roles'||path==='/workspace'&&url.searchParams.get('tab')==='plans';
  if(!relevant||url.searchParams.has('payment')||url.searchParams.has('checkout')||url.searchParams.get('return')==='bank-payment')return;
  if(!url.searchParams.has('ref'))url.searchParams.set('ref',saved.ref);
  if(url.searchParams.has('compare'))return;
+ if(saved.kind==='external'&&(path==='/external-upload-packages'||auth&&url.searchParams.get('role')!=='listener')){if(!url.searchParams.has('plan'))url.searchParams.set('plan',saved.plan);if(auth){url.searchParams.set('return','external');url.searchParams.set('role','artist');}}
  const role=url.searchParams.get('role');
  if(saved.kind==='artist'&&(path==='/start'||path==='/get-started'||path==='/workspace'||path==='/account'||auth&&(!role||role==='artist')&&url.searchParams.get('return')!=='premium')){
   if(!url.searchParams.has('product'))url.searchParams.set('product',saved.product);
@@ -35,6 +37,7 @@ export function rememberReferral(url,storage,now=Date.now()){
 export function clearReferral(){try{sessionStorage.removeItem(KEY);}catch{}}
 export function checkoutDestination(url,session){
  const q=new URLSearchParams();const ref=url.searchParams.get('ref');if(ref)q.set('ref',ref);
+ if(url.searchParams.get('return')==='external'&&artists.has(url.searchParams.get('plan'))){q.set('plan',url.searchParams.get('plan'));if(session.artist){q.set('tab','external');q.set('checkout_start','1');return '/workspace?'+q;}q.set('tab','roles');q.set('role','listener');q.set('return','external');return '/account?'+q;}
  if(url.searchParams.get('return')==='premium'&&listeners.has(url.searchParams.get('plan'))){
   q.set('plan',url.searchParams.get('plan'));q.set('checkout_start','1');
   if(session.listener)return '/premium?'+q;

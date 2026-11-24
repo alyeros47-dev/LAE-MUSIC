@@ -3,6 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),{reserve,sa
 function fixture(overrides={}){
  const track={id:12,status:'pending_upload',audio_mime:'audio/mpeg',audio_bytes:2048,audio_key:'music/7/original.mp3',cover_mime:'image/png',cover_key:'covers/7/original.png',...overrides},calls=[];
  const db={async query(sql,args=[]){calls.push({sql,args});const row=x=>({rowCount:1,rows:[x]});
+  if(sql==='SELECT * FROM external_upload_codes WHERE artist_id=$1 AND track_id=$2')return {rowCount:0,rows:[]};
   if(sql.startsWith('SELECT id,title,used_at'))return row({id:19,title:'Original Studio song',used_at:'2026-11-01',generated_track_id:12});
   if(sql.startsWith('SELECT r.result'))return row({result:{generation_id:'19',task_id:'task_resume_fixture',clip_id:'clip_resume_fixture',audio_sha256:'a'.repeat(64)}});
   if(sql.startsWith('SELECT task_id FROM sonic_test_tasks'))return row({task_id:'task_resume_fixture'});

@@ -1,0 +1,10 @@
+{
+  "revision": "external-upload-annual-2026-11-23",
+  "plans": {
+    "starter": {"name": "Starter", "usd_minor": 500, "songs": 10},
+    "growth": {"name": "Growth", "usd_minor": 1000, "songs": 30},
+    "professional": {"name": "Premium", "usd_minor": 2000, "songs": 100}
+  },
+  "rights_version": "external-music-rights-2026-11-23",
+  "rights_declaration": "I hold the rights and permissions needed to distribute and monetize this recording, its lyrics, voices, performances and artwork. My external AI service's terms permit this use. I authorize publication on LAE-MUSIC and understand that supporting rights documents must be approved before my first royalty withdrawal."
+}
