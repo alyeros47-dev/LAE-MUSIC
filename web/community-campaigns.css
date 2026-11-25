@@ -4,6 +4,7 @@
 .community-eyebrow{color:var(--lime);font-size:15px;font-weight:700;margin-bottom:12px}
 .community-tag{display:inline-block;color:var(--muted);font-size:10px;letter-spacing:.2em;margin-bottom:20px}
 .community-label{color:var(--muted);font-size:15px;margin-bottom:20px}
+.community-benefits{color:var(--muted);text-align:left;line-height:1.65;padding-left:22px;margin:0 0 26px}.community-benefits li+li{margin-top:10px}
 .community-details{color:var(--muted);font-size:16px;line-height:1.65;margin-bottom:26px}
 .community-details p{margin-bottom:20px}
 .community-details strong{color:var(--text)}
