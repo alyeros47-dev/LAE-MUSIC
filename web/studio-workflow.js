@@ -57,6 +57,7 @@ export function bindStudioWorkflow({
     processor = null,
     timer = null,
     sample = null,
+    submittedSample = null,
     previewURL = null;
   if(!navigator.mediaDevices?.getUserMedia||!(window.AudioContext||window.webkitAudioContext)){by('studio-record-voice').hidden=true;by('studio-stop-voice').hidden=true;}
   const canAct = () => !disposed && active() && form.isConnected;
@@ -262,13 +263,28 @@ export function bindStudioWorkflow({
     save.disabled =
       !storageReady ||
       savingVoice ||
-      voiceProfile.failure?.retry_allowed === false ||
+      (voiceProfile.failure?.retry_allowed === false && !voiceProfile.failure.can_replace_sample) ||
       !sample ||
+      (voiceProfile.failure?.can_replace_sample && sample === submittedSample) ||
       ["training", "submitting", "verification_required"].includes(
         voiceProfile.status,
       ) ||
       !by("studio-voice-consent").checked;
   };
+  function sampleReadyMessage() {
+    if (voiceProfile.failure?.can_replace_sample)
+      return "Your new sample is ready to preview. Confirm it is your voice alone, with no music or reverb, then save it.";
+    if ((voiceProfile.failure?.retry_allowed === false && !voiceProfile.failure.can_replace_sample))
+      return voiceProfile.failure.message;
+    if (["submitting", "training"].includes(voiceProfile.status))
+      return "Your previous voice profile is still processing. Your new recording is only a local preview. Check voice profile before saving again.";
+    if (voiceProfile.status === "verification_required")
+      return "Your previous voice request needs verification. Your new recording is only a local preview. Check voice profile; do not submit it again yet.";
+    return "Your singing sample is ready for local preview. " +
+      (storageReady
+        ? "Use only your own clear voice, without music, another voice or reverb. Confirm consent to save and train."
+        : "Voice saving is unavailable because secure storage or the music provider is not configured. Your recording stays on this device.");
+  }
   function clearSample() {
     if (previewURL) URL.revokeObjectURL(previewURL);
     previewURL = null;
@@ -308,12 +324,7 @@ export function bindStudioWorkflow({
     useSample(
       new Blob([file], { type: type === "audio/x-wav" ? "audio/wav" : type }),
     );
-    if(voiceProfile.failure?.retry_allowed===false){voiceStatus.textContent=voiceProfile.failure.message;return;}
-    voiceStatus.textContent =
-      "Local sample ready to preview. " +
-      (storageReady
-        ? "Confirm your consent before saving."
-        : "Uploading and training remain pending safe storage verification.");
+    voiceStatus.textContent = sampleReadyMessage();
   };
   function endCapture() {
     captureVersion++;
@@ -384,11 +395,7 @@ export function bindStudioWorkflow({
             return;
           }
           useSample(pcmWav(data, rate));
-          voiceStatus.textContent =
-            "Your singing sample is ready for local preview. " +
-            (storageReady
-              ? "Confirm consent to save and train."
-              : "Upload and training remain pending safe storage verification.");
+          voiceStatus.textContent = sampleReadyMessage();
         }
       };
       processor.onaudioprocess = (event) => {
@@ -406,7 +413,7 @@ export function bindStudioWorkflow({
         const second = Math.floor(count / rate);
         if (second !== shownSecond) {
           shownSecond = second;
-          voiceStatus.textContent = "Recording " + Math.floor(second / 60) + ":" + String(second % 60).padStart(2, "0") + " / 4:00. Sing alone clearly; keep this page open. Press Stop recording when finished.";
+          voiceStatus.textContent = "Recording " + Math.floor(second / 60) + ":" + String(second % 60).padStart(2, "0") + " / 4:00. Sing alone, without music or reverb; keep this page open. Press Stop recording when finished.";
         }
         if (count >= maxSamples) finish();
       };
@@ -414,7 +421,7 @@ export function bindStudioWorkflow({
       processor.connect(context.destination); // output stays silent; capture input only.
       stop.disabled = false;
       voiceStatus.textContent =
-        "Recording your singing voice locally, up to four minutes. Sing alone for at least 15 seconds, then press Stop recording.";
+        "Recording your singing voice locally, up to four minutes. Use only your voice, with no music, second voice or reverb. Sing for at least 15 seconds, then press Stop recording.";
       timer = setTimeout(() => finish?.(), VOICE_RECORDING_SECONDS * 1000);
     } catch {
       if (ticket !== captureVersion) return;
@@ -488,19 +495,21 @@ export function bindStudioWorkflow({
     if (!storageReady || !sample || !by("studio-voice-consent").checked) return;
     if (
       savingVoice ||
-      voiceProfile.failure?.retry_allowed === false ||
+      (voiceProfile.failure?.can_replace_sample && sample === submittedSample) ||
+      (voiceProfile.failure?.retry_allowed === false && !voiceProfile.failure.can_replace_sample) ||
       ["submitting", "training", "verification_required"].includes(
         voiceProfile.status,
       )
     )
       return;
+    const uploadingSample = sample;
     savingVoice = true;
     refreshSave();
     voiceStatus.textContent = "Saving your voice sample…";
     try {
       const upload = await api("/api/voice/upload", "POST", {
-        type: sample.type,
-        bytes: sample.size,
+        type: uploadingSample.type,
+        bytes: uploadingSample.size,
         consent: true,
       });
       if (
@@ -510,8 +519,8 @@ export function bindStudioWorkflow({
         throw Error("Secure upload URL was not returned.");
       const response = await fetch(upload.url, {
         method: "PUT",
-        headers: { "Content-Type": sample.type },
-        body: sample,
+        headers: { "Content-Type": uploadingSample.type },
+        body: uploadingSample,
         credentials: upload.url.startsWith("/") ? "same-origin" : "omit",
         signal: AbortSignal.timeout(90000),
       });
@@ -524,6 +533,7 @@ export function bindStudioWorkflow({
         throw Error(message);
       }
       voiceStatus.textContent = "Voice sample saved. Creating your profile…";
+      submittedSample = uploadingSample;
       const trained = await api("/api/voice/train", "POST", {});
       voiceProfile.status = trained.status;
       if (canAct()) {
