@@ -1,0 +1,201 @@
+package com.laemusic.listener
+
+import android.Manifest
+import android.content.ComponentName
+import android.content.Context
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.media3.common.Player
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import androidx.test.core.app.ActivityScenario
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.uiautomator.UiDevice
+import coil.Coil
+import coil.ImageLoader
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
+import org.json.JSONArray
+import org.json.JSONObject
+import org.junit.*
+import org.junit.Assert.*
+import java.io.File
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.security.KeyPairGenerator
+import java.security.Signature
+import java.security.interfaces.ECPublicKey
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+
+/** Synthetic catalogue/audio only; the interceptor forbids production network access. */
+class NativeListeningTest {
+    @get:Rule val compose=createEmptyComposeRule()
+    @get:Rule val notifications=GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+    private val instrumentation=InstrumentationRegistry.getInstrumentation()
+    private val context get()=instrumentation.targetContext
+    private var scenario:ActivityScenario<MainActivity>?=null
+    @Volatile private var delayLikes=false
+    private val likes=AtomicInteger(2);private var liked=false;private var following=false;private val posts=mutableListOf<String>()
+    private fun fixture(seconds:Int=120,onboarding:Boolean=false):AppGraph {
+        val start=if(seconds==6)100 else 0
+        val tracks=JSONArray((1..4).map {Song((it+start).toString(),"Test song $it","Test artist","90",if(onboarding)listOf("Gospel praise","Worship","Secular Afrobeats","Afrwn")[it-1] else "Gospel praise","Synthetic Android test catalogue").json()})
+        val client=OkHttpClient.Builder().addInterceptor {chain->
+            val request=chain.request();val path=request.url.encodedPath
+            if(request.method=="POST")synchronized(posts){posts.add(path)}
+            if(path=="/api/listener/song-like" && delayLikes)Thread.sleep(1500)
+            if(path=="/api/music/artist-follow")return@addInterceptor Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(404).message("Not deployed").body("{}".toResponseBody("application/json".toMediaType())).build()
+            if(path.endsWith("/audio"))return@addInterceptor Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("test audio").body(wav(seconds).toResponseBody("audio/wav".toMediaType())).build()
+            if(path.endsWith("cover-image") || path=="/api/artist/photo") {
+                val bitmap=android.graphics.Bitmap.createBitmap(360,640,android.graphics.Bitmap.Config.ARGB_8888)
+                android.graphics.Canvas(bitmap).apply {drawColor(android.graphics.Color.rgb(80,38,130));val paint=android.graphics.Paint().apply {color=android.graphics.Color.rgb(218,197,255);textSize=38f};drawText("LAE-MUSIC",48f,285f,paint);paint.textSize=20f;drawText("Android test artwork",48f,330f,paint)}
+                val bytes=java.io.ByteArrayOutputStream().also {bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}.toByteArray();bitmap.recycle()
+                return@addInterceptor Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("test artwork").body(bytes.toResponseBody("image/png".toMediaType())).build()
+            }
+            val body=when(path){
+                "/api/platform/session"->JSONObject()
+                "/api/platform/discover"->JSONObject().put("tracks",tracks).put("genres",JSONArray().put(JSONObject().put("genre","Gospel praise"))).put("artists",JSONArray()).put("next_cursor",JSONObject.NULL)
+                "/api/platform/editorial"->JSONObject().put("featured_tracks",tracks).put("featured_artists",JSONArray().put(JSONObject().put("id","90").put("display_name","Test artist")))
+                "/api/listener/login"->JSONObject().put("user",JSONObject().put("id","7").put("display_name","Test listener").put("email","listener@test.invalid"))
+                "/api/platform/premium/status"->JSONObject().put("active",false)
+                "/api/platform/library"->JSONObject().put("likes",tracks).put("history",JSONArray()).put("playlists",JSONArray())
+                "/api/platform/premium/playback"->JSONObject().put("eligible",false)
+                "/api/listener/song-engagement"->JSONObject().put("likes",likes.get()).put("comments",1).put("liked",liked)
+                "/api/music/artist-follow"->JSONObject().put("following",following)
+                "/api/listener/song-like"->{liked=JSONObject(request.body!!.let { b->val buffer=okio.Buffer();b.writeTo(buffer);buffer.readUtf8() }).getBoolean("liked");likes.set(if(liked)3 else 2);JSONObject().put("ok",true)}
+                "/api/listener/favorites"->if(request.method=="GET")JSONObject().put("artists",JSONArray().also {if(following)it.put(JSONObject().put("id","90").put("name","Test artist"))}) else {following=true;JSONObject().put("ok",true)}
+                "/api/listener/comments"->if(request.method=="GET")JSONObject().put("comments",JSONArray().put(JSONObject().put("id","1").put("author","Test listener").put("body","A test comment"))) else JSONObject().put("message","Comment published")
+                else->JSONObject().put("ok",true)
+            }
+            Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("fixture").addHeader("Set-Cookie",if(path=="/api/listener/login")"listener_session=isolated-test-cookie; Path=/; Secure; HttpOnly" else "fixture=present; Path=/; Secure").body(body.toString().toResponseBody("application/json".toMediaType())).build()
+        }.build()
+        instrumentation.runOnMainSync {context.graph.discovery.close()}
+        val graph=AppGraph(context,client);graph.session.clear();graph.secure.put("queue",null);graph.secure.put("queue-feed",null);graph.secure.put("feed-page",null);UiDevice.getInstance(instrumentation).wakeUp();UiDevice.getInstance(instrumentation).pressMenu();(context.applicationContext as LaeApplication).graph=graph
+        instrumentation.runOnMainSync {graph.secure.put("discovery.preferences:guest",null);graph.secure.put("discovery.evidence:guest",null);graph.session.signedIn(JSONObject().put("id","reset-fixture"));graph.discovery.switchAccount();graph.session.clear();graph.discovery.switchAccount();if(!onboarding)graph.discovery.choose(ListeningPreferences(MusicChoice.BOTH));graph.secure.put("discovery.preferences:7",ListeningPreferences(MusicChoice.BOTH).json().toString())}
+        Coil.setImageLoader(ImageLoader.Builder(context).okHttpClient(client).build())
+        return graph
+    }
+    private fun capture(name:String){
+        compose.mainClock.advanceTimeByFrame();compose.waitForIdle();instrumentation.waitForIdleSync();Thread.sleep(500)
+        UiDevice.getInstance(instrumentation).takeScreenshot(File(context.getExternalFilesDir(null),name))
+    }
+    @After fun cleanup(){scenario?.close();instrumentation.runOnMainSync {context.graph.discovery.close()};context.stopService(android.content.Intent(context,MusicPlaybackService::class.java));instrumentation.waitForIdleSync()}
+    @Test fun fiveDestinationsVerticalFeedAndRealSocialRequests() {
+        fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
+        compose.waitUntil(30000){context.graph.discovery.songs.value.isNotEmpty()}
+        val firstId=context.graph.discovery.songs.value.first().id
+        val nextId=context.graph.discovery.songs.value[1].id
+        compose.waitUntil(15000){compose.onAllNodesWithTag("feed-$firstId").fetchSemanticsNodes().isNotEmpty()}
+        // Discover is both a top feed tab and a bottom destination.
+        for(label in listOf("Home","Discover","My Music","Downloads","Profile"))compose.onAllNodesWithText(label).onLast().assertExists()
+        fun action(description:String)=compose.onNode(hasContentDescription(description) and hasAnyAncestor(hasTestTag("feed-$firstId")))
+        compose.waitUntil(15000){compose.onAllNodes(hasText("2") and hasAnyAncestor(hasTestTag("feed-$firstId"))).fetchSemanticsNodes().isNotEmpty()}
+        action("Like song").performClick()
+        compose.onNode(hasSetTextAction() and hasText("Email address")).performTextInput("listener@test.invalid")
+        compose.onNode(hasSetTextAction() and hasText("Password")).performTextInput("SyntheticPassword123")
+        compose.onNodeWithText("Sign in",useUnmergedTree=true).performScrollTo().performClick()
+        compose.waitUntil(15000){context.graph.session.owner=="7"}
+        action("Like song").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/song-like")}}
+        compose.waitUntil(15000){compose.onAllNodes(hasText("3") and hasAnyAncestor(hasTestTag("feed-$firstId"))).fetchSemanticsNodes().isNotEmpty()}
+        action("Follow artist").performClick();compose.waitUntil(15000){synchronized(posts){posts.contains("/api/listener/favorites")}}
+        compose.waitUntil(15000){compose.onAllNodes(hasContentDescription("Unfollow artist") and hasAnyAncestor(hasTestTag("feed-$firstId"))).fetchSemanticsNodes().isNotEmpty()}
+        action("Open comments").performClick();compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isNotEmpty()};compose.onNodeWithContentDescription("Close comments").performClick()
+        compose.waitUntil(10000){compose.onAllNodesWithText("A test comment").fetchSemanticsNodes().isEmpty()}
+        compose.onNodeWithTag("feed-$firstId").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.72f),androidx.compose.ui.geometry.Offset(center.x,height*.25f))};compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-$nextId").assertIsDisplayed();true}.getOrDefault(false)}
+        val root=compose.onRoot().fetchSemanticsNode().boundsInRoot
+        val feed=compose.onNodeWithTag("feed-$nextId").fetchSemanticsNode().boundsInRoot
+        assertTrue("Discover artwork must extend behind the header and bottom navigation",feed.height>=root.height*.9f)
+        compose.onNodeWithTag("feed-$nextId").performTouchInput {swipe(androidx.compose.ui.geometry.Offset(center.x,height*.25f),androidx.compose.ui.geometry.Offset(center.x,height*.72f))}
+        compose.waitUntil(15000){runCatching {compose.onNodeWithTag("feed-$firstId").assertIsDisplayed();true}.getOrDefault(false)}
+        capture("discover.png")
+        assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic")}})
+    }
+    @Test fun homeAndExploreRemainSeparateAndKeepTheCurrentPlayer() {
+        fixture();scenario=ActivityScenario.launch(MainActivity::class.java)
+        compose.waitUntil(30000){context.graph.discovery.songs.value.isNotEmpty()}
+        val firstId=context.graph.discovery.songs.value.first().id
+        compose.waitUntil(15000){compose.onAllNodesWithTag("feed-$firstId").fetchSemanticsNodes().isNotEmpty()}
+        val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
+        val player=future.get(30,TimeUnit.SECONDS)
+        try {
+            compose.waitUntil(15000){var playing=false;instrumentation.runOnMainSync {playing=player.currentMediaItem?.mediaId==firstId && player.isPlaying};playing}
+            compose.onNodeWithTag("bottom-nav-Home").performClick()
+            compose.onNodeWithTag("home-screen").assertExists()
+            compose.waitUntil(15000){compose.onAllNodesWithTag("featured-song").fetchSemanticsNodes().isNotEmpty()}
+            compose.onNodeWithTag("home-screen").performScrollToNode(hasText("Recently played"))
+            compose.onNodeWithTag("home-screen").performScrollToNode(hasText("Recommended music"))
+            compose.onNodeWithTag("home-screen").performScrollToIndex(0)
+            capture("home.png")
+            compose.onNodeWithTag("bottom-nav-Discover").performClick()
+            compose.onNodeWithTag("top-tab-Explore").performClick()
+            compose.onNodeWithTag("explore-screen").assertExists()
+            compose.onNodeWithText("Browse by category").assertExists()
+            compose.onNodeWithText("Featured artists").assertExists()
+            compose.onAllNodesWithTag("featured-song").assertCountEquals(0)
+            capture("explore.png")
+            instrumentation.runOnMainSync {assertEquals(firstId,player.currentMediaItem?.mediaId);assertTrue(player.isPlaying)}
+            compose.onNodeWithTag("top-tab-Discover").performClick()
+            compose.onNodeWithTag("feed-$firstId").assertIsDisplayed()
+            compose.onAllNodesWithTag("explore-screen").assertCountEquals(0)
+        } finally {instrumentation.runOnMainSync {player.release()}}
+    }
+    @Test fun screenLockedPlaybackContinuesAcrossSeveralTracks() {
+        fixture(6);scenario=ActivityScenario.launch(MainActivity::class.java)
+        val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
+        val player=future.get(30,TimeUnit.SECONDS);val transitions=AtomicInteger(0)
+        instrumentation.runOnMainSync {
+            player.addListener(object:Player.Listener {override fun onMediaItemTransition(item:androidx.media3.common.MediaItem?,reason:Int){transitions.incrementAndGet()}})
+            player.setMediaItems((1..4).map {Song((it+100).toString(),"Test song $it","Test artist","90","Gospel praise").item()});player.repeatMode=Player.REPEAT_MODE_ALL;player.prepare();player.play()
+        }
+        Thread.sleep(2000);UiDevice.getInstance(instrumentation).pressHome();UiDevice.getInstance(instrumentation).sleep();Thread.sleep(65000)
+        instrumentation.runOnMainSync {assertTrue("The service must cross at least eight track boundaries with the screen locked",transitions.get()>=8);assertTrue(player.isPlaying);player.stop();player.release()}
+        UiDevice.getInstance(instrumentation).wakeUp();UiDevice.getInstance(instrumentation).pressMenu();assertFalse(synchronized(posts){posts.any {it.endsWith("/play") || it.endsWith("/heartbeat")}})
+    }
+    @Test fun firstTimeChoicesPersistAndFilterTheNativeDiscoveryQueue() {
+        fixture(onboarding=true);scenario=ActivityScenario.launch(MainActivity::class.java)
+        compose.onNodeWithTag("music-preferences").assertIsDisplayed()
+        compose.onNodeWithTag("save-music-preferences").assertIsNotEnabled()
+        compose.onNodeWithTag("music-choice-GOSPEL").performClick()
+        compose.onNodeWithTag("gospel-PRAISE").performClick()
+        compose.onNodeWithTag("gospel-WORSHIP").performClick()
+        capture("preferences.png")
+        compose.onNodeWithTag("save-music-preferences").performScrollTo().performClick()
+        compose.waitUntil(30000){context.graph.discovery.songs.value.size==2}
+        assertEquals(setOf("1","2"),context.graph.discovery.songs.value.map {it.id}.toSet())
+        val future=MediaController.Builder(context,SessionToken(context,ComponentName(context,MusicPlaybackService::class.java))).buildAsync()
+        val player=future.get(30,TimeUnit.SECONDS)
+        try {
+            compose.waitUntil(15000){var ready=false;instrumentation.runOnMainSync {ready=player.mediaItemCount==2};ready}
+            instrumentation.runOnMainSync {assertEquals(setOf("1","2"),(0 until player.mediaItemCount).map {player.getMediaItemAt(it).mediaId}.toSet())}
+            scenario!!.recreate();compose.onAllNodesWithTag("music-preferences").assertCountEquals(0)
+            compose.onNodeWithTag("bottom-nav-Profile").performClick();compose.onNodeWithTag("edit-music-preferences").performClick()
+            compose.onNodeWithTag("music-choice-SECULAR").performClick();compose.onNodeWithTag("save-music-preferences").performScrollTo().performClick()
+            compose.waitUntil(15000){context.graph.discovery.songs.value.map {it.id}==listOf("3")}
+            compose.waitUntil(15000){var changed=false;instrumentation.runOnMainSync {changed=player.currentMediaItem?.mediaId=="3" && player.mediaItemCount==1};changed}
+            instrumentation.runOnMainSync {assertEquals("3",player.currentMediaItem?.mediaId);assertEquals(1,player.mediaItemCount)}
+            // An unrelated listener on the same phone must make their own choices.
+            instrumentation.runOnMainSync {context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount()}
+            compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isNotEmpty()}
+            assertNull(context.graph.discovery.preferences.value)
+            instrumentation.runOnMainSync {context.graph.discovery.liked("private-song",true);context.graph.session.clear();context.graph.discovery.switchAccount();assertFalse(context.graph.discovery.evidenceSnapshot()["private-song"]?.liked==true);context.graph.session.signedIn(JSONObject().put("id","new-listener"));context.graph.discovery.switchAccount();assertTrue(context.graph.discovery.evidenceSnapshot()["private-song"]?.liked==true);context.graph.session.clear();context.graph.discovery.switchAccount()}
+            compose.waitUntil(10000){compose.onAllNodesWithTag("music-preferences").fetchSemanticsNodes().isEmpty()}
+            assertEquals(MusicChoice.SECULAR,context.graph.discovery.preferences.value!!.choice)
+            // A slow response from the old account must not train the guest account.
+            delayLikes=true
+            scenario!!.onActivity {activity->
+                context.graph.session.signedIn(JSONObject().put("id","7"));context.graph.discovery.switchAccount()
+                androidx.lifecycle.ViewModelProvider(activity)[ListeningViewModel::class.java].like(Song("1","Song","Artist","90","Gospel praise"))
+            }
+            compose.waitUntil(10000){synchronized(posts){posts.contains("/api/listener/song-like")}}
+            instrumentation.runOnMainSync {context.graph.session.clear();context.graph.discovery.switchAccount()}
+            Thread.sleep(2500)
+            instrumentation.runOnMainSync {assertFalse(context.graph.discovery.evidenceSnapshot()["1"]?.liked==true)}
+        } finally {instrumentation.runOnMainSync {player.stop();player.release()}}
+        assertFalse(synchronized(posts){posts.any {it.contains("checkout") || it.contains("sonic") || it.endsWith("/play")}})
+    }
+    companion object {
+        fun wav(seconds:Int=3):ByteArray {val samples=8000*seconds;val pcm=ByteArray(samples*2);val b=ByteBuffer.allocate(44+pcm.size).order(ByteOrder.LITTLE_ENDIAN);b.put("RIFF".toByteArray()).putInt(36+pcm.size).put("WAVEfmt ".toByteArray()).putInt(16).putShort(1).putShort(1).putInt(8000).putInt(16000).putShort(2).putShort(16).put("data".toByteArray()).putInt(pcm.size).put(pcm);return b.array()}
+    }
+}
